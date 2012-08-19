@@ -15,8 +15,6 @@
 		) 
 	);
 
-	print_r($statuses);
-
 	echo '<fieldset>';
 	echo '<legend>Groups</legend>';
 
