@@ -1,4 +1,4 @@
-<!-- File: /app/View/Members/index.ctp -->
+<!-- File: /app/View/Members/list.ctp -->
 
 <h1>Members</h1>
 <table>
