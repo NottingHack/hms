@@ -10,6 +10,7 @@
         <th>Join Date</th>
         <th>Handle</th>
         <th>Unlock Text</th>
+        <th>Groups</th>
     </tr>
     <?php #print_r($members); ?>
     <?php foreach ($members as $member): ?>
@@ -23,6 +24,25 @@
         <td><?php echo $member['Member']['join_date']; ?></td>
         <td><?php echo $member['Member']['handle']; ?></td>
         <td><?php echo $member['Member']['unlock_text']; ?></td>
+        <td>
+            <?php
+                $numGroups = count($member['Group']);
+                if($numGroups === 0)
+                {
+                    echo 'None';
+                }
+                else
+                {
+                    for($i = 0; $i < $numGroups; $i++) {
+                        echo $member['Group'][$i]['grp_description'];
+                        if($i < $numGroups - 1)
+                        {
+                            echo ', ';
+                        }
+                    }
+                }
+            ?>
+        </td>
     </tr>
     <?php endforeach; ?>
 
