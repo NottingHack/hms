@@ -5,13 +5,13 @@
 <h3>Summary</h3>
 
 <table>
-    <?php foreach ($memberStatusCount as $title => $count): ?>
+    <?php foreach ($memberStatusCount as $title => $data): ?>
         <tr>
             <td>
-                <?php echo $title ?>
+                <?php echo $this->Html->link($title, array('controller' => 'members', 'action' => 'list_members_with_status', $data['id'])); ?>
             </td>
             <td>
-                <?php echo $count ?>
+                <?php echo $data['count'] ?>
             </td>
         </tr>
     <? endforeach; ?>

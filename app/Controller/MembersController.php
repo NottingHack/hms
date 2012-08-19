@@ -16,7 +16,10 @@
 	    	$memberStatusCount = array();
 	    	# Init the array
 	    	foreach ($statusList as $current) {
-	    		$memberStatusCount[$current['Status']['title']] = 0;
+	    		$memberStatusCount[$current['Status']['title']] = 
+	    			array( 'id' => $current['Status']['status_id'],
+	    					'count' => 0
+	    			);
 	    	}
 
 	    	$memberTotalCount = 0;
@@ -25,7 +28,7 @@
 	    		$memberStatus = $member["Status"]['title'];
 	    		if(isset($memberStatusCount[$memberStatus]))
 	    		{
-	    			$memberStatusCount[$memberStatus]++;	
+	    			$memberStatusCount[$memberStatus]['count']++;	
 	    		}
 	    	}
 
@@ -38,5 +41,12 @@
 	        $this->set('members', $this->Member->find('all'));
 	    }
 
+		# List info about all members with a certain status
+		public function list_members_with_status($statusId) {
+			# Uses the default list view
+			$this->view = 'list_members';
+
+	        $this->set('members', $this->Member->find('all', array( 'conditions' => array( 'Member.member_status' => $statusId ) )));
+	    }
 	}
 ?>
