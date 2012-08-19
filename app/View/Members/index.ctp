@@ -16,3 +16,9 @@
         </tr>
     <? endforeach; ?>
 </table>
+
+<ul class="nav">
+    <li>
+        <?php echo $this->Html->link("Add Member", array('controller' => 'members', 'action' => 'add')); ?>
+    </li>
+</ul>

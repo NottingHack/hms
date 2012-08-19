@@ -48,5 +48,17 @@
 
 	        $this->set('members', $this->Member->find('all', array( 'conditions' => array( 'Member.member_status' => $statusId ) )));
 	    }
+
+	    # Add a new member
+	    public function add() {
+	    	if ($this->request->is('post')) {
+	            if ($this->Member->save($this->request->data)) {
+	                $this->Session->setFlash('New member added.');
+	                $this->redirect(array('action' => 'index'));
+	            } else {
+	                $this->Session->setFlash('Unable to add member.');
+	            }
+	        }
+	    }
 	}
 ?>
