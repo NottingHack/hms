@@ -60,5 +60,27 @@
 	            }
 	        }
 	    }
+
+	    public function view($id = null) {
+	        $this->Member->id = $id;
+	        $this->set('member', $this->Member->read());
+	    }
+
+	    public function edit($id = null) {
+
+	    	$this->set('groups', $this->Member->Group->find('list',array('fields'=>array('grp_id','grp_description'))));
+	    	$this->set('statuses', $this->Member->Status->find('list',array('fields'=>array('status_id','title'))));
+			$this->Member->id = $id;
+			if ($this->request->is('get')) {
+			    $this->request->data = $this->Member->read();
+			} else {
+			    if ($this->Member->save($this->request->data)) {
+			        $this->Session->setFlash('Member details updated.');
+			        $this->redirect(array('action' => 'index'));
+			    } else {
+			        $this->Session->setFlash('Unable to update member details.');
+			    }
+			}
+			}
 	}
 ?>

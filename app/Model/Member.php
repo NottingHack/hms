@@ -47,7 +47,7 @@
 			# Have to do a few things before we save
 
 			# Check to see if this is a new record, or an edit
-			if( isset($this->data->id) === false )
+			if( isset($this->id) === false )
 			{
 				# New record, set the member status and the like
 				$this->data['Member']['member_status'] = 1;

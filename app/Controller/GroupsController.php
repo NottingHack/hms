@@ -39,5 +39,10 @@
 		        }
 		    }
 	    }
+
+	    public function view($id = null) {
+	        $this->Group->id = $id;
+	        $this->set('group', $this->Group->read());
+	    }
 	}
 ?>
