@@ -11,6 +11,25 @@
 				)
 		);
 
+		public $hasAndBelongsToMany = array(
+	        'Group' =>
+	            array(
+	                'className'              => 'Group',
+	                'joinTable'              => 'member_group',
+	                'foreignKey'             => 'member_id',
+	                'associationForeignKey'  => 'grp_id',
+	                'unique'                 => true,
+	                'conditions'             => '',
+	                'fields'                 => '',
+	                'order'                  => '',
+	                'limit'                  => '',
+	                'offset'                 => '',
+	                'finderQuery'            => '',
+	                'deleteQuery'            => '',
+	                'insertQuery'            => ''
+	            )
+	    );
+
 		public $validate = array(
 	        'name' => array(
 	            'rule' => 'notEmpty'
