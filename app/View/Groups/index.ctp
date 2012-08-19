@@ -7,7 +7,7 @@
 		<th></th>
 		<?php foreach ($groups as $group): ?>
 			<th>
-				<?php echo $group['Group']['grp_description']; ?>
+				<?php echo $this->Html->link($group['Group']['grp_description'], array('controller' => 'groups', 'action' => 'edit', $group['Group']['grp_id'] )); ?>
 			</th>
 		<?php endforeach; ?>
 	</tr>
@@ -39,3 +39,9 @@
 	?>
 
 </table>
+
+<ul class="nav">
+    <li>
+        <?php echo $this->Html->link("Add Group", array('controller' => 'groups', 'action' => 'add')); ?>
+    </li>
+</ul>
