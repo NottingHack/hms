@@ -11,8 +11,8 @@
         <th>Handle</th>
         <th>Unlock Text</th>
         <th>Groups</th>
+        <th>Actions</th>
     </tr>
-    <?php #print_r($members); ?>
     <?php foreach ($members as $member): ?>
     <tr>
         <td><?php echo $member['Member']['member_id']; ?></td>
@@ -40,6 +40,23 @@
                             echo ', ';
                         }
                     }
+                }
+            ?>
+        </td>
+        <td>
+            <?php 
+                switch ($member['Member']['member_status']) {
+                    case 1: # Prospective member
+                        echo $this->Html->link("Approve member", array('controller' => 'members', 'action' => 'set_member_status', $member['Member']['member_id'], 2));
+                        break;
+
+                    case 2: # Current member
+                        echo $this->Html->link("Revoke membership", array('controller' => 'members', 'action' => 'set_member_status', $member['Member']['member_id'], 3));
+                        break;
+
+                    case 3: # Ex-member
+                        echo $this->Html->link("Reinstate membership", array('controller' => 'members', 'action' => 'set_member_status', $member['Member']['member_id'], 2));
+                        break;
                 }
             ?>
         </td>

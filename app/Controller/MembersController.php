@@ -81,6 +81,36 @@
 			        $this->Session->setFlash('Unable to update member details.');
 			    }
 			}
+		}
+
+		public function set_member_status($id, $newStatus)
+		{
+			$this->Member->read(null, $id);
+			$this->Member->set('member_status', $newStatus);
+			if($this->Member->save())
+			{
+				$this->Session->setFlash('Member status updated.');
 			}
+			else
+			{
+				$this->Session->setFlash('Unable to update member status');
+			}
+
+			# Notify all the member admins about the status change
+
+			$this->redirect($this->referer());
+		}
+
+		public function email_test()
+		{
+			App::uses('CakeEmail', 'Network/Email');
+
+			$email = new CakeEmail();
+			$email->config('smtp');
+			$email->from(array('me@example.com' => 'My Site'));
+			$email->to('pyroka@gmail.com');
+			$email->subject('About');
+			$email->send('My message');
+		}
 	}
 ?>

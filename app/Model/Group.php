@@ -26,8 +26,8 @@
 	            array(
 	                'className'              => 'Member',
 	                'joinTable'              => 'member_group',
-	                'foreignKey'             => 'member_id',
-	                'associationForeignKey'  => 'grp_id',
+	                'foreignKey'             => 'grp_id',
+	                'associationForeignKey'  => 'member_id',
 	                'unique'                 => true,
 	                'conditions'             => '',
 	                'fields'                 => '',
