@@ -107,10 +107,13 @@
 
 			$email = new CakeEmail();
 			$email->config('smtp');
-			$email->from(array('me@example.com' => 'My Site'));
+			$email->from(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$email->to('pyroka@gmail.com');
-			$email->subject('About');
-			$email->send('My message');
+			$email->subject('Welcome to Nottingham Hackspace');
+			#$email->send();
+
+			$this->set('memberName', 'Daniel');
+			$this->set('guideName', 'Sue');
 		}
 	}
 ?>
