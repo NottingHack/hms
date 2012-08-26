@@ -1,6 +1,26 @@
 <!-- File: /app/View/Members/list_members.ctp -->
 
-<h1><?php echo $this->Html->link('Members', array('controller' => 'members', 'action' => 'index')); ?></h1>
+<?php
+    $this->Html->addCrumb('Members', '/members');
+    $this->Html->addCrumb('List Members', '/members/list_members_with_status');
+    if(isset($statusData))
+    {
+        $this->Html->addCrumb($statusData['title'], '/members/list_members_with_status/' . $statusData['status_id']);
+    }
+?>
+
+<h1>
+    <?php
+        if(isset($statusData))
+        {
+            echo $statusData['title'];
+        }
+        else
+        {
+            echo 'Members';
+        }
+    ?>
+</h1>
 <table>
     <tr>
         <th>Id</th>
@@ -11,6 +31,12 @@
         <th>Handle</th>
         <th>Unlock Text</th>
         <th>Groups</th>
+        <?php
+            if(isset($statusData) === false)
+            {
+                echo '<th>Status</th>';
+            }
+        ?>
         <th>Actions</th>
     </tr>
     <?php foreach ($members as $member): ?>
@@ -43,6 +69,12 @@
                 }
             ?>
         </td>
+        <?php
+            if(isset($statusData) === false)
+            {
+                echo '<td>' . $this->Html->link($member['Status']['title'], array('controller' => 'members', 'action' => 'list_members_with_status', $member['Status']['status_id'])) . '</td>';
+            }
+        ?>
         <td>
             <?php 
                 switch ($member['Member']['member_status']) {

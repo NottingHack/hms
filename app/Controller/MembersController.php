@@ -46,7 +46,16 @@
 			# Uses the default list view
 			$this->view = 'list_members';
 
-	        $this->set('members', $this->Member->find('all', array( 'conditions' => array( 'Member.member_status' => $statusId ) )));
+			if(isset($statusId))
+			{
+		        $this->set('members', $this->Member->find('all', array( 'conditions' => array( 'Member.member_status' => $statusId ) )));
+		        $statusData = $this->Member->Status->find('all', array( 'conditions' => array( 'Status.status_id' => $statusId ) ));
+				$this->set('statusData', $statusData[0]['Status']);
+			}
+			else
+			{
+				$this->redirect( array( 'controller' => 'members', 'action' => 'list_members' ) );
+			}
 	    }
 
 	    # Add a new member
@@ -138,19 +147,6 @@
 			$email->emailFormat('html');
 
 			return $email;
-		}
-
-		public function email_test()
-		{
-			$email = $this->prepare_email_for_members_in_group(5);
-			$email->subject('Welcome to Nottingham Hackspace');
-			# Use the 'to_prospective_member' layout and the 'default' view
-			$email->template('to_prospective_member', 'default');
-			$email->viewVars( array( 'memberName' => 'Daniel', 'guideName' => 'Sue' ) );
-			$email->send();
-
-			$this->set('memberName', 'Daniel');
-			$this->set('guideName', 'Sue');
 		}
 	}
 ?>

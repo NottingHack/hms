@@ -1,5 +1,10 @@
 <!-- File: /app/View/Member/edit.ctp -->
 
+<?php
+	$this->Html->addCrumb('Members', '/members');
+	$this->Html->addCrumb('Edit Member', '/members/edit');
+?>
+
 <h1>Edit Member</h1>
 <?php
 	echo $this->Form->create('Member');
