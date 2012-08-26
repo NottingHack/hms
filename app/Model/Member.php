@@ -56,9 +56,5 @@
 
 			return true;
 		}
-
-		public function afterSave(boolean $created) {
-			# Todo: e-mail those that need e-mailing
-		}
 	}
 ?>
