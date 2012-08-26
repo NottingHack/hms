@@ -61,8 +61,31 @@
 	    # Add a new member
 	    public function add() {
 	    	if ($this->request->is('post')) {
-	            if ($this->Member->save($this->request->data)) {
+	    		$result = $this->Member->save($this->request->data);
+	            if ($result) {
 	                $this->Session->setFlash('New member added.');
+
+	                # Email the new member, and notify the admins
+	                $adminEmail = $this->prepare_email_for_members_in_group(5);
+					$adminEmail->subject('New Prospective Member Notification');
+					$adminEmail->template('notify_admins_member_added', 'default');
+					$adminEmail->viewVars( array( 
+						'member' => $result['Member'],
+						 )
+					);
+					$adminEmail->send();
+
+					$memberEmail = $this->prepare_email();
+					$memberEmail->to( $result['Member']['email'] );
+					$memberEmail->subject('Welcome to Nottingham Hackspace');
+					$memberEmail->template('to_prospective_member', 'default');
+					$memberEmail->viewVars( array(
+						'memberName' => $result['Member']['name'],
+						'guideName' => 'TODO',
+						) 
+					);
+					$memberEmail->send();
+
 	                $this->redirect(array('action' => 'index'));
 	            } else {
 	                $this->Session->setFlash('Unable to add member.');
@@ -102,7 +125,7 @@
 
 				# Notify all the member admins about the status change
 				$email = $this->prepare_email_for_members_in_group(5);
-				$email->subject('Member Status Change notification');
+				$email->subject('Member Status Change Notification');
 				$email->template('notify_admins_member_status_change', 'default');
 				
 				$newStatusData = $this->Member->Status->find( 'all', array( 'conditions' => array( 'Status.status_id' => $newStatus ) ) );
@@ -137,13 +160,20 @@
 
 		private function prepare_email_for_members_in_group($groupId)
 		{
+			$email = $this->prepare_email();
+			$email->to( $this->get_emails_for_members_in_group( $groupId ) );
+
+			return $email;
+		}
+
+		private function prepare_email()
+		{
 			App::uses('CakeEmail', 'Network/Email');
 
 			$email = new CakeEmail();
 			$email->config('smtp');
 			$email->from(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$email->sender(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
-			$email->to( $this->get_emails_for_members_in_group( $groupId ) );
 			$email->emailFormat('html');
 
 			return $email;
