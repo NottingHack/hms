@@ -1,6 +1,6 @@
 <!-- File: /app/View/Members/list_members.ctp -->
 
-<h1>Members</h1>
+<h1><?php echo $this->Html->link('Members', array('controller' => 'members', 'action' => 'index')); ?></h1>
 <table>
     <tr>
         <th>Id</th>
@@ -34,7 +34,7 @@
                 else
                 {
                     for($i = 0; $i < $numGroups; $i++) {
-                        echo $member['Group'][$i]['grp_description'];
+                        echo $this->Html->link($member['Group'][$i]['grp_description'], array('controller' => 'groups', 'action' => 'view', $member['Group'][$i]['grp_id']));
                         if($i < $numGroups - 1)
                         {
                             echo ', ';
