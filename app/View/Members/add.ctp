@@ -11,5 +11,9 @@
 	echo $this->Form->input('name');
 	echo $this->Form->input('email');
 	echo $this->Form->input('handle');
+
+	# Pin details
+	echo $this->Form->hidden('Pin.pin');
+
 	echo $this->Form->end('Add Member');
 ?>

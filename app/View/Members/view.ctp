@@ -7,7 +7,8 @@
 		Member No.
 	</dt>
 	<dd>
-		<?php echo $member['Member']['member_number']; ?>
+		<?php 
+			echo isset($member['Member']['member_number']) ? $member['Member']['member_number'] : "None"; ?>
 	</dd>
 
 	<dt>

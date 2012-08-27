@@ -61,8 +61,16 @@
 	    # Add a new member
 	    public function add() {
 	    	if ($this->request->is('post')) {
-	    		$result = $this->Member->save($this->request->data);
-	            if ($result) {
+
+	    		$this->request->data['Member']['member_status'] = 1;
+				$this->request->data['Member']['unlock_text'] = 'Welcome ' . $this->request->data['Member']['handle'];
+				$this->request->data['Member']['credit_limit'] = 5000;
+
+				# Set some pin data
+				$this->request->data['Pin']['unlock_text'] = 'Welcome';
+				$this->request->data['Pin']['state'] = 10;
+
+	            if ($this->Member->saveAll($this->request->data)) {
 	                $this->Session->setFlash('New member added.');
 
 	                # Email the new member, and notify the admins
@@ -70,27 +78,30 @@
 					$adminEmail->subject('New Prospective Member Notification');
 					$adminEmail->template('notify_admins_member_added', 'default');
 					$adminEmail->viewVars( array( 
-						'member' => $result['Member'],
+						'member' => $this->request->data['Member'],
 						 )
 					);
 					$adminEmail->send();
 
 					$memberEmail = $this->prepare_email();
-					$memberEmail->to( $result['Member']['email'] );
+					$memberEmail->to( $this->request->data['Member']['email'] );
 					$memberEmail->subject('Welcome to Nottingham Hackspace');
 					$memberEmail->template('to_prospective_member', 'default');
 					$memberEmail->viewVars( array(
-						'memberName' => $result['Member']['name'],
+						'memberName' => $this->request->data['Member']['name'],
 						'guideName' => 'TODO',
 						) 
 					);
 					$memberEmail->send();
 
-	                $this->redirect(array('action' => 'index'));
+					$this->redirect(array('action' => 'index'));
 	            } else {
 	                $this->Session->setFlash('Unable to add member.');
 	            }
 	        }
+
+	        # Generate the Pin data
+			$this->request->data['Pin']['pin'] = $this->Member->Pin->generate_unique_pin();
 	    }
 
 	    public function view($id = null) {

@@ -8,8 +8,15 @@
 						"className" => "Status",
 						"foreignKey" => "member_status",
 						"type" => "inner"
-				)
+				),
 		);
+
+		public $hasOne = array(
+	        'Pin' => array(
+	            'className'    => 'Pin',
+	            'dependent'    => true
+	        )
+	    );
 
 		public $hasAndBelongsToMany = array(
 	        'Group' =>
@@ -41,20 +48,5 @@
 	            'rule' => 'notEmpty'
 	        )
 	    );
-
-
-		public function beforeSave($options = array()) {
-			# Have to do a few things before we save
-
-			# Check to see if this is a new record, or an edit
-			if( isset($this->id) === false )
-			{
-				# New record, set the member status and the like
-				$this->data['Member']['member_status'] = 1;
-				$this->data['Member']['unlock_text'] = 'Welcome ' . $this->data['Member']['handle'];
-			}
-
-			return true;
-		}
 	}
 ?>
