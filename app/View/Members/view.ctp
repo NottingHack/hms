@@ -91,4 +91,21 @@
     <li>
         <?php echo $this->Html->link("Edit", array('controller' => 'members', 'action' => 'edit', $member['Member']['member_id'])); ?>
     </li>
+    <li>
+        <?php 
+        	switch ($member['Member']['member_status']) {
+                case 1: # Prospective member
+                    echo $this->Html->link("Approve member", array('controller' => 'members', 'action' => 'set_member_status', $member['Member']['member_id'], 2));
+                    break;
+
+                case 2: # Current member
+                    echo $this->Html->link("Revoke membership", array('controller' => 'members', 'action' => 'set_member_status', $member['Member']['member_id'], 3));
+                    break;
+
+                case 3: # Ex-member
+                    echo $this->Html->link("Reinstate membership", array('controller' => 'members', 'action' => 'set_member_status', $member['Member']['member_id'], 2));
+                    break;
+            }
+        ?>
+    </li>
 </ul>
