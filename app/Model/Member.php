@@ -48,5 +48,23 @@
 	            'rule' => 'notEmpty'
 	        )
 	    );
+
+
+		public function beforeSave($options = array()) {
+			# Have to do a few things before we save
+
+			if( isset( $this->data['Member']['member_number'] ) === false &&
+				$this->data['Member']['member_status'] == 2)
+			{
+				# We're setting this member to be a 'current member' for the first time, need to modify some things
+
+				# Set the member number and join date
+				$this->data['Member']['member_number'] = $this->find( 'count', array( 'conditions' => array( 'Member.member_number !=' => null ) ) );
+				$this->data['Member']['join_date'] = date( 'Y-m-d' );
+				$this->data['Group']['group_id'] = 2;
+			}
+
+			return true;
+		}
 	}
 ?>

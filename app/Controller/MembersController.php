@@ -155,7 +155,7 @@
 				$this->Session->setFlash('Unable to update member status');
 			}
 
-			$this->redirect($this->referer());
+			#$this->redirect($this->referer());
 		}
 
 		private function get_emails_for_members_in_group($groupId)
