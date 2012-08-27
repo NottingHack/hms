@@ -67,6 +67,24 @@
 	<dd>
 		<?php echo $this->Html->link($member['Status']['title'], array('controller' => 'members', 'action' => 'list_members_with_status', $member['Status']['status_id'])); ?>
 	</dd>
+	<dt>
+		Pin
+	</dt>
+	<dd>
+		<?php echo $member['Pin']['pin']; ?>
+	</dd>
+	<dt>
+		Current Balance
+	</dt>
+	<dd>
+		<?php echo $member['Member']['balance']; ?>
+	</dd>
+	<dt>
+		Credit Limit
+	</dt>
+	<dd>
+		<?php echo $member['Member']['credit_limit']; ?>
+	</dd>
 </dl>
 
 <ul class="nav">
