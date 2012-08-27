@@ -1,5 +1,11 @@
 <!-- File: /app/View/Member/view.ctp -->
 
+<?php
+	$this->Html->addCrumb('Members', '/members');
+	$this->Html->addCrumb('View Member', '/members/view');
+?>
+
+
 <h1><?php echo $member['Member']['name'] ?></h1>
 
 <dl>
@@ -46,7 +52,7 @@
         else
         {
             for($i = 0; $i < $numGroups; $i++) {
-                echo $member['Group'][$i]['grp_description'];
+                echo $this->Html->link($member['Group'][$i]['grp_description'], array('controller' => 'groups', 'action' => 'view', $member['Group'][$i]['grp_id']));
                 if($i < $numGroups - 1)
                 {
                     echo ', ';
@@ -54,6 +60,12 @@
             }
         }
        ?>
+	</dd>
+	<dt>
+		Status
+	</dt>
+	<dd>
+		<?php echo $this->Html->link($member['Status']['title'], array('controller' => 'members', 'action' => 'list_members_with_status', $member['Status']['status_id'])); ?>
 	</dd>
 </dl>
 
