@@ -119,7 +119,7 @@
 			} else {
 			    if ($this->Member->save($this->request->data)) {
 			        $this->Session->setFlash('Member details updated.');
-			        #$this->redirect(array('action' => 'index'));
+			        $this->redirect(array('action' => 'index'));
 			    } else {
 			        $this->Session->setFlash('Unable to update member details.');
 			    }

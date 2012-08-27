@@ -62,10 +62,6 @@
 				$this->data['Member']['member_number'] = $this->find( 'count', array( 'conditions' => array( 'Member.member_number !=' => null ) ) );
 				$this->data['Member']['join_date'] = date( 'Y-m-d' );
 				$this->data['Group']['group_id'] = 2;
-
-				print_r($this->data);
-
-				return false;
 			}
 
 			return true;
