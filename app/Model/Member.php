@@ -59,7 +59,9 @@
 				# We're setting this member to be a 'current member' for the first time, need to modify some things
 
 				# Set the member number and join date
-				$this->data['Member']['member_number'] = $this->find( 'count', array( 'conditions' => array( 'Member.member_number !=' => null ) ) );
+				# Member number is totally fucked up with hard-coded entries and missing entries, so we need to find what the highest number is
+				$highestMemberNumber = $this->find( 'first', array( 'conditions' => array( 'Member.member_number !=' => null),  'order' => 'Member.member_number DESC', 'fields' => 'Member.member_number' ) );
+				$this->data['Member']['member_number'] = $highestMemberNumber['Member']['member_number'] + 1;
 				$this->data['Member']['join_date'] = date( 'Y-m-d' );
 				$this->data['Group']['group_id'] = 2;
 			}
