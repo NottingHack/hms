@@ -4,6 +4,11 @@
 	    
 	    public $helpers = array('Html', 'Form');
 
+	    public function beforeFilter() {
+	        parent::beforeFilter();
+	        $this->Auth->allow('logout');
+	    }
+
 	    # Show some basic info, and link to other things
 	    public function index() {
 
@@ -207,6 +212,20 @@
 			$email->emailFormat('html');
 
 			return $email;
+		}
+
+		public function login() {
+		    if ($this->request->is('post')) {
+		        if ($this->Auth->login()) {
+		            $this->redirect($this->Auth->redirect());
+		        } else {
+		            $this->Session->setFlash(__('Invalid username or password, try again'));
+		        }
+		    }
+		}
+
+		public function logout() {
+		    $this->redirect($this->Auth->logout());
 		}
 	}
 ?>
