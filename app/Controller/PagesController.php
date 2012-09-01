@@ -31,6 +31,7 @@ App::uses('AppController', 'Controller');
  */
 class PagesController extends AppController {
 
+	var $component = array('Auth'); 
 /**
  * Controller name
  *
@@ -72,4 +73,9 @@ class PagesController extends AppController {
 		$this->set(compact('page', 'subpage', 'title_for_layout'));
 		$this->render(implode('/', $path));
 	}
+
+	function beforeFilter() { 
+		parent::beforeFilter();
+        $this->Auth->allow('display'); 
+    }
 }
