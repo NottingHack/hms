@@ -737,3 +737,11 @@ pre {
 #url-rewriting-warning {
 	display:none;
 }
+
+
+.userBar a {
+	color: #fff;
+}
+.userBar a:hover {
+	color: #fff;
+}
