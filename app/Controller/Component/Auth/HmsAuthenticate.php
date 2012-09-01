@@ -12,8 +12,6 @@ class HmsAuthenticate extends FormAuthenticate {
     	# Find the member
     	$memberInfo = $memberModel->find('first', array( 'conditions' => array( 'Member.email' => $request->data['User']['username'] ) ) );
 
-    	print_r(HmsAuthenticate::make_salt());
-
     	if(	isset($memberInfo) &&
     		$memberInfo != null)
     	{
@@ -32,9 +30,10 @@ class HmsAuthenticate extends FormAuthenticate {
     			{
     				# Check it
     				$attemptHash = HmsAuthenticate::make_hash($memberSalt, $request->data['User']['password']);
+
     				if( $attemptHash === $actualHash )
     				{
-    					return true;
+    					return $memberInfo;
     				}
     			}
     		}

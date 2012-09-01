@@ -15,7 +15,11 @@
 	        'Pin' => array(
 	            'className'    => 'Pin',
 	            'dependent'    => true
-	        )
+	        ),
+	        'MemberAuth' => array(
+	            'className'    => 'MemberAuth',
+	            'dependent'    => true
+	        ),
 	    );
 
 		public $hasAndBelongsToMany = array(
