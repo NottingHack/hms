@@ -57,7 +57,8 @@
 		public function beforeSave($options = array()) {
 			# Have to do a few things before we save
 
-			if( isset( $this->data['Member']['member_number'] ) === false &&
+			if( isset( $this->data['Member'] ) &&
+				isset( $this->data['Member']['member_number'] ) === false &&
 				$this->data['Member']['member_status'] == 2)
 			{
 				# We're setting this member to be a 'current member' for the first time, need to modify some things

@@ -52,7 +52,6 @@ class AppController extends Controller {
 
     public function beforeFilter() {
     	$this->Auth->authenticate = array('Hms');
-        $this->Auth->allow('index');
     }
 
 }

@@ -6,7 +6,7 @@
 
 	    public function beforeFilter() {
 	        parent::beforeFilter();
-	        $this->Auth->allow('logout');
+	        $this->Auth->allow('logout', 'login');
 	    }
 
 	    # Show some basic info, and link to other things
@@ -217,6 +217,13 @@
 		public function login() {
 		    if ($this->request->is('post')) {
 		        if ($this->Auth->login()) {
+		        	echo $this->Auth->user('id');
+		        	$memberInfo = AuthComponent::user();
+		        	# Set the last login time
+		        	unset($memberInfo['MemberAuth']);
+		        	$memberInfo['MemberAuth']['member_id'] = $memberInfo['Member']['member_id'];
+		        	$memberInfo['MemberAuth']['last_login'] = date( 'Y-m-d H:m:s' );
+		        	$this->Member->MemberAuth->save($memberInfo);
 		            $this->redirect($this->Auth->redirect());
 		        } else {
 		            $this->Session->setFlash(__('Invalid username or password, try again'));
