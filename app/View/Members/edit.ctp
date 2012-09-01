@@ -2,10 +2,9 @@
 
 <?php
 	$this->Html->addCrumb('Members', '/members');
-	$this->Html->addCrumb('Edit Member', '/members/edit');
+	$this->Html->addCrumb('Edit ' . $this->data['Member']['name'], '/members/edit/' . $this->data['Member']['member_id']);
 ?>
 
-<h1>Edit Member</h1>
 <?php
 	echo $this->Form->create('Member');
 	echo $this->Form->hidden('id');
