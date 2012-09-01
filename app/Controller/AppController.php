@@ -43,7 +43,7 @@ class AppController extends Controller {
 	        ),
             'loginRedirect' => array('controller' => 'members', 'action' => 'index'),
             'logoutRedirect' => array('controller' => 'pages', 'action' => 'display', 'home'),
-            'Form' => array(
+            'Hms' => array(
                 'fields' => array('username' => 'email'),
                 'userModel' => 'Member',
             )
@@ -51,7 +51,7 @@ class AppController extends Controller {
     );
 
     public function beforeFilter() {
-    	$this->Auth->authenticate = array('Form');
+    	$this->Auth->authenticate = array('Hms');
         $this->Auth->allow('index');
     }
 
