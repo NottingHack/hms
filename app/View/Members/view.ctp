@@ -2,11 +2,9 @@
 
 <?php
 	$this->Html->addCrumb('Members', '/members');
-	$this->Html->addCrumb('View Member', '/members/view');
+	$this->Html->addCrumb($member['Member']['name'], '/members/view/' . $member['Member']['member_id']);
 ?>
 
-
-<h1><?php echo $member['Member']['name'] ?></h1>
 
 <dl>
 	<dt>

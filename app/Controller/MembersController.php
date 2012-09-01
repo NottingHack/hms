@@ -149,6 +149,25 @@
 				);
 
 				$email->send();
+
+				# Is this member being approved for the first time? If so we need to send out a message to the member admins
+				# To tell them to e-mail the PIN etc to the new member
+				$oldStatus = $data['Status']['status_id'];
+				if(	$newStatus == 2 &&
+					$oldStatus == 1)
+				{
+					$approvedEmail = $this->prepare_email_for_members_in_group(5);
+					$approvedEmail->subject('Member Approved!');
+					$approvedEmail->template('notify_admins_member_approved', 'default');
+
+					$approvedEmail->viewVars( array( 
+						'member' => $data['Member'],
+						'pin' => $data['Pin']['pin']
+						)
+					);
+
+					$approvedEmail->send();
+				}
 			}
 			else
 			{

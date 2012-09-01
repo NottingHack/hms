@@ -63,6 +63,7 @@
 				$highestMemberNumber = $this->find( 'first', array( 'conditions' => array( 'Member.member_number !=' => null),  'order' => 'Member.member_number DESC', 'fields' => 'Member.member_number' ) );
 				$this->data['Member']['member_number'] = $highestMemberNumber['Member']['member_number'] + 1;
 				$this->data['Member']['join_date'] = date( 'Y-m-d' );
+				# Group 2 is for current members
 				$this->data['Group']['group_id'] = 2;
 			}
 
