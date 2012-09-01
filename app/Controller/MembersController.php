@@ -73,7 +73,7 @@
 
 				# Set some pin data
 				$this->request->data['Pin']['unlock_text'] = 'Welcome';
-				$this->request->data['Pin']['state'] = 10;
+				$this->request->data['Pin']['state'] = 40;
 
 	            if ($this->Member->saveAll($this->request->data)) {
 	                $this->Session->setFlash('New member added.');
