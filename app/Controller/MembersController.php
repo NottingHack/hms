@@ -94,7 +94,7 @@
 					$memberEmail->template('to_prospective_member', 'default');
 					$memberEmail->viewVars( array(
 						'memberName' => $this->request->data['Member']['name'],
-						'guideName' => 'TODO',
+						'guideName' => $this->request->data['Other']['guide'],
 						) 
 					);
 					$memberEmail->send();
@@ -217,7 +217,6 @@
 		public function login() {
 		    if ($this->request->is('post')) {
 		        if ($this->Auth->login()) {
-		        	echo $this->Auth->user('id');
 		        	$memberInfo = AuthComponent::user();
 		        	# Set the last login time
 		        	unset($memberInfo['MemberAuth']);

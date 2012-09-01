@@ -12,6 +12,8 @@
 	echo $this->Form->input('email');
 	echo $this->Form->input('handle');
 
+	echo $this->Form->input('Other.guide');
+
 	# Pin details
 	echo $this->Form->hidden('Pin.pin');
 
