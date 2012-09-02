@@ -115,8 +115,10 @@
 	    public function change_password($id = null) {
 			$this->Member->id = $id;
 			$memberInfo = $this->Member->read();
+			$memberIsMemberAdmin = $this->Member->memberInGroup(AuthComponent::user('Member.member_id'), 5);
 			$this->request->data['Member']['member_id'] = $id;
 			$this->set('memberInfo', $memberInfo);
+			$this->set('memberIsMemberAdmin', $memberInfo);
 
 			if ($this->request->is('get')) {
 			}
@@ -124,20 +126,37 @@
 			{
 				# Only member admins (group 5) and the member themselves can do this
 				if( $this->request->data['Member']['member_id'] == AuthComponent::user('Member.member_id') ||
-					$this->Member->memberInGroup(AuthComponent::user('Member.member_id'), 5) ) 
+					$memberIsMemberAdmin ) 
 				{
 					# Check the current the user submitted
 					if( isset($memberInfo['MemberAuth']) &&
 						$memberInfo['MemberAuth'] != null ) 
 					{
-						$currentPasswordHash = HmsAuthenticate::make_hash($memberInfo['MemberAuth']['salt'], $this->request->data['Other']['current_password']);
-						if( $currentPasswordHash === $memberInfo['MemberAuth']['passwd'] )
+						$saltToUse = $memberInfo['MemberAuth']['salt'];
+						$passwordToCheck = $memberInfo['MemberAuth']['passwd'];
+
+						if( $memberIsMemberAdmin )
+						{
+							# Member admins need to enter their own password
+							$memberAdminMemberInfo = $this->Member->find('first', array( 'conditions' => array( 'Member.member_id' => AuthComponent::user('Member.member_id') ) ) );
+							$saltToUse = $memberAdminMemberInfo['MemberAuth']['salt'];
+							$passwordToCheck = $memberAdminMemberInfo['MemberAuth']['passwd'];
+						}
+
+						$currentPasswordHash = HmsAuthenticate::make_hash($saltToUse, $this->request->data['Other']['current_password']);
+
+						if( $currentPasswordHash === $passwordToCheck ) # MemberAdmins don't need to know the old password
 						{
 							# User submitted current password is ok, check the new one
 							if( $this->request->data['Other']['new_password'] === $this->request->data['Other']['new_password_confirm'] )
 							{
 								# Good to go
 								$memberInfo['MemberAuth']['passwd'] = HmsAuthenticate::make_hash($memberInfo['MemberAuth']['salt'], $this->request->data['Other']['new_password']);
+								$memberInfo['MemberAuth']['member_id'] = $id;
+								if( isset( $memberInfo['MemberAuth']['salt'] ) === false )
+								{
+									$memberInfo['MemberAuth']['salt'] = HmsAuthenticate::make_salt();
+								}
 								if( $this->Member->MemberAuth->save($memberInfo) )
 								{
 									$this->Session->setFlash('Password updated.');

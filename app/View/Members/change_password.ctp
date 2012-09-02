@@ -8,7 +8,13 @@
 <?php
     echo $this->Form->create('Member');
     echo $this->Form->hidden('member_id');
-    echo $this->Form->input('Other.current_password', array( 'label' => 'Current password', 'type' => 'password' ));
+    $label = "Current password";
+    if($memberIsMemberAdmin == true)
+    {
+        $label = 'Admin password';
+    }
+    echo $this->Form->input('Other.current_password', array( 'label' => $label, 'type' => 'password' ));
+    
     echo $this->Form->input('Other.new_password', array( 'label' => 'New password', 'type' => 'password' ));
     echo $this->Form->input('Other.new_password_confirm', array( 'label' => 'Confirm new password', 'type' => 'password' ));
 
