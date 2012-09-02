@@ -43,7 +43,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 			<div class="userBar">
 			<?php if(AuthComponent::user()): ?>
 				Logged in as: 
-				<?php echo AuthComponent::user('Member.name'); ?> 
+				<?php echo $this->Html->link(AuthComponent::user('Member.name'), array( 'controller' => 'members', 'action' => 'view', AuthComponent::user('Member.member_id') ) ); ?> 
 				<?php echo $this->Html->link('Logout', array( 'controller' => 'members', 'action' => 'logout' )) ?>
 			<?php else: ?>
 				<?php echo $this->Html->link('Login', array( 'controller' => 'members', 'action' => 'login' )) ?>
