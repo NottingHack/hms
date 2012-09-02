@@ -119,6 +119,7 @@
 			$this->request->data['Member']['member_id'] = $id;
 			$this->set('memberInfo', $memberInfo);
 			$this->set('memberIsMemberAdmin', $memberInfo);
+			$this->set('memberEditingOwnProfile', AuthComponent::user('Member.member_id') == $id);
 
 			if ($this->request->is('get')) {
 			}

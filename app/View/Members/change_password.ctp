@@ -9,7 +9,10 @@
     echo $this->Form->create('Member');
     echo $this->Form->hidden('member_id');
     $label = "Current password";
-    if($memberIsMemberAdmin == true)
+    # If a member admin is editing this profile, we need to show a different label
+    # Unless the member admin is editing their own profile
+    if( $memberEditingOwnProfile == false &&
+        $memberIsMemberAdmin == true)
     {
         $label = 'Admin password';
     }
