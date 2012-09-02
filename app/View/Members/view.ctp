@@ -106,4 +106,7 @@
             }
         ?>
     </li>
+    <li>
+        <?php echo $this->Html->link("Change Password", array('controller' => 'members', 'action' => 'change_password', $member['Member']['member_id'])); ?>
+    </li>
 </ul>

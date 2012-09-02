@@ -74,5 +74,11 @@
 
 			return true;
 		}
+
+		# Returns true if the member is in the group
+		public function memberInGroup($memberId, $groupId)
+		{
+			return in_array($groupId, Hash::extract( $this->find('first', array( 'conditions' => array( 'Member.member_id' => $memberId ) ) ), 'Group.{n}.grp_id' ));
+		}
 	}
 ?>

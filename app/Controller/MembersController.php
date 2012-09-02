@@ -1,4 +1,7 @@
 <?php
+	
+
+	App::uses('HmsAuthenticate', 'Controller/Component/Auth');
 
 	class MembersController extends AppController {
 	    
@@ -109,6 +112,59 @@
 			$this->request->data['Pin']['pin'] = $this->Member->Pin->generate_unique_pin();
 	    }
 
+	    public function change_password($id = null) {
+			$this->Member->id = $id;
+			$memberInfo = $this->Member->read();
+			$this->request->data['Member']['member_id'] = $id;
+			$this->set('memberInfo', $memberInfo);
+
+			if ($this->request->is('get')) {
+			}
+			else
+			{
+				# Only member admins (group 5) and the member themselves can do this
+				if( $this->request->data['Member']['member_id'] == AuthComponent::user('Member.member_id') ||
+					$this->Member->memberInGroup(AuthComponent::user('Member.member_id'), 5) ) 
+				{
+					# Check the current the user submitted
+					if( isset($memberInfo['MemberAuth']) &&
+						$memberInfo['MemberAuth'] != null ) 
+					{
+						$currentPasswordHash = HmsAuthenticate::make_hash($memberInfo['MemberAuth']['salt'], $this->request->data['Other']['current_password']);
+						if( $currentPasswordHash === $memberInfo['MemberAuth']['passwd'] )
+						{
+							# User submitted current password is ok, check the new one
+							if( $this->request->data['Other']['new_password'] === $this->request->data['Other']['new_password_confirm'] )
+							{
+								# Good to go
+								$memberInfo['MemberAuth']['passwd'] = HmsAuthenticate::make_hash($memberInfo['MemberAuth']['salt'], $this->request->data['Other']['new_password']);
+								if( $this->Member->MemberAuth->save($memberInfo) )
+								{
+									$this->Session->setFlash('Password updated.');
+								}
+								else
+								{
+									$this->Session->setFlash('Unable to update password.');
+								}
+							}
+							else
+							{
+								$this->Session->setFlash('New password doesn\'t match new password confirm');
+							}
+						}
+						else
+						{
+							$this->Session->setFlash('Current password incorrect');
+						}
+					}
+				}
+				else
+				{
+					$this->Session->setFlash('You are not authorised to do this');
+				}
+			}
+	    }
+
 	    public function view($id = null) {
 	        $this->Member->id = $id;
 	        $this->set('member', $this->Member->read());
@@ -122,7 +178,7 @@
 			if ($this->request->is('get')) {
 			    $this->request->data = $this->Member->read();
 			} else {
-			    if ($this->Member->save($this->request->data)) {
+			    if ($this->Member->saveAll($this->request->data)) {
 			        $this->Session->setFlash('Member details updated.');
 			        $this->redirect(array('action' => 'index'));
 			    } else {
