@@ -6,8 +6,8 @@
 ?>
 
 <?php
-    echo $this->Form->create('Member');
-    echo $this->Form->hidden('member_id');
+    echo $this->Form->create('ChangePassword');
+    echo $this->Form->hidden('Member.member_id');
     $label = "Current password";
     # If a member admin is editing this profile, we need to show a different label
     # Unless the member admin is editing their own profile
@@ -16,10 +16,10 @@
     {
         $label = 'Admin password';
     }
-    echo $this->Form->input('Other.current_password', array( 'label' => $label, 'type' => 'password' ));
+    echo $this->Form->input('ChangePassword.current_password', array( 'label' => $label, 'type' => 'password' ));
     
-    echo $this->Form->input('Other.new_password', array( 'label' => 'New password', 'type' => 'password' ));
-    echo $this->Form->input('Other.new_password_confirm', array( 'label' => 'Confirm new password', 'type' => 'password' ));
+    echo $this->Form->input('ChangePassword.new_password', array( 'label' => 'New password', 'type' => 'password' ));
+    echo $this->Form->input('ChangePassword.new_password_confirm', array( 'label' => 'Confirm new password', 'type' => 'password' ));
 
     echo $this->Form->end('Change password');
 ?>

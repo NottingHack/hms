@@ -113,6 +113,9 @@
 	    }
 
 	    public function change_password($id = null) {
+
+	    	Controller::loadModel('ChangePassword');
+
 			$this->Member->id = $id;
 			$memberInfo = $this->Member->read();
 			$memberIsMemberAdmin = $this->Member->memberInGroup(AuthComponent::user('Member.member_id'), 5);
@@ -125,62 +128,68 @@
 			}
 			else
 			{
-				# Only member admins (group 5) and the member themselves can do this
-				if( $this->request->data['Member']['member_id'] == AuthComponent::user('Member.member_id') ||
-					$memberIsMemberAdmin ) 
+				# Validate the input using the dummy model
+				$this->ChangePassword->set($this->data);
+				if($this->ChangePassword->validates())
 				{
-					# Check the current the user submitted
-					if( isset($memberInfo['MemberAuth']) &&
-						$memberInfo['MemberAuth'] != null ) 
+					# Only member admins (group 5) and the member themselves can do this
+					if( $this->request->data['Member']['member_id'] == AuthComponent::user('Member.member_id') ||
+						$memberIsMemberAdmin ) 
 					{
-						$saltToUse = $memberInfo['MemberAuth']['salt'];
-						$passwordToCheck = $memberInfo['MemberAuth']['passwd'];
-
-						if( $memberIsMemberAdmin )
+						# Check the current the user submitted
+						if( isset($memberInfo['MemberAuth']) &&
+							$memberInfo['MemberAuth'] != null ) 
 						{
-							# Member admins need to enter their own password
-							$memberAdminMemberInfo = $this->Member->find('first', array( 'conditions' => array( 'Member.member_id' => AuthComponent::user('Member.member_id') ) ) );
-							$saltToUse = $memberAdminMemberInfo['MemberAuth']['salt'];
-							$passwordToCheck = $memberAdminMemberInfo['MemberAuth']['passwd'];
-						}
+							$saltToUse = $memberInfo['MemberAuth']['salt'];
+							$passwordToCheck = $memberInfo['MemberAuth']['passwd'];
 
-						$currentPasswordHash = HmsAuthenticate::make_hash($saltToUse, $this->request->data['Other']['current_password']);
-
-						if( $currentPasswordHash === $passwordToCheck ) # MemberAdmins don't need to know the old password
-						{
-							# User submitted current password is ok, check the new one
-							if( $this->request->data['Other']['new_password'] === $this->request->data['Other']['new_password_confirm'] )
+							if( $memberIsMemberAdmin )
 							{
-								# Good to go
-								$memberInfo['MemberAuth']['passwd'] = HmsAuthenticate::make_hash($memberInfo['MemberAuth']['salt'], $this->request->data['Other']['new_password']);
-								$memberInfo['MemberAuth']['member_id'] = $id;
-								if( isset( $memberInfo['MemberAuth']['salt'] ) === false )
+								# Member admins need to enter their own password
+								$memberAdminMemberInfo = $this->Member->find('first', array( 'conditions' => array( 'Member.member_id' => AuthComponent::user('Member.member_id') ) ) );
+								$saltToUse = $memberAdminMemberInfo['MemberAuth']['salt'];
+								$passwordToCheck = $memberAdminMemberInfo['MemberAuth']['passwd'];
+							}
+
+							$currentPasswordHash = HmsAuthenticate::make_hash($saltToUse, $this->request->data['ChangePassword']['current_password']);
+
+							if( $currentPasswordHash === $passwordToCheck ) # MemberAdmins don't need to know the old password
+							{
+								# User submitted current password is ok, check the new one
+								if( $this->request->data['ChangePassword']['new_password'] === $this->request->data['ChangePassword']['new_password_confirm'] )
 								{
-									$memberInfo['MemberAuth']['salt'] = HmsAuthenticate::make_salt();
-								}
-								if( $this->Member->MemberAuth->save($memberInfo) )
-								{
-									$this->Session->setFlash('Password updated.');
+									# Good to go
+									$memberInfo['MemberAuth']['passwd'] = HmsAuthenticate::make_hash($memberInfo['MemberAuth']['salt'], $this->request->data['ChangePassword']['new_password']);
+									$memberInfo['MemberAuth']['member_id'] = $id;
+									if( isset( $memberInfo['MemberAuth']['salt'] ) === false )
+									{
+										$memberInfo['MemberAuth']['salt'] = HmsAuthenticate::make_salt();
+									}
+									if( $this->Member->MemberAuth->save($memberInfo) )
+									{
+										$this->Session->setFlash('Password updated.');
+										$this->redirect(array('action' => 'view', $id));
+									}
+									else
+									{
+										$this->Session->setFlash('Unable to update password.');
+									}
 								}
 								else
 								{
-									$this->Session->setFlash('Unable to update password.');
+									$this->Session->setFlash('New password doesn\'t match new password confirm');
 								}
 							}
 							else
 							{
-								$this->Session->setFlash('New password doesn\'t match new password confirm');
+								$this->Session->setFlash('Current password incorrect');
 							}
 						}
-						else
-						{
-							$this->Session->setFlash('Current password incorrect');
-						}
 					}
-				}
-				else
-				{
-					$this->Session->setFlash('You are not authorised to do this');
+					else
+					{
+						$this->Session->setFlash('You are not authorised to do this');
+					}
 				}
 			}
 	    }
