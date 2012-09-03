@@ -69,6 +69,8 @@
 
 	    # Add a new member
 	    public function add() {
+	    	$this->set('members', $this->get_readable_member_list());
+
 	    	if ($this->request->is('post')) {
 
 	    		$this->request->data['Member']['member_status'] = 1;
@@ -204,6 +206,7 @@
 
 	    	$this->set('groups', $this->Member->Group->find('list',array('fields'=>array('grp_id','grp_description'))));
 	    	$this->set('statuses', $this->Member->Status->find('list',array('fields'=>array('status_id','title'))));
+	    	$this->set('members', $this->get_readable_member_list());
 			$this->Member->id = $id;
 
 			$data = $this->Member->read();
@@ -337,6 +340,19 @@
 
 		public function logout() {
 		    $this->redirect($this->Auth->logout());
+		}
+
+		private function get_readable_member_list() {
+
+			# Grab a list of member names and ID's
+			$memberList = $this->Member->find('list', array( 'fields' => array( 'member_id', 'name' )));
+			# Sort it alphabetically
+			natcasesort($memberList);
+
+			# Add the value for no member
+			$memberList = array_merge(array( 0 => 'None' ), $memberList);
+
+			return $memberList;
 		}
 	}
 ?>

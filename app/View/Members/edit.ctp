@@ -5,7 +5,10 @@
 	$this->Html->addCrumb('Edit ' . $this->data['Member']['name'], '/members/edit/' . $this->data['Member']['member_id']);
 ?>
 
-<?php
+<?
+	print_r($statuses);
+	print_r($members);
+	print_r($this->Html->value('Member.Member'));
 	echo $this->Form->create('Member');
 	echo $this->Form->hidden('member_id');
 	echo $this->Form->input('name');
@@ -16,6 +19,11 @@
 			'options' => $statuses, 
 			'type' => 'select',
 			'selected' => $this->Html->value('Status.Status'),
+		) 
+	);
+
+	echo $this->Form->input('parent_member_id', array( 
+			'options' => $members,
 		) 
 	);
 

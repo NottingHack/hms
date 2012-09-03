@@ -9,6 +9,10 @@
 						"foreignKey" => "member_status",
 						"type" => "inner"
 				),
+				"JointMember" => array(
+						"className" => "Member",
+						"foreignKey" => "parent_member_id",
+				),
 		);
 
 		public $hasOne = array(

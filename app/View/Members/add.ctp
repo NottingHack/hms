@@ -14,6 +14,11 @@
 
 	echo $this->Form->input('Other.guide');
 
+	echo $this->Form->input('parent_member_id', array( 
+			'options' => $members,
+		) 
+	);
+
 	# Pin details
 	echo $this->Form->hidden('Pin.pin');
 
