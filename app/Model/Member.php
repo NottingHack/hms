@@ -9,6 +9,11 @@
 					"foreignKey" => "member_status",
 					"type" => "inner"
 			),
+			"Account" => array(
+					"className" => "Account",
+					"foreignKey" => "account_id",
+					"type" => "inner"
+			),
 		);
 
 		public $hasOne = array(
@@ -18,10 +23,6 @@
 	        ),
 	        'MemberAuth' => array(
 	            'className'    => 'MemberAuth',
-	            'dependent'    => true
-	        ),
-	        'Account' => array(
-	            'className'    => 'Account',
 	            'dependent'    => true
 	        ),
 	    );

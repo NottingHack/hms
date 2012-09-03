@@ -5,13 +5,11 @@
 
 		public $primaryKey = 'account_id';
 
-    	public $belongsTo =  array(
-			"Member" => array(
-					"className" => "Member",
-					"foreignKey" => "Member_id",
-					"type" => "inner"
-			),
-		);
+		public $hasMany = array(
+	        'Member' => array(
+	            'className'    => 'Member',
+	        ),
+	    );
 
 	    public $validate = array(
 	        'account_ref' => array(

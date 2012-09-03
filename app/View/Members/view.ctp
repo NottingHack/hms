@@ -3,8 +3,6 @@
 <?php
 	$this->Html->addCrumb('Members', '/members');
 	$this->Html->addCrumb($member['Member']['name'], '/members/view/' . $member['Member']['member_id']);
-
-	print_r($member);
 ?>
 
 
