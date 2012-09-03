@@ -84,6 +84,9 @@
 				$this->request->data['Pin']['state'] = 40;
 
 	            if ($this->Member->saveAll($this->request->data)) {
+
+	            	$this->request->data['Member']['member_id'] = $this->Member->getLastInsertId();
+
 	                $this->Session->setFlash('New member added.');
 
 	                $this->set_account($this->request->data);
@@ -228,7 +231,7 @@
 			    	$this->Member->clearGroupsIfMembershipRevoked($id, $this->request->data);
 			    	$this->notify_status_update($data, $this->request->data);
 			        $this->Session->setFlash('Member details updated.');
-			        #$this->redirect(array('action' => 'index'));
+			        $this->redirect(array('action' => 'index'));
 			    } else {
 			        $this->Session->setFlash('Unable to update member details.');
 			    }
@@ -397,7 +400,10 @@
 			{
 				$tempArray = $initialElement;
 				foreach ($readableAccountList as $key => $value) {
-					$tempArray[$key] = $value;
+					if($key >= 0)
+					{
+						$tempArray[$key] = $value;
+					}
 				}
 
 				$readableAccountList = $tempArray;
