@@ -205,13 +205,16 @@
 	    	$this->set('groups', $this->Member->Group->find('list',array('fields'=>array('grp_id','grp_description'))));
 	    	$this->set('statuses', $this->Member->Status->find('list',array('fields'=>array('status_id','title'))));
 			$this->Member->id = $id;
+
+			$data = $this->Member->read();
+
 			if ($this->request->is('get')) {
-			    $this->request->data = $this->Member->read();
+			    $this->request->data = $data;
 			} else {
 				unset($this->request->data['Pin']);
-				print_r($this->request->data);
 			    if ($this->Member->saveAll($this->request->data)) {
 			    	$this->Member->clearGroupsIfMembershipRevoked($id, $this->request->data);
+			    	$this->notify_status_update($data, $this->request->data);
 			        $this->Session->setFlash('Member details updated.');
 			        $this->redirect(array('action' => 'index'));
 			    } else {
@@ -230,16 +233,30 @@
 
 				$this->Member->clearGroupsIfMembershipRevoked($id, $newData);
 
+				$this->notify_status_update($data, $newData);
+			}
+			else
+			{
+				$this->Session->setFlash('Unable to update member status');
+			}
+
+			$this->redirect($this->referer());
+		}
+
+		private function notify_status_update($oldData, $newData)
+		{
+			if($oldData['Member']['member_status'] != $newData['Member']['member_status'])
+			{
 				# Notify all the member admins about the status change
 				$email = $this->prepare_email_for_members_in_group(5);
 				$email->subject('Member Status Change Notification');
 				$email->template('notify_admins_member_status_change', 'default');
 				
-				$newStatusData = $this->Member->Status->find( 'all', array( 'conditions' => array( 'Status.status_id' => $newStatus ) ) );
+				$newStatusData = $this->Member->Status->find( 'all', array( 'conditions' => array( 'Status.status_id' => $newData['Member']['member_status'] ) ) );
 
 				$email->viewVars( array( 
-					'member' => $data['Member'],
-					'oldStatus' => $data['Status']['title'],
+					'member' => $oldData['Member'],
+					'oldStatus' => $oldData['Status']['title'],
 					'newStatus' => $newStatusData[0]['Status']['title'],
 					 )
 				);
@@ -248,7 +265,10 @@
 
 				# Is this member being approved for the first time? If so we need to send out a message to the member admins
 				# To tell them to e-mail the PIN etc to the new member
-				$oldStatus = $data['Status']['status_id'];
+				print_r($oldData);
+				print_r($newData);
+				$oldStatus = $oldData['Member']['member_status'];
+				$newStatus = $newData['Member']['member_status'];
 				if(	$newStatus == 2 &&
 					$oldStatus == 1)
 				{
@@ -257,20 +277,14 @@
 					$approvedEmail->template('notify_admins_member_approved', 'default');
 
 					$approvedEmail->viewVars( array( 
-						'member' => $data['Member'],
-						'pin' => $data['Pin']['pin']
+						'member' => $oldData['Member'],
+						'pin' => $oldData['Pin']['pin']
 						)
 					);
 
 					$approvedEmail->send();
 				}
 			}
-			else
-			{
-				$this->Session->setFlash('Unable to update member status');
-			}
-
-			$this->redirect($this->referer());
 		}
 
 		private function get_emails_for_members_in_group($groupId)
