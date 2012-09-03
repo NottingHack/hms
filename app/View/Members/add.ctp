@@ -14,8 +14,9 @@
 
 	echo $this->Form->input('Other.guide');
 
-	echo $this->Form->input('parent_member_id', array( 
-			'options' => $members,
+	echo $this->Form->input('account_id', array( 
+			'options' => $accounts,
+			'label' => 'Account'
 		) 
 	);
 

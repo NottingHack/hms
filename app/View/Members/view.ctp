@@ -83,6 +83,12 @@
 	<dd>
 		<?php echo $member['Member']['credit_limit']; ?>
 	</dd>
+	<dt>
+		Account Ref
+	</dt>
+	<dd>
+		<?php echo $member['Account']['payment_ref']; ?>
+	</dd>
 </dl>
 
 <ul class="nav">

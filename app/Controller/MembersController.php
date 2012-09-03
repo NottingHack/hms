@@ -56,7 +56,6 @@
 
 			if(isset($statusId))
 			{
-			#	print_r($this->Member->find('all', array( 'conditions' => array( 'Member.member_status' => $statusId ), 'fields' => array( 'DISTINCT Member.member_id' ))));
 		        $this->set('members', $this->Member->find('all', array( 'conditions' => array( 'Member.member_status' => $statusId ) )));
 		        $statusData = $this->Member->Status->find('all', array( 'conditions' => array( 'Status.status_id' => $statusId ) ));
 				$this->set('statusData', $statusData[0]['Status']);
@@ -69,7 +68,10 @@
 
 	    # Add a new member
 	    public function add() {
-	    	$this->set('members', $this->get_readable_member_list());
+
+	    	# Get the account list but add an item for create
+	    	$accountList =  $this->get_readable_account_list( array( -1 => 'Create account' ) );
+	    	$this->set('accounts', $accountList);
 
 	    	if ($this->request->is('post')) {
 
@@ -84,6 +86,8 @@
 	            if ($this->Member->saveAll($this->request->data)) {
 	                $this->Session->setFlash('New member added.');
 
+	                $this->set_account($this->request->data);
+	               
 	                # Email the new member, and notify the admins
 	                $adminEmail = $this->prepare_email_for_members_in_group(5);
 					$adminEmail->subject('New Prospective Member Notification');
@@ -113,6 +117,7 @@
 
 	        # Generate the Pin data
 			$this->request->data['Pin']['pin'] = $this->Member->Pin->generate_unique_pin();
+			$this->request->data['Member']['account_id'] = -1;
 	    }
 
 	    public function change_password($id = null) {
@@ -206,7 +211,10 @@
 
 	    	$this->set('groups', $this->Member->Group->find('list',array('fields'=>array('grp_id','grp_description'))));
 	    	$this->set('statuses', $this->Member->Status->find('list',array('fields'=>array('status_id','title'))));
-	    	$this->set('members', $this->get_readable_member_list());
+	    	# Add a value for using the existing account
+	    	$accountsList =	$this->get_readable_account_list( array( -1 => 'Use Default' ) );
+
+	    	$this->set('accounts', $accountsList);
 			$this->Member->id = $id;
 
 			$data = $this->Member->read();
@@ -216,10 +224,11 @@
 			} else {
 				unset($this->request->data['Pin']);
 			    if ($this->Member->saveAll($this->request->data)) {
+			    	$this->set_account($this->request->data);
 			    	$this->Member->clearGroupsIfMembershipRevoked($id, $this->request->data);
 			    	$this->notify_status_update($data, $this->request->data);
 			        $this->Session->setFlash('Member details updated.');
-			        $this->redirect(array('action' => 'index'));
+			        #$this->redirect(array('action' => 'index'));
 			    } else {
 			        $this->Session->setFlash('Unable to update member details.');
 			    }
@@ -342,17 +351,89 @@
 		    $this->redirect($this->Auth->logout());
 		}
 
-		private function get_readable_member_list() {
+		private function get_readable_account_list($initialElement = null) {
+			# Grab a list of member names and ID's and account id's
+			$memberList = $this->Member->find('all', array( 'fields' => array( 'member_id', 'name', 'account_id' )));
 
-			# Grab a list of member names and ID's
-			$memberList = $this->Member->find('list', array( 'fields' => array( 'member_id', 'name' )));
+			# Create a list with account_id and member_names
+			foreach ($memberList as $memberInfo) {
+				if( isset($accountList[$memberInfo['Member']['account_id']]) == false )
+				{
+					$accountList[$memberInfo['Member']['account_id']] = array( );
+				}
+				array_push($accountList[$memberInfo['Member']['account_id']], $memberInfo['Member']['name']);
+				natcasesort($accountList[$memberInfo['Member']['account_id']]);
+			}
+
+			$accountNameList = $this->Member->Account->find('list', array( 'fields' => array( 'account_id', 'payment_ref' )));
+
+			foreach ($accountList as $accountId => $members) {
+				$formattedMemberList = $members[0];
+				$numMembers = count($members);
+				for($i = 1; $i < $numMembers; $i++)
+				{
+					$prefix = ', ';
+					if($i = $numMembers - 1)
+					{
+						$prefix = ' & ';
+					}
+					$formattedMemberList .= $prefix . $members[$i];
+				}
+
+				$readableAccountList[$accountId] = $formattedMemberList;
+				# Append the payment ref if any
+				if(isset($accountNameList[$accountId]))
+				{
+					$readableAccountList[$accountId] .= ' [ ' . $accountNameList[$accountId] . ' ]';
+				}
+			}
+
 			# Sort it alphabetically
-			natcasesort($memberList);
+			natcasesort($readableAccountList);
 
-			# Add the value for no member
-			$memberList = array_merge(array( 0 => 'None' ), $memberList);
+			# If the initial item is set, we need to make a new list starting with that
+			if(	isset($initialElement) &&
+				$initialElement != null)
+			{
+				$tempArray = $initialElement;
+				foreach ($readableAccountList as $key => $value) {
+					$tempArray[$key] = $value;
+				}
 
-			return $memberList;
+				$readableAccountList = $tempArray;
+			}
+
+			return $readableAccountList;
+		}
+
+		private function set_account($memberInfo)
+		{
+			# Do we need to create a new account?
+            if($memberInfo['Member']['account_id'] < 0)
+            {
+            	# Check if there's already an account for this member
+            	# This could happen if they started off on their own account, moved to a joint one and then they wanted to move back
+
+            	$existingAccountInfo = $this->Member->Account->find('all', array( 'conditions' => array( 'Account.member_id' => $memberInfo['Member']['member_id'] ) ));
+            	if(	isset($existingAccountInfo) &&
+            		count($existingAccountInfo) > 0)
+            	{
+            		# Already an account, just use that
+            		$memberInfo['Member']['account_id'] = $existingAccountInfo[0]['Account']['account_id'];
+            	}
+            	else
+            	{
+            		# Need to create one
+            		$memberInfo['Account']['member_id'] = $memberInfo['Member']['member_id'];
+            		$memberInfo['Account']['payment_ref'] = Account::generate_payment_ref($memberInfo);
+            		
+            		$accountInfo = $this->Member->Account->save($memberInfo);
+
+            		$memberInfo['Member']['account_id'] = $accountInfo['Account']['account_id'];
+            	}
+            }
+
+            $this->Member->save($memberInfo);
 		}
 	}
 ?>

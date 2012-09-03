@@ -4,15 +4,11 @@
 		public $primaryKey = 'member_id';
 
 		public $belongsTo =  array(
-				"Status" => array(
-						"className" => "Status",
-						"foreignKey" => "member_status",
-						"type" => "inner"
-				),
-				"JointMember" => array(
-						"className" => "Member",
-						"foreignKey" => "parent_member_id",
-				),
+			"Status" => array(
+					"className" => "Status",
+					"foreignKey" => "member_status",
+					"type" => "inner"
+			),
 		);
 
 		public $hasOne = array(
@@ -22,6 +18,10 @@
 	        ),
 	        'MemberAuth' => array(
 	            'className'    => 'MemberAuth',
+	            'dependent'    => true
+	        ),
+	        'Account' => array(
+	            'className'    => 'Account',
 	            'dependent'    => true
 	        ),
 	    );
@@ -42,7 +42,7 @@
 	                'finderQuery'            => '',
 	                'deleteQuery'            => '',
 	                'insertQuery'            => ''
-	            )
+	            ),
 	    );
 
 		public $validate = array(

@@ -6,9 +6,6 @@
 ?>
 
 <?
-	print_r($statuses);
-	print_r($members);
-	print_r($this->Html->value('Member.Member'));
 	echo $this->Form->create('Member');
 	echo $this->Form->hidden('member_id');
 	echo $this->Form->input('name');
@@ -22,8 +19,9 @@
 		) 
 	);
 
-	echo $this->Form->input('parent_member_id', array( 
-			'options' => $members,
+	echo $this->Form->input('account_id', array( 
+			'options' => $accounts,
+			'label' => 'Account [ Payment Ref ]',
 		) 
 	);
 
