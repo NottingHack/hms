@@ -208,7 +208,10 @@
 			if ($this->request->is('get')) {
 			    $this->request->data = $this->Member->read();
 			} else {
+				unset($this->request->data['Pin']);
+				print_r($this->request->data);
 			    if ($this->Member->saveAll($this->request->data)) {
+			    	$this->Member->clearGroupsIfMembershipRevoked($id, $this->request->data);
 			        $this->Session->setFlash('Member details updated.');
 			        $this->redirect(array('action' => 'index'));
 			    } else {

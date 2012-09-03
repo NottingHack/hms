@@ -57,9 +57,11 @@
 		public function beforeSave($options = array()) {
 			# Have to do a few things before we save
 
+			$memberWillBeCurrentMember = $this->data['Member']['member_status'] == 2;
+
 			if( isset( $this->data['Member'] ) &&
 				isset( $this->data['Member']['member_number'] ) === false &&
-				$this->data['Member']['member_status'] == 2)
+				$memberWillBeCurrentMember)
 			{
 				# We're setting this member to be a 'current member' for the first time, need to modify some things
 
@@ -68,8 +70,19 @@
 				$highestMemberNumber = $this->find( 'first', array( 'conditions' => array( 'Member.member_number !=' => null),  'order' => 'Member.member_number DESC', 'fields' => 'Member.member_number' ) );
 				$this->data['Member']['member_number'] = $highestMemberNumber['Member']['member_number'] + 1;
 				$this->data['Member']['join_date'] = date( 'Y-m-d' );
+			}
+
+			if( $memberWillBeCurrentMember ) 
+			{
 				# Group 2 is for current members
-				$this->data['Group']['group_id'] = 2;
+				$currentGroups = Hash::extract($this->data, 'Group.{n}');
+				$currentGroupIds = Hash::extract($currentGroups, 'group_id');
+				if( in_array(2, $currentGroupIds) == false )
+				{
+					array_push($currentGroups, array( 'grp_id' => 2 ));
+				}
+				$this->data['Group'] = $currentGroups;
+				print_r($this->data);
 			}
 
 			return true;

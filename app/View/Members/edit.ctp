@@ -33,7 +33,7 @@
 	echo '</fieldset>';
 
 	# Pin details
-	echo $this->Form->input('Pin.pin');
+	echo $this->Form->input('Pin.pin', array( 'readonly' => 'readonly' ));
 
 	echo $this->Form->end('Update Member');
 ?>
