@@ -56,6 +56,7 @@
 
 			if(isset($statusId))
 			{
+			#	print_r($this->Member->find('all', array( 'conditions' => array( 'Member.member_status' => $statusId ), 'fields' => array( 'DISTINCT Member.member_id' ))));
 		        $this->set('members', $this->Member->find('all', array( 'conditions' => array( 'Member.member_status' => $statusId ) )));
 		        $statusData = $this->Member->Status->find('all', array( 'conditions' => array( 'Status.status_id' => $statusId ) ));
 				$this->set('statusData', $statusData[0]['Status']);
@@ -223,6 +224,8 @@
 			if($this->Member->save())
 			{
 				$this->Session->setFlash('Member status updated.');
+
+				$this->Member->clearGroupsIfMembershipRevoked($id, $newData);
 
 				# Notify all the member admins about the status change
 				$email = $this->prepare_email_for_members_in_group(5);

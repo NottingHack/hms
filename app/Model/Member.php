@@ -75,6 +75,15 @@
 			return true;
 		}
 
+		public function clearGroupsIfMembershipRevoked($id, $newData) {
+			# If membership is being revoked, clear all groups
+			if($newData['Member']['member_status'] == 3)
+			{
+				#print_r($this);
+				$this->MemberGroup->deleteAll(array( 'MemberGroup.member_id' => $id ));
+			}
+		}
+
 		# Returns true if the member is in the group
 		public function memberInGroup($memberId, $groupId)
 		{
