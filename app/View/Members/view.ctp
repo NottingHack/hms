@@ -89,6 +89,50 @@
 	<dd>
 		<?php echo $member['Account']['payment_ref']; ?>
 	</dd>
+	<dt>
+		Address
+	</dt>
+	<dd>
+		<?php 
+			$addressArray = array( $member['Member']['address_1'], $member['Member']['address_2'], $member['Member']['address_city'], $member['Member']['address_postcode'] );
+
+			$addressBlock = "";
+			foreach ($addressArray as $item) {
+				if( isset($item) &&
+					$item != null &&
+					strlen(trim($item)) > 0 )
+				{
+					$addressBlock .= $item . '</br>';
+				}
+			}
+
+			if(strlen($addressBlock) > 0)
+			{
+				echo $addressBlock;
+			}
+			else
+			{
+				echo "None";
+			}
+		?>
+	</dd>
+	<dt>
+		Contact No.
+	</dt>
+	<dd>
+		<?php
+			if( isset($member['Member']['contact_number']) &&
+				$member['Member']['contact_number'] != null &&
+				strlen(trim($member['Member']['contact_number'])) > 0 )
+			{
+				echo $member['Member']['contact_number'];
+			}
+			else
+			{
+				echo "None";
+			}
+		?>
+	</dd>
 </dl>
 
 <ul class="nav">
