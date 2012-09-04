@@ -101,8 +101,6 @@
 
 				$newData['Group'] = $currentGroups;
 
-				print_r($newData);
-
 				$this->save($newData);
 			}
 		}
