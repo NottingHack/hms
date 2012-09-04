@@ -61,7 +61,6 @@
 
 		public function beforeSave($options = array()) {
 			# Have to do a few things before we save
-
 			$memberWillBeCurrentMember = $this->data['Member']['member_status'] == 2;
 
 			if( isset( $this->data['Member'] ) &&
@@ -84,9 +83,11 @@
 				$currentGroupIds = Hash::extract($currentGroups, 'group_id');
 				if( in_array(2, $currentGroupIds) == false )
 				{
-					array_push($currentGroups, array( 'grp_id' => 2 ));
+					array_push($currentGroups, array( 'grp_id' => 2, 'member_id' => $this->data['Member']['member_id'] ));
 				}
+
 				$this->data['Group'] = $currentGroups;
+
 				print_r($this->data);
 			}
 
@@ -97,7 +98,6 @@
 			# If membership is being revoked, clear all groups
 			if($newData['Member']['member_status'] == 3)
 			{
-				#print_r($this);
 				$this->MemberGroup->deleteAll(array( 'MemberGroup.member_id' => $id ));
 			}
 		}

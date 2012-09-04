@@ -225,13 +225,18 @@
 			if ($this->request->is('get')) {
 			    $this->request->data = $data;
 			} else {
+				# Need to unset the pin here, as it's not properly filled in
+				# So it adds partial data to the database
 				unset($this->request->data['Pin']);
 			    if ($this->Member->saveAll($this->request->data)) {
+			    	$this->Member->Group->save();
 			    	$this->set_account($this->request->data);
-			    	$this->Member->clearGroupsIfMembershipRevoked($id, $this->request->data);
-			    	$this->notify_status_update($data, $this->request->data);
+			    	
+			    	$this->set_member_status_impl($data, $this->request->data);
+					$this->update_status_on_joint_accounts($data, $this->request->data);
+
 			        $this->Session->setFlash('Member details updated.');
-			        $this->redirect(array('action' => 'index'));
+			        #$this->redirect(array('action' => 'index'));
 			    } else {
 			        $this->Session->setFlash('Unable to update member details.');
 			    }
@@ -242,13 +247,18 @@
 		{
 			$data = $this->Member->read(null, $id);
 			$newData = $this->Member->set('member_status', $newStatus);
-			if($this->Member->save())
+
+			$data['Member']['member_status'] = $newStatus;
+			# Need to unset the group here, as it's not properly filled in
+			# So it adds partial data to the database
+			unset($data['Group']);
+
+			if($this->Member->save($data))
 			{
 				$this->Session->setFlash('Member status updated.');
 
-				$this->Member->clearGroupsIfMembershipRevoked($id, $newData);
-
-				$this->notify_status_update($data, $newData);
+				$this->set_member_status_impl($data, $newData);
+				$this->update_status_on_joint_accounts($data, $newData);
 			}
 			else
 			{
@@ -256,6 +266,30 @@
 			}
 
 			$this->redirect($this->referer());
+		}
+
+		private function set_member_status_impl($oldData, $newData)
+		{
+			$this->Member->clearGroupsIfMembershipRevoked($oldData['Member']['member_id'], $newData);
+			$this->notify_status_update($oldData, $newData);
+		}
+
+		private function update_status_on_joint_accounts($oldData, $newData)
+		{
+			# Find any members using the same account as this one, and set their status too
+			foreach ($this->Member->find( 'all', array( 'conditions' => array( 'Member.account_id' => $oldData['Member']['account_id'] ) ) ) as $memberInfo) {
+				if($memberInfo['Member']['member_id'] != $oldData['Member']['member_id'])
+				{
+					$oldMemberInfo = $memberInfo;
+					$memberInfo['Member']['member_status'] = $newData['Member']['member_status'];
+					$this->data = $memberInfo;
+					$newMemberInfo = $this->Member->save($memberInfo);
+					if($newMemberInfo)
+					{
+						$this->set_member_status_impl($oldMemberInfo, $newMemberInfo);
+					}
+				}
+			}
 		}
 
 		private function notify_status_update($oldData, $newData)
@@ -280,8 +314,6 @@
 
 				# Is this member being approved for the first time? If so we need to send out a message to the member admins
 				# To tell them to e-mail the PIN etc to the new member
-				print_r($oldData);
-				print_r($newData);
 				$oldStatus = $oldData['Member']['member_status'];
 				$newStatus = $newData['Member']['member_status'];
 				if(	$newStatus == 2 &&
