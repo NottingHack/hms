@@ -32,6 +32,10 @@
 		) 
 	);
 
+	# Pin details
+	echo $this->Form->input('Pin.pin', array( 'readonly' => 'readonly' ));
+	echo $this->Form->input('Pin.expiry', array('type'=>'date', 'empty' => true, 'minYear' => date("Y"), 'orderYear' => 'asc', 'dateFormat' => 'DMY'));
+
 	echo '<fieldset>';
 	echo '<legend>Groups</legend>';
 
@@ -44,9 +48,6 @@
         )); 
 
 	echo '</fieldset>';
-
-	# Pin details
-	echo $this->Form->input('Pin.pin', array( 'readonly' => 'readonly' ));
 
 	echo $this->Form->end('Update Member');
 ?>

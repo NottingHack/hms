@@ -22,6 +22,7 @@
 
 	# Pin details
 	echo $this->Form->hidden('Pin.pin');
+	echo $this->Form->input('Pin.expiry', array('type'=>'date', 'empty' => true, 'minYear' => date("Y"), 'orderYear' => 'asc', 'dateFormat' => 'DMY'));
 
 	echo $this->Form->end('Add Member');
 ?>

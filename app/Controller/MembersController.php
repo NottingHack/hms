@@ -224,10 +224,15 @@
 			if ($this->request->is('get')) {
 			    $this->request->data = $data;
 			} else {
-				# Need to unset the pin here, as it's not properly filled in
-				# So it adds partial data to the database
-				unset($this->request->data['Pin']);
+				# Need to set some more info about the pin
+				#$this->request->data['Pin']['member_id'] = $id;
+				$this->request->data['Pin']['pin_id'] = $data['Pin']['pin_id'];
+
+				# Clear the actual pin number though, so that won't get updated
+				unset($this->request->data['Pin']['pin']);
+
 			    if ($this->Member->saveAll($this->request->data)) {
+
 			    	$this->set_account($this->request->data);
 			    	
 			    	$this->set_member_status_impl($data, $this->request->data);

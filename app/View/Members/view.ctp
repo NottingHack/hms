@@ -71,6 +71,20 @@
 	<dd>
 		<?php echo $member['Pin']['pin']; ?>
 	</dd>
+
+	<?php 
+		if( isset($member['Pin']['expiry']) &&
+			$member['Pin']['expiry'] != null ):
+	?>
+
+	<dt>
+		Pin Expires
+	</dt>
+	<dd>
+		<?php echo date('l, dS F, Y', strtotime($member['Pin']['expiry'])); ?>
+	</dd>
+
+	<?php endif; ?>
 	<dt>
 		Current Balance
 	</dt>

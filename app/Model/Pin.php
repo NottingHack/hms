@@ -18,7 +18,7 @@
 	            'rule' => 'notEmpty'
 	        ),
 	        'member_id' => array(
-	        	'email'
+	        	'rule' => 'notEmpty'
 	        ),
 	        'unlock_text' => array(
 	            'rule' => 'notEmpty'
