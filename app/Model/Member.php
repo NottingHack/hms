@@ -76,21 +76,6 @@
 				$this->data['Member']['join_date'] = date( 'Y-m-d' );
 			}
 
-			if( $memberWillBeCurrentMember ) 
-			{
-				# Group 2 is for current members
-				$currentGroups = Hash::extract($this->data, 'Group.{n}');
-				$currentGroupIds = Hash::extract($currentGroups, 'group_id');
-				if( in_array(2, $currentGroupIds) == false )
-				{
-					array_push($currentGroups, array( 'grp_id' => 2, 'member_id' => $this->data['Member']['member_id'] ));
-				}
-
-				$this->data['Group'] = $currentGroups;
-
-				print_r($this->data);
-			}
-
 			return true;
 		}
 
@@ -99,6 +84,26 @@
 			if($newData['Member']['member_status'] == 3)
 			{
 				$this->MemberGroup->deleteAll(array( 'MemberGroup.member_id' => $id ));
+			}
+		}
+
+		public function addToCurrentMemberGroupIfStatusIsCurrentMember($id, $newData) {
+			# If membership is current_member, add to the current member group
+			if($newData['Member']['member_status'] == 2)
+			{
+				# Group 2 is for current members
+				$currentGroups = Hash::extract($newData, 'Group.{n}');
+				$currentGroupIds = Hash::extract($currentGroups, 'group_id');
+				if( in_array(2, $currentGroupIds) == false )
+				{
+					array_push($currentGroups, array( 'grp_id' => 2, 'member_id' => $id ));
+				}
+
+				$newData['Group'] = $currentGroups;
+
+				print_r($newData);
+
+				$this->save($newData);
 			}
 		}
 

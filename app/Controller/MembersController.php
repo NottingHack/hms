@@ -219,8 +219,7 @@
 
 	    	$this->set('accounts', $accountsList);
 			$this->Member->id = $id;
-
-			$data = $this->Member->read();
+			$data = $this->Member->read(null, $id);
 
 			if ($this->request->is('get')) {
 			    $this->request->data = $data;
@@ -229,7 +228,6 @@
 				# So it adds partial data to the database
 				unset($this->request->data['Pin']);
 			    if ($this->Member->saveAll($this->request->data)) {
-			    	$this->Member->Group->save();
 			    	$this->set_account($this->request->data);
 			    	
 			    	$this->set_member_status_impl($data, $this->request->data);
@@ -271,6 +269,7 @@
 		private function set_member_status_impl($oldData, $newData)
 		{
 			$this->Member->clearGroupsIfMembershipRevoked($oldData['Member']['member_id'], $newData);
+			$this->Member->addToCurrentMemberGroupIfStatusIsCurrentMember($oldData['Member']['member_id'], $newData);
 			$this->notify_status_update($oldData, $newData);
 		}
 
@@ -278,17 +277,16 @@
 		{
 			# Find any members using the same account as this one, and set their status too
 			foreach ($this->Member->find( 'all', array( 'conditions' => array( 'Member.account_id' => $oldData['Member']['account_id'] ) ) ) as $memberInfo) {
-				if($memberInfo['Member']['member_id'] != $oldData['Member']['member_id'])
+				
+				$oldMemberInfo = $memberInfo;
+				$memberInfo['Member']['member_status'] = $newData['Member']['member_status'];
+				$this->data = $memberInfo;
+				$newMemberInfo = $this->Member->save($memberInfo);
+				if($newMemberInfo)
 				{
-					$oldMemberInfo = $memberInfo;
-					$memberInfo['Member']['member_status'] = $newData['Member']['member_status'];
-					$this->data = $memberInfo;
-					$newMemberInfo = $this->Member->save($memberInfo);
-					if($newMemberInfo)
-					{
-						$this->set_member_status_impl($oldMemberInfo, $newMemberInfo);
-					}
+					$this->set_member_status_impl($oldMemberInfo, $newMemberInfo);
 				}
+
 			}
 		}
 
