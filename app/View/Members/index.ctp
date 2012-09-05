@@ -27,6 +27,8 @@
     </tr>
 </table>
 
+<h3>Search</h3>
+
 <?php
     echo $this->form->create("Member",array('action' => 'search')); 
     echo $this->form->input("query", array('label' => '')); 
