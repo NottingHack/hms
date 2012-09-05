@@ -39,4 +39,7 @@
     <li>
         <?php echo $this->Html->link("Add Member", array('controller' => 'members', 'action' => 'add')); ?>
     </li>
+    <li>
+        <?php echo $this->Html->link("E-mail all current members", array('controller' => 'members', 'action' => 'email_members_with_status', 2)); ?>
+    </li>
 </ul>

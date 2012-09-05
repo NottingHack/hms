@@ -359,6 +359,58 @@
 			}
 		}
 
+		public function email_members_with_status($status) {
+
+			Controller::loadModel('MemberEmail');
+
+			$members = $this->Member->find('all', array('conditions' => array( 'Member.member_status' => $status )));
+			$memberEmails = Hash::extract( $members, '{n}.Member.email' );
+
+			$statusName = "Unknown";
+			$statusId = $status;
+			$statusList = $this->Member->Status->find( 'all', array( 'conditions' => array( 'status_id' => $status ) ) );
+			if(count($statusList) > 0)
+			{
+				$statusName = $statusList[0]['Status']['title'];
+			}
+
+			$this->set('members', $members);
+			$this->set('statusName', $statusName);
+			$this->set('statusId', $status);
+
+			if ($this->request->is('get')) {
+			} else {
+				$this->MemberEmail->set($this->data);
+				if($this->MemberEmail->validates())
+				{
+					$subject = $this->request->data['MemberEmail']['subject'];
+					$message = $this->request->data['MemberEmail']['message'];
+					if( isset($subject) &&
+						$subject != null &&
+						strlen(trim($subject)) > 0 &&
+
+						isset($message) &&
+						$message != null &&
+						strlen(trim($message)) > 0 )
+					{
+						# Send the message out
+						$email = $this->prepare_email();
+						$email->to($memberEmails);
+						$email->subject($subject);
+						$email->template('default', 'default');
+						$email->send($message);
+
+						$this->Session->setFlash('E-mail sent');
+						$this->redirect(array('action' => 'index'));
+					}
+					else
+					{
+						$this->Session->setFlash('Unable to send e-mail');
+					}
+				}
+			}
+		}
+
 		private function get_emails_for_members_in_group($groupId)
 		{
 			# First grab all the members in the group
