@@ -19,11 +19,10 @@
 
 		public static function generate_payment_ref($memberInfo)
 		{
-			# Currently a PIN is a 4 digit number between 1000 and 9999
+			# Payment ref is pin followed by as much of the name as possible
+			$pin = $memberInfo['Pin']['pin'];
 			$fullName = $memberInfo['Member']['name'];
-
-			$ref = substr($fullName, 0, 12);
-			$ref = str_replace(" ", "_", $ref);
+			$ref = $pin . str_replace(" ", "_", substr($fullName, 0, 8));
 			return $ref;
 		}
 	}

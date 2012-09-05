@@ -12,7 +12,7 @@ If you'd like to become a Nottingham Hackspace member, the first step is simply 
 Account number: ########<br>
 Sort Code: ##-##-##<br>
 Account name: Nottinghack<br>
-Reference: Put your name<br>
+Reference: <?php echo $paymentRef ?><br>
 </p>
 
 <p>

@@ -89,7 +89,14 @@
 
 	                $this->Session->setFlash('New member added.');
 
-	                $this->set_account($this->request->data);
+	                $memberInfo = $this->set_account($this->request->data);
+
+	                $paymentRef = $memberInfo['Account']['payment_ref'];
+	                if( isset($paymentRef) == false ||
+	                	$paymentRef == null )
+	                {
+	                	$paymentRef = Account::generate_payment_ref($memberInfo);
+	                }
 	               
 	                # Email the new member, and notify the admins
 	                $adminEmail = $this->prepare_email_for_members_in_group(5);
@@ -108,6 +115,7 @@
 					$memberEmail->viewVars( array(
 						'memberName' => $this->request->data['Member']['name'],
 						'guideName' => $this->request->data['Other']['guide'],
+						'paymentRef' => $paymentRef,
 						) 
 					);
 					$memberEmail->send();
@@ -239,7 +247,7 @@
 					$this->update_status_on_joint_accounts($data, $this->request->data);
 
 			        $this->Session->setFlash('Member details updated.');
-			        #$this->redirect(array('action' => 'index'));
+			        $this->redirect(array('action' => 'index'));
 			    } else {
 			        $this->Session->setFlash('Unable to update member details.');
 			    }
@@ -475,6 +483,8 @@
             }
 
             $this->Member->save($memberInfo);
+
+            return $memberInfo;
 		}
 	}
 ?>
