@@ -104,6 +104,8 @@
 					$adminEmail->template('notify_admins_member_added', 'default');
 					$adminEmail->viewVars( array( 
 						'member' => $this->request->data['Member'],
+						'memberAdmin' => AuthComponent::user('Member.name'),
+						'paymentRef' => $paymentRef,
 						 )
 					);
 					$adminEmail->send();
@@ -256,7 +258,8 @@
 
 		public function set_member_status($id, $newStatus)
 		{
-			$data = $this->Member->read(null, $id);
+			$oldData = $this->Member->read(null, $id);
+			$data = $oldData;
 			$newData = $this->Member->set('member_status', $newStatus);
 
 			$data['Member']['member_status'] = $newStatus;
@@ -268,7 +271,7 @@
 			{
 				$this->Session->setFlash('Member status updated.');
 
-				$this->set_member_status_impl($data, $newData);
+				$this->set_member_status_impl($oldData, $newData);
 				$this->update_status_on_joint_accounts($data, $newData);
 			}
 			else
@@ -294,6 +297,7 @@
 				$oldMemberInfo = $memberInfo;
 				$memberInfo['Member']['member_status'] = $newData['Member']['member_status'];
 				$this->data = $memberInfo;
+				unset($memberInfo['Group']);
 				$newMemberInfo = $this->Member->save($memberInfo);
 				if($newMemberInfo)
 				{
@@ -318,6 +322,7 @@
 					'member' => $oldData['Member'],
 					'oldStatus' => $oldData['Status']['title'],
 					'newStatus' => $newStatusData[0]['Status']['title'],
+					'memberAdmin' => AuthComponent::user('Member.name'),
 					 )
 				);
 

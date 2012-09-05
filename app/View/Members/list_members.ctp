@@ -24,7 +24,6 @@
 <table>
     <tr>
         <th>Id</th>
-        <th>Member No.</th>
         <th>Name</th>
         <th>Email</th>
         <th>Join Date</th>
@@ -42,7 +41,6 @@
     <?php foreach ($members as $member): ?>
     <tr>
         <td><?php echo $member['Member']['member_id']; ?></td>
-        <td><?php echo $member['Member']['member_number']; ?></td>
         <td>
             <?php echo $this->Html->link($member['Member']['name'], array('controller' => 'members', 'action' => 'view', $member['Member']['member_id'])); ?>
         </td>

@@ -8,14 +8,6 @@
 
 <dl>
 	<dt>
-		Member No.
-	</dt>
-	<dd>
-		<?php 
-			echo isset($member['Member']['member_number']) ? $member['Member']['member_number'] : "None"; ?>
-	</dd>
-
-	<dt>
 		Email
 	</dt>
 	<dd>

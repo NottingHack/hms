@@ -91,6 +91,8 @@
 			# If membership is current_member, add to the current member group
 			if($newData['Member']['member_status'] == 2)
 			{
+				$this->MemberGroup->deleteAll(array( 'MemberGroup.member_id' => $id, 'MemberGroup.grp_id' => 2 ));
+
 				# Group 2 is for current members
 				$currentGroups = Hash::extract($newData, 'Group.{n}');
 				$currentGroupIds = Hash::extract($currentGroups, 'group_id');
