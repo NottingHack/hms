@@ -1,6 +1,10 @@
 <!-- File: /app/View/Group/edit.ctp -->
 
-<h1>Edit Group</h1>
+<?php
+	$this->Html->addCrumb('Group', '/groups');
+	$this->Html->addCrumb('Edit ' . $this->data['Group']['grp_description'], '/groups/edit/' . $this->data['Group']['grp_id']);
+?>
+
 <?php
 	echo $this->Form->create('Group');
 	echo $this->Form->hidden('id' );

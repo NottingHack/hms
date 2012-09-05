@@ -1,6 +1,9 @@
 <!-- File: /app/View/Status/index.ctp -->
 
-<h1>Status</h1>
+<?php
+    $this->Html->addCrumb('Status', '/status');
+?>
+
 <table>
     <tr>
         <th>Id</th>
@@ -8,7 +11,7 @@
     </tr>
     <?php foreach ($statuses as $status): ?>
     <tr>
-        <td><?php echo $status['Status']['id']; ?></td>
+        <td><?php echo $status['Status']['status_id']; ?></td>
         <td><?php echo $status['Status']['title']; ?></td>
     </tr>
     <?php endforeach; ?>

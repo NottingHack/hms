@@ -1,6 +1,9 @@
 <!-- File: /app/View/Group/view.ctp -->
 
-<h1><?php echo $group['Group']['grp_description'] ?></h1>
+<?php
+	$this->Html->addCrumb('Group', '/groups');
+	$this->Html->addCrumb('View ' . $group['Group']['grp_description'], '/groups/view/' . $group['Group']['grp_id']);
+?>
 
 <h2>Permissions</h2>
 <ul>
@@ -19,3 +22,12 @@
 	</li>
 	<?php endforeach; ?>
 </ul>
+
+<h2>Actions</h2>
+
+<ul class="nav">
+    <li>
+        <?php echo $this->Html->link("Edit", array('controller' => 'groups', 'action' => 'edit', $group['Group']['grp_id'])); ?>
+    </li>
+</ul>
+

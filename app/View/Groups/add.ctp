@@ -1,6 +1,11 @@
 <!-- File: /app/View/Group/add.ctp -->
 
-<h1>Add Group</h1>
+
+<?php
+    $this->Html->addCrumb('Group', '/groups');
+	$this->Html->addCrumb('Add Group', '/groups/add');
+?>
+
 <?php
 	echo $this->Form->create('Group');
 	echo $this->Form->input('grp_description', array( 'label' => 'Description' ) );

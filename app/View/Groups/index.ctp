@@ -1,6 +1,8 @@
 <!-- File: /app/View/Group/index.ctp -->
 
-<h1>Groups</h1>
+<?php
+	$this->Html->addCrumb('Group', '/groups');
+?>
 
 <table>
 	<tr>
