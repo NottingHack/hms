@@ -9,19 +9,8 @@
     }
 ?>
 
-<h1>
-    <?php
-        if(isset($statusData))
-        {
-            echo $statusData['title'];
-        }
-        else
-        {
-            echo 'Members';
-        }
-    ?>
-</h1>
 <table>
+    <?php if(count($members) > 0): ?>
     <tr>
         <th>Id</th>
         <th>Name</th>
@@ -92,5 +81,8 @@
         </td>
     </tr>
     <?php endforeach; ?>
+<?php else: ?>
+    <p> No members to list. </p>
+<?php endif; ?>
 
 </table>

@@ -4,8 +4,6 @@
     $this->Html->addCrumb('Members', '/members');
 ?>
 
-<h1>Members</h1>
-
 <h3>Summary</h3>
 
 <table>
@@ -28,6 +26,12 @@
         </td>
     </tr>
 </table>
+
+<?php
+    echo $this->form->create("Member",array('action' => 'search')); 
+    echo $this->form->input("query", array('label' => '')); 
+    echo $this->form->end("Search"); 
+?>
 
 <ul class="nav">
     <li>

@@ -66,6 +66,15 @@
 			}
 	    }
 
+	    # List info about all members who's email or name is like $query
+		public function search() {
+
+			# Uses the default list view
+			$this->view = 'list_members';
+			$keyword = $this->request->data['Member']['query'];
+			$this->set('members', $this->Member->find('all', array( 'conditions' => array( 'OR' => array("Member.name Like'%$keyword%'", "Member.email Like'%$keyword%'" )))));
+	    }
+
 	    # Add a new member
 	    public function add() {
 
