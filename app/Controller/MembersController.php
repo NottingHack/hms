@@ -104,7 +104,7 @@
 	                if( isset($paymentRef) == false ||
 	                	$paymentRef == null )
 	                {
-	                	$paymentRef = Account::generate_payment_ref($memberInfo);
+	                	$paymentRef = $this->Member->Account->generate_payment_ref($memberInfo);
 	                }
 	               
 	                # Email the new member, and notify the admins
@@ -540,7 +540,7 @@
             	{
             		# Need to create one
             		$memberInfo['Account']['member_id'] = $memberInfo['Member']['member_id'];
-            		$memberInfo['Account']['payment_ref'] = Account::generate_payment_ref($memberInfo);
+            		$memberInfo['Account']['payment_ref'] = $this->Member->Account->generate_payment_ref($memberInfo);
             		
             		$accountInfo = $this->Member->Account->save($memberInfo);
 
