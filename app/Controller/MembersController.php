@@ -252,13 +252,13 @@
 
 			    if ($this->Member->saveAll($this->request->data)) {
 
-			    	$this->set_account($this->request->data);
+			    	$memberInfo = $this->set_account($this->request->data);
 			    	
-			    	$this->set_member_status_impl($data, $this->request->data);
-					$this->update_status_on_joint_accounts($data, $this->request->data);
+			    	$this->set_member_status_impl($data, $memberInfo);
+					$this->update_status_on_joint_accounts($data, $memberInfo);
 
 			        $this->Session->setFlash('Member details updated.');
-			        $this->redirect(array('action' => 'index'));
+			        #$this->redirect(array('action' => 'index'));
 			    } else {
 			        $this->Session->setFlash('Unable to update member details.');
 			    }
@@ -529,12 +529,14 @@
             	# Check if there's already an account for this member
             	# This could happen if they started off on their own account, moved to a joint one and then they wanted to move back
 
-            	$existingAccountInfo = $this->Member->Account->find('all', array( 'conditions' => array( 'Account.member_id' => $memberInfo['Member']['member_id'] ) ));
+            	$existingAccountInfo = $this->Member->Account->find('first', array( 'conditions' => array( 'Account.member_id' => $memberInfo['Member']['member_id'] ) ));
             	if(	isset($existingAccountInfo) &&
             		count($existingAccountInfo) > 0)
             	{
             		# Already an account, just use that
-            		$memberInfo['Member']['account_id'] = $existingAccountInfo[0]['Account']['account_id'];
+            		$memberInfo['Member']['account_id'] = $existingAccountInfo['Account']['account_id'];
+            		$memberInfo['Account'] = $existingAccountInfo['Account'];
+            		$this->Member->Account->save($memberInfo);
             	}
             	else
             	{
@@ -548,7 +550,7 @@
             	}
             }
 
-            $this->Member->save($memberInfo);
+           	$this->Member->save($memberInfo)
 
             return $memberInfo;
 		}

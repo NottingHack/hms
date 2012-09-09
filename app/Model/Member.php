@@ -76,6 +76,9 @@
 				$this->data['Member']['join_date'] = date( 'Y-m-d' );
 			}
 
+			# Must never ever ever alter the balance
+			unset( $this->data['Member']['balance'] );
+
 			return true;
 		}
 
