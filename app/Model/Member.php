@@ -97,14 +97,14 @@
 				$this->MemberGroup->deleteAll(array( 'MemberGroup.member_id' => $id, 'MemberGroup.grp_id' => 2 ));
 
 				# Group 2 is for current members
-				$currentGroups = Hash::extract($newData, 'Group.{n}');
-				$currentGroupIds = Hash::extract($currentGroups, 'group_id');
-				if( in_array(2, $currentGroupIds) == false )
+				$currentGroups = Hash::extract($newData, 'Group.Group.{n}');
+				print_r($currentGroups);
+				if( in_array(2, $currentGroups) == false )
 				{
 					array_push($currentGroups, array( 'grp_id' => 2, 'member_id' => $id ));
 				}
 
-				$newData['Group'] = $currentGroups;
+				$newData['Group']['Group'] = $currentGroups;
 
 				$this->save($newData);
 			}

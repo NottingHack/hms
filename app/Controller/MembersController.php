@@ -251,7 +251,6 @@
 			    $this->request->data = $data;
 			} else {
 				# Need to set some more info about the pin
-				#$this->request->data['Pin']['member_id'] = $id;
 				$this->request->data['Pin']['pin_id'] = $data['Pin']['pin_id'];
 
 				# Clear the actual pin number though, so that won't get updated
@@ -260,7 +259,6 @@
 			    if ($this->Member->saveAll($this->request->data)) {
 
 			    	$memberInfo = $this->set_account($this->request->data);
-			    	
 			    	$this->set_member_status_impl($data, $memberInfo);
 					$this->update_status_on_joint_accounts($data, $memberInfo);
 
@@ -308,18 +306,19 @@
 		private function update_status_on_joint_accounts($oldData, $newData)
 		{
 			# Find any members using the same account as this one, and set their status too
-			foreach ($this->Member->find( 'all', array( 'conditions' => array( 'Member.account_id' => $oldData['Member']['account_id'] ) ) ) as $memberInfo) {
-				
-				$oldMemberInfo = $memberInfo;
-				$memberInfo['Member']['member_status'] = $newData['Member']['member_status'];
-				$this->data = $memberInfo;
-				unset($memberInfo['Group']);
-				$newMemberInfo = $this->Member->save($memberInfo);
-				if($newMemberInfo)
+			foreach ($this->Member->find( 'all', array( 'conditions' => array( 'Member.account_id' => $oldData['Member']['account_id'] ) ) ) as $memberInfo) 
+			{
+				if($memberInfo['Member']['member_id'] != $oldData['Member']['member_id'])
 				{
-					$this->set_member_status_impl($oldMemberInfo, $newMemberInfo);
+					$oldMemberInfo = $memberInfo;
+					$memberInfo['Member']['member_status'] = $newData['Member']['member_status'];
+					$this->data = $memberInfo;
+					$newMemberInfo = $this->Member->save($memberInfo);
+					if($newMemberInfo)
+					{
+						$this->set_member_status_impl($oldMemberInfo, $newMemberInfo);
+					}
 				}
-
 			}
 		}
 
