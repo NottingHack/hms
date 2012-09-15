@@ -11,8 +11,9 @@
     # Don't show the join date for prospective members
     # But make this list inclusive, not exclusive in case other status Id's are added in future
     $showJoinDate = 
-        $statusData['status_id'] == 2 ||
-        $statusData['status_id'] == 3;
+        isset($statusData) &&
+            ( $statusData['status_id'] == 2 ||
+              $statusData['status_id'] == 3 );
 ?>
 
 <table>

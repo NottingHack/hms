@@ -71,8 +71,15 @@
 
 			# Uses the default list view
 			$this->view = 'list_members';
-			$keyword = $this->request->data['Member']['query'];
-			$this->set('members', $this->Member->find('all', array( 'conditions' => array( 'OR' => array("Member.name Like'%$keyword%'", "Member.email Like'%$keyword%'" )))));
+			if(isset($this->request->data['Member']))
+			{
+				$keyword = $this->request->data['Member']['query'];
+				$this->set('members', $this->Member->find('all', array( 'conditions' => array( 'OR' => array("Member.name Like'%$keyword%'", "Member.email Like'%$keyword%'" )))));
+			}
+			else
+			{
+				$this->redirect( array( 'controller' => 'members', 'action' => 'list_members' ) );
+			}
 	    }
 
 	    # Add a new member
