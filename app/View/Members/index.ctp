@@ -2,7 +2,18 @@
 
 <?php
     $this->Html->addCrumb('Members', '/members');
+
+    $this->Nav->add("Add Member", array('controller' => 'members', 'action' => 'add'));
+    $this->Nav->add("E-mail all current members", array('controller' => 'members', 'action' => 'email_members_with_status', 2));
 ?>
+
+<div class="search">
+<?php
+    echo $this->form->create("Member",array('action' => 'search')); 
+    echo $this->form->input("query", array('label' => ''));
+    echo $this->form->end("Search"); 
+?>
+</div>
 
 <h3>Summary</h3>
 
@@ -27,19 +38,3 @@
     </tr>
 </table>
 
-<h3>Search</h3>
-
-<?php
-    echo $this->form->create("Member",array('action' => 'search')); 
-    echo $this->form->input("query", array('label' => '')); 
-    echo $this->form->end("Search"); 
-?>
-
-<ul class="nav">
-    <li>
-        <?php echo $this->Html->link("Add Member", array('controller' => 'members', 'action' => 'add')); ?>
-    </li>
-    <li>
-        <?php echo $this->Html->link("E-mail all current members", array('controller' => 'members', 'action' => 'email_members_with_status', 2)); ?>
-    </li>
-</ul>

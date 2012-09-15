@@ -258,7 +258,7 @@
 					$this->update_status_on_joint_accounts($data, $memberInfo);
 
 			        $this->Session->setFlash('Member details updated.');
-			        #$this->redirect(array('action' => 'index'));
+			        $this->redirect(array('action' => 'view', $id));
 			    } else {
 			        $this->Session->setFlash('Unable to update member details.');
 			    }
@@ -550,7 +550,7 @@
             	}
             }
 
-           	$this->Member->save($memberInfo)
+           	$this->Member->save($memberInfo);
 
             return $memberInfo;
 		}

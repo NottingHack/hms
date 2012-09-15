@@ -7,17 +7,22 @@
     {
         $this->Html->addCrumb($statusData['title'], '/members/list_members_with_status/' . $statusData['status_id']);
     }
+
+    # Don't show the join date for prospective members
+    # But make this list inclusive, not exclusive in case other status Id's are added in future
+    $showJoinDate = 
+        $statusData['status_id'] == 2 ||
+        $statusData['status_id'] == 3;
 ?>
 
 <table>
     <?php if(count($members) > 0): ?>
     <tr>
-        <th>Id</th>
         <th>Name</th>
         <th>Email</th>
-        <th>Join Date</th>
-        <th>Handle</th>
-        <th>Unlock Text</th>
+        <?php if($showJoinDate): ?>
+            <th>Join Date</th>
+        <?php endif; ?>
         <th>Groups</th>
         <?php
             if(isset($statusData) === false)
@@ -29,14 +34,13 @@
     </tr>
     <?php foreach ($members as $member): ?>
     <tr>
-        <td><?php echo $member['Member']['member_id']; ?></td>
         <td>
             <?php echo $this->Html->link($member['Member']['name'], array('controller' => 'members', 'action' => 'view', $member['Member']['member_id'])); ?>
         </td>
         <td><?php echo $member['Member']['email']; ?></td>
-        <td><?php echo $member['Member']['join_date']; ?></td>
-        <td><?php echo $member['Member']['handle']; ?></td>
-        <td><?php echo $member['Member']['unlock_text']; ?></td>
+        <?php if($showJoinDate): ?>
+            <td><?php echo $member['Member']['join_date']; ?></td>
+        <?php endif; ?>
         <td>
             <?php
                 $numGroups = count($member['Group']);

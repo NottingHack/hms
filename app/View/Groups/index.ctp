@@ -2,11 +2,13 @@
 
 <?php
 	$this->Html->addCrumb('Group', '/groups');
+
+	$this->Nav->add("Add Group", array('controller' => 'groups', 'action' => 'add'));
 ?>
 
 <table>
 	<tr>
-		<th></th>
+		<th>Permission</th>
 		<?php foreach ($groups as $group): ?>
 			<th>
 				<?php echo $this->Html->link($group['Group']['grp_description'], array('controller' => 'groups', 'action' => 'view', $group['Group']['grp_id'] )); ?>
@@ -41,9 +43,9 @@
 	?>
 
 	<tr>
-		<td></td>
+		<td class="actions"></td>
 		<?php foreach ($groups as $group): ?>
-			<td>
+			<td class="actions">
 				<?php echo $this->Html->link("Edit", array('controller' => 'groups', 'action' => 'edit', $group['Group']['grp_id'] )); ?>
 			</td>
 		<?php endforeach; ?>
@@ -51,8 +53,3 @@
 
 </table>
 
-<ul class="nav">
-    <li>
-        <?php echo $this->Html->link("Add Group", array('controller' => 'groups', 'action' => 'add')); ?>
-    </li>
-</ul>
