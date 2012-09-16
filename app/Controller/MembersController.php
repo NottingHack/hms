@@ -11,6 +11,7 @@
 	    {
 	    	switch ($request->action) {
 	    		case 'email_members_with_status':
+
 	    			return true;
 	    		
 	    		default:
@@ -54,8 +55,8 @@
 	    	$this->set('memberStatusCount', $memberStatusCount);
 	    	$this->set('memberTotalCount', $memberTotalCount);
 
-	    	$this->Nav->add("Add Member", 'members', 'add');
-    		$this->Nav->add("E-mail all current members", 'members', 'email_members_with_status', array( 2 ) );
+	    	$this->Nav->add('Add Member', 'members', 'add');
+    		$this->Nav->add('E-mail all current members', 'members', 'email_members_with_status', array( 2 ) );
 	    }
 
 		# List info about all members
@@ -249,7 +250,25 @@
 
 	    public function view($id = null) {
 	        $this->Member->id = $id;
-	        $this->set('member', $this->Member->read());
+	        $memberInfo = $this->Member->read();
+	        $this->set('member', $memberInfo);
+
+	        $this->Nav->add('Edit', 'members', 'edit', array( $id ) );
+			switch ($memberInfo['Member']['member_status']) {
+		        case 1: # Prospective member
+		            $this->Nav->add('Approve Membership', 'members', 'set_member_status', array( $id, 2 ) );
+		            break;
+
+		        case 2: # Current member
+		            $this->Nav->add('Revoke Membership', 'members', 'set_member_status', array( $id, 3 ) );
+		            break;
+
+		        case 3: # Ex-member
+		            $this->Nav->add('Reinstate Membership', 'members', 'set_member_status', array( $id, 2 ) );
+		            break;
+		    }
+		    $this->Nav->add('Change Password', 'members', 'change_password', array( $id ) );
+
 	    }
 
 	    public function edit($id = null) {

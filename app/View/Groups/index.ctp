@@ -2,8 +2,6 @@
 
 <?php
 	$this->Html->addCrumb('Group', '/groups');
-
-	$this->Nav->add("Add Group", array('controller' => 'groups', 'action' => 'add'));
 ?>
 
 <table>

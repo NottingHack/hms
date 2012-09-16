@@ -3,8 +3,6 @@
 <?php
 	$this->Html->addCrumb('Group', '/groups');
 	$this->Html->addCrumb($group['Group']['grp_description'], '/groups/view/' . $group['Group']['grp_id']);
-
-	$this->Nav->add("Edit", array('controller' => 'groups', 'action' => 'edit', $group['Group']['grp_id']));
 ?>
 
 <h2>Permissions</h2>

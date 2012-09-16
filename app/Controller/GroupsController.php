@@ -13,6 +13,8 @@
 	    public function index() {
 	    	$this->set('groups', $this->Group->find('all'));
 	    	$this->set('permissions', $this->Group->Permission->find('all'));
+
+	    	$this->Nav->add('Add Group', 'groups', 'add');
 	    }
 
 	    # Add a new group
@@ -48,6 +50,8 @@
 	    public function view($id = null) {
 	        $this->Group->id = $id;
 	        $this->set('group', $this->Group->read());
+
+	        $this->Nav->add('Edit Group', 'groups', 'edit', array( $id ) );
 	    }
 	}
 ?>
