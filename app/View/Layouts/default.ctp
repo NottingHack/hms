@@ -61,7 +61,14 @@ $cakeDescription = "Nottingham Hackspace Management System";
 			<?php echo $this->Session->flash(); ?>
 
 			<?php echo $this->fetch('content'); ?>
-			<?php echo $this->Nav->output(); ?>
+			<?php
+				# AT [16/09/2012] Use the NavHelper to render any navigation links
+				if(	isset($navLinks) && 
+					count($navLinks) > 0)
+				{
+					echo $this->Nav->output($navLinks); 
+				}
+			?>
 		</div>
 		<div id="footer">
 			<div id="footer-widget-area" role="complementary">

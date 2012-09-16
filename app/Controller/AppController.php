@@ -48,12 +48,20 @@ class AppController extends Controller {
             'Hms' => array(
                 'fields' => array('username' => 'email'),
                 'userModel' => 'Member',
-            )
-        )
+            ),
+            'authorize' => array('Hms'),
+        ),
+        'Nav',
     );
 
     public function beforeFilter() {
-    	$this->Auth->authenticate = array('Hms');
+        $this->Auth->authenticate = array('Hms');
+    	$this->Auth->authorize = array('Hms');
+    }
+
+    public function beforeRender() {
+        # AT [16/09/2012] Send any links added to the NavComponent to the view
+        $this->set('navLinks', $this->Nav->get_allowed_actions());
     }
 
 }

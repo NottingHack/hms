@@ -2,9 +2,6 @@
 
 <?php
     $this->Html->addCrumb('Members', '/members');
-
-    $this->Nav->add("Add Member", array('controller' => 'members', 'action' => 'add'));
-    $this->Nav->add("E-mail all current members", array('controller' => 'members', 'action' => 'email_members_with_status', 2));
 ?>
 
 <div class="search">

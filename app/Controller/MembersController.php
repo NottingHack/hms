@@ -7,6 +7,17 @@
 	    
 	    public $helpers = array('Html', 'Form');
 
+	    public function isAuthorized($user, $request)
+	    {
+	    	switch ($request->action) {
+	    		case 'email_members_with_status':
+	    			return true;
+	    		
+	    		default:
+	    			return true;
+	    	}
+	    }
+
 	    public function beforeFilter() {
 	        parent::beforeFilter();
 	        $this->Auth->allow('logout', 'login');
@@ -42,6 +53,9 @@
 
 	    	$this->set('memberStatusCount', $memberStatusCount);
 	    	$this->set('memberTotalCount', $memberTotalCount);
+
+	    	$this->Nav->add("Add Member", 'members', 'add');
+    		$this->Nav->add("E-mail all current members", 'members', 'email_members_with_status', array( 2 ) );
 	    }
 
 		# List info about all members
@@ -84,6 +98,8 @@
 
 	    # Add a new member
 	    public function add() {
+
+	    	print_r($this->request);
 
 	    	# Get the account list but add an item for create
 	    	$accountList =  $this->get_readable_account_list( array( -1 => 'Create account' ) );

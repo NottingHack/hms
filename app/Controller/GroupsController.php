@@ -4,6 +4,11 @@
 	    
 	    public $helpers = array('Html', 'Form');
 
+	    public function isAuthorized($user, $request)
+	    {
+	    	return true;
+	    }
+
 	    # Show a list of the groups
 	    public function index() {
 	    	$this->set('groups', $this->Group->find('all'));

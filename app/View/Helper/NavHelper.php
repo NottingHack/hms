@@ -2,28 +2,26 @@
 
 App::uses('AppHelper', 'View/Helper');
 
+# AT [16/09/2012] NavHelper exists to render a list of links in a nice way
 class NavHelper extends AppHelper {
 
 	public $helpers = array('Html');
 
-	var $actions = array();
-
-	public function add($text, $action)
+	public function output($links)
 	{
-		$this->actions[$text] = $action;
-	}
-
-	public function output()
-	{
-		if(count($this->actions) > 0)
+		if(count($links) > 0)
 		{
 			echo '<div class="actions">';
 			echo '<ul class="nav">';
 
-			foreach ($this->actions as $text => $action) {
+			foreach ($links as $link) {
 				echo '<li>';
 
-				echo $this->Html->link($text, $action);
+				# Build the options array
+				$options = array( 'controller' => $link['controller'], 'action' => $link['action'] );
+				$options = array_merge($options, $link['params']);
+
+				echo $this->Html->link($link['text'], $options);
 
 				echo '</li>';
 			}
