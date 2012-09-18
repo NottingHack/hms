@@ -21,6 +21,8 @@
  */
 
 App::uses('Controller', 'Controller');
+App::uses('Member', 'Model');
+
 
 /**
  * Application Controller
@@ -43,7 +45,7 @@ class AppController extends Controller {
 	            'action' => 'login',
 	            #'plugin' => 'users'
 	        ),
-            'loginRedirect' => array('controller' => 'members', 'action' => 'index'),
+            'loginRedirect' => array('controller' => 'pages', 'action' => 'index'),
             'logoutRedirect' => array('controller' => 'pages', 'action' => 'display', 'home'),
             'Hms' => array(
                 'fields' => array('username' => 'email'),
@@ -62,6 +64,16 @@ class AppController extends Controller {
     public function beforeRender() {
         # AT [16/09/2012] Send any links added to the NavComponent to the view
         $this->set('navLinks', $this->Nav->get_allowed_actions());
+    }
+
+    public function isAuthorized($user, $request)
+    {
+        if(Member::isInGroupFullAccess($user))
+        {
+            return true;
+        }
+        
+        return null;
     }
 
 }

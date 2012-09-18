@@ -2,21 +2,57 @@
 	
 
 	App::uses('HmsAuthenticate', 'Controller/Component/Auth');
-
+	App::uses('Member', 'Model');
+	
 	class MembersController extends AppController {
 	    
 	    public $helpers = array('Html', 'Form');
 
 	    public function isAuthorized($user, $request)
 	    {
-	    	switch ($request->action) {
-	    		case 'email_members_with_status':
+	    	if(parent::isAuthorized($user, $request))
+	    	{
+	    		return true;
+	    	}
 
-	    			return true;
-	    		
-	    		default:
+	    	$userIsMemberAdmin = Member::isInGroupMemberAdmin( $user );
+	    	$actionHasParams = isset( $request->params ) && isset($request->params['pass']) && count( $request->params['pass'] ) > 0;
+	    	$userIdIsSet = isset( $user['Member'] ) && isset( $user['Member']['member_id'] );
+	    	$userId = $userIdIsSet ? $user['Member']['member_id'] : null;
+
+	    	/*
+	    	print_r($userIsMemberAdmin);
+	    	print_r($actionHasParams);
+	    	print_r($userIdIsSet);
+	    	print_r($userId);
+	    	*/
+
+	    	switch ($request->action) {
+	    		case 'index':
+	    		case 'list_members':
+	    		case 'list_members_with_status':
+	    		case 'email_members_with_status':
+	    		case 'search':
+	    		case 'add':
+	    		case 'set_member_status':
+	    			return $userIsMemberAdmin; 
+
+	    		case 'change_password':
+	    		case 'view':
+	    		case 'edit':
+	    			if( $userIsMemberAdmin || 
+	    				( $actionHasParams && $userIdIsSet && $request->params['pass'][0] == $userId ) )
+	    			{
+	    				return true;
+	    			}
+	    			break;
+
+	    		case 'login':
+	    		case 'logout':
 	    			return true;
 	    	}
+
+	    	return false;
 	    }
 
 	    public function beforeFilter() {
@@ -251,6 +287,15 @@
 	    public function view($id = null) {
 	        $this->Member->id = $id;
 	        $memberInfo = $this->Member->read();
+
+	        # Sanitise data
+		    $user = AuthComponent::user();
+		    $canSeeAll = Member::isInGroupMemberAdmin($user) || Member::isInGroupFullAccess($user);
+		    if(!$canSeeAll)
+		    {
+		    	unset($memberInfo['Pin']);
+		    }
+
 	        $this->set('member', $memberInfo);
 
 	        $this->Nav->add('Edit', 'members', 'edit', array( $id ) );
@@ -283,13 +328,15 @@
 			$data = $this->Member->read(null, $id);
 
 			if ($this->request->is('get')) {
-			    $this->request->data = $data;
+			    $this->request->data = $this->sanitise_edit_data($data);
 			} else {
 				# Need to set some more info about the pin
 				$this->request->data['Pin']['pin_id'] = $data['Pin']['pin_id'];
 
 				# Clear the actual pin number though, so that won't get updated
 				unset($this->request->data['Pin']['pin']);
+
+				$this->request->data = $this->sanitise_edit_data($this->request->data);
 
 			    if ($this->Member->saveAll($this->request->data)) {
 
@@ -303,6 +350,21 @@
 			        $this->Session->setFlash('Unable to update member details.');
 			    }
 			}
+		}
+
+		private function sanitise_edit_data($data)
+		{
+			$user = AuthComponent::user();
+		    $canSeeAll = Member::isInGroupMemberAdmin($user) || Member::isInGroupFullAccess($user);
+		    if(!$canSeeAll)
+		    {
+		    	unset($data['Pin']);
+		    	unset($data['Group']);
+		    	unset($data['Member']['account_id']);
+		    	unset($data['Member']['status_id']);
+		    }
+
+			return $data;
 		}
 
 		public function set_member_status($id, $newStatus)
@@ -359,43 +421,46 @@
 
 		private function notify_status_update($oldData, $newData)
 		{
-			if($oldData['Member']['member_status'] != $newData['Member']['member_status'])
+			if( isset($oldData['Member']['member_status']) && isset($newData['Member']['member_status']) )
 			{
-				# Notify all the member admins about the status change
-				$email = $this->prepare_email_for_members_in_group(5);
-				$email->subject('Member Status Change Notification');
-				$email->template('notify_admins_member_status_change', 'default');
-				
-				$newStatusData = $this->Member->Status->find( 'all', array( 'conditions' => array( 'Status.status_id' => $newData['Member']['member_status'] ) ) );
-
-				$email->viewVars( array( 
-					'member' => $oldData['Member'],
-					'oldStatus' => $oldData['Status']['title'],
-					'newStatus' => $newStatusData[0]['Status']['title'],
-					'memberAdmin' => AuthComponent::user('Member.name'),
-					 )
-				);
-
-				$email->send();
-
-				# Is this member being approved for the first time? If so we need to send out a message to the member admins
-				# To tell them to e-mail the PIN etc to the new member
-				$oldStatus = $oldData['Member']['member_status'];
-				$newStatus = $newData['Member']['member_status'];
-				if(	$newStatus == 2 &&
-					$oldStatus == 1)
+				if($oldData['Member']['member_status'] != $newData['Member']['member_status'])
 				{
-					$approvedEmail = $this->prepare_email_for_members_in_group(5);
-					$approvedEmail->subject('Member Approved!');
-					$approvedEmail->template('notify_admins_member_approved', 'default');
+					# Notify all the member admins about the status change
+					$email = $this->prepare_email_for_members_in_group(5);
+					$email->subject('Member Status Change Notification');
+					$email->template('notify_admins_member_status_change', 'default');
+					
+					$newStatusData = $this->Member->Status->find( 'all', array( 'conditions' => array( 'Status.status_id' => $newData['Member']['member_status'] ) ) );
 
-					$approvedEmail->viewVars( array( 
+					$email->viewVars( array( 
 						'member' => $oldData['Member'],
-						'pin' => $oldData['Pin']['pin']
-						)
+						'oldStatus' => $oldData['Status']['title'],
+						'newStatus' => $newStatusData[0]['Status']['title'],
+						'memberAdmin' => AuthComponent::user('Member.name'),
+						 )
 					);
 
-					$approvedEmail->send();
+					$email->send();
+
+					# Is this member being approved for the first time? If so we need to send out a message to the member admins
+					# To tell them to e-mail the PIN etc to the new member
+					$oldStatus = $oldData['Member']['member_status'];
+					$newStatus = $newData['Member']['member_status'];
+					if(	$newStatus == 2 &&
+						$oldStatus == 1)
+					{
+						$approvedEmail = $this->prepare_email_for_members_in_group(5);
+						$approvedEmail->subject('Member Approved!');
+						$approvedEmail->template('notify_admins_member_approved', 'default');
+
+						$approvedEmail->viewVars( array( 
+							'member' => $oldData['Member'],
+							'pin' => $oldData['Pin']['pin']
+							)
+						);
+
+						$approvedEmail->send();
+					}
 				}
 			}
 		}
@@ -564,35 +629,37 @@
 
 		private function set_account($memberInfo)
 		{
-			# Do we need to create a new account?
-            if($memberInfo['Member']['account_id'] < 0)
-            {
-            	# Check if there's already an account for this member
-            	# This could happen if they started off on their own account, moved to a joint one and then they wanted to move back
+			if( isset($memberInfo['Member']['account_id']) )
+			{
+				# Do we need to create a new account?
+	            if($memberInfo['Member']['account_id'] < 0)
+	            {
+	            	# Check if there's already an account for this member
+	            	# This could happen if they started off on their own account, moved to a joint one and then they wanted to move back
 
-            	$existingAccountInfo = $this->Member->Account->find('first', array( 'conditions' => array( 'Account.member_id' => $memberInfo['Member']['member_id'] ) ));
-            	if(	isset($existingAccountInfo) &&
-            		count($existingAccountInfo) > 0)
-            	{
-            		# Already an account, just use that
-            		$memberInfo['Member']['account_id'] = $existingAccountInfo['Account']['account_id'];
-            		$memberInfo['Account'] = $existingAccountInfo['Account'];
-            		$this->Member->Account->save($memberInfo);
-            	}
-            	else
-            	{
-            		# Need to create one
-            		$memberInfo['Account']['member_id'] = $memberInfo['Member']['member_id'];
-            		$memberInfo['Account']['payment_ref'] = $this->Member->Account->generate_payment_ref($memberInfo);
-            		
-            		$accountInfo = $this->Member->Account->save($memberInfo);
+	            	$existingAccountInfo = $this->Member->Account->find('first', array( 'conditions' => array( 'Account.member_id' => $memberInfo['Member']['member_id'] ) ));
+	            	if(	isset($existingAccountInfo) &&
+	            		count($existingAccountInfo) > 0)
+	            	{
+	            		# Already an account, just use that
+	            		$memberInfo['Member']['account_id'] = $existingAccountInfo['Account']['account_id'];
+	            		$memberInfo['Account'] = $existingAccountInfo['Account'];
+	            		$this->Member->Account->save($memberInfo);
+	            	}
+	            	else
+	            	{
+	            		# Need to create one
+	            		$memberInfo['Account']['member_id'] = $memberInfo['Member']['member_id'];
+	            		$memberInfo['Account']['payment_ref'] = $this->Member->Account->generate_payment_ref($memberInfo);
+	            		
+	            		$accountInfo = $this->Member->Account->save($memberInfo);
 
-            		$memberInfo['Member']['account_id'] = $accountInfo['Account']['account_id'];
-            	}
-            }
+	            		$memberInfo['Member']['account_id'] = $accountInfo['Account']['account_id'];
+	            	}
+	            }
 
-           	$this->Member->save($memberInfo);
-
+	           	$this->Member->save($memberInfo);
+	        }
             return $memberInfo;
 		}
 	}

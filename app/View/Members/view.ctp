@@ -57,26 +57,29 @@
 	<dd>
 		<?php echo $this->Html->link($member['Status']['title'], array('controller' => 'members', 'action' => 'list_members_with_status', $member['Status']['status_id'])); ?>
 	</dd>
-	<dt>
-		Pin
-	</dt>
-	<dd>
-		<?php echo $member['Pin']['pin']; ?>
-	</dd>
+	<?php if( isset($member['Pin']) ): ?>
+		<dt>
+			Pin
+		</dt>
+		<dd>
+			<?php echo $member['Pin']['pin']; ?>
+		</dd>
 
-	<?php 
-		if( isset($member['Pin']['expiry']) &&
-			$member['Pin']['expiry'] != null ):
-	?>
+		<?php 
+			if( isset($member['Pin']['expiry']) &&
+				$member['Pin']['expiry'] != null ):
+		?>
 
-	<dt>
-		Pin Expires
-	</dt>
-	<dd>
-		<?php echo date('l, dS F, Y', strtotime($member['Pin']['expiry'])); ?>
-	</dd>
+			<dt>
+				Pin Expires
+			</dt>
+			<dd>
+				<?php echo date('l, dS F, Y', strtotime($member['Pin']['expiry'])); ?>
+			</dd>
 
+		<?php endif; ?>
 	<?php endif; ?>
+
 	<dt>
 		Current Balance
 	</dt>
