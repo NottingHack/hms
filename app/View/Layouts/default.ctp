@@ -52,6 +52,20 @@ $cakeDescription = "Nottingham Hackspace Management System";
 						<?php echo $this->Html->link('Login', array( 'controller' => 'members', 'action' => 'login' )) ?>
 					<?php endif; ?>
 				</div>
+				<?php if( isset($adminNav) && count($adminNav) > 0 ): ?>
+					<div class="adminNav">
+						<ul>
+							<?php 
+								foreach ($adminNav as $text => $options) {
+									echo '<li>';
+									echo $this->Html->link($text, $options);
+									echo '</li>';
+								}
+							?>
+						</ul>
+					</div>
+					<div class="clear"></div>
+				<?php endif; ?>
 			</div>
 		</div>
 		<div id="content">

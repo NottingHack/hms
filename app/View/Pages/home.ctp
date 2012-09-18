@@ -1,7 +1,24 @@
-<?php
+<?php 
 
+if( isset($rssData) )
+{
+	if( isset($rssData->channel) && 
+		isset($rssData->channel->item) && 
+		count($rssData->channel->item) > 0 )
+	{
+		echo '<h2>Hackspace News</h2>';
+
+		foreach ($rssData->channel->item as $item):
+?>
+		<div class="news_item">
+			<a href="<?php echo $item->link; ?>"><h3><?php echo $item->title; ?></h3></a>
+			<p>
+				<?php echo $item->description; ?>
+			</p>
+		</div>
+<?php
+		endforeach;
+	}
+}
 
 ?>
-
-<br>
-Welcome to the HMS website, please <?php echo $this->Html->link( 'Login', array ('controller' => 'Members', 'action' => 'login' ) ); ?>

@@ -20,6 +20,7 @@
  */
 
 App::uses('AppController', 'Controller');
+App::uses('Xml', 'Utility');
 
 /**
  * Static content controller
@@ -70,6 +71,13 @@ class PagesController extends AppController {
 		if (!empty($path[$count - 1])) {
 			$title_for_layout = Inflector::humanize($path[$count - 1]);
 		}
+
+		# AT [18/09/2012] Dynamic content on a 'static' page? Why not.
+		if( method_exists($this, $page) )
+		{
+			call_user_func( array($this, $page) );
+		}
+
 		$this->set(compact('page', 'subpage', 'title_for_layout'));
 		$this->render(implode('/', $path));
 	}
@@ -77,5 +85,11 @@ class PagesController extends AppController {
 	function beforeFilter() { 
 		parent::beforeFilter();
         $this->Auth->allow('display'); 
+    }
+
+    public function home()
+    {
+		$parsed_xml = Xml::build('http://nottinghack.org.uk/?feed=rss2');
+		$this->set('rssData', $parsed_xml);
     }
 }
