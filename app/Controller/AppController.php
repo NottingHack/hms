@@ -22,7 +22,8 @@
 
 App::uses('Controller', 'Controller');
 App::uses('Member', 'Model');
-
+App::uses('Member', 'Model');
+App::uses('AuthComponent', 'Controller/Auth');
 
 /**
  * Application Controller
@@ -66,15 +67,29 @@ class AppController extends Controller {
         $this->set('navLinks', $this->Nav->get_allowed_actions());
 
         $user = AuthComponent::user();
-        if( isset($user) &&
-            ( Member::isInGroupFullAccess($user) || Member::isInGroupMemberAdmin($user) ) )
+        if( isset($user) )
         {
-            $adminLinks = array(
-                'Members' => array( 'controller' => 'members', 'action' => 'index' ),
-                'Groups' => array( 'controller' => 'groups', 'action' => 'index' ),
-            );
-            $this->set('adminNav', $adminLinks);    
+            $adminLinks = array();
+            if( Member::isInGroupFullAccess($user) || Member::isInGroupMemberAdmin($user) )
+            {
+                $adminLinks = array(
+                    'Members' => array( 'controller' => 'members', 'action' => 'index' ),
+                    'Groups' => array( 'controller' => 'groups', 'action' => 'index' ),
+                );
+            }
+            else if( Member::isInGroupTourGuide($user) )
+            {
+                $adminLinks = array(
+                    'Add Member' => array( 'controller' => 'members', 'action' => 'add' ),
+                );
+            }
+            $this->set('adminNav', $adminLinks);
+            $this->set('user', $user);    
         }
+        
+        $jsonData = json_decode(file_get_contents('http://lspace.nottinghack.org.uk/status/status.php'));
+
+        $this->set('jsonData', $jsonData);
         $this->set('navLinks', $this->Nav->get_allowed_actions());
     }
 

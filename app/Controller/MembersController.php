@@ -16,6 +16,7 @@
 	    	}
 
 	    	$userIsMemberAdmin = Member::isInGroupMemberAdmin( $user );
+	    	$userIsTourGuide = Member::isInGroupTourGuide( $user );
 	    	$actionHasParams = isset( $request->params ) && isset($request->params['pass']) && count( $request->params['pass'] ) > 0;
 	    	$userIdIsSet = isset( $user['Member'] ) && isset( $user['Member']['member_id'] );
 	    	$userId = $userIdIsSet ? $user['Member']['member_id'] : null;
@@ -33,9 +34,11 @@
 	    		case 'list_members_with_status':
 	    		case 'email_members_with_status':
 	    		case 'search':
-	    		case 'add':
 	    		case 'set_member_status':
 	    			return $userIsMemberAdmin; 
+
+	    		case 'add':
+	    			return $userIsMemberAdmin || $userIsTourGuide;
 
 	    		case 'change_password':
 	    		case 'view':
@@ -135,8 +138,6 @@
 
 	    # Add a new member
 	    public function add() {
-
-	    	print_r($this->request);
 
 	    	# Get the account list but add an item for create
 	    	$accountList =  $this->get_readable_account_list( array( -1 => 'Create account' ) );

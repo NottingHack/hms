@@ -150,5 +150,10 @@
 		{
 			return Member::isInGroup($user, 5);
 		}
+
+		public static function isInGroupTourGuide($user)
+		{
+			return Member::isInGroup($user, 6);
+		}
 	}
 ?>

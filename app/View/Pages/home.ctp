@@ -1,3 +1,9 @@
+<?php if($jsonData->open): ?>
+	<p>Hackspace is open!</p>
+<?php else: ?>
+	<p>Hackspace is closed.</p>
+<?php endif; ?>
+
 <?php 
 
 if( isset($rssData) )
