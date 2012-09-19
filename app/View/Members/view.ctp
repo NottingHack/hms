@@ -29,6 +29,13 @@
 	</dd>
 
 	<dt>
+		Unlock Text
+	</dt>
+	<dd>
+		<?php echo $member['Member']['unlock_text']; ?>
+	</dd>
+
+	<dt>
 		Groups
 	</dt>
 	<dd>
