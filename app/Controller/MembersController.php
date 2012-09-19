@@ -6,7 +6,7 @@
 	
 	class MembersController extends AppController {
 	    
-	    public $helpers = array('Html', 'Form');
+	    public $helpers = array('Html', 'Form', 'Tinymce');
 
 	    public function isAuthorized($user, $request)
 	    {

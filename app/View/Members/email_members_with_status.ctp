@@ -27,7 +27,12 @@
 	<?php
 		echo $this->Form->create('MemberEmail');
 		echo $this->Form->input('subject');
-		echo $this->Form->input('message', array('type' => 'textarea'));
+		echo $this->Tinymce->input('Member.message', 
+			array( 'label' => 'Message' ),
+			array( 'language'=>'en' ), 
+            'basic' 
+        ); 
+		#echo $this->Form->input('message', array('type' => 'textarea'));
 	?>
 
 	<p>This e-mail will be sent to the following members:</p>
