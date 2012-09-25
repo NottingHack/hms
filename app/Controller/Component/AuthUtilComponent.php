@@ -8,7 +8,7 @@ class AuthUtilComponent extends Component {
 	
 	public $components = array( 'Auth' );
 
-	static var $controllers = array();
+	var $controllers = array();
 	var $currentController = null;
 
 	public function initialize(Controller $controller) {
@@ -66,7 +66,6 @@ class AuthUtilComponent extends Component {
 			if($controllerToUse == null)
 			{
 				# AT [25/09/2012] Nope, we are left to construct the controller and everything
-				# this is painfully slow and needs speeding up if this is going to be used a lot
 				$controllers = App::objects('controller');
 				foreach($controllers as $controllerClassName)
 				{

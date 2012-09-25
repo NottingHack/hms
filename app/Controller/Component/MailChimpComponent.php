@@ -11,6 +11,7 @@ class MailChimpComponent extends Component {
 
 	var $apiKey = '';
 	var $api = null;
+	static $resultCache;
 
 	public function __construct(ComponentCollection $collection, $settings = array())
 	{
@@ -20,12 +21,28 @@ class MailChimpComponent extends Component {
 
 	public function list_mailinglists()
 	{
-		return $this->api->lists();
+		$cacheName = $this->_get_cache_name(__FUNCTION__);
+		$cachedResult = $this->_get_cached_result($cacheName);
+		if($cachedResult !== false)
+		{
+			return $cachedResult;
+		}
+		$result = $this->api->lists();
+		$this->_cache_result($cacheName, $result);
+		return $result;
 	}
 
 	public function list_subscribed_members($listId)
 	{
-		return $this->api->listMembers($listId, 'subscribed', null, 0, 5000 );
+		$cacheName = $this->_get_cache_name(__FUNCTION__, array($listId));
+		$cachedResult = $this->_get_cached_result($cacheName);
+		if($cachedResult != null)
+		{
+			return $cachedResult;
+		}
+		$result = $this->api->listMembers($listId, 'subscribed', null, 0, 5000 );
+		$this->_cache_result($cacheName, $result);
+		return $result;
 	}
 
 	public function error_code()
@@ -38,7 +55,24 @@ class MailChimpComponent extends Component {
 		return $this->api->errorMessage;
 	}
 
+	private function _get_cache_name($functionName, $params = array())
+	{
+		$name = $functionName;
+		foreach ($params as $val) {
+			$name .= $val;
+		}
+		return $name;
+	}
 
+	private function _cache_result($function, $data)
+	{
+		Cache::write($function, $data, 'default');
+	}
+
+	private function _get_cached_result($function)
+	{
+		return Cache::read($function, 'default');
+	}
 }
 
 ?>
