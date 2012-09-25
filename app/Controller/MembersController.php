@@ -1,12 +1,13 @@
 <?php
 	
-
 	App::uses('HmsAuthenticate', 'Controller/Component/Auth');
 	App::uses('Member', 'Model');
 	
 	class MembersController extends AppController {
 	    
 	    public $helpers = array('Html', 'Form', 'Tinymce');
+
+	    public $components = array('MailChimp');
 
 	    public function isAuthorized($user, $request)
 	    {
@@ -315,6 +316,33 @@
 		    }
 		    $this->Nav->add('Change Password', 'members', 'change_password', array( $id ) );
 
+
+		    $mailingLists = $this->MailChimp->list_mailinglists();
+		    $listsMemberIsSubscribedTo = array();
+		    if(!$this->MailChimp->error_code())
+		    {
+		    	foreach ($mailingLists['data'] as $list) {
+		    		// Grab the list of subscribed members
+		    		$subscribedMembers = $this->MailChimp->list_subscribed_members($list['id']);
+		    		if(!$this->MailChimp->error_code())
+		    		{
+		    			// Extract the emails
+		    			$emails = Hash::extract($subscribedMembers['data'], '{n}.email');
+		    			// Are we subscribed to this list?
+		    			$list['subscribed'] = (in_array($memberInfo['Member']['email'], $emails));
+		    			// Can we view it?
+		    			$list['canView'] = $this->AuthUtil->is_authorized('mailinglists', 'view', array( $list['id'] ));
+
+		    			if($list['subscribed'])
+		    			{
+		    				array_push($listsMemberIsSubscribedTo, $list);
+		    			}
+		    		}
+		    	}
+		    }
+
+		    $this->set('mailingLists', $mailingLists);
+		    $this->set('subscribedMailingLists', $listsMemberIsSubscribedTo);
 	    }
 
 	    public function edit($id = null) {

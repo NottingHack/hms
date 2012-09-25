@@ -149,4 +149,26 @@
 			}
 		?>
 	</dd>
+	<dt>
+		Mailing Lists
+	</dt>
+	<dd>
+		<?php
+			$processedMailingLists = array();
+			foreach ($subscribedMailingLists as $list) {
+				$text = '';
+				if($list['canView'])
+				{
+					$text = $this->Html->link($list['name'], array('controller' => 'mailinglists', 'action' => 'view', $list['id']));
+				}
+				else
+				{
+					$text = $list['name'];
+				}
+				array_push($processedMailingLists, $text);
+			}
+
+			echo $this->List->output($processedMailingLists);
+		?>
+	</dd>
 </dl>

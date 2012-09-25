@@ -7,29 +7,14 @@ App::uses('Component', 'Controller');
 # which can then be rendered in the view
 class NavComponent extends Component {
 	
-	public $components = array( 'Auth' );
+	public $components = array( 'AuthUtil' );
 
 	var $allowedActions = array();
 
 	# Add a navigation option, testing if it's authorized first
 	public function add($text, $controller, $action, $params = array())
 	{
-		#print_r($this->Auth);
-		$url = '/' . $controller . '/' . $action;
-
-		if(count($params) > 0)
-		{
-			$url .= '/' . join($params, '/');
-		}
-
-		$request = new CakeRequest($url, false);
-		$request->addParams(array(
-			'plugin' => null,
-			'controller' => $controller,
-			'action' => $action,
-			'pass' => $params,
-		));
-		if( $this->Auth->isAuthorized(AuthComponent::user(), $request) )
+		if( $this->AuthUtil->is_authorized($controller, $action, $params) )
 		{
 			array_push($this->allowedActions, array( 'text' => $text, 'controller' => $controller, 'action' => $action, 'params' => $params ) );
 		}

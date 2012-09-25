@@ -36,7 +36,7 @@ App::uses('AuthComponent', 'Controller/Auth');
  */
 class AppController extends Controller {
 
-	public $helpers = array('Html', 'Form', 'Nav');
+	public $helpers = array('Html', 'Form', 'Nav', 'List');
 
 	public $components = array(
         'Session',
@@ -55,6 +55,7 @@ class AppController extends Controller {
             'authorize' => array('Hms'),
         ),
         'Nav',
+        'AuthUtil',
     );
 
     public function beforeFilter() {
@@ -100,7 +101,7 @@ class AppController extends Controller {
             return true;
         }
         
-        return null;
+        return false;
     }
 
 }
