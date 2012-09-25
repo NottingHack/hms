@@ -56,7 +56,7 @@ class AuthUtilComponent extends Component {
 			$controllerToUse = null;
 			$controllerName = '';
 			if($this->currentController != null &&
-				strcasecmp($this->currentController->name, $name))
+				$this->currentController->name == $name)
 			{
 				# AT [25/09/2012] Awesome, this is not too slow
 				$controllerToUse = $this->currentController;
@@ -70,7 +70,7 @@ class AuthUtilComponent extends Component {
 				foreach($controllers as $controllerClassName)
 				{
 					$controllerName = strtolower(str_replace('Controller', '', $controllerClassName));
-					if(strcasecmp($controllerName, $name))
+					if($controllerName == $name)
 					{
 						App::import('Controller', $controllerName);
 						$controllerToUse = new $controllerClassName;
