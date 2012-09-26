@@ -376,11 +376,11 @@
 			    					$this->MailChimp->subscribe($mailingLists[$i]['id'], $this->request->data['Member']['email']);
 			    					if($this->MailChimp->error_code())
 			    					{
-			    						$flashMessage .= 'Unable to subscribe to: ' . $mailingLists[$i]['name'] . 'because ' . $this->MailChimp->error_msg() . '</br>';
+			    						$flashMessage .= 'Unable to subscribe to: ' . $mailingLists[$i]['name'] . ' because ' . $this->MailChimp->error_msg() . '</br>';
 			    					}
 			    					else
 			    					{
-			    						$flashMessage .= 'Subscribed to: ' . $mailingLists[$i]['name'] . '</br>';	
+			    						$flashMessage .= 'E-mail confirmation of mailing list subscription for: ' . $mailingLists[$i]['name'] . ' has been sent.' . '</br>';	
 			    					}
 			    				}
 			    				else
@@ -388,7 +388,7 @@
 			    					$this->MailChimp->unsubscribe($mailingLists[$i]['id'], $this->request->data['Member']['email']);
 			    					if($this->MailChimp->error_code())
 			    					{
-			    						$flashMessage .= 'Unable to un-subscribe from: ' . $mailingLists[$i]['name'] . $this->MailChimp->error_msg() . '</br>';
+			    						$flashMessage .= 'Unable to un-subscribe from: ' . $mailingLists[$i]['name'] . ' because ' . $this->MailChimp->error_msg() . '</br>';
 			    						echo $this->MailChimp->error_msg();
 			    					}
 			    					else
