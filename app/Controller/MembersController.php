@@ -317,32 +317,7 @@
 		    $this->Nav->add('Change Password', 'members', 'change_password', array( $id ) );
 
 
-		    $mailingLists = $this->MailChimp->list_mailinglists();
-		    $listsMemberIsSubscribedTo = array();
-		    if(!$this->MailChimp->error_code())
-		    {
-		    	foreach ($mailingLists['data'] as $list) {
-		    		// Grab the list of subscribed members
-		    		$subscribedMembers = $this->MailChimp->list_subscribed_members($list['id']);
-		    		if(!$this->MailChimp->error_code())
-		    		{
-		    			// Extract the emails
-		    			$emails = Hash::extract($subscribedMembers['data'], '{n}.email');
-		    			// Are we subscribed to this list?
-		    			$list['subscribed'] = (in_array($memberInfo['Member']['email'], $emails));
-		    			// Can we view it?
-		    			$list['canView'] = $this->AuthUtil->is_authorized('mailinglists', 'view', array( $list['id'] ));
-
-		    			if($list['subscribed'])
-		    			{
-		    				array_push($listsMemberIsSubscribedTo, $list);
-		    			}
-		    		}
-		    	}
-		    }
-
-		    $this->set('mailingLists', $mailingLists);
-		    $this->set('subscribedMailingLists', $listsMemberIsSubscribedTo);
+		    $this->set('mailingLists', $this->_get_mailing_lists_and_subscruibed_status($memberInfo));
 	    }
 
 	    public function edit($id = null) {
@@ -355,6 +330,8 @@
 	    	$this->set('accounts', $accountsList);
 			$this->Member->id = $id;
 			$data = $this->Member->read(null, $id);
+			$mailingLists = $this->_get_mailing_lists_and_subscruibed_status($data);
+			$this->set('mailingLists', $mailingLists);
 
 			if ($this->request->is('get')) {
 			    $this->request->data = $this->sanitise_edit_data($data);
@@ -367,18 +344,103 @@
 
 				$this->request->data = $this->sanitise_edit_data($this->request->data);
 
+
 			    if ($this->Member->saveAll($this->request->data)) {
+
+			    	$flashMessage = 'Member details updated.';
+
+			    	print_r($this->request->data);
+
+			    	if(isset($this->request->data['MailingLists']))
+			    	{
+			    		if(!isset($this->request->data['MailingLists']['MailingLists']) ||
+			    			!is_array($this->request->data['MailingLists']['MailingLists']))
+			    		{
+			    			$this->request->data['MailingLists']['MailingLists'] = array();
+			    		}
+			    		$firstSubscribtionChange = true;
+			    		# Update list subscriptions if needed
+			    		for($i = 0; $i < count($mailingLists); $i++)
+			    		{
+			    			$mailingLists[$i]['userWantsToBeSubscribed'] = in_array($i, $this->request->data['MailingLists']['MailingLists']);
+			    			if($mailingLists[$i]['subscribed'] != $mailingLists[$i]['userWantsToBeSubscribed'])
+			    			{
+
+			    				if($firstSubscribtionChange)
+			    				{
+			    					$flashMessage .= '</br>';
+			    					$firstSubscribtionChange = false;
+			    				}
+			    				if($mailingLists[$i]['userWantsToBeSubscribed'])
+			    				{
+			    					$this->MailChimp->subscribe($mailingLists[$i]['id'], $this->request->data['Member']['email']);
+			    					if($this->MailChimp->error_code())
+			    					{
+			    						$flashMessage .= 'Unable to subscribe to: ' . $mailingLists[$i]['name'] . 'because ' . $this->MailChimp->error_msg() . '</br>';
+			    					}
+			    					else
+			    					{
+			    						$flashMessage .= 'Subscribed to: ' . $mailingLists[$i]['name'] . '</br>';	
+			    					}
+			    				}
+			    				else
+			    				{
+			    					$this->MailChimp->unsubscribe($mailingLists[$i]['id'], $this->request->data['Member']['email']);
+			    					if($this->MailChimp->error_code())
+			    					{
+			    						$flashMessage .= 'Unable to un-subscribe from: ' . $mailingLists[$i]['name'] . $this->MailChimp->error_msg() . '</br>';
+			    						echo $this->MailChimp->error_msg();
+			    					}
+			    					else
+			    					{
+			    						$flashMessage .= 'Un-Subscribed from: ' . $mailingLists[$i]['name'] . '</br>';
+			    					}
+			    				}
+			    			}
+			    		}
+			    	}
+
 
 			    	$memberInfo = $this->set_account($this->request->data);
 			    	$this->set_member_status_impl($data, $memberInfo);
 					$this->update_status_on_joint_accounts($data, $memberInfo);
 
-			        $this->Session->setFlash('Member details updated.');
+			        $this->Session->setFlash($flashMessage);
 			        $this->redirect(array('action' => 'view', $id));
 			    } else {
 			        $this->Session->setFlash('Unable to update member details.');
 			    }
 			}
+		}
+
+		private function _get_mailing_lists_and_subscruibed_status($memberInfo)
+		{
+			$mailingListsRet = $this->MailChimp->list_mailinglists();
+		    if(!$this->MailChimp->error_code())
+		    {
+		    	$mailingLists = $mailingListsRet['data'];
+		    	$numMailingLists = count($mailingLists);
+		    	for($i = 0; $i < $numMailingLists; $i++)
+		    	{
+		    		// Grab the list of subscribed members
+		    		$subscribedMembers = $this->MailChimp->list_subscribed_members($mailingLists[$i]['id']);
+		    		if(!$this->MailChimp->error_code())
+		    		{
+		    			// Extract the emails
+		    			$emails = Hash::extract($subscribedMembers['data'], '{n}.email');
+		    			// Are we subscribed to this list?
+		    			$mailingLists[$i]['subscribed'] = (in_array($memberInfo['Member']['email'], $emails));
+		    			if($i > 0)
+		    			{
+		    				$mailingLists[$i]['subscribed'] = rand() % 2 == 0;
+		    			}
+		    			// Can we view it?
+		    			$mailingLists[$i]['canView'] = $this->AuthUtil->is_authorized('mailinglists', 'view', array( $mailingLists[$i]['id'] ));
+		    		}
+		    	}
+		    	return $mailingLists;
+		    }
+		    return null;
 		}
 
 		private function sanitise_edit_data($data)
@@ -391,6 +453,12 @@
 		    	unset($data['Group']);
 		    	unset($data['Member']['account_id']);
 		    	unset($data['Member']['status_id']);
+		    }
+
+		    $isEditingSelf = $data['Member']['member_id'] == $user['Member']['member_id'];
+		    if(!$isEditingSelf)
+		    {
+		    	unset($data['MailingLists']);
 		    }
 
 			return $data;

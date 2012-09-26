@@ -45,6 +45,22 @@ class MailChimpComponent extends Component {
 		return $result;
 	}
 
+	public function subscribe($listId, $email)
+	{
+		# Clear the cache for members in list
+		$cacheName = $this->_get_cache_name('list_subscribed_members', array($listId));
+		$this->_clear_cache($cacheName);
+		return $this->api->listSubscribe($listId, $email);
+	}
+
+	public function unsubscribe($listId, $email)
+	{
+		# Clear the cache for members in list
+		$cacheName = $this->_get_cache_name('list_subscribed_members', array($listId));
+		$this->_clear_cache($cacheName);
+		return $this->api->listUnsubscribe($listId, $email);
+	}
+
 	public function error_code()
 	{
 		return $this->api->errorCode;
@@ -72,6 +88,11 @@ class MailChimpComponent extends Component {
 	private function _get_cached_result($function)
 	{
 		return Cache::read($function, 'default');
+	}
+
+	private function _clear_cache($function)
+	{
+		Cache::delete($function, 'default');
 	}
 }
 

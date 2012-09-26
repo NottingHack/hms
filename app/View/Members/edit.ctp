@@ -63,5 +63,26 @@
 		echo '</fieldset>';
 	}
 
+	echo '<fieldset>';
+	echo '<legend>Mailing Lists</legend>';
+
+	$selectedMailingLists = array();
+	foreach (Hash::format($mailingLists, array('{n}.subscribed'), '%1$d' ) as $key => $value) {
+		if($value)
+		{
+			array_push($selectedMailingLists, $key);
+		}
+	}
+
+	echo $this->Form->input('MailingLists.MailingLists',array(
+        'label' => __(' ',true),
+        'type' => 'select',
+        'multiple' => 'checkbox',
+        'options' => Hash::extract($mailingLists, '{n}.name'),
+        'selected' => $selectedMailingLists,
+    )); 
+
+	echo '</fieldset>';
+
 	echo $this->Form->end('Update');
 ?>
