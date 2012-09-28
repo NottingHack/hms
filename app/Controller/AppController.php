@@ -76,6 +76,7 @@ class AppController extends Controller {
                 $adminLinks = array(
                     'Members' => array( 'controller' => 'members', 'action' => 'index' ),
                     'Groups' => array( 'controller' => 'groups', 'action' => 'index' ),
+                    'Mailing Lists' => array( 'controller' => 'mailinglists', 'action' => 'index' ),
                 );
             }
             else if( Member::isInGroupTourGuide($user) )

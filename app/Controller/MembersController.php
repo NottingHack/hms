@@ -349,8 +349,6 @@
 
 			    	$flashMessage = 'Member details updated.';
 
-			    	print_r($this->request->data);
-
 			    	if(isset($this->request->data['MailingLists']))
 			    	{
 			    		if(!isset($this->request->data['MailingLists']['MailingLists']) ||

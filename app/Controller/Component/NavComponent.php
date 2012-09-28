@@ -11,6 +11,12 @@ class NavComponent extends Component {
 
 	var $allowedActions = array();
 
+	# Add a navigation option to an external URL
+	public function addExternal($text, $url)
+	{
+		array_push($this->allowedActions, array( 'text' => $text, 'url' => $url ) );
+	}
+
 	# Add a navigation option, testing if it's authorized first
 	public function add($text, $controller, $action, $params = array())
 	{

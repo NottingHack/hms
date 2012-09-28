@@ -18,9 +18,16 @@ class NavHelper extends AppHelper {
 				echo '<li>';
 
 				# Build the options array
-				$options = array( 'controller' => $link['controller'], 'action' => $link['action'] );
-				$options = array_merge($options, $link['params']);
-
+				$options = '';
+				if(isset($link['url']))
+				{
+					$options = $link['url'];
+				}
+				else
+				{
+					$options = array( 'controller' => $link['controller'], 'action' => $link['action'] );
+					$options = array_merge($options, $link['params']);
+				}
 				echo $this->Html->link($link['text'], $options);
 
 				echo '</li>';
