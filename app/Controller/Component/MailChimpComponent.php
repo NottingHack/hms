@@ -17,6 +17,7 @@ class MailChimpComponent extends Component {
 	{
 		$this->apikey = Configure::read('mailchimp_apiKey');
 		$this->api = new MCAPI($this->apikey);
+		$this->api->useSecure(true);
 	}
 
 	public function get_mailinglist($id, $useCache = true)
