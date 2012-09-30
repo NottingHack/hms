@@ -39,6 +39,17 @@ class AuthUtilComponent extends Component {
 		$controllerObj = $this->get_controller($controller);
 		# AT [25/09/2012] Have to call beforeFilter to set-up the auth properly
 		$controllerObj->beforeFilter();
+
+		# AT [29/09/2012] First we need to check if the user must be logged in to do this action
+		$allowedActions = $controllerObj->Auth->allowedActions;
+		$isAllowed = (
+			$allowedActions == array('*') || # AT [29/09/2012] Allow all actions?
+			in_array($action, array_map('strtolower', $allowedActions))
+		);
+		if($isAllowed)
+		{
+			return true;
+		}
 		return $controllerObj->Auth->isAuthorized(AuthComponent::user(), $request);
 	}
 

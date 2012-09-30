@@ -61,6 +61,7 @@ h3 {
 	color: #195905;
 	font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
 	font-size: 130%;
+	margin-top: 20px;
 }
 h4 {
 	color: #195905;
@@ -933,4 +934,8 @@ pre {
 	float: left;
 	padding-left: 10px;
 	margin: 0px;
+}
+
+.big_button {
+	font-size: 130%;
 }

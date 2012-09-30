@@ -12,17 +12,17 @@ class NavComponent extends Component {
 	var $allowedActions = array();
 
 	# Add a navigation option to an external URL
-	public function addExternal($text, $url)
+	public function addExternal($text, $url, $class = '')
 	{
-		array_push($this->allowedActions, array( 'text' => $text, 'url' => $url ) );
+		array_push($this->allowedActions, array( 'text' => $text, 'url' => $url, 'class' => $class ) );
 	}
 
 	# Add a navigation option, testing if it's authorized first
-	public function add($text, $controller, $action, $params = array())
+	public function add($text, $controller, $action, $params = array(), $class = '')
 	{
 		if( $this->AuthUtil->is_authorized($controller, $action, $params) )
 		{
-			array_push($this->allowedActions, array( 'text' => $text, 'controller' => $controller, 'action' => $action, 'params' => $params ) );
+			array_push($this->allowedActions, array( 'text' => $text, 'controller' => $controller, 'action' => $action, 'params' => $params, 'class' => $class ) );
 		}
 	}
 

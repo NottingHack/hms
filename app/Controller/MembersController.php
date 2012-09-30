@@ -39,7 +39,7 @@
 	    			return $userIsMemberAdmin; 
 
 	    		case 'add':
-	    			return $userIsMemberAdmin || $userIsTourGuide;
+	    			return true;#$userIsMemberAdmin || $userIsTourGuide;
 
 	    		case 'change_password':
 	    		case 'view':
@@ -61,7 +61,7 @@
 
 	    public function beforeFilter() {
 	        parent::beforeFilter();
-	        $this->Auth->allow('logout', 'login');
+	        $this->Auth->allow('logout', 'login', 'add');
 	    }
 
 	    # Show some basic info, and link to other things

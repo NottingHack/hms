@@ -89,7 +89,15 @@ class PagesController extends AppController {
 
     public function home()
     {
-		$parsed_xml = Xml::build('http://nottinghack.org.uk/?feed=rss2');
-		$this->set('rssData', $parsed_xml);
+    	# AT [29/09/2012] TODO: Cache this
+    	if(AuthComponent::user())
+    	{
+			$parsed_xml = Xml::build('http://nottinghack.org.uk/?feed=rss2');
+			$this->set('rssData', $parsed_xml);
+		}
+		else
+		{
+			$this->Nav->add('Register Now!', 'members', 'add', array(), 'big_button');
+		}
     }
 }

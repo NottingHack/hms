@@ -28,7 +28,13 @@ class NavHelper extends AppHelper {
 					$options = array( 'controller' => $link['controller'], 'action' => $link['action'] );
 					$options = array_merge($options, $link['params']);
 				}
-				echo $this->Html->link($link['text'], $options);
+				
+				$htmlAttrs = array();
+				if(isset($link['class']) && $link['class'] != '')
+				{
+					$htmlAttrs['class'] = $link['class'];
+				}
+				echo $this->Html->link($link['text'], $options, $htmlAttrs);
 
 				echo '</li>';
 			}

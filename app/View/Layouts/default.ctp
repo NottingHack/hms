@@ -49,6 +49,7 @@ $cakeDescription = "Nottingham Hackspace Management System";
 							<?php echo $this->Html->link('Logout', array( 'controller' => 'members', 'action' => 'logout' )) ?>
 						</span>
 					<?php else: ?>
+						Already a member? 
 						<?php echo $this->Html->link('Login', array( 'controller' => 'members', 'action' => 'login' )) ?>
 					<?php endif; ?>
 				</div>
