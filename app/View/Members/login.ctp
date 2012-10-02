@@ -8,5 +8,6 @@
         echo $this->Form->input('username');
         echo $this->Form->input('password');
     ?>
+    <?php echo $this->Html->link('Forgot Password?', array('controller' => 'members', 'action' => 'forgot_password')); ?>
     </fieldset>
 <?php echo $this->Form->end(__('Login')); ?>

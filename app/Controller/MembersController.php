@@ -61,7 +61,7 @@
 
 	    public function beforeFilter() {
 	        parent::beforeFilter();
-	        $this->Auth->allow('logout', 'login', 'add');
+	        $this->Auth->allow('logout', 'login', 'add', 'forgot_password');
 	    }
 
 	    # Show some basic info, and link to other things
@@ -250,14 +250,7 @@
 								# User submitted current password is ok, check the new one
 								if( $this->request->data['ChangePassword']['new_password'] === $this->request->data['ChangePassword']['new_password_confirm'] )
 								{
-									# Good to go
-									$memberInfo['MemberAuth']['passwd'] = HmsAuthenticate::make_hash($memberInfo['MemberAuth']['salt'], $this->request->data['ChangePassword']['new_password']);
-									$memberInfo['MemberAuth']['member_id'] = $id;
-									if( isset( $memberInfo['MemberAuth']['salt'] ) === false )
-									{
-										$memberInfo['MemberAuth']['salt'] = HmsAuthenticate::make_salt();
-									}
-									if( $this->Member->MemberAuth->save($memberInfo) )
+									if($this->_set_member_password($memberInfo, $this->request->data['ChangePassword']['new_password']))
 									{
 										$this->Session->setFlash('Password updated.');
 										$this->redirect(array('action' => 'view', $id));
@@ -284,6 +277,157 @@
 					}
 				}
 			}
+	    }
+
+	    public function forgot_password($guid = null)
+	    {
+	    	if($guid != null)
+	    	{
+	    		# Check it's a valid UUID v4
+	    		# With this handy regex
+	    		if(preg_match('/^\{?[a-f\d]{8}-(?:[a-f\d]{4}-){3}[a-f\d]{12}\}?$/i', $guid) == false)
+	    		{
+	    			$guid = null;
+	    		}
+	    	}
+
+	    	$this->set('guid', $guid);
+
+	    	Controller::loadModel('ForgotPassword');
+
+			if ($this->request->is('get')) 
+			{
+			}
+			else
+			{
+				# Validate the input using the dummy model
+				$this->ForgotPassword->set($this->data);
+				if($this->ForgotPassword->validates())
+				{
+					# If guid is not set then we should be sending out the e-mail
+					if($guid == null)
+					{
+						# Grab the member
+						$memberInfo = $this->Member->find('all', array( 'conditions' => array('Member.email' => $this->request->data['ForgotPassword']['email']) ));
+						if($memberInfo && count($memberInfo) > 0)
+						{
+							$entry = $this->ForgotPassword->generate_entry($memberInfo[0]);
+							if($entry != null)
+							{
+								# E-mail the user...
+								$email = $this->prepare_email();
+								$email->to( $memberInfo[0]['Member']['email'] );
+								$email->subject('Password Reset Request');
+								$email->template('forgot_password', 'default');
+								$email->viewVars( array( 
+									'id' => $entry['ForgotPassword']['request_guid'],
+									 )
+								);
+								$email->send();
+								
+								$this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_sent'));
+							}
+						}
+					}
+					else
+					{
+						# Check all is well and then proceed with the password reset!
+
+						# Grab the record 
+						$record = $this->ForgotPassword->find('first', array('conditions' => array( 'ForgotPassword.request_guid' => $guid )));
+						if(isset($record) == false || $record == null)
+						{
+							# FAIL INVALID GUID
+							$this->Session->setFlash('Invalid request id');
+							$this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_error'));
+						}
+						else
+						{
+							$memberInfo = $this->Member->find('first', array( 'conditions' => array( 'Member.member_id' => $record['ForgotPassword']['member_id'] )));
+							if(isset($memberInfo) == false || $memberInfo == null)
+							{
+								# FAIL INVALID RECORD
+								$this->Session->setFlash('Invalid request id');
+								$this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_error'));
+							}
+							else
+							{
+								# CHECK FOR E-MAIL MATCH
+								if($this->request->data['ForgotPassword']['email'] != $memberInfo['Member']['email'])
+								{
+									# FAIL INCORRECT E-MAIL
+									# Don't tell them the actual reason
+									$this->Session->setFlash('Invalid request id');
+									$this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_error'));
+								}
+								else
+								{
+									# AT [01/10/2012] Has this link already been used?
+									# AT [01/10/2012] Or has it expired due to time passing?
+									if($record['ForgotPassword']['expired'] != 0 || ( (time() - strtotime($record['ForgotPassword']['timestamp'])) > (60 * 60 * 2) ) )
+									{
+										# FAIL EXPIRED LINK
+										$this->Session->setFlash('Invalid request id');
+										$this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_error'));
+									}
+									else
+									{
+										# AT [01/10/2012] Looks like we're all good to go
+										# Need to do this next bit in a transaction so we can roll it back if needed
+
+										$datasource = $this->Member->getDataSource();
+										$datasource->begin();
+
+										$succeeded = false;
+										# First we set the password
+										if($this->_set_member_password($memberInfo, $this->request->data['ForgotPassword']['new_password']))
+										{
+											# Then we expire the forgot password request
+											$record['ForgotPassword']['expired'] = 1;
+											$this->ForgotPassword->id = $record['ForgotPassword']['request_guid'];
+											if($this->ForgotPassword->save($record))
+											{
+												if($datasource->commit())
+												{
+													# Success!
+													$succeeded = true;
+												}
+											}
+										}
+
+										if($succeeded === true)
+										{
+											$this->Session->setFlash('Password successfully set.');
+											$this->redirect(array('controller' => 'members', 'action' => 'login'));
+										}
+										else
+										{
+											$this->Session->setFlash('Unable to set password');
+											$datasource->rollback();
+											$this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_error'));
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+	    }
+
+	    private function _set_member_password($memberInfo, $newPassword)
+	    {
+	    	$memberInfo['MemberAuth']['passwd'] = HmsAuthenticate::make_hash($memberInfo['MemberAuth']['salt'], $newPassword);
+			$memberInfo['MemberAuth']['member_id'] = $memberInfo['Member']['member_id'];
+			if( isset( $memberInfo['MemberAuth']['salt'] ) === false )
+			{
+				$memberInfo['MemberAuth']['salt'] = HmsAuthenticate::make_salt();
+			}
+			if( $this->Member->MemberAuth->save($memberInfo) )
+			{
+				return true;
+			}
+			return false;
 	    }
 
 	    public function view($id = null) {
