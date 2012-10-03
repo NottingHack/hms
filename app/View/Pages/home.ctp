@@ -45,8 +45,10 @@
 
 	<h3>Interested in Nottingham Hackspace?</h3>
 	<p>Excellent! Have you had a tour yet? If not come down to one of our open hack-nights (every Wednesday from 6:30pm at the address below). Already in the building? Look for the human near Ein the duck, they'll be able to help you.</p>
-	<p>If you'd like to keep up-to-date with the latest hackspace news and events, or are interested in becoming a member please <?php echo $this->Html->link('Register', array('controller' => 'members', 'action' => 'add')); ?>. You'll be given the option to subscribe to our weekly newsletter and receive an e-mail with instructions on becoming a member (if you don't want to be a member yet, please ignore that e-mail, we can always send it again if you change your mind).</p>
+	<p>If you'd like to keep up-to-date with the latest hackspace news and events, or are interested in becoming a member please <?php echo $this->Html->link('Register', array('controller' => 'members', 'action' => 'register')); ?>. You'll be given the option to subscribe to our weekly newsletter and receive an e-mail with instructions on becoming a member (if you don't want to be a member yet, please ignore that e-mail, we can always send it again if you change your mind).</p>
 	<p> You may also want to follow Nottingham Hackspace on your choice of social network: <?php echo $this->Html->link('Twitter', 'http://twitter.com/#!/hsnotts'); ?>, <?php echo $this->Html->link('Google Group', 'http://groups.google.com/group/nottinghack'); ?>, <?php echo $this->Html->link('Flickr', 'http://www.flickr.com/photos/nottinghack'); ?>, <?php echo $this->Html->link('YouTube', 'http://www.youtube.com/user/nottinghack'); ?>, or <?php echo $this->Html->link('Facebook', 'http://www.facebook.com/pages/NottingHack/106946729335123'); ?>.</p>
 	<p>We also have a <?php echo $this->Html->link('Blog', 'http://nottinghack.org.uk/'); ?>.</p>
+
+	
 
 <?php endif; ?>

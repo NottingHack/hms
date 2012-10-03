@@ -38,9 +38,6 @@
 	    		case 'set_member_status':
 	    			return $userIsMemberAdmin; 
 
-	    		case 'add':
-	    			return true;#$userIsMemberAdmin || $userIsTourGuide;
-
 	    		case 'change_password':
 	    		case 'view':
 	    		case 'edit':
@@ -61,7 +58,7 @@
 
 	    public function beforeFilter() {
 	        parent::beforeFilter();
-	        $this->Auth->allow('logout', 'login', 'add', 'forgot_password');
+	        $this->Auth->allow('logout', 'login', 'register', 'forgot_password');
 	    }
 
 	    # Show some basic info, and link to other things
@@ -96,7 +93,7 @@
 	    	$this->set('memberStatusCount', $memberStatusCount);
 	    	$this->set('memberTotalCount', $memberTotalCount);
 
-	    	$this->Nav->add('Add Member', 'members', 'add');
+	    	$this->Nav->add('Register Member', 'members', 'register');
     		$this->Nav->add('E-mail all current members', 'members', 'email_members_with_status', array( 2 ) );
 	    }
 
@@ -139,7 +136,7 @@
 	    }
 
 	    # Add a new member
-	    public function add() {
+	    public function register() {
 
 	    	# Get the account list but add an item for create
 	    	$accountList =  $this->get_readable_account_list( array( -1 => 'Create account' ) );

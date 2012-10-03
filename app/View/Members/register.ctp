@@ -2,7 +2,7 @@
 
 <?php
     $this->Html->addCrumb('Members', '/members');
-	$this->Html->addCrumb('Add Member', '/members/add');
+	$this->Html->addCrumb('Register Member', '/members/register');
 ?>
 
 <?php

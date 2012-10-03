@@ -97,7 +97,7 @@ class PagesController extends AppController {
 		}
 		else
 		{
-			$this->Nav->add('Register Now!', 'members', 'add', array(), 'big_button');
+			$this->Nav->add('Register Now!', 'members', 'register', array(), 'big_button');
 		}
     }
 }
