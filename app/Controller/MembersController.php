@@ -77,7 +77,8 @@
 	    	# Init the array
 	    	foreach ($statusList as $current) {
 	    		$memberStatusCount[$current['Status']['title']] = 
-	    			array( 'id' => $current['Status']['status_id'],
+	    			array( 	'id' => $current['Status']['status_id'],
+	    					'desc' => $current['Status']['description'],
 	    					'count' => 0
 	    			);
 	    	}

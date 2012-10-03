@@ -15,10 +15,24 @@
 <h3>Summary</h3>
 
 <table>
+    <tr>
+        <th>
+            Member Type
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            No. Members with this status
+        </th>
+    </tr>
     <?php foreach ($memberStatusCount as $title => $data): ?>
         <tr>
             <td>
                 <?php echo $this->Html->link($title, array('controller' => 'members', 'action' => 'list_members_with_status', $data['id'])); ?>
+            </td>
+            <td>
+                <?php echo $data['desc']; ?>
             </td>
             <td>
                 <?php echo $data['count'] ?>
@@ -28,6 +42,9 @@
     <tr>
         <td>
             <?php echo $this->Html->link('All', array('controller' => 'members', 'action' => 'list_members')); ?>
+        </td>
+        <td>
+            All Members
         </td>
         <td>
             <?php echo $memberTotalCount; ?>
