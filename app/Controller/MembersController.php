@@ -138,19 +138,12 @@
 	    # Add a new member
 	    public function register() {
 
-	    	# Get the account list but add an item for create
-	    	$accountList =  $this->get_readable_account_list( array( -1 => 'Create account' ) );
-	    	$this->set('accounts', $accountList);
+	    	$mailingLists = $this->_get_mailing_lists_and_subscruibed_status(null);
+			$this->set('mailingLists', $mailingLists);
 
 	    	if ($this->request->is('post')) {
 
 	    		$this->request->data['Member']['member_status'] = 1;
-				$this->request->data['Member']['unlock_text'] = 'Welcome ' . $this->request->data['Member']['handle'];
-				$this->request->data['Member']['credit_limit'] = 5000;
-
-				# Set some pin data
-				$this->request->data['Pin']['unlock_text'] = 'Welcome';
-				$this->request->data['Pin']['state'] = 40;
 
 	            if ($this->Member->saveAll($this->request->data)) {
 
@@ -559,25 +552,29 @@
 		    if(!$this->MailChimp->error_code())
 		    {
 		    	$mailingLists = $mailingListsRet['data'];
-		    	$numMailingLists = count($mailingLists);
-		    	for($i = 0; $i < $numMailingLists; $i++)
+
+		    	if($memberInfo != null)
 		    	{
-		    		// Grab the list of subscribed members
-		    		$subscribedMembers = $this->MailChimp->list_subscribed_members($mailingLists[$i]['id']);
-		    		if(!$this->MailChimp->error_code())
-		    		{
-		    			// Extract the emails
-		    			$emails = Hash::extract($subscribedMembers['data'], '{n}.email');
-		    			// Are we subscribed to this list?
-		    			$mailingLists[$i]['subscribed'] = (in_array($memberInfo['Member']['email'], $emails));
-		    			if($i > 0)
-		    			{
-		    				$mailingLists[$i]['subscribed'] = rand() % 2 == 0;
-		    			}
-		    			// Can we view it?
-		    			$mailingLists[$i]['canView'] = $this->AuthUtil->is_authorized('mailinglists', 'view', array( $mailingLists[$i]['id'] ));
-		    		}
-		    	}
+			    	$numMailingLists = count($mailingLists);
+			    	for($i = 0; $i < $numMailingLists; $i++)
+			    	{
+			    		// Grab the list of subscribed members
+			    		$subscribedMembers = $this->MailChimp->list_subscribed_members($mailingLists[$i]['id']);
+			    		if(!$this->MailChimp->error_code())
+			    		{
+			    			// Extract the emails
+			    			$emails = Hash::extract($subscribedMembers['data'], '{n}.email');
+			    			// Are we subscribed to this list?
+			    			$mailingLists[$i]['subscribed'] = (in_array($memberInfo['Member']['email'], $emails));
+			    			if($i > 0)
+			    			{
+			    				$mailingLists[$i]['subscribed'] = rand() % 2 == 0;
+			    			}
+			    			// Can we view it?
+			    			$mailingLists[$i]['canView'] = $this->AuthUtil->is_authorized('mailinglists', 'view', array( $mailingLists[$i]['id'] ));
+			    		}
+			    	}
+			    }
 		    	return $mailingLists;
 		    }
 		    return null;

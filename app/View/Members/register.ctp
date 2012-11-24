@@ -7,21 +7,20 @@
 
 <?php
 	echo $this->Form->create('Member');
-	echo $this->Form->input('name');
 	echo $this->Form->input('email');
-	echo $this->Form->input('handle');
 
-	echo $this->Form->input('Other.guide');
+	echo '<fieldset>';
+	echo '<legend>Mailing Lists</legend>';
+	echo 'Please tick the boxes the mailing list(s) you\'d like to subscribe to.';
 
-	echo $this->Form->input('account_id', array( 
-			'options' => $accounts,
-			'label' => 'Account'
-		) 
-	);
+	echo $this->Form->input('MailingLists.MailingLists',array(
+        'label' => __(' ',true),
+        'type' => 'select',
+        'multiple' => 'checkbox',
+        'options' => Hash::extract($mailingLists, '{n}.name'),
+    )); 
 
-	# Pin details
-	echo $this->Form->hidden('Pin.pin');
-	echo $this->Form->input('Pin.expiry', array('type'=>'date', 'empty' => true, 'minYear' => date("Y"), 'orderYear' => 'asc', 'dateFormat' => 'DMY'));
+	echo '</fieldset>';
 
-	echo $this->Form->end('Add Member');
+	echo $this->Form->end('Register');
 ?>
