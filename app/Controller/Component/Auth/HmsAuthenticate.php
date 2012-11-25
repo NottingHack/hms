@@ -2,12 +2,9 @@
 
 App::uses('FormAuthenticate', 'Controller/Component/Auth');
 
-Configure::config('default', new PhpReader());
-Configure::load('krb', 'default');
-
-App::uses('krb5_auth', 'Lib/Krb');
-
 class HmsAuthenticate extends FormAuthenticate {
+
+    public $components = array( 'Krb' );
 
     public function authenticate(CakeRequest $request, CakeResponse $response) {
 
@@ -15,20 +12,22 @@ class HmsAuthenticate extends FormAuthenticate {
         $memberModel = ClassRegistry::init("Member");
 
         # Find the member
-        $memberInfo = $memberModel->find('first', array( 'conditions' => array( 'Member.email' => $request->data['User']['username'] ) ) );
+        $memberInfo = $memberModel->find('first', array( 'conditions' => array( 'Member.username' => $request->data['User']['username'] ) ) );
 
         if( isset($memberInfo) &&
             $memberInfo != null)
         {
             # We have a member!
+            #$krb_username = Configure::read('krb_username');
+            #if(isset($krb_username))
+            #{
 
-            $krb_username = Configure::read('krb_username');
-            if(isset($krb_username))
-            {   
-                $authObj = new krb5_auth(Configure::read('krb_username'), Configure::read('krb_tab'), Configure::read('krb_relm'));
-                $result = $authObj->check_password($memberInfo['Member']['username'], $request->data['User']['password']);
-                return $result ? $memberInfo : false;
-            }
+            return $this->Krb->check_password($request->data['User']['username'], $request->data['User']['password']);
+            #    $authObj = new krb5_auth(Configure::read('krb_username'), Configure::read('krb_tab'), Configure::read('krb_relm'));
+            #    $result = $authObj->check_password($memberInfo['Member']['username'], $request->data['User']['password']);
+            #    return $result ? $memberInfo : false;
+            #}
+            /* We don't use this auth method any more
             else
             {
                 # Grab their salt
@@ -52,7 +51,7 @@ class HmsAuthenticate extends FormAuthenticate {
                         }
                     }
                 }
-            }
+            }*/
         }
 
     	# Login failed
