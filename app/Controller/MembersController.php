@@ -195,6 +195,31 @@
 			$this->request->data['Member']['account_id'] = -1;
 	    }
 
+	    # Get a registered member to set-up a username and Password
+	    public function setup($id = null)
+	    {
+	    	if($id != null)
+	    	{
+	    		$this->Member->id = $id;
+	    		$memberInfo = $this->Member->read();
+	    		# Does this member already have a username?
+	    		if(	$memberInfo != null &&
+	    			$memberInfo['Member']['username'] == null)
+	    		{
+	    			$this->set('memberInfo', $memberInfo);
+
+	    			if($this->request->is('get') == false)
+	    			{
+	    				
+	    			}
+	    		}
+	    		else
+	    		{
+	    			# Redirect somewhere, they shouldn't be here
+	    		}
+	    	}
+	    }
+
 	    public function change_password($id = null) {
 
 	    	Controller::loadModel('ChangePassword');
