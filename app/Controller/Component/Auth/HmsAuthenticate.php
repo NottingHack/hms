@@ -5,7 +5,7 @@ App::uses('FormAuthenticate', 'Controller/Component/Auth');
 Configure::config('default', new PhpReader());
 Configure::load('krb', 'default');
 
-App::import('Lib', 'Krb/krb5_auth');  
+App::uses('krb5_auth', 'Lib/Krb');
 
 class HmsAuthenticate extends FormAuthenticate {
 
@@ -22,10 +22,12 @@ class HmsAuthenticate extends FormAuthenticate {
         {
             # We have a member!
 
-            if(isset(Configure::read('krb_username')))
-            {
+            $krb_username = Configure::read('krb_username');
+            if(isset($krb_username))
+            {   
                 $authObj = new krb5_auth(Configure::read('krb_username'), Configure::read('krb_tab'), Configure::read('krb_relm'));
-                return $authObj->check_password($request->data['User']['username'], $request->data['User']['password']);
+                $result = $authObj->check_password($memberInfo['Member']['username'], $request->data['User']['password']);
+                return $result ? $memberInfo : false;
             }
             else
             {
