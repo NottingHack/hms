@@ -5,7 +5,7 @@ App::uses('FormAuthenticate', 'Controller/Component/Auth');
 Configure::config('default', new PhpReader());
 Configure::load('krb', 'default');
 
-App::import('Lib/Krb', 'krb5_auth');  
+App::import('Lib', 'Krb/krb5_auth');  
 
 class HmsAuthenticate extends FormAuthenticate {
 
