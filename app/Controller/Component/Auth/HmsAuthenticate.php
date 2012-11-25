@@ -1,6 +1,7 @@
 <?php
 
 App::uses('FormAuthenticate', 'Controller/Component/Auth');
+App::uses('KrbComponent', 'Controller/Component');
 
 class HmsAuthenticate extends FormAuthenticate {
 
@@ -17,41 +18,8 @@ class HmsAuthenticate extends FormAuthenticate {
         if( isset($memberInfo) &&
             $memberInfo != null)
         {
-            # We have a member!
-            #$krb_username = Configure::read('krb_username');
-            #if(isset($krb_username))
-            #{
-
+            $this->Krb = new KrbComponent($this->_Collection);
             return $this->Krb->check_password($request->data['User']['username'], $request->data['User']['password']);
-            #    $authObj = new krb5_auth(Configure::read('krb_username'), Configure::read('krb_tab'), Configure::read('krb_relm'));
-            #    $result = $authObj->check_password($memberInfo['Member']['username'], $request->data['User']['password']);
-            #    return $result ? $memberInfo : false;
-            #}
-            /* We don't use this auth method any more
-            else
-            {
-                # Grab their salt
-                $memberSalt = $memberInfo['MemberAuth']['salt'];
-                if( isset($memberSalt) &&
-                    $memberSalt != null &&
-                    strlen($memberSalt) === 16)
-                {
-                    # Grab the actual hash
-                    $actualHash = $memberInfo['MemberAuth']['passwd'];
-                    if( isset($actualHash) &&
-                        $actualHash != null &&
-                        strlen($actualHash) === 40)
-                    {
-                        # Check it
-                        $attemptHash = HmsAuthenticate::make_hash($memberSalt, $request->data['User']['password']);
-
-                        if( $attemptHash === $actualHash )
-                        {
-                            return $memberInfo;
-                        }
-                    }
-                }
-            }*/
         }
 
     	# Login failed
