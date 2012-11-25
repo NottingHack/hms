@@ -7,7 +7,7 @@
 	    
 	    public $helpers = array('Html', 'Form', 'Tinymce');
 
-	    public $components = array('MailChimp');
+	    public $components = array('MailChimp', 'Krb');
 
 	    public function isAuthorized($user, $request)
 	    {
@@ -219,47 +219,31 @@
 					if( $this->request->data['Member']['member_id'] == AuthComponent::user('Member.member_id') ||
 						$memberIsMemberAdmin ) 
 					{
-						# Check the current the user submitted
-						if( isset($memberInfo['MemberAuth']) &&
-							$memberInfo['MemberAuth'] != null ) 
+						$usernameToCheck = AuthComponent::user('Member.username');
+						$passwordToCheck = $this->request->data['ChangePassword']['current_password'];
+
+						if($this->Krb->checkPassword($usernameToCheck, $passwordToCheck))
 						{
-							$saltToUse = $memberInfo['MemberAuth']['salt'];
-							$passwordToCheck = $memberInfo['MemberAuth']['passwd'];
-
-							if( $memberIsMemberAdmin )
+							if( $this->request->data['ChangePassword']['new_password'] === $this->request->data['ChangePassword']['new_password_confirm'] )
 							{
-								# Member admins need to enter their own password
-								$memberAdminMemberInfo = $this->Member->find('first', array( 'conditions' => array( 'Member.member_id' => AuthComponent::user('Member.member_id') ) ) );
-								$saltToUse = $memberAdminMemberInfo['MemberAuth']['salt'];
-								$passwordToCheck = $memberAdminMemberInfo['MemberAuth']['passwd'];
-							}
-
-							$currentPasswordHash = HmsAuthenticate::make_hash($saltToUse, $this->request->data['ChangePassword']['current_password']);
-
-							if( $currentPasswordHash === $passwordToCheck ) # MemberAdmins don't need to know the old password
-							{
-								# User submitted current password is ok, check the new one
-								if( $this->request->data['ChangePassword']['new_password'] === $this->request->data['ChangePassword']['new_password_confirm'] )
+								if($this->_set_member_password($memberInfo, $this->request->data['ChangePassword']['new_password']))
 								{
-									if($this->_set_member_password($memberInfo, $this->request->data['ChangePassword']['new_password']))
-									{
-										$this->Session->setFlash('Password updated.');
-										$this->redirect(array('action' => 'view', $id));
-									}
-									else
-									{
-										$this->Session->setFlash('Unable to update password.');
-									}
+									$this->Session->setFlash('Password updated.');
+									$this->redirect(array('action' => 'view', $id));
 								}
 								else
 								{
-									$this->Session->setFlash('New password doesn\'t match new password confirm');
+									$this->Session->setFlash('Unable to update password.');
 								}
 							}
 							else
 							{
-								$this->Session->setFlash('Current password incorrect');
+								$this->Session->setFlash('New password doesn\'t match new password confirm');
 							}
+						}
+						else
+						{
+							$this->Session->setFlash('Current password incorrect');
 						}
 					}
 					else
@@ -408,17 +392,7 @@
 
 	    private function _set_member_password($memberInfo, $newPassword)
 	    {
-	    	$memberInfo['MemberAuth']['passwd'] = HmsAuthenticate::make_hash($memberInfo['MemberAuth']['salt'], $newPassword);
-			$memberInfo['MemberAuth']['member_id'] = $memberInfo['Member']['member_id'];
-			if( isset( $memberInfo['MemberAuth']['salt'] ) === false )
-			{
-				$memberInfo['MemberAuth']['salt'] = HmsAuthenticate::make_salt();
-			}
-			if( $this->Member->MemberAuth->save($memberInfo) )
-			{
-				return true;
-			}
-			return false;
+	    	return $this->Krb->changePassword($memberInfo['Member']['username'], $newPassword);
 	    }
 
 	    public function view($id = null) {

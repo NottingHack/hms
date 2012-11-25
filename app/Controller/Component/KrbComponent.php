@@ -33,7 +33,7 @@ class KrbComponent extends Component {
 
 	public function changePassword($username, $newPass)
 	{
-		return $this->krbObj->change_passwrd($username, $newPass);
+		return $this->krbObj->change_password($username, $newPass);
 	}
 }
 

@@ -19,7 +19,7 @@ class HmsAuthenticate extends FormAuthenticate {
             $memberInfo != null)
         {
             $this->Krb = new KrbComponent($this->_Collection);
-            return $this->Krb->check_password($request->data['User']['username'], $request->data['User']['password']);
+            return $this->Krb->checkPassword($request->data['User']['username'], $request->data['User']['password']) ? $memberInfo : false;
         }
 
     	# Login failed
