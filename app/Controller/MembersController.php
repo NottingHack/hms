@@ -196,7 +196,7 @@
 	    }
 
 	    # Get a registered member to set-up a username and Password
-	    public function setup($id = null)
+	    public function setupLogin($id = null)
 	    {
 	    	if($id != null)
 	    	{
@@ -218,6 +218,12 @@
 	    			# Redirect somewhere, they shouldn't be here
 	    		}
 	    	}
+	    }
+
+	    # Get a member with a login to set-up their address details
+	    public function setupDetails($id = null)
+	    {
+	    	
 	    }
 
 	    public function change_password($id = null) {
