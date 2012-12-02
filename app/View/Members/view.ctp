@@ -8,32 +8,40 @@
 
 <dl>
 	<dt>
+		Username
+	</dt>
+	<dd>
+		<?php echo $member['Member']['username']; ?>
+	</dd>
+
+	<dt>
 		Email
 	</dt>
 	<dd>
 		<?php echo $member['Member']['email']; ?>
 	</dd>
 
-	<dt>
-		Member Since
-	</dt>
-	<dd>
-		<?php echo $member['Member']['join_date']; ?>
-	</dd>
+	<?php 
+		# Only show join date to current members
+		if($member['Member']['member_status'] == 1):
+	?>
 
-	<dt>
-		Handle
-	</dt>
-	<dd>
-		<?php echo $member['Member']['handle']; ?>
-	</dd>
+		<dt>
+			Member Since
+		</dt>
+		<dd>
+			<?php echo $member['Member']['join_date']; ?>
+		</dd>
+	<?php endif; ?>
 
-	<dt>
-		Unlock Text
-	</dt>
-	<dd>
-		<?php echo $member['Member']['unlock_text']; ?>
-	</dd>
+	<?php if(isset($member['Member']['unlock_text'])): ?>
+		<dt>
+			Unlock Text
+		</dt>
+		<dd>
+			<?php echo $member['Member']['unlock_text']; ?>
+		</dd>
+	<?php endif; ?>
 
 	<dt>
 		Groups
@@ -58,13 +66,18 @@
         }
        ?>
 	</dd>
-	<dt>
-		Status
-	</dt>
-	<dd>
-		<?php echo $this->Html->link($member['Status']['title'], array('controller' => 'members', 'action' => 'list_members_with_status', $member['Status']['status_id'])); ?>
-	</dd>
-	<?php if( isset($member['Pin']) ): ?>
+
+	<?php if(isset($member['Status'])): ?>
+		<dt>
+			Status
+		</dt>
+		<dd>
+			<?php echo $this->Html->link($member['Status']['title'], array('controller' => 'members', 'action' => 'list_members_with_status', $member['Status']['status_id'])); ?>
+		</dd>
+
+	<?php endif; ?>
+
+	<?php if( isset($member['Pin']['pin']) ): ?>
 		<dt>
 			Pin
 		</dt>
@@ -99,12 +112,17 @@
 	<dd>
 		<?php echo $member['Member']['credit_limit']; ?>
 	</dd>
-	<dt>
-		Account Ref
-	</dt>
-	<dd>
-		<?php echo $member['Account']['payment_ref']; ?>
-	</dd>
+
+	<?php if(isset($member['Account']['account_id'])): ?>
+		<dt>
+			Account Ref
+		</dt>
+		<dd>
+			<?php echo $member['Account']['payment_ref']; ?>
+		</dd>
+
+	<?php endif; ?>
+
 	<dt>
 		Address
 	</dt>

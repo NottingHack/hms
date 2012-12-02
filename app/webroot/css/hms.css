@@ -642,6 +642,40 @@ input[type=submit]:active,
 	text-decoration: none;
 }
 
+.actions ul li a.positive {
+	background:#62af56;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#76BF6B), to(#3B8230));
+	background-image: -webkit-linear-gradient(top, #76BF6B, #3B8230);
+	background-image: -moz-linear-gradient(top, #76BF6B, #3B8230);
+	background-image: -ms-linear-gradient(top, #76BF6B, #3B8230);
+	background-image: -o-linear-gradient(top, #76BF6B, #3B8230);
+	background-image: linear-gradient(top, #76BF6B, #3B8230);
+	border-color: #2d6324;
+	color: #fff;
+	text-shadow: rgba(0, 0, 0, 0.25) 0px -1px 0px;
+	padding: 4px 8px;
+}
+.actions ul li a.positive:hover {
+	background: #5BA150;
+}
+
+.actions ul li a.negative {
+	background:#c43c35;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ee5f5b), to(#c43c35));
+	background-image: -webkit-linear-gradient(top, #ee5f5b, #c43c35);
+	background-image: -moz-linear-gradient(top, #ee5f5b, #c43c35);
+	background-image: -ms-linear-gradient(top, #ee5f5b, #c43c35);
+	background-image: -o-linear-gradient(top, #ee5f5b, #c43c35);
+	background-image: linear-gradient(top, #ee5f5b, #c43c35);
+	border-color: #632424;
+	color: #fff;
+	text-shadow: rgba(0, 0, 0, 0.25) 0px -1px 0px;
+	padding: 4px 8px;
+}
+.actions ul li a.negative:hover {
+	background: #c43c35;
+}
+
 table .actions {
 	border: none;
 }
@@ -932,6 +966,22 @@ pre {
 }
 
 .adminNav ul li {
+	float: left;
+	padding-left: 10px;
+	margin: 0px;
+}
+
+.userMessage {
+	background: #195905;
+	line-height: 30px;
+}
+
+.userMessage ul {
+	list-style: none;
+	margin: 0px;
+}
+
+.userMessage ul li {
 	float: left;
 	padding-left: 10px;
 	margin: 0px;

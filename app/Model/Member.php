@@ -4,6 +4,8 @@
 
 	class Member extends AppModel {
 
+		const MIN_PASSWORD_LENGTH = 6;
+
 		public $primaryKey = 'member_id';
 
 		public $belongsTo =  array(
@@ -15,7 +17,7 @@
 			"Account" => array(
 					"className" => "Account",
 					"foreignKey" => "account_id",
-					"type" => "inner"
+					#"type" => "inner"
 			),
 		);
 
@@ -56,11 +58,63 @@
 	        'email' => array(
 	        	'email'
 	        ),
-	        'handle' => array(
+	        'password' => array(
+	        	'noEmpty' => array(
+	            	'rule' => 'notEmpty',
+	            	'message' => 'This field cannot be left blank'
+	            ),
+	        	'minLen' => array(
+	        		'rule' => array('minLength', self::MIN_PASSWORD_LENGTH),
+            		'message' => 'Minimum 8 characters long',
+            	),
+	        ),
+	        'password_confirm' => array(
+	        	'noEmpty' => array(
+	            	'rule' => 'notEmpty',
+	            	'message' => 'This field cannot be left blank'
+	            ),
+	            'minLen' => array(
+	        		'rule' => array('minLength', self::MIN_PASSWORD_LENGTH),
+            		'message' => 'Minimum 8 characters long',
+            	),
+	        	'matchNewPassword' => array(
+	            	'rule' => array( 'passwordConfirmMatchesPassword' ),
+	            	'message' => 'Passwords don\'t match',
+	            ),
+	        ),
+	        'username' => array(
+	        	'noEmpty' => array(
+	            	'rule' => 'notEmpty',
+	            	'message' => 'This field cannot be left blank'
+	            ),
+	        	'mustbeUnique' => array(
+	            	'rule' => array( 'checkUniqueUsername' ),
+	            	'message' => 'That username is already taken',
+	            )
+	        ),
+	        'address_1' => array(
 	            'rule' => 'notEmpty'
-	        )
+	        ),
+	        'address_city' => array(
+	            'rule' => 'notEmpty'
+	        ),
+	        'address_postcode' => array(
+	            'rule' => 'notEmpty'
+	        ),
+	        'contact_number' => array(
+	            'rule' => 'notEmpty'
+	        ),
 	    );
 
+	    public function passwordConfirmMatchesPassword($check)
+		{
+			return $this->data['Member']['password'] == $this->data['Member']['password_confirm'];
+		}
+
+		public function checkUniqueUsername($check)
+		{
+			return $this->find('count', array( 'conditions' => array( 'Member.username' => $this->data['Member']['username'] ) ) ) <= 0;
+		}
 
 		public function beforeSave($options = array()) {
 

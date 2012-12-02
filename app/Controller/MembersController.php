@@ -50,6 +50,8 @@
 
 	    		case 'login':
 	    		case 'logout':
+	    		case 'setup_login':
+	    		case 'setup_details':
 	    			return true;
 	    	}
 
@@ -58,7 +60,7 @@
 
 	    public function beforeFilter() {
 	        parent::beforeFilter();
-	        $this->Auth->allow('logout', 'login', 'register', 'forgot_password');
+	        $this->Auth->allow('logout', 'login', 'register', 'forgot_password', 'setup_login', 'setup_details');
 	    }
 
 	    # Show some basic info, and link to other things
@@ -142,61 +144,68 @@
 			$this->set('mailingLists', $mailingLists);
 
 	    	if ($this->request->is('post')) {
+	    		 
+	    		$this->Member->set($this->data);
+	    		if($this->Member->validates(array('fieldList' => array('email'))))
+	    		{
 
-	    		$this->request->data['Member']['member_status'] = 1;
+		    		$this->request->data['Member']['member_status'] = 1;
 
-	            if ($this->Member->saveAll($this->request->data)) {
+		    		# Do we already know about this email?
+		    		$memberInfo = $this->Member->find('first', array( 'conditions' => array('Member.email' => $this->request->data['Member']['email'])));
+		    		$emailAlreadyKnown = !empty($memberInfo);
 
-	            	$this->request->data['Member']['member_id'] = $this->Member->getLastInsertId();
+		            if ( $emailAlreadyKnown == true ||
+		            	 ($emailAlreadyKnown == false && $this->Member->saveAll($this->request->data)) ) 
+		            {
+		            	$memberId = $emailAlreadyKnown ? $memberInfo['Member']['member_id'] : $this->Member->getLastInsertId();
 
-	                $this->Session->setFlash('New member added.');
+		                $this->Session->setFlash('Registration successful.');
 
-	                $memberInfo = $this->set_account($this->request->data);
+		                # Get a list of all the mailing lists this user is subscribing to
+		                $subscribedMailingLists = array();
+		                foreach ($this->request->data['MailingLists']['MailingLists'] as $key => $value) {
+		                	$mailingListToSubscruibe = $mailingLists[$value];
+		                	array_push($subscribedMailingLists, $mailingListToSubscruibe);
+		                }
 
-	                $paymentRef = $memberInfo['Account']['payment_ref'];
-	                if( isset($paymentRef) == false ||
-	                	$paymentRef == null )
-	                {
-	                	$paymentRef = $this->Member->Account->generate_payment_ref($memberInfo);
-	                }
-	               
-	                # Email the new member, and notify the admins
-	                $adminEmail = $this->prepare_email_for_members_in_group(5);
-					$adminEmail->subject('New Prospective Member Notification');
-					$adminEmail->template('notify_admins_member_added', 'default');
-					$adminEmail->viewVars( array( 
-						'member' => $this->request->data['Member'],
-						'memberAdmin' => AuthComponent::user('Member.name'),
-						'paymentRef' => $paymentRef,
-						 )
-					);
-					$adminEmail->send();
+		                # Only notify the member admins if it is a new email
+		                if($emailAlreadyKnown == false)
+		                {
+			                # Email the member admins then
+			                $adminEmail = $this->prepare_email_for_members_in_group(5);
+							$adminEmail->subject('New Prospective Member Notification');
+							$adminEmail->template('notify_admins_member_added', 'default');
+							$adminEmail->viewVars( array( 
+								'email' => $this->request->data['Member']['email'],
+								'mailingLists' => $subscribedMailingLists,
+								 )
+							);
+							$adminEmail->send();
+						}
 
-					$memberEmail = $this->prepare_email();
-					$memberEmail->to( $this->request->data['Member']['email'] );
-					$memberEmail->subject('Welcome to Nottingham Hackspace');
-					$memberEmail->template('to_prospective_member', 'default');
-					$memberEmail->viewVars( array(
-						'memberName' => $this->request->data['Member']['name'],
-						'guideName' => $this->request->data['Other']['guide'],
-						'paymentRef' => $paymentRef,
-						) 
-					);
-					$memberEmail->send();
+						# We always send this e-mail to the member though
+						$memberEmail = $this->prepare_email();
+						$memberEmail->to( $this->request->data['Member']['email'] );
+						$memberEmail->subject('Welcome to Nottingham Hackspace');
+						$memberEmail->template('to_prospective_member', 'default');
+						$memberEmail->viewVars( array(
+							'mailingLists' => $subscribedMailingLists,
+							'memberId' => $memberId,
+							) 
+						);
+						$memberEmail->send();
 
-					$this->redirect(array('action' => 'index'));
-	            } else {
-	                $this->Session->setFlash('Unable to add member.');
-	            }
+						$this->redirect(array( 'controller' => 'pages', 'action' => 'home'));
+		            } else {
+		                $this->Session->setFlash('Unable to register.');
+		            }
+		        }
 	        }
-
-	        # Generate the Pin data
-			$this->request->data['Pin']['pin'] = $this->Member->Pin->generate_unique_pin();
-			$this->request->data['Member']['account_id'] = -1;
 	    }
 
 	    # Get a registered member to set-up a username and Password
-	    public function setupLogin($id = null)
+	    public function setup_login($id = null)
 	    {
 	    	if($id != null)
 	    	{
@@ -204,26 +213,186 @@
 	    		$memberInfo = $this->Member->read();
 	    		# Does this member already have a username?
 	    		if(	$memberInfo != null &&
-	    			$memberInfo['Member']['username'] == null)
+	    			isset($memberInfo['Member']['username']) == false)
 	    		{
 	    			$this->set('memberInfo', $memberInfo);
 
-	    			if($this->request->is('get') == false)
+	    			$this->request->data['Member']['member_id'] = $id;
+
+	    			if($this->request->is('put'))
 	    			{
-	    				
+	    				$this->request->data['Member']['email'] = $memberInfo['Member']['email'];
+	    				$this->request->data['Member']['member_status'] = 5;
+	    				$this->Member->set($this->request->data);
+	    				if($this->Member->validates(array('fieldList' => array('name', 'username', 'password', 'password_confirm'))))
+	    				{
+		    				if(	$this->Krb->addUser($this->request->data['Member']['username'], $this->request->data['Member']['password']) &&
+		    				 	$this->Member->save($this->request->data, array('validate' => false)))
+		    				{
+		    					$this->Session->setFlash('Username and Password set.');
+								$this->redirect(array( 'controller' => 'members', 'action' => 'login'));
+		    				}
+		    				else
+		    				{
+		    					$this->Session->setFlash('Unable to set username and password.');
+		    				}
+		    			}
 	    			}
 	    		}
 	    		else
 	    		{
 	    			# Redirect somewhere, they shouldn't be here
+	    			$this->redirect(array('controller' => 'pages', 'action' => 'home'));
 	    		}
+	    	}
+	    	else
+	    	{
+	    		# Redirect somewhere, they shouldn't be here
+	    		$this->redirect(array('controller' => 'pages', 'action' => 'home'));
 	    	}
 	    }
 
 	    # Get a member with a login to set-up their address details
-	    public function setupDetails($id = null)
+	    public function setup_details($id = null)
 	    {
-	    	
+	    	if($id != null)
+	    	{
+	    		$this->Member->id = $id;
+	    		$memberInfo = $this->Member->read();
+	    		$this->set('memberInfo', $memberInfo);
+
+	    		$this->request->data['Member']['member_id'] = $id;
+	    		if($this->request->is('put'))
+    			{
+    				$this->request->data['Member']['email'] = $memberInfo['Member']['email'];
+    				$this->request->data['Member']['member_status'] = 6;
+    				$this->Member->set($this->request->data);
+    				if($this->Member->validates(array('fieldList' => array('address_1', 'address_city', 'address_postcode', 'contact_number'))))
+	    			{
+	    				if($this->Member->save($this->request->data, array('validate' => false)))
+	    				{
+	    					$this->Session->setFlash('Contact details saved.');
+
+							# Email the admins
+							$adminEmail = $this->prepare_email_for_members_in_group(5);
+							$adminEmail->subject('New Member Contact Details');
+							$adminEmail->template('notify_admins_check_contact_details', 'default');
+							$adminEmail->viewVars( array( 
+								'email' => $this->request->data['Member']['email'],
+								'id' => $id,
+								 )
+							);
+							$adminEmail->send();
+
+							# Email the member an update
+							$memberEmail = $this->prepare_email();
+							$memberEmail->to( $this->request->data['Member']['email'] );
+							$memberEmail->subject('Contact Information Completed');
+							$memberEmail->template('to_member_post_contact_update', 'default');
+							$memberEmail->send();
+
+							$this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
+	    				}
+	    				else
+	    				{
+	    					$this->Session->setFlash('Unable to save contact details.');
+	    				}
+	    			}
+    			}
+    			else
+    			{
+    				$this->request->data = $memberInfo;
+    			}
+	    	}
+	    	else
+	    	{
+	    		# Redirect somewhere, they shouldn't be here
+	    		$this->redirect(array('controller' => 'pages', 'action' => 'home'));
+	    	}
+	    }
+
+	    public function reject_details($id = null) 
+	    {
+	    	Controller::loadModel('MemberEmail');
+
+	    	if($id != null)
+	    	{
+	    		$this->Member->id = $id;
+				$memberInfo = $this->Member->read();
+				$this->set('memberInfo', $memberInfo);
+
+				if($this->request->is('post'))
+				{
+					if($this->MemberEmail->validates(array('fieldList' => array('message'))))
+					{
+						# Set the status back to 5
+						$memberInfo['Member']['member_status'] = 5;
+						if($this->Member->save($memberInfo, array('validate' => false)))
+						{
+							$this->Session->setFlash('Member has been contacted.');
+							$memberEmail = $this->prepare_email();
+							$memberEmail->to( $memberInfo['Member']['email'] );
+							$memberEmail->subject('Issue With Contact Information');
+							$memberEmail->template('to_member_contact_details_rejected', 'default');
+							$memberEmail->viewVars( array( 
+								'reason' => $this->request->data['Member']['message'],
+								 )
+							);
+							$memberEmail->send();
+
+							$this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
+						}
+						else
+						{
+							$this->Session->setFlash('Unable to set member status.');
+						}
+					}
+				}
+			}
+			else
+			{
+				# Redirect somewhere, they shouldn't be here
+	    		$this->redirect(array('controller' => 'pages', 'action' => 'home'));
+			}
+	    }
+
+	    public function accept_details($id = null)
+	    {
+	    	if($id != null)
+	    	{
+	    		$this->Member->id = $id;
+				$memberInfo = $this->Member->read();
+				$this->set('memberInfo', $memberInfo);
+
+	    		# Ok so the contact details are fine, at this point we set-up the
+	    		# account for the member and e-mail them the SO details...
+	    		$accountsList =	$this->get_readable_account_list( array( -1 => 'Create New' ) );
+	    		$this->set('accounts', $accountsList);
+
+	    		if($this->request->is('put'))
+				{
+					$this->request->data['Member']['member_status'] = 7;
+					$this->set_account($this->request->data);
+
+					# Now mail the member the SO details
+					$memberEmail = $this->prepare_email();
+					$memberEmail->to( $memberInfo['Member']['email'] );
+					$memberEmail->subject('Issue With Contact Information');
+					$memberEmail->template('to_member_so_details', 'default');
+					$memberEmail->viewVars( array( 
+						'reason' => $this->request->data['Member']['message'],
+						 )
+					);
+					$memberEmail->send();
+
+					# Finally mail the member admins to look out for a payment from this new member
+
+				}
+	    	}
+	    	else
+	    	{
+	    		$this->redirect($this->referer);
+	    	}
 	    }
 
 	    public function change_password($id = null) {
@@ -436,14 +605,17 @@
 		    if(!$canSeeAll)
 		    {
 		    	unset($memberInfo['Pin']);
+		    	unset($memberInfo['Status']);
 		    }
 
 	        $this->set('member', $memberInfo);
 
 	        $this->Nav->add('Edit', 'members', 'edit', array( $id ) );
+	        $this->Nav->add('Change Password', 'members', 'change_password', array( $id ) );
 			switch ($memberInfo['Member']['member_status']) {
-		        case 1: # Prospective member
-		            $this->Nav->add('Approve Membership', 'members', 'set_member_status', array( $id, 2 ) );
+		        case 6: # Prospective member
+		            $this->Nav->add('Approve contact details', 'members', 'accept_details', array( $id ), 'positive' );
+		            $this->Nav->add('Reject contact details', 'members', 'reject_details', array( $id ), 'negative' );
 		            break;
 
 		        case 2: # Current member
@@ -454,8 +626,6 @@
 		            $this->Nav->add('Reinstate Membership', 'members', 'set_member_status', array( $id, 2 ) );
 		            break;
 		    }
-		    $this->Nav->add('Change Password', 'members', 'change_password', array( $id ) );
-
 
 		    $this->set('mailingLists', $this->_get_mailing_lists_and_subscruibed_status($memberInfo));
 	    }
@@ -470,84 +640,94 @@
 	    	$this->set('accounts', $accountsList);
 			$this->Member->id = $id;
 			$data = $this->Member->read(null, $id);
-			$mailingLists = $this->_get_mailing_lists_and_subscruibed_status($data);
-			$this->set('mailingLists', $mailingLists);
 
-			if ($this->request->is('get')) {
-			    $this->request->data = $this->sanitise_edit_data($data);
-			} else {
-				# Need to set some more info about the pin
-				$this->request->data['Pin']['pin_id'] = $data['Pin']['pin_id'];
+			# Can't be on this screen unless we've entered all the member details
+			if($data['Member']['member_status'] == 5)
+			{
+				$this->redirect(array('action' => 'setup_details', $data['Member']['member_id']));
+			}
+			else
+			{
 
-				# Clear the actual pin number though, so that won't get updated
-				unset($this->request->data['Pin']['pin']);
+				$mailingLists = $this->_get_mailing_lists_and_subscruibed_status($data);
+				$this->set('mailingLists', $mailingLists);
 
-				$this->request->data = $this->sanitise_edit_data($this->request->data);
+				if ($this->request->is('get')) {
+				    $this->request->data = $this->sanitise_edit_data($data);
+				} else {
+					# Need to set some more info about the pin
+					$this->request->data['Pin']['pin_id'] = $data['Pin']['pin_id'];
 
+					# Clear the actual pin number though, so that won't get updated
+					unset($this->request->data['Pin']['pin']);
 
-			    if ($this->Member->saveAll($this->request->data)) {
-
-			    	$flashMessage = 'Member details updated.';
-
-			    	if(isset($this->request->data['MailingLists']))
-			    	{
-			    		if(!isset($this->request->data['MailingLists']['MailingLists']) ||
-			    			!is_array($this->request->data['MailingLists']['MailingLists']))
-			    		{
-			    			$this->request->data['MailingLists']['MailingLists'] = array();
-			    		}
-			    		$firstSubscribtionChange = true;
-			    		# Update list subscriptions if needed
-			    		for($i = 0; $i < count($mailingLists); $i++)
-			    		{
-			    			$mailingLists[$i]['userWantsToBeSubscribed'] = in_array($i, $this->request->data['MailingLists']['MailingLists']);
-			    			if($mailingLists[$i]['subscribed'] != $mailingLists[$i]['userWantsToBeSubscribed'])
-			    			{
-
-			    				if($firstSubscribtionChange)
-			    				{
-			    					$flashMessage .= '</br>';
-			    					$firstSubscribtionChange = false;
-			    				}
-			    				if($mailingLists[$i]['userWantsToBeSubscribed'])
-			    				{
-			    					$this->MailChimp->subscribe($mailingLists[$i]['id'], $this->request->data['Member']['email']);
-			    					if($this->MailChimp->error_code())
-			    					{
-			    						$flashMessage .= 'Unable to subscribe to: ' . $mailingLists[$i]['name'] . ' because ' . $this->MailChimp->error_msg() . '</br>';
-			    					}
-			    					else
-			    					{
-			    						$flashMessage .= 'E-mail confirmation of mailing list subscription for: ' . $mailingLists[$i]['name'] . ' has been sent.' . '</br>';	
-			    					}
-			    				}
-			    				else
-			    				{
-			    					$this->MailChimp->unsubscribe($mailingLists[$i]['id'], $this->request->data['Member']['email']);
-			    					if($this->MailChimp->error_code())
-			    					{
-			    						$flashMessage .= 'Unable to un-subscribe from: ' . $mailingLists[$i]['name'] . ' because ' . $this->MailChimp->error_msg() . '</br>';
-			    						echo $this->MailChimp->error_msg();
-			    					}
-			    					else
-			    					{
-			    						$flashMessage .= 'Un-Subscribed from: ' . $mailingLists[$i]['name'] . '</br>';
-			    					}
-			    				}
-			    			}
-			    		}
-			    	}
+					$this->request->data = $this->sanitise_edit_data($this->request->data);
 
 
-			    	$memberInfo = $this->set_account($this->request->data);
-			    	$this->set_member_status_impl($data, $memberInfo);
-					$this->update_status_on_joint_accounts($data, $memberInfo);
+				    if ($this->Member->saveAll($this->request->data)) {
 
-			        $this->Session->setFlash($flashMessage);
-			        $this->redirect(array('action' => 'view', $id));
-			    } else {
-			        $this->Session->setFlash('Unable to update member details.');
-			    }
+				    	$flashMessage = 'Member details updated.';
+
+				    	if(isset($this->request->data['MailingLists']))
+				    	{
+				    		if(!isset($this->request->data['MailingLists']['MailingLists']) ||
+				    			!is_array($this->request->data['MailingLists']['MailingLists']))
+				    		{
+				    			$this->request->data['MailingLists']['MailingLists'] = array();
+				    		}
+				    		$firstSubscribtionChange = true;
+				    		# Update list subscriptions if needed
+				    		for($i = 0; $i < count($mailingLists); $i++)
+				    		{
+				    			$mailingLists[$i]['userWantsToBeSubscribed'] = in_array($i, $this->request->data['MailingLists']['MailingLists']);
+				    			if($mailingLists[$i]['subscribed'] != $mailingLists[$i]['userWantsToBeSubscribed'])
+				    			{
+
+				    				if($firstSubscribtionChange)
+				    				{
+				    					$flashMessage .= '</br>';
+				    					$firstSubscribtionChange = false;
+				    				}
+				    				if($mailingLists[$i]['userWantsToBeSubscribed'])
+				    				{
+				    					$this->MailChimp->subscribe($mailingLists[$i]['id'], $this->request->data['Member']['email']);
+				    					if($this->MailChimp->error_code())
+				    					{
+				    						$flashMessage .= 'Unable to subscribe to: ' . $mailingLists[$i]['name'] . ' because ' . $this->MailChimp->error_msg() . '</br>';
+				    					}
+				    					else
+				    					{
+				    						$flashMessage .= 'E-mail confirmation of mailing list subscription for: ' . $mailingLists[$i]['name'] . ' has been sent.' . '</br>';	
+				    					}
+				    				}
+				    				else
+				    				{
+				    					$this->MailChimp->unsubscribe($mailingLists[$i]['id'], $this->request->data['Member']['email']);
+				    					if($this->MailChimp->error_code())
+				    					{
+				    						$flashMessage .= 'Unable to un-subscribe from: ' . $mailingLists[$i]['name'] . ' because ' . $this->MailChimp->error_msg() . '</br>';
+				    						echo $this->MailChimp->error_msg();
+				    					}
+				    					else
+				    					{
+				    						$flashMessage .= 'Un-Subscribed from: ' . $mailingLists[$i]['name'] . '</br>';
+				    					}
+				    				}
+				    			}
+				    		}
+				    	}
+
+
+				    	$memberInfo = $this->set_account($this->request->data);
+				    	$this->set_member_status_impl($data, $memberInfo);
+						$this->update_status_on_joint_accounts($data, $memberInfo);
+
+				        $this->Session->setFlash($flashMessage);
+				        $this->redirect(array('action' => 'view', $id));
+				    } else {
+				        $this->Session->setFlash('Unable to update member details.');
+				    }
+				}
 			}
 		}
 

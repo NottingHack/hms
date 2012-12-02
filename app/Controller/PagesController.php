@@ -92,7 +92,19 @@ class PagesController extends AppController {
     	# AT [29/09/2012] TODO: Cache this
     	if(AuthComponent::user())
     	{
-			$parsed_xml = Xml::build('http://nottinghack.org.uk/?feed=rss2');
+    		if($this->referer() == Router::url(array('controller' => 'members', 'action' => 'login'), true))
+    		{
+	    		# Redirect if the user wants to be elsewhere
+	    		$memberStatus = AuthComponent::user('Member.member_status');
+	    		switch($memberStatus)
+	    		{
+	    			case 5:
+	    			$this->redirect(array('controller' => 'members', 'action' => 'setup_details', AuthComponent::user('Member.member_id')));
+	    			return;
+	    		}
+	    	}
+	    	
+	    	$parsed_xml = Xml::build('http://nottinghack.org.uk/?feed=rss2');
 			$this->set('rssData', $parsed_xml);
 		}
 		else

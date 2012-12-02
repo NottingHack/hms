@@ -44,7 +44,7 @@ $cakeDescription = "Nottingham Hackspace Management System";
 				<div class="login">
 					<?php if( isset($user) && $user): ?>
 						Logged in as: 
-						<?php echo $this->Html->link(AuthComponent::user('Member.name'), array( 'controller' => 'members', 'action' => 'view', AuthComponent::user('Member.member_id') ) ); ?>
+						<?php echo $this->Html->link(AuthComponent::user('Member.username'), array( 'controller' => 'members', 'action' => 'view', AuthComponent::user('Member.member_id') ) ); ?>
 						<span class="loginSpace">
 							<?php echo $this->Html->link('Logout', array( 'controller' => 'members', 'action' => 'logout' )) ?>
 						</span>
@@ -58,6 +58,20 @@ $cakeDescription = "Nottingham Hackspace Management System";
 						<ul>
 							<?php 
 								foreach ($adminNav as $text => $options) {
+									echo '<li>';
+									echo $this->Html->link($text, $options);
+									echo '</li>';
+								}
+							?>
+						</ul>
+					</div>
+					<div class="clear"></div>
+				<?php endif; ?>
+				<?php if( isset($userMessage) && count($userMessage) > 0 ): ?>
+					<div class="userMessage">
+						<ul>
+							<?php 
+								foreach ($userMessage as $text => $options) {
 									echo '<li>';
 									echo $this->Html->link($text, $options);
 									echo '</li>';

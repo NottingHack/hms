@@ -1,5 +1,19 @@
 <p>New prospective member!</p>
 
 <p>
-	<?php echo $this->Html->link($member['name'] . ' [' . $member['email'] . ']', array( 'controller' => 'members', 'action' => 'view', $member['member_id'], 'full_base' => true ) ); ?>,
-	 was added by on <?php echo strftime( '%A, %d of %B %Y at %H:%M:%S (%Z)' ); ?> by <?php echo $memberAdmin ?>. Watch out for a standing order with the payment ref: <?php echo $paymentRef; ?>.</p>
+	Someone with the e-mail <?php echo $email; ?> has registered with HMS, they are subscribed to the following mailing lists:<br>
+	<?php 
+		if(count($mailingLists) > 0):
+	?>
+		<ul>
+			<?php
+				foreach($mailingLists as $list)
+				{
+					echo '<li>' . $this->Html->link($list['name'], array( 'controller' => 'mailingLists', 'action' => 'view', $list['id'], 'full_base' => true )) . '</li>';
+				}
+			?>
+		</ul>
+	<?php else: ?>
+		User is not subscribed to any mailing lists
+	<?php endif; ?>
+</p>

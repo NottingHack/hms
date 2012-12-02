@@ -85,7 +85,15 @@ class AppController extends Controller {
                     'Add Member' => array( 'controller' => 'members', 'action' => 'add' ),
                 );
             }
+
+            $userMessage = array();
+            if( $user['Member']['member_status'] == '5' )
+            {
+                $userMessage = array('Click here to enter your contact details!' => array( 'controller' => 'members', 'action' => 'setup_details', $user['Member']['member_id'] ) );
+            }
+
             $this->set('adminNav', $adminLinks);
+            $this->set('userMessage', $userMessage);
             $this->set('user', $user);    
         }
         
