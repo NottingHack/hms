@@ -1001,7 +1001,7 @@
 				if($this->MemberEmail->validates())
 				{
 					$subject = $this->request->data['MemberEmail']['subject'];
-					$message = $this->request->data['MemberEmail']['message'];
+					$message = $this->request->data['Member']['message'];
 					if( isset($subject) &&
 						$subject != null &&
 						strlen(trim($subject)) > 0 &&
@@ -1010,12 +1010,15 @@
 						$message != null &&
 						strlen(trim($message)) > 0 )
 					{
-						# Send the message out
-						$email = $this->prepare_email();
-						$email->to($memberEmails);
-						$email->subject($subject);
-						$email->template('default', 'default');
-						$email->send($message);
+						# Send these out as seperate e-mails
+						foreach ($memberEmails as $email) {
+							# Send the message out
+							$email = $this->prepare_email();
+							$email->to($memberEmails);
+							$email->subject($subject);
+							$email->template('default', 'default');
+							$email->send($message);
+						}
 
 						$this->Session->setFlash('E-mail sent');
 						$this->redirect(array('action' => 'index'));
