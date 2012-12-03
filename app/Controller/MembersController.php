@@ -40,6 +40,9 @@
 	    		case 'email_members_with_status':
 	    		case 'search':
 	    		case 'set_member_status':
+	    		case 'accept_details':
+	    		case 'reject_details':
+	    		case 'approve_member':
 	    			return $userIsMemberAdmin; 
 
 	    		case 'change_password':
@@ -217,7 +220,8 @@
 	    		$memberInfo = $this->Member->read();
 	    		# Does this member already have a username?
 	    		if(	$memberInfo != null &&
-	    			isset($memberInfo['Member']['username']) == false)
+	    			isset($memberInfo['Member']['username']) == false &&
+	    			$memberInfo['Member']['member_status'] == 1) # Can only do this if we have the correct status
 	    		{
 	    			$this->set('memberInfo', $memberInfo);
 
@@ -262,54 +266,64 @@
 	    # Get a member with a login to set-up their address details
 	    public function setup_details($id = null)
 	    {
-	    	if($id != null)
+	    	if(	$id != null &&
+	    		$id == AuthComponent::user('Member.member_id') )
 	    	{
 	    		$this->Member->id = $id;
 	    		$memberInfo = $this->Member->read();
 	    		$this->set('memberInfo', $memberInfo);
 
-	    		$this->request->data['Member']['member_id'] = $id;
-	    		if($this->request->is('put'))
-    			{
-    				$this->request->data['Member']['email'] = $memberInfo['Member']['email'];
-    				$this->request->data['Member']['member_status'] = 6;
-    				$this->Member->set($this->request->data);
-    				if($this->Member->validates(array('fieldList' => array('address_1', 'address_city', 'address_postcode', 'contact_number'))))
+	    		# Can only be here if we have the correct status
+	    		if($memberInfo['Member']['member_status'] == 5)
+	    		{
+		    		$this->request->data['Member']['member_id'] = $id;
+		    		if($this->request->is('put'))
 	    			{
-	    				if($this->Member->save($this->request->data, array('validate' => false)))
-	    				{
-	    					$this->Session->setFlash('Contact details saved.');
+	    				$this->request->data['Member']['email'] = $memberInfo['Member']['email'];
+	    				$this->request->data['Member']['member_status'] = 6;
+	    				$this->Member->set($this->request->data);
+	    				if($this->Member->validates(array('fieldList' => array('address_1', 'address_city', 'address_postcode', 'contact_number'))))
+		    			{
+		    				if($this->Member->save($this->request->data, array('validate' => false)))
+		    				{
+		    					$this->Session->setFlash('Contact details saved.');
 
-							# Email the admins
-							$adminEmail = $this->prepare_email_for_members_in_group(5);
-							$adminEmail->subject('New Member Contact Details');
-							$adminEmail->template('notify_admins_check_contact_details', 'default');
-							$adminEmail->viewVars( array( 
-								'email' => $this->request->data['Member']['email'],
-								'id' => $id,
-								 )
-							);
-							$adminEmail->send();
+								# Email the admins
+								$adminEmail = $this->prepare_email_for_members_in_group(5);
+								$adminEmail->subject('New Member Contact Details');
+								$adminEmail->template('notify_admins_check_contact_details', 'default');
+								$adminEmail->viewVars( array( 
+									'email' => $this->request->data['Member']['email'],
+									'id' => $id,
+									 )
+								);
+								$adminEmail->send();
 
-							# Email the member an update
-							$memberEmail = $this->prepare_email();
-							$memberEmail->to( $this->request->data['Member']['email'] );
-							$memberEmail->subject('Contact Information Completed');
-							$memberEmail->template('to_member_post_contact_update', 'default');
-							$memberEmail->send();
+								# Email the member an update
+								$memberEmail = $this->prepare_email();
+								$memberEmail->to( $this->request->data['Member']['email'] );
+								$memberEmail->subject('Contact Information Completed');
+								$memberEmail->template('to_member_post_contact_update', 'default');
+								$memberEmail->send();
 
-							$this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
-	    				}
-	    				else
-	    				{
-	    					$this->Session->setFlash('Unable to save contact details.');
-	    				}
+								$this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
+		    				}
+		    				else
+		    				{
+		    					$this->Session->setFlash('Unable to save contact details.');
+		    				}
+		    			}
 	    			}
-    			}
-    			else
-    			{
-    				$this->request->data = $memberInfo;
-    			}
+	    			else
+	    			{
+	    				$this->request->data = $memberInfo;
+	    			}
+	    		}
+	    		else
+		    	{
+		    		# Redirect somewhere, they shouldn't be here
+		    		$this->redirect(array('controller' => 'pages', 'action' => 'home'));
+		    	}
 	    	}
 	    	else
 	    	{
@@ -329,32 +343,41 @@
 				$this->set('memberInfo', $memberInfo);
 				$this->request->data['Member']['member_id'] = $id;
 
-				if($this->request->is('post'))
-				{
-					if($this->MemberEmail->validates(array('fieldList' => array('message'))))
+				# Can only be here if we have the correct status
+	    		if($memberInfo['Member']['member_status'] == 6)
+	    		{
+					if($this->request->is('post'))
 					{
-						# Set the status back to 5
-						$memberInfo['Member']['member_status'] = 5;
-						if($this->Member->save($memberInfo, array('validate' => false)))
+						if($this->MemberEmail->validates(array('fieldList' => array('message'))))
 						{
-							$this->Session->setFlash('Member has been contacted.');
-							$memberEmail = $this->prepare_email();
-							$memberEmail->to( $memberInfo['Member']['email'] );
-							$memberEmail->subject('Issue With Contact Information');
-							$memberEmail->template('to_member_contact_details_rejected', 'default');
-							$memberEmail->viewVars( array( 
-								'reason' => $this->request->data['Member']['message'],
-								 )
-							);
-							$memberEmail->send();
+							# Set the status back to 5
+							$memberInfo['Member']['member_status'] = 5;
+							if($this->Member->save($memberInfo, array('validate' => false)))
+							{
+								$this->Session->setFlash('Member has been contacted.');
+								$memberEmail = $this->prepare_email();
+								$memberEmail->to( $memberInfo['Member']['email'] );
+								$memberEmail->subject('Issue With Contact Information');
+								$memberEmail->template('to_member_contact_details_rejected', 'default');
+								$memberEmail->viewVars( array( 
+									'reason' => $this->request->data['Member']['message'],
+									 )
+								);
+								$memberEmail->send();
 
-							$this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
-						}
-						else
-						{
-							$this->Session->setFlash('Unable to set member status.');
+								$this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
+							}
+							else
+							{
+								$this->Session->setFlash('Unable to set member status.');
+							}
 						}
 					}
+				}
+				else
+				{
+					# Redirect somewhere, they shouldn't be here
+		    		$this->redirect(array('controller' => 'pages', 'action' => 'home'));
 				}
 			}
 			else
@@ -372,53 +395,62 @@
 				$memberInfo = $this->Member->read();
 				$this->set('memberInfo', $memberInfo);
 
-	    		# Ok so the contact details are fine, at this point we set-up the
-	    		# account for the member and e-mail them the SO details...
-	    		$accountsList =	$this->get_readable_account_list( array( -1 => 'Create New' ) );
-	    		$this->set('accounts', $accountsList);
+				# Can only be here if we have the correct status
+	    		if($memberInfo['Member']['member_status'] == 6)
+	    		{
+		    		# Ok so the contact details are fine, at this point we set-up the
+		    		# account for the member and e-mail them the SO details...
+		    		$accountsList =	$this->get_readable_account_list( array( -1 => 'Create New' ) );
+		    		$this->set('accounts', $accountsList);
 
-	    		$this->request->data['Member']['member_id'] = $id;
+		    		$this->request->data['Member']['member_id'] = $id;
 
-	    		if($this->request->is('put'))
-				{
-					$this->request->data['Member']['member_status'] = 7;
-					$accountInfo = $this->set_account($this->request->data, false);
+		    		if($this->request->is('put'))
+					{
+						$this->request->data['Member']['member_status'] = 7;
+						$accountInfo = $this->set_account($this->request->data, false);
 
-					# Now mail the member the SO details
-					$memberEmail = $this->prepare_email();
-					$memberEmail->to( $memberInfo['Member']['email'] );
-					$memberEmail->subject('Bank Details');
-					$memberEmail->template('to_member_so_details', 'default');
-					$memberEmail->viewVars( array( 
-						'name' => $memberInfo['Member']['name'],
-						'reference' => $accountInfo['Account']['payment_ref'],
-						'accountNum' => Configure::read('hms_so_accountNumber'),
-						'sortCode' => Configure::read('hms_so_sortCode'),
-						'accountName' => Configure::read('hms_so_accountName'),
-						 )
-					);
-					$memberEmail->send();
+						# Now mail the member the SO details
+						$memberEmail = $this->prepare_email();
+						$memberEmail->to( $memberInfo['Member']['email'] );
+						$memberEmail->subject('Bank Details');
+						$memberEmail->template('to_member_so_details', 'default');
+						$memberEmail->viewVars( array( 
+							'name' => $memberInfo['Member']['name'],
+							'reference' => $accountInfo['Account']['payment_ref'],
+							'accountNum' => Configure::read('hms_so_accountNumber'),
+							'sortCode' => Configure::read('hms_so_sortCode'),
+							'accountName' => Configure::read('hms_so_accountName'),
+							 )
+						);
+						$memberEmail->send();
 
-					# Finally mail the member admins to look out for a payment from this new member
-					$adminEmail = $this->prepare_email_for_members_in_group(5);
-					$adminEmail->subject('Impending Payment');
-					$adminEmail->template('notify_admins_payment_incoming', 'default');
-					$adminEmail->viewVars( array( 
-						'memberName' => $memberInfo['Member']['name'],
-						'memberId' => $id,
-						'memberEmail' => $memberInfo['Member']['email'],
-						'memberPayRef' => $accountInfo['Account']['payment_ref'],
-						 )
-					);
-					$adminEmail->send();
+						# Finally mail the member admins to look out for a payment from this new member
+						$adminEmail = $this->prepare_email_for_members_in_group(5);
+						$adminEmail->subject('Impending Payment');
+						$adminEmail->template('notify_admins_payment_incoming', 'default');
+						$adminEmail->viewVars( array( 
+							'memberName' => $memberInfo['Member']['name'],
+							'memberId' => $id,
+							'memberEmail' => $memberInfo['Member']['email'],
+							'memberPayRef' => $accountInfo['Account']['payment_ref'],
+							 )
+						);
+						$adminEmail->send();
 
-					$this->Session->setFlash('Member details accepted.');
+						$this->Session->setFlash('Member details accepted.');
 
-					$this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
+						$this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
+					}
+					else
+					{
+						$this->request->data = $memberInfo;
+					}
 				}
 				else
 				{
-					$this->request->data = $memberInfo;
+					# Redirect somewhere, they shouldn't be here
+		    		$this->redirect(array('controller' => 'pages', 'action' => 'home'));
 				}
 	    	}
 	    	else
