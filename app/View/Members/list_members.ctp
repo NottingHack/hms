@@ -70,6 +70,11 @@
         <td>
             <?php 
                 switch ($member['Member']['member_status']) {
+
+                    case 7: # Waiting for SO
+                        echo $this->Html->link('Approve Member', array('controller' => 'members', 'action' => 'approve_member', $member['Member']['member_id']));
+                    break;
+
                     case 6: # Prospective member
                         echo $this->Html->link("Check contact details", array('controller' => 'members', 'action' => 'view', $member['Member']['member_id']));
                         break;

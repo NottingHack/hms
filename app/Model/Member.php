@@ -65,7 +65,7 @@
 	            ),
 	        	'minLen' => array(
 	        		'rule' => array('minLength', self::MIN_PASSWORD_LENGTH),
-            		'message' => 'Minimum 8 characters long',
+            		'message' => 'Password too short',
             	),
 	        ),
 	        'password_confirm' => array(
@@ -75,7 +75,7 @@
 	            ),
 	            'minLen' => array(
 	        		'rule' => array('minLength', self::MIN_PASSWORD_LENGTH),
-            		'message' => 'Minimum 8 characters long',
+            		'message' => 'Password too short',
             	),
 	        	'matchNewPassword' => array(
 	            	'rule' => array( 'passwordConfirmMatchesPassword' ),
@@ -113,7 +113,22 @@
 
 		public function checkUniqueUsername($check)
 		{
-			return $this->find('count', array( 'conditions' => array( 'Member.username' => $this->data['Member']['username'] ) ) ) <= 0;
+			$lowercaseUsername = strtolower($this->data['Member']['username']);
+			$records = $this->find('all', array(  'fields' => array('Member.username'),
+													'conditions' => array( 
+														'Member.username LIKE' => $lowercaseUsername,
+														'Member.member_id NOT' => $this->data['Member']['member_id'],
+													) 
+												)
+			);
+
+			foreach ($records as $record) {
+				if(strtolower($record['Member']['username']) == $lowercaseUsername)
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 
 		public function beforeSave($options = array()) {

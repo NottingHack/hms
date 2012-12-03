@@ -35,7 +35,7 @@
 				{
 					for($c = 0; $c < $numCharsInBlock; $c++)
 					{
-						$paymentRef .= $safeChars[ rand(0, strlen($safeChars)) ];
+						$paymentRef .= $safeChars[ rand(0, strlen($safeChars) - 1) ];
 					}
 
 					if($b < ($numBlocks - 1))

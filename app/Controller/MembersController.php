@@ -2,7 +2,11 @@
 	
 	App::uses('HmsAuthenticate', 'Controller/Component/Auth');
 	App::uses('Member', 'Model');
-	
+
+	App::uses('PhpReader', 'Configure');
+	Configure::config('default', new PhpReader());
+	Configure::load('hms', 'default');
+
 	class MembersController extends AppController {
 	    
 	    public $helpers = array('Html', 'Form', 'Tinymce');
@@ -229,7 +233,7 @@
 		    				if(	$this->Krb->addUser($this->request->data['Member']['username'], $this->request->data['Member']['password']) &&
 		    				 	$this->Member->save($this->request->data, array('validate' => false)))
 		    				{
-		    					$this->Session->setFlash('Username and Password set.');
+		    					$this->Session->setFlash('Username and Password set, please login.');
 								$this->redirect(array( 'controller' => 'members', 'action' => 'login'));
 		    				}
 		    				else
@@ -320,6 +324,7 @@
 	    		$this->Member->id = $id;
 				$memberInfo = $this->Member->read();
 				$this->set('memberInfo', $memberInfo);
+				$this->request->data['Member']['member_id'] = $id;
 
 				if($this->request->is('post'))
 				{
@@ -369,30 +374,113 @@
 	    		$accountsList =	$this->get_readable_account_list( array( -1 => 'Create New' ) );
 	    		$this->set('accounts', $accountsList);
 
+	    		$this->request->data['Member']['member_id'] = $id;
+
 	    		if($this->request->is('put'))
 				{
 					$this->request->data['Member']['member_status'] = 7;
-					$this->set_account($this->request->data);
+					$accountInfo = $this->set_account($this->request->data, false);
 
 					# Now mail the member the SO details
 					$memberEmail = $this->prepare_email();
 					$memberEmail->to( $memberInfo['Member']['email'] );
-					$memberEmail->subject('Issue With Contact Information');
+					$memberEmail->subject('Bank Details');
 					$memberEmail->template('to_member_so_details', 'default');
 					$memberEmail->viewVars( array( 
-						'reason' => $this->request->data['Member']['message'],
+						'name' => $memberInfo['Member']['name'],
+						'reference' => $accountInfo['Account']['payment_ref'],
+						'accountNum' => Configure::read('hms_so_accountNumber'),
+						'sortCode' => Configure::read('hms_so_sortCode'),
+						'accountName' => Configure::read('hms_so_accountName'),
 						 )
 					);
 					$memberEmail->send();
 
 					# Finally mail the member admins to look out for a payment from this new member
+					$adminEmail = $this->prepare_email_for_members_in_group(5);
+					$adminEmail->subject('Impending Payment');
+					$adminEmail->template('notify_admins_payment_incoming', 'default');
+					$adminEmail->viewVars( array( 
+						'memberName' => $memberInfo['Member']['name'],
+						'memberId' => $id,
+						'memberEmail' => $memberInfo['Member']['email'],
+						'memberPayRef' => $accountInfo['Account']['payment_ref'],
+						 )
+					);
+					$adminEmail->send();
 
+					$this->Session->setFlash('Member details accepted.');
+
+					$this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
+				}
+				else
+				{
+					$this->request->data = $memberInfo;
 				}
 	    	}
 	    	else
 	    	{
 	    		$this->redirect($this->referer);
 	    	}
+	    }
+
+	    public function approve_member($id = null) {
+	    	if($id != null)
+	    	{
+	    		# Grab the member
+	    		$this->Member->id = $id;
+				$memberInfo = $this->Member->read();
+
+				# Check the member status
+				if($memberInfo['Member']['member_status'] == 7)
+				{
+					# Ok, we can do this
+
+					# Set the status to 'current member'
+					$memberInfo['Member']['member_status'] = 2;
+					# Generate a PIN for gate-keeper
+					$memberInfo['Member']['unlock_text'] = 'Welcome ' . $memberInfo['Member']['name'];
+
+					# Set some pin data
+                    $memberInfo['Pin']['unlock_text'] = 'Welcome';
+                    $memberInfo['Pin']['pin'] = $this->Member->Pin->generate_unique_pin();
+                    $memberInfo['Pin']['state'] = 40;
+                    $memberInfo['Pin']['member_id'] = $memberInfo['Member']['member_id'];
+
+                    # And give a credit limit
+                    $memberInfo['Member']['credit_limit'] = 5000;
+
+                    $memberInfo['Member']['join_date'] = date( 'Y-m-d' );
+
+                    unset($memberInfo['Status']);
+                    unset($memberInfo['Account']);
+                    unset($memberInfo['MemberAuth']);
+                    unset($memberInfo['Group']);
+
+                    if($this->Member->SaveAll($memberInfo))
+                    {
+                    	$this->Session->setFlash('Member has been approved.');
+
+                    	# Let the admins know
+						$adminEmail = $this->prepare_email_for_members_in_group(5);
+						$adminEmail->subject('Member Approved');
+						$adminEmail->template('notify_admins_member_approved', 'default');
+						$adminEmail->viewVars( array( 
+							'memberName' => $memberInfo['Member']['name'],
+							'memberId' => $id,
+							'memberEmail' => $memberInfo['Member']['email'],
+							'memberPin' => $memberInfo['Pin']['pin'],
+							 )
+						);
+						$adminEmail->send();
+                    }
+                    else
+                    {
+                    	$this->Session->setFlash('Member details could not be updated.');	
+                    }
+				}
+	    	}
+	    	$this->redirect($this->referer());
 	    }
 
 	    public function change_password($id = null) {
@@ -617,6 +705,10 @@
 		            $this->Nav->add('Approve contact details', 'members', 'accept_details', array( $id ), 'positive' );
 		            $this->Nav->add('Reject contact details', 'members', 'reject_details', array( $id ), 'negative' );
 		            break;
+
+		        case 7: # Waiting for SO
+		        	$this->Nav->add('Approve Member', 'members', 'approve_member', array($id), 'positive');
+		        	break;
 
 		        case 2: # Current member
 		            $this->Nav->add('Revoke Membership', 'members', 'set_member_status', array( $id, 3 ) );
@@ -1046,7 +1138,7 @@
 			return $readableAccountList;
 		}
 
-		private function set_account($memberInfo)
+		private function set_account($memberInfo, $validateMember = true)
 		{
 			if( isset($memberInfo['Member']['account_id']) )
 			{
@@ -1058,7 +1150,8 @@
 
 	            	$existingAccountInfo = $this->Member->Account->find('first', array( 'conditions' => array( 'Account.member_id' => $memberInfo['Member']['member_id'] ) ));
 	            	if(	isset($existingAccountInfo) &&
-	            		count($existingAccountInfo) > 0)
+	            		count($existingAccountInfo) > 0 &&
+	            		empty($existingAccountInfo) == false)
 	            	{
 	            		# Already an account, just use that
 	            		$memberInfo['Member']['account_id'] = $existingAccountInfo['Account']['account_id'];
@@ -1070,14 +1163,20 @@
 	            		# Need to create one
 	            		$memberInfo['Account']['member_id'] = $memberInfo['Member']['member_id'];
 	            		$memberInfo['Account']['payment_ref'] = $this->Member->Account->generate_payment_ref($memberInfo);
-	            		
 	            		$accountInfo = $this->Member->Account->save($memberInfo);
 
 	            		$memberInfo['Member']['account_id'] = $accountInfo['Account']['account_id'];
 	            	}
 	            }
 
-	           	$this->Member->save($memberInfo);
+	            if($validateMember)
+	            {
+	           		$this->Member->save($memberInfo);
+	           	}
+	           	else
+	           	{
+	           		$this->Member->save($memberInfo, array('validate' => false));
+	           	}
 	        }
             return $memberInfo;
 		}
