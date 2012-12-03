@@ -9,6 +9,7 @@
     	echo $this->Form->input('member_id', array('type' => 'hidden'));
         echo $this->Form->input('name');
         echo $this->Form->input('username');
+        echo $this->Form->input('email', array('label' => 'Email (the same one you used when you registered):'));
         echo $this->Form->input('password', array('label' => 'Password (Min ' . Member::MIN_PASSWORD_LENGTH . ' chars):'));
         echo $this->Form->input('password_confirm', array('type' => 'password'));
     ?>

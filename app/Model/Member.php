@@ -131,6 +131,12 @@
 			return true;
 		}
 
+		public function checkEmailMatch($check)
+		{
+			$ourEmail = $this->find('first', array('fields' => array('Member.email'), 'conditions' => array('Member.member_id' => $this->data['Member']['member_id'])));
+			return strcasecmp($ourEmail['Member']['email'], $this->data['Member']['email']) == 0;
+		}
+
 		public function beforeSave($options = array()) {
 
 			if( isset($this->data['Member']['member_status']) )
@@ -197,6 +203,16 @@
 		public function memberInGroup($memberId, $groupId)
 		{
 			return in_array($groupId, Hash::extract( $this->find('first', array( 'conditions' => array( 'Member.member_id' => $memberId ) ) ), 'Group.{n}.grp_id' ));
+		}
+
+		public function addEmailMustMatch()
+		{
+			$this->validator()->add('email', 'emailMustMatch', array( 'rule' => array( 'checkEmailMatch' ), 'message' => 'Incorrect email used' ));
+		}
+
+		public function removeEmailMustMatch()
+		{
+			$this->validator()->remove('email', 'emailMustMatch');
 		}
 
 		public static function isInGroup($user, $groupId)

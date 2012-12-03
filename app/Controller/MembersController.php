@@ -225,10 +225,11 @@
 
 	    			if($this->request->is('put'))
 	    			{
-	    				$this->request->data['Member']['email'] = $memberInfo['Member']['email'];
+	    				$this->Member->addEmailMustMatch();
+
 	    				$this->request->data['Member']['member_status'] = 5;
 	    				$this->Member->set($this->request->data);
-	    				if($this->Member->validates(array('fieldList' => array('name', 'username', 'password', 'password_confirm'))))
+	    				if($this->Member->validates(array('fieldList' => array('name', 'email', 'username', 'password', 'password_confirm'))))
 	    				{
 		    				if(	$this->Krb->addUser($this->request->data['Member']['username'], $this->request->data['Member']['password']) &&
 		    				 	$this->Member->save($this->request->data, array('validate' => false)))
@@ -241,6 +242,8 @@
 		    					$this->Session->setFlash('Unable to set username and password.');
 		    				}
 		    			}
+
+		    			$this->Member->removeEmailMustMatch();
 	    			}
 	    		}
 	    		else
