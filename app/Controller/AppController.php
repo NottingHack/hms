@@ -67,7 +67,9 @@ class AppController extends Controller {
         # AT [16/09/2012] Send any links added to the NavComponent to the view
         $this->set('navLinks', $this->Nav->get_allowed_actions());
 
-        $user = AuthComponent::user();
+        Controller::loadModel('Member');
+
+        $user = $this->Member->find('first', array('conditions' => array( 'Member.member_id' => AuthComponent::user('Member.member_id') )));
         if( isset($user) )
         {
             $adminLinks = array();
