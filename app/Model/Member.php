@@ -90,7 +90,16 @@
 	        	'mustbeUnique' => array(
 	            	'rule' => array( 'checkUniqueUsername' ),
 	            	'message' => 'That username is already taken',
-	            )
+	            ),
+	            'alphaNumeric' => array(
+	                'rule'     => 'alphaNumeric',
+	                'message'  => 'Aplha-numeric characters only'
+	            ),
+	            'between' => array(
+	                'rule'    => array('between', 3, 30),
+	                'message' => 'Between 3 to 30 characters'
+	            ),
+
 	        ),
 	        'address_1' => array(
 	            'rule' => 'notEmpty'
