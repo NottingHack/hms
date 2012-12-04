@@ -36,6 +36,10 @@ App::uses('AuthComponent', 'Controller/Auth');
  */
 class AppController extends Controller {
 
+    const VERSION_MAJOR = 0;
+    const VERSION_MINOR = 2;
+    const VERSION_BUILD = 0;
+
 	public $helpers = array('Html', 'Form', 'Nav', 'List');
 
 	public $components = array(
@@ -103,6 +107,8 @@ class AppController extends Controller {
 
         $this->set('jsonData', $jsonData);
         $this->set('navLinks', $this->Nav->get_allowed_actions());
+
+        $this->set('version', $this->get_version_string());
     }
 
     public function isAuthorized($user, $request)
@@ -113,6 +119,11 @@ class AppController extends Controller {
         }
         
         return false;
+    }
+
+    public function get_version_string()
+    {
+        return sprintf('%d.%d.%d', self::VERSION_MAJOR, self::VERSION_MINOR, self::VERSION_BUILD);
     }
 
 }

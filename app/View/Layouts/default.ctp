@@ -101,6 +101,13 @@ $cakeDescription = "Nottingham Hackspace Management System";
 		<div id="footer">
 			<div id="footer-widget-area" role="complementary">
 				<div id="first" class="widget-area">
+					<ul class="xoxo">
+						<li id="menu-item-328" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-328">HMS Version <?php echo $version; ?></li>
+						<li id="menu-item-327" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-327"><a href="https://bitbucket.org/pyroka/hms">Get Source</a></li>
+						<li id="menu-item-329" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-329"></br></li>
+						<li id="menu-item-330" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-330"><a href="http://nottinghack.org.uk/">Nottinghack Website</a></li>
+						<li id="menu-item-332" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-332">&#169; <?php echo date('Y'); ?> Nottinghack</li>
+					</ul>
 				</div><!-- #first .widget-area -->
 
 				<div id="second" class="widget-area">

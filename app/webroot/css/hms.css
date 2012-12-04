@@ -134,6 +134,10 @@ p {
 	padding: 0 0 0 1px;
 }
 
+#footer-widget-area #first.widget-area {
+	width: 140px;
+}
+
 #footer-widget-area ul {
 	list-style-type: none;
 	margin: 0px 0px 0px 8px;
