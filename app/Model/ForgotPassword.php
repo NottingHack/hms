@@ -1,4 +1,7 @@
 <?php
+
+	App::uses('Member', 'Model');
+
 	class ForgotPassword extends AppModel {
 		
 		public $useTable = 'forgotpassword';
@@ -15,7 +18,14 @@
 	            )
 	        ),
 	        'new_password' => array(
-	        	'rule' => 'notEmpty'
+	        	'noEmpty' => array(
+	            	'rule' => 'notEmpty',
+	            	'message' => 'This field cannot be left blank'
+	            ),
+	        	'minLen' => array(
+	        		'rule' => array('minLength', Member::MIN_PASSWORD_LENGTH),
+            		'message' => 'Password too short',
+            	),
 	        ),
 	        'new_password_confirm' => array(
 	        	'noEmpty' => array(
@@ -25,7 +35,11 @@
 	        	'matchNewPassword' => array(
 	            	'rule' => array( 'newPasswordConfirmMatchesNewPassword' ),
 	            	'message' => 'Passwords don\'t match',
-	            )
+	            ),
+	            'minLen' => array(
+	        		'rule' => array('minLength', Member::MIN_PASSWORD_LENGTH),
+            		'message' => 'Password too short',
+            	),
 	        )
 	    );
 

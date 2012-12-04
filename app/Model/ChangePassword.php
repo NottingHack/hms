@@ -1,4 +1,7 @@
 <?php
+
+	App::uses('Member', 'Model');
+
 	class ChangePassword extends AppModel {
 		
 		public $useTable = false; # This is a dummy model so we can get nice validation for the change_password view
@@ -8,7 +11,14 @@
 	            'rule' => 'notEmpty'
 	        ),
 	        'new_password' => array(
-	        	'rule' => 'notEmpty'
+	        	'noEmpty' => array(
+	            	'rule' => 'notEmpty',
+	            	'message' => 'This field cannot be left blank'
+	            ),
+	        	'minLen' => array(
+	        		'rule' => array('minLength', Member::MIN_PASSWORD_LENGTH),
+            		'message' => 'Password too short',
+            	),
 	        ),
 	        'new_password_confirm' => array(
 	        	'noEmpty' => array(
@@ -18,7 +28,11 @@
 	        	'matchNewPassword' => array(
 	            	'rule' => array( 'newPasswordConfirmMatchesNewPassword' ),
 	            	'message' => 'Passwords don\'t match',
-	            )
+	            ),
+	            'minLen' => array(
+	        		'rule' => array('minLength', Member::MIN_PASSWORD_LENGTH),
+            		'message' => 'Password too short',
+            	),
 	        )
 	    );
 

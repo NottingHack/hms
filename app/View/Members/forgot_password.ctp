@@ -10,7 +10,7 @@
     <?php
         echo $this->Form->create('ForgotPassword');
         echo $this->Form->input('ForgotPassword.email', array( 'label' => 'Email:'));        
-        echo $this->Form->input('ForgotPassword.new_password', array( 'label' => 'New password', 'type' => 'password' ));
+        echo $this->Form->input('ForgotPassword.new_password', array( 'label' => 'New password (Min ' . Member::MIN_PASSWORD_LENGTH . ' chars):', 'type' => 'password' ));
         echo $this->Form->input('ForgotPassword.new_password_confirm', array( 'label' => 'Confirm new password', 'type' => 'password' ));
 
         echo $this->Form->end('Change password');

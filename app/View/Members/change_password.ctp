@@ -18,7 +18,7 @@
     }
     echo $this->Form->input('ChangePassword.current_password', array( 'label' => $label, 'type' => 'password' ));
     
-    echo $this->Form->input('ChangePassword.new_password', array( 'label' => 'New password', 'type' => 'password' ));
+    echo $this->Form->input('ChangePassword.new_password', array( 'label' => 'New password (Min ' . Member::MIN_PASSWORD_LENGTH . ' chars):', 'type' => 'password' ));
     echo $this->Form->input('ChangePassword.new_password_confirm', array( 'label' => 'Confirm new password', 'type' => 'password' ));
 
     echo $this->Form->end('Change password');
