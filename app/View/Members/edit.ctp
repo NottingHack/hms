@@ -66,19 +66,25 @@
 	echo '<fieldset>';
 	echo '<legend>Mailing Lists</legend>';
 
+	# Need to alter the list of mailing lists
+	$formattedMailingLists = array();
 	$selectedMailingLists = array();
-	foreach (Hash::format($mailingLists, array('{n}.subscribed'), '%1$d' ) as $key => $value) {
-		if($value)
+	$mailingListOptions = array();
+	foreach ($mailingLists as $mailingList) {
+		$key = $mailingList['id'];
+		$formattedMailingLists[$key] = $mailingList;
+		if($mailingList['subscribed'])
 		{
-			array_push($selectedMailingLists, $key);
+			array_push($selectedMailingLists, $key);	
 		}
+		$mailingListOptions[$key] = $mailingList['name'];
 	}
 
 	echo $this->Form->input('MailingLists.MailingLists',array(
         'label' => __(' ',true),
         'type' => 'select',
         'multiple' => 'checkbox',
-        'options' => Hash::extract($mailingLists, '{n}.name'),
+        'options' => $mailingListOptions,
         'selected' => $selectedMailingLists,
     )); 
 

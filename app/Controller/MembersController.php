@@ -167,14 +167,25 @@
 		            {
 		            	$memberId = $emailAlreadyKnown ? $memberInfo['Member']['member_id'] : $this->Member->getLastInsertId();
 
-		                $this->Session->setFlash('Registration successful.');
+		            	$flashMessage = 'Registration successful';
+		            	if(isset($this->request->data['MailingLists']['MailingLists']) &&
+		            		empty($this->request->data['MailingLists']['MailingLists']) == false)
+		            	{
+		            		$flashMessage .= '</br>';
+		            		$flashMessage .= $this->_update_mailing_list_subscriptions($memberId, $this->request->data['MailingLists']['MailingLists']);
+		            	}
+
+		            	$this->Session->setFlash($flashMessage);
 
 		                # Get a list of all the mailing lists this user is subscribing to
 		                $subscribedMailingLists = array();
-		                foreach ($this->request->data['MailingLists']['MailingLists'] as $key => $value) {
-		                	$mailingListToSubscruibe = $mailingLists[$value];
-		                	array_push($subscribedMailingLists, $mailingListToSubscruibe);
-		                }
+		                if(isset($this->request->data['MailingLists']['MailingLists']))
+		                {
+			                foreach ($this->request->data['MailingLists']['MailingLists'] as $key => $value) {
+			                	$mailingListToSubscruibe = $mailingLists[$key];
+			                	array_push($subscribedMailingLists, $mailingListToSubscruibe);
+			                }
+			            }
 
 		                # Only notify the member admins if it is a new email
 		                if($emailAlreadyKnown == false)
@@ -802,46 +813,9 @@
 				    		{
 				    			$this->request->data['MailingLists']['MailingLists'] = array();
 				    		}
-				    		$firstSubscribtionChange = true;
-				    		# Update list subscriptions if needed
-				    		for($i = 0; $i < count($mailingLists); $i++)
-				    		{
-				    			$mailingLists[$i]['userWantsToBeSubscribed'] = in_array($i, $this->request->data['MailingLists']['MailingLists']);
-				    			if($mailingLists[$i]['subscribed'] != $mailingLists[$i]['userWantsToBeSubscribed'])
-				    			{
 
-				    				if($firstSubscribtionChange)
-				    				{
-				    					$flashMessage .= '</br>';
-				    					$firstSubscribtionChange = false;
-				    				}
-				    				if($mailingLists[$i]['userWantsToBeSubscribed'])
-				    				{
-				    					$this->MailChimp->subscribe($mailingLists[$i]['id'], $this->request->data['Member']['email']);
-				    					if($this->MailChimp->error_code())
-				    					{
-				    						$flashMessage .= 'Unable to subscribe to: ' . $mailingLists[$i]['name'] . ' because ' . $this->MailChimp->error_msg() . '</br>';
-				    					}
-				    					else
-				    					{
-				    						$flashMessage .= 'E-mail confirmation of mailing list subscription for: ' . $mailingLists[$i]['name'] . ' has been sent.' . '</br>';	
-				    					}
-				    				}
-				    				else
-				    				{
-				    					$this->MailChimp->unsubscribe($mailingLists[$i]['id'], $this->request->data['Member']['email']);
-				    					if($this->MailChimp->error_code())
-				    					{
-				    						$flashMessage .= 'Unable to un-subscribe from: ' . $mailingLists[$i]['name'] . ' because ' . $this->MailChimp->error_msg() . '</br>';
-				    						echo $this->MailChimp->error_msg();
-				    					}
-				    					else
-				    					{
-				    						$flashMessage .= 'Un-Subscribed from: ' . $mailingLists[$i]['name'] . '</br>';
-				    					}
-				    				}
-				    			}
-				    		}
+				    		$flashMessage .= '<br>';
+				    		$flashMessage .= $this->_update_mailing_list_subscriptions($id, $this->request->data['MailingLists']['MailingLists']);
 				    	}
 
 
@@ -856,6 +830,51 @@
 				    }
 				}
 			}
+		}
+
+		private function _update_mailing_list_subscriptions($memberId, $subscribeToLists)
+		{
+			$resultMessage = '';
+
+			# Grab a list of all the mailing lists we know about
+			# including whether this member is subscribed to them or not
+			$memberInfo = $this->Member->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			$currentMailingLists = $this->_get_mailing_lists_and_subscruibed_status($memberInfo);
+
+			foreach ($currentMailingLists as $mailingList) {
+				# Does the member want to be want to be subscribed to this list?
+				$wantToBeSubscribed = in_array($mailingList['id'], $subscribeToLists);
+				if($wantToBeSubscribed != $mailingList['subscribed'])
+				{
+					# Need to edit the subscription
+					if($wantToBeSubscribed)
+					{
+						$this->MailChimp->subscribe($mailingList['id'], $memberInfo['Member']['email']);
+    					if($this->MailChimp->error_code())
+    					{
+    						$resultMessage .= 'Unable to subscribe to: ' . $mailingList['name'] . ' because ' . $this->MailChimp->error_msg() . '</br>';
+    					}
+    					else
+    					{
+    						$resultMessage .= 'E-mail confirmation of mailing list subscription for: ' . $mailingList['name'] . ' has been sent.' . '</br>';	
+    					}
+					}
+					else
+					{
+						$this->MailChimp->unsubscribe($mailingList['id'], $memberInfo['Member']['email']);
+    					if($this->MailChimp->error_code())
+    					{
+    						$resultMessage .= 'Unable to un-subscribe from: ' . $mailingList['name'] . ' because ' . $this->MailChimp->error_msg() . '</br>';
+    					}
+    					else
+    					{
+    						$resultMessage .= 'Un-Subscribed from: ' . $mailingList['name'] . '</br>';
+    					}
+					}
+				}
+			}
+
+			return $resultMessage;
 		}
 
 		private function _get_mailing_lists_and_subscruibed_status($memberInfo)
