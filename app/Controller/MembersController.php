@@ -43,11 +43,15 @@
 	    		case 'accept_details':
 	    		case 'reject_details':
 	    		case 'approve_member':
+	    		case 'send_membership_reminder':
+	    		case 'send_contact_details_reminder':
+	    		case 'send_so_details_reminder':
 	    			return $userIsMemberAdmin; 
 
 	    		case 'change_password':
 	    		case 'view':
 	    		case 'edit':
+	    		case 'setup_details':
 	    			if( $userIsMemberAdmin || 
 	    				( $actionHasParams && $userIdIsSet && $request->params['pass'][0] == $userId ) )
 	    			{
@@ -58,7 +62,6 @@
 	    		case 'login':
 	    		case 'logout':
 	    		case 'setup_login':
-	    		case 'setup_details':
 	    			return true;
 	    	}
 
@@ -421,20 +424,10 @@
 						$this->request->data['Member']['member_status'] = 7;
 						$accountInfo = $this->set_account($this->request->data, false);
 
+						$memberInfo['Account'] = $accountInfo['Account'];
+
 						# Now mail the member the SO details
-						$memberEmail = $this->prepare_email();
-						$memberEmail->to( $memberInfo['Member']['email'] );
-						$memberEmail->subject('Bank Details');
-						$memberEmail->template('to_member_so_details', 'default');
-						$memberEmail->viewVars( array( 
-							'name' => $memberInfo['Member']['name'],
-							'reference' => $accountInfo['Account']['payment_ref'],
-							'accountNum' => Configure::read('hms_so_accountNumber'),
-							'sortCode' => Configure::read('hms_so_sortCode'),
-							'accountName' => Configure::read('hms_so_accountName'),
-							 )
-						);
-						$memberEmail->send();
+						$this->_send_so_details($memberInfo);
 
 						# Finally mail the member admins to look out for a payment from this new member
 						$adminEmail = $this->prepare_email_for_members_in_group(5);
@@ -444,7 +437,7 @@
 							'memberName' => $memberInfo['Member']['name'],
 							'memberId' => $id,
 							'memberEmail' => $memberInfo['Member']['email'],
-							'memberPayRef' => $accountInfo['Account']['payment_ref'],
+							'memberPayRef' => $memberInfo['Account']['payment_ref'],
 							 )
 						);
 						$adminEmail->send();
@@ -729,6 +722,79 @@
 	    	return $this->Krb->changePassword($memberInfo['Member']['username'], $newPassword);
 	    }
 
+	    public function send_membership_reminder($id = null)
+	    {
+	    	if($id != null)
+	    	{
+	    		$this->Member->id = $id;
+				$memberInfo = $this->Member->read();
+				$email = $this->prepare_email();
+				$email->to( $memberInfo['Member']['email'] );
+				$email->subject('Membership Info');
+				$email->template('to_member_membership_reminder', 'default');
+				$email->viewVars( array( 
+					'memberId' => $id,
+					 )
+				);
+				$email->send();
+
+				$this->Session->setFlash('Member has been contacted');
+				$this->redirect($this->referer());
+	    	}
+	    }
+
+	    public function send_contact_details_reminder($id = null)
+	    {
+	    	if($id != null)
+	    	{
+	    		$this->Member->id = $id;
+				$memberInfo = $this->Member->read();
+				$email = $this->prepare_email();
+				$email->to( $memberInfo['Member']['email'] );
+				$email->subject('Membership Info');
+				$email->template('to_member_contact_details_reminder', 'default');
+				$email->viewVars( array( 
+					'memberId' => $id,
+					 )
+				);
+				$email->send();
+
+				$this->Session->setFlash('Member has been contacted');
+				$this->redirect($this->referer());
+	    	}
+	    }
+
+	    public function send_so_details_reminder($id = null)
+	    {
+	    	if($id != null)
+	    	{
+	    		$this->Member->id = $id;
+				$memberInfo = $this->Member->read();
+				
+				$this->_send_so_details($memberInfo);
+
+				$this->Session->setFlash('Member has been contacted');
+				$this->redirect($this->referer());
+	    	}
+	    }
+
+	    public function _send_so_details($memberInfo)
+	    {
+			$memberEmail = $this->prepare_email();
+			$memberEmail->to( $memberInfo['Member']['email'] );
+			$memberEmail->subject('Bank Details');
+			$memberEmail->template('to_member_so_details', 'default');
+			$memberEmail->viewVars( array( 
+				'name' => $memberInfo['Member']['name'],
+				'reference' => $memberInfo['Account']['payment_ref'],
+				'accountNum' => Configure::read('hms_so_accountNumber'),
+				'sortCode' => Configure::read('hms_so_sortCode'),
+				'accountName' => Configure::read('hms_so_accountName'),
+				 )
+			);
+			$memberEmail->send();
+	    }
+
 	    public function view($id = null) {
 	        $this->Member->id = $id;
 	        $memberInfo = $this->Member->read();
@@ -747,13 +813,8 @@
 	        $this->Nav->add('Edit', 'members', 'edit', array( $id ) );
 	        $this->Nav->add('Change Password', 'members', 'change_password', array( $id ) );
 			switch ($memberInfo['Member']['member_status']) {
-		        case 6: # Prospective member
-		            $this->Nav->add('Approve contact details', 'members', 'accept_details', array( $id ), 'positive' );
-		            $this->Nav->add('Reject contact details', 'members', 'reject_details', array( $id ), 'negative' );
-		            break;
-
-		        case 7: # Waiting for SO
-		        	$this->Nav->add('Approve Member', 'members', 'approve_member', array($id), 'positive');
+		        case 1: # Prospective member
+		        	$this->Nav->add('Send Membership Reminder', 'members', 'send_membership_reminder', array($id));
 		        	break;
 
 		        case 2: # Current member
@@ -763,6 +824,20 @@
 		        case 3: # Ex-member
 		            $this->Nav->add('Reinstate Membership', 'members', 'set_member_status', array( $id, 2 ) );
 		            break;
+
+				case 5: # Waiting for contact details
+					$this->Nav->add('Send Contact Details Reminder', 'members', 'send_contact_details_reminder', array($id));
+		        	break;
+
+		        case 6: # Prospective member
+		            $this->Nav->add('Approve contact details', 'members', 'accept_details', array( $id ), 'positive' );
+		            $this->Nav->add('Reject contact details', 'members', 'reject_details', array( $id ), 'negative' );
+		            break;
+
+		        case 7: # Waiting for SO
+		        	$this->Nav->add('Send SO Details Reminder', 'members', 'send_so_details_reminder', array($id));
+		        	$this->Nav->add('Approve Member', 'members', 'approve_member', array($id), 'positive');
+		        	break;
 		    }
 
 		    $this->set('mailingLists', $this->_get_mailing_lists_and_subscruibed_status($memberInfo));

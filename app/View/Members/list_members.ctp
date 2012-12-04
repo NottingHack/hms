@@ -71,12 +71,8 @@
             <?php 
                 switch ($member['Member']['member_status']) {
 
-                    case 7: # Waiting for SO
-                        echo $this->Html->link('Approve Member', array('controller' => 'members', 'action' => 'approve_member', $member['Member']['member_id']));
-                    break;
-
-                    case 6: # Prospective member
-                        echo $this->Html->link("Check contact details", array('controller' => 'members', 'action' => 'view', $member['Member']['member_id']));
+                    case 1: # Prospective member
+                        echo $this->Html->link('Send Membership Reminder', array('controller' => 'members', 'action' => 'send_membership_reminder', $member['Member']['member_id']));
                         break;
 
                     case 2: # Current member
@@ -85,6 +81,20 @@
 
                     case 3: # Ex-member
                         echo $this->Html->link("Reinstate membership", array('controller' => 'members', 'action' => 'set_member_status', $member['Member']['member_id'], 2));
+                        break;
+
+                    case 5: # Waiting for contact details
+                        echo $this->Html->link('Send Contact Details Reminder', array('controller' => 'members', 'action' => 'send_contact_details_reminder', $member['Member']['member_id']));
+                        break;
+
+                    case 6: # Prospective member
+                        echo $this->Html->link("Check contact details", array('controller' => 'members', 'action' => 'view', $member['Member']['member_id']));
+                        break;
+
+                    case 7: # Waiting for SO
+                        echo $this->Html->link('Send SO Details Reminder', array('controller' => 'members', 'action' => 'send_so_details_reminder', $member['Member']['member_id']));
+                        echo '</br>';
+                        echo $this->Html->link('Approve Member', array('controller' => 'members', 'action' => 'approve_member', $member['Member']['member_id']));
                         break;
                 }
             ?>
