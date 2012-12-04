@@ -1037,12 +1037,15 @@
 		private function update_status_on_joint_accounts($oldData, $newData)
 		{
 			# Find any members using the same account as this one, and set their status too
-			foreach ($this->Member->find( 'all', array( 'conditions' => array( 'Member.account_id' => $oldData['Member']['account_id'] ) ) ) as $memberInfo) 
+			foreach ($this->Member->find( 'all', array( 'conditions' => array( 'Member.account_id' => $oldData['Member']['account_id'], 'Member.account_id NOT' => null ) ) ) as $memberInfo) 
 			{
 				if($memberInfo['Member']['member_id'] != $oldData['Member']['member_id'])
 				{
 					$oldMemberInfo = $memberInfo;
-					$memberInfo['Member']['member_status'] = $newData['Member']['member_status'];
+					if(isset($newData['Member']['member_status']))
+					{
+						$memberInfo['Member']['member_status'] = $newData['Member']['member_status'];
+					}
 					$this->data = $memberInfo;
 					$newMemberInfo = $this->Member->save($memberInfo);
 					if($newMemberInfo)

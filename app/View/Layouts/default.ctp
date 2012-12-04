@@ -44,7 +44,7 @@ $cakeDescription = "Nottingham Hackspace Management System";
 				<div class="login">
 					<?php if( isset($user) && $user): ?>
 						Logged in as: 
-						<?php echo $this->Html->link(AuthComponent::user('Member.username'), array( 'controller' => 'members', 'action' => 'view', AuthComponent::user('Member.member_id') ) ); ?>
+						<?php echo $this->Html->link($user['Member']['username'], array( 'controller' => 'members', 'action' => 'view', AuthComponent::user('Member.member_id') ) ); ?>
 						<span class="loginSpace">
 							<?php echo $this->Html->link('Logout', array( 'controller' => 'members', 'action' => 'logout' )) ?>
 						</span>
