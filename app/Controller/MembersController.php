@@ -26,13 +26,6 @@
 	    	$userIdIsSet = isset( $user['Member'] ) && isset( $user['Member']['member_id'] );
 	    	$userId = $userIdIsSet ? $user['Member']['member_id'] : null;
 
-	    	/*
-	    	print_r($userIsMemberAdmin);
-	    	print_r($actionHasParams);
-	    	print_r($userIdIsSet);
-	    	print_r($userId);
-	    	*/
-
 	    	switch ($request->action) {
 	    		case 'index':
 	    		case 'list_members':
@@ -46,6 +39,7 @@
 	    		case 'send_membership_reminder':
 	    		case 'send_contact_details_reminder':
 	    		case 'send_so_details_reminder':
+	    		case 'add_existing_member':
 	    			return $userIsMemberAdmin; 
 
 	    		case 'change_password':
@@ -1210,6 +1204,49 @@
 
 		public function logout() {
 		    $this->redirect($this->Auth->logout());
+		}
+
+		# Function to make it easier to enter the data for an existing (pre HMS) member
+		public function add_existing_member($id = null)
+		{
+			if($id == null)
+			{
+				$id = 1;
+			}
+
+			$this->Member->id = $id;
+	        $memberInfo = $this->Member->read();
+
+	        $this->set('statuses', $this->Member->Status->find('list'));
+	        $this->set('memberInfo', $memberInfo);
+
+	        if($this->request->is('put'))
+	        {
+	        	# Populate the account info
+	        	$this->request->data['Account']['member_id'] = $id;
+
+	        	$accountInfo = $this->Member->Account->save($this->request->data);
+	        	if($accountInfo)
+	        	{
+	        		$this->request->data['Account']['account_id'] = $accountInfo['Account']['account_id']; 
+	        		$this->request->data['Member']['account_id'] = $accountInfo['Account']['account_id'];
+
+	        		if($this->Member->saveAll($this->request->data, array('validate' => false)))
+		        	{
+		        		$this->Session->setFlash('Member details added');
+
+		        		$this->redirect(array('action' => 'add_existing_member', $id + 1));
+		        	}
+		        	else
+		        	{
+		        		$this->Session->setFlash('Member update failed');
+		        	}
+	        	}
+	        }
+	        else
+	        {
+	        	$this->request->data = $memberInfo;
+	        }
 		}
 
 		private function get_readable_account_list($initialElement = null) {
