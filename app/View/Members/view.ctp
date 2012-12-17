@@ -192,4 +192,39 @@
 			echo $this->List->output($processedMailingLists);
 		?>
 	</dd>
+
+
+	<?php if(	isset($member['StatusUpdate']) &&
+				isset($member['StatusUpdate']['StatusUpdate'])): ?>
+		<?php
+			$showUpdate = true;
+			$statusUpdate = '';
+			switch ($member['StatusUpdate']['StatusUpdate']['new_status']) {
+				case 2:
+					$statusUpdate = "Membership Granted";
+					break;
+
+				case 3:
+					$statusUpdate = "Membership Revoked";
+					break;
+
+				case 7:
+					$statusUpdate = "Contact Details Accepted";
+					break;
+				
+				default:
+					$showUpdate = false;
+					break;
+			}
+		?>
+
+		<?php if($showUpdate): ?>
+			<dt>
+				Last Status Update
+			</dt>
+			<dd>
+				<?php echo sprintf('%s by %s on %s', $statusUpdate, $this->Html->link($member['StatusUpdate']['MemberAdmin']['name'], array('controller' => 'members', 'action' => 'view', $member['StatusUpdate']['MemberAdmin']['member_id'])), date('d-M-Y \a\t H:i', strtotime($member['StatusUpdate']['StatusUpdate']['timestamp']))); ?>
+			</dd>
+		<?php endif; ?>
+	<?php endif; ?>
 </dl>

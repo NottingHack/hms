@@ -32,6 +32,14 @@
 	        ),
 	    );
 
+	    public $hasMany = array(
+	    	# Only interested in the most recent status update normally
+	    	'StatusUpdate' => array(
+	    		'order' => 'StatusUpdate.timestamp DESC',
+	    		'limit'	=> '1',	
+	    	)
+	    );
+
 		public $hasAndBelongsToMany = array(
 	        'Group' =>
 	            array(

@@ -436,6 +436,8 @@
 						);
 						$adminEmail->send();
 
+						$this->_create_status_update_record($id, AuthComponent::user('Member.member_id'), 7, 6);
+
 						$this->Session->setFlash('Member details accepted.');
 
 						$this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
@@ -492,6 +494,8 @@
 
                     if($this->Member->SaveAll($memberInfo))
                     {
+                    	$this->_create_status_update_record($id, AuthComponent::user('Member.member_id'), 2, 7);
+
                     	$this->Session->setFlash('Member has been approved.');
 
                     	# Let the admins know
@@ -711,6 +715,22 @@
 			}
 	    }
 
+	    private function _create_status_update_record($memberId, $adminId, $newStatus, $oldStatus)
+	    {
+	    	$this->Member->StatusUpdate->create();
+	    	$this->Member->StatusUpdate->save(
+	    		array(
+	    			'StatusUpdate' => array(
+	    				'member_id' => $memberId,
+	    				'admin_id' => $adminId,
+	    				'new_status' => $newStatus,
+	    				'old_status' => $oldStatus,
+	    				'timestamp' => null,
+	    			),
+	    		)
+	    	);
+	    }
+
 	    private function _set_member_password($memberInfo, $newPassword)
 	    {
 	    	return $this->Krb->changePassword($memberInfo['Member']['username'], $newPassword);
@@ -800,6 +820,14 @@
 		    {
 		    	unset($memberInfo['Pin']);
 		    	unset($memberInfo['Status']);
+		    	unset($memberInfo['StatusUpdate']);
+		    }
+		    else
+		    {
+		    	if(empty($memberInfo['StatusUpdate']) == false)
+		    	{
+		    		$memberInfo['StatusUpdate'] = $this->Member->StatusUpdate->findById($memberInfo['StatusUpdate'][0]['id']);
+		    	}
 		    }
 
 	        $this->set('member', $memberInfo);
@@ -1011,8 +1039,7 @@
 			# Need to unset the group here, as it's not properly filled in
 			# So it adds partial data to the database
 			unset($data['Group']);
-
-			if($this->Member->save($data))
+			if($this->Member->save($data, array( 'fieldList' => array( 'member_id', 'member_status' ) ) ))
 			{
 				$this->Session->setFlash('Member status updated.');
 
@@ -1029,6 +1056,8 @@
 
 		private function set_member_status_impl($oldData, $newData)
 		{
+			$this->_create_status_update_record($oldData['Member']['member_id'], AuthComponent::user('Member.member_id'), $newData['Member']['member_status'], $oldData['Member']['member_status']);
+
 			$this->Member->clearGroupsIfMembershipRevoked($oldData['Member']['member_id'], $newData);
 			$this->Member->addToCurrentMemberGroupIfStatusIsCurrentMember($oldData['Member']['member_id'], $newData);
 			$this->notify_status_update($oldData, $newData);
