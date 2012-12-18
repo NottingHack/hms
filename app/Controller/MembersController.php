@@ -498,8 +498,9 @@
 
                     	$this->Session->setFlash('Member has been approved.');
 
-                    	# Let the admins know
-						$adminEmail = $this->prepare_email_for_members_in_group(5);
+                    	# Only notify the admin that approved them
+						$adminEmail = $this->prepare_email();
+						$adminEmail->to( AuthComponent::user('Member.email') );
 						$adminEmail->subject('Member Approved');
 						$adminEmail->template('notify_admins_member_approved', 'default');
 						$adminEmail->viewVars( array( 
