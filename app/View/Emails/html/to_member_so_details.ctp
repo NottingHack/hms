@@ -14,6 +14,6 @@
 </p>
 
 <p>
-	Thanks,</br>
-	Nottingham Hackspace Member Admins
+	Thanks,<br>
+	Nottinghack Member Admin Team
 </p>
