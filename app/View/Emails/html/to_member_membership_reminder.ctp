@@ -24,7 +24,7 @@
 
 <p>
 	Here's the URL for the public google group:<br>
-	https://groups.google.com/group/nottinghack?hl=en
+	<?php echo $this->Html->link('https://groups.google.com/group/nottinghack?hl=en'); ?>
 </p>
 
 <p>
@@ -33,5 +33,5 @@
 
 <p>
 	Thanks,<br>
-	Nottingham Hackspace Member Admins
+	Nottinghack Member Admin Team
 </p>

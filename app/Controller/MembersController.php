@@ -511,6 +511,24 @@
 							 )
 						);
 						$adminEmail->send();
+
+						# Notify the new member
+						$memberEmail = $this->prepare_email();
+						$memberEmail->to( $memberInfo['Member']['email'] );
+						$memberEmail->subject('Membership Complete');
+						$memberEmail->template('to_member_access_details', 'default');
+						$memberEmail->viewVars( array( 
+							'adminName' => AuthComponent::user('Member.name'),
+							'adminEmail' => AuthComponent::user('Member.email'),
+							'manLink' => Configure::read('hms_help_manual_url'),
+							'outerDoorCode' => Configure::read('hms_access_street_door'),
+							'innerDoorCode' => Configure::read('hms_access_inner_door'),
+							'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
+							'wifiPass' => Configure::read('hms_access_wifi_password'),
+							 )
+						);
+						$memberEmail->send();
+
                     }
                     else
                     {
@@ -718,18 +736,22 @@
 
 	    private function _create_status_update_record($memberId, $adminId, $newStatus, $oldStatus)
 	    {
-	    	$this->Member->StatusUpdate->create();
-	    	$this->Member->StatusUpdate->save(
-	    		array(
-	    			'StatusUpdate' => array(
-	    				'member_id' => $memberId,
-	    				'admin_id' => $adminId,
-	    				'new_status' => $newStatus,
-	    				'old_status' => $oldStatus,
-	    				'timestamp' => null,
-	    			),
-	    		)
-	    	);
+	    	if($newStatus != null && $oldStatus != null && $newStatus != $oldStatus)
+	    	{
+
+		    	$this->Member->StatusUpdate->create();
+		    	$this->Member->StatusUpdate->save(
+		    		array(
+		    			'StatusUpdate' => array(
+		    				'member_id' => $memberId,
+		    				'admin_id' => $adminId,
+		    				'new_status' => $newStatus,
+		    				'old_status' => $oldStatus,
+		    				'timestamp' => null,
+		    			),
+		    		)
+		    	);
+		    }
 	    }
 
 	    private function _set_member_password($memberInfo, $newPassword)
@@ -1064,7 +1086,10 @@
 
 		private function set_member_status_impl($oldData, $newData)
 		{
-			$this->_create_status_update_record($oldData['Member']['member_id'], AuthComponent::user('Member.member_id'), $newData['Member']['member_status'], $oldData['Member']['member_status']);
+			if(isset($newData['Member']['member_status']))
+			{
+				$this->_create_status_update_record($oldData['Member']['member_id'], AuthComponent::user('Member.member_id'), $newData['Member']['member_status'], $oldData['Member']['member_status']);
+			}
 
 			$this->Member->clearGroupsIfMembershipRevoked($oldData['Member']['member_id'], $newData);
 			$this->Member->addToCurrentMemberGroupIfStatusIsCurrentMember($oldData['Member']['member_id'], $newData);
