@@ -100,18 +100,23 @@
 		<?php endif; ?>
 	<?php endif; ?>
 
-	<dt>
-		Current Balance
-	</dt>
-	<dd>
-		<?php echo $member['Member']['balance']; ?>
-	</dd>
-	<dt>
-		Credit Limit
-	</dt>
-	<dd>
-		<?php echo $member['Member']['credit_limit']; ?>
-	</dd>
+	<?php if(isset($member['Member']['balance'])): ?>
+		<dt>
+			Current Balance
+		</dt>
+		<dd>
+			<?php echo $member['Member']['balance']; ?>
+		</dd>
+	<?php endif; ?>
+
+	<?php if(isset($member['Member']['credit_limit'])): ?>
+		<dt>
+			Credit Limit
+		</dt>
+		<dd>
+			<?php echo $member['Member']['credit_limit']; ?>
+		</dd>
+	<?php endif; ?>
 
 	<?php if(isset($member['Account']['account_id'])): ?>
 		<dt>

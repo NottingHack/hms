@@ -814,13 +814,20 @@
 	        $memberInfo = $this->Member->read();
 
 	        # Sanitise data
-		    $user = AuthComponent::user();
+		    $user = $this->Member->findByMemberId(AuthComponent::user('Member.member_id'));
 		    $canSeeAll = Member::isInGroupMemberAdmin($user) || Member::isInGroupFullAccess($user);
 		    if(!$canSeeAll)
 		    {
 		    	unset($memberInfo['Pin']);
 		    	unset($memberInfo['Status']);
 		    	unset($memberInfo['StatusUpdate']);
+
+		    	// Only current members can see credit limit and balances
+		    	if($user['Member']['member_status'] != 2)
+		    	{
+		    		unset($memberInfo['Member']['balance']);
+		    		unset($memberInfo['Member']['credit_limit']);
+		    	}
 		    }
 		    else
 		    {
