@@ -17,31 +17,25 @@
 	        ),
 	    );
 
-		public function generate_payment_ref($memberInfo)
+		public function generate_payment_ref()
 		{
 			# Payment ref is a randomly generates string of 'safechars'
 			# Stolen from London Hackspace code
 			$safeChars = "2346789BCDFGHJKMPQRTVWXY";
-			# So we want 8 of these chars in two groups of 4
-			# Then we need to make sure it's unique
-			$numBlocks = 2;
-			$numCharsInBlock = 4;
 
-			$paymentRef = "";
+			# We prefix the ref with a string that lets people know it's us
+			$prefix = 'HSNOTTS';
+
+			# Payment references can be up to 18 chars according to: http://www.bacs.co.uk/Bacs/Businesses/BacsDirectCredit/Receiving/Pages/PaymentReferenceInformation.aspx
+			$maxRefLength = 18;
+
+			$paymentRef = '';
 			do
 			{
-				$paymentRef = "";
-				for($b = 0; $b < $numBlocks; $b++)
+				$paymentRef = $prefix;
+				for($i = strlen($prefix); $i < $maxRefLength; $i++)
 				{
-					for($c = 0; $c < $numCharsInBlock; $c++)
-					{
-						$paymentRef .= $safeChars[ rand(0, strlen($safeChars) - 1) ];
-					}
-
-					if($b < ($numBlocks - 1))
-					{
-						$paymentRef .= '-';
-					}
+					$paymentRef .= $safeChars[ rand(0, strlen($safeChars) - 1) ];
 				}
 			} while( $this->find('count', array( 'conditions' => array( 'Account.payment_ref' =>  $paymentRef) )) > 0 );
 

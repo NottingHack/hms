@@ -1370,7 +1370,7 @@
 	            	{
 	            		# Need to create one
 	            		$memberInfo['Account']['member_id'] = $memberInfo['Member']['member_id'];
-	            		$memberInfo['Account']['payment_ref'] = $this->Member->Account->generate_payment_ref($memberInfo);
+	            		$memberInfo['Account']['payment_ref'] = $this->Member->Account->generate_payment_ref();
 	            		$accountInfo = $this->Member->Account->save($memberInfo);
 
 	            		$memberInfo['Member']['account_id'] = $accountInfo['Account']['account_id'];
