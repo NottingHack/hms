@@ -105,7 +105,7 @@
 			Current Balance
 		</dt>
 		<dd>
-			<?php echo $member['Member']['balance']; ?>
+			<?php echo $this->Currency->output($member['Member']['balance']); ?>
 		</dd>
 	<?php endif; ?>
 
@@ -114,7 +114,7 @@
 			Credit Limit
 		</dt>
 		<dd>
-			<?php echo $member['Member']['credit_limit']; ?>
+			<?php echo $this->Currency->output($member['Member']['credit_limit']); ?>
 		</dd>
 	<?php endif; ?>
 

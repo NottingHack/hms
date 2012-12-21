@@ -9,7 +9,7 @@
 
 	class MembersController extends AppController {
 	    
-	    public $helpers = array('Html', 'Form', 'Tinymce');
+	    public $helpers = array('Html', 'Form', 'Tinymce', 'Currency');
 
 	    public $components = array('MailChimp', 'Krb');
 

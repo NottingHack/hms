@@ -994,3 +994,8 @@ pre {
 .big_button {
 	font-size: 130%;
 }
+
+.currency_negative {
+	color: #ff0000;
+}
+
