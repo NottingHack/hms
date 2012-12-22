@@ -10,7 +10,7 @@ class CurrencyHelper extends AppHelper {
 	public function output($pennys)
 	{
 		$output = '';
-		$moneyStr = $this->Number->currency($pennys / 1000, 'GBP', array( 'places' => 2, 'negative' => '-') );
+		$moneyStr = $this->Number->currency($pennys / 100, 'GBP', array( 'places' => 2, 'negative' => '-') );
 		if($pennys < 0)
 		{
 			$output = sprintf('<span class="currency_negative">%s</span>', $moneyStr);

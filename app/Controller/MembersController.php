@@ -243,6 +243,9 @@
 	    				$this->Member->set($this->request->data);
 	    				if($this->Member->validates(array('fieldList' => array('name', 'email', 'username', 'password', 'password_confirm'))))
 	    				{
+	    					# Make the handle the same as the username for now...
+	    					$this->request->data['Member']['handle'] = $this->request->data['Member']['username'];
+
 		    				if(	$this->Krb->addUser($this->request->data['Member']['username'], $this->request->data['Member']['password']) &&
 		    				 	$this->Member->save($this->request->data, array('validate' => false)))
 		    				{

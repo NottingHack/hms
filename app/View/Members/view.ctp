@@ -15,6 +15,13 @@
 	</dd>
 
 	<dt>
+		Handle
+	</dt>
+	<dd>
+		<?php echo $member['Member']['handle']; ?>
+	</dd>
+
+	<dt>
 		Email
 	</dt>
 	<dd>
