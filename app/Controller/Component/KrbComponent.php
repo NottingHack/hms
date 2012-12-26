@@ -61,6 +61,16 @@ class KrbComponent extends Component {
 		
 		return $this->krbObj->change_password($username, $newPass);
 	}
+
+	public function userExists($username)
+	{
+		if($this->use_dummy)
+		{
+			return true;
+		}
+
+		return $this0->krbObj->user_exists($username);
+	}
 }
 
 ?>

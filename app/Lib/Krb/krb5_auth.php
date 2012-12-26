@@ -84,7 +84,7 @@ class krb5_auth
    * FALSE = user doesn't exist
    * NULL  = something went wrong
    */
-  function user_exists($username)
+  public function user_exists($username)
   {
     try
     {

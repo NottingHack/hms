@@ -759,7 +759,16 @@
 
 	    private function _set_member_password($memberInfo, $newPassword)
 	    {
-	    	return $this->Krb->changePassword($memberInfo['Member']['username'], $newPassword);
+	    	switch ($this->Krb->userExists($memberInfo['Member']['username'])) {
+	    		case TRUE:
+	    			return $this->Krb->changePassword($memberInfo['Member']['username'], $newPassword);
+
+	    		case FALSE:
+	    			return $this->krb->addUser($memberInfo['Member']['username'], $newPassword);
+	    		
+	    		default:
+	    			return false;
+	    	}
 	    }
 
 	    public function send_membership_reminder($id = null)
