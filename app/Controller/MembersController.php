@@ -7,12 +7,37 @@
 	Configure::config('default', new PhpReader());
 	Configure::load('hms', 'default');
 
+	/**
+	 * Controller for Member functions.
+	 *
+	 *
+	 * @package       app.Controller
+	 */
 	class MembersController extends AppController {
 	    
+	    //! We need the Html, Form, Tinymce and Currency helpers.
+	    /*!
+	    	@sa http://api20.cakephp.org/class/html-helper
+	    	@sa http://api20.cakephp.org/class/form-helper
+	    	@sa TinymceHelper
+	    	@sa CurrencyHelper
+	    */
 	    public $helpers = array('Html', 'Form', 'Tinymce', 'Currency');
 
+	    //! We need the MailChimp and Krb components.
+	    /*!
+	    	@sa MailChimpComponent
+	    	@sa KrbComponent
+	    */
 	    public $components = array('MailChimp', 'Krb');
 
+	    //! Test to see if a user is authorized to make a request.
+	    /*!
+	    	@param array $user Member record for the user.
+	    	@param CakeRequest $request The request the user is attempting to make.
+	    	@retval bool True if the user is authorized to make the request, otherwise false.
+	    	@sa http://api20.cakephp.org/class/cake-request
+	    */
 	    public function isAuthorized($user, $request)
 	    {
 	    	if(parent::isAuthorized($user, $request))
@@ -62,42 +87,49 @@
 	    	return false;
 	    }
 
+	    //! Perform any actions that should be performed before any controller action
+	    /*!
+	    	@sa http://api20.cakephp.org/class/controller#method-ControllerbeforeFilter
+	    */
 	    public function beforeFilter() {
 	        parent::beforeFilter();
 	        $this->Auth->allow('logout', 'login', 'register', 'forgot_password', 'setup_login', 'setup_details');
 	    }
 
-	    # Show some basic info, and link to other things
+	    //! Show a list of all Status and a count of how many members are in each status.
 	    public function index() {
 
-	    	# Need the Status model here
-	    	$statusList = $this->Member->Status->find('all');
+	    	/*
+	    		Data should be presented to the view in an array like so:
+	    			[n] => 
+	    				[id] => status id
+	    				[title] => status title
+	    				[desc] => status description
+	    				[count] => number of members with this status
+	    	*/
 
-	    	# Come up with a count of all members
-	    	# And a count for each status
-	    	
-	    	$memberStatusCount = array();
-	    	# Init the array
-	    	foreach ($statusList as $current) {
-	    		$memberStatusCount[$current['Status']['title']] = 
-	    			array( 	'id' => $current['Status']['status_id'],
-	    					'desc' => $current['Status']['description'],
-	    					'count' => 0
-	    			);
+	    	$statusInfoList = $this->Member->Status->getIdNameDescriptionAll();
+	    	$memberStatusInfo = array();
+	    	foreach ($statusInfoList as $statusInfo) 
+	    	{
+
+	    		$id = Hash::get($statusInfo, 'Status.status_id');
+	    		$title = Hash::get($statusInfo, 'Status.title');
+	    		$desc = Hash::get($statusInfo, 'Status.description');
+	    		$count = $this->Member->getCountForStatus( $id );
+
+	    		array_push($memberStatusInfo, 
+	    			array( 
+	    				'id' => $id, 
+	    				'title' => $title, 
+	    				'desc' => $desc,
+	    				'count' => $count,
+	    			)
+	    		);
 	    	}
 
-	    	$memberTotalCount = 0;
-	    	foreach ($this->Member->find('all') as $member) {
-	    		$memberTotalCount++;
-	    		$memberStatus = $member["Status"]['title'];
-	    		if(isset($memberStatusCount[$memberStatus]))
-	    		{
-	    			$memberStatusCount[$memberStatus]['count']++;	
-	    		}
-	    	}
-
-	    	$this->set('memberStatusCount', $memberStatusCount);
-	    	$this->set('memberTotalCount', $memberTotalCount);
+	    	$this->set('memberStatusInfo', $memberStatusInfo);
+	    	$this->set('memberTotalCount', $this->Member->getCount());
 
 	    	$this->Nav->add('Register Member', 'members', 'register');
     		$this->Nav->add('E-mail all current members', 'members', 'email_members_with_status', array( 2 ) );

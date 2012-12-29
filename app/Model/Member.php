@@ -355,5 +355,24 @@
 		{
 			return Member::isInGroup($user, 6);
 		}
+
+		//! Find how many members have a certain Status.
+		/*!
+			@param int $status_id The id of the Status record to check.
+			@retval int The number of member records that belong to the Status.
+		*/
+		public function getCountForStatus($status_id)
+		{
+			return $this->find( 'count', array( 'conditions' => array( $this->belongsTo['Status']['foreignKey'] => $status_id ) ) );
+		}
+
+		//! Find out how many member records exist in the database.
+		/*!
+			@retval int The number of member records in the database.
+		*/
+		public function getCount()
+		{
+			return $this->find( 'count' );
+		}
 	}
 ?>

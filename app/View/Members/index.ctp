@@ -26,10 +26,20 @@
             No. Members with this status
         </th>
     </tr>
-    <?php foreach ($memberStatusCount as $title => $data): ?>
+        <?php
+            /*
+                Data should be presented to the view in an array like so:
+                            [n] => 
+                                [id] => status id
+                                [title] => status title
+                                [desc] => status description
+                                [count] => number of members with this status
+            */ 
+            foreach ($memberStatusInfo as $data):
+        ?>
         <tr>
             <td>
-                <?php echo $this->Html->link($title, array('controller' => 'members', 'action' => 'list_members_with_status', $data['id'])); ?>
+                <?php echo $this->Html->link($data['title'], array('controller' => 'members', 'action' => 'list_members_with_status', $data['id'])); ?>
             </td>
             <td>
                 <?php echo $data['desc']; ?>
@@ -38,7 +48,7 @@
                 <?php echo $data['count'] ?>
             </td>
         </tr>
-    <? endforeach; ?>
+    <?php endforeach; ?>
     <tr>
         <td>
             <?php echo $this->Html->link('All', array('controller' => 'members', 'action' => 'list_members')); ?>
