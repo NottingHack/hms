@@ -109,6 +109,7 @@ class MemberTest extends CakeTestCase
         $this->assertIdentical($this->Member->getCountForStatus(4), 1);
         $this->assertIdentical($this->Member->getCountForStatus(5), 1);
         $this->assertIdentical($this->Member->getCountForStatus(6), 1);
+        $this->assertIdentical($this->Member->getCountForStatus(0), 0);
     }
 
     public function testGetCount()
