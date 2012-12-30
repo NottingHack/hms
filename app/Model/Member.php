@@ -9,7 +9,8 @@
 	 *
 	 * @package       app.Model
 	 */
-	class Member extends AppModel {
+	class Member extends AppModel 
+	{
 
 		const MIN_PASSWORD_LENGTH = 6; //!< The minimum length passwords must be.
 		const MIN_USERNAME_LENGTH = 3; //!< The minimum length usernames must be.
@@ -161,20 +162,22 @@
 		//! Validation function to see if the user-supplied username is already taken.
 		/*!
 			@param array $check The username to check.
-			@retval bool True if the supplied username doesn't exist in the database, otherwise false.
+			@retval bool True if the supplied username exists in the database (case-insensitive) registered to a different user, otherwise false.
 		*/
 		public function checkUniqueUsername($check)
 		{
 			$lowercaseUsername = strtolower($check);
-			$records = $this->find('all', array(  'fields' => array('Member.username'),
-													'conditions' => array( 
-														'Member.username LIKE' => $lowercaseUsername,
-														'Member.member_id NOT' => $this->data['Member']['member_id'],
-													) 
-												)
+			$records = $this->find('all', 
+				array(  'fields' => array('Member.username'),
+					'conditions' => array( 
+						'Member.username LIKE' => $lowercaseUsername,
+						'Member.member_id NOT' => $this->data['Member']['member_id'],
+					) 
+				)
 			);
 
-			foreach ($records as $record) {
+			foreach ($records as $record) 
+			{
 				if(strtolower($record['Member']['username']) == $lowercaseUsername)
 				{
 					return false;
@@ -201,92 +204,12 @@
 			@param array $options Any options that were passed to the Save method
 			@sa http://book.cakephp.org/2.0/en/models/callback-methods.html#beforesave
 		*/
-		public function beforeSave($options = array()) {
-
-			if( isset($this->data['Member']['member_status']) )
-			{
-				# Have to do a few things before we save
-				$memberWillBeCurrentMember = $this->data['Member']['member_status'] == 2;
-
-				if( isset( $this->data['Member'] ) &&
-					isset( $this->data['Member']['member_number'] ) === false &&
-					$memberWillBeCurrentMember)
-				{
-					# We're setting this member to be a 'current member' for the first time, need to modify some things
-
-					# Set the member number and join date
-					# Member number is totally fucked up with hard-coded entries and missing entries, so we need to find what the highest number is
-					$highestMemberNumber = $this->find( 'first', array( 'conditions' => array( 'Member.member_number !=' => null),  'order' => 'Member.member_number DESC', 'fields' => 'Member.member_number' ) );
-					$this->data['Member']['member_number'] = $highestMemberNumber['Member']['member_number'] + 1;
-					$this->data['Member']['join_date'] = date( 'Y-m-d' );
-				}
-			}
-
+		public function beforeSave($options = array()) 
+		{
 			# Must never ever ever alter the balance
 			unset( $this->data['Member']['balance'] );
 
 			return true;
-		}
-
-		//! If membership has just been revoked, clear all Group records for the Member.
-		/*!
-			Privileges are tied to groups, so we need to make sure that a former Member is no-longer
-			a part of any Group.
-
-			@param int $id The ID of the Member record.
-			@param array $newData The new member details.
-		*/
-		public function clearGroupsIfMembershipRevoked($id, $newData) {
-			if( isset($newData['Member']['member_status']) )
-			{
-				# If membership is being revoked, clear all groups
-				if($newData['Member']['member_status'] == 3)
-				{
-					$this->MemberGroup->deleteAll(array( 'MemberGroup.member_id' => $id ));
-				}
-			}
-		}
-
-		//! If the Member has just had their MemberStatus set to 'current member' then we need to make sure they're a member of the 'current members' Group.
-		/*!
-			Privileges are tied to groups, so any Member that has the 'current member' MemberStatus should be in the 'current members' Group
-			so that they have the correct permissions.
-
-			@param int $id The ID of the Member record.
-			@param array $newData The new member details.
-		*/
-		public function addToCurrentMemberGroupIfStatusIsCurrentMember($id, $newData) {
-
-			if( isset($newData['Member']['member_status']) )
-			{
-				# If membership is current_member, add to the current member group
-				if($newData['Member']['member_status'] == 2)
-				{
-					$this->MemberGroup->deleteAll(array( 'MemberGroup.member_id' => $id, 'MemberGroup.grp_id' => 2 ));
-
-					# Group 2 is for current members
-					$currentGroups = Hash::extract($newData, 'Group.Group.{n}');
-					print_r($currentGroups);
-					if( in_array(2, $currentGroups) == false )
-					{
-						array_push($currentGroups, array( 'grp_id' => 2, 'member_id' => $id ));
-					}
-
-					$newData['Group']['Group'] = $currentGroups;
-
-					$this->save($newData);
-				}
-			}
-		}
-
-		//! Checks to see if a specific Member is part of a specific Group.
-		/*!
-			@param int $memberId The ID of the member record.
-			@param int $groupId The ID of the Group record we're checking for.
-		*/
-		public function memberInGroup($memberId, $groupId)
-		{
-			return in_array($groupId, Hash::extract( $this->find('first', array( 'conditions' => array( 'Member.member_id' => $memberId ) ) ), 'Group.{n}.grp_id' ));
 		}
 
 		//! Add an extra validation rule to the e-mail field stating that the user supplied e-mail must match what's in the database.
@@ -307,53 +230,6 @@
 		public function removeEmailMustMatch()
 		{
 			$this->validator()->remove('email', 'emailMustMatch');
-		}
-
-		//! Function to check to see if a Member is in a Group without hitting the database.
-		/*!
-			@param array $member The Member record to check.
-			@param int $groupId The Group ID to check against.
-			@retval bool True if the Member is in the Group, false otherwise.
-		*/
-		public static function isInGroup($member, $groupId)
-		{
-			if(	isset($member) &&
-				isset($member['Group']))
-			{
-				return in_array($groupId, Hash::extract($member['Group'], '{n}.grp_id'));
-			}
-
-			return false;
-		}
-
-		//! Test to see if a Member is in the 'full access' Group without hitting the database
-		/*!
-			@param array $member The Member record to check.
-			@retval bool True if the Member is in the 'full access' Group, false otherwise.
-		*/
-		public static function isInGroupFullAccess($user)
-		{
-			return Member::isInGroup($user, 1);
-		}
-
-		//! Test to see if a Member is in the 'member admin' Group without hitting the database
-		/*!
-			@param array $member The Member record to check.
-			@retval bool True if the Member is in the 'member admin' Group, false otherwise.
-		*/
-		public static function isInGroupMemberAdmin($user)
-		{
-			return Member::isInGroup($user, 5);
-		}
-
-		//! Test to see if a Member is in the 'tour guide' Group without hitting the database
-		/*!
-			@param array $member The Member record to check.
-			@retval bool True if the Member is in the 'tour guide' Group, false otherwise.
-		*/
-		public static function isInGroupTourGuide($user)
-		{
-			return Member::isInGroup($user, 6);
 		}
 
 		//! Find how many members have a certain Status.

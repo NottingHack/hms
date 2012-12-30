@@ -13,7 +13,8 @@
 	 *
 	 * @package       app.Controller
 	 */
-	class MembersController extends AppController {
+	class MembersController extends AppController 
+	{
 	    
 	    //! We need the Html, Form, Tinymce and Currency helpers.
 	    /*!
@@ -51,7 +52,8 @@
 	    	$userIdIsSet = isset( $user['Member'] ) && isset( $user['Member']['member_id'] );
 	    	$userId = $userIdIsSet ? $user['Member']['member_id'] : null;
 
-	    	switch ($request->action) {
+	    	switch ($request->action) 
+	    	{
 	    		case 'index':
 	    		case 'list_members':
 	    		case 'list_members_with_status':
@@ -91,13 +93,15 @@
 	    /*!
 	    	@sa http://api20.cakephp.org/class/controller#method-ControllerbeforeFilter
 	    */
-	    public function beforeFilter() {
+	    public function beforeFilter() 
+	    {
 	        parent::beforeFilter();
 	        $this->Auth->allow('logout', 'login', 'register', 'forgot_password', 'setup_login', 'setup_details');
 	    }
 
 	    //! Show a list of all Status and a count of how many members are in each status.
-	    public function index() {
+	    public function index() 
+	    {
 
 	    	/*
 	    		Data should be presented to the view in an array like so:
@@ -136,12 +140,14 @@
 	    }
 
 		# List info about all members
-		public function list_members() {
+		public function list_members() 
+		{
 	        $this->set('members', $this->Member->find('all'));
 	    }
 
 		# List info about all members with a certain status
-		public function list_members_with_status($statusId) {
+		public function list_members_with_status($statusId) 
+		{
 			# Uses the default list view
 			$this->view = 'list_members';
 
@@ -158,7 +164,8 @@
 	    }
 
 	    # List info about all members who's email or name is like $query
-		public function search() {
+		public function search() 
+		{
 
 			# Uses the default list view
 			$this->view = 'list_members';
@@ -174,12 +181,14 @@
 	    }
 
 	    # Add a new member
-	    public function register() {
+	    public function register() 
+	    {
 
 	    	$mailingLists = $this->_get_mailing_lists_and_subscruibed_status(null);
 			$this->set('mailingLists', $mailingLists);
 
-	    	if ($this->request->is('post')) {
+	    	if ($this->request->is('post')) 
+	    	{
 	    		 
 	    		$this->Member->set($this->data);
 	    		if($this->Member->validates(array('fieldList' => array('email'))))
@@ -210,7 +219,8 @@
 		                $subscribedMailingLists = array();
 		                if(isset($this->request->data['MailingLists']['MailingLists']))
 		                {
-			                foreach ($this->request->data['MailingLists']['MailingLists'] as $key => $value) {
+			                foreach ($this->request->data['MailingLists']['MailingLists'] as $key => $value) 
+			                {
 			                	$mailingListToSubscruibe = $mailingLists[$key];
 			                	array_push($subscribedMailingLists, $mailingListToSubscruibe);
 			                }
@@ -244,7 +254,9 @@
 						$memberEmail->send();
 
 						$this->redirect(array( 'controller' => 'pages', 'action' => 'home'));
-		            } else {
+		            } 
+		            else 
+		            {
 		                $this->Session->setFlash('Unable to register.');
 		            }
 		        }
@@ -494,7 +506,8 @@
 	    	}
 	    }
 
-	    public function approve_member($id = null) {
+	    public function approve_member($id = null) 
+	    {
 	    	if($id != null)
 	    	{
 	    		# Grab the member
@@ -574,7 +587,8 @@
 	    	$this->redirect($this->referer());
 	    }
 
-	    public function change_password($id = null) {
+	    public function change_password($id = null) 
+	    {
 
 	    	Controller::loadModel('ChangePassword');
 
@@ -586,7 +600,8 @@
 			$this->set('memberIsMemberAdmin', $memberInfo);
 			$this->set('memberEditingOwnProfile', AuthComponent::user('Member.member_id') == $id);
 
-			if ($this->request->is('get')) {
+			if ($this->request->is('get')) 
+			{
 			}
 			else
 			{
@@ -791,7 +806,8 @@
 
 	    private function _set_member_password($memberInfo, $newPassword)
 	    {
-	    	switch ($this->Krb->userExists($memberInfo['Member']['username'])) {
+	    	switch ($this->Krb->userExists($memberInfo['Member']['username'])) 
+	    	{
 	    		case TRUE:
 	    			return $this->Krb->changePassword($memberInfo['Member']['username'], $newPassword);
 
@@ -876,7 +892,8 @@
 			$memberEmail->send();
 	    }
 
-	    public function view($id = null) {
+	    public function view($id = null) 
+	    {
 	        $this->Member->id = $id;
 	        $memberInfo = $this->Member->read();
 
@@ -908,7 +925,8 @@
 
 	        $this->Nav->add('Edit', 'members', 'edit', array( $id ) );
 	        $this->Nav->add('Change Password', 'members', 'change_password', array( $id ) );
-			switch ($memberInfo['Member']['member_status']) {
+			switch ($memberInfo['Member']['member_status']) 
+			{
 		        case 1: # Prospective member
 		        	$this->Nav->add('Send Membership Reminder', 'members', 'send_membership_reminder', array($id));
 		        	break;
@@ -939,7 +957,8 @@
 		    $this->set('mailingLists', $this->_get_mailing_lists_and_subscruibed_status($memberInfo));
 	    }
 
-	    public function edit($id = null) {
+	    public function edit($id = null) 
+	    {
 
 	    	$this->set('groups', $this->Member->Group->find('list',array('fields'=>array('grp_id','grp_description'))));
 	    	$this->set('statuses', $this->Member->Status->find('list',array('fields'=>array('status_id','title'))));
@@ -961,9 +980,12 @@
 				$mailingLists = $this->_get_mailing_lists_and_subscruibed_status($data);
 				$this->set('mailingLists', $mailingLists);
 
-				if ($this->request->is('get')) {
+				if ($this->request->is('get')) 
+				{
 				    $this->request->data = $this->sanitise_edit_data($data);
-				} else {
+				} 
+				else 
+				{
 					# Need to set some more info about the pin
 					$this->request->data['Pin']['pin_id'] = $data['Pin']['pin_id'];
 
@@ -973,7 +995,8 @@
 					$this->request->data = $this->sanitise_edit_data($this->request->data);
 
 
-				    if ($this->Member->saveAll($this->request->data)) {
+				    if ($this->Member->saveAll($this->request->data)) 
+				    {
 
 				    	$flashMessage = 'Member details updated.';
 
@@ -996,7 +1019,9 @@
 
 				        $this->Session->setFlash($flashMessage);
 				        $this->redirect(array('action' => 'view', $id));
-				    } else {
+				    } 
+				    else 
+				    {
 				        $this->Session->setFlash('Unable to update member details.');
 				    }
 				}
@@ -1012,7 +1037,8 @@
 			$memberInfo = $this->Member->find('first', array('conditions' => array('Member.member_id' => $memberId)));
 			$currentMailingLists = $this->_get_mailing_lists_and_subscruibed_status($memberInfo);
 
-			foreach ($currentMailingLists as $mailingList) {
+			foreach ($currentMailingLists as $mailingList) 
+			{
 				# Does the member want to be want to be subscribed to this list?
 				$wantToBeSubscribed = in_array($mailingList['id'], $subscribeToLists);
 				if($wantToBeSubscribed != $mailingList['subscribed'])
@@ -1208,7 +1234,8 @@
 			}
 		}
 
-		public function email_members_with_status($status) {
+		public function email_members_with_status($status) 
+		{
 
 			Controller::loadModel('MemberEmail');
 
@@ -1227,8 +1254,11 @@
 			$this->set('statusName', $statusName);
 			$this->set('statusId', $status);
 
-			if ($this->request->is('get')) {
-			} else {
+			if ($this->request->is('get')) 
+			{
+			}
+			else 
+			{
 				$this->MemberEmail->set($this->data);
 				if($this->MemberEmail->validates())
 				{
@@ -1243,7 +1273,8 @@
 						strlen(trim($message)) > 0 )
 					{
 						# Send these out as seperate e-mails
-						foreach ($memberEmails as $email) {
+						foreach ($memberEmails as $email) 
+						{
 							# Send the message out
 							$email = $this->prepare_email();
 							$email->to($memberEmails);
@@ -1295,9 +1326,12 @@
 			return $email;
 		}
 
-		public function login() {
-		    if ($this->request->is('post')) {
-		        if ($this->Auth->login()) {
+		public function login() 
+		{
+		    if ($this->request->is('post')) 
+		    {
+		        if ($this->Auth->login()) 
+		        {
 		        	$memberInfo = AuthComponent::user();
 		        	# Set the last login time
 		        	unset($memberInfo['MemberAuth']);
@@ -1305,13 +1339,16 @@
 		        	$memberInfo['MemberAuth']['last_login'] = date( 'Y-m-d H:m:s' );
 		        	$this->Member->MemberAuth->save($memberInfo);
 		            $this->redirect($this->Auth->redirect());
-		        } else {
+		        } 
+		        else 
+		        {
 		            $this->Session->setFlash(__('Invalid username or password, try again'));
 		        }
 		    }
 		}
 
-		public function logout() {
+		public function logout() 
+		{
 		    $this->redirect($this->Auth->logout());
 		}
 
@@ -1358,12 +1395,14 @@
 	        }
 		}
 
-		private function get_readable_account_list($initialElement = null) {
+		private function get_readable_account_list($initialElement = null) 
+		{
 			# Grab a list of member names and ID's and account id's
 			$memberList = $this->Member->find('all', array( 'fields' => array( 'member_id', 'name', 'account_id' )));
 
 			# Create a list with account_id and member_names
-			foreach ($memberList as $memberInfo) {
+			foreach ($memberList as $memberInfo) 
+			{
 				if( isset($accountList[$memberInfo['Member']['account_id']]) == false )
 				{
 					$accountList[$memberInfo['Member']['account_id']] = array( );
@@ -1374,7 +1413,8 @@
 
 			$accountNameList = $this->Member->Account->find('list', array( 'fields' => array( 'account_id', 'payment_ref' )));
 
-			foreach ($accountList as $accountId => $members) {
+			foreach ($accountList as $accountId => $members) 
+			{
 				$formattedMemberList = $members[0];
 				$numMembers = count($members);
 				for($i = 1; $i < $numMembers; $i++)
@@ -1403,7 +1443,8 @@
 				$initialElement != null)
 			{
 				$tempArray = $initialElement;
-				foreach ($readableAccountList as $key => $value) {
+				foreach ($readableAccountList as $key => $value) 
+				{
 					if($key >= 0)
 					{
 						$tempArray[$key] = $value;
