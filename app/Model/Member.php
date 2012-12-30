@@ -41,8 +41,8 @@
 		*/
 		public $hasOne = array(
 	        'Pin' => array(
-	            'className'    => 'Pin',
-	            'dependent'    => true
+	            'className' => 'Pin',
+	            'dependent' => true
 	        ),
 	    );
 
@@ -60,15 +60,17 @@
 	    //! We have and belong to many Group.
 	    /*!
 	    	Group is set to be unique as it is impossible for the Member to be in the same Group twice.
+	    	We also specify a model to use as the 'with' model so that we can add methods to it.
 	    */
 		public $hasAndBelongsToMany = array(
 	        'Group' =>
 	            array(
-	                'className'              => 'Group',
-	                'joinTable'              => 'member_group',
-	                'foreignKey'             => 'member_id',
-	                'associationForeignKey'  => 'grp_id',
-	                'unique'                 => true,
+	                'className' => 'Group',
+	                'joinTable' => 'member_group',
+	                'foreignKey' => 'member_id',
+	                'associationForeignKey' => 'grp_id',
+	                'unique' => true,
+	                'with' => 'GroupsMember',				
 	            ),
 	    );
 
