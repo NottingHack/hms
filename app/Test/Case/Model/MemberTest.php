@@ -4,7 +4,7 @@
 
     class MemberTest extends CakeTestCase 
     {
-        public $fixtures = array( 'app.GroupsMember', 'app.member', 'app.Status', 'app.Group' );
+        public $fixtures = array( 'app.GroupsMember', 'app.member', 'app.Status', 'app.Group', 'app.Account' );
 
         public function setUp() 
         {

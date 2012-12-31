@@ -36,7 +36,7 @@
 	    	@retval string A unique (at the time of function-call) payment reference.
 	    	@sa http://www.bacs.co.uk/Bacs/Businesses/BacsDirectCredit/Receiving/Pages/PaymentReferenceInformation.aspx
 	    */
-		public function generate_payment_ref()
+		public function generatePaymentRef()
 		{
 			// Payment ref is a randomly generates string of 'safechars'
 			// Stolen from London Hackspace code
