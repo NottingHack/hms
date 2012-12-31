@@ -1,22 +1,40 @@
 <?php
-	class Account extends AppModel {
-		
-		public $useTable = "account";
 
-		public $primaryKey = 'account_id';
+	App::uses('AppModel', 'Model');
 
+	/**
+	 * Model for all group data
+	 *
+	 *
+	 * @package       app.Model
+	 */
+	class Account extends AppModel 
+	{
+		public $useTable = "account";	//!< Specify the table to use.
+
+		public $primaryKey = 'account_id';	//!< Specify the primary key to use.
+
+		//! An Account can have many Member
 		public $hasMany = array(
 	        'Member' => array(
 	            'className'    => 'Member',
 	        ),
 	    );
 
+		//! Validation rules.
+		/*!
+			Account Reference must not be empty.
+		*/
 	    public $validate = array(
 	        'account_ref' => array(
 	            'rule' => 'notEmpty'
 	        ),
 	    );
 
+	    //! Generate a unique payment reference
+	    /*!
+	    	@retval string A unique (at the time of function-call) payment reference.
+	    */
 		public function generate_payment_ref()
 		{
 			# Payment ref is a randomly generates string of 'safechars'
