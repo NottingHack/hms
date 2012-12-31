@@ -1,8 +1,22 @@
 <?php
-	class MemberEmail extends AppModel {
-		
-		public $useTable = false; # This is a dummy model so we can get nice validation for the email_members_with_status view
 
+	App::uses('AppModel', 'Model');
+
+	/**
+	 * Model to provide validation for the email members form/view.
+	 *
+	 *
+	 * @package       app.Model
+	 */
+	class MemberEmail extends AppModel 
+	{
+		public $useTable = false; //!< Don't use any table, this is just a dummy model.
+
+		//! Validation rules.
+		/*!
+			Subject must not be empty.
+			Message must not be empty.
+		*/
 	    public $validate = array(
 	        'subject' => array(
 	            'rule' => 'notEmpty'

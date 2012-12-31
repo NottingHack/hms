@@ -10,7 +10,7 @@
 	 */
 	class ChangePassword extends AppModel 
 	{
-		public $useTable = false; //!< Don't use any table, this is just a dummy view.
+		public $useTable = false; //!< Don't use any table, this is just a dummy model.
 
 		//! Validation rules.
 		/*!
