@@ -46,8 +46,7 @@
 	    		return true;
 	    	}
 
-	    	$userIsMemberAdmin = Member::isInGroupMemberAdmin( $user );
-	    	$userIsTourGuide = Member::isInGroupTourGuide( $user );
+	    	$userIsMemberAdmin = $this->Member->GroupsMember->isMemberInGroup( Hash::extract($user, 'Member.member_id'), Group::MEMBER_ADMIN );
 	    	$actionHasParams = isset( $request->params ) && isset($request->params['pass']) && count( $request->params['pass'] ) > 0;
 	    	$userIdIsSet = isset( $user['Member'] ) && isset( $user['Member']['member_id'] );
 	    	$userId = $userIdIsSet ? $user['Member']['member_id'] : null;

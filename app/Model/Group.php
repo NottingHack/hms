@@ -15,6 +15,7 @@
 	    const CURRENT_MEMBERS = 2; 	//!< The id of the current members group.
 	    const GATEKEEPER_ADMIN = 3; //!< The id of the gatekeeper admin group.
 	    const SNACKSPACE_ADMIN = 4; //!< The id of the snackspace admin group.
+	    const MEMBER_ADMIN = 5; //!< The id of the snackspace admin group.
 		
 		public $useTable = "grp";	//!< Specify the table to use, as we don't use the default.
 

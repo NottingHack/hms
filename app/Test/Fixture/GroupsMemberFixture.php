@@ -12,6 +12,18 @@
 
 		public $records = array(
 			array('member_id' => 1, 'grp_id' => 1),
+
+			array('member_id' => 1, 'grp_id' => 2),
+			array('member_id' => 2, 'grp_id' => 2),
+			array('member_id' => 3, 'grp_id' => 2),
+			array('member_id' => 4, 'grp_id' => 2),
+			array('member_id' => 5, 'grp_id' => 2),
+
+			array('member_id' => 2, 'grp_id' => 3),
+
+			array('member_id' => 4, 'grp_id' => 4),
+
+			array('member_id' => 5, 'grp_id' => 5),
 		);
 
 		public function create($db)

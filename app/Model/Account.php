@@ -34,17 +34,18 @@
 	    //! Generate a unique payment reference
 	    /*!
 	    	@retval string A unique (at the time of function-call) payment reference.
+	    	@sa http://www.bacs.co.uk/Bacs/Businesses/BacsDirectCredit/Receiving/Pages/PaymentReferenceInformation.aspx
 	    */
 		public function generate_payment_ref()
 		{
-			# Payment ref is a randomly generates string of 'safechars'
-			# Stolen from London Hackspace code
+			// Payment ref is a randomly generates string of 'safechars'
+			// Stolen from London Hackspace code
 			$safeChars = "2346789BCDFGHJKMPQRTVWXY";
 
-			# We prefix the ref with a string that lets people know it's us
+			// We prefix the ref with a string that lets people know it's us
 			$prefix = 'HSNOTTS';
 
-			# Payment references can be up to 18 chars according to: http://www.bacs.co.uk/Bacs/Businesses/BacsDirectCredit/Receiving/Pages/PaymentReferenceInformation.aspx
+			// Payment references can be up to 18 chars according to: http://www.bacs.co.uk/Bacs/Businesses/BacsDirectCredit/Receiving/Pages/PaymentReferenceInformation.aspx
 			$maxRefLength = 18;
 
 			$paymentRef = '';

@@ -30,13 +30,13 @@
 			@param int $groupId The primary key of the Group record.
 			@retval bool True if the Member is in the Group, false otherwise.
 		*/
-		public function is_member_in_group($memberId, $groupId)
+		public function isMemberInGroup($memberId, $groupId)
 		{
 			$numEntries = $this->find('count', 
 				array('conditions' => 
 					array(
-						'member_id' => $member_id, 
-						'grp_id' => $groupId
+						'GroupsMember.member_id' => $memberId, 
+						'GroupsMember.grp_id' => $groupId
 					)
 				)
 			);

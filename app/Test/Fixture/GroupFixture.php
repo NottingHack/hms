@@ -10,6 +10,7 @@
 			array('grp_id' => 2, 'grp_description' => 'Current Members'),
 			array('grp_id' => 3, 'grp_description' => 'Snackspace Admin'),
 			array('grp_id' => 4, 'grp_description' => 'Gatekeeper Admin'),
+			array('grp_id' => 5, 'grp_description' => 'Member Admin'),
 		);
 	}
 

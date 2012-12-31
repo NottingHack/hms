@@ -115,10 +115,12 @@ class AppController extends Controller {
 
     public function isAuthorized($user, $request)
     {
-        /*if(Member::isInGroupFullAccess($user))
+        $this->Member = ClassRegistry::init('Member');
+
+        if($this->Member->GroupsMember->isMemberInGroup( Hash::extract($user, 'Member.member_id'), Group::FULL_ACCESS ))
         {
             return true;
-        }*/
+        }
         
         return false;
     }
