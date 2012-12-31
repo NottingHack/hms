@@ -2,7 +2,7 @@
 
 	class MembersControllerTest extends ControllerTestCase
 	{
-		public $fixtures = array( 'app.Member', 'app.Status', 'app.Group', 'app.GroupsMember' );
+		public $fixtures = array( 'app.Member', 'app.Status', 'app.Group', 'app.GroupsMember', 'app.Account' );
 
 		public function testIsAuthorized()
 		{
