@@ -116,6 +116,15 @@
         {
             $this->assertIdentical($this->Member->getCount(), 14);
         }
+
+        public function testDoesMemberExistWithEmail()
+        {
+            $this->assertIdentical( $this->Member->doesMemberExistWithEmail( 'm.pryce@example.org' ), true );
+            $this->assertIdentical( $this->Member->doesMemberExistWithEmail( strtoupper('a.santini@hotmail.com') ), true );
+            $this->assertIdentical( $this->Member->doesMemberExistWithEmail( 'CherylLCarignan@teleworm.us' ), true );
+            $this->assertIdentical( $this->Member->doesMemberExistWithEmail( 'DorothyDRussell@dayrep.com' ), true );
+            $this->assertIdentical( $this->Member->doesMemberExistWithEmail( 'about@example.org' ), false );
+        }
     }
 
 ?>

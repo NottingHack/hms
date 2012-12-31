@@ -252,5 +252,15 @@
 		{
 			return $this->find( 'count' );
 		}
+
+		//! Find out if we have record of a Member with a specific e-mail address.
+		/*!
+			@param string $email E-mail address to check.
+			@retval bool True if there is a Member with this e-mail, false otherwise.
+		*/
+		public function doesMemberExistWithEmail($email)
+		{
+			return $this->find( 'count', array( 'conditions' => array( 'Member.email' => strtolower($email) ) ) ) > 0;
+		}
 	}
 ?>

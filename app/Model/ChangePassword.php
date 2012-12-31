@@ -15,8 +15,8 @@
 		//! Validation rules.
 		/*!
 			Current Password must not be empty.
-			New Password must not be empty, and must be over Member::MIN_PASSWORD_LENGTH characters.
-			New Password Confirm must not be empty, must match New Password and must be over Member::MIN_PASSWORD_LENGTH characters.
+			New Password must not be empty, and must be at-least Member::MIN_PASSWORD_LENGTH characters.
+			New Password Confirm must not be empty, must match New Password and must be at-least Member::MIN_PASSWORD_LENGTH characters.
 		*/
 	    public $validate = array(
 	        'current_password' => array(
