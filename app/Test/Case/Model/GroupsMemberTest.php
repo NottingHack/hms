@@ -1,6 +1,6 @@
 <?php
 
-    App::uses('Member', 'Model');
+    App::uses('GroupsMember', 'Model');
 
     class GroupsMemberTest extends CakeTestCase 
     {
