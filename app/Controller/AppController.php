@@ -68,6 +68,7 @@ class AppController extends Controller {
     }
 
     public function beforeRender() {
+        /*
         # AT [16/09/2012] Send any links added to the NavComponent to the view
         $this->set('navLinks', $this->Nav->get_allowed_actions());
 
@@ -109,14 +110,15 @@ class AppController extends Controller {
         $this->set('navLinks', $this->Nav->get_allowed_actions());
 
         $this->set('version', $this->get_version_string());
+        */
     }
 
     public function isAuthorized($user, $request)
     {
-        if(Member::isInGroupFullAccess($user))
+        /*if(Member::isInGroupFullAccess($user))
         {
             return true;
-        }
+        }*/
         
         return false;
     }

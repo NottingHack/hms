@@ -4,7 +4,7 @@ App::uses('Member', 'Model');
 
 class MemberTest extends CakeTestCase 
 {
-    public $fixtures = array( 'app.member', 'app.Status' );
+    public $fixtures = array( 'app.GroupsMember', 'app.member', 'app.Status', 'app.Group' );
 
     public function setUp() 
     {

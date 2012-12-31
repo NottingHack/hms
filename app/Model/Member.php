@@ -54,7 +54,7 @@
 	    	'StatusUpdate' => array(
 	    		'order' => 'StatusUpdate.timestamp DESC',
 	    		'limit'	=> '1',	
-	    	)
+	    	),
 	    );
 
 	    //! We have and belong to many Group.

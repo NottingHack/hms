@@ -4,6 +4,24 @@
 	{
 		public $useTable = 'member_group';
 
+		public $belongsTo = array(
+			'Member' => array(
+				'className' => 'Member',
+				'foreignKey' => 'member_id',
+			),
+			'Group' => array(
+				'className' => 'Group',
+				'foreignKey' => 'grp_id',
+			),
+		);
+
+		/*public $belongsTo = array(
+			'Group' => array(
+				'className' => 'Group',
+				'foreignKey' => 'grp_id',
+			),
+		);*/
+
 		//! Test to see if a Member is in a Group.
 		/*!
 			@param int $memberId The primary key of the Member record.
@@ -16,7 +34,7 @@
 				array('conditions' => 
 					array(
 						'member_id' => $member_id, 
-						'group_id' => $groupId
+						'grp_id' => $groupId
 					)
 				)
 			);
