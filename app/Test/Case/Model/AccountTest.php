@@ -17,7 +17,7 @@
             $paymentRef = $this->Account->generatePaymentRef();
             $prefix = 'HSNOTTS';
 
-            $this->assertIdentical( strlen($paymentRef), 18 );
+            $this->assertIdentical( strlen($paymentRef), 18, 'Payment ref is incorrect length.' );
             $this->assertTextStartsWith( $prefix, $paymentRef );
 
             // Check for unsafe chars...
@@ -27,10 +27,10 @@
             for($i = 0; $i < strlen($unsafeChars); $i++)
             {
                 $char = $unsafeChars[$i];
-                $this->assertTextNotContains($char, $trimmedRef, "Payment ref string includes unsafe character: $char");
+                $this->assertTextNotContains($char, $trimmedRef, "Payment ref string includes unsafe character: $char.");
             }
 
-            $this->assertIdentical( $this->Account->find('count', array('conditions' => array( 'Account.payment_ref' => $paymentRef ) ) ), 0 );
+            $this->assertIdentical( $this->Account->find('count', array('conditions' => array( 'Account.payment_ref' => $paymentRef ) ) ), 0, 'Payment ref generated was not unique.' );
         }
     }
 

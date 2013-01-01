@@ -26,7 +26,7 @@
                 array('Status' => array('status_id' => 6, 'title' => 'Ex Member', 'description' => 'Former member, details only kept for a while')),
             );
 
-            $this->assertEqual( $results, $expectedResults );
+            $this->assertEqual( $results, $expectedResults, 'Array returned was incorrect.' );
         }
     }
 
