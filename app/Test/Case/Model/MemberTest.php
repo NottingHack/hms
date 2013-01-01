@@ -19,13 +19,13 @@
 
             $this->Member->data['Member']['password'] = $testEmail;
 
-            $this->assertIdentical($this->Member->passwordConfirmMatchesPassword($testEmail), true, 'Password failed to match');
-            $this->assertIdentical($this->Member->passwordConfirmMatchesPassword($anotherTestEmail), false, 'Password matched when it should not have.');
-            $this->assertIdentical($this->Member->passwordConfirmMatchesPassword(''), false, 'Password matched when it should not have.');
-            $this->assertIdentical($this->Member->passwordConfirmMatchesPassword(null), false, 'Password matched when it should not have.');
+            $this->assertTrue($this->Member->passwordConfirmMatchesPassword($testEmail), 'Password failed to match');
+            $this->assertFalse($this->Member->passwordConfirmMatchesPassword($anotherTestEmail), 'Password matched when it should not have.');
+            $this->assertFalse($this->Member->passwordConfirmMatchesPassword(''), 'Password matched when it should not have.');
+            $this->assertFalse($this->Member->passwordConfirmMatchesPassword(null), 'Password matched when it should not have.');
 
             $this->Member->data['Member']['password'] = 0;
-            $this->assertIdentical($this->Member->passwordConfirmMatchesPassword('0'), false, 'Password matched across types.');
+            $this->assertFalse($this->Member->passwordConfirmMatchesPassword('0'), 'Password matched across types.');
         }
 
         public function testCheckUniqueUsername()
@@ -36,19 +36,19 @@
 
             $this->Member->data['Member']['member_id'] = 900;
 
-            $this->assertIdentical($this->Member->checkUniqueUsername($testUsernameTaken), false, 'Username StrippingDemonic was not taken.');
-            $this->assertIdentical($this->Member->checkUniqueUsername(strtolower($testUsernameTaken)), false, 'Username strippingdemonic was not taken.');
-            $this->assertIdentical($this->Member->checkUniqueUsername(strtoupper($testUsernameTaken)), false, 'Username STRIPPINGDEMONIC was not taken.');
+            $this->assertFalse($this->Member->checkUniqueUsername($testUsernameTaken), 'Username StrippingDemonic was not taken.');
+            $this->assertFalse($this->Member->checkUniqueUsername(strtolower($testUsernameTaken)), 'Username strippingdemonic was not taken.');
+            $this->assertFalse($this->Member->checkUniqueUsername(strtoupper($testUsernameTaken)), 'Username STRIPPINGDEMONIC was not taken.');
 
-            $this->assertIdentical($this->Member->checkUniqueUsername($testUsernameNotTaken), true, 'Username TheAwfulGamer was taken.');
-            $this->assertIdentical($this->Member->checkUniqueUsername(strtolower($testUsernameNotTaken)), true, 'Username theawfulgamer was taken.');
-            $this->assertIdentical($this->Member->checkUniqueUsername(strtoupper($testUsernameNotTaken)), true, 'Username THEAWFULGAMER was taken.');
+            $this->assertTrue($this->Member->checkUniqueUsername($testUsernameNotTaken), 'Username TheAwfulGamer was taken.');
+            $this->assertTrue($this->Member->checkUniqueUsername(strtolower($testUsernameNotTaken)), 'Username theawfulgamer was taken.');
+            $this->assertTrue($this->Member->checkUniqueUsername(strtoupper($testUsernameNotTaken)), 'Username THEAWFULGAMER was taken.');
 
             $this->Member->data['Member']['member_id'] = 1;
 
-            $this->assertIdentical($this->Member->checkUniqueUsername($testUsernameTaken), true, 'Username test failed to exclude member 1.');
-            $this->assertIdentical($this->Member->checkUniqueUsername(strtolower($testUsernameTaken)), true, 'Username test failed to exclude member 1.');
-            $this->assertIdentical($this->Member->checkUniqueUsername(strtoupper($testUsernameTaken)), true, 'Username test failed to exclude member 1.');
+            $this->assertTrue($this->Member->checkUniqueUsername($testUsernameTaken), 'Username test failed to exclude member 1.');
+            $this->assertTrue($this->Member->checkUniqueUsername(strtolower($testUsernameTaken)), 'Username test failed to exclude member 1.');
+            $this->assertTrue($this->Member->checkUniqueUsername(strtoupper($testUsernameTaken)), 'Username test failed to exclude member 1.');
         }
 
         public function testCheckEmailMatch()
@@ -65,12 +65,12 @@
             for($i = 0; $i < count($testEmails); $i++)
             {
                 $this->Member->data['Member']['member_id'] = $i + 1;
-                $this->assertIdentical($this->Member->checkEmailMatch($testEmails[$i]), true, 'Email for member ' . $i + 1 . ' did not match ' . $testEmails[$i] . '.');
+                $this->assertTrue($this->Member->checkEmailMatch($testEmails[$i]), 'Email for member ' . $i + 1 . ' did not match ' . $testEmails[$i] . '.');
                 for($j = 0; $j < count($testEmails); $j++)
                 {
                     if($i != $j)
                     {
-                        $this->assertIdentical($this->Member->checkEmailMatch($testEmails[$j]), false, 'Email for member ' . $i + 1 . ' matched ' . $testEmails[$j] . '.');
+                        $this->assertFalse($this->Member->checkEmailMatch($testEmails[$j]), 'Email for member ' . $i + 1 . ' matched ' . $testEmails[$j] . '.');
                     }
                 }
             }
@@ -80,7 +80,7 @@
         {
             $this->Member->data['Member']['balance'] = -400;
             $this->Member->beforeSave();
-            $this->assertIdentical(isset($this->Member->data['Member']['balance']), false, 'BeforeSave failed to unset Member.balance.');
+            $this->assertFalse(isset($this->Member->data['Member']['balance']), 'BeforeSave failed to unset Member.balance.');
         }
 
         public function testAddEmailMustMatch()
@@ -119,11 +119,11 @@
 
         public function testDoesMemberExistWithEmail()
         {
-            $this->assertIdentical( $this->Member->doesMemberExistWithEmail( 'm.pryce@example.org' ), true, 'Failed to find member with e-mail: m.pryce@example.org.' );
-            $this->assertIdentical( $this->Member->doesMemberExistWithEmail( strtoupper('a.santini@hotmail.com') ), true, 'Failed to find member with e-mail: A.SANTINIT@HOTMAIL.COM.' );
-            $this->assertIdentical( $this->Member->doesMemberExistWithEmail( 'CherylLCarignan@teleworm.us' ), true, 'Failed to find member with e-mail: CherylLCarignan@teleworm.us.' );
-            $this->assertIdentical( $this->Member->doesMemberExistWithEmail( 'DorothyDRussell@dayrep.com' ), true, 'Failed to find member with e-mail: DorothyDRussell@dayrep.com.' );
-            $this->assertIdentical( $this->Member->doesMemberExistWithEmail( 'about@example.org' ), false, 'Found member with e-mail: about@example.org.' );
+            $this->assertTrue( $this->Member->doesMemberExistWithEmail( 'm.pryce@example.org' ), 'Failed to find member with e-mail: m.pryce@example.org.' );
+            $this->assertTrue( $this->Member->doesMemberExistWithEmail( strtoupper('a.santini@hotmail.com') ), 'Failed to find member with e-mail: A.SANTINIT@HOTMAIL.COM.' );
+            $this->assertTrue( $this->Member->doesMemberExistWithEmail( 'CherylLCarignan@teleworm.us' ), 'Failed to find member with e-mail: CherylLCarignan@teleworm.us.' );
+            $this->assertTrue( $this->Member->doesMemberExistWithEmail( 'DorothyDRussell@dayrep.com' ), 'Failed to find member with e-mail: DorothyDRussell@dayrep.com.' );
+            $this->assertFalse( $this->Member->doesMemberExistWithEmail( 'about@example.org' ), 'Found member with e-mail: about@example.org.' );
         }
     }
 

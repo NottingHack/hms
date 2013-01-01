@@ -1,11 +1,9 @@
 <?php
 
+App::uses('PhpReader', 'Configure');
 App::uses('Component', 'Controller');
-
-Configure::config('default', new PhpReader());
-Configure::load('krb', 'default');
-
 App::uses('krb5_auth', 'Lib/Krb');
+
 
 class KrbComponent extends Component {
 
@@ -14,6 +12,9 @@ class KrbComponent extends Component {
 
 	public function __construct(ComponentCollection $collection, $settings = array())
 	{
+		Configure::config('default', new PhpReader());
+		Configure::load('krb', 'default');
+
 		$this->use_dummy = Configure::read('krb_use_dummy');
 		if(	isset($this->use_dummy) == false ||
 			$this->use_dummy == false)

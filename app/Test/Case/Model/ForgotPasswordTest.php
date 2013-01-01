@@ -20,21 +20,21 @@
 
             $this->ForgotPassword->data['ForgotPassword']['new_password'] = $correctPassword;
 
-            $this->assertIdentical( $this->ForgotPassword->newPasswordConfirmMatchesNewPassword($correctPassword), true, 'Password failed to match.' );
-            $this->assertIdentical( $this->ForgotPassword->newPasswordConfirmMatchesNewPassword($incorrectPassword), false, 'Password matched when it should not have.' );
+            $this->assertTrue( $this->ForgotPassword->newPasswordConfirmMatchesNewPassword($correctPassword), 'Password failed to match.' );
+            $this->assertFalse( $this->ForgotPassword->newPasswordConfirmMatchesNewPassword($incorrectPassword), 'Password matched when it should not have.' );
 
             $this->ForgotPassword->data['ForgotPassword']['new_password'] = '0';
-            $this->assertIdentical( $this->ForgotPassword->newPasswordConfirmMatchesNewPassword(0), false, 'Password matched across types.' );
-            $this->assertIdentical( $this->ForgotPassword->newPasswordConfirmMatchesNewPassword(null), false, 'Password matched across types.' );
+            $this->assertFalse( $this->ForgotPassword->newPasswordConfirmMatchesNewPassword(0), 'Password matched across types.' );
+            $this->assertFalse( $this->ForgotPassword->newPasswordConfirmMatchesNewPassword(null), 'Password matched across types.' );
         }
 
         public function testFindMemberWithEmail()
         {
-            $this->assertIdentical( $this->ForgotPassword->findMemberWithEmail( 'm.pryce@example.org' ), true, 'Failed to find member with e-mail: m.pryce@example.org.' );
-            $this->assertIdentical( $this->ForgotPassword->findMemberWithEmail( strtoupper('a.santini@hotmail.com') ), true, 'Failed to find member with e-mail: A.SANTINIT@HOTMAIL.COM.' );
-            $this->assertIdentical( $this->ForgotPassword->findMemberWithEmail( 'CherylLCarignan@teleworm.us' ), true, 'Failed to find member with e-mail: CherylLCarignan@teleworm.us.' );
-            $this->assertIdentical( $this->ForgotPassword->findMemberWithEmail( 'DorothyDRussell@dayrep.com' ), true, 'Failed to find member with e-mail: DorothyDRussell@dayrep.com.' );
-            $this->assertIdentical( $this->ForgotPassword->findMemberWithEmail( 'about@example.org' ), false, 'Found member with e-mail: about@example.org.' );
+            $this->assertTrue( $this->ForgotPassword->findMemberWithEmail( 'm.pryce@example.org' ), 'Failed to find member with e-mail: m.pryce@example.org.' );
+            $this->assertTrue( $this->ForgotPassword->findMemberWithEmail( strtoupper('a.santini@hotmail.com') ), 'Failed to find member with e-mail: A.SANTINIT@HOTMAIL.COM.' );
+            $this->assertTrue( $this->ForgotPassword->findMemberWithEmail( 'CherylLCarignan@teleworm.us' ), 'Failed to find member with e-mail: CherylLCarignan@teleworm.us.' );
+            $this->assertTrue( $this->ForgotPassword->findMemberWithEmail( 'DorothyDRussell@dayrep.com' ), 'Failed to find member with e-mail: DorothyDRussell@dayrep.com.' );
+            $this->assertFalse( $this->ForgotPassword->findMemberWithEmail( 'about@example.org' ), 'Found member with e-mail: about@example.org.' );
         }
 
         public function testCreateNewEntry()

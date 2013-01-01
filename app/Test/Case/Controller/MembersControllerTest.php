@@ -9,6 +9,7 @@
 		public function setUp() 
         {
         	parent::setUp();
+
             $this->MembersController = new MembersController();
             $this->MembersController->constructClasses();
         }
@@ -88,6 +89,21 @@
 					$this->assertIdentical( $actualResult, $expectedResult, sprintf('isAuthorized returned %s for %s (id: %d) when accessing %s.', $actualResult ? 'true' : 'false', $userName, $userId, $requestObj->url));
 				}
 			}
+		}
+
+		public function testBeforeFilter()
+		{
+			$prevAllowedActions = $this->MembersController->Auth->allowedActions;
+			$this->assertIdentical( count($prevAllowedActions), 0, 'Prior to calling \'beforeFilter\' the allowed actions array was not empty.' );
+
+			$this->MembersController->beforeFilter();
+			$afterAllowedActions = $this->MembersController->Auth->allowedActions;
+			$this->assertTrue( in_array('logout', $afterAllowedActions), 'Allowed actions does not contain \'logout\'.' );
+			$this->assertTrue( in_array('login', $afterAllowedActions), 'Allowed actions does not contain \'login\'.' );
+			$this->assertTrue( in_array('register', $afterAllowedActions), 'Allowed actions does not contain \'register\'.' );
+			$this->assertTrue( in_array('forgot_password', $afterAllowedActions), 'Allowed actions does not contain \'forgot_password\'.' );
+			$this->assertTrue( in_array('setup_login', $afterAllowedActions), 'Allowed actions does not contain \'setup_login\'.' );
+			$this->assertTrue( in_array('setup_details', $afterAllowedActions), 'Allowed actions does not contain \'setup_details\'.' );
 		}
 
 		private function _buildFakeRequest($action, $params = array())
