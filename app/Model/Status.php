@@ -1,4 +1,6 @@
 <?php
+
+	App::uses('AppModel', 'Model');
 	
 	/**
 	 * Model for all member status data
@@ -6,7 +8,8 @@
 	 *
 	 * @package       app.Model
 	 */
-	class Status extends AppModel {
+	class Status extends AppModel 
+	{
 		
 		//! We use the 'status' table instead of the default.
 		public $useTable = "status";
