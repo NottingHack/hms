@@ -2,7 +2,6 @@
 
 	App::uses('AppModel', 'Model');
 
-
 	/**
 	 * Model for all member data
 	 *
