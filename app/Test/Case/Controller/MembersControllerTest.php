@@ -67,7 +67,8 @@
 
 			foreach($testUsers as $userName => $user)
 			{
-				$userInfo = $this->MembersController->Member->findByMemberId($user['ourId']);
+				$userId = $user['ourId'];
+				$userInfo = $this->MembersController->Member->findByMemberId($userId);
 				foreach($fakeRequestDetails as $reqDetails)
 				{
 					$actionName = $reqDetails['name'];
@@ -84,7 +85,7 @@
 					$requestObj = $this->_buildFakeRequest($actionName, $params);
 					$expectedResult = in_array($userName, $reqDetails['access']);
 					$actualResult = $this->MembersController->isAuthorized($userInfo, $requestObj);
-					$this->assertIdentical( $actualResult, $expectedResult );
+					$this->assertIdentical( $actualResult, $expectedResult, sprintf('isAuthorized returned %s for %s (id: %d) when accessing %s', $actualResult ? 'true' : 'false', $userName, $userId, $requestObj->url));
 				}
 			}
 		}
