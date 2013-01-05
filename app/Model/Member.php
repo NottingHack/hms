@@ -272,6 +272,17 @@
 			return $this->_getMemberSummary();
 		}
 
+		//! Get a summary of the member records for all members.
+		/*!
+			@param int $statusId Retrieve information about members who have this status.
+			@retval array A summary of the data of all members.
+			@sa Member::_getMemberSummary()
+		*/
+		public function getMemberSummaryForStatus($statusId)
+		{
+			return $this->_getMemberSummary( array( 'Member.member_status' => $statusId ) );
+		}
+
 		//! Get a summary of the member records for all members that match the conditions.
 		/*!
 			@retval array A summary (id, name, email, Status and Groups) of the data of all members that match the conditions.

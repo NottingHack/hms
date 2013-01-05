@@ -27,7 +27,7 @@
 	    	),
 	    );
 
-		//! Get a summary of the status  records for all statuses.
+		//! Get a summary of the status records for all statuses.
 		/*!
 			@retval array A summary of the data of all statuses.
 			@sa Status::_getStatusSummary()
@@ -35,6 +35,23 @@
 		public function getStatusSummaryAll()
 		{
 			return $this->_getStatusSummary();
+		}
+
+		//! Get a summary of the status records for a single status.
+		/*!
+			@param int $id The id of the status to look at
+			@retval mixed A summary of the data for a single status, or false if none can be found.
+			@sa Status::_getStatusSummary()
+		*/
+		public function getStatusSummaryForId($id)
+		{
+			$info = $this->_getStatusSummary( array('Status.status_id' => $id) );
+
+			if(count($info) > 0)
+			{
+				return $info[0];
+			}
+			return $info;
 		}
 
 		//! Get a summary of the status records for all statuses that match the conditions.

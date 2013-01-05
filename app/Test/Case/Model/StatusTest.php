@@ -32,6 +32,26 @@
                 $this->assertIdentical( $statusInfo['count'], $expectedMemberCount, 'Status count is incorrect for id: ' . $statusInfo['id'] . '.' );
             }
         }
+
+        public function testGetStatusSummaryForId()
+        {
+            $this->assertIdentical( count($this->Status->getStatusSummaryForId(0)), 0, 'Status 0 returned some results.' );
+            $this->assertIdentical( count($this->Status->getStatusSummaryForId(7)), 0, 'Status 7 returned some results.' );
+
+            $statusList = $this->Status->getStatusSummaryForId(1);
+
+            $this->assertInternalType( 'array', $statusList, 'statusList is not an array.' );
+
+            $this->assertArrayHasKey( 'id', $statusList, 'Status has no id.' ); 
+            $this->assertGreaterThan( 0, $statusList['id'], 'Status id is invalid.' );
+
+            $this->assertArrayHasKey( 'name', $statusList, 'Status has no name.' ); 
+            $this->assertArrayHasKey( 'description', $statusList, 'Status has no description.' ); 
+            $this->assertArrayHasKey( 'count', $statusList, 'Status has no count.' ); 
+
+            $expectedMemberCount = $this->Status->Member->find('count', array('conditions' => array('Member.member_status' => $statusList['id'])));
+            $this->assertIdentical( $statusList['count'], $expectedMemberCount, 'Status count is incorrect for id: ' . $statusList['id'] . '.' );
+        }
     }
 
 ?>

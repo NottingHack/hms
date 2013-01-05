@@ -125,123 +125,33 @@
 
 	    	// Get the member summary from the model.
 	    	$memberList = $this->Member->getMemberSummaryAll();
-
-	    	// Have to add the actions ourselves
-	    	for($i = 0; $i < count($memberList); $i++)
-	    	{
-	    		$actions = array();
-
-	    		$status = $memberList[$i]['status']['id'];
-	    		$id = $memberList[$i]['id'];
-
-	    		switch($status)
-	    		{
-	    			case Status::PROSPECTIVE_MEMBER:
-	    				array_push($actions, 
-	    					array(
-	    						'title' => 'Send Membership Reminder',
-	    						'controller' => 'members',
-	    						'action' => 'send_membership_reminder',
-	    						'params' => array(
-	    							$id,
-	    						),
-	    					)
-	    				);
-	    			break;
-
-	    			case Status::PRE_MEMBER_1:
-	    			break;
-
-	    			case Status::PRE_MEMBER_2:
-	    				array_push($actions, 
-	    					array(
-	    						'title' => 'Send Contact Details Reminder',
-	    						'controller' => 'members',
-	    						'action' => 'send_contact_details_reminder',
-	    						'params' => array(
-	    							$id,
-	    						),
-	    					)
-	    				);
-	    			break;
-
-	    			case Status::PRE_MEMBER_3:
-
-	    				array_push($actions, 
-	    					array(
-	    						'title' => 'Send SO Details Reminder',
-	    						'controller' => 'members',
-	    						'action' => 'send_so_details_reminder',
-	    						'params' => array(
-	    							$id,
-	    						),
-	    					)
-	    				);
-
-	    				array_push($actions, 
-	    					array(
-	    						'title' => 'Approve Member',
-	    						'controller' => 'members',
-	    						'action' => 'approve_member',
-	    						'params' => array(
-	    							$id,
-	    						),
-	    					)
-	    				);
-
-	    			break;
-
-	    			case Status::CURRENT_MEMBER:
-	    				array_push($actions, 
-	    					array(
-	    						'title' => 'Revoke Membership',
-	    						'controller' => 'members',
-	    						'action' => 'set_member_status',
-	    						'params' => array(
-	    							$id,
-	    							Status::EX_MEMBER,
-	    						),
-	    					)
-	    				);
-	    			break;
-
-	    			case Status::EX_MEMBER:
-	    				array_push($actions, 
-	    					array(
-	    						'title' => 'Reinstate Membership',
-	    						'controller' => 'members',
-	    						'action' => 'set_member_status',
-	    						'params' => array(
-	    							$id,
-	    							Status::CURRENT_MEMBER,
-	    						),
-	    					)
-	    				);
-	    			break;
-	    		}
-
-	    		$memberList[$i]['actions'] = $actions;
-	    	}
+	    	$memberList = $this->_addMemberActions($memberList);
 
 	        $this->set('memberList', $memberList);
 	    }
 
-		# List info about all members with a certain status
-		public function list_members_with_status($statusId) 
+		//! List all members with a particular status.
+		/*!
+			@param int $statusId The status to list all members for.
+		*/
+		public function listMembersWithStatus($statusId) 
 		{
-			# Uses the default list view
+			// Use the list members view
 			$this->view = 'list_members';
 
-			if(isset($statusId))
+			// If statusId is not set, list all the members
+			if(!isset($statusId))
 			{
-		        $this->set('members', $this->Member->find('all', array( 'conditions' => array( 'Member.member_status' => $statusId ) )));
-		        $statusData = $this->Member->Status->find('all', array( 'conditions' => array( 'Status.status_id' => $statusId ) ));
-				$this->set('statusData', $statusData[0]['Status']);
+				return $this->redirect( array('controller' => 'members', 'action' => 'listMembers') );
 			}
-			else
-			{
-				$this->redirect( array( 'controller' => 'members', 'action' => 'list_members' ) );
-			}
+
+			$memberList = $this->Member->getMemberSummaryForStatus($statusId);
+	    	$memberList = $this->_addMemberActions($memberList);
+	    	
+			$statusInfo = $this->Member->Status->getStatusSummaryForId($statusId);
+
+	        $this->set('memberList', $memberList);
+	        $this->set('statusInfo', $statusInfo);
 	    }
 
 	    # List info about all members who's email or name is like $query
@@ -1579,6 +1489,113 @@
 	           	}
 	        }
             return $memberInfo;
+		}
+
+		//! Adds the appropriate actions to each member in the member list.
+		/*!
+			@param array $memberList A list of member summaries to add the actions to.
+			@retval array The original memberList, with the actions added for each member.
+		*/
+		private function _addMemberActions($memberList)
+		{
+			// Have to add the actions ourselves
+	    	for($i = 0; $i < count($memberList); $i++)
+	    	{
+	    		$actions = array();
+
+	    		$status = $memberList[$i]['status']['id'];
+	    		$id = $memberList[$i]['id'];
+
+	    		switch($status)
+	    		{
+	    			case Status::PROSPECTIVE_MEMBER:
+	    				array_push($actions, 
+	    					array(
+	    						'title' => 'Send Membership Reminder',
+	    						'controller' => 'members',
+	    						'action' => 'send_membership_reminder',
+	    						'params' => array(
+	    							$id,
+	    						),
+	    					)
+	    				);
+	    			break;
+
+	    			case Status::PRE_MEMBER_1:
+	    			break;
+
+	    			case Status::PRE_MEMBER_2:
+	    				array_push($actions, 
+	    					array(
+	    						'title' => 'Send Contact Details Reminder',
+	    						'controller' => 'members',
+	    						'action' => 'send_contact_details_reminder',
+	    						'params' => array(
+	    							$id,
+	    						),
+	    					)
+	    				);
+	    			break;
+
+	    			case Status::PRE_MEMBER_3:
+
+	    				array_push($actions, 
+	    					array(
+	    						'title' => 'Send SO Details Reminder',
+	    						'controller' => 'members',
+	    						'action' => 'send_so_details_reminder',
+	    						'params' => array(
+	    							$id,
+	    						),
+	    					)
+	    				);
+
+	    				array_push($actions, 
+	    					array(
+	    						'title' => 'Approve Member',
+	    						'controller' => 'members',
+	    						'action' => 'approve_member',
+	    						'params' => array(
+	    							$id,
+	    						),
+	    					)
+	    				);
+
+	    			break;
+
+	    			case Status::CURRENT_MEMBER:
+	    				array_push($actions, 
+	    					array(
+	    						'title' => 'Revoke Membership',
+	    						'controller' => 'members',
+	    						'action' => 'set_member_status',
+	    						'params' => array(
+	    							$id,
+	    							Status::EX_MEMBER,
+	    						),
+	    					)
+	    				);
+	    			break;
+
+	    			case Status::EX_MEMBER:
+	    				array_push($actions, 
+	    					array(
+	    						'title' => 'Reinstate Membership',
+	    						'controller' => 'members',
+	    						'action' => 'set_member_status',
+	    						'params' => array(
+	    							$id,
+	    							Status::CURRENT_MEMBER,
+	    						),
+	    					)
+	    				);
+	    			break;
+	    		}
+
+	    		$memberList[$i]['actions'] = $actions;
+	    	}
+
+	    	return $memberList;
 		}
 	}
 ?>

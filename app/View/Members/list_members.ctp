@@ -2,10 +2,12 @@
 
 <?php
     $this->Html->addCrumb('Members', '/members');
-    $this->Html->addCrumb('List Members', '/members/list_members_with_status');
-    if(isset($statusData))
+    $this->Html->addCrumb('List Members', '/members/listMembersWithStatus');
+    if( isset($statusInfo) &&
+        isset($statusInfo['id']) &&
+        isset($statusInfo['name']) )
     {
-        $this->Html->addCrumb($statusData['title'], '/members/list_members_with_status/' . $statusData['status_id']);
+        $this->Html->addCrumb($statusInfo['name'], '/members/listMembersWithStatus/' . $statusInfo['id']);
     }
 ?>
 
@@ -44,7 +46,7 @@
                 ?>
             </td>
             <td>
-                <?php echo $this->Html->link($member['status']['name'], array('controller' => 'members', 'action' => 'list_members_with_status', $member['status']['id'])); ?>
+                <?php echo $this->Html->link($member['status']['name'], array('controller' => 'members', 'action' => 'listMembersWithStatus', $member['status']['id'])); ?>
             </td>
             <td>
                 <?php
