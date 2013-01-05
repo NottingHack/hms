@@ -1,8 +1,8 @@
 <?php
 
-    App::uses('AutomationDriverTest', 'Lib/AutomationDriver');
+    App::uses('HmsAutomationDriverTest', 'Lib/AutomationDriver');
 
-    class UserCanRegisterTest extends AutomationDriverTest 
+    class UserCanRegisterTest extends HmsAutomationDriverTest 
     {
         public function setUp() 
         {
@@ -12,13 +12,12 @@
 
         public function testCanRegister()
         {
-            $this->automationDriver->navigateToMemberRegister();
-            $this->assertTrue( $this->automationDriver->pageHasNoErrors(), 'Registration page has errors.' );
+            $this->reigsterNewMember('test001.pyroka@gmail.com');
         }
 
         public function tearDown()
         {
-        	$this->automationDriver->disconnect();
+        	//$this->automationDriver->disconnect();
         }
     }
 

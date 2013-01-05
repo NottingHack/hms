@@ -34,7 +34,6 @@ class AuthUtilComponent extends Component {
 			'pass' => $params,
 		));
 
-
 		# AT [25/09/2012] Grab the controller, this may have to create it :(
 		$controllerObj = $this->get_controller($controller);
 		# AT [25/09/2012] Have to call beforeFilter to set-up the auth properly
@@ -46,6 +45,7 @@ class AuthUtilComponent extends Component {
 			$allowedActions == array('*') || # AT [29/09/2012] Allow all actions?
 			in_array($action, array_map('strtolower', $allowedActions))
 		);
+
 		if($isAllowed)
 		{
 			return true;

@@ -68,17 +68,17 @@ class AppController extends Controller {
     }
 
     public function beforeRender() {
-        /*
         # AT [16/09/2012] Send any links added to the NavComponent to the view
         $this->set('navLinks', $this->Nav->get_allowed_actions());
 
         Controller::loadModel('Member');
 
         $user = $this->Member->find('first', array('conditions' => array( 'Member.member_id' => AuthComponent::user('Member.member_id') )));
-        if( isset($user) )
+        if( $user )
         {
             $adminLinks = array();
-            if( Member::isInGroupFullAccess($user) || Member::isInGroupMemberAdmin($user) )
+            if( $this->Member->GroupsMember->isMemberInGroup( Hash::get($user, 'Member.member_id'), Group::FULL_ACCESS ) || 
+                $this->Member->GroupsMember->isMemberInGroup( Hash::get($user, 'Member.member_id'), Group::MEMBER_ADMIN ) )
             {
                 $adminLinks = array(
                     'Members' => array( 'controller' => 'members', 'action' => 'index' ),
@@ -86,12 +86,12 @@ class AppController extends Controller {
                     'Mailing Lists' => array( 'controller' => 'mailinglists', 'action' => 'index' ),
                 );
             }
-            else if( Member::isInGroupTourGuide($user) )
+            /*else if( Member::isInGroupTourGuide($user) )
             {
                 $adminLinks = array(
                     'Add Member' => array( 'controller' => 'members', 'action' => 'add' ),
                 );
-            }
+            }*/
 
             $userMessage = array();
             if( $user['Member']['member_status'] == '5' )
@@ -110,7 +110,6 @@ class AppController extends Controller {
         $this->set('navLinks', $this->Nav->get_allowed_actions());
 
         $this->set('version', $this->get_version_string());
-        */
     }
 
     public function isAuthorized($user, $request)

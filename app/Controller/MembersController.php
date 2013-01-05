@@ -82,6 +82,7 @@
 	    		case 'login':
 	    		case 'logout':
 	    		case 'setup_login':
+	    		case 'register':
 	    			return true;
 	    	}
 

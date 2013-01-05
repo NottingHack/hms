@@ -11,7 +11,6 @@
 			parent::setUp();
 			$this->automationDriver = new AutomationDriver();
 		}
-
 	}
 
 ?>

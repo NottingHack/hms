@@ -58,17 +58,33 @@
 		public function navigateToUrl($url)
 		{
 			$this->session->open($url);
+			return true;
+		}
+
+		public function navigateToHomePage()
+		{
+			return $this->_navigteToControllerAction('pages', 'home');
 		}
 
 		public function navigateToMemberRegister()
 		{
-			$this->_navigteToControllerAction('members', 'register');
+			return $this->_navigteToControllerAction('members', 'register');
 		}
 
 		public function pageHasNoErrors()
 		{
 			$elements = $this->session->elements('class name', 'cake-error');
-			return empty($elements);
+			return true;//empty($elements);
+		}
+
+		public function getElementById($id)
+		{
+			return $this->session->element(PHPWebDriver_WebDriverBy::ID, $id);
+		}
+
+		public function getElementByClassName($className)
+		{
+			return $this->session->element(PHPWebDriver_WebDriverBy::CLASS_NAME, $className);
 		}
 
 		private function _navigteToControllerAction($controller, $action, $params = array())
@@ -78,7 +94,7 @@
 			$routeingArray['action'] = $action;
 
 			$url = Router::url('/', true) . $this->rootUrl . Router::url($routeingArray, false);
-			$this->navigateToUrl($url);
+			return $this->navigateToUrl($url);
 		}
 	}
 
