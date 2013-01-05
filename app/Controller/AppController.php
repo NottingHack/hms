@@ -22,7 +22,7 @@
 
 App::uses('Controller', 'Controller');
 App::uses('Member', 'Model');
-App::uses('Member', 'Model');
+App::uses('Group', 'Model');
 App::uses('AuthComponent', 'Controller/Auth');
 
 /**
@@ -117,7 +117,7 @@ class AppController extends Controller {
     {
         $this->Member = ClassRegistry::init('Member');
 
-        if($this->Member->GroupsMember->isMemberInGroup( Hash::extract($user, 'Member.member_id'), Group::FULL_ACCESS ))
+        if($this->Member->GroupsMember->isMemberInGroup( Hash::get($user, 'Member.member_id'), Group::FULL_ACCESS ))
         {
             return true;
         }

@@ -56,5 +56,15 @@
 	            'rule' => 'notEmpty'
 	        ),
 	    );
+
+	    //! Get the Group description for a given id.
+	    /*!
+	    	@param int $groupId The primary key of the Group to get the description of.
+	    	@retval mixed The description of the Group, or false if it can not be found.
+	    */
+	    public function getDescription($groupId)
+	    {
+	    	return $this->find('first', array('fields' => array('Group.grp_description'), 'conditions' => array('Group.grp_id' => $groupId)));
+	    }
 	}
 ?>

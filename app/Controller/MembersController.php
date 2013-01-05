@@ -101,47 +101,128 @@
 	    //! Show a list of all Status and a count of how many members are in each status.
 	    public function index() 
 	    {
-
-	    	/*
-	    		Data should be presented to the view in an array like so:
-	    			[n] => 
-	    				[id] => status id
-	    				[title] => status title
-	    				[desc] => status description
-	    				[count] => number of members with this status
-	    	*/
-
-	    	$statusInfoList = $this->Member->Status->getIdNameDescriptionAll();
-	    	$memberStatusInfo = array();
-	    	foreach ($statusInfoList as $statusInfo) 
-	    	{
-
-	    		$id = Hash::get($statusInfo, 'Status.status_id');
-	    		$title = Hash::get($statusInfo, 'Status.title');
-	    		$desc = Hash::get($statusInfo, 'Status.description');
-	    		$count = $this->Member->getCountForStatus( $id );
-
-	    		array_push($memberStatusInfo, 
-	    			array( 
-	    				'id' => $id, 
-	    				'title' => $title, 
-	    				'desc' => $desc,
-	    				'count' => $count,
-	    			)
-	    		);
-	    	}
-
-	    	$this->set('memberStatusInfo', $memberStatusInfo);
+	    	$this->set('memberStatusInfo', $this->Member->Status->getStatusSummaryAll());
 	    	$this->set('memberTotalCount', $this->Member->getCount());
 
 	    	$this->Nav->add('Register Member', 'members', 'register');
-    		$this->Nav->add('E-mail all current members', 'members', 'email_members_with_status', array( 2 ) );
+    		$this->Nav->add('E-mail all current members', 'members', 'email_members_with_status', array( Status::CURRENT_MEMBER ) );
 	    }
 
-		# List info about all members
-		public function list_members() 
+		//! Show a list of all members, their e-mail address, status and the groups they're in.
+		public function listMembers() 
 		{
-	        $this->set('members', $this->Member->find('all'));
+
+			/*
+	    	    Actions should be added to the array like so:
+	    	    	[actions] =>
+	    					[n]
+	    						[title] => action title
+	    						[controller] => action controller
+	    						[action] => action name
+	    						[params] => array of params
+	    	*/
+
+	    	// Get the member summary from the model.
+	    	$memberList = $this->Member->getMemberSummaryAll();
+
+	    	// Have to add the actions ourselves
+	    	for($i = 0; $i < count($memberList); $i++)
+	    	{
+	    		$actions = array();
+
+	    		$status = $memberList[$i]['status']['id'];
+	    		$id = $memberList[$i]['id'];
+
+	    		switch($status)
+	    		{
+	    			case Status::PROSPECTIVE_MEMBER:
+	    				array_push($actions, 
+	    					array(
+	    						'title' => 'Send Membership Reminder',
+	    						'controller' => 'members',
+	    						'action' => 'send_membership_reminder',
+	    						'params' => array(
+	    							$id,
+	    						),
+	    					)
+	    				);
+	    			break;
+
+	    			case Status::PRE_MEMBER_1:
+	    			break;
+
+	    			case Status::PRE_MEMBER_2:
+	    				array_push($actions, 
+	    					array(
+	    						'title' => 'Send Contact Details Reminder',
+	    						'controller' => 'members',
+	    						'action' => 'send_contact_details_reminder',
+	    						'params' => array(
+	    							$id,
+	    						),
+	    					)
+	    				);
+	    			break;
+
+	    			case Status::PRE_MEMBER_3:
+
+	    				array_push($actions, 
+	    					array(
+	    						'title' => 'Send SO Details Reminder',
+	    						'controller' => 'members',
+	    						'action' => 'send_so_details_reminder',
+	    						'params' => array(
+	    							$id,
+	    						),
+	    					)
+	    				);
+
+	    				array_push($actions, 
+	    					array(
+	    						'title' => 'Approve Member',
+	    						'controller' => 'members',
+	    						'action' => 'approve_member',
+	    						'params' => array(
+	    							$id,
+	    						),
+	    					)
+	    				);
+
+	    			break;
+
+	    			case Status::CURRENT_MEMBER:
+	    				array_push($actions, 
+	    					array(
+	    						'title' => 'Revoke Membership',
+	    						'controller' => 'members',
+	    						'action' => 'set_member_status',
+	    						'params' => array(
+	    							$id,
+	    							Status::EX_MEMBER,
+	    						),
+	    					)
+	    				);
+	    			break;
+
+	    			case Status::EX_MEMBER:
+	    				array_push($actions, 
+	    					array(
+	    						'title' => 'Reinstate Membership',
+	    						'controller' => 'members',
+	    						'action' => 'set_member_status',
+	    						'params' => array(
+	    							$id,
+	    							Status::CURRENT_MEMBER,
+	    						),
+	    					)
+	    				);
+	    			break;
+	    		}
+
+	    		$memberList[$i]['actions'] = $actions;
+	    	}
+
+	        $this->set('memberList', $memberList);
 	    }
 
 		# List info about all members with a certain status

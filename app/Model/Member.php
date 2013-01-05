@@ -261,5 +261,86 @@
 		{
 			return $this->find( 'count', array( 'conditions' => array( 'Member.email' => strtolower($email) ) ) ) > 0;
 		}
+
+		//! Get a summary of the member records for all members.
+		/*!
+			@retval array A summary of the data of all members.
+			@sa Member::_getMemberSummary()
+		*/
+		public function getMemberSummaryAll()
+		{
+			return $this->_getMemberSummary();
+		}
+
+		//! Get a summary of the member records for all members that match the conditions.
+		/*!
+			@retval array A summary (id, name, email, Status and Groups) of the data of all members that match the conditions.
+		*/
+		private function _getMemberSummary($conditions = array())
+		{
+			$info = $this->find( 'all', array('conditions' => $conditions) );
+
+			return $this->_formatMemberInfo($info);
+		}
+
+		//! Format member information into a nicer arrangement.
+		/*!
+			@param $info The info to format, usually retrieved from Member::_getMemberSummary.
+			@retval array An array of member information, formatted so that nothing needs to know database rows.
+			@sa Member::_getMemberSummary
+		*/
+		private function _formatMemberInfo($info)
+		{
+			/*
+	    	    Data should be presented to the view in an array like so:
+	    			[n] => 
+	    				[id] => member id
+	    				[name] => member name
+	    				[email] => member email
+	    				[groups] => 
+	    					[n] =>
+	    						[id] => group id
+	    						[description] => group description
+	    				[status] => 
+	    					[id] => status id
+	    					[name] => name of the status
+	    	*/
+
+			$formattedInfo = array();
+	    	foreach ($info as $member) 
+	    	{
+	    		$id = Hash::get($member, 'Member.member_id');
+	    		$name = Hash::get($member, 'Member.name');
+	    		$email = Hash::get($member, 'Member.email');
+
+	    		$status = array(
+	    			'id' => Hash::get($member, 'Status.status_id'),
+	    			'name' => Hash::get($member, 'Status.title'),
+	    		);
+
+	    		$groups = array();
+	    		foreach($member['Group'] as $group)
+	    		{
+	    			array_push($groups,
+		    			array(
+		    				'id' => Hash::get($group, 'grp_id'),
+		    				'description' => Hash::get($group, 'grp_description'),
+		    			)
+		    		);
+	    		}
+
+	    		array_push($formattedInfo,
+	    			array(
+	    				'id' => $id,
+	    				'name' => $name,
+	    				'email' => $email,
+	    				'groups' => $groups,
+	    				'status' => $status,
+	    			)
+	    		);
+	    	}
+
+	    	return $formattedInfo;
+		}
 	}
 ?>

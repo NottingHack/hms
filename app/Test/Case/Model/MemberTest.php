@@ -4,7 +4,7 @@
 
     class MemberTest extends CakeTestCase 
     {
-        public $fixtures = array( 'app.GroupsMember', 'app.member', 'app.Status', 'app.Group', 'app.Account' );
+        public $fixtures = array( 'app.GroupsMember', 'app.member', 'app.Status', 'app.Group', 'app.Account', 'app.Pin' );
 
         public function setUp() 
         {
@@ -124,6 +124,34 @@
             $this->assertTrue( $this->Member->doesMemberExistWithEmail( 'CherylLCarignan@teleworm.us' ), 'Failed to find member with e-mail: CherylLCarignan@teleworm.us.' );
             $this->assertTrue( $this->Member->doesMemberExistWithEmail( 'DorothyDRussell@dayrep.com' ), 'Failed to find member with e-mail: DorothyDRussell@dayrep.com.' );
             $this->assertFalse( $this->Member->doesMemberExistWithEmail( 'about@example.org' ), 'Found member with e-mail: about@example.org.' );
+        }
+
+        public function testGetMemberSummaryAll()
+        {
+            $memberList = $this->Member->getMemberSummaryAll();
+
+            $this->assertIdentical( count($memberList), $this->Member->find('count'), 'All members not included.' );
+            $this->assertInternalType( 'array', $memberList, 'memberList is not an array.' );
+
+            foreach ($memberList as $memberInfo)
+            {
+                $this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
+                $this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
+
+                $this->assertArrayHasKey( 'name', $memberInfo, 'Member has no name.' ); 
+                $this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
+                $this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
+
+                foreach ($memberInfo['groups'] as $group) 
+                {
+                    $this->assertArrayHasKey( 'id', $group, 'Group has no id.' ); 
+                    $this->assertArrayHasKey( 'description', $group, 'Group has no description.' );
+                    $this->assertInternalType( 'string', $group['description'], 'Group description is not a string.' );
+                }
+
+                $this->assertArrayHasKey( 'status', $memberInfo, 'Member has no status.' ); 
+                $this->assertInternalType( 'array', $memberInfo['status'], 'No array by the name of status' );
+            }
         }
     }
 

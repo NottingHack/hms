@@ -43,5 +43,15 @@
 
 			return $numEntries > 0;
 		}
+
+		//! Get the id of any Group that a Member is in.
+		/*!
+			@param int $memberId The primary key of the Member record.
+			@retval array An array of Group ids that the Member belongs to.
+		*/
+		public function getGroupIdsForMember($memberId)
+		{
+			return $this->find('list', array('fields' => array('GroupsMember.grp_id', 'GroupsMember.grp_id'), 'conditions' => array('GroupsMember.member_id' => $memberId)));
+		}
 	}
 ?>

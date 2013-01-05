@@ -50,6 +50,13 @@
             $this->assertFalse( $this->GroupsMember->isMemberInGroup(5, 3), 'Member 5 is in group 3.' );
             $this->assertFalse( $this->GroupsMember->isMemberInGroup(5, 4), 'Member 5 is in group 4.' );
         }
+
+        public function testGetGroupIdsForMember()
+        {
+            $groupIds = $this->GroupsMember->getGroupIdsForMember(1);
+
+            $this->assertEqual( $groupIds, array(1 => '1', 2 => '2'), 'Returned incorrect groups ids for member 1.' );
+        }
     }
 
 ?>

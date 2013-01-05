@@ -4,7 +4,7 @@
 
     class StatusTest extends CakeTestCase 
     {
-        public $fixtures = array( 'app.Status', 'app.Member' );
+        public $fixtures = array( 'app.Status', 'app.Member', 'app.Account', 'app.Pin', 'app.Group', 'app.GroupsMember' );
 
         public function setUp() 
         {
@@ -12,21 +12,25 @@
             $this->Status = ClassRegistry::init('Status');
         }
 
-        public function testGetIdNameDescriptionAll()
+        public function testGetStatusSummaryAll()
         {
-            $results = $this->Status->getIdNameDescriptionAll();
+            $statusList = $this->Status->getStatusSummaryAll();
 
-            $expectedResults = 
-            array(
-                array('Status' => array('status_id' => 1, 'title' => 'Prospective Member', 'description' => 'Interested in the hackspace, we have their e-mail. May be receiving the newsletter')),
-                array('Status' => array('status_id' => 2, 'title' => 'Pre-Member (stage 1)', 'description' => 'Member has HMS login details, waiting for them to enter contact details')),
-                array('Status' => array('status_id' => 3, 'title' => 'Pre-Member (stage 2)', 'description' => 'Waiting for member-admin to approve contact details')),
-                array('Status' => array('status_id' => 4, 'title' => 'Pre-Member (stage 3)', 'description' => 'Waiting for standing order')),
-                array('Status' => array('status_id' => 5, 'title' => 'Current Member', 'description' => 'Active member')),
-                array('Status' => array('status_id' => 6, 'title' => 'Ex Member', 'description' => 'Former member, details only kept for a while')),
-            );
+            $this->assertIdentical( count($statusList), $this->Status->find('count'), 'All statuses not included.' );
+            $this->assertInternalType( 'array', $statusList, 'statusList is not an array.' );
 
-            $this->assertEqual( $results, $expectedResults, 'Array returned was incorrect.' );
+            foreach ($statusList as $statusInfo)
+            {
+                $this->assertArrayHasKey( 'id', $statusInfo, 'Status has no id.' ); 
+                $this->assertGreaterThan( 0, $statusInfo['id'], 'Status id is invalid.' );
+
+                $this->assertArrayHasKey( 'name', $statusInfo, 'Status has no name.' ); 
+                $this->assertArrayHasKey( 'description', $statusInfo, 'Status has no description.' ); 
+                $this->assertArrayHasKey( 'count', $statusInfo, 'Status has no count.' ); 
+
+                $expectedMemberCount = $this->Status->Member->find('count', array('conditions' => array('Member.member_status' => $statusInfo['id'])));
+                $this->assertIdentical( $statusInfo['count'], $expectedMemberCount, 'Status count is incorrect for id: ' . $statusInfo['id'] . '.' );
+            }
         }
     }
 

@@ -106,6 +106,63 @@
 			$this->assertTrue( in_array('setup_details', $afterAllowedActions), 'Allowed actions does not contain \'setup_details\'.' );
 		}
 
+		public function testIndex()
+		{
+			$this->testAction('/members/index');
+
+			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
+			$this->assertArrayHasKey( 'memberStatusInfo', $this->vars, 'No view value called \'memberStatusInfo\'.' ); 
+			$this->assertArrayHasKey( 'memberTotalCount', $this->vars, 'No view value called \'memberTotalCount\'.' ); 
+
+			$this->assertInternalType( 'array', $this->vars['memberStatusInfo'], 'No array by the name of memberStatusInfo.' );
+			$this->assertIdentical( count($this->vars['memberStatusInfo']), $this->MembersController->Member->Status->find('count'), 'All statuses are not included in index.' );
+
+
+			$this->assertInternalType( 'int', $this->vars['memberTotalCount'], 'No int by the name of memberTotalCount.' );
+			$this->assertIdentical( $this->vars['memberTotalCount'], $this->MembersController->Member->find('count'), 'Total member count is incorrect.' );
+		}
+
+		public function testListMembers()
+		{
+			$this->testAction('/members/listMembers');
+
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+			$this->assertArrayHasKey( 'memberList', $this->vars, 'No view value called \'memberList\'.' ); 
+
+			$this->assertInternalType( 'array', $this->vars['memberList'], 'No array by the name of memberInfo' );
+			$this->assertIdentical( count($this->vars['memberList']), $this->MembersController->Member->find('count'), 'All members not included.' );
+
+			foreach ($this->vars['memberList'] as $memberInfo)
+			{
+				$this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
+				$this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
+
+				$this->assertArrayHasKey( 'name', $memberInfo, 'Member has no name.' ); 
+				$this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
+				$this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
+
+				foreach ($memberInfo['groups'] as $group) 
+				{
+					$this->assertArrayHasKey( 'id', $group, 'Group has no id.' ); 
+					$this->assertArrayHasKey( 'description', $group, 'Group has no description.' );
+					$this->assertInternalType( 'string', $group['description'], 'Group description is not a string.' );
+				}
+
+				$this->assertArrayHasKey( 'status', $memberInfo, 'Member has no status.' ); 
+				$this->assertInternalType( 'array', $memberInfo['status'], 'No array by the name of status' );
+
+				$this->assertArrayHasKey( 'actions', $memberInfo, 'Member has no actions.' ); 
+
+				foreach ($memberInfo['actions'] as $action) 
+				{
+					$this->assertArrayHasKey( 'title', $action, 'Action has no title.' ); 
+					$this->assertArrayHasKey( 'controller', $action, 'Action has no controller.' ); 
+					$this->assertArrayHasKey( 'action', $action, 'Action has no action.' ); 
+					$this->assertArrayHasKey( 'params', $action, 'Action has no params.' ); 					
+				}
+			}
+		}
+
 		private function _buildFakeRequest($action, $params = array())
 		{
 			$url = '/' . 'MembersController' . '/' . $action;
