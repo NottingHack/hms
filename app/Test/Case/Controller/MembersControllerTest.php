@@ -223,12 +223,10 @@
 		public function testSearch()
 		{
 			$data = array(
-		        'Member' => array(
-		            'query' => 'and',
-		        )
+		        'query' => 'and',
 		    );
 
-		    $this->testAction('/members/search', array('data' => $data, 'method' => 'post'));
+		    $this->testAction('/members/search', array('data' => $data, 'method' => 'get'));
 
 			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
 			$this->assertArrayHasKey( 'memberList', $this->vars, 'No view value called \'memberList\'.' ); 
@@ -266,13 +264,11 @@
 			}
 
 			$data = array(
-		        'Member' => array(
-		        )
 		    );
 
 
 			// This should redirect
-		    $this->testAction('/members/search', array('data' => $data, 'method' => 'post'));
+		    $this->testAction('/members/search', array('data' => $data, 'method' => 'get'));
 		    $this->assertContains('/members/listMembers', $this->headers['Location']);
 		}
 

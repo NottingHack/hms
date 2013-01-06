@@ -20,10 +20,11 @@
 	    /*!
 	    	@sa http://api20.cakephp.org/class/html-helper
 	    	@sa http://api20.cakephp.org/class/form-helper
+	    	@sa http://api20.cakephp.org/class/paginator-helper
 	    	@sa TinymceHelper
 	    	@sa CurrencyHelper
 	    */
-	    public $helpers = array('Html', 'Form', 'Tinymce', 'Currency');
+	    public $helpers = array('Html', 'Form', 'Paginator', 'Tinymce', 'Currency');
 
 	    //! We need the MailChimp and Krb components.
 	    /*!
@@ -123,11 +124,18 @@
 	    						[params] => array of params
 	    	*/
 
+	    	/*
 	    	// Get the member summary from the model.
 	    	$memberList = $this->Member->getMemberSummaryAll();
 	    	$memberList = $this->_addMemberActions($memberList);
 
 	        $this->set('memberList', $memberList);
+
+	        print_r($this->paginate('Member'));
+	        exit();
+	        */
+
+	        $this->_paginateMemberList($this->Member->getMemberSummaryAll(true));
 	    }
 
 		//! List all members with a particular status.
@@ -145,13 +153,8 @@
 				return $this->redirect( array('controller' => 'members', 'action' => 'listMembers') );
 			}
 
-			$memberList = $this->Member->getMemberSummaryForStatus($statusId);
-	    	$memberList = $this->_addMemberActions($memberList);
-
-			$statusInfo = $this->Member->Status->getStatusSummaryForId($statusId);
-
-	        $this->set('memberList', $memberList);
-	        $this->set('statusInfo', $statusInfo);
+			$this->_paginateMemberList($this->Member->getMemberSummaryForStatus(true, $statusId));
+	        $this->set('statusInfo', $this->Member->Status->getStatusSummaryForId($statusId));
 	    }
 
 	    //! List all members who's name, email, username or handle is similar to the search term.
@@ -161,15 +164,25 @@
 			$this->view = 'list_members';
 
 			// If search term is not set, list all the members
-			if(	!isset($this->request->data['Member']) ||
-				!isset($this->request->data['Member']['query']))
+			if(	!isset($this->params['url']['query']))
 			{
 				return $this->redirect( array('controller' => 'members', 'action' => 'listMembers') );
 			}
 
-			$keyword = $this->request->data['Member']['query'];
+			$keyword = $this->params['url']['query'];
 
-			$memberList = $this->Member->getMemberSummaryForSearchQuery($keyword);
+	        $this->_paginateMemberList($this->Member->getMemberSummaryForSearchQuery(true, $keyword));
+	    }
+
+	    //! Perform all the actions needed to get a paginated member list with actions applied.
+	    /*!
+	    	@param array $queryResult The query to pass to paginate(), usually obtained from a Member::getMemberSummary**** method.
+	    */
+	    private function _paginateMemberList($queryResult)
+	    {
+	    	$this->paginate = $queryResult;
+	        $memberList = $this->paginate('Member');
+	        $memberList = $this->Member->formatMemberInfo($memberList);
 	    	$memberList = $this->_addMemberActions($memberList);
 	        $this->set('memberList', $memberList);
 	    }

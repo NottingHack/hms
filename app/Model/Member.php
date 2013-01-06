@@ -267,9 +267,9 @@
 			@retval array A summary of the data of all members.
 			@sa Member::_getMemberSummary()
 		*/
-		public function getMemberSummaryAll()
+		public function getMemberSummaryAll($paginate)
 		{
-			return $this->_getMemberSummary();
+			return $this->_getMemberSummary($paginate);
 		}
 
 		//! Get a summary of the member records for all members.
@@ -278,9 +278,9 @@
 			@retval array A summary of the data of all members of a status.
 			@sa Member::_getMemberSummary()
 		*/
-		public function getMemberSummaryForStatus($statusId)
+		public function getMemberSummaryForStatus($paginate, $statusId)
 		{
-			return $this->_getMemberSummary( array( 'Member.member_status' => $statusId ) );
+			return $this->_getMemberSummary($paginate, array( 'Member.member_status' => $statusId ) );
 		}
 
 		//! Get a summary of the member records for all member records where their name, email, username or handle is similar to the keyword.
@@ -289,9 +289,9 @@
 			@retval array A summary of the data of all members who match the query.
 			@sa Member::_getMemberSummary()
 		*/
-		public function getMemberSummaryForSearchQuery($keyword)
+		public function getMemberSummaryForSearchQuery($paginate, $keyword)
 		{
-			return $this->_getMemberSummary( 
+			return $this->_getMemberSummary( $paginate,
 				array( 'OR' => 
 					array(
 						"Member.name Like'%$keyword%'", 
@@ -307,11 +307,18 @@
 		/*!
 			@retval array A summary (id, name, email, Status and Groups) of the data of all members that match the conditions.
 		*/
-		private function _getMemberSummary($conditions = array())
+		private function _getMemberSummary($paginate, $conditions = array())
 		{
-			$info = $this->find( 'all', array('conditions' => $conditions) );
+			$findOptions = array('conditions' => $conditions);
 
-			return $this->_formatMemberInfo($info);
+			if($paginate)
+			{
+				return $findOptions;
+			}
+
+			$info = $this->find( 'all', $findOptions );
+
+			return $this->formatMemberInfo($info);
 		}
 
 		//! Format member information into a nicer arrangement.
@@ -320,7 +327,7 @@
 			@retval array An array of member information, formatted so that nothing needs to know database rows.
 			@sa Member::_getMemberSummary
 		*/
-		private function _formatMemberInfo($info)
+		public function formatMemberInfo($info)
 		{
 			/*
 	    	    Data should be presented to the view in an array like so:
@@ -336,7 +343,6 @@
 	    					[id] => status id
 	    					[name] => name of the status
 	    	*/
-
 			$formattedInfo = array();
 	    	foreach ($info as $member) 
 	    	{
