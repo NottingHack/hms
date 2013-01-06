@@ -147,28 +147,31 @@
 
 			$memberList = $this->Member->getMemberSummaryForStatus($statusId);
 	    	$memberList = $this->_addMemberActions($memberList);
-	    	
+
 			$statusInfo = $this->Member->Status->getStatusSummaryForId($statusId);
 
 	        $this->set('memberList', $memberList);
 	        $this->set('statusInfo', $statusInfo);
 	    }
 
-	    # List info about all members who's email or name is like $query
+	    //! List all members who's name, email, username or handle is similar to the search term.
 		public function search() 
 		{
-
-			# Uses the default list view
+			// Use the list members view
 			$this->view = 'list_members';
-			if(isset($this->request->data['Member']))
+
+			// If search term is not set, list all the members
+			if(	!isset($this->request->data['Member']) ||
+				!isset($this->request->data['Member']['query']))
 			{
-				$keyword = $this->request->data['Member']['query'];
-				$this->set('members', $this->Member->find('all', array( 'conditions' => array( 'OR' => array("Member.name Like'%$keyword%'", "Member.email Like'%$keyword%'" )))));
+				return $this->redirect( array('controller' => 'members', 'action' => 'listMembers') );
 			}
-			else
-			{
-				$this->redirect( array( 'controller' => 'members', 'action' => 'list_members' ) );
-			}
+
+			$keyword = $this->request->data['Member']['query'];
+
+			$memberList = $this->Member->getMemberSummaryForSearchQuery($keyword);
+	    	$memberList = $this->_addMemberActions($memberList);
+	        $this->set('memberList', $memberList);
 	    }
 
 	    # Add a new member

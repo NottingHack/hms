@@ -275,12 +275,32 @@
 		//! Get a summary of the member records for all members.
 		/*!
 			@param int $statusId Retrieve information about members who have this status.
-			@retval array A summary of the data of all members.
+			@retval array A summary of the data of all members of a status.
 			@sa Member::_getMemberSummary()
 		*/
 		public function getMemberSummaryForStatus($statusId)
 		{
 			return $this->_getMemberSummary( array( 'Member.member_status' => $statusId ) );
+		}
+
+		//! Get a summary of the member records for all member records where their name, email, username or handle is similar to the keyword.
+		/*!
+			@param string $keyword Term to search for.
+			@retval array A summary of the data of all members who match the query.
+			@sa Member::_getMemberSummary()
+		*/
+		public function getMemberSummaryForSearchQuery($keyword)
+		{
+			return $this->_getMemberSummary( 
+				array( 'OR' => 
+					array(
+						"Member.name Like'%$keyword%'", 
+						"Member.email Like'%$keyword%'",
+						"Member.username Like'%$keyword%'",
+						"Member.handle Like'%$keyword%'",
+					)
+				)
+			);
 		}
 
 		//! Get a summary of the member records for all members that match the conditions.

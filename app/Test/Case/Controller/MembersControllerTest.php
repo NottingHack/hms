@@ -220,6 +220,62 @@
 			}
 		}
 
+		public function testSearch()
+		{
+			$data = array(
+		        'Member' => array(
+		            'query' => 'and',
+		        )
+		    );
+
+		    $this->testAction('/members/search', array('data' => $data, 'method' => 'post'));
+
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+			$this->assertArrayHasKey( 'memberList', $this->vars, 'No view value called \'memberList\'.' ); 
+
+			$this->assertInternalType( 'array', $this->vars['memberList'], 'No array by the name of memberInfo' );
+
+			foreach ($this->vars['memberList'] as $memberInfo)
+			{
+				$this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
+				$this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
+
+				$this->assertArrayHasKey( 'name', $memberInfo, 'Member has no name.' ); 
+				$this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
+				$this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
+
+				foreach ($memberInfo['groups'] as $group) 
+				{
+					$this->assertArrayHasKey( 'id', $group, 'Group has no id.' ); 
+					$this->assertArrayHasKey( 'description', $group, 'Group has no description.' );
+					$this->assertInternalType( 'string', $group['description'], 'Group description is not a string.' );
+				}
+
+				$this->assertArrayHasKey( 'status', $memberInfo, 'Member has no status.' ); 
+				$this->assertInternalType( 'array', $memberInfo['status'], 'No array by the name of status' );
+
+				$this->assertArrayHasKey( 'actions', $memberInfo, 'Member has no actions.' ); 
+
+				foreach ($memberInfo['actions'] as $action) 
+				{
+					$this->assertArrayHasKey( 'title', $action, 'Action has no title.' ); 
+					$this->assertArrayHasKey( 'controller', $action, 'Action has no controller.' ); 
+					$this->assertArrayHasKey( 'action', $action, 'Action has no action.' ); 
+					$this->assertArrayHasKey( 'params', $action, 'Action has no params.' ); 					
+				}
+			}
+
+			$data = array(
+		        'Member' => array(
+		        )
+		    );
+
+
+			// This should redirect
+		    $this->testAction('/members/search', array('data' => $data, 'method' => 'post'));
+		    $this->assertContains('/members/listMembers', $this->headers['Location']);
+		}
+
 		private function _buildFakeRequest($action, $params = array())
 		{
 			$url = '/' . 'MembersController' . '/' . $action;
