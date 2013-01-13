@@ -2,6 +2,7 @@
 	
 	App::uses('HmsAuthenticate', 'Controller/Component/Auth');
 	App::uses('Member', 'Model');
+	App::uses('CakeEmail', 'Network/Email');
 
 	App::uses('PhpReader', 'Configure');
 	Configure::config('default', new PhpReader());
@@ -82,13 +83,16 @@
 
 	    		case 'login':
 	    		case 'logout':
-	    		case 'setup_login':
+	    		case 'setupLogin':
 	    		case 'register':
 	    			return true;
 	    	}
 
 	    	return false;
 	    }
+
+	    //! Email object, for easy mocking.
+	    public $email = null;
 
 	    //! Perform any actions that should be performed before any controller action
 	    /*!
@@ -97,7 +101,7 @@
 	    public function beforeFilter() 
 	    {
 	        parent::beforeFilter();
-	        $this->Auth->allow('logout', 'login', 'register', 'forgot_password', 'setup_login', 'setup_details');
+	        $this->Auth->allow('logout', 'login', 'register', 'forgot_password', 'setupLogin', 'setup_details');
 	    }
 
 	    //! Show a list of all Status and a count of how many members are in each status.
@@ -187,92 +191,70 @@
 	        $this->set('memberList', $memberList);
 	    }
 
-	    # Add a new member
+	    //! Grab a users e-mail address and start the membership procedure.
 	    public function register() 
 	    {
-
+	    	// Need a list of mailing-lists that the user can opt-in to
 	    	$mailingLists = $this->_get_mailing_lists_and_subscruibed_status(null);
 			$this->set('mailingLists', $mailingLists);
 
-	    	if ($this->request->is('post')) 
-	    	{
-	    		 
-	    		$this->Member->set($this->data);
-	    		if($this->Member->validates(array('fieldList' => array('email'))))
-	    		{
+			if($this->request->is('post'))
+			{
+				$result = $this->Member->tryRegisterMember( $this->request->data );
 
-		    		$this->request->data['Member']['member_status'] = 1;
+				if( $result )
+				{
+					$status = $result['status'];
 
-		    		# Do we already know about this email?
-		    		$memberInfo = $this->Member->find('first', array( 'conditions' => array('Member.email' => $this->request->data['Member']['email'])));
-		    		$emailAlreadyKnown = !empty($memberInfo);
+					if( $status != Status::PROSPECTIVE_MEMBER )
+					{
+						// User is already way past this membership stage, send them to the login page
+						$this->Session->setFlash( 'User with that e-mail already exists.' );
+						return $this->redirect( array('controller' => 'members', 'action' => 'login') );
+					}
 
-		            if ( $emailAlreadyKnown == true ||
-		            	 ($emailAlreadyKnown == false && $this->Member->saveAll($this->request->data)) ) 
-		            {
-		            	$memberId = $emailAlreadyKnown ? $memberInfo['Member']['member_id'] : $this->Member->getLastInsertId();
+					$email = $result['email'];
 
-		            	$flashMessage = 'Registration successful';
-		            	if(isset($this->request->data['MailingLists']['MailingLists']) &&
-		            		empty($this->request->data['MailingLists']['MailingLists']) == false)
-		            	{
-		            		$flashMessage .= '</br>';
-		            		$flashMessage .= $this->_update_mailing_list_subscriptions($memberId, $this->request->data['MailingLists']['MailingLists']);
-		            	}
+					// E-mail the member admins for a created record
+					if( $result['createdRecord'] === true )
+					{
+						$this->_sendEmail(
+	                		$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
+	                		'New Prospective Member Notification',
+	                		'notify_admins_member_added',
+	                		array( 
+								'email' => $email,
+							)
+	                	);
+					}
 
-		            	$this->Session->setFlash($flashMessage);
+					$memberId = $result['memberId'];
 
-		                # Get a list of all the mailing lists this user is subscribing to
-		                $subscribedMailingLists = array();
-		                if(isset($this->request->data['MailingLists']['MailingLists']))
-		                {
-			                foreach ($this->request->data['MailingLists']['MailingLists'] as $key => $value) 
-			                {
-			                	$mailingListToSubscruibe = $mailingLists[$key];
-			                	array_push($subscribedMailingLists, $mailingListToSubscruibe);
-			                }
-			            }
-
-		                # Only notify the member admins if it is a new email
-		                if($emailAlreadyKnown == false)
-		                {
-			                # Email the member admins then
-			                $adminEmail = $this->prepare_email_for_members_in_group(5);
-							$adminEmail->subject('New Prospective Member Notification');
-							$adminEmail->template('notify_admins_member_added', 'default');
-							$adminEmail->viewVars( array( 
-								'email' => $this->request->data['Member']['email'],
-								'mailingLists' => $subscribedMailingLists,
-								 )
-							);
-							$adminEmail->send();
-						}
-
-						# We always send this e-mail to the member though
-						$memberEmail = $this->prepare_email();
-						$memberEmail->to( $this->request->data['Member']['email'] );
-						$memberEmail->subject('Welcome to Nottingham Hackspace');
-						$memberEmail->template('to_prospective_member', 'default');
-						$memberEmail->viewVars( array(
-							'mailingLists' => $subscribedMailingLists,
+					// But e-mail the member either-way
+					$this->_sendEmail(
+						$email,
+						'Welcome to Nottingham Hackspace',
+						'to_prospective_member',
+						array(
 							'memberId' => $memberId,
-							) 
-						);
-						$memberEmail->send();
+						)
+					);
 
-						$this->redirect(array( 'controller' => 'pages', 'action' => 'home'));
-		            } 
-		            else 
-		            {
-		                $this->Session->setFlash('Unable to register.');
-		            }
-		        }
-	        }
-	    }
+					$this->Session->setFlash( 'Registration successful, please check your inbox.' );
+					return $this->redirect(array( 'controller' => 'pages', 'action' => 'home'));
+				}
+				else
+				{
+					$this->Session->setFlash( 'Unable to register.' );
+				}
+			}
+		}
 
-	    # Get a registered member to set-up a username and Password
+	    //! Allow a member to set-up their initial login details.
 	    public function setup_login($id = null)
 	    {
+
+
 	    	if($id != null)
 	    	{
 	    		$this->Member->id = $id;
@@ -1301,36 +1283,24 @@
 			}
 		}
 
-		private function get_emails_for_members_in_group($groupId)
+
+		private function _sendEmail($to, $subject, $template, $viewVars)
 		{
-			# First grab all the members in the group
-			$members = $this->Member->Group->find('all', array( 'conditions' => array( 'Group.grp_id' => $groupId ) ) );
+			if($this->email == null)
+			{
+				$this->email = new CakeEmail();
+			}
 
-			#Then spilt out the e-mails
-			#return Hash::extract( $members, '{n}.Member.{n}.email' );
-			return array( 'pyroka@gmail.com' );
-		}
-
-
-		private function prepare_email_for_members_in_group($groupId)
-		{
-			$email = $this->prepare_email();
-			$email->to( $this->get_emails_for_members_in_group( $groupId ) );
-
-			return $email;
-		}
-
-		private function prepare_email()
-		{
-			App::uses('CakeEmail', 'Network/Email');
-
-			$email = new CakeEmail();
+			$email = $this->email;
 			$email->config('smtp');
 			$email->from(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$email->sender(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$email->emailFormat('html');
-
-			return $email;
+			$email->to($to);
+			$email->subject($subject);
+			$email->template($template);
+			$email->viewVars($viewVars);
+			return $email->send();
 		}
 
 		public function login() 

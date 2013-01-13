@@ -46,7 +46,7 @@
 
 				array( 'name' => 'login', 							'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember' ) ),
 				array( 'name' => 'logout', 							'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember' ) ),
-				array( 'name' => 'setup_login', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember' ) ),
+				array( 'name' => 'setupLogin', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember' ) ),
 			);
 
 			$testUsers = array(
@@ -102,7 +102,7 @@
 			$this->assertTrue( in_array('login', $afterAllowedActions), 'Allowed actions does not contain \'login\'.' );
 			$this->assertTrue( in_array('register', $afterAllowedActions), 'Allowed actions does not contain \'register\'.' );
 			$this->assertTrue( in_array('forgot_password', $afterAllowedActions), 'Allowed actions does not contain \'forgot_password\'.' );
-			$this->assertTrue( in_array('setup_login', $afterAllowedActions), 'Allowed actions does not contain \'setup_login\'.' );
+			$this->assertTrue( in_array('setupLogin', $afterAllowedActions), 'Allowed actions does not contain \'setupLogin\'.' );
 			$this->assertTrue( in_array('setup_details', $afterAllowedActions), 'Allowed actions does not contain \'setup_details\'.' );
 		}
 
@@ -270,6 +270,160 @@
 			// This should redirect
 		    $this->testAction('/members/search', array('data' => $data, 'method' => 'get'));
 		    $this->assertContains('/members/listMembers', $this->headers['Location']);
+		}
+
+		public function testRegisterNoData()
+		{
+			// Test with no data
+			$this->testAction('/members/register', array('data' => null, 'method' => null));
+
+			$this->_testRegisterMailingListViewVars();
+		}
+
+		public function testRegisterNewMember()
+		{
+			// Test with a new e-mail
+			$emailAddress = 'foo@bar.org';
+
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->exactly(2))->method('config');
+			$mockEmail->expects($this->exactly(2))->method('from');
+			$mockEmail->expects($this->exactly(2))->method('sender');
+			$mockEmail->expects($this->exactly(2))->method('emailFormat');
+			$mockEmail->expects($this->exactly(2))->method('to');
+			$mockEmail->expects($this->exactly(2))->method('subject');
+			$mockEmail->expects($this->exactly(2))->method('template');
+			$mockEmail->expects($this->exactly(2))->method('viewVars');
+			$mockEmail->expects($this->exactly(2))->method('send')->will($this->returnValue(true));
+
+			$mockEmail->expects($this->at(0))->method('config')->with('smtp');
+			$mockEmail->expects($this->at(1))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(2))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(3))->method('emailFormat')->with('html');
+			$mockEmail->expects($this->at(4))->method('to')->with(array('j.easterwood@googlemail.com'));
+			$mockEmail->expects($this->at(5))->method('subject')->with('New Prospective Member Notification');
+			$mockEmail->expects($this->at(6))->method('template')->with('notify_admins_member_added');
+			$mockEmail->expects($this->at(7))->method('viewVars')->with(array('email' => $emailAddress));
+			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
+
+			$mockEmail->expects($this->at(9))->method('config')->with('smtp');
+			$mockEmail->expects($this->at(10))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(11))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(12))->method('emailFormat')->with('html');
+			$mockEmail->expects($this->at(13))->method('to')->with($emailAddress);
+			$mockEmail->expects($this->at(14))->method('subject')->with('Welcome to Nottingham Hackspace');
+			$mockEmail->expects($this->at(15))->method('template')->with('to_prospective_member');
+			$mockEmail->expects($this->at(16))->method('viewVars')->with(array('memberId' => 15));
+			$mockEmail->expects($this->at(17))->method('send')->will($this->returnValue(true));
+
+			$this->testAction('/members/register', array('data' => array('Member' => array('email' => $emailAddress)), 'method' => 'post'));
+
+			$this->_testRegisterMailingListViewVars();
+
+			// Should have created a new member
+			$memberInfo = $this->MembersController->Member->findByEmail('foo@bar.org');
+
+			$this->assertInternalType( 'array', $memberInfo, 'Member record is not an array.' );
+			$this->assertEqual( Hash::get($memberInfo, 'Member.member_id'), 15, 'Member has incorrect id.' );
+			$this->assertEqual( Hash::get($memberInfo, 'Member.email'), $emailAddress, 'Member has incorrect email.' );
+
+			$this->assertContains('/pages/home', $this->headers['Location']);
+		}
+
+		public function testRegisterExistingPropspectiveMember()
+		{
+			// Test with an email address belonging to a member who is currently a prospective member
+			$emailAddress = 'CherylLCarignan@teleworm.us';
+
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->exactly(1))->method('config');
+			$mockEmail->expects($this->exactly(1))->method('from');
+			$mockEmail->expects($this->exactly(1))->method('sender');
+			$mockEmail->expects($this->exactly(1))->method('emailFormat');
+			$mockEmail->expects($this->exactly(1))->method('to');
+			$mockEmail->expects($this->exactly(1))->method('subject');
+			$mockEmail->expects($this->exactly(1))->method('template');
+			$mockEmail->expects($this->exactly(1))->method('viewVars');
+			$mockEmail->expects($this->exactly(1))->method('send')->will($this->returnValue(true));
+
+			$mockEmail->expects($this->at(0))->method('config')->with('smtp');
+			$mockEmail->expects($this->at(1))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(2))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(3))->method('emailFormat')->with('html');
+			$mockEmail->expects($this->at(4))->method('to')->with($emailAddress);
+			$mockEmail->expects($this->at(5))->method('subject')->with('Welcome to Nottingham Hackspace');
+			$mockEmail->expects($this->at(6))->method('template')->with('to_prospective_member');
+			$mockEmail->expects($this->at(7))->method('viewVars')->with(array('memberId' => 7));
+			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
+
+			$this->testAction('/members/register', array('data' => array('Member' => array('email' => $emailAddress)), 'method' => 'post'));
+
+			$this->_testRegisterMailingListViewVars();
+
+			$this->assertContains('/pages/home', $this->headers['Location']);
+		}
+
+		public function testRegisterCurrentMember()
+		{
+			// Test with an email address belonging to a member who is currently an existing member
+			$emailAddress = 'm.pryce@example.org';
+
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$this->testAction('/members/register', array('data' => array('Member' => array('email' => $emailAddress)), 'method' => 'post'));
+
+			$this->_testRegisterMailingListViewVars();
+
+			$this->assertContains('/members/login', $this->headers['Location']);
+		}
+
+		public function testRegisterExMember()
+		{
+			// Test with an email address belonging to a member who is currently an ex member
+			$emailAddress = 'g.garratte@foobar.org';
+
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$this->testAction('/members/register', array('data' => array('Member' => array('email' => $emailAddress)), 'method' => 'post'));
+
+			$this->_testRegisterMailingListViewVars();
+			$this->assertContains('/members/login', $this->headers['Location']);
+		}
+
+		private function _testRegisterMailingListViewVars()
+		{
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+			$this->assertArrayHasKey( 'mailingLists', $this->vars, 'No view value called \'memberList\'.' );
+		}
+
+		private function _mockMemberEmail()
+		{
+			$this->controller = $this->generate('Members');
+			$mockEmail = $this->getMock('CakeEmail');
+			$this->controller->email = $mockEmail;
+			return $mockEmail;
 		}
 
 		private function _buildFakeRequest($action, $params = array())

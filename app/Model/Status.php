@@ -15,7 +15,7 @@
 	    const PRE_MEMBER_2 = 3; //!< The id of the pre-member (stage 2) status.
 	    const PRE_MEMBER_3 = 4; //!< The id of the pre-member (stage 3) status.
 	    const CURRENT_MEMBER = 5; //!< The id of the current member status.
-	    const EX_MEMBER = 5; //!< The id of the ex member status.
+	    const EX_MEMBER = 6; //!< The id of the ex member status.
 
 		public $useTable = "status"; //!< We use the 'status' table instead of the default.
 		public $primaryKey = 'status_id'; //!< We use 'status_id' as our primary key.

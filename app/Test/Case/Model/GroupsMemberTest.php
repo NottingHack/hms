@@ -53,9 +53,18 @@
 
         public function testGetGroupIdsForMember()
         {
-            $groupIds = $this->GroupsMember->getGroupIdsForMember(1);
+            //$this->assertEqual( count($this->GroupsMember->getGroupIdsForMember(0)), 0, 'Returned incorrect groups for non-existent member.' );
 
-            $this->assertEqual( $groupIds, array(1 => '1', 2 => '2'), 'Returned incorrect groups ids for member 1.' );
+            $groupIds = $this->GroupsMember->getGroupIdsForMember(1);
+            $this->assertEqual( $groupIds, array('1', '2'), 'Returned incorrect groups ids for member 1.' );
+        }
+
+        public function testGetMemberIdsForGroup()
+        {
+            $this->assertEqual( count($this->GroupsMember->getMemberIdsForGroup(0)), 0, 'Returned incorrect groups for non-existent group.' );
+
+            $memberIds = $this->GroupsMember->getMemberIdsForGroup(Group::CURRENT_MEMBERS);
+            $this->assertEqual( $memberIds, array('1', '2', '3','4', '5') );
         }
     }
 

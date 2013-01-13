@@ -303,24 +303,6 @@
 			);
 		}
 
-		//! Get a summary of the member records for all members that match the conditions.
-		/*!
-			@retval array A summary (id, name, email, Status and Groups) of the data of all members that match the conditions.
-		*/
-		private function _getMemberSummary($paginate, $conditions = array())
-		{
-			$findOptions = array('conditions' => $conditions);
-
-			if($paginate)
-			{
-				return $findOptions;
-			}
-
-			$info = $this->find( 'all', $findOptions );
-
-			return $this->formatMemberInfo($info);
-		}
-
 		//! Format member information into a nicer arrangement.
 		/*!
 			@param $info The info to format, usually retrieved from Member::_getMemberSummary.
@@ -378,6 +360,212 @@
 	    	}
 
 	    	return $formattedInfo;
+		}
+
+		//! Create a member info array for a new member.
+		/*!
+			@param string $email The e-mail address for the new member.
+			@retval array An array of member info suitable for saving.
+		*/
+		public function createNewMemberInfo($email)
+		{
+			return array(
+				'Member' => array(
+					'email' => $email,
+					'member_status' => Status::PROSPECTIVE_MEMBER,
+				),
+			);
+		}
+
+		//! Get the Status for a member, may hit the database.
+		/*!
+			@param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
+			@retval int The status for the member, or 0 if status could nto be found.
+		*/
+		public function getStatusForMember($memberData)
+		{
+			if(!isset($memberData))
+			{
+				return 0;
+			}
+
+			if(is_array($memberData))
+			{
+				$status = Hash::get($memberData, 'Member.member_status');
+				if(isset($status))
+				{
+					return $status;
+				}
+				else
+				{
+					$memberData = Hash::get($memberData, 'Member.member_id');
+				}
+			}
+
+			$memberInfo = $this->find('first', array('fields' => array('Member.member_status'), 'conditions' => array('Member.member_id' => $memberData) ));
+			if(is_array($memberInfo))
+			{
+				$status = Hash::get($memberInfo, 'Member.member_status');
+				if(isset($status))
+				{
+					return (int)$status;
+				}
+			}
+
+			return 0;
+		}
+
+		//! Get a list of e-mail addresses for all members in a Group.
+		/*!
+			@param int $groupId The id of the group the members must belong to.
+			@retval array A list of member e-mails.
+		*/
+		public function getEmailsForMembersInGroup($groupId)
+		{
+			$memberIds = $this->GroupsMember->getMemberIdsForGroup($groupId);
+			if(count($memberIds) > 0)
+			{
+				$emails = $this->find('all', array('fields' => array('email'), 'conditions' => array('Member.member_id' => $memberIds)));
+				return Hash::extract( $emails, '{n}.Member.email' );
+			}
+			return array();
+		}
+
+		//! Attempt to register a new member record.
+		/*!
+			@param array $data Information to use to create the new member record.
+			@retval mixed Array of details if the member record was created or didn't need to be, or null if member record could not be created.
+		*/
+		public function tryRegisterMember($data)
+		{
+			if(!isset($data) || !is_array($data))
+			{
+				return null;
+			}
+
+			if( (isset($data['Member']) && isset($data['Member']['email'])) == false )
+			{
+				return null;
+			}
+
+			$this->set($data);
+
+			// Need to validate only the e-mail
+			if( !$this->validates( array( 'fieldList' => array( 'email' ) ) ) )
+			{
+				// Failed
+				return null;
+			}
+
+			// Grab the e-mail
+			$email = $data['Member']['email'];
+
+			// Start to build the result data
+			$resultDetails = array();
+			$resultDetails['email'] = $email;
+
+			// Do we already know about this e-mail?
+			$memberInfo = $this->findByEmail( $email );
+
+			// Find only returns an array if it was successful
+			$newMember = !is_array($memberInfo);
+			$resultDetails['createdRecord'] = $newMember;
+
+			$memberId = -1;
+			if($newMember)
+			{
+				$memberInfo = $this->createNewMemberInfo( $email );
+
+				if( $this->_saveMemberData( $memberInfo, array( 'member_id', 'email', 'member_status' ) ) != true )
+				{
+					// Save failed for reasons.
+					return null;
+				}
+
+				$memberId = $this->id;
+			}
+			else
+			{
+				$memberId = Hash::get($memberInfo, 'Member.member_id');
+			}
+			
+			$resultDetails['status'] = (int)$this->getStatusForMember( $memberInfo );
+			$resultDetails['memberId'] = $memberId;
+
+			// Success!
+			return $resultDetails;
+		}
+
+		//! Create or save a member record, and all associated data.
+		/*! 
+			@param array $memberInfo The information to use to create or update the member record.
+			@param array $fields The fields that should be saved.
+			@retval boolean True if data has been saved successfully, false otherwise.
+		*/
+		private function _saveMemberData($memberInfo, $fields)
+		{
+			$dataSource = $this->getDataSource();
+			$dataSource->begin();
+
+			$memberId = Hash::get( $memberInfo, 'Member.member_id' );
+
+			// If the member already exists, sort out the groups
+			if($memberId != null)
+			{
+				$newStatus = (int)$this->getStatusForMember( $memberInfo );
+
+				if( $newStatus == Status::CURRENT_MEMBER )
+				{
+					// Member must be in the current member group
+					if( !$this->GroupsMember->addMemberToGroup( $memberId, Group::CURRENT_MEMBERS ) )
+					{
+						$dataSource->rollback();
+						return false;
+					}
+				}
+				else
+				{
+					// Member has to be stripped of all group info
+					if( !$this->GroupsMember->removeAllGroupsForMember( $memberId ) )
+					{
+						$dataSource->rollback();
+						return false;
+					}
+				}
+			}
+			else
+			{
+				$this->Create();
+			}
+
+			if( $this->saveAll( $memberInfo, array( 'fieldList' => $fields ), $fields) == false )
+			{
+				$dataSource->rollback();
+				return false;
+			}
+
+			// We're good
+			$dataSource->commit();
+			return true;
+		}
+
+
+		//! Get a summary of the member records for all members that match the conditions.
+		/*!
+			@retval array A summary (id, name, email, Status and Groups) of the data of all members that match the conditions.
+		*/
+		private function _getMemberSummary($paginate, $conditions = array())
+		{
+			$findOptions = array('conditions' => $conditions);
+
+			if($paginate)
+			{
+				return $findOptions;
+			}
+
+			$info = $this->find( 'all', $findOptions );
+
+			return $this->formatMemberInfo($info);
 		}
 	}
 ?>

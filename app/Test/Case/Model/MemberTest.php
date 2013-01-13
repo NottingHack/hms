@@ -251,6 +251,163 @@
                 $this->assertInternalType( 'array', $memberInfo['status'], 'No array by the name of status' );
             }
         }
+
+        public function testCreateNewMemberInfo()
+        {
+            $testEmail = 'foo@bar.co.uk';
+            $result = $this->Member->createNewMemberInfo($testEmail);
+
+            $this->assertInternalType( 'array', $result, 'Result is not an array.' );
+            $this->assertArrayHasKey( 'Member', $result, 'Result has no Member array.' );
+
+            $this->assertInternalType( 'array', $result['Member'], 'Result Member is not an array.' );
+
+            $this->assertArrayHasKey( 'email', $result['Member'], 'Result Member has no email.' );
+            $this->assertIdentical( $result['Member']['email'], $testEmail, 'Email is incorrect.' );
+
+            $this->assertArrayHasKey( 'member_status', $result['Member'], 'Result Member has no member status.' );
+            $this->assertIdentical( $result['Member']['member_status'], Status::PROSPECTIVE_MEMBER, 'Member status is incorrect.' );
+        }
+
+        public function testGetStatusForMember()
+        {
+            $this->assertIdentical( $this->Member->getStatusForMember(null), 0, 'Null data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(0), 0, 'Invalid data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(-1), 0, 'Invalid data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array()), 0, 'Empty array was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member')), 0, 'Invalid array was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array())), 0, 'Invalid array was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_id' => 0))), 0, 'Invalid member_id was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_id' => -1))), 0, 'Invalid member_id was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_id' => null))), 0, 'Invalid member_id was not handled correctly.' );
+
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_id' => 1))), 5, 'Member status is incorrect.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_id' => 6))), 6, 'Member status is incorrect.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_id' => 7))), 1, 'Member status is incorrect.' );
+
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_status' => 1))), 1, 'Member status is incorrect.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_status' => 1, 'member_id' => 7))), 1, 'Member status is incorrect.' );
+
+            $this->assertIdentical( $this->Member->getStatusForMember(1), 5, 'Member status is incorrect.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(6), 6, 'Member status is incorrect.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(7), 1, 'Member status is incorrect.' );
+        }
+
+        public function testGetEmailsForMembersInGroup()
+        {
+            $this->assertEqual( count($this->Member->getEmailsForMembersInGroup(0)), 0, 'Incorrect return value for non-existant group.' );
+
+            $this->assertEqual( $this->Member->getEmailsForMembersInGroup(Group::CURRENT_MEMBERS), array( 'm.pryce@example.org', 'a.santini@hotmail.com', 'g.viles@gmail.com', 'k.savala@yahoo.co.uk', 'j.easterwood@googlemail.com' ), 'Incorrect return value for Current Member group.' );
+        }
+
+        public function testTryRegisterMember()
+        {
+            // Test invalid data
+            $this->assertIdentical( $this->Member->tryRegisterMember(null), null, 'Null data was not handles correctly.' );
+            $this->assertIdentical( $this->Member->tryRegisterMember('fofe'), null, 'Non-array data was not handles correctly.' );
+            $this->assertIdentical( $this->Member->tryRegisterMember(array()), null, 'Empty array data was not handles correctly.' );
+            $this->assertIdentical( $this->Member->tryRegisterMember(array('Group')), null, 'Invalid array data was not handles correctly.' );
+            $this->assertIdentical( $this->Member->tryRegisterMember(array('Member' => array('email'))), null, 'Invalid array data was not handles correctly.' );
+            $this->assertIdentical( $this->Member->tryRegisterMember(array('Member' => array('email' => 'not a valid e-mail'))), null, 'Invalid array data was not handles correctly.' );
+
+            // Test with a member that we already know exists, for a member who have the PROSPECTIVE_MEMBER status
+            $existingEmail = 'CherylLCarignan@teleworm.us';
+
+            $result = $this->Member->tryRegisterMember( array('Member' => array('email' => $existingEmail)) );
+
+            $this->assertNotIdentical( $result, null, 'Result should be non-null.' );
+            $this->assertInternalType( 'array', $result, 'Result should be an array.' );
+
+            $this->assertArrayHasKey( 'email', $result, 'Result does not have e-mail.' );
+            $this->assertIdentical( $result['email'], $existingEmail, 'Result has incorrect e-mail.' );
+
+            $this->assertArrayHasKey( 'createdRecord', $result, 'Result does not have createdRecord.' );
+            $this->assertFalse( $result['createdRecord'], 'Result has incorrect createdRecord.' );
+
+            $this->assertArrayHasKey( 'status', $result, 'Result does not have status.' );
+            $this->assertIdentical( $result['status'], Status::PROSPECTIVE_MEMBER, 'Result has incorrect status.' );
+
+            $this->assertArrayHasKey( 'memberId', $result, 'Result does not have member id.' );
+
+            $upperCaseEmail = strtoupper($existingEmail);
+
+            $this->assertNotIdentical( $result, null, 'Result should be non-null.' );
+            $this->assertInternalType( 'array', $result, 'Result should be an array.' );
+
+            $this->assertArrayHasKey( 'email', $result, 'Result does not have e-mail.' );
+            $this->assertIdentical( $result['email'], $existingEmail, 'Result has incorrect e-mail.' );
+
+            $this->assertArrayHasKey( 'createdRecord', $result, 'Result does not have createdRecord.' );
+            $this->assertFalse( $result['createdRecord'], 'Result has incorrect createdRecord.' );
+
+            $this->assertArrayHasKey( 'status', $result, 'Result does not have status.' );
+            $this->assertIdentical( $result['status'], Status::PROSPECTIVE_MEMBER, 'Result has incorrect status.' );
+
+            $this->assertArrayHasKey( 'memberId', $result, 'Result does not have member id.' );
+
+            // Test with a member that we already know exists, for a member who does not have the PROSPECTIVE_MEMBER status
+            $testData = array(
+                'm.pryce@example.org' => Status::CURRENT_MEMBER,
+                'DorothyDRussell@dayrep.com' => Status::PRE_MEMBER_1,
+                'BettyCParis@teleworm.us' => Status::PRE_MEMBER_2,
+                'RyanMiles@dayrep.com' => Status::PRE_MEMBER_3,
+                'g.garratte@foobar.org' => Status::EX_MEMBER,
+            );
+
+            foreach ($testData as $email => $status) 
+            {
+                $result = $this->Member->tryRegisterMember( array('Member' => array('email' => $email)) );
+
+                $this->assertNotIdentical( $result, null, 'Result should be non-null.' );
+                $this->assertInternalType( 'array', $result, 'Result should be an array.' );
+
+                $this->assertArrayHasKey( 'email', $result, 'Result does not have e-mail.' );
+                $this->assertIdentical( $result['email'], $email, 'Result has incorrect e-mail.' );
+
+                $this->assertArrayHasKey( 'createdRecord', $result, 'Result does not have createdRecord.' );
+                $this->assertFalse( $result['createdRecord'], 'Result has incorrect createdRecord.' );
+
+                $this->assertArrayHasKey( 'status', $result, 'Result does not have status.' );
+                $this->assertIdentical( $result['status'], $status, 'Result has incorrect status.' );
+
+                $this->assertArrayHasKey( 'memberId', $result, 'Result does not have member id.' );
+            }
+
+            // Test with a new e-mail
+            $newEmail = 'foo@srsaegrttfd.com';
+            $result = $this->Member->tryRegisterMember( array('Member' => array('email' => $newEmail)) );
+
+            $this->assertNotIdentical( $result, null, 'Result should be non-null.' );
+            $this->assertInternalType( 'array', $result, 'Result should be an array.' );
+
+            $this->assertArrayHasKey( 'email', $result, 'Result does not have e-mail.' );
+            $this->assertEqual( $result['email'], $newEmail, 'Result has incorrect e-mail.' );
+
+            $this->assertArrayHasKey( 'createdRecord', $result, 'Result does not have createdRecord.' );
+            $this->assertTrue( $result['createdRecord'], 'Result has incorrect createdRecord.' );
+
+            $this->assertArrayHasKey( 'status', $result, 'Result does not have status.' );
+            $this->assertEqual( $result['status'], Status::PROSPECTIVE_MEMBER, 'Result has incorrect status.' );
+
+            $this->assertArrayHasKey( 'memberId', $result, 'Result does not have member id.' );
+
+
+            $record = $this->Member->findByEmail($newEmail);
+
+            $this->assertNotIdentical( $record, null, 'Could not find record.' );
+            $this->assertInternalType( 'array', $record, 'Could not find record.' );
+
+            $this->assertArrayHasKey( 'Member', $record, 'Record does not have member key.' );
+
+            $this->assertArrayHasKey( 'member_id', $record['Member'], 'Record Member does not have member_id key.' );
+            $this->assertArrayHasKey( 'email', $record['Member'], 'Record Member does not have email key.' );
+            $this->assertIdentical( $record['Member']['email'], $newEmail, 'Record email is incorrect.' );
+
+            $this->assertArrayHasKey( 'member_status', $record['Member'], 'Record Member does not have member_status key.' );
+            $this->assertEqual( $record['Member']['member_status'], Status::PROSPECTIVE_MEMBER, 'Record has incorrect status.' );
+
+            $this->assertEqual( $record['Member']['member_id'], $result['memberId'], 'Result has incorrect member id.' );
+        }
     }
 
 ?>

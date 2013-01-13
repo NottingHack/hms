@@ -3,7 +3,7 @@
 </p>
 
 <p>
-	If you'd like to become a Nottingham Hackspace member, the first step is is to <?php echo $this->Html->link('create an HMS account', array('controller' => 'members', 'action' => 'setup_login', $memberId, 'full_base' => true)); ?>.
+	If you'd like to become a Nottingham Hackspace member, the first step is is to <?php echo $this->Html->link('create an HMS account', array('controller' => 'members', 'action' => 'setupLogin', $memberId, 'full_base' => true)); ?>.
 </p>
 
 <p>

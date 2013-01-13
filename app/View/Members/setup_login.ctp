@@ -1,4 +1,4 @@
-<!-- File: /app/View/Member/setup_login.ctp -->
+<!-- File: /app/View/Member/setupLogin.ctp -->
 
 <p>
 	Please enter your name and a username and password that you'll use to login to HMS.
