@@ -127,18 +127,6 @@
 	    						[action] => action name
 	    						[params] => array of params
 	    	*/
-
-	    	/*
-	    	// Get the member summary from the model.
-	    	$memberList = $this->Member->getMemberSummaryAll();
-	    	$memberList = $this->_addMemberActions($memberList);
-
-	        $this->set('memberList', $memberList);
-
-	        print_r($this->paginate('Member'));
-	        exit();
-	        */
-
 	        $this->_paginateMemberList($this->Member->getMemberSummaryAll(true));
 	    }
 
@@ -200,7 +188,7 @@
 
 			if($this->request->is('post'))
 			{
-				$result = $this->Member->tryRegisterMember( $this->request->data );
+				$result = $this->Member->registerMember( $this->request->data );
 
 				if( $result )
 				{
@@ -251,59 +239,28 @@
 		}
 
 	    //! Allow a member to set-up their initial login details.
-	    public function setup_login($id = null)
+	    /*
+	    	@param int $id The id of the member whose details we want to set-up.
+	    */
+	    public function setupLogin($id = null)
 	    {
-
-
-	    	if($id != null)
+	    	if( $id == null ||
+	    		$this->Member->getStatusForMember($id) != Status::PROSPECTIVE_MEMBER)
 	    	{
-	    		$this->Member->id = $id;
-	    		$memberInfo = $this->Member->read();
-	    		# Does this member already have a username?
-	    		if(	$memberInfo != null &&
-	    			isset($memberInfo['Member']['username']) == false &&
-	    			$memberInfo['Member']['member_status'] == 1) # Can only do this if we have the correct status
+	    		return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
+	    	}
+
+	    	if($this->request->is('post'))
+	    	{
+	    		if( $this->Member->setupLogin($id, $this->request->data) )
 	    		{
-	    			$this->set('memberInfo', $memberInfo);
-
-	    			$this->request->data['Member']['member_id'] = $id;
-
-	    			if($this->request->is('put'))
-	    			{
-	    				$this->Member->addEmailMustMatch();
-
-	    				$this->request->data['Member']['member_status'] = 5;
-	    				$this->Member->set($this->request->data);
-	    				if($this->Member->validates(array('fieldList' => array('name', 'email', 'username', 'password', 'password_confirm'))))
-	    				{
-	    					# Make the handle the same as the username for now...
-	    					$this->request->data['Member']['handle'] = $this->request->data['Member']['username'];
-
-		    				if(	$this->Krb->addUser($this->request->data['Member']['username'], $this->request->data['Member']['password']) &&
-		    				 	$this->Member->save($this->request->data, array('validate' => false)))
-		    				{
-		    					$this->Session->setFlash('Username and Password set, please login.');
-								$this->redirect(array( 'controller' => 'members', 'action' => 'login'));
-		    				}
-		    				else
-		    				{
-		    					$this->Session->setFlash('Unable to set username and password.');
-		    				}
-		    			}
-
-		    			$this->Member->removeEmailMustMatch();
-	    			}
+	    			$this->Session->setFlash('Username and Password set, please login.');
+	    			return $this->redirect(array( 'controller' => 'members', 'action' => 'login'));
 	    		}
 	    		else
 	    		{
-	    			# Redirect somewhere, they shouldn't be here
-	    			$this->redirect(array('controller' => 'pages', 'action' => 'home'));
+	    			$this->Session->setFlash('Unable to set username and password.');
 	    		}
-	    	}
-	    	else
-	    	{
-	    		# Redirect somewhere, they shouldn't be here
-	    		$this->redirect(array('controller' => 'pages', 'action' => 'home'));
 	    	}
 	    }
 

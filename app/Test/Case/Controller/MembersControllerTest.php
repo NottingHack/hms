@@ -386,7 +386,7 @@
 
 			$this->_testRegisterMailingListViewVars();
 
-			$this->assertContains('/members/login', $this->headers['Location']);
+			$this->assertContains('/members/login', $this->headers['Location'], 'Redirect to login page did not occur.' );
 		}
 
 		public function testRegisterExMember()
@@ -409,7 +409,76 @@
 			$this->testAction('/members/register', array('data' => array('Member' => array('email' => $emailAddress)), 'method' => 'post'));
 
 			$this->_testRegisterMailingListViewVars();
-			$this->assertContains('/members/login', $this->headers['Location']);
+			$this->assertContains('/members/login', $this->headers['Location'], 'Redirect to login page did not occur.' );
+		}
+
+		public function testSetupLoginWithInvalidMember()
+		{
+			/*
+			$invalidMemberIds = array(1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14);
+			foreach ($invalidMemberIds as $memberId) 
+			{
+				$this->testAction('/members/setupLogin/' . $memberId);
+				
+				$this->assertTrue( isset($this->headers), 'Redirect to home page did not occur for member: ' . $memberId . '.' );
+				$this->assertInternalType( 'array', $this->headers, 'Redirect to home page did not occur for member: ' . $memberId . '.' );
+				$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect to home page did not occur for member: ' . $memberId . '.' );
+				$this->assertContains('/pages/home', $this->headers['Location'], 'Redirect to home page did not occur for member: ' . $memberId . '.' );
+			}
+
+			// This shouldn't redirect, as it invalid data rather than an invalid action.
+			$invalidData = array(
+				8 => array(
+					'Member' => array(
+						'name' => 'Tony'
+						'username' => 'dayrep',
+						'email' => 'aefsarwgesthbbs@easwrgtu.com',
+						'password' => 'hunter2',
+						'password_confirm' => 'hunter2'
+					),
+				),
+			);
+
+			foreach ($invalidData as $memberId => $data) 
+			{
+				$this->testAction('/members/setupLogin/' . $memberId, array('data' => $data, 'method' => 'post'));
+				$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect to home page occurred for member: ' . $memberId . '.' );
+			}
+			*/
+		}
+
+		public function testSetupLoginWithValidMember()
+		{
+			$validData = array(
+				7 => array(
+					'Member' => array(
+						'name' => 'Cheryl',
+						'username' => 'dayrep',
+						'email' => 'CherylLCarignan@teleworm.us',
+						'password' => 'hunter2',
+						'password_confirm' => 'hunter2'
+					),
+				),
+				8 => array(
+					'Member' => array(
+						'name' => 'Melvin',
+						'username' => 'retgar',
+						'email' => 'MelvinJFerrell@dayrep.com',
+						'password' => 'q1w2e3r4t5',
+						'password_confirm' => 'q1w2e3r4t5'
+					),
+				),
+			);
+
+			foreach ($validData as $memberId => $data) 
+			{
+				$this->testAction('/members/setupLogin/' . $memberId, array('data' => $data, 'method' => 'post'));
+				
+				$this->assertTrue( isset($this->headers), 'Redirect to login page did not occur for member: ' . $memberId . '.' );
+				$this->assertInternalType( 'array', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
+				$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
+				$this->assertContains('/members/login', $this->headers['Location'], 'Redirect to login page did not occur for member: ' . $memberId . '.' );
+			}
 		}
 
 		private function _testRegisterMailingListViewVars()

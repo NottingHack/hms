@@ -12,8 +12,6 @@ class AllTests extends CakeTestSuite
 	{
 		$suite = new CakeTestSuite('All Tests');
 		$suite->addTestDirectoryRecursive(TESTS);
-
-		$path = TESTS . DS;
 		return $suite;
 	}
 }

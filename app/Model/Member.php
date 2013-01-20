@@ -150,6 +150,9 @@
 	        ),
 	    );
 
+		//! Use the KrbAuth behaviour for setting passwords and the like.
+		public $actsAs = array('KrbAuth');
+
 		//! Validation function to see if the user-supplied password and password confirmation match.
 		/*!
 			@param array $check The password to be validated.
@@ -157,7 +160,7 @@
 		*/
 	    public function passwordConfirmMatchesPassword($check)
 		{
-			return $this->data['Member']['password'] === $check;
+			return $this->data['Member']['password'] === $check['password_confirm'];
 		}
 
 		//! Validation function to see if the user-supplied username is already taken.
@@ -167,7 +170,7 @@
 		*/
 		public function checkUniqueUsername($check)
 		{
-			$lowercaseUsername = strtolower($check);
+			$lowercaseUsername = strtolower($check['username']);
 			$records = $this->find('all', 
 				array(  'fields' => array('Member.username'),
 					'conditions' => array( 
@@ -197,7 +200,7 @@
 		public function checkEmailMatch($check)
 		{
 			$ourEmail = $this->find('first', array('fields' => array('Member.email'), 'conditions' => array('Member.member_id' => $this->data['Member']['member_id'])));
-			return strcasecmp($ourEmail['Member']['email'], $check) == 0;
+			return strcasecmp($ourEmail['Member']['email'], $check['email']) == 0;
 		}
 
 		//! Actions to perform before saving any data
@@ -436,7 +439,7 @@
 			@param array $data Information to use to create the new member record.
 			@retval mixed Array of details if the member record was created or didn't need to be, or null if member record could not be created.
 		*/
-		public function tryRegisterMember($data)
+		public function registerMember($data)
 		{
 			if(!isset($data) || !is_array($data))
 			{
@@ -476,7 +479,7 @@
 			{
 				$memberInfo = $this->createNewMemberInfo( $email );
 
-				if( $this->_saveMemberData( $memberInfo, array( 'member_id', 'email', 'member_status' ) ) != true )
+				if( $this->_saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' ) ) ) != true )
 				{
 					// Save failed for reasons.
 					return null;
@@ -494,6 +497,62 @@
 
 			// Success!
 			return $resultDetails;
+		}
+
+		//! Attempt to set-up login details for a member.
+		/*!
+			@param int $memberId The id of the member to set-up the login details for.
+			@param array $data The data to use.
+			@retval bool True on success, otherwise false.
+		*/
+		public function setupLogin($memberId, $data)
+		{
+			if(!isset($memberId) || $memberId <= 0)
+			{
+				return false;
+			}
+
+			if(!isset($data) || !is_array($data))
+			{
+				return false;
+			}
+
+			if( ( isset($data['Member']) && 
+				  isset($data['Member']['name']) &&
+				  isset($data['Member']['username']) &&
+				  isset($data['Member']['email']) &&
+				  isset($data['Member']['password']) ) == false )
+			{
+				return false;
+			}
+
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if(!$memberInfo)
+			{
+				return false;
+			}
+
+			// Merge all the data, set the handle to be the same as the username for now
+			$hardcodedData = array(
+				'handle' => $data['Member']['username'],
+				'member_status' => Status::PRE_MEMBER_1,
+			);
+			unset($data['Member']['member_id']);
+			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $data['Member'], $hardcodedData));
+
+			$this->set($dataToSave);
+
+			$this->addEmailMustMatch();
+
+			$saveOk = false;
+			if($this->validates(array( 'fieldList' => array('name', 'username', 'handle', 'email', 'password', 'password_confirm'))))
+			{
+								$saveOk = $this->_saveMemberData($dataToSave, array('Member' => array('name', 'username', 'handle', 'member_status')));
+			}
+
+			$this->removeEmailMustMatch();
+
+			return $saveOk;
 		}
 
 		//! Create or save a member record, and all associated data.
@@ -526,11 +585,35 @@
 				else
 				{
 					// Member has to be stripped of all group info
-					if( !$this->GroupsMember->removeAllGroupsForMember( $memberId ) )
+					$memberInfo['Group'] = array();
+					if(!in_array('Group', $fields))
 					{
-						$dataSource->rollback();
-						return false;
+						array_push($fields, 'Group');
 					}
+				}
+
+				// Do we have to change the password?
+				if(	isset($memberInfo['Member']['username']) && 
+					isset($memberInfo['Member']['password']) )
+				{
+					$username = Hash::get($memberInfo, 'Member.username');
+					$password = Hash::get($memberInfo, 'Member.password');
+
+					$authOk = false;
+					switch ($this->userExists($username)) 
+			    	{
+			    		case TRUE:
+			    			$authOk = $this->changePassword($username, $password);
+
+			    		case FALSE:
+			    			$authOk = $this->addUser($username, $password);
+			    	}
+
+			    	if(!$authOk)
+			    	{
+			    		$dataSource->rollback();
+			    		return false;
+			    	}
 				}
 			}
 			else
@@ -538,7 +621,7 @@
 				$this->Create();
 			}
 
-			if( $this->saveAll( $memberInfo, array( 'fieldList' => $fields ), $fields) == false )
+			if( $this->saveAll( $memberInfo, array( 'fieldList' => $fields )) == false )
 			{
 				$dataSource->rollback();
 				return false;
