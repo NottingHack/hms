@@ -414,7 +414,6 @@
 
 		public function testSetupLoginWithInvalidMember()
 		{
-			/*
 			$invalidMemberIds = array(1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14);
 			foreach ($invalidMemberIds as $memberId) 
 			{
@@ -430,7 +429,7 @@
 			$invalidData = array(
 				8 => array(
 					'Member' => array(
-						'name' => 'Tony'
+						'name' => 'Tony',
 						'username' => 'dayrep',
 						'email' => 'aefsarwgesthbbs@easwrgtu.com',
 						'password' => 'hunter2',
@@ -444,7 +443,6 @@
 				$this->testAction('/members/setupLogin/' . $memberId, array('data' => $data, 'method' => 'post'));
 				$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect to home page occurred for member: ' . $memberId . '.' );
 			}
-			*/
 		}
 
 		public function testSetupLoginWithValidMember()
@@ -479,6 +477,120 @@
 				$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				$this->assertContains('/members/login', $this->headers['Location'], 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 			}
+		}
+
+		public function testSetupDetailsWithInvalidMembers()
+		{
+			$data = array(
+                'Member' => array(
+                    'address_1' => '27A The Mews',
+                    'address_2' => 'Test Road',
+                    'address_city' => 'Testington',
+                    'address_postcode' => 'DE22 7BU',
+                    'contact_number' => '07973 235786',
+                )
+            );
+
+            $memberList = array( 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14 );
+
+            $mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+            foreach ($memberList as $memberId)
+            {
+            	$this->testAction('/members/setupDetails/' . $memberId, array('data' => $data, 'method' => 'post'));
+				
+				$this->assertTrue( isset($this->headers), 'Redirect to login page did not occur for member: ' . $memberId . '.' );
+				$this->assertInternalType( 'array', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
+				$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
+				$this->assertContains('/pages/home', $this->headers['Location'], 'Redirect to login page did not occur for member: ' . $memberId . '.' );
+            }
+
+		}
+
+		public function testSetupDetails()
+		{
+			$data = array(
+                'Member' => array(
+                    'address_1' => '27A The Mews',
+                    'address_2' => 'Test Road',
+                    'address_city' => 'Testington',
+                    'address_postcode' => 'DE22 7BU',
+                    'contact_number' => '07973 235786',
+                )
+            );
+
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->exactly(2))->method('config');
+			$mockEmail->expects($this->exactly(2))->method('from');
+			$mockEmail->expects($this->exactly(2))->method('sender');
+			$mockEmail->expects($this->exactly(2))->method('emailFormat');
+			$mockEmail->expects($this->exactly(2))->method('to');
+			$mockEmail->expects($this->exactly(2))->method('subject');
+			$mockEmail->expects($this->exactly(2))->method('template');
+			$mockEmail->expects($this->exactly(2))->method('viewVars');
+			$mockEmail->expects($this->exactly(2))->method('send')->will($this->returnValue(true));
+
+			$mockEmail->expects($this->at(0))->method('config')->with('smtp');
+			$mockEmail->expects($this->at(1))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(2))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(3))->method('emailFormat')->with('html');
+			$mockEmail->expects($this->at(4))->method('to')->with(array('j.easterwood@googlemail.com'));
+			$mockEmail->expects($this->at(5))->method('subject')->with('New Member Contact Details');
+			$mockEmail->expects($this->at(6))->method('template')->with('notify_admins_check_contact_details');
+			$mockEmail->expects($this->at(7))->method('viewVars')->with(array('email' => 'DorothyDRussell@dayrep.com', 'id' => 9));
+			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
+
+			$mockEmail->expects($this->at(9))->method('config')->with('smtp');
+			$mockEmail->expects($this->at(10))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(11))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(12))->method('emailFormat')->with('html');
+			$mockEmail->expects($this->at(13))->method('to')->with('DorothyDRussell@dayrep.com');
+			$mockEmail->expects($this->at(14))->method('subject')->with('Contact Information Completed');
+			$mockEmail->expects($this->at(15))->method('template')->with('to_member_post_contact_update');
+			$mockEmail->expects($this->at(16))->method('viewVars')->with(array());
+			$mockEmail->expects($this->at(17))->method('send')->will($this->returnValue(true));
+
+			$this->testAction('/members/setupDetails/9', array('data' => $data, 'method' => 'post'));
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect did not occurred.' );
+			$this->assertContains('/members/view/9', $this->headers['Location'], 'Redirect to member view did not occur.' );
+
+
+			$record = $this->MembersController->Member->findByMemberId(9);
+
+            $this->assertNotIdentical( $record, null, 'Could not find record for member id.' );
+            $this->assertInternalType( 'array', $record, 'Could not find record for member id.' );
+
+            $this->assertArrayHasKey( 'Member', $record, 'Record does not have member key for member id.' );
+
+            $this->assertArrayHasKey( 'member_id', $record['Member'], 'Record Member does not have member_id key for member id.' );
+            $this->assertArrayHasKey( 'address_1', $record['Member'], 'Record Member does not have address_1 key for member id.' );
+            $this->assertIdentical( $record['Member']['address_1'], $data['Member']['address_1'], 'Record address_1 is incorrect for member id.' );
+
+            $this->assertArrayHasKey( 'member_status', $record['Member'], 'Record Member does not have member_status key for member id.' );
+            $this->assertEqual( $record['Member']['member_status'], Status::PRE_MEMBER_2, 'Record has incorrect status for member id.' );
+
+            $this->assertArrayHasKey( 'address_2', $record['Member'], 'Record Member does not have address_2 key for member id.' );
+            $this->assertEqual( $record['Member']['address_2'], $data['Member']['address_2'], 'Record has incorrect address_2 for member id.' );
+
+            $this->assertArrayHasKey( 'address_city', $record['Member'], 'Record Member does not have address_city key for member id.' );
+            $this->assertEqual( $record['Member']['address_city'], $data['Member']['address_city'], 'Record has incorrect address_city for member id.' );
+
+            $this->assertArrayHasKey( 'address_postcode', $record['Member'], 'Record Member does not have address_postcode key for member id.' );
+            $this->assertEqual( $record['Member']['address_postcode'], $data['Member']['address_postcode'], 'Record has incorrect address_postcode for member id.' );
+
+            $this->assertArrayHasKey( 'contact_number', $record['Member'], 'Record Member does not have contact_number key for member id.' );
+            $this->assertEqual( $record['Member']['contact_number'], $data['Member']['contact_number'], 'Record has incorrect contact_number for member id.' );
 		}
 
 		private function _testRegisterMailingListViewVars()

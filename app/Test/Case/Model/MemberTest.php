@@ -293,6 +293,30 @@
             $this->assertIdentical( $this->Member->getStatusForMember(7), 1, 'Member status is incorrect.' );
         }
 
+        public function testGetEmailForMember()
+        {
+            $this->assertIdentical( $this->Member->getEmailForMember(null), null, 'Null data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getEmailForMember(0), null, 'Invalid data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getEmailForMember(-1), null, 'Invalid data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getEmailForMember(array()), null, 'Empty array was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getEmailForMember(array('Member')), null, 'Invalid array was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getEmailForMember(array('Member' => array())), null, 'Invalid array was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getEmailForMember(array('Member' => array('member_id' => 0))), null, 'Invalid member_id was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getEmailForMember(array('Member' => array('member_id' => -1))), null, 'Invalid member_id was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getEmailForMember(array('Member' => array('member_id' => null))), null, 'Invalid member_id was not handled correctly.' );
+
+            $this->assertIdentical( $this->Member->getEmailForMember(array('Member' => array('member_id' => 1))), 'm.pryce@example.org', 'Member email is incorrect.' );
+            $this->assertIdentical( $this->Member->getEmailForMember(array('Member' => array('member_id' => 6))), 'g.garratte@foobar.org', 'Member email is incorrect.' );
+            $this->assertIdentical( $this->Member->getEmailForMember(array('Member' => array('member_id' => 7))), 'CherylLCarignan@teleworm.us', 'Member email is incorrect.' );
+
+            $this->assertIdentical( $this->Member->getEmailForMember(array('Member' => array('email' => 'foo@bar.co.uk'))), 'foo@bar.co.uk', 'Member email is incorrect.' );
+            $this->assertIdentical( $this->Member->getEmailForMember(array('Member' => array('email' => 'foo@bar.co.uk', 'member_id' => 7))), 'foo@bar.co.uk', 'Member email is incorrect.' );
+
+            $this->assertIdentical( $this->Member->getEmailForMember(1), 'm.pryce@example.org', 'Member email is incorrect.' );
+            $this->assertIdentical( $this->Member->getEmailForMember(6), 'g.garratte@foobar.org', 'Member email is incorrect.' );
+            $this->assertIdentical( $this->Member->getEmailForMember(7), 'CherylLCarignan@teleworm.us', 'Member email is incorrect.' );
+        }
+
         public function testGetEmailsForMembersInGroup()
         {
             $this->assertEqual( count($this->Member->getEmailsForMembersInGroup(0)), 0, 'Incorrect return value for non-existant group.' );
@@ -481,9 +505,8 @@
             $this->assertEqual( $record['Member']['contact_number'], null, 'Record has incorrect contact number.' );
         }
 
-        public function testSetupLogin()
+        public function testSetupLoginInvalidInput()
         {
-            // Test invalid data
             $this->assertFalse( $this->Member->setupLogin(null, null), 'Null data was not handled correctly.' );
             $this->assertFalse( $this->Member->setupLogin(-1, array()), 'Invalid id was not handled correctly.' );
             $this->assertFalse( $this->Member->setupLogin(0, array()), 'Invalid id was not handled correctly.' );
@@ -506,8 +529,103 @@
             );
 
             $this->assertFalse( $this->Member->setupLogin(7, $data), 'Invalid email was not handled correctly.' );
+        }
 
-            // Data that should work
+        public function testSetupLoginThorws()
+        {
+            $data = array(
+                1 => array(
+                    'Member' => array(
+                        'name' => 'FooBarson',
+                        'username' => 'fubbby',
+                        'email' => 'm.pryce@example.org',
+                        'password' => 'hunter2',
+                        'password_confirm' => 'hunter2',
+                    )
+                ),
+                6 => array(
+                    'Member' => array(
+                        'name' => 'FooBarson',
+                        'username' => 'fubbby',
+                        'email' => 'g.garratte@foobar.org',
+                        'password' => 'hunter2',
+                        'password_confirm' => 'hunter2',
+                    )
+                ),
+                9 => array(
+                    'Member' => array(
+                        'name' => 'FooBarson',
+                        'username' => 'fubbby',
+                        'email' => 'DorothyDRussell@dayrep.com',
+                        'password' => 'hunter2',
+                        'password_confirm' => 'hunter2',
+                    )
+                ),
+                10 => array(
+                    'Member' => array(
+                        'name' => 'FooBarson',
+                        'username' => 'fubbby',
+                        'email' => 'HugoJLorenz@dayrep.com',
+                        'password' => 'hunter2',
+                        'password_confirm' => 'hunter2',
+                    )
+                ),
+                11 => array(
+                    'Member' => array(
+                        'name' => 'FooBarson',
+                        'username' => 'fubbby',
+                        'email' => 'BettyCParis@teleworm.us',
+                        'password' => 'hunter2',
+                        'password_confirm' => 'hunter2',
+                    )
+                ),
+                12 => array(
+                    'Member' => array(
+                        'name' => 'FooBarson',
+                        'username' => 'fubbby',
+                        'email' => 'RoyJForsman@teleworm.us',
+                        'password' => 'hunter2',
+                        'password_confirm' => 'hunter2',
+                    )
+                ),
+                13 => array(
+                    'Member' => array(
+                        'name' => 'FooBarson',
+                        'username' => 'fubbby',
+                        'email' => 'RyanMiles@dayrep.com',
+                        'password' => 'hunter2',
+                        'password_confirm' => 'hunter2',
+                    )
+                ),
+                14 => array(
+                    'Member' => array(
+                        'name' => 'FooBarson',
+                        'username' => 'fubbby',
+                        'email' => 'EvanAtkinson@teleworm.us',
+                        'password' => 'hunter2',
+                        'password_confirm' => 'hunter2',
+                    )
+                ),
+            );
+
+            foreach ($data as $memberId => $memberData)
+            {
+                $threw = false;
+                try
+                {
+                    $this->Member->setupLogin($memberId, $memberData);
+                }
+                catch(InvalidStatusException $e)
+                {
+                    $threw = true;
+                }
+                
+                $this->assertTrue( $threw, 'SetupLogin for member id ' . $memberId . ' failed to throw.' );                
+            }
+        }
+
+        public function testSetupLoginValidData()
+        {
             $data = array(
                 'Member' => array(
                     'name' => 'FooBarson',
@@ -604,6 +722,165 @@
             $this->assertEqual( $record['Member']['address_city'], null, 'Record has incorrect address city.' );
             $this->assertEqual( $record['Member']['address_postcode'], null, 'Record has incorrect address postcode.' );
             $this->assertEqual( $record['Member']['contact_number'], null, 'Record has incorrect contact number.' );
+        }
+
+        public function testSetupDetailsInvalidData()
+        {
+            $this->assertFalse( $this->Member->setupDetails(null, null), 'Null data was not handled correctly.' );
+            $this->assertFalse( $this->Member->setupDetails(-1, array()), 'Invalid id was not handled correctly.' );
+            $this->assertFalse( $this->Member->setupDetails(0, array()), 'Invalid id was not handled correctly.' );
+            $this->assertFalse( $this->Member->setupDetails(2076, array()), 'Invalid id was not handled correctly.' );
+
+            $this->assertFalse( $this->Member->setupDetails(9, 'ferfe'), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->setupDetails(9, null), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->setupDetails(9, array()), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->setupDetails(9, array('Member')), 'Invalid data was not handled correctly.' );
+        }
+
+        public function testSetupDetailsThrows()
+        {
+            $data = array(
+                'Member' => array(
+                    'address_1' => '27A The Mews',
+                    'address_2' => 'Test Road',
+                    'address_city' => 'Testington',
+                    'address_postcode' => 'DE22 7BU',
+                    'contact_number' => '07973 235786',
+                )
+            );
+
+            $testMemberIds = array( 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14 );
+            foreach ($testMemberIds as $memberId) 
+            {
+                $threw = false;
+                try
+                {
+                    $this->Member->setupDetails($memberId, $data);
+                }
+                catch(InvalidStatusException $e)
+                {
+                    $threw = true;
+                }
+                
+                $this->assertTrue( $threw, 'SetupDetails for member id ' . $memberId . ' failed to throw.' );
+            }
+        }
+
+        public function testSetupDetailsValidData()
+        {
+            $data = array(
+                9 => array(
+                    'Member' => array(
+                        'address_1' => '27A The Mews',
+                        'address_2' => 'Test Road',
+                        'address_city' => 'Testington',
+                        'address_postcode' => 'DE22 7BU',
+                        'contact_number' => '07973 235786',
+                    )
+                ),
+                10 => array(
+                    'Member' => array(
+                        'address_1' => '323 Foo Street',
+                        'address_2' => '',
+                        'address_city' => 'Wibble',
+                        'address_postcode' => 'WI65 2GH',
+                        'contact_number' => '07956426486',
+                    )
+                ),
+            );
+
+            foreach ($data as $memberId => $memberData) 
+            {
+                $this->assertTrue( $this->Member->setupDetails($memberId, $memberData), 'Valid data was not handled correctly.' );
+
+                $record = $this->Member->findByMemberId($memberId);
+
+                $this->assertNotIdentical( $record, null, 'Could not find record for member id ' . $memberId .'.' );
+                $this->assertInternalType( 'array', $record, 'Could not find record for member id ' . $memberId .'.' );
+
+                $this->assertArrayHasKey( 'Member', $record, 'Record does not have member key for member id ' . $memberId .'.' );
+
+                $this->assertArrayHasKey( 'member_id', $record['Member'], 'Record Member does not have member_id key for member id ' . $memberId .'.' );
+                $this->assertArrayHasKey( 'address_1', $record['Member'], 'Record Member does not have address_1 key for member id ' . $memberId .'.' );
+                $this->assertIdentical( $record['Member']['address_1'], $memberData['Member']['address_1'], 'Record address_1 is incorrect for member id ' . $memberId .'.' );
+
+                $this->assertArrayHasKey( 'member_status', $record['Member'], 'Record Member does not have member_status key for member id ' . $memberId .'.' );
+                $this->assertEqual( $record['Member']['member_status'], Status::PRE_MEMBER_2, 'Record has incorrect status for member id ' . $memberId .'.' );
+
+                $this->assertArrayHasKey( 'address_2', $record['Member'], 'Record Member does not have address_2 key for member id ' . $memberId .'.' );
+                $this->assertEqual( $record['Member']['address_2'], $memberData['Member']['address_2'], 'Record has incorrect address_2 for member id ' . $memberId .'.' );
+
+                $this->assertArrayHasKey( 'address_city', $record['Member'], 'Record Member does not have address_city key for member id ' . $memberId .'.' );
+                $this->assertEqual( $record['Member']['address_city'], $memberData['Member']['address_city'], 'Record has incorrect address_city for member id ' . $memberId .'.' );
+
+                $this->assertArrayHasKey( 'address_postcode', $record['Member'], 'Record Member does not have address_postcode key for member id ' . $memberId .'.' );
+                $this->assertEqual( $record['Member']['address_postcode'], $memberData['Member']['address_postcode'], 'Record has incorrect address_postcode for member id ' . $memberId .'.' );
+
+                $this->assertArrayHasKey( 'contact_number', $record['Member'], 'Record Member does not have contact_number key for member id ' . $memberId .'.' );
+                $this->assertEqual( $record['Member']['contact_number'], $memberData['Member']['contact_number'], 'Record has incorrect contact_number for member id ' . $memberId .'.' );
+            }
+        }
+
+        public function testSetupDetailsOnlySavesAddressContactInfoMemberStatus()
+        {
+            $data = array(
+                'Member' => array(
+                    'member_id' => 14,
+                    'name' => 'FooBarson',
+                    'email' => 'CherylLCarignan@teleworm.us',
+                    'join_date' => '2010-09-22',
+                    'handle' => 'bildestonelectrician',
+                    'unlock_text' => 'Hey Kelly',
+                    'balance' => -5649,
+                    'credit_limit' => 5000,
+                    'member_status' => 5,
+                    'username' => 'fubbby',
+                    'account_id' => 4,
+                    'address_1' => '8 Elm Close',
+                    'address_2' => 'Tetsworth',
+                    'address_city' => 'Thame',
+                    'address_postcode' => 'OX9 7AP',
+                    'contact_number' => '079 0644 8720',
+                    'password' => 'hunter2',
+                    'password_confirm' => 'hunter2',
+                )
+            );
+
+            $memberId = 9;
+
+            $this->assertTrue( $this->Member->setupDetails($memberId, $data), 'Valid data was not handled correctly.' );
+
+            $record = $this->Member->findByMemberId($memberId);
+
+            $this->assertNotIdentical( $record, null, 'Could not find record for member id.' );
+            $this->assertInternalType( 'array', $record, 'Could not find record for member id.' );
+
+            $this->assertArrayHasKey( 'Member', $record, 'Record does not have member key for member id.' );
+
+            $this->assertArrayHasKey( 'member_id', $record['Member'], 'Record Member does not have member_id key for member id.' );
+            $this->assertArrayHasKey( 'address_1', $record['Member'], 'Record Member does not have address_1 key for member id.' );
+            $this->assertIdentical( $record['Member']['address_1'], $data['Member']['address_1'], 'Record address_1 is incorrect for member id.' );
+
+            $this->assertArrayHasKey( 'member_status', $record['Member'], 'Record Member does not have member_status key for member id.' );
+            $this->assertEqual( $record['Member']['member_status'], Status::PRE_MEMBER_2, 'Record has incorrect status for member id.' );
+
+            $this->assertArrayHasKey( 'address_2', $record['Member'], 'Record Member does not have address_2 key for member id.' );
+            $this->assertEqual( $record['Member']['address_2'], $data['Member']['address_2'], 'Record has incorrect address_2 for member id.' );
+
+            $this->assertArrayHasKey( 'address_city', $record['Member'], 'Record Member does not have address_city key for member id.' );
+            $this->assertEqual( $record['Member']['address_city'], $data['Member']['address_city'], 'Record has incorrect address_city for member id.' );
+
+            $this->assertArrayHasKey( 'address_postcode', $record['Member'], 'Record Member does not have address_postcode key for member id.' );
+            $this->assertEqual( $record['Member']['address_postcode'], $data['Member']['address_postcode'], 'Record has incorrect address_postcode for member id.' );
+
+            $this->assertArrayHasKey( 'contact_number', $record['Member'], 'Record Member does not have contact_number key for member id.' );
+            $this->assertEqual( $record['Member']['contact_number'], $data['Member']['contact_number'], 'Record has incorrect contact_number for member id.' );
+
+            $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
+            $this->assertEqual( $record['Member']['unlock_text'], null, 'Record has incorrect unlock text.' );
+            $this->assertEqual( $record['Member']['balance'], 0, 'Record has incorrect balance.' );
+            $this->assertEqual( $record['Member']['credit_limit'], 0, 'Record has incorrect credit limit.' );
+            $this->assertEqual( $record['Member']['account_id'], null, 'Record has incorrect account id.' );
         }
     }
 

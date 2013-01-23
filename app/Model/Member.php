@@ -1,6 +1,8 @@
 <?php
 
 	App::uses('AppModel', 'Model');
+	App::uses('Status', 'Model');
+	App::uses('InvalidStatusException', 'Error/Exception');
 
 	/**
 	 * Model for all member data
@@ -147,6 +149,18 @@
 	        ),
 	        'contact_number' => array(
 	            'rule' => 'notEmpty'
+	        ),
+	        'member_status' => array(
+	        	'rule' => array(
+	        		'inList', array(
+	        			Status::PROSPECTIVE_MEMBER,
+	        			Status::PRE_MEMBER_1,
+	        			Status::PRE_MEMBER_2,
+	        			Status::PRE_MEMBER_3,
+	        			Status::CURRENT_MEMBER,
+	        			Status::EX_MEMBER,
+	        		),
+	        	),
 	        ),
 	    );
 
@@ -383,7 +397,7 @@
 		//! Get the Status for a member, may hit the database.
 		/*!
 			@param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
-			@retval int The status for the member, or 0 if status could nto be found.
+			@retval int The status for the member, or 0 if status could not be found.
 		*/
 		public function getStatusForMember($memberData)
 		{
@@ -416,6 +430,44 @@
 			}
 
 			return 0;
+		}
+
+		//! Get the email for a member, may hit the database.
+		/*!
+			@param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
+			@retval int The email for the member, or null if email could not be found.
+		*/
+		public function getEmailForMember($memberData)
+		{
+			if(!isset($memberData))
+			{
+				return null;
+			}
+
+			if(is_array($memberData))
+			{
+				$email = Hash::get($memberData, 'Member.email');
+				if(isset($email))
+				{
+					return $email;
+				}
+				else
+				{
+					$memberData = Hash::get($memberData, 'Member.member_id');
+				}
+			}
+
+			$memberInfo = $this->find('first', array('fields' => array('Member.email'), 'conditions' => array('Member.member_id' => $memberData) ));
+			if(is_array($memberInfo))
+			{
+				$email = Hash::get($memberInfo, 'Member.email');
+				if(isset($email))
+				{
+					return $email;
+				}
+			}
+
+			return null;
 		}
 
 		//! Get a list of e-mail addresses for all members in a Group.
@@ -512,6 +564,17 @@
 				return false;
 			}
 
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus == 0)
+			{
+				return false;
+			}
+
+			if($memberStatus != Status::PROSPECTIVE_MEMBER )
+			{
+				throw new InvalidStatusException( 'Member does not have status: ' . Status::PROSPECTIVE_MEMBER );
+			}
+
 			if(!isset($data) || !is_array($data))
 			{
 				return false;
@@ -545,14 +608,67 @@
 			$this->addEmailMustMatch();
 
 			$saveOk = false;
-			if($this->validates(array( 'fieldList' => array('name', 'username', 'handle', 'email', 'password', 'password_confirm'))))
+			if($this->validates(array( 'fieldList' => array('name', 'username', 'handle', 'email', 'password', 'password_confirm', 'member_status'))))
 			{
-								$saveOk = $this->_saveMemberData($dataToSave, array('Member' => array('name', 'username', 'handle', 'member_status')));
+				$saveOk = $this->_saveMemberData($dataToSave, array('Member' => array('name', 'username', 'handle', 'member_status')));
 			}
 
 			$this->removeEmailMustMatch();
 
 			return $saveOk;
+		}
+
+		public function setupDetails($memberId, $data)
+		{
+			if(!isset($memberId) || $memberId <= 0)
+			{
+				return false;
+			}
+
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus == 0)
+			{
+				return false;
+			}
+
+			if($memberStatus != Status::PRE_MEMBER_1 )
+			{
+				throw new InvalidStatusException( 'Member does not have status: ' . Status::PRE_MEMBER_1 );
+			}
+
+			if(!isset($data) || !is_array($data))
+			{
+				return false;
+			}
+
+			if( ( isset($data['Member']) && 
+				  isset($data['Member']['address_1']) &&
+				  isset($data['Member']['address_city']) &&
+				  isset($data['Member']['address_postcode']) &&
+				  isset($data['Member']['contact_number']) ) == false )
+			{
+				return false;
+			}
+
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if(!$memberInfo)
+			{
+				return false;
+			}
+
+			// Merge all the data, set the handle to be the same as the username for now
+			$hardcodedData = array(
+				'member_status' => Status::PRE_MEMBER_2,
+			);
+			unset($data['Member']['member_id']);
+			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $data['Member'], $hardcodedData));
+
+			if(	$this->validates(array( 'fieldList' => array('address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status'))) )
+			{
+				return $this->_saveMemberData($dataToSave, array('Member' => array('address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status')));
+			}
+
+			return false;
 		}
 
 		//! Create or save a member record, and all associated data.

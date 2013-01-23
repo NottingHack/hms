@@ -252,84 +252,75 @@
 
 	    	if($this->request->is('post'))
 	    	{
-	    		if( $this->Member->setupLogin($id, $this->request->data) )
+	    		try
 	    		{
-	    			$this->Session->setFlash('Username and Password set, please login.');
-	    			return $this->redirect(array( 'controller' => 'members', 'action' => 'login'));
+	    			if( $this->Member->setupLogin($id, $this->request->data) )
+		    		{
+		    			$this->Session->setFlash('Username and Password set, please login.');
+		    			return $this->redirect(array( 'controller' => 'members', 'action' => 'login'));
+		    		}
+		    		else
+		    		{
+		    			$this->Session->setFlash('Unable to set username and password.');
+		    		}
 	    		}
-	    		else
+	    		catch(InvalidStatusException $e)
 	    		{
-	    			$this->Session->setFlash('Unable to set username and password.');
+	    			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));		
 	    		}
 	    	}
 	    }
 
-	    # Get a member with a login to set-up their address details
-	    public function setup_details($id = null)
+	    //! Allow a member who is logged in to set-up their contact details.
+	    /*
+	    	@param int $id The id of the member whose contact details we want to set-up.
+	    */
+	    public function setupDetails($id = null)
 	    {
-	    	if(	$id != null &&
+	    	// Can't do this if id isn't the same as that of the logged in user.
+	    	if( $id == null ||
 	    		$id == AuthComponent::user('Member.member_id') )
 	    	{
-	    		$this->Member->id = $id;
-	    		$memberInfo = $this->Member->read();
-	    		$this->set('memberInfo', $memberInfo);
-
-	    		# Can only be here if we have the correct status
-	    		if($memberInfo['Member']['member_status'] == 5)
-	    		{
-		    		$this->request->data['Member']['member_id'] = $id;
-		    		if($this->request->is('put'))
-	    			{
-	    				$this->request->data['Member']['email'] = $memberInfo['Member']['email'];
-	    				$this->request->data['Member']['member_status'] = 6;
-	    				$this->Member->set($this->request->data);
-	    				if($this->Member->validates(array('fieldList' => array('address_1', 'address_city', 'address_postcode', 'contact_number'))))
-		    			{
-		    				if($this->Member->save($this->request->data, array('validate' => false)))
-		    				{
-		    					$this->Session->setFlash('Contact details saved.');
-
-								# Email the admins
-								$adminEmail = $this->prepare_email_for_members_in_group(5);
-								$adminEmail->subject('New Member Contact Details');
-								$adminEmail->template('notify_admins_check_contact_details', 'default');
-								$adminEmail->viewVars( array( 
-									'email' => $this->request->data['Member']['email'],
-									'id' => $id,
-									 )
-								);
-								$adminEmail->send();
-
-								# Email the member an update
-								$memberEmail = $this->prepare_email();
-								$memberEmail->to( $this->request->data['Member']['email'] );
-								$memberEmail->subject('Contact Information Completed');
-								$memberEmail->template('to_member_post_contact_update', 'default');
-								$memberEmail->send();
-
-								$this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
-		    				}
-		    				else
-		    				{
-		    					$this->Session->setFlash('Unable to save contact details.');
-		    				}
-		    			}
-	    			}
-	    			else
-	    			{
-	    				$this->request->data = $memberInfo;
-	    			}
-	    		}
-	    		else
-		    	{
-		    		# Redirect somewhere, they shouldn't be here
-		    		$this->redirect(array('controller' => 'pages', 'action' => 'home'));
-		    	}
+	    		return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
 	    	}
-	    	else
+
+	    	if( $this->request->is('post') )
 	    	{
-	    		# Redirect somewhere, they shouldn't be here
-	    		$this->redirect(array('controller' => 'pages', 'action' => 'home'));
+	    		try
+	    		{
+	    			if( $this->Member->setupDetails($id, $this->request->data) )
+		    		{
+		    			$memberEmail = $this->Member->getEmailForMember($id);
+
+		    			$this->Session->setFlash('Contact details saved.');
+
+						$this->_sendEmail(
+							$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
+							'New Member Contact Details',
+							'notify_admins_check_contact_details',
+							array( 
+								'email' => $memberEmail,
+								'id' => $id,
+							)
+						);
+
+						$this->_sendEmail(
+							$memberEmail,
+							'Contact Information Completed',
+							'to_member_post_contact_update'
+						);
+
+						return $this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
+		    		}
+		    		else
+		    		{
+		    			$this->Session->setFlash('Unable to save contact details.');
+		    		}
+	    		}
+	    		catch(InvalidStatusException $e)
+	    		{
+	    			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
+	    		}
 	    	}
 	    }
 
@@ -1241,7 +1232,7 @@
 		}
 
 
-		private function _sendEmail($to, $subject, $template, $viewVars)
+		private function _sendEmail($to, $subject, $template, $viewVars = array())
 		{
 			if($this->email == null)
 			{
