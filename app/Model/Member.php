@@ -618,6 +618,12 @@
 			return $saveOk;
 		}
 
+		//! Attempt to set-up contact details for a member.
+		/*!
+			@param int $memberId The id of the member to set-up the contact details for.
+			@param array $data The data to use.
+			@retval bool True on success, otherwise false.
+		*/
 		public function setupDetails($memberId, $data)
 		{
 			if(!isset($memberId) || $memberId <= 0)
@@ -656,7 +662,6 @@
 				return false;
 			}
 
-			// Merge all the data, set the handle to be the same as the username for now
 			$hardcodedData = array(
 				'member_status' => Status::PRE_MEMBER_2,
 			);
@@ -669,6 +674,65 @@
 			}
 
 			return false;
+		}
+
+		//! Mark a members contact details as invalid.
+		/*
+			@param int $memberId The id of the member.
+			@param array $data The data to use.
+			@retval bool True if the members data was altered successfully, false otherwise.
+		*/
+		public function rejectDetails($memberId, $data)
+		{
+			// Need some extra validation
+	    	$this->MemberEmail = ClassRegistry::init('MemberEmail');
+
+	    	if(!isset($memberId) || $memberId <= 0)
+			{
+				return false;
+			}
+
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus == 0)
+			{
+				return false;
+			}
+
+			if($memberStatus != Status::PRE_MEMBER_2 )
+			{
+				throw new InvalidStatusException( 'Member does not have status: ' . Status::PRE_MEMBER_2 );
+			}
+
+			if(!isset($data) || !is_array($data))
+			{
+				return false;
+			}
+
+			if( ( isset($data['MemberEmail']) && 
+				  isset($data['MemberEmail']['subject']) &&
+				  isset($data['MemberEmail']['message']) ) == false )
+			{
+				return false;
+			}
+
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if(!$memberInfo)
+			{
+				return false;
+			}
+
+			$hardcodedData = array(
+				'member_status' => Status::PRE_MEMBER_1,
+			);
+			unset($data['Member']['member_id']);
+			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $hardcodedData));
+
+			if( $this->MemberEmail->validates( array( 'fieldList' => array( 'subject', 'body' ) ) ) )
+			{
+				return $this->_saveMemberData($dataToSave, array('Member' => array('member_status')));
+			}
+
+			unset($this->MemberEmail);
 		}
 
 		//! Create or save a member record, and all associated data.

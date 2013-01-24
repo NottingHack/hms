@@ -25,5 +25,19 @@
 	        	'rule' => 'notEmpty'
 	        ),
 	    );
+
+	    //! Get the message from an array of member email data.
+	    /*!
+	    	@param array $data The array of data to get the message from.
+	    	@retvl string The message, or null if it could not be found.
+	    */
+	    public function getMessage($data)
+	    {
+	    	if( isset($data) && is_array($data) )
+	    	{
+	    		return Hash::get($data, 'MemberEmail.message');
+	    	}
+	    	return null;
+	    }
 	}
 ?>

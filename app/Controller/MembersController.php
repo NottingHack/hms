@@ -56,24 +56,24 @@
 	    	switch ($request->action) 
 	    	{
 	    		case 'index':
-	    		case 'list_members':
-	    		case 'list_members_with_status':
-	    		case 'email_members_with_status':
+	    		case 'listMembers':
+	    		case 'listMembersWithStatus':
+	    		case 'emailMembersWithStatus':
 	    		case 'search':
-	    		case 'set_member_status':
-	    		case 'accept_details':
-	    		case 'reject_details':
-	    		case 'approve_member':
-	    		case 'send_membership_reminder':
-	    		case 'send_contact_details_reminder':
-	    		case 'send_so_details_reminder':
-	    		case 'add_existing_member':
+	    		case 'setMemberStatus':
+	    		case 'acceptDetails':
+	    		case 'rejectDetails':
+	    		case 'approveMember':
+	    		case 'sendMembershipReminder':
+	    		case 'sendContactDetailsReminder':
+	    		case 'sendSoDetailsReminder':
+	    		case 'addExistingMember':
 	    			return $userIsMemberAdmin; 
 
-	    		case 'change_password':
+	    		case 'changePassword':
 	    		case 'view':
 	    		case 'edit':
-	    		case 'setup_details':
+	    		case 'setupDetails':
 	    			if( $userIsMemberAdmin || 
 	    				( $actionHasParams && $userIdIsSet && $request->params['pass'][0] == $userId ) )
 	    			{
@@ -244,8 +244,7 @@
 	    */
 	    public function setupLogin($id = null)
 	    {
-	    	if( $id == null ||
-	    		$this->Member->getStatusForMember($id) != Status::PROSPECTIVE_MEMBER)
+	    	if( $id == null )
 	    	{
 	    		return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
 	    	}
@@ -324,59 +323,50 @@
 	    	}
 	    }
 
-	    public function reject_details($id = null) 
+	    //! Reject the contact details a member has supplied, with a message to say why.
+	    /*!
+	    	@param int $id The id of the member whose contact details we're rejecting.
+	    */
+	    public function rejectDetails($id = null) 
 	    {
-	    	Controller::loadModel('MemberEmail');
-
-	    	if($id != null)
+	    	if( $id == null )
 	    	{
-	    		$this->Member->id = $id;
-				$memberInfo = $this->Member->read();
-				$this->set('memberInfo', $memberInfo);
-				$this->request->data['Member']['member_id'] = $id;
+	    		return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
+	    	}
 
-				# Can only be here if we have the correct status
-	    		if($memberInfo['Member']['member_status'] == 6)
+	    	if($this->request->is('post'))
+	    	{
+	    		try
 	    		{
-					if($this->request->is('post'))
-					{
-						if($this->MemberEmail->validates(array('fieldList' => array('message'))))
-						{
-							# Set the status back to 5
-							$memberInfo['Member']['member_status'] = 5;
-							if($this->Member->save($memberInfo, array('validate' => false)))
-							{
-								$this->Session->setFlash('Member has been contacted.');
-								$memberEmail = $this->prepare_email();
-								$memberEmail->to( $memberInfo['Member']['email'] );
-								$memberEmail->subject('Issue With Contact Information');
-								$memberEmail->template('to_member_contact_details_rejected', 'default');
-								$memberEmail->viewVars( array( 
-									'reason' => $this->request->data['Member']['message'],
-									 )
-								);
-								$memberEmail->send();
+		    		if($this->Member->rejectDetails($id, $this->request->data))
+		    		{
+		    			$this->Session->setFlash('Member has been contacted.');
 
-								$this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
-							}
-							else
-							{
-								$this->Session->setFlash('Unable to set member status.');
-							}
-						}
-					}
-				}
-				else
-				{
-					# Redirect somewhere, they shouldn't be here
-		    		$this->redirect(array('controller' => 'pages', 'action' => 'home'));
-				}
-			}
-			else
-			{
-				# Redirect somewhere, they shouldn't be here
-	    		$this->redirect(array('controller' => 'pages', 'action' => 'home'));
-			}
+		    			$memberEmail = $this->Member->getEmailForMember($id);
+
+		    			Controller::loadModel('MemberEmail');
+		    			
+		    			$this->_sendEmail(
+		    				$memberEmail,
+		    				'Issue With Contact Information',
+		    				'to_member_contact_details_rejected',
+		    				array(
+		    					'message' => $this->MemberEmail->getMessage( $this->request->data )
+		    				)
+		    			);
+
+		    			return $this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
+		    		}
+		    		else
+		    		{
+		    			$this->Session->setFlash('Unable to set member status. Failed to reject details.');
+		    		}
+	    		}
+	    		catch(InvalidStatusException $e)
+	    		{
+	    			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
+	    		}
+	    	}	    	
 	    }
 
 	    public function accept_details($id = null)
