@@ -14,7 +14,7 @@
 
 		public $primaryKey = 'account_id';	//!< Specify the primary key to use.
 
-		//! An Account can have many Member
+		//! An Account has many Member
 		public $hasMany = array(
 	        'Member' => array(
 	            'className'    => 'Member',
@@ -23,10 +23,14 @@
 
 		//! Validation rules.
 		/*!
-			Account Reference must not be empty.
+			Account Id must be numeric.
+			Payment Reference must not be empty.
 		*/
 	    public $validate = array(
-	        'account_ref' => array(
+	    	'account_id' => array(
+	        	'rule' => 'numeric',
+	        ),
+	        'payment_ref' => array(
 	            'rule' => 'notEmpty'
 	        ),
 	    );
@@ -59,6 +63,48 @@
 			} while( $this->find('count', array( 'conditions' => array( 'Account.payment_ref' =>  $paymentRef) )) > 0 );
 
 			return $paymentRef;
+		}
+
+		//! Create and save a new account if needed or check for an existing account.
+		/*!
+			@param int An account id.
+			@retval int The new or existing account id on success, or -1 on error.
+		*/
+		public function setupAccountIfNeeded($accountId)
+		{
+			if(isset($accountId))
+			{
+				if($accountId <= 0)
+				{
+					// Generate a new account
+					$this->Create();
+					$data = array(
+						'Account' => array(
+							'payment_ref' => $this->generatePaymentRef(),
+						),
+					);
+
+					if( $this->save($data, array('fieldList' => array('account_id', 'payment_ref'))) )
+					{
+						// New account is ok
+						$accountId = $this->id;
+						return $accountId;
+					}
+					
+					// New account creation failed
+					return -1;
+				}
+				else
+				{
+					// Attempt to find an account with this id
+					if( $this->find('first', array('conditions' => array('account_id' => $accountId))) )
+					{
+						// All good
+						return $accountId;
+					}
+				}				
+			}
+			return -1;
 		}
 	}
 ?>

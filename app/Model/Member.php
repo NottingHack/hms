@@ -3,6 +3,7 @@
 	App::uses('AppModel', 'Model');
 	App::uses('Status', 'Model');
 	App::uses('InvalidStatusException', 'Error/Exception');
+	App::uses('String', 'Utility');
 
 	/**
 	 * Model for all member data
@@ -82,6 +83,8 @@
 			Password must not be empty and have a length equal or greater than the Member::MIN_PASSWORD_LENGTH.
 			Password Confirm must not be empty, have a length equal or greater than the Member::MIN_PASSWORD_LENGTH and it's contents much match that of Password.
 			Username must not be empty, be unique (in the database), only contain alpha-numeric characters, and be between Member::MIN_USERNAME_LENGTH and Member::MAX_USERNAME_LENGTH characters long.
+			Member Status must be in the list of valid statuses.
+			Account id must be numeric.
 			Address 1 must not be empty.
 			Address City must not be empty.
 			Address Postcode must not be empty.
@@ -138,17 +141,8 @@
 	            ),
 
 	        ),
-	        'address_1' => array(
-	            'rule' => 'notEmpty'
-	        ),
-	        'address_city' => array(
-	            'rule' => 'notEmpty'
-	        ),
-	        'address_postcode' => array(
-	            'rule' => 'notEmpty'
-	        ),
-	        'contact_number' => array(
-	            'rule' => 'notEmpty'
+	        'account_id' => array(
+	        	'rule' => 'numeric',
 	        ),
 	        'member_status' => array(
 	        	'rule' => array(
@@ -161,6 +155,18 @@
 	        			Status::EX_MEMBER,
 	        		),
 	        	),
+	        ),
+	        'address_1' => array(
+	            'rule' => 'notEmpty'
+	        ),
+	        'address_city' => array(
+	            'rule' => 'notEmpty'
+	        ),
+	        'address_postcode' => array(
+	            'rule' => 'notEmpty'
+	        ),
+	        'contact_number' => array(
+	            'rule' => 'notEmpty'
 	        ),
 	    );
 
@@ -531,7 +537,7 @@
 			{
 				$memberInfo = $this->createNewMemberInfo( $email );
 
-				if( $this->_saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' ) ) ) != true )
+				if( !$this->_saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' ) ) ) )
 				{
 					// Save failed for reasons.
 					return null;
@@ -668,6 +674,8 @@
 			unset($data['Member']['member_id']);
 			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $data['Member'], $hardcodedData));
 
+			$this->set($dataToSave);
+
 			if(	$this->validates(array( 'fieldList' => array('address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status'))) )
 			{
 				return $this->_saveMemberData($dataToSave, array('Member' => array('address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status')));
@@ -727,6 +735,8 @@
 			unset($data['Member']['member_id']);
 			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $hardcodedData));
 
+			$this->set($dataToSave);
+
 			if( $this->MemberEmail->validates( array( 'fieldList' => array( 'subject', 'body' ) ) ) )
 			{
 				return $this->_saveMemberData($dataToSave, array('Member' => array('member_status')));
@@ -735,11 +745,118 @@
 			unset($this->MemberEmail);
 		}
 
+		//! Mark a members details as valid.
+		/*!
+			@param int $memberId The id of the member who's details we want to mark as valid.
+			@param array $data The account data to use.
+			@retval mixed Array of member details on success, or null on failure.
+		*/
+		public function acceptDetails($memberId, $data)
+		{
+			if(!isset($memberId) || $memberId <= 0)
+			{
+				return null;
+			}
+
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus == 0)
+			{
+				return null;
+			}
+
+			if($memberStatus != Status::PRE_MEMBER_2 )
+			{
+				throw new InvalidStatusException( 'Member does not have status: ' . Status::PRE_MEMBER_2 );
+			}
+
+			if(!isset($data) || !is_array($data))
+			{
+				return null;
+			}
+
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if(!$memberInfo)
+			{
+				return null;
+			}
+
+			$hardcodedData = array(
+				'member_status' => Status::PRE_MEMBER_3,
+			);
+			unset($data['Member']);
+			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $hardcodedData));
+
+			$dataToSave = Hash::merge($dataToSave, $data);
+
+			$this->set($dataToSave);
+
+			if( $this->_saveMemberData($dataToSave, array('Member' => array( 'member_status', 'account_id' ) )) )
+			{
+				return $this->getSoDetails($memberId);
+			}
+
+			return null;
+		}
+
+		//! Get a members name, email and payment ref.
+		/*
+			@param int $memberId The id of the member to get the details for.
+			@retval mixed Array of info on success, null on failure.
+		*/
+		public function getSoDetails($memberId)
+		{
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if($memberInfo)
+			{
+				$name = Hash::get($memberInfo, 'Member.name');
+				$email = Hash::get($memberInfo, 'Member.email');
+				$paymentRef = Hash::get($memberInfo, 'Account.payment_ref');
+
+				if(isset($name) && isset($email) && isset($paymentRef))
+				{
+					return array(
+						'name' => $name,
+						'email' => $email,
+						'paymentRef' => $paymentRef,
+					);
+				}
+			}
+			return null;
+		}
+
+		//! Get a list of account and member details that is suitable for populating a drop-down box
+		/*!
+			@retval null List of values on success, null on failure.
+		*/
+		public function getReadableAccountList()
+		{
+			$memberList = $this->find('list', array(
+				'fields' => array('member_id', 'name', 'account_id'), 
+				'conditions' => array('Member.account_id !=' => null))
+			);
+
+			$accountList = array();
+			foreach ($memberList as $accountId => $members) 
+			{
+				$memberNames = array();
+				foreach ($members as $id => $name) 
+				{
+					array_push($memberNames, $name);
+				}
+				
+				$accountList[$accountId] = String::toList($memberNames);
+			}
+			$accountList['-1'] = 'Create new';
+			ksort($accountList);
+
+			return $accountList;
+		}
+
 		//! Create or save a member record, and all associated data.
 		/*! 
 			@param array $memberInfo The information to use to create or update the member record.
 			@param array $fields The fields that should be saved.
-			@retval boolean True if data has been saved successfully, false otherwise.
+			@retval bool True if save succeeded, false otherwise.
 		*/
 		private function _saveMemberData($memberInfo, $fields)
 		{
@@ -801,7 +918,41 @@
 				$this->Create();
 			}
 
-			if( $this->saveAll( $memberInfo, array( 'fieldList' => $fields )) == false )
+			// Do we want to be saving an account id?
+			if(	isset($fields['Member']) && 
+				is_array($fields['Member']) && 
+				in_array('account_id', $fields['Member']))
+			{
+				// Attempt to get the account id we're meant to be saving, try from the account field first.
+				$accountId = Hash::get($memberInfo, 'Account.account_id');
+
+				if(!isset($accountId))
+				{
+					// Try the member field?
+					$accountId = Hash::get($memberInfo, 'Member.account_id');
+				}
+
+				// Do we actually have an account id?
+				if(isset($accountId))
+				{
+					// Check with the Account model if this account exists or not
+					// should return the id of the account we should be saving
+					$accountId = $this->Account->setupAccountIfNeeded($accountId);
+					if($accountId < 0)
+					{
+						// Either account creation failed or account does not exist.
+						$dataSource->rollback();
+						return false;
+					}
+
+					// Set the account id in the member info, as it may have changed.
+					$memberInfo = Hash::insert($memberInfo, 'Member.account_id', $accountId);
+				}
+			}
+
+			unset($memberInfo['Account']);
+
+			if( !$this->saveAll( $memberInfo, array( 'fieldList' => $fields )) )
 			{
 				$dataSource->rollback();
 				return false;

@@ -369,67 +369,44 @@
 	    	}	    	
 	    }
 
-	    public function accept_details($id = null)
+	    //! Accept the contact details a member has supplied.
+	    /*!
+	    	@param int $id The id of the member whose contact details we're accepting.
+	    */
+	    public function acceptDetails($id = null)
 	    {
-	    	if($id != null)
+	    	if( $id == null )
 	    	{
-	    		$this->Member->id = $id;
-				$memberInfo = $this->Member->read();
-				$this->set('memberInfo', $memberInfo);
-
-				# Can only be here if we have the correct status
-	    		if($memberInfo['Member']['member_status'] == 6)
-	    		{
-		    		# Ok so the contact details are fine, at this point we set-up the
-		    		# account for the member and e-mail them the SO details...
-		    		$accountsList =	$this->get_readable_account_list( array( -1 => 'Create New' ) );
-		    		$this->set('accounts', $accountsList);
-
-		    		$this->request->data['Member']['member_id'] = $id;
-
-		    		if($this->request->is('put'))
-					{
-						$this->request->data['Member']['member_status'] = 7;
-						$accountInfo = $this->set_account($this->request->data, false);
-
-						$memberInfo['Account'] = $accountInfo['Account'];
-
-						# Now mail the member the SO details
-						$this->_send_so_details($memberInfo);
-
-						# Finally mail the member admins to look out for a payment from this new member
-						$adminEmail = $this->prepare_email_for_members_in_group(5);
-						$adminEmail->subject('Impending Payment');
-						$adminEmail->template('notify_admins_payment_incoming', 'default');
-						$adminEmail->viewVars( array( 
-							'memberName' => $memberInfo['Member']['name'],
-							'memberId' => $id,
-							'memberEmail' => $memberInfo['Member']['email'],
-							'memberPayRef' => $memberInfo['Account']['payment_ref'],
-							 )
-						);
-						$adminEmail->send();
-
-						$this->_create_status_update_record($id, AuthComponent::user('Member.member_id'), 7, 6);
-
-						$this->Session->setFlash('Member details accepted.');
-
-						$this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
-					}
-					else
-					{
-						$this->request->data = $memberInfo;
-					}
-				}
-				else
-				{
-					# Redirect somewhere, they shouldn't be here
-		    		$this->redirect(array('controller' => 'pages', 'action' => 'home'));
-				}
+	    		return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
 	    	}
-	    	else
+
+	    	$this->set('accounts', $this->Member->getReadableAccountList());
+
+	    	if($this->request->is('post'))
 	    	{
-	    		$this->redirect($this->referer);
+	    		try
+	    		{
+	    			$memberDetails = $this->Member->acceptDetails($id, $this->request->data);
+		    		if($memberDetails)
+		    		{
+		    			$this->Session->setFlash('Member details accepted.');
+
+		    			$this->_sendSoDetailsToMember($id);
+
+						$this->_sendEmail(
+							$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
+							'Impending Payment',
+							'notify_admins_payment_incoming',
+							$memberDetails
+						);
+
+						return $this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
+		    		}
+		    	}
+		    	catch(InvalidStatusException $e)
+	    		{
+	    			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
+	    		}
 	    	}
 	    }
 
@@ -802,21 +779,31 @@
 	    	}
 	    }
 
-	    public function _send_so_details($memberInfo)
+	    //! Send the e-mail containing standing order info to a member.
+	    /*
+	    	@param int $memberId The id of the member to send the reminder to.
+	    	@return bool True if mail was sent, false otherwise.
+	    */
+	    private function _sendSoDetailsToMember($memberId)
 	    {
-			$memberEmail = $this->prepare_email();
-			$memberEmail->to( $memberInfo['Member']['email'] );
-			$memberEmail->subject('Bank Details');
-			$memberEmail->template('to_member_so_details', 'default');
-			$memberEmail->viewVars( array( 
-				'name' => $memberInfo['Member']['name'],
-				'reference' => $memberInfo['Account']['payment_ref'],
-				'accountNum' => Configure::read('hms_so_accountNumber'),
-				'sortCode' => Configure::read('hms_so_sortCode'),
-				'accountName' => Configure::read('hms_so_accountName'),
-				 )
-			);
-			$memberEmail->send();
+	    	$memberSoDetails = $this->Member->getSoDetails($memberId);
+	    	if($memberSoDetails != null)
+	    	{
+	    		return $this->_sendEmail(
+	    			$memberSoDetails['email'],
+	    			'Bank Details',
+	    			'to_member_so_details',
+	    			array( 
+						'name' => $memberSoDetails['name'],
+						'paymentRef' => $memberSoDetails['paymentRef'],
+						'accountNum' => Configure::read('hms_so_accountNumber'),
+						'sortCode' => Configure::read('hms_so_sortCode'),
+						'accountName' => Configure::read('hms_so_accountName'),
+					)
+	    		);
+	    	}
+
+			return false;
 	    }
 
 	    public function view($id = null) 
@@ -1308,68 +1295,6 @@
 	        {
 	        	$this->request->data = $memberInfo;
 	        }
-		}
-
-		private function get_readable_account_list($initialElement = null) 
-		{
-			# Grab a list of member names and ID's and account id's
-			$memberList = $this->Member->find('all', array( 'fields' => array( 'member_id', 'name', 'account_id' )));
-
-			# Create a list with account_id and member_names
-			foreach ($memberList as $memberInfo) 
-			{
-				if( isset($accountList[$memberInfo['Member']['account_id']]) == false )
-				{
-					$accountList[$memberInfo['Member']['account_id']] = array( );
-				}
-				array_push($accountList[$memberInfo['Member']['account_id']], $memberInfo['Member']['name']);
-				natcasesort($accountList[$memberInfo['Member']['account_id']]);
-			}
-
-			$accountNameList = $this->Member->Account->find('list', array( 'fields' => array( 'account_id', 'payment_ref' )));
-
-			foreach ($accountList as $accountId => $members) 
-			{
-				$formattedMemberList = $members[0];
-				$numMembers = count($members);
-				for($i = 1; $i < $numMembers; $i++)
-				{
-					$prefix = ', ';
-					if($i = $numMembers - 1)
-					{
-						$prefix = ' & ';
-					}
-					$formattedMemberList .= $prefix . $members[$i];
-				}
-
-				$readableAccountList[$accountId] = $formattedMemberList;
-				# Append the payment ref if any
-				if(isset($accountNameList[$accountId]))
-				{
-					$readableAccountList[$accountId] .= ' [ ' . $accountNameList[$accountId] . ' ]';
-				}
-			}
-
-			# Sort it alphabetically
-			natcasesort($readableAccountList);
-
-			# If the initial item is set, we need to make a new list starting with that
-			if(	isset($initialElement) &&
-				$initialElement != null)
-			{
-				$tempArray = $initialElement;
-				foreach ($readableAccountList as $key => $value) 
-				{
-					if($key >= 0)
-					{
-						$tempArray[$key] = $value;
-					}
-				}
-
-				$readableAccountList = $tempArray;
-			}
-
-			return $readableAccountList;
 		}
 
 		private function set_account($memberInfo, $validateMember = true)

@@ -6,12 +6,16 @@
  *
  * @package       app.Test.Case
  */
-class AllTests extends CakeTestSuite 
+class AllTests extends PHPUnit_Framework_TestSuite 
 {
 	public static function suite() 
 	{
 		$suite = new CakeTestSuite('All Tests');
-		$suite->addTestDirectoryRecursive(TESTS);
+
+		$suite->addTestDirectory(TESTS . 'Case' . DS . 'Model');
+		$suite->addTestDirectory(TESTS . 'Case' . DS . 'Controller');
+		$suite->addTestDirectory(TESTS . 'Case' . DS . 'View');
+		$suite->addTestDirectory(TESTS . 'Case' . DS . 'View' . DS . 'Helper');
 		return $suite;
 	}
 }
