@@ -285,6 +285,21 @@
 			return $this->find( 'count', array( 'conditions' => array( 'Member.email' => strtolower($email) ) ) ) > 0;
 		}
 
+		//! Get a summary of the member records for a specific member.
+		/*!
+			@retval array A summary of the data for a specific member.
+			@sa Member::_getMemberSummary()
+		*/
+		public function getMemberSummaryForMember($memberId)
+		{
+			$memberList = $this->_getMemberSummary(false, array('Member.member_id' => $memberId));
+			if(!empty($memberList))
+			{
+				return $memberList[0];
+			}
+			return array();
+		}
+
 		//! Get a summary of the member records for all members.
 		/*!
 			@retval array A summary of the data of all members.
@@ -693,7 +708,7 @@
 		public function rejectDetails($memberId, $data)
 		{
 			// Need some extra validation
-	    	$this->MemberEmail = ClassRegistry::init('MemberEmail');
+	    	$memberEmail = ClassRegistry::init('MemberEmail');
 
 	    	if(!isset($memberId) || $memberId <= 0)
 			{
@@ -732,17 +747,14 @@
 			$hardcodedData = array(
 				'member_status' => Status::PRE_MEMBER_1,
 			);
-			unset($data['Member']['member_id']);
 			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $hardcodedData));
 
 			$this->set($dataToSave);
 
-			if( $this->MemberEmail->validates( array( 'fieldList' => array( 'subject', 'body' ) ) ) )
+			if( $memberEmail->validates( array( 'fieldList' => array( 'subject', 'body' ) ) ) )
 			{
 				return $this->_saveMemberData($dataToSave, array('Member' => array('member_status')));
 			}
-
-			unset($this->MemberEmail);
 		}
 
 		//! Mark a members details as valid.
@@ -798,6 +810,74 @@
 			return null;
 		}
 
+		//! Approve a member, making them a current member.
+		/*
+			@pamar int $memberId The id of the member to approve.
+			@retval mixed Array of member details on success, or null on failure.
+		*/
+		public function approveMember($memberId)
+		{
+			if(!isset($memberId) || $memberId <= 0)
+			{
+				return null;
+			}
+
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus == 0)
+			{
+				return null;
+			}
+
+			if($memberStatus != Status::PRE_MEMBER_3 )
+			{
+				throw new InvalidStatusException( 'Member does not have status: ' . Status::PRE_MEMBER_3 );
+			}
+
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if(!$memberInfo)
+			{
+				return null;
+			}
+
+			$hardcodedMemberData = array(
+				'member_status' => Status::CURRENT_MEMBER,
+				'unlock_text' => 'Welcome ' . $memberInfo['Member']['name'],
+				'credit_limit' => 5000,
+				'join_date' => date( 'Y-m-d' ),
+			);
+			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $hardcodedMemberData));
+			$dataToSave['Pin'] = array(
+				'unlock_text' => 'Welcome',
+				'pin' => $this->Pin->generateUniquePin(),
+				'state' => 40,
+				'member_id' => $memberId,
+			);
+
+			$this->set($dataToSave);
+
+			$fieldsToSave = array(
+				'Member' => array( 
+					'member_status', 
+					'unlock_text', 
+					'credit_limit', 
+					'join_date' 
+				), 
+				'Pin' => array(
+					'unlock_text', 
+					'pin', 
+					'state', 
+					'member_id'
+				)
+			);
+
+			if( $this->_saveMemberData($dataToSave, $fieldsToSave) )
+			{
+				return $this->getApproveDetails($memberId);
+			}
+
+			return null;
+		}
+
 		//! Get a members name, email and payment ref.
 		/*
 			@param int $memberId The id of the member to get the details for.
@@ -818,6 +898,32 @@
 						'name' => $name,
 						'email' => $email,
 						'paymentRef' => $paymentRef,
+					);
+				}
+			}
+			return null;
+		}
+
+		//! Get a members name, email and pin.
+		/*
+			@param int $memberId The id of the member to get the details for.
+			@retval mixed Array of info on success, null on failure.
+		*/
+		public function getApproveDetails($memberId)
+		{
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if($memberInfo)
+			{
+				$name = Hash::get($memberInfo, 'Member.name');
+				$email = Hash::get($memberInfo, 'Member.email');
+				$pin = Hash::get($memberInfo, 'Pin.pin');
+
+				if(isset($name) && isset($email) && isset($pin))
+				{
+					return array(
+						'name' => $name,
+						'email' => $email,
+						'pin' => $pin,
 					);
 				}
 			}
@@ -852,6 +958,15 @@
 			return $accountList;
 		}
 
+		//! Get the path to the member id.
+		/*!
+			@retval string The path to the member id element.
+		*/
+		public function getIdPath()
+		{
+			return 'Member.member_id';
+		}
+
 		//! Create or save a member record, and all associated data.
 		/*! 
 			@param array $memberInfo The information to use to create or update the member record.
@@ -869,24 +984,39 @@
 			if($memberId != null)
 			{
 				$newStatus = (int)$this->getStatusForMember( $memberInfo );
+				$oldStatus = (int)$this->getStatusForMember( $memberId );
 
-				if( $newStatus == Status::CURRENT_MEMBER )
+				if($newStatus != $oldStatus)
 				{
-					// Member must be in the current member group
-					if( !$this->GroupsMember->addMemberToGroup( $memberId, Group::CURRENT_MEMBERS ) )
-					{
-						$dataSource->rollback();
-						return false;
-					}
-				}
-				else
-				{
-					// Member has to be stripped of all group info
-					$memberInfo['Group'] = array();
+					// We shall need to save the Group
 					if(!in_array('Group', $fields))
 					{
 						array_push($fields, 'Group');
 					}
+
+					$newGroups = array( 'Group' );
+					if( $newStatus != Status::CURRENT_MEMBER )
+					{
+						$newGroups['Group'] = array();
+					}
+					else
+					{
+						// Get a list of existing groups this member is a part of
+						$existingGroups = $this->GroupsMember->getGroupIdsForMember( $memberId );
+						if(!in_array(Group::CURRENT_MEMBERS, $existingGroups))
+						{
+							array_push($existingGroups, Group::CURRENT_MEMBERS);
+						}
+
+						$groupIdx = 0;
+						foreach ($existingGroups as $group) 
+						{
+							$newGroups['Group'][$groupIdx] = $group;
+							$groupIdx++;
+						}
+					}
+
+					$memberInfo['Group'] = $newGroups;
 				}
 
 				// Do we have to change the password?

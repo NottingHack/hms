@@ -410,85 +410,56 @@
 	    	}
 	    }
 
-	    public function approve_member($id = null) 
+	    //! Approve a membership
+	    /*!
+	    	@param int $id The id of the member who we are approving.
+	    */
+	    public function approveMember($id = null) 
 	    {
-	    	if($id != null)
+	    	try
 	    	{
-	    		# Grab the member
-	    		$this->Member->id = $id;
-				$memberInfo = $this->Member->read();
+	    		$memberDetails = $this->Member->approveMember($id);
+	    		if($memberDetails)
+		    	{
+		    		$this->Session->setFlash('Member has been approved.');
 
-				# Check the member status
-				if($memberInfo['Member']['member_status'] == 7)
-				{
-					# Ok, we can do this
+		    		$adminDetails = $this->Member->getMemberSummaryForMember($this->Auth->user($this->Member->getIdPath()));
 
-					# Set the status to 'current member'
-					$memberInfo['Member']['member_status'] = 2;
-					# Generate a PIN for gate-keeper
-					$memberInfo['Member']['unlock_text'] = 'Welcome ' . $memberInfo['Member']['name'];
+		    		// We only notify the admin that approved them.
+		    		$this->_sendEmail(
+		    			$adminDetails['email'],
+		    			'Member Approved',
+		    			'notify_admins_member_approved',
+		    			$memberDetails
+		    		);
 
-					# Set some pin data
-                    $memberInfo['Pin']['unlock_text'] = 'Welcome';
-                    $memberInfo['Pin']['pin'] = $this->Member->Pin->generate_unique_pin();
-                    $memberInfo['Pin']['state'] = 40;
-                    $memberInfo['Pin']['member_id'] = $memberInfo['Member']['member_id'];
-
-                    # And give a credit limit
-                    $memberInfo['Member']['credit_limit'] = 5000;
-
-                    $memberInfo['Member']['join_date'] = date( 'Y-m-d' );
-
-                    unset($memberInfo['Status']);
-                    unset($memberInfo['Account']);
-                    unset($memberInfo['MemberAuth']);
-                    unset($memberInfo['Group']);
-
-                    if($this->Member->SaveAll($memberInfo))
-                    {
-                    	$this->_create_status_update_record($id, AuthComponent::user('Member.member_id'), 2, 7);
-
-                    	$this->Session->setFlash('Member has been approved.');
-
-                    	# Only notify the admin that approved them
-						$adminEmail = $this->prepare_email();
-						$adminEmail->to( AuthComponent::user('Member.email') );
-						$adminEmail->subject('Member Approved');
-						$adminEmail->template('notify_admins_member_approved', 'default');
-						$adminEmail->viewVars( array( 
-							'memberName' => $memberInfo['Member']['name'],
-							'memberId' => $id,
-							'memberEmail' => $memberInfo['Member']['email'],
-							'memberPin' => $memberInfo['Pin']['pin'],
-							 )
-						);
-						$adminEmail->send();
-
-						# Notify the new member
-						$memberEmail = $this->prepare_email();
-						$memberEmail->to( $memberInfo['Member']['email'] );
-						$memberEmail->subject('Membership Complete');
-						$memberEmail->template('to_member_access_details', 'default');
-						$memberEmail->viewVars( array( 
-							'adminName' => AuthComponent::user('Member.name'),
-							'adminEmail' => AuthComponent::user('Member.email'),
+		    		// E-mail the member
+		    		$this->_sendEmail(
+		    			$memberDetails['email'],
+		    			'Membership Complete',
+		    			'to_member_access_details',
+		    			array( 
+							'adminName' => $adminDetails['name'],
+							'adminEmail' => $adminDetails['email'],
 							'manLink' => Configure::read('hms_help_manual_url'),
 							'outerDoorCode' => Configure::read('hms_access_street_door'),
 							'innerDoorCode' => Configure::read('hms_access_inner_door'),
 							'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
 							'wifiPass' => Configure::read('hms_access_wifi_password'),
-							 )
-						);
-						$memberEmail->send();
-
-                    }
-                    else
-                    {
-                    	$this->Session->setFlash('Member details could not be updated.');	
-                    }
-				}
+						)
+		    		);
+		    	}
+		    	else
+		    	{
+		    		$this->Session->setFlash('Member details could not be updated.');
+		    	}
 	    	}
-	    	$this->redirect($this->referer());
+	    	catch(InvalidStatusException $e)
+    		{
+    			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
+    		}
+	    	
+	    	return $this->redirect($this->referer());
 	    }
 
 	    public function change_password($id = null) 

@@ -758,6 +758,91 @@
 			$this->assertEqual( $this->vars['accounts'], array( '-1' => 'Create new', '1' => 'Mathew Pryce', '2' => 'Annabelle Santini', '3' => 'Guy Viles, Kelly Savala and Jessie Easterwood', '6' => 'Guy Garrette', '7' => 'Ryan Miles', '8' => 'Evan Atkinson' ), 'Accounts view var not set correctly.' );
 		}
 
+		public function testApproveMemberWithInvalidMembers()
+		{
+
+			$memberList = array( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 );
+
+            $mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+            foreach ($memberList as $memberId)
+            {
+            	$this->testAction('/members/approveMember/' . $memberId);
+				
+				$this->assertTrue( isset($this->headers), 'Redirect to login page did not occur for member: ' . $memberId . '.' );
+				$this->assertInternalType( 'array', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
+				$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
+				//$this->assertContains('/pages/home', $this->headers['Location'], 'Redirect to login page did not occur for member: ' . $memberId . '.' );
+            }
+		}
+
+		public function testApproveMember()
+		{
+            $this->controller = $this->generate('Members', array(
+            	'models' => array(
+            		'Member' => array(
+            			'getApproveDetails', 
+            			'__construct',
+            		)
+            	),
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
+
+			$mockEmail = $this->getMock('CakeEmail');
+			$this->controller->email = $mockEmail;
+
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+            $this->controller->Member->expects($this->exactly(1))->method('getApproveDetails')->will($this->returnValue(array('name' => 'Ryan Miles', 'id' => 13, 'email' => 'RyanMiles@dayrep.com', 'pin' => '2234')));
+
+            $mockEmail->expects($this->exactly(2))->method('config');
+			$mockEmail->expects($this->exactly(2))->method('from');
+			$mockEmail->expects($this->exactly(2))->method('sender');
+			$mockEmail->expects($this->exactly(2))->method('emailFormat');
+			$mockEmail->expects($this->exactly(2))->method('to');
+			$mockEmail->expects($this->exactly(2))->method('subject');
+			$mockEmail->expects($this->exactly(2))->method('template');
+			$mockEmail->expects($this->exactly(2))->method('viewVars');
+			$mockEmail->expects($this->exactly(2))->method('send')->will($this->returnValue(true));
+
+			$mockEmail->expects($this->at(0))->method('config')->with('smtp');
+			$mockEmail->expects($this->at(1))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(2))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(3))->method('emailFormat')->with('html');
+			$mockEmail->expects($this->at(4))->method('to')->with('j.easterwood@googlemail.com');
+			$mockEmail->expects($this->at(5))->method('subject')->with('Member Approved');
+			$mockEmail->expects($this->at(6))->method('template')->with('notify_admins_member_approved');
+			$mockEmail->expects($this->at(7))->method('viewVars')->with(array('name' => 'Ryan Miles', 'id' => 13, 'email' => 'RyanMiles@dayrep.com', 'pin' => '2234'));
+			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
+
+			$mockEmail->expects($this->at(9))->method('config')->with('smtp');
+			$mockEmail->expects($this->at(10))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(11))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(12))->method('emailFormat')->with('html');
+			$mockEmail->expects($this->at(13))->method('to')->with('RyanMiles@dayrep.com');
+			$mockEmail->expects($this->at(14))->method('subject')->with('Membership Complete');
+			$mockEmail->expects($this->at(15))->method('template')->with('to_member_access_details');
+			$mockEmail->expects($this->at(16))->method('viewVars')->with(array('adminName' => 'Jessie Easterwood', 'adminEmail' => 'j.easterwood@googlemail.com', 'manLink' => Configure::read('hms_help_manual_url'), 'outerDoorCode' => Configure::read('hms_access_street_door'), 'innerDoorCode' => Configure::read('hms_access_inner_door'), 'wifiSsid' => Configure::read('hms_access_wifi_ssid'), 'wifiPass' => Configure::read('hms_access_wifi_password')));
+			$mockEmail->expects($this->at(17))->method('send')->will($this->returnValue(true));
+
+            $this->testAction('/members/approveMember/13');
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect did not occurr.' );
+			//$this->assertContains('/members/view/11', $this->headers['Location'], 'Redirect to member view did not occur.' );
+		}
+
 		private function _testRegisterMailingListViewVars()
 		{
 			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );

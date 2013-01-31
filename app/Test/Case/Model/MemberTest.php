@@ -226,6 +226,34 @@
             $this->assertInternalType( 'array', $query['conditions'], 'Query conditions is not an array.' );
         }
 
+        public function testGetMemberSummaryForMember()
+        {
+            $this->assertEqual( $this->Member->getMemberSummaryForMember(0), array(), 'Invalid data handled incorrectly.');
+            $this->assertEqual( $this->Member->getMemberSummaryForMember(null), array(), 'Invalid data handled incorrectly.');
+            $this->assertEqual( $this->Member->getMemberSummaryForMember(-1), array(), 'Invalid data handled incorrectly.');
+
+            $memberInfo = $this->Member->getMemberSummaryForMember(1);
+
+            $this->assertInternalType( 'array', $memberInfo, 'memberList is not an array.' );
+
+            $this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
+            $this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
+
+            $this->assertArrayHasKey( 'name', $memberInfo, 'Member has no name.' ); 
+            $this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
+            $this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
+
+            foreach ($memberInfo['groups'] as $group) 
+            {
+                $this->assertArrayHasKey( 'id', $group, 'Group has no id.' ); 
+                $this->assertArrayHasKey( 'description', $group, 'Group has no description.' );
+                $this->assertInternalType( 'string', $group['description'], 'Group description is not a string.' );
+            }
+
+            $this->assertArrayHasKey( 'status', $memberInfo, 'Member has no status.' ); 
+            $this->assertInternalType( 'array', $memberInfo['status'], 'No array by the name of status' );
+        }
+
         public function testFormatMemberInfo()
         {
             $this->assertIdentical( count($this->Member->formatMemberInfo( array() )), 0, 'FormatMemberInfo of an empty array did not return and empty array.' );
@@ -1202,6 +1230,72 @@
             $this->assertEqual( $record['Member']['contact_number'], '079 0572 8737', 'Record has incorrect contact number.' );
         }
 
+        public function testApproveMemberInvalidData()
+        {
+            $this->assertIdentical( $this->Member->approveMember(null), null, 'Null data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->approveMember(-1), null, 'Invalid id was not handled correctly.' );
+            $this->assertIdentical( $this->Member->approveMember(0), null, 'Invalid id was not handled correctly.' );
+            $this->assertIdentical( $this->Member->approveMember(2076), null, 'Invalid id was not handled correctly.' );
+        }
+
+        public function testApproveMemberThrows()
+        {
+            $testMemberIds = array( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 );
+            foreach ($testMemberIds as $memberId) 
+            {
+                $threw = false;
+                try
+                {
+                    $this->Member->approveMember($memberId);
+                }
+                catch(InvalidStatusException $e)
+                {
+                    $threw = true;
+                }
+                
+                $this->assertTrue( $threw, 'AcceptDetails for member id ' . $memberId . ' failed to throw.' );
+            }
+        }
+
+        public function testApproveMember()
+        {
+            $return = $this->Member->approveMember( 14 );
+
+            $this->assertNotEqual( $return, null, 'Failed approving member.' );
+            $this->assertInternalType( 'array', $return, 'Failed approving member.' );
+            $this->assertArrayHasKey( 'name', $return, 'Return array is invalid.' );
+            $this->assertEqual( $return['name'], 'Evan Atkinson', 'Return array has invalid name.' );
+            $this->assertArrayHasKey( 'email', $return, 'Return array is invalid.' );
+            $this->assertEqual( $return['email'], 'EvanAtkinson@teleworm.us', 'Return array has invalid email.' );
+            $this->assertArrayHasKey( 'pin', $return, 'Return array is invalid.' );
+
+            $record = $this->Member->findByMemberId(14);
+
+            $this->assertEqual( $record['Member']['member_id'], 14, 'Record has incorrect member_id.' );
+            $this->assertEqual( $record['Member']['name'], 'Evan Atkinson', 'Record has incorrect name.' );
+            $this->assertEqual( $record['Member']['email'], 'EvanAtkinson@teleworm.us', 'Record has incorrect email.' );
+            $this->assertEqual( $record['Member']['join_date'], date('Y-m-d'), 'Record has incorrect join date.' );
+            $this->assertEqual( $record['Member']['handle'], 'Sookinium', 'Record has incorrect handle.' );
+            $this->assertEqual( $record['Member']['unlock_text'], 'Welcome Evan Atkinson', 'Record has incorrect unlock text.' );
+            $this->assertEqual( $record['Member']['balance'], 0, 'Record has incorrect balance.' );
+            $this->assertEqual( $record['Member']['credit_limit'], 5000, 'Record has incorrect credit limit.' );
+            $this->assertEqual( $record['Member']['member_status'], Status::CURRENT_MEMBER, 'Record has incorrect status.' );
+            $this->assertEqual( $record['Member']['username'], 'Sookinium', 'Record has incorrect status.' );
+            $this->assertEqual( $record['Member']['account_id'], 8, 'Record has incorrect account id.' );
+            $this->assertEqual( $record['Member']['address_1'], '34 Wartnaby Road', 'Record has incorrect address 1.' );
+            $this->assertEqual( $record['Member']['address_2'], null, 'Record has incorrect address 2.' );
+            $this->assertEqual( $record['Member']['address_city'], 'Acklam', 'Record has incorrect address city.' );
+            $this->assertEqual( $record['Member']['address_postcode'], 'TS5 3HD', 'Record has incorrect address postcode.' );
+            $this->assertEqual( $record['Member']['contact_number'], '078 1957 5612', 'Record has incorrect contact number.' );
+
+            $this->assertEqual( $record['Pin']['unlock_text'], 'Welcome', 'Record has incorrect pin unlock text.' );
+            //$this->assertEqual( $record['Pin']['pin'], 'Welcome', 'Record has incorrect pin.' );
+            $this->assertEqual( $record['Pin']['state'], 40, 'Record has incorrect pin state.' );
+            $this->assertEqual( $record['Pin']['member_id'], 14, 'Record has incorrect pin member id.' );
+
+            $this->assertEqual( $record['Group'], array( '0' => array( 'grp_id' => Group::CURRENT_MEMBERS, 'grp_description' => 'Current Members') ), 'Record has incorrect group.' );
+        }
+
         public function testGetSoDetails()
         {
             $this->assertIdentical( $this->Member->getSoDetails(null), null, 'Null data was not handled correctly.' );
@@ -1212,6 +1306,18 @@
 
             $this->assertEqual( $this->Member->getSoDetails(2), array('name' => 'Annabelle Santini', 'email' => 'a.santini@hotmail.com', 'paymentRef' => 'HSNOTTSK2R62GQW684'), 'Valid data was not handled correctly.' );            
         }
+
+        public function testGetApproveDetails()
+        {
+            $this->assertIdentical( $this->Member->getApproveDetails(null), null, 'Null data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getApproveDetails(-1), null, 'Invalid data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getApproveDetails(0), null, 'Invalid data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getApproveDetails(2076), null, 'Invalid data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getApproveDetails(array()), null, 'Invalid data was not handled correctly.' );
+
+            $this->assertEqual( $this->Member->getApproveDetails(4), array('name' => 'Kelly Savala', 'email' => 'k.savala@yahoo.co.uk', 'pin' => '5436'), 'Valid data was not handled correctly.' );            
+        }
+
 
         public function testGetReadableAccountList()
         {
