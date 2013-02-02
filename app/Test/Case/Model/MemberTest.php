@@ -859,8 +859,8 @@
 
             $record = $this->Member->findByMemberId($memberId);
 
-            $this->assertNotIdentical( $record, null, 'Could not find record for member id.' );
-            $this->assertInternalType( 'array', $record, 'Could not find record for member id.' );
+            $this->assertNotIdentical( $record, null, 'Could not find record.' );
+            $this->assertInternalType( 'array', $record, 'Could not find record.' );
 
             $this->assertEqual( $record['Member']['member_id'], 9, 'Record has incorrect member_id.' );
             $this->assertEqual( $record['Member']['name'], 'Dorothy D. Russell', 'Record has incorrect name.' );
@@ -942,12 +942,12 @@
 
                 $record = $this->Member->findByMemberId($memberId);
 
-                $this->assertNotIdentical( $record, null, 'Could not find record for member id.' );
-                $this->assertInternalType( 'array', $record, 'Could not find record for member id.' );
-                $this->assertArrayHasKey( 'Member', $record, 'Record does not have member key for member id.' );
-                $this->assertArrayHasKey( 'member_id', $record['Member'], 'Record Member does not have member_id key for member id.' );
-                $this->assertArrayHasKey( 'member_status', $record['Member'], 'Record Member does not have member_status key for member id.' );
-                $this->assertEqual( $record['Member']['member_status'], Status::PRE_MEMBER_1, 'Record has incorrect status for member id.' );
+                $this->assertNotIdentical( $record, null, 'Could not find record.' );
+                $this->assertInternalType( 'array', $record, 'Could not find record.' );
+                $this->assertArrayHasKey( 'Member', $record, 'Record does not have member key.' );
+                $this->assertArrayHasKey( 'member_id', $record['Member'], 'Record Member does not have member_id key.' );
+                $this->assertArrayHasKey( 'member_status', $record['Member'], 'Record Member does not have member_status key.' );
+                $this->assertEqual( $record['Member']['member_status'], Status::PRE_MEMBER_1, 'Record has incorrect status.' );
             }
         }
 
@@ -986,8 +986,8 @@
 
             $record = $this->Member->findByMemberId($memberId);
 
-            $this->assertNotIdentical( $record, null, 'Could not find record for member id.' );
-            $this->assertInternalType( 'array', $record, 'Could not find record for member id.' );
+            $this->assertNotIdentical( $record, null, 'Could not find record.' );
+            $this->assertInternalType( 'array', $record, 'Could not find record.' );
 
             $this->assertEqual( $record['Member']['member_id'], 11, 'Record has incorrect member_id.' );
             $this->assertEqual( $record['Member']['name'], 'Betty C. Paris', 'Record has incorrect name.' );
@@ -1064,6 +1064,16 @@
             $this->assertArrayHasKey( 'email', $return, 'Return array is invalid.' );
             $this->assertEqual( $return['email'], 'BettyCParis@teleworm.us', 'Return array has invalid email.' );
             $this->assertArrayHasKey( 'paymentRef', $return, 'Return array is invalid.' );
+
+            $record = $this->Member->findByMemberId(11);
+            $this->assertNotIdentical( $record, null, 'Could not find record.' );
+            $this->assertInternalType( 'array', $record, 'Could not find record.' );
+            $this->assertArrayHasKey( 'Member', $record, 'Record does not have member key.' );
+            $this->assertArrayHasKey( 'member_id', $record['Member'], 'Record Member does not have member_id key.' );
+            $this->assertArrayHasKey( 'member_status', $record['Member'], 'Record Member does not have member_status key.' );
+            $this->assertEqual( $record['Member']['member_status'], Status::PRE_MEMBER_3, 'Record has incorrect status.' );
+            $this->assertArrayHasKey( 'account_id', $record['Member'], 'Record Member does not have account_id key.' );
+            $this->assertEqual( $record['Member']['account_id'], 9, 'Record has incorrect account_id.' );
         }
 
         public function testAcceptDetailsExistingAccountWaitingForPayment()
@@ -1087,10 +1097,18 @@
             $this->assertArrayHasKey( 'email', $return, 'Return array is invalid.' );
             $this->assertEqual( $return['email'], 'RoyJForsman@teleworm.us', 'Return array has invalid email.' );
             $this->assertArrayHasKey( 'paymentRef', $return, 'Return array is invalid.' );
-
             $this->assertEqual( $prevNumAccounts, $this->Member->Account->find('count'), 'An account was created!.' );
-
             $this->assertEqual( $return['paymentRef'], $accountRecord['Account']['payment_ref'], 'Payment ref was incorrect.' );
+
+            $record = $this->Member->findByMemberId(12);
+            $this->assertNotIdentical( $record, null, 'Could not find record.' );
+            $this->assertInternalType( 'array', $record, 'Could not find record.' );
+            $this->assertArrayHasKey( 'Member', $record, 'Record does not have member key.' );
+            $this->assertArrayHasKey( 'member_id', $record['Member'], 'Record Member does not have member_id key.' );
+            $this->assertArrayHasKey( 'member_status', $record['Member'], 'Record Member does not have member_status key.' );
+            $this->assertEqual( $record['Member']['member_status'], Status::PRE_MEMBER_3, 'Record has incorrect status.' );
+            $this->assertArrayHasKey( 'account_id', $record['Member'], 'Record Member does not have account_id key.' );
+            $this->assertEqual( $record['Member']['account_id'], 8, 'Record has incorrect account_id.' );
         }
 
         public function testAcceptDetailsExistingAccountCurrentMember()
@@ -1114,10 +1132,18 @@
             $this->assertArrayHasKey( 'email', $return, 'Return array is invalid.' );
             $this->assertEqual( $return['email'], 'RoyJForsman@teleworm.us', 'Return array has invalid email.' );
             $this->assertArrayHasKey( 'paymentRef', $return, 'Return array is invalid.' );
-
             $this->assertEqual( $prevNumAccounts, $this->Member->Account->find('count'), 'An account was created!.' );
-
             $this->assertEqual( $return['paymentRef'], $accountRecord['Account']['payment_ref'], 'Payment ref was incorrect.' );
+
+            $record = $this->Member->findByMemberId(12);
+            $this->assertNotIdentical( $record, null, 'Could not find record.' );
+            $this->assertInternalType( 'array', $record, 'Could not find record.' );
+            $this->assertArrayHasKey( 'Member', $record, 'Record does not have member key.' );
+            $this->assertArrayHasKey( 'member_id', $record['Member'], 'Record Member does not have member_id key.' );
+            $this->assertArrayHasKey( 'member_status', $record['Member'], 'Record Member does not have member_status key.' );
+            $this->assertEqual( $record['Member']['member_status'], Status::PRE_MEMBER_3, 'Record has incorrect status.' );
+            $this->assertArrayHasKey( 'account_id', $record['Member'], 'Record Member does not have account_id key.' );
+            $this->assertEqual( $record['Member']['account_id'], 3, 'Record has incorrect account_id.' );
         }
 
         public function testAcceptDetailsOnlySavesMemberStatusAccountIdExistingAccount()
@@ -1154,8 +1180,8 @@
 
             $record = $this->Member->findByMemberId($memberId);
 
-            $this->assertNotIdentical( $record, null, 'Could not find record for member id.' );
-            $this->assertInternalType( 'array', $record, 'Could not find record for member id.' );
+            $this->assertNotIdentical( $record, null, 'Could not find record.' );
+            $this->assertInternalType( 'array', $record, 'Could not find record.' );
 
             $this->assertEqual( $record['Member']['member_id'], 11, 'Record has incorrect member_id.' );
             $this->assertEqual( $record['Member']['name'], 'Betty C. Paris', 'Record has incorrect name.' );
@@ -1209,8 +1235,8 @@
 
             $record = $this->Member->findByMemberId($memberId);
 
-            $this->assertNotIdentical( $record, null, 'Could not find record for member id.' );
-            $this->assertInternalType( 'array', $record, 'Could not find record for member id.' );
+            $this->assertNotIdentical( $record, null, 'Could not find record.' );
+            $this->assertInternalType( 'array', $record, 'Could not find record.' );
 
             $this->assertEqual( $record['Member']['member_id'], 11, 'Record has incorrect member_id.' );
             $this->assertEqual( $record['Member']['name'], 'Betty C. Paris', 'Record has incorrect name.' );
