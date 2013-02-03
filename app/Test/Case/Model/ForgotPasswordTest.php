@@ -5,7 +5,7 @@
 
     class ForgotPasswordTest extends CakeTestCase 
     {
-        public $fixtures = array( 'app.ForgotPassword', 'app.Member', 'app.Status', 'app.Account', 'app.Group', 'app.GroupsMember', 'app.Pin');
+        public $fixtures = array( 'app.ForgotPassword', 'app.Member', 'app.Status', 'app.Account', 'app.Group', 'app.GroupsMember', 'app.Pin', 'app.StatusUpdate');
 
         public function setUp() 
         {

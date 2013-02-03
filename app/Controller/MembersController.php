@@ -338,7 +338,7 @@
 	    	{
 	    		try
 	    		{
-		    		if($this->Member->rejectDetails($id, $this->request->data))
+		    		if($this->Member->rejectDetails($id, $this->request->data, $this->_getLoggedInMemberId()))
 		    		{
 		    			$this->Session->setFlash('Member has been contacted.');
 
@@ -386,7 +386,7 @@
 	    	{
 	    		try
 	    		{
-	    			$memberDetails = $this->Member->acceptDetails($id, $this->request->data);
+	    			$memberDetails = $this->Member->acceptDetails($id, $this->request->data, $this->_getLoggedInMemberId());
 		    		if($memberDetails)
 		    		{
 		    			$this->Session->setFlash('Member details accepted.');
@@ -418,7 +418,7 @@
 	    {
 	    	try
 	    	{
-	    		$memberDetails = $this->Member->approveMember($id);
+	    		$memberDetails = $this->Member->approveMember($id, $this->_getLoggedInMemberId());
 	    		if($memberDetails)
 		    	{
 		    		$this->Session->setFlash('Member has been approved.');
@@ -1416,6 +1416,15 @@
 	    	}
 
 	    	return $memberList;
+		}
+
+		//! Get the id of the currently logged in Member.
+		/*!
+			@retval int The id of the currently logged in Member, or 0 if not found.
+		*/
+		private function _getLoggedInMemberId()
+		{
+			return $this->Auth->user($this->Member->getIdPath());
 		}
 	}
 ?>

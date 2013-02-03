@@ -552,7 +552,7 @@
 			{
 				$memberInfo = $this->createNewMemberInfo( $email );
 
-				if( !$this->_saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' ) ) ) )
+				if( !$this->_saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' )), 0) )
 				{
 					// Save failed for reasons.
 					return null;
@@ -631,7 +631,7 @@
 			$saveOk = false;
 			if($this->validates(array( 'fieldList' => array('name', 'username', 'handle', 'email', 'password', 'password_confirm', 'member_status'))))
 			{
-				$saveOk = $this->_saveMemberData($dataToSave, array('Member' => array('name', 'username', 'handle', 'member_status')));
+				$saveOk = $this->_saveMemberData($dataToSave, array('Member' => array('name', 'username', 'handle', 'member_status')), $memberId);
 			}
 
 			$this->removeEmailMustMatch();
@@ -693,7 +693,7 @@
 
 			if(	$this->validates(array( 'fieldList' => array('address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status'))) )
 			{
-				return $this->_saveMemberData($dataToSave, array('Member' => array('address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status')));
+				return $this->_saveMemberData($dataToSave, array('Member' => array('address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status')), $memberId);
 			}
 
 			return false;
@@ -703,14 +703,20 @@
 		/*
 			@param int $memberId The id of the member.
 			@param array $data The data to use.
+			@param int $adminId The id of the member admin who is rejecting the details.
 			@retval bool True if the members data was altered successfully, false otherwise.
 		*/
-		public function rejectDetails($memberId, $data)
+		public function rejectDetails($memberId, $data, $adminId)
 		{
 			// Need some extra validation
 	    	$memberEmail = ClassRegistry::init('MemberEmail');
 
 	    	if(!isset($memberId) || $memberId <= 0)
+			{
+				return false;
+			}
+
+			if(!isset($adminId) || $adminId <= 0)
 			{
 				return false;
 			}
@@ -753,7 +759,7 @@
 
 			if( $memberEmail->validates( array( 'fieldList' => array( 'subject', 'body' ) ) ) )
 			{
-				return $this->_saveMemberData($dataToSave, array('Member' => array('member_status')));
+				return $this->_saveMemberData($dataToSave, array('Member' => array('member_status')), $adminId);
 			}
 		}
 
@@ -761,13 +767,19 @@
 		/*!
 			@param int $memberId The id of the member who's details we want to mark as valid.
 			@param array $data The account data to use.
+			@param int $adminId The id of the member admin who's accepting the details.
 			@retval mixed Array of member details on success, or null on failure.
 		*/
-		public function acceptDetails($memberId, $data)
+		public function acceptDetails($memberId, $data, $adminId)
 		{
 			if(!isset($memberId) || $memberId <= 0)
 			{
 				return null;
+			}
+
+			if(!isset($adminId) || $adminId <= 0)
+			{
+				return false;
 			}
 
 			$memberStatus = $this->getStatusForMember( $memberId );
@@ -802,7 +814,7 @@
 
 			$this->set($dataToSave);
 
-			if( $this->_saveMemberData($dataToSave, array('Member' => array( 'member_status', 'account_id' ) )) )
+			if( $this->_saveMemberData($dataToSave, array('Member' => array( 'member_status', 'account_id' )), $adminId) )
 			{
 				return $this->getSoDetails($memberId);
 			}
@@ -812,10 +824,11 @@
 
 		//! Approve a member, making them a current member.
 		/*
-			@pamar int $memberId The id of the member to approve.
+			@param int $memberId The id of the member to approve.
+			@param int $adminId The id of the member admin who is approving the member.
 			@retval mixed Array of member details on success, or null on failure.
 		*/
-		public function approveMember($memberId)
+		public function approveMember($memberId, $adminId)
 		{
 			if(!isset($memberId) || $memberId <= 0)
 			{
@@ -870,7 +883,7 @@
 				)
 			);
 
-			if( $this->_saveMemberData($dataToSave, $fieldsToSave) )
+			if( $this->_saveMemberData($dataToSave, $fieldsToSave, $adminId) )
 			{
 				return $this->getApproveDetails($memberId);
 			}
@@ -971,9 +984,10 @@
 		/*! 
 			@param array $memberInfo The information to use to create or update the member record.
 			@param array $fields The fields that should be saved.
+			@param int $adminId The id of the member who is making the change that needs saving.
 			@retval bool True if save succeeded, false otherwise.
 		*/
-		private function _saveMemberData($memberInfo, $fields)
+		private function _saveMemberData($memberInfo, $fields, $adminId)
 		{
 			$dataSource = $this->getDataSource();
 			$dataSource->begin();
@@ -981,9 +995,10 @@
 			$memberId = Hash::get( $memberInfo, 'Member.member_id' );
 
 			// If the member already exists, sort out the groups
+			$oldStatus = 0;
+			$newStatus = (int)$this->getStatusForMember( $memberInfo );
 			if($memberId != null)
 			{
-				$newStatus = (int)$this->getStatusForMember( $memberInfo );
 				$oldStatus = (int)$this->getStatusForMember( $memberId );
 
 				if($newStatus != $oldStatus)
@@ -1086,6 +1101,28 @@
 			{
 				$dataSource->rollback();
 				return false;
+			}
+
+			// Do we need to create a status update record?
+			if($newStatus != $oldStatus)
+			{
+				// If $memberId is null then we've just created this member.
+				if($memberId == null)
+				{
+					$memberId = $this->id;
+				}
+
+				// Admin id of 0 means the member is making the change themselves
+				if($adminId === 0)
+				{
+					$adminId = $memberId;
+				}
+
+				if(!$this->StatusUpdate->createNewRecord( $memberId, $adminId, $oldStatus, $newStatus ))
+				{
+					$dataSource->rollback();
+					return false;
+				}
 			}
 
 			// We're good

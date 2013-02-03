@@ -8,7 +8,7 @@
 
 	class MembersControllerTest extends ControllerTestCase
 	{
-		public $fixtures = array( 'app.Member', 'app.Status', 'app.Group', 'app.GroupsMember', 'app.Account', 'app.Pin' );
+		public $fixtures = array( 'app.Member', 'app.Status', 'app.Group', 'app.GroupsMember', 'app.Account', 'app.Pin', 'app.StatusUpdate' );
 
 		public function setUp() 
         {
@@ -497,20 +497,20 @@
 
             $memberList = array( 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14 );
 
-            $mockEmail = $this->_mockMemberEmail();
-
-			$mockEmail->expects($this->never())->method('config');
-			$mockEmail->expects($this->never())->method('from');
-			$mockEmail->expects($this->never())->method('sender');
-			$mockEmail->expects($this->never())->method('emailFormat');
-			$mockEmail->expects($this->never())->method('to');
-			$mockEmail->expects($this->never())->method('subject');
-			$mockEmail->expects($this->never())->method('template');
-			$mockEmail->expects($this->never())->method('viewVars');
-			$mockEmail->expects($this->never())->method('send');
-
             foreach ($memberList as $memberId)
             {
+            	$mockEmail = $this->_mockMemberEmail();
+
+				$mockEmail->expects($this->never())->method('config');
+				$mockEmail->expects($this->never())->method('from');
+				$mockEmail->expects($this->never())->method('sender');
+				$mockEmail->expects($this->never())->method('emailFormat');
+				$mockEmail->expects($this->never())->method('to');
+				$mockEmail->expects($this->never())->method('subject');
+				$mockEmail->expects($this->never())->method('template');
+				$mockEmail->expects($this->never())->method('viewVars');
+				$mockEmail->expects($this->never())->method('send');
+
             	$this->testAction('/members/setupDetails/' . $memberId, array('data' => $data, 'method' => 'post'));
 				
 				$this->assertTrue( isset($this->headers), 'Redirect to login page did not occur for member: ' . $memberId . '.' );
@@ -608,20 +608,30 @@
 
 			$memberList = array( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14 );
 
-            $mockEmail = $this->_mockMemberEmail();
-
-			$mockEmail->expects($this->never())->method('config');
-			$mockEmail->expects($this->never())->method('from');
-			$mockEmail->expects($this->never())->method('sender');
-			$mockEmail->expects($this->never())->method('emailFormat');
-			$mockEmail->expects($this->never())->method('to');
-			$mockEmail->expects($this->never())->method('subject');
-			$mockEmail->expects($this->never())->method('template');
-			$mockEmail->expects($this->never())->method('viewVars');
-			$mockEmail->expects($this->never())->method('send');
-
             foreach ($memberList as $memberId)
             {
+            	$this->controller = $this->generate('Members', array(
+	            	'components' => array(
+	            		'Auth' => array(
+	            			'user',
+	            		)
+	            	)
+	            ));
+
+				$mockEmail = $this->getMock('CakeEmail');
+				$this->controller->email = $mockEmail;
+				$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+
+				$mockEmail->expects($this->never())->method('config');
+				$mockEmail->expects($this->never())->method('from');
+				$mockEmail->expects($this->never())->method('sender');
+				$mockEmail->expects($this->never())->method('emailFormat');
+				$mockEmail->expects($this->never())->method('to');
+				$mockEmail->expects($this->never())->method('subject');
+				$mockEmail->expects($this->never())->method('template');
+				$mockEmail->expects($this->never())->method('viewVars');
+				$mockEmail->expects($this->never())->method('send');
+
             	$this->testAction('/members/rejectDetails/' . $memberId, array('data' => $data, 'method' => 'post'));
 				
 				$this->assertTrue( isset($this->headers), 'Redirect to login page did not occur for member: ' . $memberId . '.' );
@@ -640,7 +650,17 @@
                 )
             );
 
-            $mockEmail = $this->_mockMemberEmail();
+            $this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
+
+			$mockEmail = $this->getMock('CakeEmail');
+			$this->controller->email = $mockEmail;
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
             $mockEmail->expects($this->exactly(1))->method('config');
 			$mockEmail->expects($this->exactly(1))->method('from');
@@ -677,20 +697,30 @@
 
 			$memberList = array( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14 );
 
-            $mockEmail = $this->_mockMemberEmail();
-
-			$mockEmail->expects($this->never())->method('config');
-			$mockEmail->expects($this->never())->method('from');
-			$mockEmail->expects($this->never())->method('sender');
-			$mockEmail->expects($this->never())->method('emailFormat');
-			$mockEmail->expects($this->never())->method('to');
-			$mockEmail->expects($this->never())->method('subject');
-			$mockEmail->expects($this->never())->method('template');
-			$mockEmail->expects($this->never())->method('viewVars');
-			$mockEmail->expects($this->never())->method('send');
-
             foreach ($memberList as $memberId)
             {
+            	$this->controller = $this->generate('Members', array(
+	            	'components' => array(
+	            		'Auth' => array(
+	            			'user',
+	            		)
+	            	)
+	            ));
+
+				$mockEmail = $this->getMock('CakeEmail');
+				$this->controller->email = $mockEmail;
+	            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+
+				$mockEmail->expects($this->never())->method('config');
+				$mockEmail->expects($this->never())->method('from');
+				$mockEmail->expects($this->never())->method('sender');
+				$mockEmail->expects($this->never())->method('emailFormat');
+				$mockEmail->expects($this->never())->method('to');
+				$mockEmail->expects($this->never())->method('subject');
+				$mockEmail->expects($this->never())->method('template');
+				$mockEmail->expects($this->never())->method('viewVars');
+				$mockEmail->expects($this->never())->method('send');
+
             	$this->testAction('/members/acceptDetails/' . $memberId, array('data' => $data, 'method' => 'post'));
 				
 				$this->assertTrue( isset($this->headers), 'Redirect to login page did not occur for member: ' . $memberId . '.' );
@@ -712,12 +742,26 @@
                 )
             );
 
-			$this->controller = $this->generate('Members', array('models' => array('Member' => array('getSoDetails', '__construct'))));
+			$this->controller = $this->generate('Members', array(
+				'models' => array(
+					'Member' => array(
+						'getSoDetails', 
+						'__construct'
+					)
+				),
+				'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+			));
+
 			$mockEmail = $this->getMock('CakeEmail');
 			$this->controller->email = $mockEmail;
 
 			$fakePaymentRef = 'HSNOTTSTYX339RW444';
 			$this->controller->Member->expects($this->exactly(2))->method('getSoDetails')->will($this->returnValue(array('name' => 'Roy J. Forsman', 'email' => 'RoyJForsman@teleworm.us', 'paymentRef' => $fakePaymentRef)));
+			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
             $mockEmail->expects($this->exactly(2))->method('config');
 			$mockEmail->expects($this->exactly(2))->method('from');
@@ -763,20 +807,20 @@
 
 			$memberList = array( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 );
 
-            $mockEmail = $this->_mockMemberEmail();
-
-			$mockEmail->expects($this->never())->method('config');
-			$mockEmail->expects($this->never())->method('from');
-			$mockEmail->expects($this->never())->method('sender');
-			$mockEmail->expects($this->never())->method('emailFormat');
-			$mockEmail->expects($this->never())->method('to');
-			$mockEmail->expects($this->never())->method('subject');
-			$mockEmail->expects($this->never())->method('template');
-			$mockEmail->expects($this->never())->method('viewVars');
-			$mockEmail->expects($this->never())->method('send');
-
             foreach ($memberList as $memberId)
             {
+            	$mockEmail = $this->_mockMemberEmail();
+
+				$mockEmail->expects($this->never())->method('config');
+				$mockEmail->expects($this->never())->method('from');
+				$mockEmail->expects($this->never())->method('sender');
+				$mockEmail->expects($this->never())->method('emailFormat');
+				$mockEmail->expects($this->never())->method('to');
+				$mockEmail->expects($this->never())->method('subject');
+				$mockEmail->expects($this->never())->method('template');
+				$mockEmail->expects($this->never())->method('viewVars');
+				$mockEmail->expects($this->never())->method('send');
+
             	$this->testAction('/members/approveMember/' . $memberId);
 				
 				$this->assertTrue( isset($this->headers), 'Redirect to login page did not occur for member: ' . $memberId . '.' );
@@ -804,7 +848,6 @@
 
 			$mockEmail = $this->getMock('CakeEmail');
 			$this->controller->email = $mockEmail;
-
             $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
             $this->controller->Member->expects($this->exactly(1))->method('getApproveDetails')->will($this->returnValue(array('name' => 'Ryan Miles', 'id' => 13, 'email' => 'RyanMiles@dayrep.com', 'pin' => '2234')));
 

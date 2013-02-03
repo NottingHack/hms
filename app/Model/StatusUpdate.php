@@ -38,5 +38,36 @@
 				'foreignKey' => 'new_status',
 			),
     	);
+
+    	//! Create a new status update record.
+    	/*
+			@param int $memberId The id of the member who's having their status updated.
+			@param int $adminId The id of the member who is doing the updating.
+			@param int $oldStatus The members previous status.
+			@param int $newStatus The members new status.
+			@retval bool True if creation was successful, false otherwise.
+		*/
+		public function createNewRecord($memberId, $adminId, $oldStatus, $newStatus)
+		{
+			if(	isset($memberId) && isset($adminId) && isset($oldStatus) && isset($newStatus) &&
+				is_numeric($memberId) && is_numeric($adminId) && is_numeric($oldStatus) && is_numeric($newStatus))
+			{
+				$this->Create();
+
+				$data = array(
+					'StatusUpdate' => array(
+						'member_id' => $memberId,
+						'admin_id' => $adminId,
+						'old_status' => $oldStatus,
+						'new_status' => $newStatus,
+						'timestamp' => date('Y-m-d H:i:s'),
+					)
+				);
+
+				return ($this->save($data) != false);
+			}
+
+			return false;
+		}
 	}
 ?>
