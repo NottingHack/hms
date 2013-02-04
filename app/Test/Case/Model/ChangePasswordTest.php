@@ -18,12 +18,12 @@
 
             $this->ChangePassword->data['ChangePassword']['new_password'] = $correctPassword;
 
-            $this->assertTrue( $this->ChangePassword->newPasswordConfirmMatchesNewPassword($correctPassword), 'Password failed to match.' );
-            $this->assertFalse( $this->ChangePassword->newPasswordConfirmMatchesNewPassword($incorrectPassword), 'Password matched when it should not have.' );
+            $this->assertTrue( $this->ChangePassword->newPasswordConfirmMatchesNewPassword(array('new_password_confirm' => $correctPassword)), 'Password failed to match.' );
+            $this->assertFalse( $this->ChangePassword->newPasswordConfirmMatchesNewPassword(array('new_password_confirm' => $incorrectPassword)), 'Password matched when it should not have.' );
 
             $this->ChangePassword->data['ChangePassword']['new_password'] = '0';
-            $this->assertFalse( $this->ChangePassword->newPasswordConfirmMatchesNewPassword(0), 'Password matched across types.' );
-            $this->assertFalse( $this->ChangePassword->newPasswordConfirmMatchesNewPassword(null), 'Password matched across types.' );
+            $this->assertFalse( $this->ChangePassword->newPasswordConfirmMatchesNewPassword(array('new_password_confirm' => 0)), 'Password matched across types.' );
+            $this->assertFalse( $this->ChangePassword->newPasswordConfirmMatchesNewPassword(array('new_password_confirm' => null)), 'Password matched across types.' );
         }
     }
 

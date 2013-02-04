@@ -56,7 +56,7 @@
 	    */
 		public function newPasswordConfirmMatchesNewPassword($check)
 		{
-			return $this->data['ChangePassword']['new_password'] === $check;
+			return $this->data['ChangePassword']['new_password'] === $check['new_password_confirm'];
 		}
 	}
 ?>

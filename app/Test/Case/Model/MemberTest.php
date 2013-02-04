@@ -1417,7 +1417,7 @@
                     $threw = true;
                 }
                 
-                $this->assertTrue( $threw, 'AcceptDetails for member id ' . $memberId . ' failed to throw.' );
+                $this->assertTrue( $threw, 'approveMember for member id ' . $memberId . ' failed to throw.' );
             }
         }
 
@@ -1476,6 +1476,91 @@
             $this->assertEqual( $record['StatusUpdate'][0]['new_status'], Status::CURRENT_MEMBER, 'Record has incorrect new_status.' );
             $this->assertGreaterThanOrEqual( $beforeTimestamp, strtotime($record['StatusUpdate'][0]['timestamp']), 'Record has incorrect timestamp.' );
             $this->assertLessThanOrEqual( $afterTimestamp, strtotime($record['StatusUpdate'][0]['timestamp']), 'Record has incorrect timestamp.' );
+        }
+
+        public function testChangePasswordInvalidData()
+        {
+            $this->assertFalse( $this->Member->changePassword(null, null, null), 'Invalid data not handled correctly.' );
+            $this->assertFalse( $this->Member->changePassword(0, 0, array()), 'Invalid data not handled correctly.' );
+            $this->assertFalse( $this->Member->changePassword(-1, 0, array()), 'Invalid data not handled correctly.' );
+            $this->assertFalse( $this->Member->changePassword(0, -1, array()), 'Invalid data not handled correctly.' );
+            $this->assertFalse( $this->Member->changePassword('2', '1', array()), 'Invalid data not handled correctly.' );
+            $this->assertFalse( $this->Member->changePassword(2, 1, array()), 'Invalid data not handled correctly.' );
+            $this->assertFalse( $this->Member->changePassword(2, 1, array('ChangePassword')), 'Invalid data not handled correctly.' );
+            $this->assertFalse( $this->Member->changePassword(2, 1, array('ChangePassword' => array())), 'Invalid data not handled correctly.' );
+            $this->assertFalse( $this->Member->changePassword(2, 1, array('ChangePassword' => array('current_password'))), 'Invalid data not handled correctly.' );
+            $this->assertFalse( $this->Member->changePassword(2, 1, array('ChangePassword' => array('current_password', 'new_password'))), 'Invalid data not handled correctly.' );
+            $this->assertFalse( $this->Member->changePassword(2, 1, array('ChangePassword' => array('current_password', 'new_password', 'new_password_confirm'))), 'Invalid data not handled correctly.' );
+            $this->assertFalse( $this->Member->changePassword(1, 1, array('ChangePassword' => array('current_password' => 'foo', 'new_password' => 'dsads', 'new_password_confirm' => 'completely different'))), 'Invalid data not handled correctly.' );
+        }
+
+        public function testChangePasswordThrows()
+        {
+            $data = array(
+                'ChangePassword' => array(
+                    'current_password' => 'foo', 
+                    'new_password' => 'completely', 
+                    'new_password_confirm' => 'completely'
+                )
+            );
+
+            $testMemberIds = array( 7, 8 );
+            foreach ($testMemberIds as $memberId) 
+            {
+                $threw = false;
+                try
+                {
+                    $this->Member->changePassword($memberId, 5, $data);
+                }
+                catch(InvalidStatusException $e)
+                {
+                    $threw = true;
+                }
+                
+                $this->assertTrue( $threw, 'changePassword for member id ' . $memberId . ' failed to throw.' );
+            }
+        }
+
+        public function testChangePasswordOwnAccount()
+        {
+            $data = array(
+                'ChangePassword' => array(
+                    'current_password' => 'foo', 
+                    'new_password' => 'completely', 
+                    'new_password_confirm' => 'completely'
+                )
+            );
+
+            $this->assertTrue( $this->Member->changePassword(2, 2, $data), 'Valid data was not handled correctly.' );
+            $this->assertTrue( $this->Member->krbCheckPassword('pecanpaella', 'completely'), 'Password was not set correctly.' );
+        }
+
+        public function testChangePasswordMemberAdminOtherAccount()
+        {
+            $data = array(
+                'ChangePassword' => array(
+                    'current_password' => 'foo', 
+                    'new_password' => 'wsafwe', 
+                    'new_password_confirm' => 'wsafwe'
+                )
+            );
+
+            $this->assertTrue( $this->Member->changePassword(3, 5, $data), 'Valid data was not handled correctly.' );
+            $this->assertTrue( $this->Member->krbCheckPassword('buntweyr', 'wsafwe'), 'Password was not set correctly.' );
+        }
+
+        public function testChangePasswordMemberAdminOwnAccount()
+        {
+            $data = array(
+                'ChangePassword' => array(
+                    'current_password' => 'foo', 
+                    'new_password' => 'jyty6ut65', 
+                    'new_password_confirm' => 'jyty6ut65'
+                )
+            );
+
+            $this->assertTrue( $this->Member->changePassword(5, 5, $data), 'Valid data was not handled correctly.' );
+            $this->assertTrue( $this->Member->krbCheckPassword('chollertonbanker', 'jyty6ut65'), 'Password was not set correctly.' );
         }
 
         public function testGetSoDetails()

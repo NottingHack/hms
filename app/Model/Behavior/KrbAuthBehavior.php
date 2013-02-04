@@ -38,7 +38,7 @@
 			@param string $password The password to check.
 			@retval bool True if password is correct (or useDummy is true), false otherwise.
 		*/
-		public function checkPassword(Model $model, $username, $password)
+		public function krbCheckPassword(Model $model, $username, $password)
 		{
 			if($this->useDummy)
 			{
@@ -55,7 +55,7 @@
 			@param string $password The password to create.
 			@retval bool True if creation succeeded (or useDummy is true), false otherwise.
 		*/
-		public function addUser(Model $model, $username, $password)
+		public function krbAddUser(Model $model, $username, $password)
 		{
 			if($this->useDummy)
 			{
@@ -71,7 +71,7 @@
 			@param string $username The username to delete.
 			@retval bool True if deletion succeeded (or useDummy is true), false otherwise.
 		*/
-		public function deleteUser(Model $model, $username)
+		public function krbDeleteUser(Model $model, $username)
 		{
 			if($this->useDummy)
 			{
@@ -88,7 +88,7 @@
 			@param string $newPass The new password to use.
 			@retval bool True if password update succeeded (or useDummy is true), false otherwise.
 		*/
-		public function changePassword(Model $model, $username, $newPass)
+		public function krbChangePassword(Model $model, $username, $newPass)
 		{
 			if($this->useDummy)
 			{
@@ -104,14 +104,14 @@
 			@param string $username The username to check.
 			@retval bool True if user exists (or useDummy is true), false otherwise.
 		*/
-		public function userExists(Model $model, $username)
+		public function krbUserExists(Model $model, $username)
 		{
 			if($this->useDummy)
 			{
 				return true;
 			}
 
-			return $this0->krbObj->user_exists($username);
+			return $this->krbObj->user_exists($username);
 		}
 	}
 

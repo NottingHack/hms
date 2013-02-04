@@ -462,65 +462,42 @@
 	    	return $this->redirect($this->referer());
 	    }
 
-	    public function change_password($id = null) 
+	    public function changePassword($id) 
 	    {
+	    	$memberInfo = $this->Member->getMemberSummaryForMember($id);
+	    	if(!$memberInfo)
+	    	{
+	    		return $this->redirect($this->referer());
+	    	}
 
-	    	Controller::loadModel('ChangePassword');
+	    	$adminId = $this->_getLoggedInMemberId();
+	    	$this->set('id', $id);
+	    	$this->set('name', $memberInfo['name']);
+	    	$this->set('ownAccount', $adminId == $id);
 
-			$this->Member->id = $id;
-			$memberInfo = $this->Member->read();
-			$memberIsMemberAdmin = $this->Member->memberInGroup(AuthComponent::user('Member.member_id'), 5);
-			$this->request->data['Member']['member_id'] = $id;
-			$this->set('memberInfo', $memberInfo);
-			$this->set('memberIsMemberAdmin', $memberInfo);
-			$this->set('memberEditingOwnProfile', AuthComponent::user('Member.member_id') == $id);
-
-			if ($this->request->is('get')) 
-			{
-			}
-			else
-			{
-				# Validate the input using the dummy model
-				$this->ChangePassword->set($this->data);
-				if($this->ChangePassword->validates())
-				{
-					# Only member admins (group 5) and the member themselves can do this
-					if( $this->request->data['Member']['member_id'] == AuthComponent::user('Member.member_id') ||
-						$memberIsMemberAdmin ) 
-					{
-						$usernameToCheck = AuthComponent::user('Member.username');
-						$passwordToCheck = $this->request->data['ChangePassword']['current_password'];
-
-						if($this->Krb->checkPassword($usernameToCheck, $passwordToCheck))
-						{
-							if( $this->request->data['ChangePassword']['new_password'] === $this->request->data['ChangePassword']['new_password_confirm'] )
-							{
-								if($this->_set_member_password($memberInfo, $this->request->data['ChangePassword']['new_password']))
-								{
-									$this->Session->setFlash('Password updated.');
-									$this->redirect(array('action' => 'view', $id));
-								}
-								else
-								{
-									$this->Session->setFlash('Unable to update password.');
-								}
-							}
-							else
-							{
-								$this->Session->setFlash('New password doesn\'t match new password confirm');
-							}
-						}
-						else
-						{
-							$this->Session->setFlash('Current password incorrect');
-						}
-					}
-					else
-					{
-						$this->Session->setFlash('You are not authorised to do this');
-					}
-				}
-			}
+	    	if($this->request->is('post'))
+	    	{
+		    	try
+		    	{
+		    		if($this->Member->changePassword($id, $adminId, $this->request->data))
+		    		{
+		    			$this->Session->setFlash('Password updated.');
+		    			return $this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
+		    		}
+		    		else
+		    		{
+		    			$this->Session->setFlash('Unable to update password.');
+		    		}
+		    	}
+		    	catch(InvalidStatusException $e)
+	    		{
+	    			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
+	    		}
+	    		catch(NotAuthorizedException $e)
+	    		{
+	    			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
+	    		}
+	    	}
 	    }
 
 	    public function forgot_password($guid = null)

@@ -3,6 +3,7 @@
 	App::uses('AppModel', 'Model');
 	App::uses('Status', 'Model');
 	App::uses('InvalidStatusException', 'Error/Exception');
+	App::uses('NotAuthorizedException', 'Error/Exception');
 	App::uses('String', 'Utility');
 
 	/**
@@ -911,6 +912,84 @@
 			return null;
 		}
 
+		//! Change a users password.
+		/*
+			@param int $memberId The id of the member whose password is being changed.
+			@param int $adminId The id of the member who is changing the password.
+			@param array $data The array of password data.
+		*/
+		public function changePassword($memberId, $adminId, $data)
+		{
+			// Need some extra validation
+	    	$changePasswordModel = ClassRegistry::init('ChangePassword');
+
+	    	if(!isset($memberId) || $memberId <= 0)
+			{
+				return false;
+			}
+
+			if(!isset($adminId) || $adminId <= 0)
+			{
+				return false;
+			}
+
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus == 0)
+			{
+				return false;
+			}
+
+			if($memberStatus == Status::PROSPECTIVE_MEMBER )
+			{
+				throw new InvalidStatusException( 'Member has status: ' . Status::PROSPECTIVE_MEMBER );
+			}
+
+			if(	$memberId != $adminId && 
+				!($this->GroupsMember->isMemberInGroup($adminId, Group::MEMBER_ADMIN) || $this->GroupsMember->isMemberInGroup($adminId, Group::FULL_ACCESS)))
+			{
+				throw new NotAuthorizedException('Only member admins can change another members password.');
+			}
+
+			if(!isset($data) || !is_array($data))
+			{
+				return false;
+			}
+
+			if( ( isset($data['ChangePassword']) && 
+				  isset($data['ChangePassword']['current_password']) &&
+				  isset($data['ChangePassword']['new_password']) &&
+				  isset($data['ChangePassword']['new_password_confirm']) ) == false )
+			{
+				return false;
+			}
+
+			$changePasswordModel->set($data);
+			if(!$changePasswordModel->validates())
+			{
+				return false;
+			}
+
+			$passwordToCheckMember = $this->find('first', array('conditions' => array('Member.member_id' => $adminId)));
+			if(!$passwordToCheckMember)
+			{
+				return false;
+			}
+
+			$passwordToSetMember = ($adminId === $memberId) ? $passwordToCheckMember : $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+
+			if(!$passwordToSetMember)
+			{
+				return false;
+			}
+
+			if($this->krbCheckPassword(Hash::get($passwordToCheckMember, 'Member.username'), Hash::get($data, 'ChangePassword.current_password')))
+			{
+				return $this->krbChangePassword(Hash::get($passwordToSetMember, 'Member.username'),Hash::get($data, 'ChangePassword.new_password'));
+			}
+
+			return false;
+		}
+
 		//! Get a members name, email and payment ref.
 		/*
 			@param int $memberId The id of the member to get the details for.
@@ -1053,13 +1132,13 @@
 					$password = Hash::get($memberInfo, 'Member.password');
 
 					$authOk = false;
-					switch ($this->userExists($username)) 
+					switch ($this->krbUserExists($username)) 
 			    	{
 			    		case TRUE:
-			    			$authOk = $this->changePassword($username, $password);
+			    			$authOk = $this->krbChangePassword($username, $password);
 
 			    		case FALSE:
-			    			$authOk = $this->addUser($username, $password);
+			    			$authOk = $this->krbAddUser($username, $password);
 			    	}
 
 			    	if(!$authOk)

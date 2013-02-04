@@ -886,6 +886,170 @@
 			//$this->assertContains('/members/view/11', $this->headers['Location'], 'Redirect to member view did not occur.' );
 		}
 
+		public function testChangePasswordNoInputOwnAccount()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
+
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(3));
+
+			$this->testAction('/members/changePassword/3');
+
+			$this->assertIdentical( count($this->vars), 3, 'Unexpected number of view vars.' );
+			$this->assertArrayHasKey( 'id', $this->vars, 'No id value in view vars.' );
+			$this->assertArrayHasKey( 'name', $this->vars, 'No name value in view vars.' );
+			$this->assertArrayHasKey( 'ownAccount', $this->vars, 'No ownAccount value in view vars.' );
+			$this->assertIdentical( $this->vars['id'], '3', 'Incorrect id value.' );
+			$this->assertIdentical( $this->vars['name'], 'Guy Viles', 'Incorrect name value.' );
+			$this->assertIdentical( $this->vars['ownAccount'], true, 'Incorrect ownAccount value.' );
+			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect occurred.' );
+		}
+
+		public function testChangePasswordNoInputMemberAdmin()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
+
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+
+            $this->testAction('/members/changePassword/5');
+
+			$this->assertIdentical( count($this->vars), 3, 'Unexpected number of view vars.' );
+			$this->assertArrayHasKey( 'id', $this->vars, 'No id value in view vars.' );
+			$this->assertArrayHasKey( 'name', $this->vars, 'No name value in view vars.' );
+			$this->assertArrayHasKey( 'ownAccount', $this->vars, 'No ownAccount value in view vars.' );
+			$this->assertIdentical( $this->vars['id'], '5', 'Incorrect id value.' );
+			$this->assertIdentical( $this->vars['name'], 'Jessie Easterwood', 'Incorrect name value.' );
+			$this->assertIdentical( $this->vars['ownAccount'], true, 'Incorrect ownAccount value.' );
+			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect occurred.' );
+		}
+
+		public function testChangePasswordNoInputMemberAdminOwnAccount()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
+
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+
+            $this->testAction('/members/changePassword/2');
+
+			$this->assertIdentical( count($this->vars), 3, 'Unexpected number of view vars.' );
+			$this->assertArrayHasKey( 'id', $this->vars, 'No id value in view vars.' );
+			$this->assertArrayHasKey( 'name', $this->vars, 'No name value in view vars.' );
+			$this->assertArrayHasKey( 'ownAccount', $this->vars, 'No ownAccount value in view vars.' );
+			$this->assertIdentical( $this->vars['id'], '2', 'Incorrect id value.' );
+			$this->assertIdentical( $this->vars['name'], 'Annabelle Santini', 'Incorrect name value.' );
+			$this->assertIdentical( $this->vars['ownAccount'], false, 'Incorrect ownAccount value.' );
+			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect occurred.' );
+		}
+
+		public function testChangePasswordRedirects()
+		{
+			// A non logged in user can't do this
+			$this->testAction('/members/changePassword/3');
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+
+			// A logged in user that is a non member-admin cannot change the password of another member.
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
+
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(3));
+			$this->testAction('/members/changePassword/2');
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+		}
+
+		public function testChangePasswordMemberCanChangeOwnPassword()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
+
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
+
+            $data = array(
+            	'ChangePassword' => array(
+            		'current_password' => 'hunter2',
+            		'new_password' => 'c*6vUc88i1"C=3$',
+            		'new_password_confirm' => 'c*6vUc88i1"C=3$',
+            	)
+            );
+			$this->testAction('/members/changePassword/2', array('data' => $data, 'method' => 'post'));
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertContains('/members/view/2', $this->headers['Location'], 'Redirect to member view did not occur.' );
+		}
+
+		public function testChangePasswordMemberAdminCanChangeOtherPassword()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
+
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+
+            $data = array(
+            	'ChangePassword' => array(
+            		'current_password' => 'hunter2',
+            		'new_password' => 'c*6vUc88i1"C=3$',
+            		'new_password_confirm' => 'c*6vUc88i1"C=3$',
+            	)
+            );
+			$this->testAction('/members/changePassword/3', array('data' => $data, 'method' => 'post'));
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertContains('/members/view/3', $this->headers['Location'], 'Redirect to member view did not occur.' );
+		}
+
+		public function testChangePasswordMemberAdminCanChangeOwnPassword()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
+
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+
+            $data = array(
+            	'ChangePassword' => array(
+            		'current_password' => 'hunter2',
+            		'new_password' => 'c*6vUc88i1"C=3$',
+            		'new_password_confirm' => 'c*6vUc88i1"C=3$',
+            	)
+            );
+			$this->testAction('/members/changePassword/5', array('data' => $data, 'method' => 'post'));
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertContains('/members/view/5', $this->headers['Location'], 'Redirect to member view did not occur.' );
+		}
+
 		private function _testRegisterMailingListViewVars()
 		{
 			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
