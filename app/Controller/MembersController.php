@@ -423,7 +423,7 @@
 		    	{
 		    		$this->Session->setFlash('Member has been approved.');
 
-		    		$adminDetails = $this->Member->getMemberSummaryForMember($this->Auth->user($this->Member->getIdPath()));
+		    		$adminDetails = $this->Member->getMemberSummaryForMember($this->_getLoggedInMemberId());
 
 		    		// We only notify the admin that approved them.
 		    		$this->_sendEmail(
@@ -1424,7 +1424,7 @@
 		*/
 		private function _getLoggedInMemberId()
 		{
-			return $this->Auth->user($this->Member->getIdPath());
+			return $this->Member->getIdForMember($this->Auth->user());
 		}
 	}
 ?>

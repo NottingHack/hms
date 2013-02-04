@@ -298,6 +298,30 @@
             $this->assertIdentical( $result['Member']['member_status'], Status::PROSPECTIVE_MEMBER, 'Member status is incorrect.' );
         }
 
+        public function testGetIdForMember()
+        {
+            $this->assertIdentical( $this->Member->getStatusForMember(null), 0, 'Null data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(0), 0, 'Invalid data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(-1), 0, 'Invalid data was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array()), 0, 'Empty array was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member')), 0, 'Invalid array was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array())), 0, 'Invalid array was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_id' => 0))), 0, 'Invalid member_id was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_id' => -1))), 0, 'Invalid member_id was not handled correctly.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_id' => null))), 0, 'Invalid member_id was not handled correctly.' );
+
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_id' => 1))), 5, 'Member id is incorrect.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_id' => 6))), 6, 'Member id is incorrect.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_id' => 7))), 1, 'Member id is incorrect.' );
+
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_status' => 1))), 1, 'Member id is incorrect.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(array('Member' => array('member_status' => 1, 'member_id' => 7))), 1, 'Member id is incorrect.' );
+
+            $this->assertIdentical( $this->Member->getStatusForMember(1), 5, 'Member id is incorrect.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(6), 6, 'Member id is incorrect.' );
+            $this->assertIdentical( $this->Member->getStatusForMember(7), 1, 'Member id is incorrect.' );
+        }
+
         public function testGetStatusForMember()
         {
             $this->assertIdentical( $this->Member->getStatusForMember(null), 0, 'Null data was not handled correctly.' );

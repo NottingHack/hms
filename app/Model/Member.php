@@ -420,6 +420,26 @@
 			@param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
 			@retval int The status for the member, or 0 if status could not be found.
 		*/
+		public function getIdForMember($memberData)
+		{
+			if(!isset($memberData))
+			{
+				return 0;
+			}
+
+			if(is_array($memberData))
+			{
+				$memberData = Hash::get($memberData, 'Member.member_id');
+			}
+
+			return $memberData;
+		}
+
+		//! Get the Status for a member, may hit the database.
+		/*!
+			@param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
+			@retval int The status for the member, or 0 if status could not be found.
+		*/
 		public function getStatusForMember($memberData)
 		{
 			if(!isset($memberData))
@@ -969,15 +989,6 @@
 			ksort($accountList);
 
 			return $accountList;
-		}
-
-		//! Get the path to the member id.
-		/*!
-			@retval string The path to the member id element.
-		*/
-		public function getIdPath()
-		{
-			return 'Member.member_id';
 		}
 
 		//! Create or save a member record, and all associated data.
