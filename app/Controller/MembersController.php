@@ -219,14 +219,7 @@
 					$memberId = $result['memberId'];
 
 					// But e-mail the member either-way
-					$this->_sendEmail(
-						$email,
-						'Welcome to Nottingham Hackspace',
-						'to_prospective_member',
-						array(
-							'memberId' => $memberId,
-						)
-					);
+					$this->_sendProspectiveMemberEmail($memberId);
 
 					$this->Session->setFlash( 'Registration successful, please check your inbox.' );
 					return $this->redirect(array( 'controller' => 'pages', 'action' => 'home'));
@@ -566,25 +559,46 @@
     		}
 	    }
 
-	    public function send_membership_reminder($id = null)
+	    //! Send the 'prospective member' email to a member.
+	    /*!
+	    	@param int $id The id of the member to send the message to.
+	    */
+	    public function sendMembershipReminder($id = null)
 	    {
 	    	if($id != null)
 	    	{
-	    		$this->Member->id = $id;
-				$memberInfo = $this->Member->read();
-				$email = $this->prepare_email();
-				$email->to( $memberInfo['Member']['email'] );
-				$email->subject('Membership Info');
-				$email->template('to_member_membership_reminder', 'default');
-				$email->viewVars( array( 
-					'memberId' => $id,
-					 )
-				);
-				$email->send();
-
-				$this->Session->setFlash('Member has been contacted');
-				$this->redirect($this->referer());
+	    		if($this->_sendProspectiveMemberEmail($id))
+    			{
+					$this->Session->setFlash('Member has been contacted');
+    			}
+    			else
+    			{
+    				$this->Session->setFlash('Unable to contact member');	
+    			}
 	    	}
+	    	$this->redirect($this->referer());
+	    }
+
+	    //! Send the 'prospective member' email to a member.
+	    /*!
+	    	@param int $memberId The id of the member to send the message to.
+	    	@retval bool True if e-mail was sent.
+	    */
+	    private function _sendProspectiveMemberEmail($memberId)
+	    {
+	    	$email = $this->Member->getEmailForMember($memberId);
+	    	if($email)
+	    	{
+	    		return $this->_sendEmail(
+					$email,
+					'Welcome to Nottingham Hackspace',
+					'to_prospective_member',
+					array(
+						'memberId' => $memberId,
+					)
+				);
+	    	}
+	    	return false;
 	    }
 
 	    public function send_contact_details_reminder($id = null)

@@ -6,20 +6,6 @@
 	Thank you for registering your interest in Nottingham Hackspace.
 </p>
 
-<?php
-	if(count($mailingLists) > 0):
-?>
-	<p> You have been subscribed to the following mailing lists: </p>
-	<ul>
-		<?php 
-			foreach($mailingLists as $list)
-			{
-				echo '<li>' . $list['name'] . '</li>';
-			}
-		?>
-	</ul>
-<?php endif; ?>
-
 <p>
 	If you'd like to become a Nottingham Hackspace member, the first step is is to <?php echo $this->Html->link('create an HMS account', array('controller' => 'members', 'action' => 'setupLogin', $memberId, 'full_base' => true)); ?>. Also, please add "membership@nottinghack.org.uk" to your address book to reduce the chances of hackspace email going into your spam.
 </p>

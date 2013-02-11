@@ -1342,6 +1342,50 @@
 			$this->assertContains('/pages/forgot_password_error', $this->headers['Location'], 'Redirect to forgot password error view did not occur.' );
 		}
 
+		public function testSendMembershipReminderInvalidData()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$this->testAction('/members/sendMembershipReminder/sdfsfgresr');
+		}
+
+		public function testSendMembershipReminder()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->once())->method('config');
+			$mockEmail->expects($this->once())->method('from');
+			$mockEmail->expects($this->once())->method('sender');
+			$mockEmail->expects($this->once())->method('emailFormat');
+			$mockEmail->expects($this->once())->method('to');
+			$mockEmail->expects($this->once())->method('subject');
+			$mockEmail->expects($this->once())->method('template');
+			$mockEmail->expects($this->once())->method('viewVars');
+			$mockEmail->expects($this->once())->method('send');
+
+			$mockEmail->expects($this->at(0))->method('config')->with('smtp');
+			$mockEmail->expects($this->at(1))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(2))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(3))->method('emailFormat')->with('html');
+			$mockEmail->expects($this->at(4))->method('to')->with('CherylLCarignan@teleworm.us');
+			$mockEmail->expects($this->at(5))->method('subject')->with('Welcome to Nottingham Hackspace');
+			$mockEmail->expects($this->at(6))->method('template')->with('to_prospective_member');
+			$mockEmail->expects($this->at(7))->method('viewVars')->with(array('memberId' => 7));
+			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
+
+			$this->testAction('/members/sendMembershipReminder/7');
+		}
+
 		private function _testRegisterMailingListViewVars()
 		{
 			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
