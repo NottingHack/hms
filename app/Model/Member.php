@@ -14,7 +14,6 @@
 	 */
 	class Member extends AppModel 
 	{
-
 		const MIN_PASSWORD_LENGTH = 6; //!< The minimum length passwords must be.
 		const MIN_USERNAME_LENGTH = 3; //!< The minimum length usernames must be.
 		const MAX_USERNAME_LENGTH = 30; //!< The maximum length usernames can be.
@@ -434,6 +433,40 @@
 			}
 
 			return $memberData;
+		}
+
+		//! Get the username for a member, may hit the database.
+		/*!
+			@param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
+			@retval int The username for the member, or 0 if username could not be found.
+		*/
+		public function getUsernameForMember($memberData)
+		{
+			if(!isset($memberData))
+			{
+				return 0;
+			}
+
+			if(is_array($memberData))
+			{
+				$status = Hash::get($memberData, 'Member.username');
+				if(isset($status))
+				{
+					return $status;
+				}
+				else
+				{
+					$memberData = Hash::get($memberData, 'Member.member_id');
+				}
+			}
+
+			$memberInfo = $this->find('first', array('fields' => array('Member.username'), 'conditions' => array('Member.member_id' => $memberData) ));
+			if(is_array($memberInfo))
+			{
+				return Hash::get($memberInfo, 'Member.username');
+			}
+
+			return 0;
 		}
 
 		//! Get the Status for a member, may hit the database.
@@ -990,6 +1023,124 @@
 			return false;
 		}
 
+		//! Generate a forgot password request from an e-mail.
+		/*
+			@param array $data Array of data containing the user submitted e-mail.
+			@retval mixed An array of id and email data if creation succeeded, false otherwise.
+		*/
+		public function createForgotPassword($data)
+		{
+			// Need some extra validation
+	    	$forgotPasswordModel = ClassRegistry::init('ForgotPassword');
+
+	    	if(!isset($data) || !is_array($data))
+			{
+				return false;
+			}
+
+			if( ( isset($data['ForgotPassword']) && 
+				  isset($data['ForgotPassword']['email']) ) == false )
+			{
+				return false;
+			}
+
+			if ( isset($data['ForgotPassword']['new_password']) ||
+			  	isset($data['ForgotPassword']['new_password_confirm']) )
+			{
+				return false;
+			}
+
+			$emailAddress = Hash::get($data, 'ForgotPassword.email');
+
+			$memberInfo = $this->find('first', array('conditions' => array('Member.email' => $emailAddress), 'fields' => array('Member.member_id', 'Member.member_status')));
+			if($memberInfo)
+			{
+				$memberStatus = $this->getStatusForMember( $memberInfo );
+				if($memberStatus == 0)
+				{
+					return false;
+				}
+
+				if($memberStatus == Status::PROSPECTIVE_MEMBER )
+				{
+					throw new InvalidStatusException( 'Member has status: ' . Status::PROSPECTIVE_MEMBER );
+				}
+
+				$guid = $forgotPasswordModel->createNewEntry(Hash::get($memberInfo, 'Member.member_id'));
+				if($guid != null)
+				{
+					return array('id' => $guid, 'email' => $emailAddress);
+				}
+			}
+
+			return false;
+		}
+
+		//! Complete a forgot password request
+		/*
+			@param string $guid The id of the forgot password request.
+			@param array $data Array of data containing the user submitted e-mail.
+			@retval bool True if password was changed, false otherwise.
+		*/
+		public function completeForgotPassword($guid, $data)
+		{
+			if(!ForgotPassword::isValidGuid($guid))
+			{
+				return false;
+			}
+
+			// Need some extra validation
+	    	$forgotPasswordModel = ClassRegistry::init('ForgotPassword');
+
+	    	if(!isset($data) || !is_array($data))
+			{
+				return false;
+			}
+
+			if( ( isset($data['ForgotPassword']) && 
+				  isset($data['ForgotPassword']['email']) &&
+				  isset($data['ForgotPassword']['new_password']) &&
+				  isset($data['ForgotPassword']['new_password_confirm'])  ) == false )
+			{
+				return false;
+			}
+
+			$forgotPasswordModel->set($data);
+			if($forgotPasswordModel->validates())
+			{
+				$emailAddress = Hash::get($data, 'ForgotPassword.email');
+
+				$memberInfo = $this->find('first', array('conditions' => array('Member.email' => $emailAddress), 'fields' => array('Member.member_id')));
+				if($memberInfo)
+				{
+					$memberId = $this->getIdForMember($memberInfo);
+					if(	$memberId > 0 && 
+						$forgotPasswordModel->isEntryValid($guid, $memberId))
+					{
+						$username = $this->getUsernameForMember($memberId);
+						if($username)
+						{
+							$password = Hash::get($data, 'ForgotPassword.new_password');
+
+							$dataSource = $this->getDataSource();
+							$dataSource->begin();
+
+							if( ($this->setPassword($username, $password, true) &&
+								$forgotPasswordModel->expireEntry($guid)) )
+							{
+								$dataSource->commit();
+								return true;
+							}
+							
+							$dataSource->rollback();
+							return false;
+						}
+					}
+				}				
+			}
+			return false;
+		}
+
 		//! Get a members name, email and payment ref.
 		/*
 			@param int $memberId The id of the member to get the details for.
@@ -1131,17 +1282,7 @@
 					$username = Hash::get($memberInfo, 'Member.username');
 					$password = Hash::get($memberInfo, 'Member.password');
 
-					$authOk = false;
-					switch ($this->krbUserExists($username)) 
-			    	{
-			    		case TRUE:
-			    			$authOk = $this->krbChangePassword($username, $password);
-
-			    		case FALSE:
-			    			$authOk = $this->krbAddUser($username, $password);
-			    	}
-
-			    	if(!$authOk)
+			    	if(!$this->setPassword($username, $password, true))
 			    	{
 			    		$dataSource->rollback();
 			    		return false;
@@ -1218,6 +1359,29 @@
 			// We're good
 			$dataSource->commit();
 			return true;
+		}
+
+		//! Set the password for the member, with the option to create a new password entry if needed.
+		/*!
+			@param string $username The username of the member.
+			@param string $password The new password.
+			@param bool $allowCreate If true, will create a new auth record for a member that doesn't currently have one.
+			@retval bool True if the password was set ok, false otherwise.
+		*/
+		private function setPassword($username, $password, $allowCreate)
+		{
+			switch ($this->krbUserExists($username)) 
+	    	{
+	    		case TRUE:
+	    			return $this->krbChangePassword($username, $password);
+
+	    		case FALSE:
+	    			return ($allowCreate && $this->krbAddUser($username, $password));
+
+	    		default:
+	    			return false;
+	    	}
+	    	return false;
 		}
 
 

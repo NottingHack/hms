@@ -4,7 +4,7 @@
 
     class MemberTest extends CakeTestCase 
     {
-        public $fixtures = array( 'app.GroupsMember', 'app.member', 'app.Status', 'app.Group', 'app.Account', 'app.Pin', 'app.StatusUpdate' );
+        public $fixtures = array( 'app.GroupsMember', 'app.member', 'app.Status', 'app.Group', 'app.Account', 'app.Pin', 'app.StatusUpdate', 'app.ForgotPassword' );
 
         public function setUp() 
         {
@@ -12,7 +12,6 @@
             $this->Member = ClassRegistry::init('Member');
         }
 
-        
         public function testPasswordConfirmMatchesPassword()
         {
             $testEmail = 'fub@example.org';
@@ -1561,6 +1560,123 @@
 
             $this->assertTrue( $this->Member->changePassword(5, 5, $data), 'Valid data was not handled correctly.' );
             $this->assertTrue( $this->Member->krbCheckPassword('chollertonbanker', 'jyty6ut65'), 'Password was not set correctly.' );
+        }
+
+        public function testCreateForgotPasswordInvalidData()
+        {
+            $this->assertFalse( $this->Member->createForgotPassword(null), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->createForgotPassword('fdfs'), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->createForgotPassword(-1), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->createForgotPassword(1), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->createForgotPassword(array()), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->createForgotPassword(array('ForgotPassword')), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->createForgotPassword(array('ForgotPassword' => array('email'))), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->createForgotPassword(array('ForgotPassword' => array('email' => 'totallynotavalidemail@test.org.uk'))), 'Invalid data was not handled correctly.' );
+        }
+
+        public function testCreateForgotPasswordThrows()
+        {
+            $testData = array(
+                7 => array(
+                    'ForgotPassword' => array(
+                        'email' => 'CherylLCarignan@teleworm.us',
+                    )
+                ),
+                8 => array(
+                    'ForgotPassword' => array(
+                        'email' => 'MelvinJFerrell@dayrep.com',
+                    )
+                )
+            );
+
+            foreach ($testData as $memberId => $data) 
+            {
+                $threw = false;
+                try
+                {
+                    $this->Member->createForgotPassword($data);
+                }
+                catch(InvalidStatusException $e)
+                {
+                    $threw = true;
+                }
+                
+                $this->assertTrue( $threw, 'createForgotPassword for member id ' . $memberId . ' failed to throw.' );
+            }
+        }
+
+        public function testCreateForgotPassword()
+        {
+            $testData = array(
+                1 => 'm.pryce@example.org',
+                2 => 'a.santini@hotmail.com',
+                3 => 'g.viles@gmail.com',
+                4 => 'k.savala@yahoo.co.uk',
+                5 => 'j.easterwood@googlemail.com',
+                6 => 'g.garratte@foobar.org',
+                9 => 'DorothyDRussell@dayrep.com',
+                10 => 'HugoJLorenz@dayrep.com',
+                11 => 'BettyCParis@teleworm.us',
+                12 => 'RoyJForsman@teleworm.us',
+                13 => 'RyanMiles@dayrep.com',
+                15 => 'EvanAtkinson@teleworm.us',
+            );
+
+            foreach ($testData as $memberId => $email) 
+            {
+                $this->assertInternalType( 'array', $this->Member->createForgotPassword(array('ForgotPassword' => array('email' => $email))), 'Failed to create forgot password for member: ' . $memberId . '.');
+            }
+        }
+
+        public function testCompleteForgotPasswordInvalidData()
+        {
+            $this->assertFalse( $this->Member->completeForgotPassword(null, null), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->completeForgotPassword('addwd', 'fdfs'), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->completeForgotPassword(String::UUID(), -1), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->completeForgotPassword('adssd', 1), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->completeForgotPassword(String::UUID(), array()), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->completeForgotPassword(String::UUID(), array('ForgotPassword')), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->completeForgotPassword(String::UUID(), array('ForgotPassword' => array('email'))), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->completeForgotPassword(String::UUID(), array('ForgotPassword' => array('email' => 'totallynotavalidemail@test.org.uk'))), 'Invalid data was not handled correctly.' );
+
+            $data = array(
+                'ForgotPassword' => array(
+                    'email' => 'totallynotavalidemail@test.org.uk',
+                    'new_password' => 'adsad',
+                    'new_password_confirm' => 'not the same',
+                )
+            );
+            $this->assertFalse( $this->Member->completeForgotPassword(String::UUID(), $data), 'Invalid data was not handled correctly.' );
+
+            $data = array(
+                'ForgotPassword' => array(
+                    'email' => 'm.pryce@example.org',
+                    'new_password' => 'thesame',
+                    'new_password_confirm' => 'thesame',
+                )
+            );
+            $this->assertFalse( $this->Member->completeForgotPassword('50b0ec45-8984-48b8-ac8a-5db90a000005', $data), 'Invalid data was not handled correctly.' );
+
+            $data = array(
+                'ForgotPassword' => array(
+                    'email' => 'g.viles@gmail.com',
+                    'new_password' => 'thesame',
+                    'new_password_confirm' => 'thesame',
+                )
+            );
+            $this->assertFalse( $this->Member->completeForgotPassword('50be19c8-0968-43ba-be1b-0990bcda665d', $data), 'Invalid data was not handled correctly.' );
+        }
+
+        public function testCompleteForgotPassword()
+        {
+            $data = array(
+                'ForgotPassword' => array(
+                    'email' => 'a.santini@hotmail.com',
+                    'new_password' => 'thesame',
+                    'new_password_confirm' => 'thesame',
+                )
+            );
+            $this->assertTrue( $this->Member->completeForgotPassword('50b104e4-33f8-4821-b756-5e100a000005', $data), 'Valid data was not handled correctly.' );
         }
 
         public function testGetSoDetails()

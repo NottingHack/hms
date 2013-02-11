@@ -462,6 +462,10 @@
 	    	return $this->redirect($this->referer());
 	    }
 
+	    //! Change a members password
+	    /*!
+	    	@param int $id The id of the member whose password we are changing.
+	    */
 	    public function changePassword($id) 
 	    {
 	    	$memberInfo = $this->Member->getMemberSummaryForMember($id);
@@ -500,140 +504,66 @@
 	    	}
 	    }
 
-	    public function forgot_password($guid = null)
+	    //! Generate or complete a forgot password request.
+	    /*
+	    	@param string $guid The id of the request, may be null.
+	    */
+	    public function forgotPassword($guid = null)
 	    {
 	    	if($guid != null)
 	    	{
-	    		# Check it's a valid UUID v4
-	    		# With this handy regex
-	    		if(preg_match('/^\{?[a-f\d]{8}-(?:[a-f\d]{4}-){3}[a-f\d]{12}\}?$/i', $guid) == false)
+	    		if(!ForgotPassword::isValidGuid($guid))
 	    		{
 	    			$guid = null;
 	    		}
 	    	}
 
-	    	$this->set('guid', $guid);
+	    	$this->set('createRequest', $guid == null);
 
-	    	Controller::loadModel('ForgotPassword');
+	    	if($this->request->is('post'))
+    		{
+    			try
+		    	{
+		    		if($guid == null)
+			    	{
+			    		$data = $this->Member->createForgotPassword($this->request->data);
+			    		if($data != false)
+			    		{
+			    			$this->_sendEmail(
+			    				$data['email'],
+			    				'Password Reset Request',
+			    				'forgot_password',
+			    				array(
+			    					'id' => $data['id'],
+			    				)
+			    			);
 
-			if ($this->request->is('get')) 
-			{
-			}
-			else
-			{
-				# Validate the input using the dummy model
-				$this->ForgotPassword->set($this->data);
-				if($this->ForgotPassword->validates())
-				{
-					# If guid is not set then we should be sending out the e-mail
-					if($guid == null)
-					{
-						# Grab the member
-						$memberInfo = $this->Member->find('all', array( 'conditions' => array('Member.email' => $this->request->data['ForgotPassword']['email']) ));
-						if($memberInfo && count($memberInfo) > 0)
-						{
-							$entry = $this->ForgotPassword->generate_entry($memberInfo[0]);
-							if($entry != null)
-							{
-								# E-mail the user...
-								$email = $this->prepare_email();
-								$email->to( $memberInfo[0]['Member']['email'] );
-								$email->subject('Password Reset Request');
-								$email->template('forgot_password', 'default');
-								$email->viewVars( array( 
-									'id' => $entry['ForgotPassword']['request_guid'],
-									 )
-								);
-								$email->send();
-								
-								$this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_sent'));
-							}
-						}
-					}
-					else
-					{
-						# Check all is well and then proceed with the password reset!
-
-						# Grab the record 
-						$record = $this->ForgotPassword->find('first', array('conditions' => array( 'ForgotPassword.request_guid' => $guid )));
-						if(isset($record) == false || $record == null)
-						{
-							# FAIL INVALID GUID
-							$this->Session->setFlash('Invalid request id');
-							$this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_error'));
-						}
-						else
-						{
-							$memberInfo = $this->Member->find('first', array( 'conditions' => array( 'Member.member_id' => $record['ForgotPassword']['member_id'] )));
-							if(isset($memberInfo) == false || $memberInfo == null)
-							{
-								# FAIL INVALID RECORD
-								$this->Session->setFlash('Invalid request id');
-								$this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_error'));
-							}
-							else
-							{
-								# CHECK FOR E-MAIL MATCH
-								if($this->request->data['ForgotPassword']['email'] != $memberInfo['Member']['email'])
-								{
-									# FAIL INCORRECT E-MAIL
-									# Don't tell them the actual reason
-									$this->Session->setFlash('Invalid request id');
-									$this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_error'));
-								}
-								else
-								{
-									# AT [01/10/2012] Has this link already been used?
-									# AT [01/10/2012] Or has it expired due to time passing?
-									if($record['ForgotPassword']['expired'] != 0 || ( (time() - strtotime($record['ForgotPassword']['timestamp'])) > (60 * 60 * 2) ) )
-									{
-										# FAIL EXPIRED LINK
-										$this->Session->setFlash('Invalid request id');
-										$this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_error'));
-									}
-									else
-									{
-										# AT [01/10/2012] Looks like we're all good to go
-										# Need to do this next bit in a transaction so we can roll it back if needed
-
-										$datasource = $this->Member->getDataSource();
-										$datasource->begin();
-
-										$succeeded = false;
-										# First we set the password
-										if($this->_set_member_password($memberInfo, $this->request->data['ForgotPassword']['new_password']))
-										{
-											# Then we expire the forgot password request
-											$record['ForgotPassword']['expired'] = 1;
-											$this->ForgotPassword->id = $record['ForgotPassword']['request_guid'];
-											if($this->ForgotPassword->save($record))
-											{
-												if($datasource->commit())
-												{
-													# Success!
-													$succeeded = true;
-												}
-											}
-										}
-
-										if($succeeded === true)
-										{
-											$this->Session->setFlash('Password successfully set.');
-											$this->redirect(array('controller' => 'members', 'action' => 'login'));
-										}
-										else
-										{
-											$this->Session->setFlash('Unable to set password');
-											$datasource->rollback();
-											$this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_error'));
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+			    			return $this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_sent'));
+			    		}
+			    		else
+			    		{
+			    			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
+			    		}
+			    	}
+			    	else
+			    	{
+			    		if($this->Member->completeForgotPassword($guid, $this->request->data))
+			    		{
+			    			$this->Session->setFlash('Password successfully set.');
+							return $this->redirect(array('controller' => 'members', 'action' => 'login'));
+			    		}
+			    		else
+			    		{
+			    			$this->Session->setFlash('Unable to set password');
+			    			return $this->redirect(array('controller' => 'pages', 'action' => 'forgot_password_error'));
+			    		}
+			    	}
+			    }
+			    catch(InvalidStatusException $e)
+	    		{
+	    			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
+	    		}
+    		}
 	    }
 
 	    private function _create_status_update_record($memberId, $adminId, $newStatus, $oldStatus)

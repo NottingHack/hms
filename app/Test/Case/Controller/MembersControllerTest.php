@@ -8,7 +8,7 @@
 
 	class MembersControllerTest extends ControllerTestCase
 	{
-		public $fixtures = array( 'app.Member', 'app.Status', 'app.Group', 'app.GroupsMember', 'app.Account', 'app.Pin', 'app.StatusUpdate' );
+		public $fixtures = array( 'app.Member', 'app.Status', 'app.Group', 'app.GroupsMember', 'app.Account', 'app.Pin', 'app.StatusUpdate', 'app.ForgotPassword' );
 
 		public function setUp() 
         {
@@ -1048,6 +1048,298 @@
 			$this->testAction('/members/changePassword/5', array('data' => $data, 'method' => 'post'));
 			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
 			$this->assertContains('/members/view/5', $this->headers['Location'], 'Redirect to member view did not occur.' );
+		}
+
+		public function testForgotPasswordNoInput()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$this->testAction('/members/forgotPassword/');
+
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view vars.' );
+			$this->assertArrayHasKey( 'createRequest', $this->vars, 'No createRequest value in view vars.' );
+			$this->assertIdentical( $this->vars['createRequest'], true, 'Incorrect createRequest value.' );
+		}
+
+		public function testForgotPasswordInvalidGuid()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$this->testAction('/members/forgotPassword/awfefwfargaez');
+
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view vars.' );
+			$this->assertArrayHasKey( 'createRequest', $this->vars, 'No createRequest value in view vars.' );
+			$this->assertIdentical( $this->vars['createRequest'], true, 'Incorrect createRequest value.' );
+		}
+
+		public function testForgotPasswordCreate()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->exactly(1))->method('config');
+			$mockEmail->expects($this->exactly(1))->method('from');
+			$mockEmail->expects($this->exactly(1))->method('sender');
+			$mockEmail->expects($this->exactly(1))->method('emailFormat');
+			$mockEmail->expects($this->exactly(1))->method('to');
+			$mockEmail->expects($this->exactly(1))->method('subject');
+			$mockEmail->expects($this->exactly(1))->method('template');
+			$mockEmail->expects($this->exactly(1))->method('viewVars');
+			$mockEmail->expects($this->exactly(1))->method('send');
+
+			$mockEmail->expects($this->at(0))->method('config')->with('smtp');
+			$mockEmail->expects($this->at(1))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(2))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(3))->method('emailFormat')->with('html');
+			$mockEmail->expects($this->at(4))->method('to')->with('a.santini@hotmail.com');
+			$mockEmail->expects($this->at(5))->method('subject')->with('Password Reset Request');
+			$mockEmail->expects($this->at(6))->method('template')->with('forgot_password');
+			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
+
+			$data = array(
+				'ForgotPassword' => array(
+					'email' => 'a.santini@hotmail.com',
+				),
+			);
+
+			$this->testAction('/members/forgotPassword', array('data' => $data, 'method' => 'post'));
+
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view vars.' );
+			$this->assertArrayHasKey( 'createRequest', $this->vars, 'No createRequest value in view vars.' );
+			$this->assertIdentical( $this->vars['createRequest'], true, 'Incorrect createRequest value.' );
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertContains('/pages/forgot_password_sent', $this->headers['Location'], 'Redirect to forgot password sent view did not occur.' );
+		}
+
+		public function testForgotPasswordCreateInvalidMember()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$data = array(
+				'ForgotPassword' => array(
+					'email' => 'CherylLCarignan@teleworm.us',
+				),
+			);
+
+			$this->testAction('/members/forgotPassword', array('data' => $data, 'method' => 'post'));
+
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view vars.' );
+			$this->assertArrayHasKey( 'createRequest', $this->vars, 'No createRequest value in view vars.' );
+			$this->assertIdentical( $this->vars['createRequest'], true, 'Incorrect createRequest value.' );
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertContains('/pages/home', $this->headers['Location'], 'Redirect to home sent view did not occur.' );
+		}
+
+		public function testForgotPasswordCreateInvalidEmail()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$data = array(
+				'ForgotPassword' => array(
+					'email' => 'totallyfake@gmail.com',
+				),
+			);
+
+			$this->testAction('/members/forgotPassword', array('data' => $data, 'method' => 'post'));
+
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view vars.' );
+			$this->assertArrayHasKey( 'createRequest', $this->vars, 'No createRequest value in view vars.' );
+			$this->assertIdentical( $this->vars['createRequest'], true, 'Incorrect createRequest value.' );
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertContains('/pages/home', $this->headers['Location'], 'Redirect to home view did not occur.' );
+		}
+
+		public function testForgotPasswordComplete()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$data = array(
+				'ForgotPassword' => array(
+					'email' => 'a.santini@hotmail.com',
+					'new_password' => 'totally1337password',
+					'new_password_confirm' => 'totally1337password',
+				),
+			);
+
+			$this->testAction('/members/forgotPassword/50b104e4-33f8-4821-b756-5e100a000005', array('data' => $data, 'method' => 'post'));
+
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view vars.' );
+			$this->assertArrayHasKey( 'createRequest', $this->vars, 'No createRequest value in view vars.' );
+			$this->assertIdentical( $this->vars['createRequest'], false, 'Incorrect createRequest value.' );
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertContains('/members/login', $this->headers['Location'], 'Redirect to login view did not occur.' );
+		}
+
+		public function testForgotPasswordCompleteNonMatchingPasswords()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$data = array(
+				'ForgotPassword' => array(
+					'email' => 'a.santini@hotmail.com',
+					'new_password' => 'totally1337password',
+					'new_password_confirm' => 'non1337password',
+				),
+			);
+
+			$this->testAction('/members/forgotPassword/50b104e4-33f8-4821-b756-5e100a000005', array('data' => $data, 'method' => 'post'));
+
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view vars.' );
+			$this->assertArrayHasKey( 'createRequest', $this->vars, 'No createRequest value in view vars.' );
+			$this->assertIdentical( $this->vars['createRequest'], false, 'Incorrect createRequest value.' );
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertContains('/pages/forgot_password_error', $this->headers['Location'], 'Redirect to forgot password error view did not occur.' );
+		}
+
+		public function testForgotPasswordCompleteInvalidGuid()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$data = array(
+				'ForgotPassword' => array(
+					'email' => 'a.santini@hotmail.com',
+					'new_password' => 'totally1337password',
+					'new_password_confirm' => 'totally1337password',
+				),
+			);
+
+			$this->testAction('/members/forgotPassword/50b104e4-33f8-4821-b756', array('data' => $data, 'method' => 'post'));
+
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view vars.' );
+			$this->assertArrayHasKey( 'createRequest', $this->vars, 'No createRequest value in view vars.' );
+			$this->assertIdentical( $this->vars['createRequest'], true, 'Incorrect createRequest value.' );
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertContains('/pages/home', $this->headers['Location'], 'Redirect to forgot password error view did not occur.' );
+		}
+
+		public function testForgotPasswordCompleteExpiredGuid()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$data = array(
+				'ForgotPassword' => array(
+					'email' => 'm.pryce@example.org',
+					'new_password' => 'totally1337password',
+					'new_password_confirm' => 'totally1337password',
+				),
+			);
+
+			$this->testAction('/members/forgotPassword/50b0ec45-8984-48b8-ac8a-5db90a000005', array('data' => $data, 'method' => 'post'));
+
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view vars.' );
+			$this->assertArrayHasKey( 'createRequest', $this->vars, 'No createRequest value in view vars.' );
+			$this->assertIdentical( $this->vars['createRequest'], false, 'Incorrect createRequest value.' );
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertContains('/pages/forgot_password_error', $this->headers['Location'], 'Redirect to forgot password error view did not occur.' );
+		}
+
+		public function testForgotPasswordCompleteTimedoutRequest()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$data = array(
+				'ForgotPassword' => array(
+					'email' => 'g.viles@gmail.com',
+					'new_password' => 'totally1337password',
+					'new_password_confirm' => 'totally1337password',
+				),
+			);
+
+			$this->testAction('/members/forgotPassword/50be19c8-0968-43ba-be1b-0990bcda665d', array('data' => $data, 'method' => 'post'));
+
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view vars.' );
+			$this->assertArrayHasKey( 'createRequest', $this->vars, 'No createRequest value in view vars.' );
+			$this->assertIdentical( $this->vars['createRequest'], false, 'Incorrect createRequest value.' );
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertContains('/pages/forgot_password_error', $this->headers['Location'], 'Redirect to forgot password error view did not occur.' );
 		}
 
 		private function _testRegisterMailingListViewVars()
