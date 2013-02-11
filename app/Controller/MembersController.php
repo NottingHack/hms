@@ -573,10 +573,11 @@
     			}
     			else
     			{
-    				$this->Session->setFlash('Unable to contact member');	
+    				$this->Session->setFlash('Unable to contact member');
     			}
 	    	}
-	    	$this->redirect($this->referer());
+
+	    	return $this->redirect($this->referer());
 	    }
 
 	    //! Send the 'prospective member' email to a member.
@@ -601,39 +602,54 @@
 	    	return false;
 	    }
 
-	    public function send_contact_details_reminder($id = null)
+	    //! Send the 'contact details reminder' email to a member.
+	    /*!
+	    	@param int $id The id of the member to contact.
+	    */
+	    public function sendContactDetailsReminder($id = null)
 	    {
-	    	if($id != null)
-	    	{
-	    		$this->Member->id = $id;
-				$memberInfo = $this->Member->read();
-				$email = $this->prepare_email();
-				$email->to( $memberInfo['Member']['email'] );
-				$email->subject('Membership Info');
-				$email->template('to_member_contact_details_reminder', 'default');
-				$email->viewVars( array( 
-					'memberId' => $id,
-					 )
-				);
-				$email->send();
+	    	$emailSent = false;
 
-				$this->Session->setFlash('Member has been contacted');
-				$this->redirect($this->referer());
+	    	$email = $this->Member->getEmailForMember($id);
+	    	if($email)
+	    	{
+	    		$emailSent = $this->_sendEmail(
+					$email,
+					'Membership Info',
+					'to_member_contact_details_reminder',
+					array(
+						'memberId' => $id,
+					)
+				);
 	    	}
+
+	    	if($emailSent)
+			{
+				$this->Session->setFlash('Member has been contacted');
+			}
+			else
+			{
+				$this->Session->setFlash('Unable to contact member');
+			}
+
+			return $this->redirect($this->referer());
 	    }
 
-	    public function send_so_details_reminder($id = null)
+	    //! Send the 'so details reminder' email to a member.
+	    /*!
+	    	@param int $id The id of the member to contact.
+	    */
+	    public function sendSoDetailsReminder($id = null)
 	    {
-	    	if($id != null)
+	    	if($this->_sendSoDetailsToMember($id))
 	    	{
-	    		$this->Member->id = $id;
-				$memberInfo = $this->Member->read();
-				
-				$this->_send_so_details($memberInfo);
-
-				$this->Session->setFlash('Member has been contacted');
-				$this->redirect($this->referer());
+	    		$this->Session->setFlash('Member has been contacted');
 	    	}
+	    	else
+	    	{
+	    		$this->Session->setFlash('Unable to contact member');
+	    	}
+	    	return $this->redirect($this->referer());
 	    }
 
 	    //! Send the e-mail containing standing order info to a member.

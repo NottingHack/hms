@@ -1386,6 +1386,94 @@
 			$this->testAction('/members/sendMembershipReminder/7');
 		}
 
+		public function testSendSoDetailsReminderInvalidData()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$this->testAction('/members/sendSoDetailsReminder/sdfsfgresr');
+		}
+
+		public function testSendSoDetailsReminder()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->once())->method('config');
+			$mockEmail->expects($this->once())->method('from');
+			$mockEmail->expects($this->once())->method('sender');
+			$mockEmail->expects($this->once())->method('emailFormat');
+			$mockEmail->expects($this->once())->method('to');
+			$mockEmail->expects($this->once())->method('subject');
+			$mockEmail->expects($this->once())->method('template');
+			$mockEmail->expects($this->once())->method('viewVars');
+			$mockEmail->expects($this->once())->method('send');
+
+			$mockEmail->expects($this->at(0))->method('config')->with('smtp');
+			$mockEmail->expects($this->at(1))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(2))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(3))->method('emailFormat')->with('html');
+			$mockEmail->expects($this->at(4))->method('to')->with('RyanMiles@dayrep.com');
+			$mockEmail->expects($this->at(5))->method('subject')->with('Bank Details');
+			$mockEmail->expects($this->at(6))->method('template')->with('to_member_so_details');
+			$mockEmail->expects($this->at(7))->method('viewVars')->with(array('name' => 'Ryan Miles', 'paymentRef' => 'HSNOTTSFGXWGKF48QB', 'accountNum' => Configure::read('hms_so_accountNumber'), 'sortCode' => Configure::read('hms_so_sortCode'), 'accountName' => Configure::read('hms_so_accountName') ));
+			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
+
+			$this->testAction('/members/sendSoDetailsReminder/13');
+		}
+
+		public function testSendContactDetailsReminderInvalidData()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$this->testAction('/members/sendContactDetailsReminder/sdfsfgresr');
+		}
+
+		public function testSendContactDetailsReminder()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->once())->method('config');
+			$mockEmail->expects($this->once())->method('from');
+			$mockEmail->expects($this->once())->method('sender');
+			$mockEmail->expects($this->once())->method('emailFormat');
+			$mockEmail->expects($this->once())->method('to');
+			$mockEmail->expects($this->once())->method('subject');
+			$mockEmail->expects($this->once())->method('template');
+			$mockEmail->expects($this->once())->method('viewVars');
+			$mockEmail->expects($this->once())->method('send');
+
+			$mockEmail->expects($this->at(0))->method('config')->with('smtp');
+			$mockEmail->expects($this->at(1))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(2))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+			$mockEmail->expects($this->at(3))->method('emailFormat')->with('html');
+			$mockEmail->expects($this->at(4))->method('to')->with('HugoJLorenz@dayrep.com');
+			$mockEmail->expects($this->at(5))->method('subject')->with('Membership Info');
+			$mockEmail->expects($this->at(6))->method('template')->with('to_member_contact_details_reminder');
+			$mockEmail->expects($this->at(7))->method('viewVars')->with(array('memberId' => 10));
+			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
+
+			$this->testAction('/members/sendContactDetailsReminder/10');
+		}
+
 		private function _testRegisterMailingListViewVars()
 		{
 			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
