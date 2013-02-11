@@ -32,7 +32,7 @@
 	    	@sa MailChimpComponent
 	    	@sa KrbComponent
 	    */
-	    public $components = array('MailChimp', 'Krb');
+	    public $components = array('MailChimp');
 
 	    //! Test to see if a user is authorized to make a request.
 	    /*!
