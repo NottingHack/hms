@@ -955,7 +955,14 @@
 			}
 		}
 
-
+		//! Send an e-mail to one or more email addresses.
+		/*
+			@param mixed $to Either an array of email address strings, or a string containing a singular e-mail address.
+			@param string $subject The subject of the email.
+			@param string $template Which email view template to use.
+			@param array $viewVars Array containing all the variables to pass to the view.
+			@retval bool True if e-mail was sent, false otherwise.
+		*/
 		private function _sendEmail($to, $subject, $template, $viewVars = array())
 		{
 			if($this->email == null)
@@ -975,19 +982,14 @@
 			return $email->send();
 		}
 
+		//! Attempt to login as a member
 		public function login() 
 		{
 		    if ($this->request->is('post')) 
 		    {
 		        if ($this->Auth->login()) 
 		        {
-		        	$memberInfo = AuthComponent::user();
-		        	# Set the last login time
-		        	unset($memberInfo['MemberAuth']);
-		        	$memberInfo['MemberAuth']['member_id'] = $memberInfo['Member']['member_id'];
-		        	$memberInfo['MemberAuth']['last_login'] = date( 'Y-m-d H:m:s' );
-		        	$this->Member->MemberAuth->save($memberInfo);
-		            $this->redirect($this->Auth->redirect());
+		            return $this->redirect($this->Auth->redirect());
 		        } 
 		        else 
 		        {
@@ -996,9 +998,10 @@
 		    }
 		}
 
+		//! Logout.
 		public function logout() 
 		{
-		    $this->redirect($this->Auth->logout());
+		    return $this->redirect($this->Auth->logout());
 		}
 
 		//! Adds the appropriate actions to each member in the member list.
