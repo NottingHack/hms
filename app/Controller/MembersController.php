@@ -566,41 +566,6 @@
     		}
 	    }
 
-	    private function _create_status_update_record($memberId, $adminId, $newStatus, $oldStatus)
-	    {
-	    	if($newStatus != null && $oldStatus != null && $newStatus != $oldStatus)
-	    	{
-
-		    	$this->Member->StatusUpdate->create();
-		    	$this->Member->StatusUpdate->save(
-		    		array(
-		    			'StatusUpdate' => array(
-		    				'member_id' => $memberId,
-		    				'admin_id' => $adminId,
-		    				'new_status' => $newStatus,
-		    				'old_status' => $oldStatus,
-		    				'timestamp' => null,
-		    			),
-		    		)
-		    	);
-		    }
-	    }
-
-	    private function _set_member_password($memberInfo, $newPassword)
-	    {
-	    	switch ($this->Krb->userExists($memberInfo['Member']['username'])) 
-	    	{
-	    		case TRUE:
-	    			return $this->Krb->changePassword($memberInfo['Member']['username'], $newPassword);
-
-	    		case FALSE:
-	    			return $this->krb->addUser($memberInfo['Member']['username'], $newPassword);
-	    		
-	    		default:
-	    			return false;
-	    	}
-	    }
-
 	    public function send_membership_reminder($id = null)
 	    {
 	    	if($id != null)
