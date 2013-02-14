@@ -1221,6 +1221,28 @@
 			return $accountList;
 		}
 
+		//! Validate that e-mail data is ok.
+		/*!
+			@param array $data The data to validate.
+			@retval mixed Array of e-mail data if $data is valid, false otherwise.
+		*/
+		public function validateEmail($data)
+		{
+			if(	is_array($data) &&
+				isset($data['MemberEmail']) &&
+				isset($data['MemberEmail']['subject']) &&
+				isset($data['MemberEmail']['message']) )
+			{
+				$emailModel = ClassRegistry::init('MemberEmail');
+				$emailModel->set($data);
+				if($emailModel->validates($data))
+				{
+					return array('subject' => Hash::get($data, 'MemberEmail.subject'), 'message' => Hash::get($data, 'MemberEmail.message'));
+				}
+			}
+			return false;
+		}
+
 		//! Create or save a member record, and all associated data.
 		/*! 
 			@param array $memberInfo The information to use to create or update the member record.

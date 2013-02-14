@@ -1707,6 +1707,23 @@
             $expectedResult = array( '-1' => 'Create new', '1' => 'Mathew Pryce', '2' => 'Annabelle Santini', '3' => 'Guy Viles, Kelly Savala and Jessie Easterwood', '6' => 'Guy Garrette', '7' => 'Ryan Miles', '8' => 'Evan Atkinson' );
             $this->assertEqual( $this->Member->getReadableAccountList(), $expectedResult, 'Invalid result.' );
         }
+
+        public function testValidateEmailInvalidData()
+        {
+            $this->assertFalse( $this->Member->validateEmail(null), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->validateEmail('2123312'), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->validateEmail(-1), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->validateEmail(26), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->validateEmail(array()), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->validateEmail(array('MemberEmail')), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->validateEmail(array('MemberEmail' => array('subject', 'message'))), 'Invalid data was not handled correctly.' );
+        }
+
+        public function testValidateEmailValidData()
+        {
+            $data = array('subject' => 'This is a subject', 'message' => 'Lorem impus sit dom amet.');
+            $this->assertEqual( $this->Member->validateEmail(array('MemberEmail' => $data)), $data, 'Valid data was not handled correctly.' );   
+        }
     }
 
 ?>

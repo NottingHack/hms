@@ -1474,6 +1474,178 @@
 			$this->testAction('/members/sendContactDetailsReminder/10');
 		}
 
+		public function testEmailMembersWithStatusNoData()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$this->testAction('/members/emailMembersWithStatus/1');
+
+			$this->_testEmailMembersWithStatusVewVars();
+		}
+
+		public function testEmailMembersWithStatusInvalidStatus()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$this->testAction('/members/emailMembersWithStatus/0');
+
+			$this->_testEmailMembersWithStatusVewVars();
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+		}
+
+		public function testEmailMemberWithStatusInvalidData()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->never())->method('config');
+			$mockEmail->expects($this->never())->method('from');
+			$mockEmail->expects($this->never())->method('sender');
+			$mockEmail->expects($this->never())->method('emailFormat');
+			$mockEmail->expects($this->never())->method('to');
+			$mockEmail->expects($this->never())->method('subject');
+			$mockEmail->expects($this->never())->method('template');
+			$mockEmail->expects($this->never())->method('viewVars');
+			$mockEmail->expects($this->never())->method('send');
+
+			$data = array(
+				'MemberEmail' => array(
+					'subject' => '',
+					'message' => '',
+				),
+			);
+			$this->testAction('/members/emailMembersWithStatus/2', array('data' => $data, 'method' => 'post'));
+
+			$this->_testEmailMembersWithStatusVewVars();
+			//$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
+		}
+
+		public function testEmailMemberWithStatusValidData()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->exactly(5))->method('config');
+			$mockEmail->expects($this->exactly(5))->method('from');
+			$mockEmail->expects($this->exactly(5))->method('sender');
+			$mockEmail->expects($this->exactly(5))->method('emailFormat');
+			$mockEmail->expects($this->exactly(5))->method('to');
+			$mockEmail->expects($this->exactly(5))->method('subject');
+			$mockEmail->expects($this->exactly(5))->method('template');
+			$mockEmail->expects($this->exactly(5))->method('viewVars');
+			$mockEmail->expects($this->exactly(5))->method('send');
+
+			$emails = array(
+				'm.pryce@example.org',
+				'a.santini@hotmail.com',
+				'g.viles@gmail.com',
+				'k.savala@yahoo.co.uk',
+				'j.easterwood@googlemail.com',
+			);
+
+			$data = array(
+				'MemberEmail' => array(
+					'subject' => 'Hello!',
+					'message' => 'This is a test message :)',
+				),
+			);
+
+			$index = 0;
+			foreach ($emails as $email) 
+			{
+				$mockEmail->expects($this->at($index++))->method('config')->with('smtp');
+				$mockEmail->expects($this->at($index++))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+				$mockEmail->expects($this->at($index++))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+				$mockEmail->expects($this->at($index++))->method('emailFormat')->with('html');
+				$mockEmail->expects($this->at($index++))->method('to')->with($email);
+				$mockEmail->expects($this->at($index++))->method('subject')->with($data['MemberEmail']['subject']);
+				$mockEmail->expects($this->at($index++))->method('template')->with('default');
+				$mockEmail->expects($this->at($index++))->method('viewVars')->with(array('content' => $data['MemberEmail']['message']));
+				$mockEmail->expects($this->at($index++))->method('send')->will($this->returnValue(true));
+			}
+
+			$this->testAction('/members/emailMembersWithStatus/5', array('data' => $data, 'method' => 'post'));
+
+			$this->_testEmailMembersWithStatusVewVars();
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+		}
+
+		public function testEmailMemberWithStatusValidDataDodgyEmail()
+		{
+			$mockEmail = $this->_mockMemberEmail();
+
+			$mockEmail->expects($this->exactly(5))->method('config');
+			$mockEmail->expects($this->exactly(5))->method('from');
+			$mockEmail->expects($this->exactly(5))->method('sender');
+			$mockEmail->expects($this->exactly(5))->method('emailFormat');
+			$mockEmail->expects($this->exactly(5))->method('to');
+			$mockEmail->expects($this->exactly(5))->method('subject');
+			$mockEmail->expects($this->exactly(5))->method('template');
+			$mockEmail->expects($this->exactly(5))->method('viewVars');
+			$mockEmail->expects($this->exactly(5))->method('send');
+
+			$emails = array(
+				'm.pryce@example.org',
+				'a.santini@hotmail.com',
+				'g.viles@gmail.com',
+				'k.savala@yahoo.co.uk',
+				'j.easterwood@googlemail.com',
+			);
+
+			$data = array(
+				'MemberEmail' => array(
+					'subject' => 'Hello!',
+					'message' => 'This is a test message :)',
+				),
+			);
+
+			$index = 0;
+			$count = 0;
+			foreach ($emails as $email) 
+			{
+				$mockEmail->expects($this->at($index++))->method('config')->with('smtp');
+				$mockEmail->expects($this->at($index++))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+				$mockEmail->expects($this->at($index++))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+				$mockEmail->expects($this->at($index++))->method('emailFormat')->with('html');
+				$mockEmail->expects($this->at($index++))->method('to')->with($email);
+				$mockEmail->expects($this->at($index++))->method('subject')->with($data['MemberEmail']['subject']);
+				$mockEmail->expects($this->at($index++))->method('template')->with('default');
+				$mockEmail->expects($this->at($index++))->method('viewVars')->with(array('content' => $data['MemberEmail']['message']));
+				$mockEmail->expects($this->at($index++))->method('send')->will($this->returnValue(($count % 2) == 0));
+				$count++;
+			}
+
+			$this->testAction('/members/emailMembersWithStatus/5', array('data' => $data, 'method' => 'post'));
+
+			$this->_testEmailMembersWithStatusVewVars();
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+		}
+
+		private function _testEmailMembersWithStatusVewVars()
+		{
+			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
+			$this->assertArrayHasKey( 'members', $this->vars, 'No view value called \'members\'.' );
+			$this->assertArrayHasKey( 'status', $this->vars, 'No view value called \'status\'.' );
+		}
+
 		private function _testRegisterMailingListViewVars()
 		{
 			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );

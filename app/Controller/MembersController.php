@@ -895,63 +895,72 @@
 		    return null;
 		}
 
-		public function email_members_with_status($status) 
+		//! Send an e-mail to every member with a certain status.
+		/*!
+			@param int $statusId Attempt to e-mail members with this status.
+		*/
+		public function emailMembersWithStatus($statusId) 
 		{
+			$memberList = $this->Member->getMemberSummaryForStatus(false, $statusId);
+			$statusInfo = $this->Member->Status->getStatusSummaryForId($statusId);
 
-			Controller::loadModel('MemberEmail');
+			$this->set('members', $memberList);
+			$this->set('status', $statusInfo);
 
-			$members = $this->Member->find('all', array('conditions' => array( 'Member.member_status' => $status )));
-			$memberEmails = Hash::extract( $members, '{n}.Member.email' );
-
-			$statusName = "Unknown";
-			$statusId = $status;
-			$statusList = $this->Member->Status->find( 'all', array( 'conditions' => array( 'status_id' => $status ) ) );
-			if(count($statusList) > 0)
+			if(	$memberList &&
+				$statusInfo)
 			{
-				$statusName = $statusList[0]['Status']['title'];
-			}
-
-			$this->set('members', $members);
-			$this->set('statusName', $statusName);
-			$this->set('statusId', $status);
-
-			if ($this->request->is('get')) 
-			{
-			}
-			else 
-			{
-				$this->MemberEmail->set($this->data);
-				if($this->MemberEmail->validates())
+				if($this->request->is('post'))
 				{
-					$subject = $this->request->data['MemberEmail']['subject'];
-					$message = $this->request->data['Member']['message'];
-					if( isset($subject) &&
-						$subject != null &&
-						strlen(trim($subject)) > 0 &&
+					$messageDetails = $this->Member->validateEmail($this->request->data);
 
-						isset($message) &&
-						$message != null &&
-						strlen(trim($message)) > 0 )
+					if($messageDetails)
 					{
-						# Send these out as seperate e-mails
-						foreach ($memberEmails as $email) 
+						$failedMembers = array();
+						foreach ($memberList as $member) 
 						{
-							# Send the message out
-							$email = $this->prepare_email();
-							$email->to($memberEmails);
-							$email->subject($subject);
-							$email->template('default', 'default');
-							$email->send($message);
+							$emailOk = $this->_sendEmail(
+								$member['email'], 
+								$messageDetails['subject'], 
+								'default', 
+								array(
+									'content' => $messageDetails['message']
+								)
+							);
+							if(!$emailOk)
+							{
+								array_push($failedMembers, $member);
+							}
 						}
 
-						$this->Session->setFlash('E-mail sent');
-						$this->redirect(array('action' => 'index'));
-					}
-					else
-					{
-						$this->Session->setFlash('Unable to send e-mail');
+						$numFailed = count($failedMembers);
+						if($numFailed > 0)
+						{
+							if($numFailed == count($memberList))
+							{
+								$this->Session->setFlash('Failed to send e-mail to any member.');
+							}
+							else
+							{
+								$flashMessage = 'E-mail sent to all but the following members:';
+								foreach ($failedMembers as $failedMember) 
+								{
+									$flashMessage .= '\n' . $failedMember['name'];
+								}
+								$this->Session->setFlash($flashMessage);
+							}
+						}
+						else
+						{
+							$this->Session->setFlash('E-mail to all members.');
+						}
+						return $this->redirect(array('controller' => 'members', 'action' => 'index'));
 					}
 				}
+			}
+			else
+			{
+				return $this->redirect($this->referer());
 			}
 		}
 
@@ -982,7 +991,7 @@
 			return $email->send();
 		}
 
-		//! Attempt to login as a member
+		//! Attempt to login as a member.
 		public function login() 
 		{
 		    if ($this->request->is('post')) 
