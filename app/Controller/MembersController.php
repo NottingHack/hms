@@ -679,69 +679,86 @@
 			return false;
 	    }
 
-	    public function view($id = null) 
+	    //! View the full member profile.
+	    /*!	
+	   		@param int $id The id of the member to view.
+	   	*/
+	    public function view($id) 
 	    {
-	        $this->Member->id = $id;
-	        $memberInfo = $this->Member->read();
+	    	if(isset($id))
+	    	{
+	    		$memberInfo = $this->Member->getMemberDetails($id);
+	    		if($memberInfo)
+	    		{
+	    			$viewerId = $this->_getLoggedInMemberId();
 
-	        # Sanitise data
-		    $user = $this->Member->findByMemberId(AuthComponent::user('Member.member_id'));
-		    $canSeeAll = Member::isInGroupMemberAdmin($user) || Member::isInGroupFullAccess($user);
-		    if(!$canSeeAll)
-		    {
-		    	unset($memberInfo['Pin']);
-		    	unset($memberInfo['Status']);
-		    	unset($memberInfo['StatusUpdate']);
+			    	$showAdminFeatures = 
+			    		(	$this->Member->GroupsMember->isMemberInGroup($viewerId, Group::MEMBER_ADMIN) || 
+			    			$this->Member->GroupsMember->isMemberInGroup($viewerId, Group::FULL_ACCESS) );
 
-		    	// Only current members can see credit limit and balances
-		    	if($user['Member']['member_status'] != 2)
-		    	{
-		    		unset($memberInfo['Member']['balance']);
-		    		unset($memberInfo['Member']['credit_limit']);
-		    	}
-		    }
-		    else
-		    {
-		    	if(empty($memberInfo['StatusUpdate']) == false)
-		    	{
-		    		$memberInfo['StatusUpdate'] = $this->Member->StatusUpdate->findById($memberInfo['StatusUpdate'][0]['id']);
-		    	}
-		    }
 
-	        $this->set('member', $memberInfo);
+			    	// Only admins or the own member can view a profile.
+			    	if($viewerId == $id || $showAdminFeatures)
+			    	{
+			    		$memberStatus = $this->Member->getStatusForMember($id);
+			    		// Only show the finance stuff to admins, current or ex members
+			    		$hasJoined = in_array($memberStatus, array(Status::CURRENT_MEMBER, Status::EX_MEMBER));
+				    	$showFinances = $showAdminFeatures || $hasJoined;
 
-	        $this->Nav->add('Edit', 'members', 'edit', array( $id ) );
-	        $this->Nav->add('Change Password', 'members', 'change_password', array( $id ) );
-			switch ($memberInfo['Member']['member_status']) 
-			{
-		        case 1: # Prospective member
-		        	$this->Nav->add('Send Membership Reminder', 'members', 'send_membership_reminder', array($id));
-		        	break;
 
-		        case 2: # Current member
-		            $this->Nav->add('Revoke Membership', 'members', 'set_member_status', array( $id, 3 ) );
-		            break;
+				    	// Hide things they shouldn't be seeing
+				    	if(!$showAdminFeatures)
+				    	{
+				    		unset($memberInfo['pin']);
+				    		unset($memberInfo['status']);
+				    		unset($memberInfo['lastStatusUpdate']);
+				    	}
 
-		        case 3: # Ex-member
-		            $this->Nav->add('Reinstate Membership', 'members', 'set_member_status', array( $id, 2 ) );
-		            break;
+				    	if(!$showFinances)
+				    	{
+				    		unset($memberInfo['balance']);
+				    		unset($memberInfo['creditLimit']);
+				    	}
 
-				case 5: # Waiting for contact details
-					$this->Nav->add('Send Contact Details Reminder', 'members', 'send_contact_details_reminder', array($id));
-		        	break;
+				    	if(!$hasJoined)
+				    	{
+				    		unset($memberInfo['joinDate']);
+				    		unset($memberInfo['unlockText']);
+				    	}
 
-		        case 6: # Prospective member
-		            $this->Nav->add('Approve contact details', 'members', 'accept_details', array( $id ), 'positive' );
-		            $this->Nav->add('Reject contact details', 'members', 'reject_details', array( $id ), 'negative' );
-		            break;
+				    	$unsetIfNull = array('username', 'handle', 'name', 'paymentRef', 'contactNumber', 'pin', 'lastStatusUpdate');
+				    	foreach ($unsetIfNull as $index) 
+				    	{
+				    		if(	array_key_exists($index, $memberInfo) &&
+				    			$memberInfo[$index] == null)
+					    	{
+					    		unset($memberInfo[$index]);	
+					    	}
+				    	}
 
-		        case 7: # Waiting for SO
-		        	$this->Nav->add('Send SO Details Reminder', 'members', 'send_so_details_reminder', array($id));
-		        	$this->Nav->add('Approve Member', 'members', 'approve_member', array($id), 'positive');
-		        	break;
-		    }
+				    	// Address part 1 is mandatory, so if that is null then they don't really have an address
+				    	if($memberInfo['address']['part1'] == null)
+				    	{
+				    		unset($memberInfo['address']);
+				    	}
 
-		    $this->set('mailingLists', $this->_get_mailing_lists_and_subscruibed_status($memberInfo));
+				    	$this->set('member', $memberInfo);
+
+				    	$this->Nav->add('Edit', 'members', 'edit', array( $id ) );
+				        $this->Nav->add('Change Password', 'members', 'changePassword', array( $id ) );
+
+				        foreach ($this->_getActionsForMmeber($id) as $action) 
+				        {
+				        	$this->Nav->add($action['title'], $action['controller'], $action['action'], $action['params']);
+				        }
+
+				        return; // Don't hit the redirect below.
+				    }
+	    		}
+	    	}
+
+	    	// Error!
+	    	return $this->redirect($this->referer());
 	    }
 
 	    public function edit($id = null) 
@@ -952,7 +969,7 @@
 						}
 						else
 						{
-							$this->Session->setFlash('E-mail to all members.');
+							$this->Session->setFlash('E-mail sent to all listed members.');
 						}
 						return $this->redirect(array('controller' => 'members', 'action' => 'index'));
 					}
@@ -1023,101 +1040,110 @@
 			// Have to add the actions ourselves
 	    	for($i = 0; $i < count($memberList); $i++)
 	    	{
-	    		$actions = array();
-
-	    		$status = $memberList[$i]['status']['id'];
 	    		$id = $memberList[$i]['id'];
-
-	    		switch($status)
-	    		{
-	    			case Status::PROSPECTIVE_MEMBER:
-	    				array_push($actions, 
-	    					array(
-	    						'title' => 'Send Membership Reminder',
-	    						'controller' => 'members',
-	    						'action' => 'send_membership_reminder',
-	    						'params' => array(
-	    							$id,
-	    						),
-	    					)
-	    				);
-	    			break;
-
-	    			case Status::PRE_MEMBER_1:
-	    			break;
-
-	    			case Status::PRE_MEMBER_2:
-	    				array_push($actions, 
-	    					array(
-	    						'title' => 'Send Contact Details Reminder',
-	    						'controller' => 'members',
-	    						'action' => 'send_contact_details_reminder',
-	    						'params' => array(
-	    							$id,
-	    						),
-	    					)
-	    				);
-	    			break;
-
-	    			case Status::PRE_MEMBER_3:
-
-	    				array_push($actions, 
-	    					array(
-	    						'title' => 'Send SO Details Reminder',
-	    						'controller' => 'members',
-	    						'action' => 'send_so_details_reminder',
-	    						'params' => array(
-	    							$id,
-	    						),
-	    					)
-	    				);
-
-	    				array_push($actions, 
-	    					array(
-	    						'title' => 'Approve Member',
-	    						'controller' => 'members',
-	    						'action' => 'approve_member',
-	    						'params' => array(
-	    							$id,
-	    						),
-	    					)
-	    				);
-
-	    			break;
-
-	    			case Status::CURRENT_MEMBER:
-	    				array_push($actions, 
-	    					array(
-	    						'title' => 'Revoke Membership',
-	    						'controller' => 'members',
-	    						'action' => 'set_member_status',
-	    						'params' => array(
-	    							$id,
-	    							Status::EX_MEMBER,
-	    						),
-	    					)
-	    				);
-	    			break;
-
-	    			case Status::EX_MEMBER:
-	    				array_push($actions, 
-	    					array(
-	    						'title' => 'Reinstate Membership',
-	    						'controller' => 'members',
-	    						'action' => 'set_member_status',
-	    						'params' => array(
-	    							$id,
-	    							Status::CURRENT_MEMBER,
-	    						),
-	    					)
-	    				);
-	    			break;
-	    		}
-
-	    		$memberList[$i]['actions'] = $actions;
+	    		$memberList[$i]['actions'] = $this->_getActionsForMmeber($id);
 	    	}
 
 	    	return $memberList;
+		}
+
+		//! Get an array of possible actions for a member
+		/*
+			@param int @memberId The id of the member to work with.
+			@retval array An array of actions.
+		*/
+		private function _getActionsForMmeber($memberId)
+		{
+			$statusId = $this->Member->getStatusForMember($memberId);
+
+			$actions = array();
+    		switch($statusId)
+    		{
+    			case Status::PROSPECTIVE_MEMBER:
+    				array_push($actions, 
+    					array(
+    						'title' => 'Send Membership Reminder',
+    						'controller' => 'members',
+    						'action' => 'sendMembershipReminder',
+    						'params' => array(
+    							$memberId,
+    						),
+    					)
+    				);
+    			break;
+
+    			case Status::PRE_MEMBER_1:
+    			break;
+
+    			case Status::PRE_MEMBER_2:
+    				array_push($actions, 
+    					array(
+    						'title' => 'Send Contact Details Reminder',
+    						'controller' => 'members',
+    						'action' => 'sendContactDetailsReminder',
+    						'params' => array(
+    							$memberId,
+    						),
+    					)
+    				);
+    			break;
+
+    			case Status::PRE_MEMBER_3:
+
+    				array_push($actions, 
+    					array(
+    						'title' => 'Send SO Details Reminder',
+    						'controller' => 'members',
+    						'action' => 'sendSoDetailsReminder',
+    						'params' => array(
+    							$memberId,
+    						),
+    					)
+    				);
+
+    				array_push($actions, 
+    					array(
+    						'title' => 'Approve Member',
+    						'controller' => 'members',
+    						'action' => 'approveMember',
+    						'params' => array(
+    							$memberId,
+    						),
+    					)
+    				);
+
+    			break;
+
+    			case Status::CURRENT_MEMBER:
+    				array_push($actions, 
+    					array(
+    						'title' => 'Revoke Membership',
+    						'controller' => 'members',
+    						'action' => 'setMemberStatus',
+    						'params' => array(
+    							$memberId,
+    							Status::EX_MEMBER,
+    						),
+    					)
+    				);
+    			break;
+
+    			case Status::EX_MEMBER:
+    				array_push($actions, 
+    					array(
+    						'title' => 'Reinstate Membership',
+    						'controller' => 'members',
+    						'action' => 'setMemberStatus',
+    						'params' => array(
+    							$memberId,
+    							Status::CURRENT_MEMBER,
+    						),
+    					)
+    				);
+    			break;
+    		}
+
+    		return $actions;
 		}
 
 		//! Get the id of the currently logged in Member.

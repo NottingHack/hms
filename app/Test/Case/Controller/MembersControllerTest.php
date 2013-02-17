@@ -1639,6 +1639,409 @@
 			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
 		}
 
+		public function testViewInvalidData()
+		{
+			// Should redirect
+			$this->testAction('members/view/0');
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+		}
+
+		public function testViewMemberAsAnotherMember()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
+
+			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
+
+			// Should redirect
+			$this->testAction('members/view/4');
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+		}
+
+		public function testViewMemberAsMemberAdmin()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	)
+            ));
+
+			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+
+			$this->controller->Nav->expects($this->exactly(3))->method('add');
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'setMemberStatus', array(4, Status::EX_MEMBER));
+
+			// Should not redirect, and should populate 
+			$this->testAction('members/view/4');
+			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+
+			$expectedMemberInfo = array(
+				'id' => '4',
+				'name' => 'Kelly Savala',
+				'username' => 'huskycolossus',
+				'handle' => 'bildestonelectrician',
+				'email' => 'k.savala@yahoo.co.uk',
+				'groups' => array(
+					0 => array(
+						'id' => '2',
+						'description' => 'Current Members',
+					),
+					1 => array(
+						'id' => '4',
+						'description' => 'Gatekeeper Admin',
+					),
+				),
+				'status' => array(
+					'id' => '5',
+					'name' => 'Current Member',
+				),
+				'joinDate' => '2010-09-22',
+				'unlockText' => 'Hey Kelly',
+				'balance' => '-5649',
+				'creditLimit' => '5000',
+				'pin' => '5436',
+				'paymentRef' => 'HSNOTTSYT7H4CW3GP9',
+				'address' => array(
+					'part1' => '8 Elm Close',
+					'part2' => 'Tetsworth',
+					'city' => 'Thame',
+					'postcode' => 'OX9 7AP',
+				),
+				'contactNumber' => '079 0644 8720',
+				'lastStatusUpdate' => array(
+					'id' => '4',
+					'by' => '5',
+					'from' => '4',
+					'to' => '5',
+					'at' => '2012-12-17 19:19:59',
+				),
+			);
+
+			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
+		}
+
+		public function testViewMemberAsFullAccess()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	)
+            ));
+
+			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(1));
+
+			$this->controller->Nav->expects($this->exactly(3))->method('add');
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'setMemberStatus', array(4, Status::EX_MEMBER));
+
+			// Should not redirect, and should populate 
+			$this->testAction('members/view/4');
+			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+
+			$expectedMemberInfo = array(
+				'id' => '4',
+				'name' => 'Kelly Savala',
+				'username' => 'huskycolossus',
+				'handle' => 'bildestonelectrician',
+				'email' => 'k.savala@yahoo.co.uk',
+				'groups' => array(
+					0 => array(
+						'id' => '2',
+						'description' => 'Current Members',
+					),
+					1 => array(
+						'id' => '4',
+						'description' => 'Gatekeeper Admin',
+					),
+				),
+				'status' => array(
+					'id' => '5',
+					'name' => 'Current Member',
+				),
+				'joinDate' => '2010-09-22',
+				'unlockText' => 'Hey Kelly',
+				'balance' => '-5649',
+				'creditLimit' => '5000',
+				'pin' => '5436',
+				'paymentRef' => 'HSNOTTSYT7H4CW3GP9',
+				'address' => array(
+					'part1' => '8 Elm Close',
+					'part2' => 'Tetsworth',
+					'city' => 'Thame',
+					'postcode' => 'OX9 7AP',
+				),
+				'contactNumber' => '079 0644 8720',
+				'lastStatusUpdate' => array(
+					'id' => '4',
+					'by' => '5',
+					'from' => '4',
+					'to' => '5',
+					'at' => '2012-12-17 19:19:59',
+				),
+			);
+
+			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
+		}
+
+		public function testViewMemberAsSameMember()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	)
+            ));
+
+			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(4));
+
+			$this->controller->Nav->expects($this->exactly(3))->method('add');
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'setMemberStatus', array(4, Status::EX_MEMBER));
+
+			// Should not redirect, and should populate 
+			$this->testAction('members/view/4');
+			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+
+			$expectedMemberInfo = array(
+				'id' => '4',
+				'name' => 'Kelly Savala',
+				'username' => 'huskycolossus',
+				'handle' => 'bildestonelectrician',
+				'email' => 'k.savala@yahoo.co.uk',
+				'groups' => array(
+					0 => array(
+						'id' => '2',
+						'description' => 'Current Members',
+					),
+					1 => array(
+						'id' => '4',
+						'description' => 'Gatekeeper Admin',
+					),
+				),
+				'joinDate' => '2010-09-22',
+				'unlockText' => 'Hey Kelly',
+				'balance' => '-5649',
+				'creditLimit' => '5000',
+				'paymentRef' => 'HSNOTTSYT7H4CW3GP9',
+				'address' => array(
+					'part1' => '8 Elm Close',
+					'part2' => 'Tetsworth',
+					'city' => 'Thame',
+					'postcode' => 'OX9 7AP',
+				),
+				'contactNumber' => '079 0644 8720',
+			);
+
+			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
+		}
+
+		public function testViewMemberAsMemberAdminThatIsProspectiveMember()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	)
+            ));
+
+			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+
+			$this->controller->Nav->expects($this->exactly(3))->method('add');
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(7));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(7));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Send Membership Reminder', 'members', 'sendMembershipReminder', array(7));
+
+			// Should not redirect, and should populate 
+			$this->testAction('members/view/7');
+			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+
+			$expectedMemberInfo = array(
+				'id' => '7',
+				'email' => 'CherylLCarignan@teleworm.us',
+				'groups' => array(
+				),
+				'status' => array(
+					'id' => '1',
+					'name' => 'Prospective Member',
+				),
+				'balance' => '0',
+				'creditLimit' => '0',
+			);
+
+			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
+		}
+
+		public function testViewMemberAsSameMemberThatIsPreMember1()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	)
+            ));
+
+			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(9));
+
+			$this->controller->Nav->expects($this->exactly(2))->method('add');
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(9));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(9));
+
+			// Should not redirect, and should populate 
+			$this->testAction('members/view/9');
+			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+
+			$expectedMemberInfo = array(
+				'id' => '9',
+				'name' => 'Dorothy D. Russell',
+				'username' => 'Warang29',
+				'handle' => 'Warang29',
+				'email' => 'DorothyDRussell@dayrep.com',
+				'groups' => array(
+				),
+			);
+
+			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
+		}
+
+		public function testViewMemberAsSameMemberThatIsPreMember2()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	)
+            ));
+
+			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(11));
+
+			$this->controller->Nav->expects($this->exactly(3))->method('add');
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(11));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(11));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Send Contact Details Reminder', 'members', 'sendContactDetailsReminder', array(11));
+
+			// Should not redirect, and should populate 
+			$this->testAction('members/view/11');
+			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+
+			$expectedMemberInfo = array(
+				'id' => '11',
+				'name' => 'Betty C. Paris',
+				'username' => 'Beltonstlend51',
+				'handle' => 'Beltonstlend51',
+				'email' => 'BettyCParis@teleworm.us',
+				'groups' => array(
+				),
+				'address' => array(
+					'part1' => '10 Hampton Court Rd',
+					'part2' => '',
+					'city' => 'Spelsbury',
+					'postcode' => 'OX7 2US',
+				),
+				'contactNumber' => '079 0572 8737',
+			);
+
+			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
+		}
+
+		public function testViewMemberAsSameMemberThatIsPreMember3()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	)
+            ));
+
+			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(4));
+
+			$this->controller->Nav->expects($this->exactly(3))->method('add');
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'setMemberStatus', array(4, Status::EX_MEMBER));
+
+			// Should not redirect, and should populate 
+			$this->testAction('members/view/4');
+			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+
+			$expectedMemberInfo = array(
+				'id' => '4',
+				'name' => 'Kelly Savala',
+				'username' => 'huskycolossus',
+				'handle' => 'bildestonelectrician',
+				'email' => 'k.savala@yahoo.co.uk',
+				'groups' => array(
+					0 => array(
+						'id' => '2',
+						'description' => 'Current Members',
+					),
+					1 => array(
+						'id' => '4',
+						'description' => 'Gatekeeper Admin',
+					),
+				),
+				'joinDate' => '2010-09-22',
+				'unlockText' => 'Hey Kelly',
+				'balance' => '-5649',
+				'creditLimit' => '5000',
+				'paymentRef' => 'HSNOTTSYT7H4CW3GP9',
+				'address' => array(
+					'part1' => '8 Elm Close',
+					'part2' => 'Tetsworth',
+					'city' => 'Thame',
+					'postcode' => 'OX9 7AP',
+				),
+				'contactNumber' => '079 0644 8720',
+			);
+
+			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
+		}
+
 		private function _testEmailMembersWithStatusVewVars()
 		{
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );

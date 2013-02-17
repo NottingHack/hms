@@ -341,39 +341,84 @@
 			);
 		}
 
+		//! Get the full details for a member.
+		/*
+			@param int $memberId The id of the member to look at.
+			@retval mixed Array of member info if member was found, false otherwise.
+		*/
+		public function getMemberDetails($memberId)
+		{
+			if(is_numeric($memberId))
+			{
+				$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+				if(is_array($memberInfo))
+				{
+					$formattedMemberInfo = $this->formatMemberInfo(array($memberInfo));
+					return $formattedMemberInfo[0];
+				}
+			}
+			return false;
+		}
+
 		//! Format member information into a nicer arrangement.
 		/*!
-			@param $info The info to format, usually retrieved from Member::_getMemberSummary.
+			@param $info The info to format, usually retrieved from Member::_getMemberSummary or Member::getMemberDetails.
 			@retval array An array of member information, formatted so that nothing needs to know database rows.
 			@sa Member::_getMemberSummary
+			@sa Member::getMemberDetails
 		*/
 		public function formatMemberInfo($info)
 		{
 			/*
 	    	    Data should be presented to the view in an array like so:
-	    			[n] => 
-	    				[id] => member id
-	    				[name] => member name
-	    				[email] => member email
-	    				[groups] => 
-	    					[n] =>
-	    						[id] => group id
-	    						[description] => group description
-	    				[status] => 
-	    					[id] => status id
-	    					[name] => name of the status
+    			[n] => 
+    				[id] => member id
+    				[name] => member name
+    				[username] => member username
+    				[handle] => member handle
+    				[email] => member email
+    				[groups] => 
+    					[n] =>
+    						[id] => group id
+    						[description] => group description
+    				[status] => 
+    					[id] => status id
+    					[name] => name of the status
+    				[joinDate] => member join data
+    				[unlockText] => member unlock text
+    				[balance] => member balance
+    				[creditLimit] => member credit limit
+    				[pin] => member pin
+    				[paymentRef] => member payment ref
+    				[address] =>
+    					[part1] => member address part 1
+    					[part2] => member address part 2
+    					[city] => member address part 2
+    					[postcode] => member address postcode
+    				[contactNumber] => member contact number
+    				[lastStatusUpdate] => 
+    					[id] => member id
+    					[by] => admin member id
+    					[from] => previous status id
+    					[to] => current status id
+    					[at] => time the update happened
 	    	*/
 			$formattedInfo = array();
 	    	foreach ($info as $member) 
 	    	{
 	    		$id = Hash::get($member, 'Member.member_id');
 	    		$name = Hash::get($member, 'Member.name');
+	    		$username = Hash::get($member, 'Member.username');
+	    		$handle = Hash::get($member, 'Member.handle');
 	    		$email = Hash::get($member, 'Member.email');
 
 	    		$status = array(
 	    			'id' => Hash::get($member, 'Status.status_id'),
 	    			'name' => Hash::get($member, 'Status.title'),
 	    		);
+
+	    		$joinDate = Hash::get($member, 'Member.join_date');
+	    		$unlockText = Hash::get($member, 'Member.unlock_text');
 
 	    		$groups = array();
 	    		foreach($member['Group'] as $group)
@@ -386,13 +431,38 @@
 		    		);
 	    		}
 
+	    		$balance = Hash::get($member, 'Member.balance');
+	    		$creditLimit = Hash::get($member, 'Member.credit_limit');
+	    		$pin = Hash::get($member, 'Pin.pin');
+	    		$paymentRef = Hash::get($member, 'Account.payment_ref');
+	    		$address = array(
+	    			'part1' => Hash::get($member, 'Member.address_1'),
+	    			'part2' => Hash::get($member, 'Member.address_2'),
+	    			'city' => Hash::get($member, 'Member.address_city'),
+	    			'postcode' => Hash::get($member, 'Member.address_postcode'),
+	    		);
+	    		$contactNumber = Hash::get($member, 'Member.contact_number');
+
+	    		$lastStatusUpdate = $this->StatusUpdate->formatStatusUpdate(Hash::get($member, 'StatusUpdate.0.id'));
+
 	    		array_push($formattedInfo,
 	    			array(
 	    				'id' => $id,
 	    				'name' => $name,
+	    				'username' => $username,
+	    				'handle' => $handle,
 	    				'email' => $email,
 	    				'groups' => $groups,
 	    				'status' => $status,
+	    				'joinDate' => $joinDate,
+	    				'unlockText' => $unlockText,
+	    				'paymentRef'=> $paymentRef,
+	    				'balance' => $balance,
+	    				'creditLimit' => $creditLimit,
+	    				'pin' => $pin,
+	    				'address' => $address,
+	    				'contactNumber' => $contactNumber,
+	    				'lastStatusUpdate' => $lastStatusUpdate,
 	    			)
 	    		);
 	    	}

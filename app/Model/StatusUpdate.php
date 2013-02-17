@@ -69,5 +69,27 @@
 
 			return false;
 		}
+
+		//! Get all the data about a status update, formatted so that calling code doesn't need to know about our columns.
+		/*!
+			@param int $updateId The id of the record to format.
+			@retval mixed Array of formatted data if record found, otherwise false.
+		*/
+		public function formatStatusUpdate($updateId)
+		{
+			$record = $this->find('first', array('conditions' => array('StatusUpdate.id' => $updateId)));
+			if($record)
+			{
+				return array(
+					'id' => Hash::get($record, 'StatusUpdate.member_id'),
+					'by' => Hash::get($record, 'StatusUpdate.admin_id'),
+					'from' => Hash::get($record, 'StatusUpdate.old_status'),
+					'to' => Hash::get($record, 'StatusUpdate.new_status'),
+					'at' => Hash::get($record, 'StatusUpdate.timestamp'),
+				);
+			}
+
+			return false;
+		}
 	}
 ?>
