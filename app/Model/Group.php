@@ -66,5 +66,61 @@
 	    {
 	    	return $this->find('first', array('fields' => array('Group.grp_description'), 'conditions' => array('Group.grp_id' => $groupId)));
 	    }
+
+	    //! Get a summary of the group records for all groups.
+		/*!
+			@retval array A summary of the data of all groups.
+			@sa Group::_getGroupSummary()
+		*/
+		public function getGroupSummaryAll()
+		{
+			return $this->_getGroupSummary();
+		}
+
+		//! Get a summary of the group records for all groups that match the conditions.
+		/*!
+			@retval array A summary (id, name, description and member count) of the data of all groups that match the conditions.
+		*/
+		private function _getGroupSummary($conditions = array())
+		{
+			$info = $this->find( 'all', array('conditions' => $conditions) );
+
+			return $this->_formatGroupInfo($info);
+		}
+
+		//! Format group information into a nicer arrangement.
+		/*!
+			@param $info The info to format, usually retrieved from Group::_getGroupSummary.
+			@retval array An array of group information, formatted so that nothing needs to know database rows.
+			@sa Group::_getGroupSummary
+		*/
+		private function _formatGroupInfo($info)
+		{
+			/*
+	    	    Data should be presented to the view in an array like so:
+	    			[n] => 
+	    				[id] => group id
+	    				[description] => group description
+	    				[count] => number of members with this group
+	    	*/
+
+			$formattedInfo = array();
+	    	foreach ($info as $group) 
+	    	{
+	    		$id = Hash::get($group, 'Group.grp_id');
+	    		$description = Hash::get($group, 'Group.grp_description');
+	    		$count = count( Hash::extract($group, 'Member') );
+
+	    		array_push($formattedInfo,
+	    			array(
+	    				'id' => $id,
+	    				'description' => $description,
+	    				'count' => $count,
+	    			)
+	    		);
+	    	}
+
+	    	return $formattedInfo;
+		}
 	}
 ?>

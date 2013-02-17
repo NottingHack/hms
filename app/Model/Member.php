@@ -287,12 +287,14 @@
 
 		//! Get a summary of the member records for a specific member.
 		/*!
+			@param int $memberId The id of the member to work with.
+			@param $format If true format the return data.
 			@retval array A summary of the data for a specific member.
 			@sa Member::_getMemberSummary()
 		*/
-		public function getMemberSummaryForMember($memberId)
+		public function getMemberSummaryForMember($memberId, $format = true)
 		{
-			$memberList = $this->_getMemberSummary(false, array('Member.member_id' => $memberId));
+			$memberList = $this->_getMemberSummary(false, array('Member.member_id' => $memberId), $format);
 			if(!empty($memberList))
 			{
 				return $memberList[0];
@@ -339,25 +341,6 @@
 					)
 				)
 			);
-		}
-
-		//! Get the full details for a member.
-		/*
-			@param int $memberId The id of the member to look at.
-			@retval mixed Array of member info if member was found, false otherwise.
-		*/
-		public function getMemberDetails($memberId)
-		{
-			if(is_numeric($memberId))
-			{
-				$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
-				if(is_array($memberInfo))
-				{
-					$formattedMemberInfo = $this->formatMemberInfo(array($memberInfo));
-					return $formattedMemberInfo[0];
-				}
-			}
-			return false;
 		}
 
 		//! Format member information into a nicer arrangement.
@@ -556,7 +539,7 @@
 				$status = Hash::get($memberData, 'Member.member_status');
 				if(isset($status))
 				{
-					return $status;
+					return (int)$status;
 				}
 				else
 				{
@@ -1479,9 +1462,12 @@
 
 		//! Get a summary of the member records for all members that match the conditions.
 		/*!
+			@param bool $paginate If true, just return the query for pagination instead of the data.
+			@param array $conditions An array of conditions to decide which member records to access.
+			@param bool $format If true format the data first, otherwise just return it in the same format as the datasource gives it us.
 			@retval array A summary (id, name, email, Status and Groups) of the data of all members that match the conditions.
 		*/
-		private function _getMemberSummary($paginate, $conditions = array())
+		private function _getMemberSummary($paginate, $conditions = array(), $format = true)
 		{
 			$findOptions = array('conditions' => $conditions);
 
@@ -1492,7 +1478,11 @@
 
 			$info = $this->find( 'all', $findOptions );
 
-			return $this->formatMemberInfo($info);
+			if($format)
+			{
+				return $this->formatMemberInfo($info);
+			}
+			return $info;
 		}
 	}
 ?>
