@@ -343,68 +343,86 @@
 			);
 		}
 
+		//! Format an array of member infos.
+		/*!
+			@param array $memberInfoList The array of member infos.
+			@param bool $removeNullEntries If true then entries that have a value of null, false or an empty array won't exist in the final array.
+			@retval array An array of formatted member infos.
+		*/
+		public function formatMemberInfoList($memberInfoList, $removeNullEntries)
+		{
+			$formattedInfos = array();
+			foreach ($memberInfoList as $memberInfo) 
+			{
+				array_push($formattedInfos, $this->formatMemberInfo($memberInfo, $removeNullEntries));
+			}
+			return $formattedInfos;
+		}
+
 		//! Format member information into a nicer arrangement.
 		/*!
 			@param $info The info to format, usually retrieved from Member::_getMemberSummary or Member::getMemberDetails.
+			@param bool $removeNullEntries If true then entries that have a value of null, false or an empty array won't exist in the final array.
 			@retval array An array of member information, formatted so that nothing needs to know database rows.
 			@sa Member::_getMemberSummary
 			@sa Member::getMemberDetails
 		*/
-		public function formatMemberInfo($info)
+		public function formatMemberInfo($memberInfo, $removeNullEntries)
 		{
 			/*
 	    	    Data should be presented to the view in an array like so:
-    			[n] => 
-    				[id] => member id
-    				[name] => member name
-    				[username] => member username
-    				[handle] => member handle
-    				[email] => member email
-    				[groups] => 
-    					[n] =>
-    						[id] => group id
-    						[description] => group description
-    				[status] => 
-    					[id] => status id
-    					[name] => name of the status
-    				[joinDate] => member join data
-    				[unlockText] => member unlock text
-    				[balance] => member balance
-    				[creditLimit] => member credit limit
-    				[pin] => member pin
-    				[paymentRef] => member payment ref
-    				[address] =>
-    					[part1] => member address part 1
-    					[part2] => member address part 2
-    					[city] => member address part 2
-    					[postcode] => member address postcode
-    				[contactNumber] => member contact number
-    				[lastStatusUpdate] => 
-    					[id] => member id
-    					[by] => admin member id
-    					[from] => previous status id
-    					[to] => current status id
-    					[at] => time the update happened
+				[id] => member id
+				[name] => member name
+				[username] => member username
+				[handle] => member handle
+				[email] => member email
+				[groups] => 
+					[n] =>
+						[id] => group id
+						[description] => group description
+				[status] => 
+					[id] => status id
+					[name] => name of the status
+				[joinDate] => member join data
+				[unlockText] => member unlock text
+				[balance] => member balance
+				[creditLimit] => member credit limit
+				[pin] => member pin
+				[paymentRef] => member payment ref
+				[address] =>
+					[part1] => member address part 1
+					[part2] => member address part 2
+					[city] => member address part 2
+					[postcode] => member address postcode
+				[contactNumber] => member contact number
+				[lastStatusUpdate] => 
+					[id] => member id
+					[by] => admin member id
+					[from] => previous status id
+					[to] => current status id
+					[at] => time the update happened
 	    	*/
-			$formattedInfo = array();
-	    	foreach ($info as $member) 
-	    	{
-	    		$id = Hash::get($member, 'Member.member_id');
-	    		$name = Hash::get($member, 'Member.name');
-	    		$username = Hash::get($member, 'Member.username');
-	    		$handle = Hash::get($member, 'Member.handle');
-	    		$email = Hash::get($member, 'Member.email');
 
-	    		$status = array(
-	    			'id' => Hash::get($member, 'Status.status_id'),
-	    			'name' => Hash::get($member, 'Status.title'),
-	    		);
+    		$id = Hash::get($memberInfo, 'Member.member_id');
+    		$name = Hash::get($memberInfo, 'Member.name');
+    		$username = Hash::get($memberInfo, 'Member.username');
+    		$handle = Hash::get($memberInfo, 'Member.handle');
+    		$email = Hash::get($memberInfo, 'Member.email');
 
-	    		$joinDate = Hash::get($member, 'Member.join_date');
-	    		$unlockText = Hash::get($member, 'Member.unlock_text');
+    		$status = array();
+    		if(array_key_exists('Status', $memberInfo))
+    		{
+    			$status['id'] = Hash::get($memberInfo, 'Status.status_id');
+    			$status['name'] = Hash::get($memberInfo, 'Status.title');
+    		}
 
-	    		$groups = array();
-	    		foreach($member['Group'] as $group)
+    		$joinDate = Hash::get($memberInfo, 'Member.join_date');
+    		$unlockText = Hash::get($memberInfo, 'Member.unlock_text');
+
+    		$groups = array();
+    		if(array_key_exists('Group', $memberInfo))
+    		{
+    			foreach($memberInfo['Group'] as $group)
 	    		{
 	    			array_push($groups,
 		    			array(
@@ -413,44 +431,72 @@
 		    			)
 		    		);
 	    		}
+    		}
 
-	    		$balance = Hash::get($member, 'Member.balance');
-	    		$creditLimit = Hash::get($member, 'Member.credit_limit');
-	    		$pin = Hash::get($member, 'Pin.pin');
-	    		$paymentRef = Hash::get($member, 'Account.payment_ref');
-	    		$address = array(
-	    			'part1' => Hash::get($member, 'Member.address_1'),
-	    			'part2' => Hash::get($member, 'Member.address_2'),
-	    			'city' => Hash::get($member, 'Member.address_city'),
-	    			'postcode' => Hash::get($member, 'Member.address_postcode'),
-	    		);
-	    		$contactNumber = Hash::get($member, 'Member.contact_number');
+    		$balance = Hash::get($memberInfo, 'Member.balance');
+    		$creditLimit = Hash::get($memberInfo, 'Member.credit_limit');
+    		$pin = Hash::get($memberInfo, 'Pin.pin');
+    		$paymentRef = Hash::get($memberInfo, 'Account.payment_ref');
+    		$address = array(
+    			'part1' => Hash::get($memberInfo, 'Member.address_1'),
+    			'part2' => Hash::get($memberInfo, 'Member.address_2'),
+    			'city' => Hash::get($memberInfo, 'Member.address_city'),
+    			'postcode' => Hash::get($memberInfo, 'Member.address_postcode'),
+    		);
+    		$contactNumber = Hash::get($memberInfo, 'Member.contact_number');
 
-	    		$lastStatusUpdate = $this->StatusUpdate->formatStatusUpdate(Hash::get($member, 'StatusUpdate.0.id'));
+    		$lastStatusUpdate = null;
+    		if(Hash::check($memberInfo, 'StatusUpdate.0.id'))
+    		{
+				$lastStatusUpdate = $this->StatusUpdate->formatStatusUpdate(Hash::get($memberInfo, 'StatusUpdate.0.id'));
+    		}
 
-	    		array_push($formattedInfo,
-	    			array(
-	    				'id' => $id,
-	    				'name' => $name,
-	    				'username' => $username,
-	    				'handle' => $handle,
-	    				'email' => $email,
-	    				'groups' => $groups,
-	    				'status' => $status,
-	    				'joinDate' => $joinDate,
-	    				'unlockText' => $unlockText,
-	    				'paymentRef'=> $paymentRef,
-	    				'balance' => $balance,
-	    				'creditLimit' => $creditLimit,
-	    				'pin' => $pin,
-	    				'address' => $address,
-	    				'contactNumber' => $contactNumber,
-	    				'lastStatusUpdate' => $lastStatusUpdate,
-	    			)
-	    		);
-	    	}
+			$allValues = array(
+				'id' => $id,
+				'name' => $name,
+				'username' => $username,
+				'handle' => $handle,
+				'email' => $email,
+				'groups' => $groups,
+				'status' => $status,
+				'joinDate' => $joinDate,
+				'unlockText' => $unlockText,
+				'paymentRef'=> $paymentRef,
+				'balance' => $balance,
+				'creditLimit' => $creditLimit,
+				'pin' => $pin,
+				'address' => $address,
+				'contactNumber' => $contactNumber,
+				'lastStatusUpdate' => $lastStatusUpdate,
+			);
 
-	    	return $formattedInfo;
+			if(!$removeNullEntries)
+			{
+				return $allValues;
+			}
+
+			// Filter out any values that are null or false etc.
+			$onlyValidValues = array();
+
+			foreach ($allValues as $key => $value) 
+			{
+				if(isset($value) != false)
+				{
+					if(is_array($value) && empty($value))
+					{
+						continue;
+					}
+					$onlyValidValues[$key] = $value;
+				}
+			}
+
+			// Address part 1 is required so if any part of the address exists then that will
+			if(!$onlyValidValues['address']['part1'])
+			{
+				unset($onlyValidValues['address']);
+			}
+
+			return $onlyValidValues;
 		}
 
 		//! Create a member info array for a new member.
@@ -1194,6 +1240,48 @@
 			return false;
 		}
 
+		//! Update all the updatable info for a member.
+		/*!
+			@param int $memberId The id of the member to update.
+			@param array $data The array of new data.
+			@param int $adminId The id of the member who is updating the details.
+			@retval bool True if member details were updated ok, false otherwise.
+		*/
+		public function updateDetails($memberId, $data, $adminId)
+		{
+			if(!is_numeric($memberId) || $memberId <= 0)
+			{
+				return false;
+			}
+
+			if(!is_array($data) || empty($data))
+			{
+				return false;
+			}
+
+			$data['Member']['member_id'] = $memberId;
+
+			$fieldsToSave = array(
+				'Member' => array(
+					'member_id',
+					'name',
+					'username',
+					'handle',
+					'email',
+					'status_id',
+					'unlock_text',
+					'account_id',
+					'address_1',
+					'address_2',
+					'address_city',
+					'address_postcode',
+					'contact_number',
+				),
+				'Group',
+			);
+			return $this->_saveMemberData($data, $fieldsToSave, $adminId);
+		}
+
 		//! Get a members name, email and payment ref.
 		/*
 			@param int $memberId The id of the member to get the details for.
@@ -1292,6 +1380,55 @@
 				{
 					return array('subject' => Hash::get($data, 'MemberEmail.subject'), 'message' => Hash::get($data, 'MemberEmail.message'));
 				}
+			}
+			return false;
+		}
+
+		//! Sanitise an array of member info, removing certain fields.
+		/*!
+			@param array $memberInfo The array of member info to sanitise.
+			@param bool $showAdminFeatures If true then all data should be shown.
+			@param bool $showFinances If true then finance data should be shown.
+			@param bool $hasJoined If true then show data that is only relevant to members who have joined.
+			@retval mixed The array of sanitised member info, or false on error.
+		*/
+		public function sanitiseMemberInfo($memberInfo, $showAdminFeatures, $showFinances, $hasJoined)
+		{
+			if(is_array($memberInfo) && !empty($memberInfo))
+			{
+
+				// Hide things they shouldn't be seeing
+		    	if(!$showAdminFeatures)
+		    	{
+		    		unset($memberInfo['Pin']);
+		    		unset($memberInfo['Status']);
+		    		unset($memberInfo['Member']['status_id']);
+		    		unset($memberInfo['StatusUpdate']);
+		    	}
+
+		    	if(!$showFinances)
+		    	{
+		    		unset($memberInfo['Member']['balance']);
+		    		unset($memberInfo['Member']['credit_limit']);
+		    	}
+
+		    	if(!$hasJoined)
+		    	{
+		    		unset($memberInfo['Member']['join_date']);
+		    		unset($memberInfo['Member']['unlock_text']);
+		    	}
+
+		    	$unsetIfNull = array('username', 'handle', 'name', 'account_id', 'contact_number', 'address_1', 'address_2', 'address_city', 'address_postcode');
+		    	foreach ($unsetIfNull as $index) 
+		    	{
+		    		if(	array_key_exists($index, $memberInfo['Member']) &&
+		    			$memberInfo['Member'][$index] == null)
+			    	{
+			    		unset($memberInfo['Member'][$index]);	
+			    	}
+		    	}
+
+				return $memberInfo;
 			}
 			return false;
 		}
@@ -1480,7 +1617,7 @@
 
 			if($format)
 			{
-				return $this->formatMemberInfo($info);
+				return $this->formatMemberInfoList($info, false);
 			}
 			return $info;
 		}

@@ -174,7 +174,7 @@
 	    {
 	    	$this->paginate = $queryResult;
 	        $memberList = $this->paginate('Member');
-	        $memberList = $this->Member->formatMemberInfo($memberList);
+	        $memberList = $this->Member->formatMemberInfoList($memberList, false);
 	    	$memberList = $this->_addMemberActions($memberList);
 	        $this->set('memberList', $memberList);
 	    }
@@ -685,24 +685,36 @@
 	   	*/
 	    public function view($id) 
 	    {
-	    	$memberInfo = $this->Member->getMemberSummaryForMember($id);
-	    	if($memberInfo)
+	    	$showAdminFeatures = false;
+	    	$showFinances = false;
+	    	$hasJoined = false;
+	    	$canView = $this->_getViewPermissions($id, $showAdminFeatures, $showFinances, $hasJoined);
+
+	    	if($canView)
 	    	{
-	    		$sanatisedInfo = $this->_getFullProfileData($memberInfo);
-		    	if($sanatisedInfo)
-		    	{
-		    		$this->set('member', $sanatisedInfo);
+	    		$rawMemberInfo = $this->Member->getMemberSummaryForMember($id, false);
+	    		if($rawMemberInfo)
+	    		{
+	    			$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined);
+	    			if($sanitisedMemberInfo)
+	    			{
+	    				$formattedInfo = $this->Member->formatMemberInfo($sanitisedMemberInfo, true);
+	    				if($formattedInfo)
+	    				{
+	    					$this->set('member', $formattedInfo);
 
-			    	$this->Nav->add('Edit', 'members', 'edit', array( $id ) );
-			        $this->Nav->add('Change Password', 'members', 'changePassword', array( $id ) );
+					    	$this->Nav->add('Edit', 'members', 'edit', array( $id ) );
+					        $this->Nav->add('Change Password', 'members', 'changePassword', array( $id ) );
 
-			        foreach ($this->_getActionsForMmeber($id) as $action) 
-			        {
-			        	$this->Nav->add($action['title'], $action['controller'], $action['action'], $action['params']);
-			        }
+					        foreach ($this->_getActionsForMember($id) as $action) 
+					        {
+					        	$this->Nav->add($action['title'], $action['controller'], $action['action'], $action['params']);
+					        }
 
-			        return; // Don't hit that redirect
-		    	}
+					        return; // Don't hit that redirect
+	    				}
+	    			}
+	    		}
 	    	}
 	    	
 	    	// Couldn't find a record with that id...
@@ -715,105 +727,84 @@
 	   	*/
 	    public function edit($id) 
 	    {
-	    	$rawMemberInfo = $this->Member->getMemberSummaryForMember($id, false);
-	    	$formattedMemberInfo = $this->_getFullProfileData($this->Member->formatMemberInfo($rawMemberInfo));
-	    	if($memberInfo)
+	    	$showAdminFeatures = false;
+	    	$showFinances = false;
+	    	$hasJoined = false;
+	    	$canEdit = $this->_getViewPermissions($id, $showAdminFeatures, $showFinances, $hasJoined);
+	    	if($canEdit)
 	    	{
-	    		$this->set('member', $formattedMemberInfo);
-	    		$this->set('accounts', $this->Member->getReadableAccountList());
-	    		$this->set('statuses', $this->Member->Status->getStatusSummaryAll());
-	    		$this->set('groups', $this->Member->Group->getGroupSummaryAll());
+	    		$rawMemberInfo = $this->Member->getMemberSummaryForMember($id, false);
+		    	if($rawMemberInfo)
+		    	{
+		    		$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined);
+		    		$formattedMemberInfo = $this->Member->formatMemberInfo($sanitisedMemberInfo, true);
+			    	if($formattedMemberInfo)
+			    	{
+			    		$this->set('member', $formattedMemberInfo);
+			    		$this->set('accounts', $this->Member->getReadableAccountList());
+			    		$this->set('statuses', $this->Member->Status->getStatusSummaryAll());
+			    		$this->set('groups', $this->Member->Group->getGroupSummaryAll());
 
-	    		if($this->request->is('get'))
-	    		{
-	    			$this->request->data = $rawMemberInfo;
-	    		}
-	    		else if($this->request->is('put'))
-	    		{
-	    			if($this->Member->edit($id, $this->request->data))
-	    			{
-	    				$this->Session->setFlash('Details updated.');
-				        $this->redirect(array('action' => 'view', $id));
-	    			}
-	    			else
-	    			{
-	    				$this->Session->setFlash('Unable to update details.');
-	    			}
-	    		}
+			    		if($this->request->is('post'))
+			    		{
+			    			$sanitisedData = $this->Member->sanitiseMemberInfo($this->request->data, $showAdminFeatures, $showFinances, $hasJoined);
+			    			if($sanitisedData)
+			    			{
+			    				if($this->Member->updateDetails($id, $sanitisedData, $this->_getLoggedInMemberId()))
+				    			{
+				    				$this->Session->setFlash('Details updated.');
+							        return $this->redirect(array('action' => 'view', $id));
+				    			}
+				    		}
+				    		$this->Session->setFlash('Unable to update details.');
+			    		}
+
+			    		if (!$this->request->data) 
+			    		{
+					        $this->request->data = $rawMemberInfo;
+					    }
+
+			    		return; // Don't hit the redirect below.
+			    	}
+		    	}
 	    	}
-	    	else
-	    	{
-	    		// Couldn't find a record with that id...
-	    		return $this->redirect($this->referer());
-	    	}
+	    	
+	    	// Couldn't find a record with that id...
+	    	return $this->redirect($this->referer());
 		}
 
-		//! Get the full profile data for a member, sanatised based on permissions.
-	    /*!
-	    	@param array $memberInfo Array of member info.
-	    	@retval mixed Array of member info if member can be found, false otherwise.
-	    */
-	    private function _getFullProfileData($memberInfo)
-	    {
-	    	if(is_array($memberInfo))
-	    	{
-	    		$id = $memberInfo['id'];
-    			$viewerId = $this->_getLoggedInMemberId();
+		//! Check to see if certain view/edit params should be shown to the logged in member.
+		/*!
+			@param int $memberId The id of the member being viewed.
+			@param ref bool $showAdminFeatures If this is set to true then admin features should be shown.
+			@param ref bool $showFinances If this is set to true then financial information should be shown.
+			@param ref bool $hasJoined If this is set to true then the member has joined.
+		*/
+		private function _getViewPermissions($memberId, &$showAdminFeatures, &$showFinances, &$hasJoined)
+		{
+			if(is_numeric($memberId))
+			{
+				$memberStatus = $this->Member->getStatusForMember($memberId);
+				if($memberStatus)
+				{
+					$viewerId = $this->_getLoggedInMemberId();
 
-		    	$showAdminFeatures = 
-		    		(	$this->Member->GroupsMember->isMemberInGroup($viewerId, Group::MEMBER_ADMIN) || 
-		    			$this->Member->GroupsMember->isMemberInGroup($viewerId, Group::FULL_ACCESS) );
+	    			$showAdminFeatures = 
+			    		(	$this->Member->GroupsMember->isMemberInGroup($viewerId, Group::MEMBER_ADMIN) || 
+			    			$this->Member->GroupsMember->isMemberInGroup($viewerId, Group::FULL_ACCESS) );
 
-
-		    	// Only admins or the own member can view a profile.
-		    	if($viewerId == $id || $showAdminFeatures)
-		    	{
-		    		$memberStatus = $memberInfo['status']['id'];
 		    		// Only show the finance stuff to admins, current or ex members
 		    		$hasJoined = in_array($memberStatus, array(Status::CURRENT_MEMBER, Status::EX_MEMBER));
-			    	$showFinances = $showAdminFeatures || $hasJoined;
 
+		    		$viewingOwnProfile = $viewerId == $memberId;
 
-			    	// Hide things they shouldn't be seeing
-			    	if(!$showAdminFeatures)
-			    	{
-			    		unset($memberInfo['pin']);
-			    		unset($memberInfo['status']);
-			    		unset($memberInfo['lastStatusUpdate']);
-			    	}
+			    	$showFinances = ($showAdminFeatures || $viewingOwnProfile)  && $hasJoined;
 
-			    	if(!$showFinances)
-			    	{
-			    		unset($memberInfo['balance']);
-			    		unset($memberInfo['creditLimit']);
-			    	}
-
-			    	if(!$hasJoined)
-			    	{
-			    		unset($memberInfo['joinDate']);
-			    		unset($memberInfo['unlockText']);
-			    	}
-
-			    	$unsetIfNull = array('username', 'handle', 'name', 'paymentRef', 'contactNumber', 'pin', 'lastStatusUpdate');
-			    	foreach ($unsetIfNull as $index) 
-			    	{
-			    		if(	array_key_exists($index, $memberInfo) &&
-			    			$memberInfo[$index] == null)
-				    	{
-				    		unset($memberInfo[$index]);	
-				    	}
-			    	}
-
-			    	// Address part 1 is mandatory, so if that is null then they don't really have an address
-			    	if($memberInfo['address']['part1'] == null)
-			    	{
-			    		unset($memberInfo['address']);
-			    	}
-
-			    	return $memberInfo;
-			    }
-    		}
-	    }
+			    	return ($viewingOwnProfile || $showAdminFeatures);
+				}
+			}
+			return false;
+		}
 
 		private function _update_mailing_list_subscriptions($memberId, $subscribeToLists)
 		{
@@ -1024,7 +1015,7 @@
 	    	for($i = 0; $i < count($memberList); $i++)
 	    	{
 	    		$id = $memberList[$i]['id'];
-	    		$memberList[$i]['actions'] = $this->_getActionsForMmeber($id);
+	    		$memberList[$i]['actions'] = $this->_getActionsForMember($id);
 	    	}
 
 	    	return $memberList;
@@ -1035,7 +1026,7 @@
 			@param int @memberId The id of the member to work with.
 			@retval array An array of actions.
 		*/
-		private function _getActionsForMmeber($memberId)
+		private function _getActionsForMember($memberId)
 		{
 			$statusId = $this->Member->getStatusForMember($memberId);
 

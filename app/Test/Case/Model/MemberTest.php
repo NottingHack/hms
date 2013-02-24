@@ -253,12 +253,12 @@
             $this->assertInternalType( 'array', $memberInfo['status'], 'No array by the name of status' );
         }
 
-        public function testFormatMemberInfo()
+        public function testFormatMemberInfoList()
         {
-            $this->assertIdentical( count($this->Member->formatMemberInfo( array() )), 0, 'FormatMemberInfo of an empty array did not return and empty array.' );
+            $this->assertIdentical( count($this->Member->formatMemberInfoList( array(), false )), 0, 'FormatMemberInfo of an empty array did not return and empty array.' );
 
 
-            $memberList = $this->Member->formatMemberInfo( $this->Member->find('all') );
+            $memberList = $this->Member->formatMemberInfoList( $this->Member->find('all'), false );
             foreach ($memberList as $memberInfo)
             {
                 $this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 

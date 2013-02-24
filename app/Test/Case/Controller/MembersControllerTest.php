@@ -1889,14 +1889,10 @@
 			$expectedMemberInfo = array(
 				'id' => '7',
 				'email' => 'CherylLCarignan@teleworm.us',
-				'groups' => array(
-				),
 				'status' => array(
 					'id' => '1',
 					'name' => 'Prospective Member',
 				),
-				'balance' => '0',
-				'creditLimit' => '0',
 			);
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
@@ -1932,8 +1928,6 @@
 				'username' => 'Warang29',
 				'handle' => 'Warang29',
 				'email' => 'DorothyDRussell@dayrep.com',
-				'groups' => array(
-				),
 			);
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
@@ -1970,8 +1964,6 @@
 				'username' => 'Beltonstlend51',
 				'handle' => 'Beltonstlend51',
 				'email' => 'BettyCParis@teleworm.us',
-				'groups' => array(
-				),
 				'address' => array(
 					'part1' => '10 Hampton Court Rd',
 					'part2' => '',
@@ -2040,6 +2032,188 @@
 			);
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
+		}
+
+		public function testEditMemberInvalidData()
+		{
+			// Should redirect
+			$this->testAction('members/edit/0');
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+		}
+
+		public function testEditMemberGetOwn()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            	)
+            ));
+
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
+
+			$this->testAction('members/edit/2');
+			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
+
+			$expectedMemberVal = array(
+				'id' => '2',
+				'name' => 'Annabelle Santini',
+				'username' => 'pecanpaella',
+				'handle' => 'mammetwarpsgrove',
+				'email' => 'a.santini@hotmail.com',
+				'groups' => array(
+					0 => array(
+						'id' => '2',
+						'description' => 'Current Members',
+					),
+					1 => array(
+						'id' => '3',
+						'description' => 'Snackspace Admin',
+					),
+				),
+				'joinDate' => '2011-02-24',
+				'unlockText' => 'Welcome Annabelle',
+				'balance' => '0',
+				'creditLimit' => '5000',
+				'paymentRef' => 'HSNOTTSK2R62GQW684',
+				'address' => array(
+					'part1' => '1 Saint Paul\'s Church Yard',
+					'part2' => 'The City',
+					'city' => 'London',
+					'postcode' => 'EC4M 8SH',
+				),
+				'contactNumber' => '077 1755 4342',
+			);
+			$this->_testEditMemberViewVars($expectedMemberVal);
+		}
+
+		public function testEditMemberEditOwn()
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            	)
+            ));
+
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
+
+            $data = array(
+            	'Member' => array(
+					'name' => 'Nat',
+					'username' => 'foo',
+					'handle' => 'thisisahandle',
+					'email' => 'totallydifferent@hotmail.com',
+					'unlockText' => 'Would you kindly?',
+					'address_1' => '5 Henry Way',
+					'address_2' => '',
+					'address_city' => 'Bobbington',
+					'address_postcode' => 'FU453JD',
+					'contact_number' => '079716523804',
+				),
+			);
+
+			$this->testAction('members/edit/2', array('data' => $data, 'method' => 'post'));
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertContains('/members/view/2', $this->headers['Location']);
+
+			$expectedMemberVal = array(
+				'id' => '2',
+				'name' => 'Annabelle Santini',
+				'username' => 'pecanpaella',
+				'handle' => 'mammetwarpsgrove',
+				'email' => 'a.santini@hotmail.com',
+				'groups' => array(
+					0 => array(
+						'id' => '2',
+						'description' => 'Current Members',
+					),
+					1 => array(
+						'id' => '3',
+						'description' => 'Snackspace Admin',
+					),
+				),
+				'joinDate' => '2011-02-24',
+				'unlockText' => 'Welcome Annabelle',
+				'balance' => '0',
+				'creditLimit' => '5000',
+				'paymentRef' => 'HSNOTTSK2R62GQW684',
+				'address' => array(
+					'part1' => '1 Saint Paul\'s Church Yard',
+					'part2' => 'The City',
+					'city' => 'London',
+					'postcode' => 'EC4M 8SH',
+				),
+				'contactNumber' => '077 1755 4342',
+			);
+			$this->_testEditMemberViewVars($expectedMemberVal);
+		}
+
+		public function _testEditMemberViewVars($expectedMemberVal)
+		{
+			$this->assertIdentical( count($this->vars), 4, 'Unexpected number of view values.' );
+			$this->assertArrayHasKey( 'member', $this->vars, 'No view value called \'members\'.' );
+			$this->assertArrayHasKey( 'accounts', $this->vars, 'No view value called \'accounts\'.' );
+			$this->assertArrayHasKey( 'statuses', $this->vars, 'No view value called \'statuses\'.' );
+			$this->assertArrayHasKey( 'groups', $this->vars, 'No view value called \'groups\'.' );
+
+			$this->assertEqual( $this->vars['member'], $expectedMemberVal, 'Member array is incorrect.' );
+
+			$expectedAccountsVal = array(
+				'-1' => 'Create new', 
+				'1' => 'Mathew Pryce', 
+				'2' => 'Annabelle Santini', 
+				'3' => 'Guy Viles, Kelly Savala and Jessie Easterwood', 
+				'6' => 'Guy Garrette', 
+				'7' => 'Ryan Miles', 
+				'8' => 'Evan Atkinson' 
+			);
+
+			$this->assertEqual( $this->vars['accounts'], $expectedAccountsVal, 'Accounts array is incorrect.' );
+
+			$expectedStatusesVal = array(
+				0 => array('id' => '1', 'name' => 'Prospective Member', 'description' => 'Interested in the hackspace, we have their e-mail. May be receiving the newsletter', 'count' => 2),
+				1 => array('id' => '2', 'name' => 'Pre-Member (stage 1)', 'description' => 'Member has HMS login details, waiting for them to enter contact details', 'count' => 2),
+				2 => array('id' => '3', 'name' => 'Pre-Member (stage 2)', 'description' => 'Waiting for member-admin to approve contact details', 'count' => 2),
+				3 => array('id' => '4', 'name' => 'Pre-Member (stage 3)', 'description' => 'Waiting for standing order', 'count' => 2),
+				4 => array('id' => '5', 'name' => 'Current Member', 'description' => 'Active member', 'count' => 5),
+				5 => array('id' => '6', 'name' => 'Ex Member', 'description' => 'Former member, details only kept for a while', 'count' => 1),
+			);
+
+			$this->assertEqual( $this->vars['statuses'], $expectedStatusesVal, 'Status array is incorrect.' );
+
+			$expectedGroupsVal = array(
+				0 => array(
+					'id' => '1',
+					'description' => 'Full Access',
+					'count' => '1',
+				),
+				1 => array(
+					'id' => '2',
+					'description' => 'Current Members',
+					'count' => '5',
+				),
+				2 => array(
+					'id' => '3',
+					'description' => 'Snackspace Admin',
+					'count' => '1',
+				),
+				3 => array(
+					'id' => '4',
+					'description' => 'Gatekeeper Admin',
+					'count' => '1',
+				),
+				4 => array(
+					'id' => '5',
+					'description' => 'Member Admin',
+					'count' => '1',
+				),
+			);
+
+			$this->assertEqual( $this->vars['groups'], $expectedGroupsVal, 'Groups array is incorrect.' );
+
 		}
 
 		private function _testEmailMembersWithStatusVewVars()
