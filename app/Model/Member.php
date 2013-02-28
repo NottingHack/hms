@@ -1268,7 +1268,7 @@
 					'username',
 					'handle',
 					'email',
-					'status_id',
+					'member_status',
 					'unlock_text',
 					'account_id',
 					'address_1',
@@ -1390,9 +1390,10 @@
 			@param bool $showAdminFeatures If true then all data should be shown.
 			@param bool $showFinances If true then finance data should be shown.
 			@param bool $hasJoined If true then show data that is only relevant to members who have joined.
+			@param bool $showAccount If true then show account info.
 			@retval mixed The array of sanitised member info, or false on error.
 		*/
-		public function sanitiseMemberInfo($memberInfo, $showAdminFeatures, $showFinances, $hasJoined)
+		public function sanitiseMemberInfo($memberInfo, $showAdminFeatures, $showFinances, $hasJoined, $showAccount)
 		{
 			if(is_array($memberInfo) && !empty($memberInfo))
 			{
@@ -1402,8 +1403,9 @@
 		    	{
 		    		unset($memberInfo['Pin']);
 		    		unset($memberInfo['Status']);
-		    		unset($memberInfo['Member']['status_id']);
+		    		unset($memberInfo['Member']['member_status']);
 		    		unset($memberInfo['StatusUpdate']);
+		    		unset($memberInfo['Group']);
 		    	}
 
 		    	if(!$showFinances)
@@ -1418,13 +1420,19 @@
 		    		unset($memberInfo['Member']['unlock_text']);
 		    	}
 
-		    	$unsetIfNull = array('username', 'handle', 'name', 'account_id', 'contact_number', 'address_1', 'address_2', 'address_city', 'address_postcode');
+		    	if(!$showAccount)
+		    	{
+		    		unset($memberInfo['Member']['account_id']);
+		    		unset($memberInfo['Account']);	
+		    	}
+
+		    	$unsetIfNull = array('username', 'handle', 'name', 'account_id', 'contact_number', 'address_1', 'address_2', 'address_city', 'address_postcode', 'member_number');
 		    	foreach ($unsetIfNull as $index) 
 		    	{
-		    		if(	array_key_exists($index, $memberInfo['Member']) &&
-		    			$memberInfo['Member'][$index] == null)
+		    		if(	array_key_exists($index, $memberInfo['Member']) && 
+		    			!isset($memberInfo['Member'][$index]) )
 			    	{
-			    		unset($memberInfo['Member'][$index]);	
+			    		unset($memberInfo['Member'][$index]);
 			    	}
 		    	}
 

@@ -1834,16 +1834,6 @@
 				'username' => 'huskycolossus',
 				'handle' => 'bildestonelectrician',
 				'email' => 'k.savala@yahoo.co.uk',
-				'groups' => array(
-					0 => array(
-						'id' => '2',
-						'description' => 'Current Members',
-					),
-					1 => array(
-						'id' => '4',
-						'description' => 'Gatekeeper Admin',
-					),
-				),
 				'joinDate' => '2010-09-22',
 				'unlockText' => 'Hey Kelly',
 				'balance' => '-5649',
@@ -2007,16 +1997,6 @@
 				'username' => 'huskycolossus',
 				'handle' => 'bildestonelectrician',
 				'email' => 'k.savala@yahoo.co.uk',
-				'groups' => array(
-					0 => array(
-						'id' => '2',
-						'description' => 'Current Members',
-					),
-					1 => array(
-						'id' => '4',
-						'description' => 'Gatekeeper Admin',
-					),
-				),
 				'joinDate' => '2010-09-22',
 				'unlockText' => 'Hey Kelly',
 				'balance' => '-5649',
@@ -2062,16 +2042,6 @@
 				'username' => 'pecanpaella',
 				'handle' => 'mammetwarpsgrove',
 				'email' => 'a.santini@hotmail.com',
-				'groups' => array(
-					0 => array(
-						'id' => '2',
-						'description' => 'Current Members',
-					),
-					1 => array(
-						'id' => '3',
-						'description' => 'Snackspace Admin',
-					),
-				),
 				'joinDate' => '2011-02-24',
 				'unlockText' => 'Welcome Annabelle',
 				'balance' => '0',
@@ -2090,23 +2060,13 @@
 
 		public function testEditMemberEditOwn()
 		{
-			$this->controller = $this->generate('Members', array(
-            	'components' => array(
-            		'Auth' => array(
-            			'user',
-            		),
-            	)
-            ));
-
-            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
-
-            $data = array(
+			$inputData = array(
             	'Member' => array(
 					'name' => 'Nat',
 					'username' => 'foo',
 					'handle' => 'thisisahandle',
 					'email' => 'totallydifferent@hotmail.com',
-					'unlockText' => 'Would you kindly?',
+					'unlock_text' => 'Would you kindly?',
 					'address_1' => '5 Henry Way',
 					'address_2' => '',
 					'address_city' => 'Bobbington',
@@ -2115,26 +2075,12 @@
 				),
 			);
 
-			$this->testAction('members/edit/2', array('data' => $data, 'method' => 'post'));
-			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
-			$this->assertContains('/members/view/2', $this->headers['Location']);
-
-			$expectedMemberVal = array(
+			$expectedViewVal = array(
 				'id' => '2',
 				'name' => 'Annabelle Santini',
 				'username' => 'pecanpaella',
 				'handle' => 'mammetwarpsgrove',
 				'email' => 'a.santini@hotmail.com',
-				'groups' => array(
-					0 => array(
-						'id' => '2',
-						'description' => 'Current Members',
-					),
-					1 => array(
-						'id' => '3',
-						'description' => 'Snackspace Admin',
-					),
-				),
 				'joinDate' => '2011-02-24',
 				'unlockText' => 'Welcome Annabelle',
 				'balance' => '0',
@@ -2148,7 +2094,216 @@
 				),
 				'contactNumber' => '077 1755 4342',
 			);
-			$this->_testEditMemberViewVars($expectedMemberVal);
+
+			$expectedRecordData = array(
+				'Member' => array(
+				    'member_id' => '2',
+            		'account_id' => '2',
+            		'member_status' => '5',
+            		'join_date' => '2011-02-24',
+            		'balance' => '0',
+            		'credit_limit' => '5000',
+            		'member_number' => null,
+					'name' => 'Nat',
+					'username' => 'foo',
+					'handle' => 'thisisahandle',
+					'email' => 'totallydifferent@hotmail.com',
+					'unlock_text' => 'Would you kindly?',
+					'address_1' => '5 Henry Way',
+					'address_2' => '',
+					'address_city' => 'Bobbington',
+					'address_postcode' => 'FU453JD',
+					'contact_number' => '079716523804',
+				),
+				'Status' => array(
+				    'status_id' => '5',
+				    'title' => 'Current Member',
+				    'description' => 'Active member',
+				),
+				'Account' => array(
+				    'account_id' => '2',
+				    'payment_ref' => 'HSNOTTSK2R62GQW684',
+				),
+				'Pin' => array(
+				    'pin_id' => '2',
+				    'pin' => '7422',
+				    'unlock_text' => 'NOT USED',
+				    'date_added' => '2012-12-03 23:56:43',
+				    'expiry' => null,
+				    'state' => '30',
+				    'member_id' => '2',
+				),
+				'StatusUpdate' => array(
+				),
+				'Group' => array(
+				    0 => array(
+				        'grp_id' => '2',
+				        'grp_description' => 'Current Members',
+				    ),
+				    1 => array(
+				        'grp_id' => '3',
+				        'grp_description' => 'Snackspace Admin',
+				    ),
+				),
+			);
+
+			$this->_testEditMember($inputData, $expectedViewVal, $expectedRecordData);
+		}
+
+		public function testEditMemberEditOwnAllValues()
+		{
+			$inputData = array(
+            	'Member' => array(
+            		'member_id' => '243',
+            		'account_id' => '325',
+            		'member_status' => '1',
+            		'join_date' => '2013-12-30',
+            		'balance' => '100000',
+            		'credit_limit' => '20000',
+            		'member_number' => '4954365',
+					'name' => 'Nat',
+					'username' => 'foo',
+					'handle' => 'thisisahandle',
+					'email' => 'totallydifferent@hotmail.com',
+					'unlock_text' => 'Would you kindly?',
+					'address_1' => '5 Henry Way',
+					'address_2' => '',
+					'address_city' => 'Bobbington',
+					'address_postcode' => 'FU453JD',
+					'contact_number' => '079716523804',
+				),
+				'Status' => array(
+				    'status_id' => '3',
+				    'title' => 'Special Status',
+				    'description' => 'All the awesome',
+				),
+				'Account' => array(
+				    'account_id' => '56',
+				    'payment_ref' => 'INEEDNOPAYMENTREF',
+				),
+				'Pin' => array(
+				    'pin_id' => '4',
+				    'pin' => '5555',
+				    'unlock_text' => 'MAYBE USED',
+				    'date_added' => '2010-01-01 00:00:00',
+				    'expiry' => 'NEVER!',
+				    'state' => '22',
+				    'member_id' => '15',
+				),
+				'StatusUpdate' => array(
+					0 => array(
+						'id' => '1',
+						'member_id' => '4',
+						'admin_id' => '5',
+						'old_status' => '0',
+						'new_status' => '3',
+						'timestamp' => '2012-12-17 19:19:59',
+					),
+				),
+				'Group' => array(
+				    0 => array(
+				        'grp_id' => '1',
+				        'grp_description' => 'Full Access',
+				    ),
+				),
+			);
+
+			$expectedViewVal = array(
+				'id' => '2',
+				'name' => 'Annabelle Santini',
+				'username' => 'pecanpaella',
+				'handle' => 'mammetwarpsgrove',
+				'email' => 'a.santini@hotmail.com',
+				'joinDate' => '2011-02-24',
+				'unlockText' => 'Welcome Annabelle',
+				'balance' => '0',
+				'creditLimit' => '5000',
+				'paymentRef' => 'HSNOTTSK2R62GQW684',
+				'address' => array(
+					'part1' => '1 Saint Paul\'s Church Yard',
+					'part2' => 'The City',
+					'city' => 'London',
+					'postcode' => 'EC4M 8SH',
+				),
+				'contactNumber' => '077 1755 4342',
+			);
+
+			$expectedRecordData = array(
+				'Member' => array(
+				    'member_id' => '2',
+            		'account_id' => '2',
+            		'member_status' => '5',
+            		'join_date' => '2011-02-24',
+            		'balance' => '0',
+            		'credit_limit' => '5000',
+            		'member_number' => null,
+					'name' => 'Nat',
+					'username' => 'foo',
+					'handle' => 'thisisahandle',
+					'email' => 'totallydifferent@hotmail.com',
+					'unlock_text' => 'Would you kindly?',
+					'address_1' => '5 Henry Way',
+					'address_2' => '',
+					'address_city' => 'Bobbington',
+					'address_postcode' => 'FU453JD',
+					'contact_number' => '079716523804',
+				),
+				'Status' => array(
+				    'status_id' => '5',
+				    'title' => 'Current Member',
+				    'description' => 'Active member',
+				),
+				'Account' => array(
+				    'account_id' => '2',
+				    'payment_ref' => 'HSNOTTSK2R62GQW684',
+				),
+				'Pin' => array(
+				    'pin_id' => '2',
+				    'pin' => '7422',
+				    'unlock_text' => 'NOT USED',
+				    'date_added' => '2012-12-03 23:56:43',
+				    'expiry' => null,
+				    'state' => '30',
+				    'member_id' => '2',
+				),
+				'StatusUpdate' => array(
+				),
+				'Group' => array(
+				    0 => array(
+				        'grp_id' => '2',
+				        'grp_description' => 'Current Members',
+				    ),
+				    1 => array(
+				        'grp_id' => '3',
+				        'grp_description' => 'Snackspace Admin',
+				    ),
+				),
+			);
+			$this->_testEditMember($inputData, $expectedViewVal, $expectedRecordData);
+		}
+
+		private function _testEditMember($inputData, $expectedViewVal, $expectedRecordData)
+		{
+			$this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            	)
+            ));
+
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
+
+			$this->testAction('members/edit/2', array('data' => $inputData, 'method' => 'post'));
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertContains('/members/view/2', $this->headers['Location']);
+
+			
+			$this->_testEditMemberViewVars($expectedViewVal);
+
+			$record = $this->controller->Member->find('first', array('conditions' => array('Member.member_id' => 2)));
+
+			$this->assertEqual( $record, $expectedRecordData, 'Member record was not updated correctly.' );
 		}
 
 		public function _testEditMemberViewVars($expectedMemberVal)
