@@ -782,9 +782,9 @@
 			$this->addEmailMustMatch();
 
 			$saveOk = false;
-			if($this->validates(array( 'fieldList' => array('name', 'username', 'handle', 'email', 'password', 'password_confirm', 'member_status'))))
+			if($this->validates(array( 'fieldList' => array('member_id', 'name', 'username', 'handle', 'email', 'password', 'password_confirm', 'member_status'))))
 			{
-				$saveOk = $this->_saveMemberData($dataToSave, array('Member' => array('name', 'username', 'handle', 'member_status')), $memberId);
+				$saveOk = $this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'name', 'username', 'handle', 'member_status')), $memberId);
 			}
 
 			$this->removeEmailMustMatch();
@@ -844,9 +844,9 @@
 
 			$this->set($dataToSave);
 
-			if(	$this->validates(array( 'fieldList' => array('address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status'))) )
+			if(	$this->validates(array( 'fieldList' => array('member_id', 'address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status'))) )
 			{
-				return $this->_saveMemberData($dataToSave, array('Member' => array('address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status')), $memberId);
+				return $this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status')), $memberId);
 			}
 
 			return false;
@@ -912,7 +912,7 @@
 
 			if( $memberEmail->validates( array( 'fieldList' => array( 'subject', 'body' ) ) ) )
 			{
-				return $this->_saveMemberData($dataToSave, array('Member' => array('member_status')), $adminId);
+				return $this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'member_status')), $adminId);
 			}
 		}
 
@@ -951,6 +951,12 @@
 				return null;
 			}
 
+			if( ( isset($data['Account']) && 
+				  isset($data['Account']['account_id']) ) == false )
+			{
+				return null;
+			}
+
 			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
 			if(!$memberInfo)
 			{
@@ -967,7 +973,7 @@
 
 			$this->set($dataToSave);
 
-			if( $this->_saveMemberData($dataToSave, array('Member' => array( 'member_status', 'account_id' )), $adminId) )
+			if( $this->_saveMemberData($dataToSave, array('Member' => array( 'member_id', 'member_status', 'account_id' ), 'Account' => 'account_id'), $adminId) )
 			{
 				return $this->getSoDetails($memberId);
 			}
@@ -1023,6 +1029,7 @@
 
 			$fieldsToSave = array(
 				'Member' => array( 
+					'member_id',
 					'member_status', 
 					'unlock_text', 
 					'credit_limit', 
@@ -1268,7 +1275,6 @@
 					'username',
 					'handle',
 					'email',
-					'member_status',
 					'unlock_text',
 					'account_id',
 					'address_1',
@@ -1277,7 +1283,8 @@
 					'address_postcode',
 					'contact_number',
 				),
-				'Group',
+				'Group' => array(
+				),
 			);
 			return $this->_saveMemberData($data, $fieldsToSave, $adminId);
 		}
@@ -1391,9 +1398,10 @@
 			@param bool $showFinances If true then finance data should be shown.
 			@param bool $hasJoined If true then show data that is only relevant to members who have joined.
 			@param bool $showAccount If true then show account info.
+			@param bool $showStatus If true then show member status.
 			@retval mixed The array of sanitised member info, or false on error.
 		*/
-		public function sanitiseMemberInfo($memberInfo, $showAdminFeatures, $showFinances, $hasJoined, $showAccount)
+		public function sanitiseMemberInfo($memberInfo, $showAdminFeatures, $showFinances, $hasJoined, $showAccount, $showStatus)
 		{
 			if(is_array($memberInfo) && !empty($memberInfo))
 			{
@@ -1402,8 +1410,6 @@
 		    	if(!$showAdminFeatures)
 		    	{
 		    		unset($memberInfo['Pin']);
-		    		unset($memberInfo['Status']);
-		    		unset($memberInfo['Member']['member_status']);
 		    		unset($memberInfo['StatusUpdate']);
 		    		unset($memberInfo['Group']);
 		    	}
@@ -1424,6 +1430,12 @@
 		    	{
 		    		unset($memberInfo['Member']['account_id']);
 		    		unset($memberInfo['Account']);	
+		    	}
+
+		    	if(!$showAdminFeatures || !$showStatus)
+		    	{
+		    		unset($memberInfo['Status']);
+		    		unset($memberInfo['Member']['member_status']);
 		    	}
 
 		    	$unsetIfNull = array('username', 'handle', 'name', 'account_id', 'contact_number', 'address_1', 'address_2', 'address_city', 'address_postcode', 'member_number');
@@ -1462,38 +1474,49 @@
 			{
 				$oldStatus = (int)$this->getStatusForMember( $memberId );
 
-				if($newStatus != $oldStatus)
+				$newGroups = array( 'Group' );
+				if( $newStatus != Status::CURRENT_MEMBER )
 				{
-					// We shall need to save the Group
-					if(!in_array('Group', $fields))
+					$newGroups['Group'] = array();
+				}
+				else
+				{
+					// Get a list of existing groups this member is a part of
+					// Maybe from the data to be saved, maybe from the existing member data...
+					$existingGroups = array();
+					if(	isset($fields['Group']) && 
+						isset($memberInfo['Group']) && 
+						isset($memberInfo['Group']['Group']) )
 					{
-						array_push($fields, 'Group');
-					}
-
-					$newGroups = array( 'Group' );
-					if( $newStatus != Status::CURRENT_MEMBER )
-					{
-						$newGroups['Group'] = array();
+						// Group data is coming in..
+						foreach ($memberInfo['Group']['Group'] as $key => $value) 
+						{
+							array_push($existingGroups, $value);
+						}
 					}
 					else
 					{
-						// Get a list of existing groups this member is a part of
-						$existingGroups = $this->GroupsMember->getGroupIdsForMember( $memberId );
-						if(!in_array(Group::CURRENT_MEMBERS, $existingGroups))
-						{
-							array_push($existingGroups, Group::CURRENT_MEMBERS);
-						}
+						// We'll need to save it now
+						$fields['Group'] = array();
 
-						$groupIdx = 0;
-						foreach ($existingGroups as $group) 
-						{
-							$newGroups['Group'][$groupIdx] = $group;
-							$groupIdx++;
-						}
+						// Use the groups currently associated with this member
+						$existingGroups = $this->GroupsMember->getGroupIdsForMember( $memberId );
 					}
 
-					$memberInfo['Group'] = $newGroups;
+					if(!in_array(Group::CURRENT_MEMBERS, $existingGroups))
+					{
+						array_push($existingGroups, Group::CURRENT_MEMBERS);
+					}
+
+					$groupIdx = 0;
+					foreach ($existingGroups as $group) 
+					{
+						$newGroups['Group'][$groupIdx] = $group;
+						$groupIdx++;
+					}
 				}
+
+				$memberInfo['Group'] = $newGroups;
 
 				// Do we have to change the password?
 				if(	isset($memberInfo['Member']['username']) && 
@@ -1548,7 +1571,43 @@
 
 			unset($memberInfo['Account']);
 
-			if( !$this->saveAll( $memberInfo, array( 'fieldList' => $fields )) )
+			$safeMemberInfo = array();
+			// Need to unset anything in the $memberInfo that's not in $fields.
+			foreach ($fields as $allowedModel => $allowedFields) 
+			{
+				if(is_array($allowedFields))
+				{
+					if(isset($memberInfo[$allowedModel]))
+					{
+						// If the field entry array is empty, then all the children of that are valid
+						if(empty($allowedFields))
+						{
+							$safeMemberInfo[$allowedModel] = $memberInfo[$allowedModel];
+						}
+						else
+						{
+							$validValues = array();
+
+							// Copy any 'safe' values
+							foreach ($allowedFields as $allowedField) 
+							{
+								if(isset($memberInfo[$allowedModel][$allowedField]))
+								{
+									$validValues[$allowedField] = $memberInfo[$allowedModel][$allowedField];
+								}
+							}
+
+							// Don't bother adding it to the safe member info if it's empty
+							if(!empty($validValues))
+							{
+								$safeMemberInfo[$allowedModel] = $validValues;
+							}
+						}	
+					}
+				}
+			}
+
+			if( !$this->saveAll( $safeMemberInfo, array( 'fieldList' => $fields )) )
 			{
 				$dataSource->rollback();
 				return false;

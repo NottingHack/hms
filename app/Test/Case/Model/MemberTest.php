@@ -11,7 +11,7 @@
         	parent::setUp();
             $this->Member = ClassRegistry::init('Member');
         }
-
+        
         public function testPasswordConfirmMatchesPassword()
         {
             $testEmail = 'fub@example.org';

@@ -695,7 +695,7 @@
 	    		$rawMemberInfo = $this->Member->getMemberSummaryForMember($id, false);
 	    		if($rawMemberInfo)
 	    		{
-	    			$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined, true);
+	    			$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined, true, true);
 	    			if($sanitisedMemberInfo)
 	    			{
 	    				$formattedInfo = $this->Member->formatMemberInfo($sanitisedMemberInfo, true);
@@ -736,7 +736,7 @@
 	    		$rawMemberInfo = $this->Member->getMemberSummaryForMember($id, false);
 		    	if($rawMemberInfo)
 		    	{
-		    		$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined, true);
+		    		$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined, true, true);
 		    		$formattedMemberInfo = $this->Member->formatMemberInfo($sanitisedMemberInfo, true);
 			    	if($formattedMemberInfo)
 			    	{
@@ -747,7 +747,7 @@
 
 			    		if($this->request->is('post'))
 			    		{
-			    			$sanitisedData = $this->Member->sanitiseMemberInfo($this->request->data, $showAdminFeatures, $showFinances, $hasJoined, false);
+			    			$sanitisedData = $this->Member->sanitiseMemberInfo($this->request->data, $showAdminFeatures, $showFinances, $hasJoined, $showAdminFeatures, false);
 			    			if($sanitisedData)
 			    			{
 			    				if($this->Member->updateDetails($id, $sanitisedData, $this->_getLoggedInMemberId()))

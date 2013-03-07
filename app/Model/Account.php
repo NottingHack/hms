@@ -87,7 +87,7 @@
 					if( $this->save($data, array('fieldList' => array('account_id', 'payment_ref'))) )
 					{
 						// New account is ok
-						$accountId = $this->id;
+						$accountId = $this->getID();
 						return $accountId;
 					}
 					

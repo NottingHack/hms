@@ -2,6 +2,7 @@
 
 	App::uses('MembersController', 'Controller');
 	App::uses('Member', 'Model');
+	App::uses('Account', 'Model');
 	App::uses('PhpReader', 'Configure');
 	Configure::config('default', new PhpReader());
 	Configure::load('hms', 'default');
@@ -2147,7 +2148,7 @@
 				),
 			);
 
-			$this->_testEditMember($inputData, $expectedViewVal, $expectedRecordData);
+			$this->_testEditMember(2, 2, $inputData, $expectedViewVal, $expectedRecordData);
 		}
 
 		public function testEditMemberEditOwnAllValues()
@@ -2279,29 +2280,832 @@
 				    ),
 				),
 			);
-			$this->_testEditMember($inputData, $expectedViewVal, $expectedRecordData);
+			$this->_testEditMember(2, 2, $inputData, $expectedViewVal, $expectedRecordData);
 		}
 
-		private function _testEditMember($inputData, $expectedViewVal, $expectedRecordData)
+		public function testEditMemberEditMemberAdmin()
 		{
-			$this->controller = $this->generate('Members', array(
-            	'components' => array(
-            		'Auth' => array(
-            			'user',
-            		),
-            	)
-            ));
+			$this->_testEditMemberSetAdminFields(5);
+		}
 
-            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
+		public function testEditMemberEditFullAccess()
+		{
+			$this->_testEditMemberSetAdminFields(1);
+		}
 
-			$this->testAction('members/edit/2', array('data' => $inputData, 'method' => 'post'));
+		private function _testEditMemberSetAdminFields($adminId)
+		{
+			$inputData = array(
+            	'Member' => array(
+					'name' => 'Ser Dantus',
+					'username' => 'loremipsum',
+					'handle' => 'fubfubfub',
+					'email' => 'not_the_same@gmail.com',
+					'unlock_text' => 'Open the damn door',
+					'address_1' => '34fewarg',
+					'address_2' => '',
+					'address_city' => '5468452456',
+					'address_postcode' => 'weqfwrgetshb',
+					'contact_number' => '01321564895',
+					'account_id' => '4',
+					'member_status' => 1,
+				),
+				'Group' => array(
+					'Group' => array(
+						0 => 2,
+						1 => 3,
+						2 => 5,
+					),
+				),
+			);
+
+			$expectedViewVal = array(
+				'id' => '4',
+				'name' => 'Kelly Savala',
+				'username' => 'huskycolossus',
+				'handle' => 'bildestonelectrician',
+				'email' => 'k.savala@yahoo.co.uk',
+				'joinDate' => '2010-09-22',
+				'unlockText' => 'Hey Kelly',
+				'balance' => '-5649',
+				'creditLimit' => '5000',
+				'paymentRef' => 'HSNOTTSYT7H4CW3GP9',
+				'address' => array(
+					'part1' => '8 Elm Close',
+					'part2' => 'Tetsworth',
+					'city' => 'Thame',
+					'postcode' => 'OX9 7AP',
+				),
+				'contactNumber' => '079 0644 8720',
+				'pin' => '5436',
+				'groups' => array(
+					0 => array(
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
+				    1 => array(
+				        'id' => '4',
+				        'description' => 'Gatekeeper Admin',
+				    ),
+				),
+				'status' => array(
+					'id' => '5',
+				    'name' => 'Current Member',
+				),
+				'lastStatusUpdate' => array(
+					'id' => '4',
+					'by' => '5',
+					'from' => '4',
+					'to' => '5',
+					'at' => '2012-12-17 19:19:59',
+				),
+			);
+
+			$expectedRecordData = array(
+				'Member' => array(
+				    'member_id' => '4',
+            		'account_id' => '4',
+            		'member_status' => '5',
+            		'join_date' => '2010-09-22',
+            		'balance' => '-5649',
+            		'credit_limit' => '5000',
+            		'member_number' => null,
+					'name' => 'Ser Dantus',
+					'username' => 'loremipsum',
+					'handle' => 'fubfubfub',
+					'email' => 'not_the_same@gmail.com',
+					'unlock_text' => 'Open the damn door',
+					'address_1' => '34fewarg',
+					'address_2' => '',
+					'address_city' => '5468452456',
+					'address_postcode' => 'weqfwrgetshb',
+					'contact_number' => '01321564895',
+				),
+				'Status' => array(
+				    'status_id' => '5',
+				    'title' => 'Current Member',
+				    'description' => 'Active member'
+				),
+				'Account' => array(
+				    'account_id' => '4',
+				    'payment_ref' => 'HSNOTTSCV3TFFDGXXY',
+				),
+				'Pin' => array(
+				    'pin_id' => '4',
+				    'pin' => '5436',
+				    'unlock_text' => 'NOT USED',
+				    'date_added' => '2012-12-18 21:01:05',
+				    'expiry' => null,
+				    'state' => '30',
+				    'member_id' => '4',
+				),
+				'StatusUpdate' => array(
+					0 => array(
+						'id' => '2',
+						'member_id' => '4',
+						'admin_id' => '5',
+						'old_status' => '4',
+						'new_status' => '5',
+						'timestamp' => '2012-12-17 19:19:59',
+					),
+				),
+				'Group' => array(
+					0 => array(
+						'grp_id' => '2',
+						'grp_description' => 'Current Members'
+					),
+					1 => array(
+						'grp_id' => '3',
+						'grp_description' => 'Snackspace Admin',
+					),
+					2 => array(
+						'grp_id' => '5',
+						'grp_description' => 'Member Admin'
+					),
+				),
+			);
+
+			$this->_testEditMember(4, $adminId, $inputData, $expectedViewVal, $expectedRecordData);
+		}
+
+		public function testEditMemberEditRemoveGroupsMemberAdmin()
+		{
+			$this->_testEditMemberRemoveGroups(5);
+		}
+
+		public function testEditMemberEditRemoveGroupsFullAccess()
+		{
+			$this->_testEditMemberRemoveGroups(1);
+		}
+
+		private function _testEditMemberRemoveGroups($adminId)
+		{
+			$inputData = array(
+            	'Member' => array(
+					'name' => 'Ser Dantus',
+					'username' => 'loremipsum',
+					'handle' => 'fubfubfub',
+					'email' => 'not_the_same@gmail.com',
+					'unlock_text' => 'Open the damn door',
+					'address_1' => '34fewarg',
+					'address_2' => '',
+					'address_city' => '5468452456',
+					'address_postcode' => 'weqfwrgetshb',
+					'contact_number' => '01321564895',
+					'account_id' => '4',
+					'member_status' => 1,
+				),
+				'Group' => array(
+					'Group' => array(
+						0 => 2,
+					),
+				),
+			);
+
+			$expectedViewVal = array(
+				'id' => '2',
+				'name' => 'Annabelle Santini',
+				'username' => 'pecanpaella',
+				'handle' => 'mammetwarpsgrove',
+				'email' => 'a.santini@hotmail.com',
+				'joinDate' => '2011-02-24',
+				'unlockText' => 'Welcome Annabelle',
+				'balance' => '0',
+				'creditLimit' => '5000',
+				'paymentRef' => 'HSNOTTSK2R62GQW684',
+				'address' => array(
+					'part1' => '1 Saint Paul\'s Church Yard',
+					'part2' => 'The City',
+					'city' => 'London',
+					'postcode' => 'EC4M 8SH',
+				),
+				'contactNumber' => '077 1755 4342',
+				'pin' => '7422',
+				'groups' => array(
+					0 => array(
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
+				    1 => array(
+				        'id' => '3',
+				        'description' => 'Snackspace Admin',
+				    ),
+				),
+				'status' => array(
+					'id' => '5',
+				    'name' => 'Current Member',
+				),
+			);
+
+			$expectedRecordData = array(
+				'Member' => array(
+				    'member_id' => '2',
+            		'account_id' => '4',
+            		'member_status' => '5',
+            		'join_date' => '2011-02-24',
+            		'balance' => '0',
+            		'credit_limit' => '5000',
+            		'member_number' => null,
+					'name' => 'Ser Dantus',
+					'username' => 'loremipsum',
+					'handle' => 'fubfubfub',
+					'email' => 'not_the_same@gmail.com',
+					'unlock_text' => 'Open the damn door',
+					'address_1' => '34fewarg',
+					'address_2' => '',
+					'address_city' => '5468452456',
+					'address_postcode' => 'weqfwrgetshb',
+					'contact_number' => '01321564895',
+				),
+				'Status' => array(
+				    'status_id' => '5',
+				    'title' => 'Current Member',
+				    'description' => 'Active member'
+				),
+				'Account' => array(
+				    'account_id' => '4',
+				    'payment_ref' => 'HSNOTTSCV3TFFDGXXY',
+				),
+				'Pin' => array(
+				    'pin_id' => '2',
+				    'pin' => '7422',
+				    'unlock_text' => 'NOT USED',
+				    'date_added' => '2012-12-03 23:56:43',
+				    'expiry' => null,
+				    'state' => '30',
+				    'member_id' => '2',
+				),
+				'StatusUpdate' => array(
+				),
+				'Group' => array(
+					0 => array(
+						'grp_id' => '2',
+						'grp_description' => 'Current Members'
+					),
+				),
+			);
+
+			$this->_testEditMember(2, $adminId, $inputData, $expectedViewVal, $expectedRecordData);
+		}
+
+		public function testEditMemberEditRemoveAllGroupsMemberAdmin()
+		{
+			$this->_testEditMemberRemoveAllGroups(5);
+		}
+
+		public function testEditMemberEditRemoveAllGroupsFullAccess()
+		{
+			$this->_testEditMemberRemoveAllGroups(1);
+		}
+
+		private function _testEditMemberRemoveAllGroups($adminId)
+		{
+			$inputData = array(
+            	'Member' => array(
+					'name' => 'Ser Dantus',
+					'username' => 'loremipsum',
+					'handle' => 'fubfubfub',
+					'email' => 'not_the_same@gmail.com',
+					'unlock_text' => 'Open the damn door',
+					'address_1' => '34fewarg',
+					'address_2' => '', 
+					'address_city' => '5468452456',
+					'address_postcode' => 'weqfwrgetshb',
+					'contact_number' => '01321564895',
+					'account_id' => '4',
+					'member_status' => 1,
+				),
+				'Group' => array(
+					'Group' => array(
+					),
+				),
+			);
+
+			$expectedViewVal = array(
+				'id' => '5',
+				'name' => 'Jessie Easterwood',
+				'username' => 'chollertonbanker',
+				'handle' => 'dailyponcy',
+				'email' => 'j.easterwood@googlemail.com',
+				'joinDate' => '2010-09-22',
+				'unlockText' => 'Oh dear...',
+				'balance' => '-3465',
+				'creditLimit' => '5000',
+				'paymentRef' => 'HSNOTTSYT7H4CW3GP9',
+				'address' => array(
+					'part1' => '9 Langton Avenue',
+					'part2' => 'East Calder',
+					'city' => 'Livingston',
+					'postcode' => 'EH53 0DR',
+				),
+				'contactNumber' => '070 0036 0548',
+				'pin' => '3014',
+				'groups' => array(
+					0 => array(
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
+				    1 => array(
+				        'id' => '5',
+				        'description' => 'Member Admin',
+				    ),
+				),
+				'status' => array(
+					'id' => '5',
+				    'name' => 'Current Member',
+				),
+			);
+
+			$expectedRecordData = array(
+				'Member' => array(
+				    'member_id' => '5',
+            		'account_id' => '4',
+            		'member_status' => '5',
+            		'join_date' => '2010-09-22',
+            		'balance' => '-3465',
+            		'credit_limit' => '5000',
+            		'member_number' => null,
+					'name' => 'Ser Dantus',
+					'username' => 'loremipsum',
+					'handle' => 'fubfubfub',
+					'email' => 'not_the_same@gmail.com',
+					'unlock_text' => 'Open the damn door',
+					'address_1' => '34fewarg',
+					'address_2' => '',
+					'address_city' => '5468452456',
+					'address_postcode' => 'weqfwrgetshb',
+					'contact_number' => '01321564895',
+				),
+				'Status' => array(
+				    'status_id' => '5',
+				    'title' => 'Current Member',
+				    'description' => 'Active member'
+				),
+				'Account' => array(
+				    'account_id' => '4',
+				    'payment_ref' => 'HSNOTTSCV3TFFDGXXY',
+				),
+				'Pin' => array(
+				    'pin_id' => '5',
+				    'pin' => '3014',
+				    'unlock_text' => 'NOT USED',
+				    'date_added' => '2012-12-19 19:54:12',
+				    'expiry' => null,
+				    'state' => '30',
+				    'member_id' => '5',
+				),
+				'StatusUpdate' => array(
+				),
+				'Group' => array(
+					0 => array(
+						'grp_id' => '2',
+						'grp_description' => 'Current Members'
+					),
+				),
+			);
+
+			$this->_testEditMember(5, $adminId, $inputData, $expectedViewVal, $expectedRecordData);
+		}
+
+		public function testEditMemberEditJoinAccountMemberAdmin()
+		{
+			$this->_testEditMemberJoinAccount(5);
+		}
+
+		public function testEditMemberEditJoinAccountFullAccess()
+		{
+			$this->_testEditMemberJoinAccount(1);
+		}
+
+		private function _testEditMemberJoinAccount($adminId)
+		{
+			$inputData = array(
+            	'Member' => array(
+					'name' => 'Ser Dantus',
+					'username' => 'loremipsum',
+					'handle' => 'fubfubfub',
+					'email' => 'not_the_same@gmail.com',
+					'unlock_text' => 'Open the damn door',
+					'address_1' => '34fewarg',
+					'address_2' => '', 
+					'address_city' => '5468452456',
+					'address_postcode' => 'weqfwrgetshb',
+					'contact_number' => '01321564895',
+					'account_id' => '3',
+					'member_status' => 1,
+				),
+				'Group' => array(
+					'Group' => array(
+					),
+				),
+			);
+
+			$expectedViewVal = array(
+				'id' => '3',
+				'name' => 'Guy Viles',
+				'username' => 'buntweyr',
+				'handle' => 'doyltcameraman',
+				'email' => 'g.viles@gmail.com',
+				'joinDate' => '2010-08-18',
+				'unlockText' => 'Sup Guy',
+				'balance' => '-985',
+				'creditLimit' => '5000',
+				'paymentRef' => 'HSNOTTSYT7H4CW3GP9',
+				'address' => array(
+					'part1' => '4 Fraser Crescent',
+					'part2' => '',
+					'city' => 'Portree',
+					'postcode' => 'IV51 9DR',
+				),
+				'contactNumber' => '077 7181 0959',
+				'pin' => '5142',
+				'groups' => array(
+					0 => array(
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
+				),
+				'status' => array(
+					'id' => '5',
+				    'name' => 'Current Member',
+				),
+			);
+
+			$expectedRecordData = array(
+				'Member' => array(
+				    'member_id' => '3',
+            		'account_id' => '3',
+            		'member_status' => '5',
+            		'join_date' => '2010-08-18',
+            		'balance' => '-985',
+            		'credit_limit' => '5000',
+            		'member_number' => null,
+					'name' => 'Ser Dantus',
+					'username' => 'loremipsum',
+					'handle' => 'fubfubfub',
+					'email' => 'not_the_same@gmail.com',
+					'unlock_text' => 'Open the damn door',
+					'address_1' => '34fewarg',
+					'address_2' => '',
+					'address_city' => '5468452456',
+					'address_postcode' => 'weqfwrgetshb',
+					'contact_number' => '01321564895',
+				),
+				'Status' => array(
+				    'status_id' => '5',
+				    'title' => 'Current Member',
+				    'description' => 'Active member'
+				),
+				'Account' => array(
+				    'account_id' => '3',
+				    'payment_ref' => 'HSNOTTSYT7H4CW3GP9',
+				),
+				'Pin' => array(
+				    'pin_id' => '3',
+				    'pin' => '5142',
+				    'unlock_text' => 'NOT USED',
+				    'date_added' => '2012-12-18 20:15:00',
+				    'expiry' => null,
+				    'state' => '30',
+				    'member_id' => '3',
+				),
+				'StatusUpdate' => array(
+				),
+				'Group' => array(
+					0 => array(
+						'grp_id' => '2',
+						'grp_description' => 'Current Members'
+					),
+				),
+			);
+
+			$this->_testEditMember(3, $adminId, $inputData, $expectedViewVal, $expectedRecordData);
+		}
+
+		public function testEditMemberEditLeaveJointAccountMemberAdmin()
+		{
+			$this->_testEditMemberLeaveJointAccount(5);
+		}
+
+		public function testEditMemberEditLeaveJointAccountFullAccess()
+		{
+			$this->_testEditMemberLeaveJointAccount(1);
+		}
+
+		private function _testEditMemberLeaveJointAccount($adminId)
+		{
+			$inputData = array(
+            	'Member' => array(
+					'name' => 'Ser Dantus',
+					'username' => 'loremipsum',
+					'handle' => 'fubfubfub',
+					'email' => 'not_the_same@gmail.com',
+					'unlock_text' => 'Open the damn door',
+					'address_1' => '34fewarg',
+					'address_2' => '', 
+					'address_city' => '5468452456',
+					'address_postcode' => 'weqfwrgetshb',
+					'contact_number' => '01321564895',
+					'account_id' => '-1',
+					'member_status' => 1,
+				),
+				'Group' => array(
+					'Group' => array(
+					),
+				),
+			);
+
+			$expectedViewVal = array(
+				'id' => '3',
+				'name' => 'Guy Viles',
+				'username' => 'buntweyr',
+				'handle' => 'doyltcameraman',
+				'email' => 'g.viles@gmail.com',
+				'joinDate' => '2010-08-18',
+				'unlockText' => 'Sup Guy',
+				'balance' => '-985',
+				'creditLimit' => '5000',
+				#'paymentRef' => 'HSNOTTSYT7H4CW3GP9',
+				'address' => array(
+					'part1' => '4 Fraser Crescent',
+					'part2' => '',
+					'city' => 'Portree',
+					'postcode' => 'IV51 9DR',
+				),
+				'contactNumber' => '077 7181 0959',
+				'pin' => '5142',
+				'groups' => array(
+					0 => array(
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
+				),
+				'status' => array(
+					'id' => '5',
+				    'name' => 'Current Member',
+				),
+			);
+
+			$expectedRecordData = array(
+				'Member' => array(
+				    'member_id' => '3',
+            		'account_id' => '9',
+            		'member_status' => '5',
+            		'join_date' => '2010-08-18',
+            		'balance' => '-985',
+            		'credit_limit' => '5000',
+            		'member_number' => null,
+					'name' => 'Ser Dantus',
+					'username' => 'loremipsum',
+					'handle' => 'fubfubfub',
+					'email' => 'not_the_same@gmail.com',
+					'unlock_text' => 'Open the damn door',
+					'address_1' => '34fewarg',
+					'address_2' => '',
+					'address_city' => '5468452456',
+					'address_postcode' => 'weqfwrgetshb',
+					'contact_number' => '01321564895',
+				),
+				'Status' => array(
+				    'status_id' => '5',
+				    'title' => 'Current Member',
+				    'description' => 'Active member'
+				),
+				'Account' => array(
+				    'account_id' => '9',
+				    'payment_ref' => 'HSNOTTSC6P8QV4C9PV',
+				),
+				'Pin' => array(
+				    'pin_id' => '3',
+				    'pin' => '5142',
+				    'unlock_text' => 'NOT USED',
+				    'date_added' => '2012-12-18 20:15:00',
+				    'expiry' => null,
+				    'state' => '30',
+				    'member_id' => '3',
+				),
+				'StatusUpdate' => array(
+				),
+				'Group' => array(
+					0 => array(
+						'grp_id' => '2',
+						'grp_description' => 'Current Members'
+					),
+				),
+			);
+
+			$controllerMock = $this->generate('Members', array(
+	        	'components' => array(
+	        		'Auth' => array(
+	        			'user',
+	        		),
+	        	)
+	        ));
+
+	        $accountMock = $this->getMock('Account', array('generatePaymentRef', 'getID'));
+	        $accountMock->expects($this->once())->method('generatePaymentRef')->will($this->returnValue('HSNOTTSC6P8QV4C9PV'));
+	        $accountMock->expects($this->any())->method('getID')->will($this->returnValue('9'));
+	        $controllerMock->Member->Account = $accountMock;
+
+			$this->_testEditMember(3, $adminId, $inputData, $expectedViewVal, $expectedRecordData, $controllerMock);
+		}
+
+		public function testEditMemberEditSetEverythingMemberAdmin()
+		{
+			$this->_testEditMemberSetEverything(5);
+		}
+
+		public function testEditMemberEditSetEverythingFullAccess()
+		{
+			$this->_testEditMemberSetEverything(1);
+		}
+
+		private function _testEditMemberSetEverything($adminId)
+		{
+			$inputData = array(
+            	'Member' => array(
+				    'member_id' => '6',
+            		'account_id' => '1',
+            		'member_status' => '8',
+            		'join_date' => '2012-10-11',
+            		'balance' => '-6575',
+            		'credit_limit' => '8976',
+            		'member_number' => '325436',
+					'name' => 'Ser Dantus',
+					'username' => 'loremipsum',
+					'handle' => 'fubfubfub',
+					'email' => 'not_the_same@gmail.com',
+					'unlock_text' => 'Open the damn door',
+					'address_1' => '34fewarg',
+					'address_2' => 'efwshtydrt',
+					'address_city' => '5468452456',
+					'address_postcode' => 'weqfwrgetshb',
+					'contact_number' => '01321564895',
+				),
+				'Status' => array(
+				    'status_id' => '1',
+				    'title' => 'Full Access',
+				    'description' => 'All the things'
+				),
+				'Account' => array(
+				    'account_id' => '1',
+				    'payment_ref' => 'HSNOTTSYT7H4CW3GP9',
+				),
+				'Pin' => array(
+				    'pin_id' => '4',
+				    'pin' => '9995',
+				    'unlock_text' => 'Might be used',
+				    'date_added' => '2011-04-06 04:23:59',
+				    'expiry' => '2011-04-06',
+				    'state' => '20',
+				    'member_id' => '1',
+				),
+				'StatusUpdate' => array(
+					0 => array(
+						'id' => '2',
+						'member_id' => '4',
+						'admin_id' => '5',
+						'old_status' => '4',
+						'new_status' => '5',
+						'timestamp' => '2012-12-17 19:19:59',
+					),
+				),
+				'Group' => array(
+					'Group' => array(
+						0 => 1,
+						1 => 2,
+						2 => 3,
+						3 => 4,
+						4 => 5,
+					)
+				),
+			);
+
+			$expectedViewVal = array(
+				'id' => '3',
+				'name' => 'Guy Viles',
+				'username' => 'buntweyr',
+				'handle' => 'doyltcameraman',
+				'email' => 'g.viles@gmail.com',
+				'joinDate' => '2010-08-18',
+				'unlockText' => 'Sup Guy',
+				'balance' => '-985',
+				'creditLimit' => '5000',
+				'paymentRef' => 'HSNOTTSYT7H4CW3GP9',
+				'address' => array(
+					'part1' => '4 Fraser Crescent',
+					'part2' => '',
+					'city' => 'Portree',
+					'postcode' => 'IV51 9DR',
+				),
+				'contactNumber' => '077 7181 0959',
+				'pin' => '5142',
+				'groups' => array(
+					0 => array(
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
+				),
+				'status' => array(
+					'id' => '5',
+				    'name' => 'Current Member',
+				),
+			);
+
+			$expectedRecordData = array(
+				'Member' => array(
+				    'member_id' => '3',
+            		'account_id' => '1',
+            		'member_status' => '5',
+            		'join_date' => '2010-08-18',
+            		'balance' => '-985',
+            		'credit_limit' => '5000',
+            		'member_number' => null,
+					'name' => 'Ser Dantus',
+					'username' => 'loremipsum',
+					'handle' => 'fubfubfub',
+					'email' => 'not_the_same@gmail.com',
+					'unlock_text' => 'Open the damn door',
+					'address_1' => '34fewarg',
+					'address_2' => 'efwshtydrt',
+					'address_city' => '5468452456',
+					'address_postcode' => 'weqfwrgetshb',
+					'contact_number' => '01321564895',
+				),
+				'Status' => array(
+				    'status_id' => '5',
+				    'title' => 'Current Member',
+				    'description' => 'Active member'
+				),
+				'Account' => array(
+				    'account_id' => '1',
+				    'payment_ref' => 'HSNOTTS6762KC8JD7H',
+				),
+				'Pin' => array(
+				    'pin_id' => '3',
+				    'pin' => '5142',
+				    'unlock_text' => 'NOT USED',
+				    'date_added' => '2012-12-18 20:15:00',
+				    'expiry' => null,
+				    'state' => '30',
+				    'member_id' => '3',
+				),
+				'StatusUpdate' => array(
+				),
+				'Group' => array(
+					0 => array(
+						'grp_id' => '1',
+						'grp_description' => 'Full Access'
+					),
+					1 => array(
+						'grp_id' => '2',
+						'grp_description' => 'Current Members'
+					),
+					2 => array(
+						'grp_id' => '3',
+						'grp_description' => 'Snackspace Admin'
+					),
+					3 => array(
+						'grp_id' => '4',
+						'grp_description' => 'Gatekeeper Admin'
+					),
+					4 => array(
+						'grp_id' => '5',
+						'grp_description' => 'Member Admin'
+					),
+				),
+			);
+
+			$this->_testEditMember(3, $adminId, $inputData, $expectedViewVal, $expectedRecordData);
+		}
+
+		private function _testEditMember($memberId, $adminId, $inputData, $expectedViewVal, $expectedRecordData, $controllerMock = null)
+		{
+			if($controllerMock == null)
+			{
+				$this->controller = $this->generate('Members', array(
+		        	'components' => array(
+		        		'Auth' => array(
+		        			'user',
+		        		),
+		        	)
+		        ));
+			}
+			else
+			{
+				$this->controller = $controllerMock;
+			}
+
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue($adminId));
+
+			$this->testAction('members/edit/' . $memberId, array('data' => $inputData, 'method' => 'post'));
 			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
-			$this->assertContains('/members/view/2', $this->headers['Location']);
+			$this->assertContains('/members/view/' . $memberId, $this->headers['Location']);
 
 			
 			$this->_testEditMemberViewVars($expectedViewVal);
 
-			$record = $this->controller->Member->find('first', array('conditions' => array('Member.member_id' => 2)));
+			$record = $this->controller->Member->find('first', array('conditions' => array('Member.member_id' => $memberId)));
 
 			$this->assertEqual( $record, $expectedRecordData, 'Member record was not updated correctly.' );
 		}
