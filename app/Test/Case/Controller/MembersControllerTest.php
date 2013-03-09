@@ -96,6 +96,73 @@
 			}
 		}
 
+		public function testIsRequestLocal()
+		{
+			$testIps = array(
+				'10.0.0.32' => true,
+				'192.0.0.4' => false,
+			);
+
+			foreach ($testIps as $ip => $expectedResult) 
+			{
+				$this->controller = $this->generate('Members', array(
+		        	'methods' => array(
+					    'getRequestIpAddress'
+					),
+		        ));
+
+		        $this->controller->expects($this->once())->method('getRequestIpAddress')->will($this->returnValue($ip));
+		        
+		        $this->assertEqual($this->controller->isRequestLocal(), $expectedResult, 'Ip address ' . $ip . ' was not handled correctly.');
+			}
+		}
+
+		public function testIsAuthorizedRegister()
+		{
+			$testData = array(
+				array(
+					'admin' => true,
+					'local' => true,
+					'result' => true,
+				),
+				array(
+					'admin' => true,
+					'local' => false,
+					'result' => true,
+				),
+				array(
+					'admin' => false,
+					'local' => true,
+					'result' => true,
+				),
+				array(
+					'admin' => false,
+					'local' => false,
+					'result' => false,
+				),
+			);
+
+			foreach ($testData as $setup) 
+			{
+				$this->controller = $this->generate('Members', array(
+		        	'methods' => array(
+					    'isRequestLocal'
+					),
+		        ));
+
+				$userId = $setup['admin'] ? 5 : 3;
+		        $userInfo = $this->MembersController->Member->findByMemberId($userId);
+
+		        $this->controller->expects($this->any())->method('isRequestLocal')->will($this->returnValue($setup['local']));
+
+		        $requestObj = $this->_buildFakeRequest('register ', array());
+				$expectedResult = $setup['result'];
+				$actualResult = $this->MembersController->isAuthorized($userInfo, $requestObj);
+		        
+		        $this->assertEqual($setup['result'], $expectedResult, 'Combination handled incorrectly: admin - ' . $setup['admin'] ? 'true' : 'false' . ' local - ' . $setup['local'] ? 'true' : 'false');
+			}
+		}
+
 		public function testBeforeFilter()
 		{
 			$prevAllowedActions = $this->MembersController->Auth->allowedActions;

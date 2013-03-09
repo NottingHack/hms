@@ -84,8 +84,23 @@
 	    		case 'login':
 	    		case 'logout':
 	    		case 'setupLogin':
-	    		case 'register':
 	    			return true;
+
+	    		case 'register':
+	    			// Anyone can access if they're local
+	    			$isLocal = $this->isRequestLocal();
+	    			if($isLocal)
+	    			{
+	    				return true;
+	    			}
+
+	    			// Member admins can access from outside the space
+	    			if($userIsMemberAdmin)
+	    			{
+	    				return true;
+	    			}
+
+	    			return false;
 	    	}
 
 	    	return false;
@@ -1127,6 +1142,24 @@
 		private function _getLoggedInMemberId()
 		{
 			return $this->Member->getIdForMember($this->Auth->user());
+		}
+
+		//! Test to see if a request is coming from within the hackspace.
+		/*!
+			@retval bool True if the request is coming from with in the hackspace, false otherwise.
+		*/
+		public function isRequestLocal()
+		{
+			return preg_match('/10\.0\.0\.\d+/', $this->getRequestIpAddress());
+		}
+
+		//! Get the ip address of the request
+		/*
+			@retval string The IP address of the request.
+		*/
+		public function getRequestIpAddress()
+		{
+			return $this->request->clientIp();
 		}
 	}
 ?>

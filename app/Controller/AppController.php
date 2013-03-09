@@ -48,7 +48,6 @@ class AppController extends Controller {
         	'loginAction' => array(
 	            'controller' => 'members',
 	            'action' => 'login',
-	            #'plugin' => 'users'
 	        ),
             'loginRedirect' => array('controller' => 'pages', 'action' => 'index'),
             'logoutRedirect' => array('controller' => 'pages', 'action' => 'display', 'home'),
@@ -68,7 +67,7 @@ class AppController extends Controller {
     }
 
     public function beforeRender() {
-        # AT [16/09/2012] Send any links added to the NavComponent to the view
+        // Send any links added to the NavComponent to the view
         $this->set('navLinks', $this->Nav->get_allowed_actions());
 
         Controller::loadModel('Member');
@@ -108,7 +107,7 @@ class AppController extends Controller {
 
     public function isAuthorized($user, $request)
     {
-        $this->Member = ClassRegistry::init('Member');
+        Controller::loadModel('Member');
 
         if($this->Member->GroupsMember->isMemberInGroup( $this->Member->getIdForMember($user), Group::FULL_ACCESS ))
         {
