@@ -197,8 +197,9 @@
 	    //! Grab a users e-mail address and start the membership procedure.
 	    public function register() 
 	    {
+	    	Controller::loadModel('MailingList');
 	    	// Need a list of mailing-lists that the user can opt-in to
-	    	$mailingLists = $this->_get_mailing_lists_and_subscruibed_status(null);
+	    	$mailingLists = $this->MailingList->listMailinglists(false);
 			$this->set('mailingLists', $mailingLists);
 
 			if($this->request->is('post'))
@@ -819,86 +820,6 @@
 				}
 			}
 			return false;
-		}
-
-		private function _update_mailing_list_subscriptions($memberId, $subscribeToLists)
-		{
-			$resultMessage = '';
-
-			# Grab a list of all the mailing lists we know about
-			# including whether this member is subscribed to them or not
-			$memberInfo = $this->Member->find('first', array('conditions' => array('Member.member_id' => $memberId)));
-			$currentMailingLists = $this->_get_mailing_lists_and_subscruibed_status($memberInfo);
-
-			foreach ($currentMailingLists as $mailingList) 
-			{
-				# Does the member want to be want to be subscribed to this list?
-				$wantToBeSubscribed = in_array($mailingList['id'], $subscribeToLists);
-				if($wantToBeSubscribed != $mailingList['subscribed'])
-				{
-					# Need to edit the subscription
-					if($wantToBeSubscribed)
-					{
-						$this->MailChimp->subscribe($mailingList['id'], $memberInfo['Member']['email']);
-    					if($this->MailChimp->error_code())
-    					{
-    						$resultMessage .= 'Unable to subscribe to: ' . $mailingList['name'] . ' because ' . $this->MailChimp->error_msg() . '</br>';
-    					}
-    					else
-    					{
-    						$resultMessage .= 'E-mail confirmation of mailing list subscription for: ' . $mailingList['name'] . ' has been sent.' . '</br>';	
-    					}
-					}
-					else
-					{
-						$this->MailChimp->unsubscribe($mailingList['id'], $memberInfo['Member']['email']);
-    					if($this->MailChimp->error_code())
-    					{
-    						$resultMessage .= 'Unable to un-subscribe from: ' . $mailingList['name'] . ' because ' . $this->MailChimp->error_msg() . '</br>';
-    					}
-    					else
-    					{
-    						$resultMessage .= 'Un-Subscribed from: ' . $mailingList['name'] . '</br>';
-    					}
-					}
-				}
-			}
-
-			return $resultMessage;
-		}
-
-		private function _get_mailing_lists_and_subscruibed_status($memberInfo)
-		{
-			$mailingListsRet = $this->MailChimp->list_mailinglists();
-		    if(!$this->MailChimp->error_code())
-		    {
-		    	$mailingLists = $mailingListsRet['data'];
-
-		    	if($memberInfo != null)
-		    	{
-			    	$numMailingLists = count($mailingLists);
-			    	for($i = 0; $i < $numMailingLists; $i++)
-			    	{
-			    		// Grab the list of subscribed members
-			    		$subscribedMembers = $this->MailChimp->list_subscribed_members($mailingLists[$i]['id']);
-			    		if(!$this->MailChimp->error_code())
-			    		{
-			    			// Extract the emails
-			    			$emails = Hash::extract($subscribedMembers['data'], '{n}.email');
-			    			// Are we subscribed to this list?
-			    			$mailingLists[$i]['subscribed'] = (in_array($memberInfo['Member']['email'], $emails));
-			    			if($i > 0)
-			    			{
-			    				$mailingLists[$i]['subscribed'] = rand() % 2 == 0;
-			    			}
-			    			// Can we view it?
-			    			$mailingLists[$i]['canView'] = $this->AuthUtil->is_authorized('mailinglists', 'view', array( $mailingLists[$i]['id'] ));
-			    		}
-			    	}
-			    }
-		    	return $mailingLists;
-		    }
-		    return null;
 		}
 
 		//! Send an e-mail to every member with a certain status.
