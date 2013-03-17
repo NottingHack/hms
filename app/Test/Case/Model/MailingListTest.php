@@ -199,28 +199,35 @@
             return false;
         }
 
+        public function getMockMailingList()
+        {
+            $mockModel = $this->getMock(
+                'MailingList',
+                array(
+                    'listMailinglists',
+                    'getMailinglist',
+                    'listSubscribers',
+                    'subscribe',
+                    'unsubscribe',
+                    'errorCode',
+                    'errorMsg',
+                )
+            );
+
+            $mockModel->expects($this->any())->method('listMailingLists')->will($this->returnCallback(array($this, 'listMailingListsMock')));
+            $mockModel->expects($this->any())->method('getMailinglist')->will($this->returnCallback(array($this, 'getMailingListMock')));
+            $mockModel->expects($this->any())->method('listSubscribers')->will($this->returnCallback(array($this, 'listSubscribersMock')));
+            $mockModel->expects($this->any())->method('subscribe')->will($this->returnValue(true));
+            $mockModel->expects($this->any())->method('unsubscribe')->will($this->returnValue(true));
+
+            return $mockModel;
+        }
+
         private function _createMailingListModel($useMock)
         {
             if($useMock)
             {
-                $this->MailingList = $this->getMock(
-                    'MailingList',
-                    array(
-                        'listMailinglists',
-                        'getMailinglist',
-                        'listSubscribers',
-                        'subscribe',
-                        'unsubscribe',
-                        'errorCode',
-                        'errorMsg',
-                    )
-                );
-
-                $this->MailingList->expects($this->any())->method('listMailingLists')->will($this->returnCallback(array($this, 'listMailingListsMock')));
-                $this->MailingList->expects($this->any())->method('getMailinglist')->will($this->returnCallback(array($this, 'getMailingListMock')));
-                $this->MailingList->expects($this->any())->method('listSubscribers')->will($this->returnCallback(array($this, 'listSubscribersMock')));
-                $this->MailingList->expects($this->any())->method('subscribe')->will($this->returnValue(true));
-                $this->MailingList->expects($this->any())->method('unsubscribe')->will($this->returnValue(true));
+                $this->MailingList = $this->getMockMailingList();
 
             }
             else

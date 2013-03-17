@@ -3,6 +3,10 @@
 	App::uses('MembersController', 'Controller');
 	App::uses('Member', 'Model');
 	App::uses('Account', 'Model');
+
+	App::build(array('TestCase' => array('%s' . 'Test' . DS . 'Case' . DS . 'Model' . DS)), App::REGISTER);
+	App::uses('MailingListTest', 'TestCase');
+
 	App::uses('PhpReader', 'Configure');
 	Configure::config('default', new PhpReader());
 	Configure::load('hms', 'default');
@@ -17,6 +21,30 @@
 
             $this->MembersController = new MembersController();
             $this->MembersController->constructClasses();
+        }
+
+        private function _getMailingListMock()
+        {
+        	$mailingListTestCase = new MailingListTest();
+        	return $mailingListTestCase->getMockMailingList();
+        }
+
+        private function _testMailingListView($expectedResults)
+        {
+        	$this->assertArrayHasKey( 'mailingLists', $this->vars, 'No view value called \'mailingLists\'.' );
+        	$this->assertInternalType('array', $this->vars['mailingLists'], 'Mailing lists is not of array type.');
+
+        	$this->assertArrayHasKey('total', $this->vars['mailingLists'], 'Mailing lists has no total.');
+        	$this->assertEqual($this->vars['mailingLists']['total'], 2, 'Mailing list total is incorrect.');
+
+        	$this->assertArrayHasKey('data', $this->vars['mailingLists'], 'Mailing lists has no data');
+
+        	foreach ($this->vars['mailingLists']['data'] as $listData) 
+        	{
+        		$this->assertInternalType('array', $listData, 'List data is not of array type.');
+        		$this->assertArrayHasKey('subscribed', $listData, 'List data has no subscribed info for id ' . $listData['id']);
+        		$this->assertEqual($listData['subscribed'], $expectedResults[$listData['id']], 'List data subscribed has incorrect value for id ' . $listData['id']);
+        	}
         }
 
 		public function testIsAuthorized()
@@ -107,7 +135,7 @@
 			{
 				$this->controller = $this->generate('Members', array(
 		        	'methods' => array(
-					    'getRequestIpAddress'
+					    'getRequestIpAddress',
 					),
 		        ));
 
@@ -346,6 +374,8 @@
 
 		public function testRegisterNoData()
 		{
+			$this->_mockMemberEmail();
+
 			// Test with no data
 			$this->testAction('/members/register', array('data' => null, 'method' => null));
 
@@ -1741,10 +1771,15 @@
             		'Nav' => array(
             			'add',
             		)
-            	)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
             ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+
+			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
 
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
@@ -1754,7 +1789,8 @@
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/4');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
-			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
+			$this->_testMailingListView(array('0a6da449c9' => true, '455de2ac56' => false));
 
 			$expectedMemberInfo = array(
 				'id' => '4',
@@ -1811,10 +1847,15 @@
             		'Nav' => array(
             			'add',
             		)
-            	)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
             ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(1));
+
+			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
 
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
@@ -1824,7 +1865,8 @@
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/4');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
-			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
+			$this->_testMailingListView(array('0a6da449c9' => true, '455de2ac56' => false));
 
 			$expectedMemberInfo = array(
 				'id' => '4',
@@ -1881,10 +1923,15 @@
             		'Nav' => array(
             			'add',
             		)
-            	)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
             ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(4));
+
+			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
 
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
@@ -1894,7 +1941,8 @@
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/4');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
-			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
+			$this->_testMailingListView(array('0a6da449c9' => true, '455de2ac56' => false));
 
 			$expectedMemberInfo = array(
 				'id' => '4',
@@ -1929,10 +1977,15 @@
             		'Nav' => array(
             			'add',
             		)
-            	)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
             ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+
+			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
 
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(7));
@@ -1942,7 +1995,8 @@
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/7');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
-			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
+			$this->_testMailingListView(array('0a6da449c9' => true, '455de2ac56' => true));
 
 			$expectedMemberInfo = array(
 				'id' => '7',
@@ -1966,10 +2020,15 @@
             		'Nav' => array(
             			'add',
             		)
-            	)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
             ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(9));
+
+			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
 
 			$this->controller->Nav->expects($this->exactly(2))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(9));
@@ -1978,7 +2037,8 @@
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/9');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
-			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
+			$this->_testMailingListView(array('0a6da449c9' => true, '455de2ac56' => true));
 
 			$expectedMemberInfo = array(
 				'id' => '9',
@@ -2001,10 +2061,15 @@
             		'Nav' => array(
             			'add',
             		)
-            	)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
             ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(11));
+
+			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
 
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(11));
@@ -2014,7 +2079,8 @@
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/11');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
-			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
+			$this->_testMailingListView(array('0a6da449c9' => false, '455de2ac56' => true));
 
 			$expectedMemberInfo = array(
 				'id' => '11',
@@ -2044,10 +2110,15 @@
             		'Nav' => array(
             			'add',
             		)
-            	)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
             ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(4));
+
+			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
 
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
@@ -2057,7 +2128,8 @@
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/4');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
-			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
+			$this->_testMailingListView(array('0a6da449c9' => true, '455de2ac56' => false));
 
 			$expectedMemberInfo = array(
 				'id' => '4',
@@ -2096,10 +2168,15 @@
             		'Auth' => array(
             			'user',
             		),
-            	)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
             ));
 
             $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
+
+            $this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
 
 			$this->testAction('members/edit/2');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
@@ -2123,7 +2200,7 @@
 				),
 				'contactNumber' => '077 1755 4342',
 			);
-			$this->_testEditMemberViewVars($expectedMemberVal);
+			$this->_testEditMemberViewVars($expectedMemberVal, array('0a6da449c9' => true, '455de2ac56' => false));
 		}
 
 		public function testEditMemberEditOwn()
@@ -2215,7 +2292,7 @@
 				),
 			);
 
-			$this->_testEditMember(2, 2, $inputData, $expectedViewVal, $expectedRecordData);
+			$this->_testEditMember(2, 2, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
 		}
 
 		public function testEditMemberEditOwnAllValues()
@@ -2347,7 +2424,7 @@
 				    ),
 				),
 			);
-			$this->_testEditMember(2, 2, $inputData, $expectedViewVal, $expectedRecordData);
+			$this->_testEditMember(2, 2, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
 		}
 
 		public function testEditMemberEditMemberAdmin()
@@ -2492,7 +2569,7 @@
 				),
 			);
 
-			$this->_testEditMember(4, $adminId, $inputData, $expectedViewVal, $expectedRecordData);
+			$this->_testEditMember(4, $adminId, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
 		}
 
 		public function testEditMemberEditRemoveGroupsMemberAdmin()
@@ -2612,7 +2689,7 @@
 				),
 			);
 
-			$this->_testEditMember(2, $adminId, $inputData, $expectedViewVal, $expectedRecordData);
+			$this->_testEditMember(2, $adminId, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
 		}
 
 		public function testEditMemberEditRemoveAllGroupsMemberAdmin()
@@ -2731,7 +2808,7 @@
 				),
 			);
 
-			$this->_testEditMember(5, $adminId, $inputData, $expectedViewVal, $expectedRecordData);
+			$this->_testEditMember(5, $adminId, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
 		}
 
 		public function testEditMemberEditJoinAccountMemberAdmin()
@@ -2846,7 +2923,7 @@
 				),
 			);
 
-			$this->_testEditMember(3, $adminId, $inputData, $expectedViewVal, $expectedRecordData);
+			$this->_testEditMember(3, $adminId, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
 		}
 
 		public function testEditMemberEditLeaveJointAccountMemberAdmin()
@@ -2966,7 +3043,10 @@
 	        		'Auth' => array(
 	        			'user',
 	        		),
-	        	)
+	        	),
+	        	'methods' => array(
+            		'getMailingList',
+            	),
 	        ));
 
 	        $accountMock = $this->getMock('Account', array('generatePaymentRef', 'getID'));
@@ -2974,7 +3054,7 @@
 	        $accountMock->expects($this->any())->method('getID')->will($this->returnValue('9'));
 	        $controllerMock->Member->Account = $accountMock;
 
-			$this->_testEditMember(3, $adminId, $inputData, $expectedViewVal, $expectedRecordData, $controllerMock);
+			$this->_testEditMember(3, $adminId, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false), $controllerMock);
 		}
 
 		public function testEditMemberEditSetEverythingMemberAdmin()
@@ -3143,10 +3223,10 @@
 				),
 			);
 
-			$this->_testEditMember(3, $adminId, $inputData, $expectedViewVal, $expectedRecordData);
+			$this->_testEditMember(3, $adminId, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
 		}
 
-		private function _testEditMember($memberId, $adminId, $inputData, $expectedViewVal, $expectedRecordData, $controllerMock = null)
+		private function _testEditMember($memberId, $adminId, $inputData, $expectedViewVal, $expectedRecordData, $expectedMailingLists, $controllerMock = null)
 		{
 			if($controllerMock == null)
 			{
@@ -3155,7 +3235,10 @@
 		        		'Auth' => array(
 		        			'user',
 		        		),
-		        	)
+		        	),
+		        	'methods' => array(
+	            		'getMailingList',
+	            	),
 		        ));
 			}
 			else
@@ -3165,25 +3248,28 @@
 
             $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue($adminId));
 
+            $this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
+
 			$this->testAction('members/edit/' . $memberId, array('data' => $inputData, 'method' => 'post'));
 			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
 			$this->assertContains('/members/view/' . $memberId, $this->headers['Location']);
 
 			
-			$this->_testEditMemberViewVars($expectedViewVal);
+			$this->_testEditMemberViewVars($expectedViewVal, $expectedMailingLists);
 
 			$record = $this->controller->Member->find('first', array('conditions' => array('Member.member_id' => $memberId)));
 
 			$this->assertEqual( $record, $expectedRecordData, 'Member record was not updated correctly.' );
 		}
 
-		public function _testEditMemberViewVars($expectedMemberVal)
+		public function _testEditMemberViewVars($expectedMemberVal, $expectedMailingLists)
 		{
-			$this->assertIdentical( count($this->vars), 4, 'Unexpected number of view values.' );
+			$this->assertIdentical( count($this->vars), 5, 'Unexpected number of view values.' );
 			$this->assertArrayHasKey( 'member', $this->vars, 'No view value called \'members\'.' );
 			$this->assertArrayHasKey( 'accounts', $this->vars, 'No view value called \'accounts\'.' );
 			$this->assertArrayHasKey( 'statuses', $this->vars, 'No view value called \'statuses\'.' );
 			$this->assertArrayHasKey( 'groups', $this->vars, 'No view value called \'groups\'.' );
+			$this->assertArrayHasKey( 'mailingLists', $this->vars, 'No view value called \'mailingLists\'.' );
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberVal, 'Member array is incorrect.' );
 
@@ -3240,6 +3326,8 @@
 
 			$this->assertEqual( $this->vars['groups'], $expectedGroupsVal, 'Groups array is incorrect.' );
 
+			$this->_testMailingListView($expectedMailingLists);
+
 		}
 
 		private function _testEmailMembersWithStatusVewVars()
@@ -3257,7 +3345,14 @@
 
 		private function _mockMemberEmail()
 		{
-			$this->controller = $this->generate('Members');
+			$this->controller = $this->generate('Members', array(
+				'methods' => array(
+					'getMailingList',
+				),
+			));
+
+			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
+
 			$mockEmail = $this->getMock('CakeEmail');
 			$this->controller->email = $mockEmail;
 			return $mockEmail;

@@ -194,10 +194,20 @@
 	        $this->set('memberList', $memberList);
 	    }
 
+	    //! Get a MailingList model.
+	    /*!
+	    	@retval MailingListModel The MailingListModel.
+	    */
+	    public function getMailingList()
+	    {
+	    	App::uses('MailingList', 'Model');
+	    	return new MailingList();
+	    }
+
 	    //! Grab a users e-mail address and start the membership procedure.
 	    public function register() 
 	    {
-	    	Controller::loadModel('MailingList');
+	    	$this->MailingList = $this->getMailingList();
 	    	// Need a list of mailing-lists that the user can opt-in to
 	    	$mailingLists = $this->MailingList->listMailinglists(false);
 			$this->set('mailingLists', $mailingLists);
@@ -709,8 +719,15 @@
 	    	if($canView)
 	    	{
 	    		$rawMemberInfo = $this->Member->getMemberSummaryForMember($id, false);
+
 	    		if($rawMemberInfo)
 	    		{
+	    			$memberEmail = $this->Member->getEmailForMember($rawMemberInfo);
+	    			$this->MailingList = $this->getMailingList();
+			    	// Need a list of mailing-lists that the user can opt-in to
+			    	$mailingLists = $this->MailingList->getListsAndSubscribeStatus($memberEmail);
+					$this->set('mailingLists', $mailingLists);
+
 	    			$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined, true, true);
 	    			if($sanitisedMemberInfo)
 	    			{
@@ -752,6 +769,12 @@
 	    		$rawMemberInfo = $this->Member->getMemberSummaryForMember($id, false);
 		    	if($rawMemberInfo)
 		    	{
+		    		$memberEmail = $this->Member->getEmailForMember($rawMemberInfo);
+	    			$this->MailingList = $this->getMailingList();
+			    	// Need a list of mailing-lists that the user can opt-in to
+			    	$mailingLists = $this->MailingList->getListsAndSubscribeStatus($memberEmail);
+					$this->set('mailingLists', $mailingLists);
+
 		    		$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined, true, true);
 		    		$formattedMemberInfo = $this->Member->formatMemberInfo($sanitisedMemberInfo, true);
 			    	if($formattedMemberInfo)
