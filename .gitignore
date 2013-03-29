@@ -1,5 +1,7 @@
-/app/Config
-/app/tmp
+/app/Config/database.php
+/app/Config/hms.php
+/app/Config/krb.php
+/app/Config/mailchimp.php
 /lib/Cake/Console/Templates/skel/tmp/
 /plugins
 /vendors
@@ -7,3 +9,4 @@
 /dist
 .DS_Store
 /tags
+/dev/hms.settings
