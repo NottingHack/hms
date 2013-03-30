@@ -67,8 +67,29 @@ if ($oDB->connect_error) {
 	echo("Couldn't connect to main database<br/>\n");
 }
 else {
-	$oDB->multi_query(file_get_contents('hms.sql'));
-	echo("Created main database<br/>\n");
+	if ($oDB->multi_query(file_get_contents('hms.sql'))) {
+		echo("Created main database<br/>\n");
+		$oDB->store_result();
+		while ($oDB->more_results()) {
+			$oDB->next_result();
+			$oDB->store_result();
+		}
+		// set up dev user
+		$sSql = "INSERT INTO `members` (`member_id`, `member_number`, `name`, `email`, `join_date`, `handle`, `unlock_text`, `balance`, `credit_limit`, `member_status`, `username`, `account_id`, `address_1`, `address_2`, `address_city`, `address_postcode`, `contact_number`) VALUES";
+		$sSql .= "(NULL, 111, '" . $_POST['yourname'] . "', '" . $_POST['youremail'] . "', '" . date("Y-m-d") . "', '" . $_POST['yourhandle'] . "', 'Welcome " . $_POST['yourhandle'] . "', -1200, 5000, 5, '" . $_POST['yourhandle'] . "', NULL, NULL, NULL, NULL, NULL, NULL);";
+
+		if ($oDB->query($sSql)) {
+			echo("Created DEV user<br />\n");
+		}
+		else {
+			echo("Failed to create DEV user, was your input valid?<br />\n");
+			echo($oDB->error . "<br />\n");
+		}
+	}
+	else {
+		echo("Failed to create main database<br/>\n");
+	}
+	
 }
 $oDB->close();
 
@@ -79,8 +100,12 @@ if ($oDB->connect_error) {
 	echo("Couldn't connect to test database<br/>\n");
 }
 else {
-	$oDB->multi_query(file_get_contents('hms_test.sql'));
-	echo("Created test database<br/>\n");
+	if ($oDB->multi_query(file_get_contents('hms_test.sql'))) {
+		echo("Created test database<br/>\n");
+	}
+	else {
+		echo("Failed to create test database<br/>\n");
+	}
 }
 $oDB->close();
 

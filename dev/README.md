@@ -57,6 +57,8 @@ You will need the `hms.settings` file.  This is not included in the repository, 
 Open the hms.settings file and change the database settings to your newly created databases and users
 
 In your browser, visit  
-`http://localhost/hms/dev/setup.php`
+`http://localhost/hms/dev/setup.html`
 
-This will create the config files for you and populate the database.
+Fill in your details and click **Go**.  This will create the config files for you and populate the database, including an admin member with the details you have provided.
+
+**Note:** This form does zero error checking, so make sure you have entered your details correctly and **NEVER** use this script on a production system.
