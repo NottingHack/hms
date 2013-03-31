@@ -1,7 +1,9 @@
+/app/tmp
 /app/Config/database.php
 /app/Config/hms.php
 /app/Config/krb.php
 /app/Config/mailchimp.php
+/app/Config/email.php
 /lib/Cake/Console/Templates/skel/tmp/
 /plugins
 /vendors

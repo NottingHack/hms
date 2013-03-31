@@ -7,6 +7,14 @@ CREATE TABLE IF NOT EXISTS `access_log` (
   PRIMARY KEY (`access_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9408 ;
 
+CREATE TABLE IF NOT EXISTS `account` (
+  `account_id` int(11) NOT NULL AUTO_INCREMENT,
+  `payment_ref` varchar(18) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  PRIMARY KEY (`account_id`),
+  UNIQUE KEY `payment_ref` (`payment_ref`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=239 ;
+
 CREATE TABLE IF NOT EXISTS `forgotpassword` (
   `member_id` int(11) NOT NULL,
   `request_guid` char(36) NOT NULL,
