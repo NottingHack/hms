@@ -247,7 +247,7 @@
 					// But e-mail the member either-way
 					$this->_sendProspectiveMemberEmail($memberId);
 
-					$this->Session->setFlash( 'Registration successful, please check your inbox.' );
+					$this->_setFlashFromMailingListInfo('Registration successful, please check your inbox.' , Hash::get($result, 'mailingLists'));
 					return $this->redirect(array( 'controller' => 'pages', 'action' => 'home'));
 				}
 				else
@@ -255,6 +255,49 @@
 					$this->Session->setFlash( 'Unable to register.' );
 				}
 			}
+		}
+
+		//! Set the session flash message based on the data returned from a function that updates the mailing list settings.
+		/*!
+			@param string $initialMessage The message to show at the start of the flash, before any mailing list messages.
+			@param array $result The results from the function that updated the mailing list settings.
+		*/
+		private function _setFlashFromMailingListInfo($initialMessage, $results)
+		{
+			$message = $initialMessage;
+			if(	is_array($results) && 
+				!empty($results))
+			{
+				$message .= '\n';
+				foreach ($results as $resultData) 
+				{
+					$resultStr = '';
+
+					if($resultData['successful'])
+					{
+						$resultStr .= 'Successfully ';
+					}
+					else
+					{
+						$resultStr .= 'Unable to ';
+					}
+
+					if($resultData['action'] == 'subscribe')
+					{
+						$resultStr .= 'subscribed to ';
+					}
+					else
+					{
+						$resultStr .= 'unsubscribed from ';
+					}
+
+					$resultStr .= $resultData['name'];
+
+					$message .= $resultStr . '\n';
+				}
+			}
+
+			$this->Session->setFlash( $message );
 		}
 
 	    //! Allow a member to set-up their initial login details.
@@ -679,7 +722,7 @@
 	    }
 
 	    //! Send the e-mail containing standing order info to a member.
-	    /*
+	    /*!
 	    	@param int $memberId The id of the member to send the reminder to.
 	    	@return bool True if mail was sent, false otherwise.
 	    */
@@ -789,9 +832,10 @@
 			    			$sanitisedData = $this->Member->sanitiseMemberInfo($this->request->data, $showAdminFeatures, $showFinances, $hasJoined, $showAdminFeatures, false);
 			    			if($sanitisedData)
 			    			{
-			    				if($this->Member->updateDetails($id, $sanitisedData, $this->_getLoggedInMemberId()))
+			    				$updateResult = $this->Member->updateDetails($id, $sanitisedData, $this->_getLoggedInMemberId());
+			    				if($updateResult)
 				    			{
-				    				$this->Session->setFlash('Details updated.');
+				    				$this->_setFlashFromMailingListInfo('Details updated.', $updateResult['mailingLists']);
 							        return $this->redirect(array('action' => 'view', $id));
 				    			}
 				    		}

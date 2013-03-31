@@ -4,6 +4,8 @@
 
     class MailingListTest extends CakeTestCase 
     {
+        public $useTable = false;
+        
         public $fixtures = array( 'app.Status', 'app.Member', 'app.Account', 'app.Pin', 'app.Group', 'app.GroupsMember' );
 
         public function getMailingListMock($listId)
@@ -368,11 +370,13 @@
                             'list' => '0a6da449c9',
                             'action' => 'subscribe',
                             'successful' => true,
+                            'name' => 'Nottingham Hackspace Announcements',
                         ),
                         array(
                             'list' => '455de2ac56',
                             'action' => 'subscribe',
                             'successful' => true,
+                            'name' => 'Nottingham Hackspace The Other List',
                         ),
                     ),
                 ),
@@ -386,11 +390,13 @@
                             'list' => '0a6da449c9',
                             'action' => 'unsubscribe',
                             'successful' => true,
+                            'name' => 'Nottingham Hackspace Announcements',
                         ),
                         array(
                             'list' => '455de2ac56',
                             'action' => 'subscribe',
                             'successful' => true,
+                            'name' => 'Nottingham Hackspace The Other List',
                         ),
                     ),
                 ),
@@ -403,6 +409,7 @@
                             'list' => '455de2ac56',
                             'action' => 'unsubscribe',
                             'successful' => true,
+                            'name' => 'Nottingham Hackspace The Other List',
                         ),
                     ),
                 ),
@@ -415,11 +422,13 @@
                             'list' => '0a6da449c9',
                             'action' => 'unsubscribe',
                             'successful' => true,
+                            'name' => 'Nottingham Hackspace Announcements',
                         ),
                         array(
                             'list' => '455de2ac56',
                             'action' => 'unsubscribe',
                             'successful' => true,
+                            'name' => 'Nottingham Hackspace The Other List',
                         ),
                     ),
                 ),

@@ -202,6 +202,7 @@
 
 			// Need the most up to date data, so don't use the cache
 			$subscribeInfo = $this->getListsAndSubscribeStatus($email, false);
+
 			foreach ($subscribeInfo['data'] as $subscription) 
 			{
 				$wantsToBeSubscribed = in_array($subscription['id'], $subscriptions);
@@ -211,6 +212,7 @@
 				{
 					$actionInfo = array(
 						'list' => $subscription['id'],
+						'name' => $subscription['name'],
 					);
 
 					if($wantsToBeSubscribed)

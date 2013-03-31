@@ -87,7 +87,7 @@ $cakeDescription = "Nottingham Hackspace Management System";
 			<div id="crumb">
 				<?php echo $this->Html->getCrumbs(' > ', 'Home'); ?>
 			</div>
-			<?php echo $this->Session->flash(); ?>
+			<?php echo str_replace('\n', '</ br>', $this->Session->flash()); ?>
 			<?php echo $this->fetch('content'); ?>
 			<?php
 				# AT [16/09/2012] Use the NavHelper to render any navigation links

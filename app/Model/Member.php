@@ -173,6 +173,9 @@
 		//! Use the KrbAuth behaviour for setting passwords and the like.
 		public $actsAs = array('KrbAuth');
 
+		//! MailingList object, for easy mocking.
+	    public $mailingList = null;
+
 		//! Validation function to see if the user-supplied password and password confirmation match.
 		/*!
 			@param array $check The password to be validated.
@@ -704,12 +707,16 @@
 			if($newMember)
 			{
 				$memberInfo = $this->createNewMemberInfo( $email );
+				$memberInfo['MailingList'] = Hash::get($data, 'MailingList');
 
-				if( !$this->_saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' )), 0) )
+				$saveResult = $this->_saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' ), 'MailingList' => array()), 0);
+				if( !is_array($saveResult) )
 				{
 					// Save failed for reasons.
 					return null;
 				}
+
+				$resultDetails['mailingLists'] = Hash::get($saveResult, 'mailingLists');
 
 				$memberId = $this->id;
 			}
@@ -784,7 +791,7 @@
 			$saveOk = false;
 			if($this->validates(array( 'fieldList' => array('member_id', 'name', 'username', 'handle', 'email', 'password', 'password_confirm', 'member_status'))))
 			{
-				$saveOk = $this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'name', 'username', 'handle', 'member_status')), $memberId);
+				$saveOk = is_array($this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'name', 'username', 'handle', 'member_status')), $memberId));
 			}
 
 			$this->removeEmailMustMatch();
@@ -846,7 +853,21 @@
 
 			if(	$this->validates(array( 'fieldList' => array('member_id', 'address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status'))) )
 			{
-				return $this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status')), $memberId);
+				return is_array($this->_saveMemberData(
+					$dataToSave, 
+					array('Member' => 
+						array(
+							'member_id', 
+							'address_1', 
+							'address_2', 
+							'address_city', 
+							'address_postcode', 
+							'contact_number', 
+							'member_status'
+						)
+					),
+					$memberId)
+				);
 			}
 
 			return false;
@@ -912,7 +933,7 @@
 
 			if( $memberEmail->validates( array( 'fieldList' => array( 'subject', 'body' ) ) ) )
 			{
-				return $this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'member_status')), $adminId);
+				return is_array($this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'member_status')), $adminId));
 			}
 		}
 
@@ -973,7 +994,7 @@
 
 			$this->set($dataToSave);
 
-			if( $this->_saveMemberData($dataToSave, array('Member' => array( 'member_id', 'member_status', 'account_id' ), 'Account' => 'account_id'), $adminId) )
+			if( is_array($this->_saveMemberData($dataToSave, array('Member' => array( 'member_id', 'member_status', 'account_id' ), 'Account' => 'account_id'), $adminId)) )
 			{
 				return $this->getSoDetails($memberId);
 			}
@@ -1043,7 +1064,7 @@
 				)
 			);
 
-			if( $this->_saveMemberData($dataToSave, $fieldsToSave, $adminId) )
+			if( is_array($this->_saveMemberData($dataToSave, $fieldsToSave, $adminId)) )
 			{
 				return $this->getApproveDetails($memberId);
 			}
@@ -1285,6 +1306,8 @@
 				),
 				'Group' => array(
 				),
+				'MailingList' => array(
+				),
 			);
 			return $this->_saveMemberData($data, $fieldsToSave, $adminId);
 		}
@@ -1458,10 +1481,12 @@
 			@param array $memberInfo The information to use to create or update the member record.
 			@param array $fields The fields that should be saved.
 			@param int $adminId The id of the member who is making the change that needs saving.
-			@retval bool True if save succeeded, false otherwise.
+			@retval mixed Array of result data if save succeed, false otherwise.
 		*/
 		private function _saveMemberData($memberInfo, $fields, $adminId)
 		{
+			$result = array();
+
 			$dataSource = $this->getDataSource();
 			$dataSource->begin();
 
@@ -1607,6 +1632,16 @@
 				}
 			}
 
+			$mailingLists = Hash::get($memberInfo, 'MailingList.MailingList');
+			$memberEmail = $this->getEmailForMember($memberInfo);
+
+			if(	$mailingLists &&
+				$memberEmail)
+			{
+				$mailingList = $this->getMailingList();
+				$result['mailingLists'] = $mailingList->updateSubscriptions( $memberEmail, $mailingLists );
+			}
+
 			if( !$this->saveAll( $safeMemberInfo, array( 'fieldList' => $fields )) )
 			{
 				$dataSource->rollback();
@@ -1637,7 +1672,20 @@
 
 			// We're good
 			$dataSource->commit();
-			return true;
+			return $result;
+		}
+
+		//! Get a MailingList model.
+		/*!
+			@retval MailingList The MailingList model.
+		*/
+		public function getMailingList()
+		{
+			if($this->mailingList == null)
+			{
+				$this->mailingList = ClassRegistry::init('MailingList');
+			}
+			return $this->mailingList;
 		}
 
 		//! Set the password for the member, with the option to create a new password entry if needed.

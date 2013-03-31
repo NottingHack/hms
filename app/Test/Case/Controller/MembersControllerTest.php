@@ -21,6 +21,7 @@
 
             $this->MembersController = new MembersController();
             $this->MembersController->constructClasses();
+            $this->MembersController->Member->mailingList = $this->_getMailingListMock();
         }
 
         private function _getMailingListMock()
@@ -419,7 +420,9 @@
 			$mockEmail->expects($this->at(16))->method('viewVars')->with(array('memberId' => 15));
 			$mockEmail->expects($this->at(17))->method('send')->will($this->returnValue(true));
 
-			$this->testAction('/members/register', array('data' => array('Member' => array('email' => $emailAddress)), 'method' => 'post'));
+			$this->controller->Session->expects($this->once())->method('setFlash')->with('Registration successful, please check your inbox.\nSuccessfully subscribed to Nottingham Hackspace The Other List\n');
+
+			$this->testAction('/members/register', array('data' => array('Member' => array('email' => $emailAddress), 'MailingList' => array('MailingList' => array('455de2ac56'))), 'method' => 'post'));
 
 			$this->_testRegisterMailingListViewVars();
 
@@ -460,7 +463,9 @@
 			$mockEmail->expects($this->at(7))->method('viewVars')->with(array('memberId' => 7));
 			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
 
-			$this->testAction('/members/register', array('data' => array('Member' => array('email' => $emailAddress)), 'method' => 'post'));
+			$this->controller->Session->expects($this->once())->method('setFlash')->with('Registration successful, please check your inbox.');
+
+			$this->testAction('/members/register', array('data' => array('Member' => array('email' => $emailAddress), 'MailingList' => array('MailingList' => array())), 'method' => 'post'));
 
 			$this->_testRegisterMailingListViewVars();
 
@@ -2210,13 +2215,18 @@
 					'name' => 'Nat',
 					'username' => 'foo',
 					'handle' => 'thisisahandle',
-					'email' => 'totallydifferent@hotmail.com',
+					'email' => 'a.santini@hotmail.com',
 					'unlock_text' => 'Would you kindly?',
 					'address_1' => '5 Henry Way',
 					'address_2' => '',
 					'address_city' => 'Bobbington',
 					'address_postcode' => 'FU453JD',
 					'contact_number' => '079716523804',
+				),
+				'MailingList' => array(
+					'MailingList' => array(
+						'455de2ac56'
+					)
 				),
 			);
 
@@ -2252,7 +2262,7 @@
 					'name' => 'Nat',
 					'username' => 'foo',
 					'handle' => 'thisisahandle',
-					'email' => 'totallydifferent@hotmail.com',
+					'email' => 'a.santini@hotmail.com',
 					'unlock_text' => 'Would you kindly?',
 					'address_1' => '5 Henry Way',
 					'address_2' => '',
@@ -2292,7 +2302,18 @@
 				),
 			);
 
-			$this->_testEditMember(2, 2, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
+			$this->_testEditMember(
+				2, 
+				2, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
+				array(
+					'0a6da449c9' => true, 
+					'455de2ac56' => false
+				),
+				'Details updated.\nSuccessfully unsubscribed from Nottingham Hackspace Announcements\nSuccessfully subscribed to Nottingham Hackspace The Other List\n'
+				);
 		}
 
 		public function testEditMemberEditOwnAllValues()
@@ -2351,6 +2372,11 @@
 				        'grp_description' => 'Full Access',
 				    ),
 				),
+				'MailingList' => array(
+					'MailingList' => array(
+						'0a6da449c9'
+					)
+				),
 			);
 
 			$expectedViewVal = array(
@@ -2424,7 +2450,18 @@
 				    ),
 				),
 			);
-			$this->_testEditMember(2, 2, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
+			$this->_testEditMember(
+				2, 
+				2, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
+				array(
+					'0a6da449c9' => true, 
+					'455de2ac56' => false
+				),
+				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace Announcements\n'
+			);
 		}
 
 		public function testEditMemberEditMemberAdmin()
@@ -2444,7 +2481,7 @@
 					'name' => 'Ser Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
-					'email' => 'not_the_same@gmail.com',
+					'email' => 'k.savala@yahoo.co.uk',
 					'unlock_text' => 'Open the damn door',
 					'address_1' => '34fewarg',
 					'address_2' => '',
@@ -2460,6 +2497,12 @@
 						1 => 3,
 						2 => 5,
 					),
+				),
+				'MailingList' => array(
+					'MailingList' => array(
+						'0a6da449c9',
+						'455de2ac56',
+					)
 				),
 			);
 
@@ -2517,7 +2560,7 @@
 					'name' => 'Ser Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
-					'email' => 'not_the_same@gmail.com',
+					'email' => 'k.savala@yahoo.co.uk',
 					'unlock_text' => 'Open the damn door',
 					'address_1' => '34fewarg',
 					'address_2' => '',
@@ -2569,7 +2612,18 @@
 				),
 			);
 
-			$this->_testEditMember(4, $adminId, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
+			$this->_testEditMember(
+				4, 
+				$adminId, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
+				array(
+					'0a6da449c9' => true, 
+					'455de2ac56' => false
+				),
+				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace The Other List\n'
+			);
 		}
 
 		public function testEditMemberEditRemoveGroupsMemberAdmin()
@@ -2589,7 +2643,7 @@
 					'name' => 'Ser Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
-					'email' => 'not_the_same@gmail.com',
+					'email' => 'a.santini@hotmail.com',
 					'unlock_text' => 'Open the damn door',
 					'address_1' => '34fewarg',
 					'address_2' => '',
@@ -2603,6 +2657,11 @@
 					'Group' => array(
 						0 => 2,
 					),
+				),
+				'MailingList' => array(
+					'MailingList' => array(
+						'455de2ac56',
+					)
 				),
 			);
 
@@ -2653,7 +2712,7 @@
 					'name' => 'Ser Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
-					'email' => 'not_the_same@gmail.com',
+					'email' => 'a.santini@hotmail.com',
 					'unlock_text' => 'Open the damn door',
 					'address_1' => '34fewarg',
 					'address_2' => '',
@@ -2689,7 +2748,18 @@
 				),
 			);
 
-			$this->_testEditMember(2, $adminId, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
+			$this->_testEditMember(
+				2, 
+				$adminId, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
+				array(
+					'0a6da449c9' => true, 
+					'455de2ac56' => false
+				),
+				'Details updated.\nSuccessfully unsubscribed from Nottingham Hackspace Announcements\nSuccessfully subscribed to Nottingham Hackspace The Other List\n'
+			);
 		}
 
 		public function testEditMemberEditRemoveAllGroupsMemberAdmin()
@@ -2722,6 +2792,11 @@
 				'Group' => array(
 					'Group' => array(
 					),
+				),
+				'MailingList' => array(
+					'MailingList' => array(
+						'0a6da449c9',
+					)
 				),
 			);
 
@@ -2808,7 +2883,18 @@
 				),
 			);
 
-			$this->_testEditMember(5, $adminId, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
+			$this->_testEditMember(
+				5, 
+				$adminId, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
+				array(
+					'0a6da449c9' => true, 
+					'455de2ac56' => false
+				),
+				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace Announcements\n'
+				);
 		}
 
 		public function testEditMemberEditJoinAccountMemberAdmin()
@@ -2841,6 +2927,11 @@
 				'Group' => array(
 					'Group' => array(
 					),
+				),
+				'MailingList' => array(
+					'MailingList' => array(
+						'455de2ac56',
+					)
 				),
 			);
 
@@ -2923,7 +3014,18 @@
 				),
 			);
 
-			$this->_testEditMember(3, $adminId, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
+			$this->_testEditMember(
+				3, 
+				$adminId, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
+				array(
+					'0a6da449c9' => true, 
+					'455de2ac56' => false
+				),
+				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace The Other List\n'
+			);
 		}
 
 		public function testEditMemberEditLeaveJointAccountMemberAdmin()
@@ -2956,6 +3058,11 @@
 				'Group' => array(
 					'Group' => array(
 					),
+				),
+				'MailingList' => array(
+					'MailingList' => array(
+						'0a6da449c9',
+					)
 				),
 			);
 
@@ -3043,6 +3150,9 @@
 	        		'Auth' => array(
 	        			'user',
 	        		),
+	        		'Session' => array(
+	        			'setFlash',
+	        		),
 	        	),
 	        	'methods' => array(
             		'getMailingList',
@@ -3054,7 +3164,18 @@
 	        $accountMock->expects($this->any())->method('getID')->will($this->returnValue('9'));
 	        $controllerMock->Member->Account = $accountMock;
 
-			$this->_testEditMember(3, $adminId, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false), $controllerMock);
+			$this->_testEditMember(
+				3, 
+				$adminId, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
+				array(
+					'0a6da449c9' => true, 
+					'455de2ac56' => false
+				), 
+				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace Announcements\n',
+				$controllerMock);
 		}
 
 		public function testEditMemberEditSetEverythingMemberAdmin()
@@ -3126,6 +3247,13 @@
 						4 => 5,
 					)
 				),
+				'MailingList' => array(
+					'MailingList' => array(
+						'0a6da449c9',
+						'455de2ac56',
+					)
+				),
+
 			);
 
 			$expectedViewVal = array(
@@ -3223,10 +3351,21 @@
 				),
 			);
 
-			$this->_testEditMember(3, $adminId, $inputData, $expectedViewVal, $expectedRecordData, array('0a6da449c9' => true, '455de2ac56' => false));
+			$this->_testEditMember(
+				3, 
+				$adminId, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
+				array(
+					'0a6da449c9' => true, 
+					'455de2ac56' => false
+				)
+				,'Details updated.\nSuccessfully subscribed to Nottingham Hackspace Announcements\nSuccessfully subscribed to Nottingham Hackspace The Other List\n'
+			);
 		}
 
-		private function _testEditMember($memberId, $adminId, $inputData, $expectedViewVal, $expectedRecordData, $expectedMailingLists, $controllerMock = null)
+		private function _testEditMember($memberId, $adminId, $inputData, $expectedViewVal, $expectedRecordData, $expectedMailingLists, $expectedFlash, $controllerMock = null)
 		{
 			if($controllerMock == null)
 			{
@@ -3234,6 +3373,9 @@
 		        	'components' => array(
 		        		'Auth' => array(
 		        			'user',
+		        		),
+		        		'Session' => array(
+		        			'setFlash',
 		        		),
 		        	),
 		        	'methods' => array(
@@ -3250,11 +3392,14 @@
 
             $this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
 
+           	$this->controller->Session->expects($this->once())->method('setFlash')->with($expectedFlash);
+
+            $this->controller->Member->mailingList = $this->_getMailingListMock();
+
 			$this->testAction('members/edit/' . $memberId, array('data' => $inputData, 'method' => 'post'));
 			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
 			$this->assertContains('/members/view/' . $memberId, $this->headers['Location']);
 
-			
 			$this->_testEditMemberViewVars($expectedViewVal, $expectedMailingLists);
 
 			$record = $this->controller->Member->find('first', array('conditions' => array('Member.member_id' => $memberId)));
@@ -3349,12 +3494,20 @@
 				'methods' => array(
 					'getMailingList',
 				),
+				'components' => array(
+					'Session' => array(
+						'setFlash',
+					),
+				),
 			));
 
 			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
 
 			$mockEmail = $this->getMock('CakeEmail');
 			$this->controller->email = $mockEmail;
+
+			$this->controller->Member->mailingList = $this->_getMailingListMock();
+
 			return $mockEmail;
 		}
 

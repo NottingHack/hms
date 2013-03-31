@@ -1,6 +1,7 @@
 <?php
 
     App::uses('Member', 'Model');
+    App::uses('MailingListTest', 'Test/Case/Model');
 
     class MemberTest extends CakeTestCase 
     {
@@ -8,10 +9,13 @@
 
         public function setUp() 
         {
-        	parent::setUp();
+            parent::setUp();
+
+            $mailingListTest = new MailingListTest();
             $this->Member = ClassRegistry::init('Member');
+            $this->Member->mailingList = $mailingListTest->getMockMailingList();
         }
-        
+
         public function testPasswordConfirmMatchesPassword()
         {
             $testEmail = 'fub@example.org';
@@ -389,7 +393,7 @@
             // Test with a member that we already know exists, for a member who have the PROSPECTIVE_MEMBER status
             $existingEmail = 'CherylLCarignan@teleworm.us';
 
-            $result = $this->Member->registerMember( array('Member' => array('email' => $existingEmail)) );
+            $result = $this->Member->registerMember( array('Member' => array('email' => $existingEmail), 'MailingLists' => array('MailingLists' => array())) );
 
             $this->assertNotIdentical( $result, null, 'Result should be non-null.' );
             $this->assertInternalType( 'array', $result, 'Result should be an array.' );
@@ -453,19 +457,26 @@
 
             // Test with a new e-mail
             $newEmail = 'foo@srsaegrttfd.com';
-            $result = $this->Member->registerMember( array('Member' => array('email' => $newEmail)) );
+            $result = $this->Member->registerMember( array('Member' => array('email' => $newEmail), 'MailingList' => array('MailingList' => array('0a6da449c9'))) );
 
             $afterTimestamp = time();
 
             $this->assertNotIdentical( $result, null, 'Result should be non-null.' );
             $this->assertInternalType( 'array', $result, 'Result should be an array.' );
+
             $this->assertArrayHasKey( 'email', $result, 'Result does not have e-mail.' );
             $this->assertEqual( $result['email'], $newEmail, 'Result has incorrect e-mail.' );
+
             $this->assertArrayHasKey( 'createdRecord', $result, 'Result does not have createdRecord.' );
             $this->assertTrue( $result['createdRecord'], 'Result has incorrect createdRecord.' );
+
             $this->assertArrayHasKey( 'status', $result, 'Result does not have status.' );
             $this->assertEqual( $result['status'], Status::PROSPECTIVE_MEMBER, 'Result has incorrect status.' );
+
             $this->assertArrayHasKey( 'memberId', $result, 'Result does not have member id.' );
+
+            $this->assertArrayHasKey( 'mailingLists', $result, 'Result does not have mailingLists.' );
+            $this->assertEqual( $result['mailingLists'], array(array('list' => '0a6da449c9', 'action' => 'subscribe', 'successful' => true, 'name' => 'Nottingham Hackspace Announcements')), 'Result has incorrect mailingLists.' );
 
 
             $record = $this->Member->findByEmail($newEmail);
