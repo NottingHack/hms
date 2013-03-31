@@ -48,10 +48,10 @@
 	    		return true;
 	    	}
 
-	    	$userIsMemberAdmin = $this->Member->GroupsMember->isMemberInGroup( Hash::extract($user, 'Member.member_id'), Group::MEMBER_ADMIN );
+	    	$userId = $this->Member->getIdForMember($user);
+	    	$userIsMemberAdmin = $this->Member->GroupsMember->isMemberInGroup( $userId, Group::MEMBER_ADMIN );
 	    	$actionHasParams = isset( $request->params ) && isset($request->params['pass']) && count( $request->params['pass'] ) > 0;
-	    	$userIdIsSet = isset( $user['Member'] ) && isset( $user['Member']['member_id'] );
-	    	$userId = $userIdIsSet ? $user['Member']['member_id'] : null;
+	    	$userIdIsSet = is_numeric($userId);
 
 	    	switch ($request->action) 
 	    	{
