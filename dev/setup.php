@@ -76,7 +76,7 @@ else {
 		}
 		// set up dev user
 		$sSql = "INSERT INTO `members` (`member_id`, `member_number`, `name`, `email`, `join_date`, `handle`, `unlock_text`, `balance`, `credit_limit`, `member_status`, `username`, `account_id`, `address_1`, `address_2`, `address_city`, `address_postcode`, `contact_number`) VALUES";
-		$sSql .= "(NULL, 111, '" . $_POST['yourname'] . "', '" . $_POST['youremail'] . "', '" . date("Y-m-d") . "', '" . $_POST['yourhandle'] . "', 'Welcome " . $_POST['yourhandle'] . "', -1200, 5000, 5, '" . $_POST['yourhandle'] . "', NULL, NULL, NULL, NULL, NULL, NULL);";
+		$sSql .= "(6, 111, '" . $_POST['yourname'] . "', '" . $_POST['youremail'] . "', '" . date("Y-m-d") . "', '" . $_POST['yourhandle'] . "', 'Welcome " . $_POST['yourhandle'] . "', -1200, 5000, 5, '" . $_POST['yourhandle'] . "', NULL, NULL, NULL, NULL, NULL, NULL);";
 
 		if ($oDB->query($sSql)) {
 			echo("Created DEV user<br />\n");
