@@ -3,6 +3,7 @@
 /app/Config/krb.php
 /app/Config/mailchimp.php
 /app/Config/email.php
+/app/tmp
 /lib/Cake/Console/Templates/skel/tmp/
 /plugins
 /vendors
