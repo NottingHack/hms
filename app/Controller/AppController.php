@@ -37,10 +37,10 @@ App::uses('AuthComponent', 'Controller/Auth');
 class AppController extends Controller {
 
     const VERSION_MAJOR = 0;
-    const VERSION_MINOR = 2;
+    const VERSION_MINOR = 3;
     const VERSION_BUILD = 0;
 
-	public $helpers = array('Html', 'Form', 'Nav', 'List');
+	public $helpers = array('Html', 'Form', 'Nav');
 
 	public $components = array(
         'Session',
@@ -87,14 +87,15 @@ class AppController extends Controller {
             }
 
             $userMessage = array();
-            if( $this->Member->getStatusForMember($loggedInMemberId) == Status::PRE_MEMBER_2 )
+            if( $this->Member->getStatusForMember($loggedInMemberId) == Status::PRE_MEMBER_1 )
             {
-                $userMessage = array('Click here to enter your contact details!' => array( 'controller' => 'members', 'action' => 'setup_details', $loggedInMemberId ) );
+                $userMessage = array('Click here to enter your contact details!' => array( 'controller' => 'members', 'action' => 'setupDetails', $loggedInMemberId ) );
             }
 
             $this->set('adminNav', $adminLinks);
             $this->set('userMessage', $userMessage);
-            $this->set('user', $user);
+            $this->set('memberId', $loggedInMemberId);
+            $this->set('username', $this->Member->getUsernameForMember($this->Auth->user()));
         }
 
         $jsonData = json_decode(file_get_contents('http://lspace.nottinghack.org.uk/status/status.php'));

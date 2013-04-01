@@ -30,7 +30,8 @@ App::uses('Xml', 'Utility');
  * @package       app.Controller
  * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
  */
-class PagesController extends AppController {
+class PagesController extends AppController 
+{
 
 	var $component = array('Auth'); 
 /**
@@ -100,7 +101,7 @@ class PagesController extends AppController {
 	    		// Redirect if the user wants to be elsewhere
 	    		switch($this->Member->getStatusForMember($loggedInMemberId))
 	    		{
-	    			case Status::PRE_MEMBER_2:
+	    			case Status::PRE_MEMBER_1:
 	    				return $this->redirect(array('controller' => 'members', 'action' => 'setupDetails', $loggedInMemberId));
 	    		}
 	    	}

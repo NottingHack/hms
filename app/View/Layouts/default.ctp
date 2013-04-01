@@ -42,9 +42,9 @@ $cakeDescription = "Nottingham Hackspace Management System";
 			<div class="banner"></div>
 			<div class="userBar">
 				<div class="login">
-					<?php if( isset($user) && $user): ?>
+					<?php if( isset($memberId)): ?>
 						Logged in as: 
-						<?php echo $this->Html->link($user['Member']['username'], array( 'controller' => 'members', 'action' => 'view', AuthComponent::user('Member.member_id') ) ); ?>
+						<?php echo $this->Html->link($username, array( 'controller' => 'members', 'action' => 'view', $memberId ) ); ?>
 						<span class="loginSpace">
 							<?php echo $this->Html->link('Logout', array( 'controller' => 'members', 'action' => 'logout' )) ?>
 						</span>
@@ -87,7 +87,7 @@ $cakeDescription = "Nottingham Hackspace Management System";
 			<div id="crumb">
 				<?php echo $this->Html->getCrumbs(' > ', 'Home'); ?>
 			</div>
-			<?php echo str_replace('\n', '</ br>', $this->Session->flash()); ?>
+			<?php echo str_replace('\n', '</br>', $this->Session->flash()); ?>
 			<?php echo $this->fetch('content'); ?>
 			<?php
 				# AT [16/09/2012] Use the NavHelper to render any navigation links

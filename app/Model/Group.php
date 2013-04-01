@@ -77,6 +77,15 @@
 			return $this->_getGroupSummary();
 		}
 
+		//! Get a list of groups
+		/*!
+			@retval array A list of groups.
+		*/
+		public function getGroupList()
+		{
+			return $this->find('list', array('fields' => array('Group.grp_id', 'Group.grp_description')));
+		}
+
 		//! Get a summary of the group records for all groups that match the conditions.
 		/*!
 			@retval array A summary (id, name, description and member count) of the data of all groups that match the conditions.

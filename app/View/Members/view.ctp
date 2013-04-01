@@ -2,7 +2,7 @@
 
 <?php
 	$this->Html->addCrumb('Members', '/members');
-	$this->Html->addCrumb($member['Member']['name'], '/members/view/' . $member['Member']['member_id']);
+	$this->Html->addCrumb($member['username'], '/members/view/' . $member['id']);
 ?>
 
 
@@ -11,126 +11,114 @@
 		Username
 	</dt>
 	<dd>
-		<?php echo $member['Member']['username']; ?>
+		<?php echo $member['username']; ?>
 	</dd>
 
 	<dt>
 		Handle
 	</dt>
 	<dd>
-		<?php echo $member['Member']['handle']; ?>
+		<?php echo $member['handle']; ?>
 	</dd>
 
 	<dt>
 		Email
 	</dt>
 	<dd>
-		<?php echo $member['Member']['email']; ?>
+		<?php echo $member['email']; ?>
 	</dd>
 
 	<?php 
-		# Only show join date to current members
-		if($member['Member']['member_status'] == 1):
+		if(isset($member['joinDate'])):
 	?>
 
 		<dt>
 			Member Since
 		</dt>
 		<dd>
-			<?php echo $member['Member']['join_date']; ?>
+			<?php echo $member['joinDate']; ?>
 		</dd>
 	<?php endif; ?>
 
-	<?php if(isset($member['Member']['unlock_text'])): ?>
+	<?php if(isset($member['unlockText'])): ?>
 		<dt>
 			Unlock Text
 		</dt>
 		<dd>
-			<?php echo $member['Member']['unlock_text']; ?>
+			<?php echo $member['unlockText']; ?>
 		</dd>
 	<?php endif; ?>
 
-	<dt>
-		Groups
-	</dt>
-	<dd>
-		<?php
+	<?php if(isset($member['groups'])): ?>
+		<dt>
+			Groups
+		</dt>
+		<dd>
+			<?php
 
-		$numGroups = count($member['Group']);
-        if($numGroups === 0)
-        {
-            echo 'None';
-        }
-        else
-        {
-            for($i = 0; $i < $numGroups; $i++) {
-                echo $this->Html->link($member['Group'][$i]['grp_description'], array('controller' => 'groups', 'action' => 'view', $member['Group'][$i]['grp_id']));
-                if($i < $numGroups - 1)
-                {
-                    echo ', ';
-                }
-            }
-        }
-       ?>
-	</dd>
+			$numGroups = count($member['groups']);
 
-	<?php if(isset($member['Status'])): ?>
+	        if($numGroups === 0)
+	        {
+	            echo 'None';
+	        }
+	        else
+	        {
+	        	$groupsList = array();
+	        	foreach ($member['groups'] as $group) 
+	        	{
+	        		array_push($groupsList, $this->Html->link($group['description'], array('controller' => 'groups', 'action' => 'view', $group['id'])));
+	        	}
+
+	        	echo String::toList($groupsList);
+	        }
+	       ?>
+		</dd>
+	<?php endif; ?>
+
+	<?php if(isset($member['status'])): ?>
 		<dt>
 			Status
 		</dt>
 		<dd>
-			<?php echo $this->Html->link($member['Status']['title'], array('controller' => 'members', 'action' => 'list_members_with_status', $member['Status']['status_id'])); ?>
+			<?php echo $this->Html->link($member['status']['name'], array('controller' => 'members', 'action' => 'listMembersWithStatus', $member['status']['id'])); ?>
 		</dd>
 
 	<?php endif; ?>
 
-	<?php if( isset($member['Pin']['pin']) ): ?>
+	<?php if( isset($member['pin']) ): ?>
 		<dt>
 			Pin
 		</dt>
 		<dd>
-			<?php echo $member['Pin']['pin']; ?>
+			<?php echo $member['pin']; ?>
 		</dd>
-
-		<?php 
-			if( isset($member['Pin']['expiry']) &&
-				$member['Pin']['expiry'] != null ):
-		?>
-
-			<dt>
-				Pin Expires
-			</dt>
-			<dd>
-				<?php echo date('l, dS F, Y', strtotime($member['Pin']['expiry'])); ?>
-			</dd>
-
-		<?php endif; ?>
 	<?php endif; ?>
 
-	<?php if(isset($member['Member']['balance'])): ?>
+	<?php if(isset($member['balance'])): ?>
 		<dt>
 			Current Balance
 		</dt>
 		<dd>
-			<?php echo $this->Currency->output($member['Member']['balance']); ?>
+			<?php echo $this->Currency->output($member['balance']); ?>
 		</dd>
 	<?php endif; ?>
 
-	<?php if(isset($member['Member']['credit_limit'])): ?>
+	<?php if(isset($member['creditLimit'])): ?>
 		<dt>
 			Credit Limit
 		</dt>
 		<dd>
-			<?php echo $this->Currency->output($member['Member']['credit_limit']); ?>
+			<?php echo $this->Currency->output($member['creditLimit']); ?>
 		</dd>
 	<?php endif; ?>
 
-	<?php if(isset($member['Account']['account_id'])): ?>
+	<?php if(isset($member['paymentRef'])): ?>
 		<dt>
 			Account Ref
 		</dt>
 		<dd>
-			<?php echo $member['Account']['payment_ref']; ?>
+			<?php echo $member['paymentRef']; ?>
 		</dd>
 
 	<?php endif; ?>
@@ -140,7 +128,12 @@
 	</dt>
 	<dd>
 		<?php 
-			$addressArray = array( $member['Member']['address_1'], $member['Member']['address_2'], $member['Member']['address_city'], $member['Member']['address_postcode'] );
+
+			$addressArray = array();
+			if(isset($member['address']))
+			{
+				$addressArray = $member['address'];
+			}
 
 			$addressBlock = "";
 			foreach ($addressArray as $item) {
@@ -167,11 +160,11 @@
 	</dt>
 	<dd>
 		<?php
-			if( isset($member['Member']['contact_number']) &&
-				$member['Member']['contact_number'] != null &&
-				strlen(trim($member['Member']['contact_number'])) > 0 )
+			if( isset($member['contactNumber']) &&
+				$member['contactNumber'] != null &&
+				strlen(trim($member['contactNumber'])) > 0 )
 			{
-				echo $member['Member']['contact_number'];
+				echo $member['contactNumber'];
 			}
 			else
 			{
@@ -184,34 +177,16 @@
 	</dt>
 	<dd>
 		<?php
-			$processedMailingLists = array();
-			foreach ($mailingLists as $list) {
-				if($list['subscribed'])
-				{
-					$text = '';
-					if($list['canView'])
-					{
-						$text = $this->Html->link($list['name'], array('controller' => 'mailinglists', 'action' => 'view', $list['id']));
-					}
-					else
-					{
-						$text = $list['name'];
-					}
-					array_push($processedMailingLists, $text);
-				}
-			}
-
-			echo $this->List->output($processedMailingLists);
+			echo $this->Mailinglist->outputList($mailingLists);
 		?>
 	</dd>
 
 
-	<?php if(	isset($member['StatusUpdate']) &&
-				isset($member['StatusUpdate']['StatusUpdate'])): ?>
+	<?php if(isset($member['lastStatusUpdate'])): ?>
 		<?php
 			$showUpdate = true;
 			$statusUpdate = '';
-			switch ($member['StatusUpdate']['StatusUpdate']['new_status']) {
+			switch ($member['lastStatusUpdate']['to']) {
 				case 2:
 					$statusUpdate = "Membership Granted";
 					break;
@@ -235,7 +210,7 @@
 				Last Status Update
 			</dt>
 			<dd>
-				<?php echo sprintf('%s by %s on %s', $statusUpdate, $this->Html->link($member['StatusUpdate']['MemberAdmin']['name'], array('controller' => 'members', 'action' => 'view', $member['StatusUpdate']['MemberAdmin']['member_id'])), date('d-M-Y \a\t H:i', strtotime($member['StatusUpdate']['StatusUpdate']['timestamp']))); ?>
+				<?php echo sprintf('%s by %s on %s', $statusUpdate, $this->Html->link($member['lastStatusUpdate']['by_username'], array('controller' => 'members', 'action' => 'view', $member['lastStatusUpdate']['by'])), date('d-M-Y \a\t H:i', strtotime($member['lastStatusUpdate']['at']))); ?>
 			</dd>
 		<?php endif; ?>
 	<?php endif; ?>

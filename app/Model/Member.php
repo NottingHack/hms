@@ -401,6 +401,7 @@
 				[lastStatusUpdate] => 
 					[id] => member id
 					[by] => admin member id
+					[by_username] => admin username
 					[from] => previous status id
 					[to] => current status id
 					[at] => time the update happened
@@ -707,9 +708,9 @@
 			if($newMember)
 			{
 				$memberInfo = $this->createNewMemberInfo( $email );
-				$memberInfo['MailingList'] = Hash::get($data, 'MailingList');
+				$memberInfo['MailingLists'] = Hash::get($data, 'MailingLists');
 
-				$saveResult = $this->_saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' ), 'MailingList' => array()), 0);
+				$saveResult = $this->_saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' ), 'MailingLists' => array()), 0);
 				if( !is_array($saveResult) )
 				{
 					// Save failed for reasons.
@@ -912,7 +913,6 @@
 			}
 
 			if( ( isset($data['MemberEmail']) && 
-				  isset($data['MemberEmail']['subject']) &&
 				  isset($data['MemberEmail']['message']) ) == false )
 			{
 				return false;
@@ -931,7 +931,7 @@
 
 			$this->set($dataToSave);
 
-			if( $memberEmail->validates( array( 'fieldList' => array( 'subject', 'body' ) ) ) )
+			if( $memberEmail->validates( array( 'fieldList' => array( 'body' ) ) ) )
 			{
 				return is_array($this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'member_status')), $adminId));
 			}
@@ -1306,7 +1306,7 @@
 				),
 				'Group' => array(
 				),
-				'MailingList' => array(
+				'MailingLists' => array(
 				),
 			);
 			return $this->_saveMemberData($data, $fieldsToSave, $adminId);
@@ -1513,10 +1513,18 @@
 						isset($memberInfo['Group']) && 
 						isset($memberInfo['Group']['Group']) )
 					{
-						// Group data is coming in..
-						foreach ($memberInfo['Group']['Group'] as $key => $value) 
+						if(!is_array($memberInfo['Group']['Group']))
 						{
-							array_push($existingGroups, $value);
+							// Someone has attempted to wipe all groups
+							$existingGroups = array();
+						}
+						else
+						{
+							// Group data is coming in..
+							foreach ($memberInfo['Group']['Group'] as $key => $value) 
+							{
+								array_push($existingGroups, $value);
+							}
 						}
 					}
 					else
@@ -1632,10 +1640,21 @@
 				}
 			}
 
-			$mailingLists = Hash::get($memberInfo, 'MailingList.MailingList');
+			$mailingListsInData = Hash::check($memberInfo, 'MailingLists.MailingLists');
+			$mailingLists = array();
+			if($mailingListsInData)
+			{
+				$mailingLists = Hash::get($memberInfo, 'MailingLists.MailingLists');
+				// $mailingLists will be an empty string if no mailing lists are selected
+				if(is_string($mailingLists))
+				{
+					$mailingLists = array();
+				}
+			}
+
 			$memberEmail = $this->getEmailForMember($memberInfo);
 
-			if(	$mailingLists &&
+			if(	$mailingListsInData &&
 				$memberEmail)
 			{
 				$mailingList = $this->getMailingList();
