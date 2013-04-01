@@ -457,7 +457,7 @@
 
             // Test with a new e-mail
             $newEmail = 'foo@srsaegrttfd.com';
-            $result = $this->Member->registerMember( array('Member' => array('email' => $newEmail), 'MailingList' => array('MailingList' => array('0a6da449c9'))) );
+            $result = $this->Member->registerMember( array('Member' => array('email' => $newEmail), 'MailingLists' => array('MailingLists' => array('0a6da449c9'))) );
 
             $afterTimestamp = time();
 
