@@ -11,10 +11,10 @@ $aSettings = array(
 		'default_login'		=>	'hms',
 		'default_password'	=>	'',
 		'default_database'	=>	'hms',
-		'test_host'		=>	'localhost',
+		'test_host'			=>	'localhost',
 		'test_login'		=>	'hms',
-		'test_password'	=>	'',
-		'test_database'	=>	'hms_test'
+		'test_password'		=>	'',
+		'test_database'		=>	'hms_test'
 		),
 	'hms'	=>	array(
 		'streetdoor'	=>	'1234',
@@ -28,9 +28,33 @@ $aSettings = array(
 		'key'	=>	'123456',
 		'list'	=>	'123456',
 		),
+	'email'	=>	array(
+		'from_address'	=>	'site@localhost',
+		'host'			=>	'localhost',
+		'port'			=>	25,
+		'username'		=>	'user',
+		'password'		=>	'secret',
+		),
 	);
 
 include('hms.settings');
+
+// Read in POST to see if it contains email settings
+if (isset($_POST['smtpfrom'])) {
+	$aSettings['email']['from_address'] = $_POST['smtpfrom'];
+}
+if (isset($_POST['smtphost'])) {
+	$aSettings['email']['host'] = $_POST['smtphost'];
+}
+if (isset($_POST['smtpport'])) {
+	$aSettings['email']['port'] = $_POST['smtpport'];
+}
+if (isset($_POST['smtpuser'])) {
+	$aSettings['email']['username'] = $_POST['smtpuser'];
+}
+if (isset($_POST['smtppass'])) {
+	$aSettings['email']['password'] = $_POST['smtppass'];
+}
 
 $sPath = '../app/Config/';
 
@@ -39,6 +63,7 @@ $aFiles = array(
 	'hms',
 	'krb',
 	'mailchimp',
+	'email',
 	);
 
 echo("Started<br />\n");

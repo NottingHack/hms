@@ -7,10 +7,23 @@
 <h1>Your Details</h1>
 
 <form action="setup.php" method="POST">
+<fieldset>
+	<legend>DEV User</legend>
+	Your Name: <input type="text" name="yourname" /><br />
+	Your Email: <input type="text" name="youremail" /><br />
+	Your Handle: <input type="text" name="yourhandle" /><br />
+</fieldset>
 
-Your Name: <input type="text" name="yourname" /><br />
-Your Email: <input type="text" name="youremail" /><br />
-Your Handle: <input type="text" name="yourhandle" /><br />
+<fieldset>
+	<legend>SMTP Details</legend>
+	<p>Example given is for Gmail</p>
+	From Address: <input type="text" name="smtpfrom" value="Your Gmail address" /><br />
+	SMTP Host: <input type="text" name="smtphost" value="ssl://smtp.gmail.com" /><br />
+	SMTP Port: <input type="text" name="smtpport" value="495" /><br />
+	SMTP Username: <input type="text" name="smtpuser" value="Your Gmail address" /><br />
+	SMTP Password: <input type="text" name="smtppass" value="Your Gmail password" /> (The .gitignore file excludes this from the repo, it's only on your machine)<br />
+</fieldset>
+
 
 <input type="submit" name="submit" value="Go" />
 
