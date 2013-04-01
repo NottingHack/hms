@@ -1,6 +1,7 @@
 /app/Config/database.php
 /app/Config/hms.php
 /app/Config/krb.php
+/app/Config/hms.keytab
 /app/Config/mailchimp.php
 /app/Config/email.php
 /app/tmp
