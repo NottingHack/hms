@@ -2,10 +2,10 @@
 
 <?php
 	$this->Html->addCrumb('Members', '/members');
-	$this->Html->addCrumb('Edit ' . $this->data['Member']['name'], '/members/edit/' . $this->data['Member']['member_id']);
+	$this->Html->addCrumb('Edit ' . $member['username'], '/members/view/' . $member['id']);
 ?>
 
-<?
+<?php
 	echo $this->Form->create('Member');
 	echo $this->Form->hidden('member_id');
 	//echo $this->Form->input('username');
@@ -67,27 +67,7 @@
 	echo '<fieldset>';
 	echo '<legend>Mailing Lists</legend>';
 
-	# Need to alter the list of mailing lists
-	$formattedMailingLists = array();
-	$selectedMailingLists = array();
-	$mailingListOptions = array();
-	foreach ($mailingLists as $mailingList) {
-		$key = $mailingList['id'];
-		$formattedMailingLists[$key] = $mailingList;
-		if($mailingList['subscribed'])
-		{
-			array_push($selectedMailingLists, $key);	
-		}
-		$mailingListOptions[$key] = $mailingList['name'];
-	}
-
-	echo $this->Form->input('MailingLists.MailingLists',array(
-        'label' => __(' ',true),
-        'type' => 'select',
-        'multiple' => 'checkbox',
-        'options' => $mailingListOptions,
-        'selected' => $selectedMailingLists,
-    )); 
+	echo $this->Mailinglist->output($mailingLists);
 
 	echo '</fieldset>';
 

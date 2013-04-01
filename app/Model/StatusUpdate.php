@@ -80,9 +80,11 @@
 			$record = $this->find('first', array('conditions' => array('StatusUpdate.id' => $updateId)));
 			if($record)
 			{
+				$adminId = Hash::get($record, 'StatusUpdate.admin_id');
 				return array(
 					'id' => Hash::get($record, 'StatusUpdate.member_id'),
-					'by' => Hash::get($record, 'StatusUpdate.admin_id'),
+					'by' => $adminId,
+					'by_username' => $this->Member->getUsernameForMember($adminId),
 					'from' => Hash::get($record, 'StatusUpdate.old_status'),
 					'to' => Hash::get($record, 'StatusUpdate.new_status'),
 					'at' => Hash::get($record, 'StatusUpdate.timestamp'),

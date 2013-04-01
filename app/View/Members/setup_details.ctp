@@ -1,6 +1,6 @@
 <!-- File: /app/View/Member/setup_details.ctp -->
 
-<?
+<?php
 	echo $this->Form->create('Member');
 	echo $this->Form->hidden('member_id');
 

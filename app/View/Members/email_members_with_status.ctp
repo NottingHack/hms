@@ -2,16 +2,17 @@
 
 <?php
 	$this->Html->addCrumb('Members', '/members');
-	$this->Html->addCrumb('Email members with status ' . $statusName, '/members/email_members_with_status/' . $statusId);
+	$this->Html->addCrumb('Email members with status ' . $status['name'], '/members/email_members_with_status/' . $status['id']);
 ?>
 
 <?php
 	$membersWithEmails = array();
 	$membersWithoutEmails = array();
-	foreach ($members as $memberInfo) {
-		if( isset($memberInfo['Member']['email']) &&
-			$memberInfo['Member']['email'] != null &&
-			strlen(trim($memberInfo['Member']['email'])) > 0)
+	foreach ($members as $memberInfo) 
+	{
+		if( isset($memberInfo['email']) &&
+			$memberInfo['email'] != null &&
+			strlen(trim($memberInfo['email'])) > 0)
 		{
 			array_push($membersWithEmails, $memberInfo);
 		}
@@ -41,7 +42,7 @@
 		foreach ($membersWithEmails as $memberInfo) {
 			echo '<li>';
 
-			echo $memberInfo['Member']['name'] . ' [' . $memberInfo['Member']['email'] . ']';
+			echo $memberInfo['name'] . ' [' . $memberInfo['email'] . ']';
 
 			echo '</li>';
 		}
@@ -49,10 +50,10 @@
 
 		if(count($membersWithoutEmails) > 0)
 		{
-			echo '<p>However, the following members do not have e-mail addresses so they will not be contacted:</p>';
+			echo '</br><p>However, the following members do not have e-mail addresses so they will not be contacted:</p>';
 			echo '<ul>';
 			foreach ($membersWithoutEmails as $memberInfo) {
-				echo '<li><strong>' . $memberInfo['Member']['name'] . '</strong></li>';
+				echo '<li><strong>' . $memberInfo['name'] . '</strong></li>';
 			}
 			echo '</ul>';
 		}

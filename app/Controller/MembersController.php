@@ -2,6 +2,7 @@
 	
 	App::uses('HmsAuthenticate', 'Controller/Component/Auth');
 	App::uses('Member', 'Model');
+	App::uses('ForgotPassword', 'Model');
 	App::uses('CakeEmail', 'Network/Email');
 
 	App::uses('PhpReader', 'Configure');
@@ -25,7 +26,7 @@
 	    	@sa TinymceHelper
 	    	@sa CurrencyHelper
 	    */
-	    public $helpers = array('Html', 'Form', 'Paginator', 'Tinymce', 'Currency');
+	    public $helpers = array('Html', 'Form', 'Paginator', 'Tinymce', 'Currency', 'Mailinglist');
 
 	    //! We need the MailChimp and Krb components.
 	    /*!
@@ -84,6 +85,7 @@
 	    		case 'login':
 	    		case 'logout':
 	    		case 'setupLogin':
+	    		case 'forgotPassword':
 	    			return true;
 
 	    		case 'register':
@@ -116,7 +118,7 @@
 	    public function beforeFilter() 
 	    {
 	        parent::beforeFilter();
-	        $this->Auth->allow('logout', 'login', 'register', 'forgot_password', 'setupLogin', 'setup_details');
+	        $this->Auth->allow('logout', 'login', 'register', 'forgotPassword', 'setupLogin', 'setupDetails');
 	    }
 
 	    //! Show a list of all Status and a count of how many members are in each status.
@@ -126,7 +128,7 @@
 	    	$this->set('memberTotalCount', $this->Member->getCount());
 
 	    	$this->Nav->add('Register Member', 'members', 'register');
-    		$this->Nav->add('E-mail all current members', 'members', 'email_members_with_status', array( Status::CURRENT_MEMBER ) );
+    		$this->Nav->add('E-mail all current members', 'members', 'emailMembersWithStatus', array( Status::CURRENT_MEMBER ) );
 	    }
 
 		//! Show a list of all members, their e-mail address, status and the groups they're in.
@@ -340,7 +342,7 @@
 	    {
 	    	// Can't do this if id isn't the same as that of the logged in user.
 	    	if( $id == null ||
-	    		$id == AuthComponent::user('Member.member_id') )
+	    		$id != $this->_getLoggedInMemberId() )
 	    	{
 	    		return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
 	    	}
@@ -396,6 +398,8 @@
 	    		return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
 	    	}
 
+	    	$this->set('name', $this->Member->getUsernameForMember($id));
+
 	    	if($this->request->is('post'))
 	    	{
 	    		try
@@ -413,7 +417,7 @@
 		    				'Issue With Contact Information',
 		    				'to_member_contact_details_rejected',
 		    				array(
-		    					'message' => $this->MemberEmail->getMessage( $this->request->data )
+		    					'reason' => $this->MemberEmail->getMessage( $this->request->data )
 		    				)
 		    			);
 
@@ -443,8 +447,10 @@
 	    	}
 
 	    	$this->set('accounts', $this->Member->getReadableAccountList());
+	    	$this->set('name', $this->Member->getUsernameForMember($id));
 
-	    	if($this->request->is('post'))
+	    	if(	$this->request->is('post') ||
+	    		$this->request->is('put'))
 	    	{
 	    		try
 	    		{
@@ -459,10 +465,19 @@
 							$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
 							'Impending Payment',
 							'notify_admins_payment_incoming',
-							$memberDetails
+							array(
+								'memberId' => $id,
+								'memberName' => $memberDetails['name'],
+								'memberEmail' => $memberDetails['email'],
+								'memberPayRef' => $memberDetails['paymentRef'],
+							)
 						);
 
 						return $this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
+		    		}
+		    		else
+		    		{
+		    			$this->Session->setFlash('Unable to update member details');
 		    		}
 		    	}
 		    	catch(InvalidStatusException $e)
@@ -487,12 +502,17 @@
 
 		    		$adminDetails = $this->Member->getMemberSummaryForMember($this->_getLoggedInMemberId());
 
-		    		// We only notify the admin that approved them.
+		    		// Notify all the member admins
 		    		$this->_sendEmail(
-		    			$adminDetails['email'],
+		    			$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
 		    			'Member Approved',
 		    			'notify_admins_member_approved',
-		    			$memberDetails
+		    			array(
+		    				'memberName' => $memberDetails['name'],
+		    				'memberEmail' => $memberDetails['email'],
+		    				'memberId' => $id,
+		    				'memberPin' => $memberDetails['pin'],
+		    			)
 		    		);
 
 		    		// E-mail the member
@@ -538,7 +558,7 @@
 
 	    	$adminId = $this->_getLoggedInMemberId();
 	    	$this->set('id', $id);
-	    	$this->set('name', $memberInfo['name']);
+	    	$this->set('name', $memberInfo['username']);
 	    	$this->set('ownAccount', $adminId == $id);
 
 	    	if($this->request->is('post'))
@@ -784,7 +804,12 @@
 
 					        foreach ($this->_getActionsForMember($id) as $action) 
 					        {
-					        	$this->Nav->add($action['title'], $action['controller'], $action['action'], $action['params']);
+					        	$class = '';
+					        	if(isset($action['class']))
+					        	{
+					        		$class = $action['class'];
+					        	}
+					        	$this->Nav->add($action['title'], $action['controller'], $action['action'], $action['params'], $class);
 					        }
 
 					        return; // Don't hit that redirect
@@ -824,16 +849,16 @@
 			    	{
 			    		$this->set('member', $formattedMemberInfo);
 			    		$this->set('accounts', $this->Member->getReadableAccountList());
-			    		$this->set('statuses', $this->Member->Status->getStatusSummaryAll());
-			    		$this->set('groups', $this->Member->Group->getGroupSummaryAll());
+			    		$this->set('groups', $this->Member->Group->getGroupList());
 
-			    		if($this->request->is('post'))
+			    		if(	$this->request->is('post') ||
+			    			$this->request->is('put'))
 			    		{
 			    			$sanitisedData = $this->Member->sanitiseMemberInfo($this->request->data, $showAdminFeatures, $showFinances, $hasJoined, $showAdminFeatures, false);
 			    			if($sanitisedData)
 			    			{
 			    				$updateResult = $this->Member->updateDetails($id, $sanitisedData, $this->_getLoggedInMemberId());
-			    				if($updateResult)
+			    				if(is_array($updateResult))
 				    			{
 				    				$this->_setFlashFromMailingListInfo('Details updated.', $updateResult['mailingLists']);
 							        return $this->redirect(array('action' => 'view', $id));
@@ -846,14 +871,14 @@
 			    		{
 					        $this->request->data = $rawMemberInfo;
 					    }
-
-			    		return; // Don't hit the redirect below.
 			    	}
 		    	}
 	    	}
-	    	
-	    	// Couldn't find a record with that id...
-	    	return $this->redirect($this->referer());
+	    	else
+	    	{
+	    		// Couldn't find a record with that id...
+	    		return $this->redirect($this->referer());
+	    	}
 		}
 
 		//! Check to see if certain view/edit params should be shown to the logged in member.
@@ -1050,9 +1075,6 @@
     			break;
 
     			case Status::PRE_MEMBER_1:
-    			break;
-
-    			case Status::PRE_MEMBER_2:
     				array_push($actions, 
     					array(
     						'title' => 'Send Contact Details Reminder',
@@ -1061,6 +1083,30 @@
     						'params' => array(
     							$memberId,
     						),
+    					)
+    				);
+    			break;
+
+    			case Status::PRE_MEMBER_2:
+    				array_push($actions, 
+    					array(
+    						'title' => 'Accept Details',
+    						'controller' => 'members',
+    						'action' => 'acceptDetails',
+    						'params' => array(
+    							$memberId,
+    						),
+    						'class' => 'positive',
+    					),
+
+    					array(
+    						'title' => 'Reject Details',
+    						'controller' => 'members',
+    						'action' => 'rejectDetails',
+    						'params' => array(
+    							$memberId,
+    						),
+    						'class' => 'negative',
     					)
     				);
     			break;
@@ -1086,6 +1132,7 @@
     						'params' => array(
     							$memberId,
     						),
+    						'class' => 'positive',
     					)
     				);
 
