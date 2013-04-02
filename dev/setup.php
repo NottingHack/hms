@@ -40,6 +40,7 @@ $aSettings = array(
 include('hms.settings');
 
 // Read in POST to see if it contains email settings
+/* Put this in hms.settings, where it belongs
 if (isset($_POST['smtpfrom'])) {
 	$aSettings['email']['from_address'] = $_POST['smtpfrom'];
 }
@@ -55,6 +56,7 @@ if (isset($_POST['smtpuser'])) {
 if (isset($_POST['smtppass'])) {
 	$aSettings['email']['password'] = $_POST['smtppass'];
 }
+*/
 
 $sPath = '../app/Config/';
 
