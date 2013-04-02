@@ -57,7 +57,7 @@
 				array( 'name' => 'listMembersWithStatus', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 				array( 'name' => 'emailMembersWithStatus', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 				array( 'name' => 'search', 							'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'setMemberStatus', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'revokeMembership', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 				array( 'name' => 'acceptDetails', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 				array( 'name' => 'rejectDetails', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 				array( 'name' => 'approveMember', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
@@ -1793,7 +1793,7 @@
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
-			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'setMemberStatus', array(4, Status::EX_MEMBER));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
 
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/4');
@@ -1870,7 +1870,7 @@
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
-			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'setMemberStatus', array(4, Status::EX_MEMBER));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
 
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/4');
@@ -1947,7 +1947,7 @@
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
-			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'setMemberStatus', array(4, Status::EX_MEMBER));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
 
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/4');
@@ -2136,7 +2136,7 @@
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
-			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'setMemberStatus', array(4, Status::EX_MEMBER));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
 
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/4');
@@ -3489,6 +3489,59 @@
 			$this->controller->Member->mailingList = $this->_getMailingListMock();
 
 			return $mockEmail;
+		}
+
+		public function testRevokeMembershipAsNonAdmin()
+		{
+			$this->_testRevokeMembership(2, 5, 'You are not authorized to do that.', false);
+		}
+
+		public function testRevokeMembershipInvalidMember()
+		{
+			$this->_testRevokeMembership(5, 6, 'Only current members can have their membership revoked.', false);
+		}
+
+		public function testRevokeMembershipAsMemberAdmin()
+		{
+			$this->_testRevokeMembership(5, 2, 'Membership revoked.', true);
+		}
+
+		public function testRevokeMembershipAsFullAccess()
+		{
+			$this->_testRevokeMembership(1, 2, 'Membership revoked.', true);
+		}
+
+		private function _testRevokeMembership($adminId, $memberId, $expectedFlash, $expectSuccess)
+		{
+			$this->controller = $this->generate('Members', array(
+				'components' => array(
+					'Auth' => array(
+						'user',
+					),
+					'Session' => array(
+						'setFlash',
+					),
+				),
+			));
+
+			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue($adminId));
+			$this->controller->Session->expects($this->once())->method('setFlash')->with($expectedFlash);
+
+			$this->testAction('members/revokeMembership/' . $memberId);
+
+			if($expectSuccess)
+			{
+				// Get the record and test it
+				$record = $this->controller->Member->findByMemberId($memberId);
+
+				$this->assertInternalType('array', $record, 'Record was not found.');
+
+				$this->assertEqual($record['Member']['member_status'], Status::EX_MEMBER, 'Status was not set correctly.');
+
+				$this->assertEqual($record['StatusUpdate'][0]['admin_id'], $adminId, 'StatusUpdate has incorrect adminId');
+				$this->assertEqual($record['StatusUpdate'][0]['old_status'], Status::CURRENT_MEMBER, 'StatusUpdate has incorrect oldStatus');
+				$this->assertEqual($record['StatusUpdate'][0]['new_status'], Status::EX_MEMBER, 'StatusUpdate has incorrect oldStatus');
+			}
 		}
 
 		private function _buildFakeRequest($action, $params = array())

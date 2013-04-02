@@ -61,7 +61,7 @@
 	    		case 'listMembersWithStatus':
 	    		case 'emailMembersWithStatus':
 	    		case 'search':
-	    		case 'setMemberStatus':
+	    		case 'revokeMembership':
 	    		case 'acceptDetails':
 	    		case 'rejectDetails':
 	    		case 'approveMember':
@@ -881,6 +881,35 @@
 	    	}
 		}
 
+		//! Revoke a members membership
+		/*
+			@param int $memberId The id of the member to revoke.
+		*/
+		public function revokeMembership($id = null)
+		{
+			try
+			{
+				if($this->Member->revokeMembership($id, $this->_getLoggedInMemberId()))
+				{
+					$this->Session->setFlash('Membership revoked.');
+				}
+				else
+				{
+					$this->Session->setFlash('Unable to revoke membership.');
+				}
+			}
+			catch(InvalidStatusException $ex)
+			{
+				$this->Session->setFlash('Only current members can have their membership revoked.');
+			}
+			catch(NotAuthorizedException $ex)
+			{
+				$this->Session->setFlash('You are not authorized to do that.');
+			}
+
+			return $this->redirect($this->referer());
+		}
+
 		//! Check to see if certain view/edit params should be shown to the logged in member.
 		/*!
 			@param int $memberId The id of the member being viewed.
@@ -1143,11 +1172,11 @@
     					array(
     						'title' => 'Revoke Membership',
     						'controller' => 'members',
-    						'action' => 'setMemberStatus',
+    						'action' => 'revokeMembership',
     						'params' => array(
     							$memberId,
-    							Status::EX_MEMBER,
     						),
+    						'class' => 'negative',
     					)
     				);
     			break;

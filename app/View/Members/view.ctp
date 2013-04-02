@@ -187,15 +187,15 @@
 			$showUpdate = true;
 			$statusUpdate = '';
 			switch ($member['lastStatusUpdate']['to']) {
-				case 2:
+				case 5:
 					$statusUpdate = "Membership Granted";
 					break;
 
-				case 3:
+				case 6:
 					$statusUpdate = "Membership Revoked";
 					break;
 
-				case 7:
+				case 2:
 					$statusUpdate = "Contact Details Accepted";
 					break;
 				

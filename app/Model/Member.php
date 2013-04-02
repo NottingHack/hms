@@ -1392,6 +1392,48 @@
 			return $accountList;
 		}
 
+		//! Revoke a members membership.
+		/*!
+			@param int $memberId The id of the membership to revoke.
+			@param int $adminId The id of the member doing the revoking.
+			@retval bool True if membership was revoked, false otherwise.
+		*/
+		public function revokeMembership($memberId, $adminId)
+		{
+			if(	!is_numeric($memberId) ||
+				!is_numeric($adminId))
+			{
+				return false;
+			}
+
+			if(	!($this->GroupsMember->isMemberInGroup($adminId, Group::MEMBER_ADMIN) || $this->GroupsMember->isMemberInGroup($adminId, Group::FULL_ACCESS)))
+			{
+				throw new NotAuthorizedException('Only member admins can revoke membership.');
+			}
+
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus != Status::CURRENT_MEMBER )
+			{
+				throw new InvalidStatusException( 'Only current members can have their membership revoked.' );
+			}
+
+			$data = array(
+				'Member' => array(
+					'member_id' => $memberId,
+					'member_status' => Status::EX_MEMBER,
+				),
+			);
+
+			$fieldsToSave = array(
+				'Member' => array(
+					'member_id',
+					'member_status'
+				),
+			);
+
+			return is_array($this->_saveMemberData($data, $fieldsToSave, $adminId));
+		}
+
 		//! Validate that e-mail data is ok.
 		/*!
 			@param array $data The data to validate.
