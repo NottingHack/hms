@@ -1400,27 +1400,54 @@
 		*/
 		public function revokeMembership($memberId, $adminId)
 		{
+			return $this->_setMemberStatus($memberId, $adminId, Status::EX_MEMBER, Status::CURRENT_MEMBER);
+		}
+
+
+		//! Reinstate an ex-members membership.
+		/*!
+			@param int $memberId The id of the membership to reinstate.
+			@param int $adminId The id of the member doing the reinstating.
+			@retval bool True if membership was reinstated, false otherwise.
+		*/
+		public function reinstateMembership($memberId, $adminId)
+		{
+			return $this->_setMemberStatus($memberId, $adminId, Status::CURRENT_MEMBER, Status::EX_MEMBER);
+		}
+
+		//! Set a members member_status.
+		/*!
+			@param int $memberId The id of the member to change the status of.
+			@param int $adminId The id of the member doing then changing.
+			@param int $newStatus The new member_status.
+			@param int $requiredCurrentStatus The status the member must currently have.
+			@retval bool True if status was set, otherwise false.
+		*/
+		private function _setMemberStatus($memberId, $adminId, $newStatus, $requiredCurrentStatus)
+		{
 			if(	!is_numeric($memberId) ||
-				!is_numeric($adminId))
+				!is_numeric($adminId) ||
+				!is_numeric($newStatus) ||
+				!is_numeric($requiredCurrentStatus))
 			{
 				return false;
 			}
 
 			if(	!($this->GroupsMember->isMemberInGroup($adminId, Group::MEMBER_ADMIN) || $this->GroupsMember->isMemberInGroup($adminId, Group::FULL_ACCESS)))
 			{
-				throw new NotAuthorizedException('Only member admins can revoke membership.');
+				throw new NotAuthorizedException('Only member admins can change member status.');
 			}
 
 			$memberStatus = $this->getStatusForMember( $memberId );
-			if($memberStatus != Status::CURRENT_MEMBER )
+			if($memberStatus != $requiredCurrentStatus )
 			{
-				throw new InvalidStatusException( 'Only current members can have their membership revoked.' );
+				throw new InvalidStatusException( 'Member doesn\'t have the correct status.' );
 			}
 
 			$data = array(
 				'Member' => array(
 					'member_id' => $memberId,
-					'member_status' => Status::EX_MEMBER,
+					'member_status' => $newStatus,
 				),
 			);
 

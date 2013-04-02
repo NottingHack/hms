@@ -62,6 +62,7 @@
 	    		case 'emailMembersWithStatus':
 	    		case 'search':
 	    		case 'revokeMembership':
+	    		case 'reinstateMembership':
 	    		case 'acceptDetails':
 	    		case 'rejectDetails':
 	    		case 'approveMember':
@@ -910,6 +911,35 @@
 			return $this->redirect($this->referer());
 		}
 
+		//! Reinstate an ex-members membership
+		/*
+			@param int $memberId The id of the member to reinstate.
+		*/
+		public function reinstateMembership($id = null)
+		{
+			try
+			{
+				if($this->Member->reinstateMembership($id, $this->_getLoggedInMemberId()))
+				{
+					$this->Session->setFlash('Membership reinstated.');
+				}
+				else
+				{
+					$this->Session->setFlash('Unable to reinstate membership.');
+				}
+			}
+			catch(InvalidStatusException $ex)
+			{
+				$this->Session->setFlash('Only ex members can have their membership reinstated.');
+			}
+			catch(NotAuthorizedException $ex)
+			{
+				$this->Session->setFlash('You are not authorized to do that.');
+			}
+
+			return $this->redirect($this->referer());
+		}
+
 		//! Check to see if certain view/edit params should be shown to the logged in member.
 		/*!
 			@param int $memberId The id of the member being viewed.
@@ -1186,11 +1216,11 @@
     					array(
     						'title' => 'Reinstate Membership',
     						'controller' => 'members',
-    						'action' => 'setMemberStatus',
+    						'action' => 'reinstateMembership',
     						'params' => array(
     							$memberId,
-    							Status::CURRENT_MEMBER,
     						),
+    						'class' => 'positive',
     					)
     				);
     			break;

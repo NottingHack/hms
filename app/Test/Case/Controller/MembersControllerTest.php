@@ -58,6 +58,7 @@
 				array( 'name' => 'emailMembersWithStatus', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 				array( 'name' => 'search', 							'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 				array( 'name' => 'revokeMembership', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'reinstateMembership', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 				array( 'name' => 'acceptDetails', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 				array( 'name' => 'rejectDetails', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 				array( 'name' => 'approveMember', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
@@ -3513,6 +3514,36 @@
 
 		private function _testRevokeMembership($adminId, $memberId, $expectedFlash, $expectSuccess)
 		{
+			$this->_testChangeMembershipStatus($adminId, $memberId, $expectedFlash, $expectSuccess, 'revokeMembership', Status::EX_MEMBER, Status::CURRENT_MEMBER);
+		}
+
+		public function testReinstateMembershipAsNonAdmin()
+		{
+			$this->_testReinstateMembership(2, 6, 'You are not authorized to do that.', false);
+		}
+
+		public function testReinstateMembershipInvalidMember()
+		{
+			$this->_testReinstateMembership(5, 3, 'Only ex members can have their membership reinstated.', false);
+		}
+
+		public function testReinstateMembershipAsMemberAdmin()
+		{
+			$this->_testReinstateMembership(5, 6, 'Membership reinstated.', true);
+		}
+
+		public function testReinstateMembershipAsFullAccess()
+		{
+			$this->_testReinstateMembership(1, 6, 'Membership reinstated.', true);
+		}
+
+		private function _testReinstateMembership($adminId, $memberId, $expectedFlash, $expectSuccess)
+		{
+			$this->_testChangeMembershipStatus($adminId, $memberId, $expectedFlash, $expectSuccess, 'reinstateMembership', Status::CURRENT_MEMBER, Status::EX_MEMBER);
+		}
+
+		private function _testChangeMembershipStatus($adminId, $memberId, $expectedFlash, $expectSuccess, $function, $newStatus, $oldStatus)
+		{
 			$this->controller = $this->generate('Members', array(
 				'components' => array(
 					'Auth' => array(
@@ -3527,7 +3558,7 @@
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue($adminId));
 			$this->controller->Session->expects($this->once())->method('setFlash')->with($expectedFlash);
 
-			$this->testAction('members/revokeMembership/' . $memberId);
+			$this->testAction('members/' . $function . '/' . $memberId);
 
 			if($expectSuccess)
 			{
@@ -3536,11 +3567,11 @@
 
 				$this->assertInternalType('array', $record, 'Record was not found.');
 
-				$this->assertEqual($record['Member']['member_status'], Status::EX_MEMBER, 'Status was not set correctly.');
+				$this->assertEqual($record['Member']['member_status'], $newStatus, 'Status was not set correctly.');
 
 				$this->assertEqual($record['StatusUpdate'][0]['admin_id'], $adminId, 'StatusUpdate has incorrect adminId');
-				$this->assertEqual($record['StatusUpdate'][0]['old_status'], Status::CURRENT_MEMBER, 'StatusUpdate has incorrect oldStatus');
-				$this->assertEqual($record['StatusUpdate'][0]['new_status'], Status::EX_MEMBER, 'StatusUpdate has incorrect oldStatus');
+				$this->assertEqual($record['StatusUpdate'][0]['old_status'], $oldStatus, 'StatusUpdate has incorrect oldStatus');
+				$this->assertEqual($record['StatusUpdate'][0]['new_status'], $newStatus, 'StatusUpdate has incorrect oldStatus');
 			}
 		}
 
