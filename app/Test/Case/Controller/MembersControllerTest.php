@@ -78,10 +78,6 @@
 
 				array( 'name' => 'setupDetails', 					'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember' ) ),
 				array( 'name' => 'setupDetails', 					'params' => array('otherId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-
-				array( 'name' => 'login', 							'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember' ) ),
-				array( 'name' => 'logout', 							'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember' ) ),
-				array( 'name' => 'setupLogin', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember' ) ),
 			);
 
 			$testUsers = array(
@@ -147,50 +143,52 @@
 			}
 		}
 
-		public function testIsAuthorizedRegister()
+		private function _testBeforeFilterRegister($admin, $local, $result)
 		{
-			$testData = array(
-				array(
-					'admin' => true,
-					'local' => true,
-					'result' => true,
+			$this->controller = $this->generate('Members', array(
+				'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	),
+	        	'methods' => array(
+				    'isRequestLocal'
 				),
-				array(
-					'admin' => true,
-					'local' => false,
-					'result' => true,
-				),
-				array(
-					'admin' => false,
-					'local' => true,
-					'result' => true,
-				),
-				array(
-					'admin' => false,
-					'local' => false,
-					'result' => false,
-				),
-			);
+	        ));
 
-			foreach ($testData as $setup) 
+			$userId = 3;
+			if($admin)
 			{
-				$this->controller = $this->generate('Members', array(
-		        	'methods' => array(
-					    'isRequestLocal'
-					),
-		        ));
-
-				$userId = $setup['admin'] ? 5 : 3;
-		        $userInfo = $this->MembersController->Member->findByMemberId($userId);
-
-		        $this->controller->expects($this->any())->method('isRequestLocal')->will($this->returnValue($setup['local']));
-
-		        $requestObj = $this->_buildFakeRequest('register ', array());
-				$expectedResult = $setup['result'];
-				$actualResult = $this->MembersController->isAuthorized($userInfo, $requestObj);
-		        
-		        $this->assertEqual($setup['result'], $expectedResult, 'Combination handled incorrectly: admin - ' . $setup['admin'] ? 'true' : 'false' . ' local - ' . $setup['local'] ? 'true' : 'false');
+				$userId = 5;
 			}
+
+	        $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue($userId));
+		    $this->controller->expects($this->any())->method('isRequestLocal')->will($this->returnValue($local));
+
+		    $this->controller->beforeFilter();
+
+			$actualResult = in_array('register', $this->controller->Auth->allowedActions);
+			$this->assertEqual($actualResult, $result, sprintf('Combination handled incorrectly: admin - %s local - %s.', ($admin ? 'true' : 'false'), ($local ? 'true' : 'false')));
+		}
+
+		public function testBeforeFilterRegisterLocalAdmin()
+		{
+			$this->_testBeforeFilterRegister(true, true, true);
+		}
+
+		public function testBeforeFilterRegisterNonLocalAdmin()
+		{
+			$this->_testBeforeFilterRegister(true, false, true);
+		}
+
+		public function testBeforeFilterRegisterLocalNonAdmin()
+		{
+			$this->_testBeforeFilterRegister(false, true, true);
+		}
+
+		public function testBeforeFilterRegisterNonLocalNonAdmin()
+		{
+			$this->_testBeforeFilterRegister(false, false, false);
 		}
 
 		public function testBeforeFilter()
@@ -202,7 +200,6 @@
 			$afterAllowedActions = $this->MembersController->Auth->allowedActions;
 			$this->assertTrue( in_array('logout', $afterAllowedActions), 'Allowed actions does not contain \'logout\'.' );
 			$this->assertTrue( in_array('login', $afterAllowedActions), 'Allowed actions does not contain \'login\'.' );
-			$this->assertTrue( in_array('register', $afterAllowedActions), 'Allowed actions does not contain \'register\'.' );
 			$this->assertTrue( in_array('forgotPassword', $afterAllowedActions), 'Allowed actions does not contain \'forgot_password\'.' );
 			$this->assertTrue( in_array('setupLogin', $afterAllowedActions), 'Allowed actions does not contain \'setupLogin\'.' );
 			$this->assertTrue( in_array('setupDetails', $afterAllowedActions), 'Allowed actions does not contain \'setupDetails\'.' );

@@ -50,7 +50,9 @@ class AuthUtilComponent extends Component {
 		{
 			return true;
 		}
-		return $controllerObj->Auth->isAuthorized(AuthComponent::user(), $request);
+
+		$user = AuthComponent::user();
+		return $controllerObj->Auth->isAuthorized($user, $request);
 	}
 
 	private function get_controller($name)

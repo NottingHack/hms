@@ -82,28 +82,6 @@
 	    				return true;
 	    			}
 	    			break;
-
-	    		case 'login':
-	    		case 'logout':
-	    		case 'setupLogin':
-	    		case 'forgotPassword':
-	    			return true;
-
-	    		case 'register':
-	    			// Anyone can access if they're local
-	    			$isLocal = $this->isRequestLocal();
-	    			if($isLocal)
-	    			{
-	    				return true;
-	    			}
-
-	    			// Member admins can access from outside the space
-	    			if($userIsMemberAdmin)
-	    			{
-	    				return true;
-	    			}
-
-	    			return false;
 	    	}
 
 	    	return false;
@@ -119,7 +97,28 @@
 	    public function beforeFilter() 
 	    {
 	        parent::beforeFilter();
-	        $this->Auth->allow('logout', 'login', 'register', 'forgotPassword', 'setupLogin', 'setupDetails');
+
+	        $allowedActionsArray = array(
+	        	'logout', 
+	        	'login', 
+	        	'forgotPassword', 
+	        	'setupLogin', 
+	        	'setupDetails'
+	        );
+
+	    	$userIsMemberAdmin = $this->Member->GroupsMember->isMemberInGroup( $this->_getLoggedInMemberId(), Group::MEMBER_ADMIN );
+	    	$isLocal = $this->isRequestLocal();
+
+	    	// We have to put register here, as is isAuthorized()
+	        // cannot be used to check access to functions if they can
+	        // ever be accessed by a user that is not logged in
+	    	if( $isLocal ||
+	    		$userIsMemberAdmin )
+	    	{
+	    		array_push($allowedActionsArray, 'register');
+	    	}
+
+	        $this->Auth->allow($allowedActionsArray);
 	    }
 
 	    //! Show a list of all Status and a count of how many members are in each status.
@@ -1253,6 +1252,21 @@
 		*/
 		public function getRequestIpAddress()
 		{
+			// We might have a debug config here to force requests to be local
+			App::uses('PhpReader', 'Configure');
+			Configure::config('default', new PhpReader());
+			Configure::load('debug', 'default');
+
+			try
+			{
+				$ip = Configure::read('forceRequestIp');
+				return $ip;
+			}
+			catch(ConfigureException $ex)
+			{
+				// We don't care.
+			}
+
 			return $this->request->clientIp();
 		}
 	}
