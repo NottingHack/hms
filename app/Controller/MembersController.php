@@ -33,7 +33,7 @@
 	    	@sa MailChimpComponent
 	    	@sa KrbComponent
 	    */
-	    public $components = array('MailChimp');
+	    public $components = array('MailChimp', 'BankStatement');
 
 	    //! Test to see if a user is authorized to make a request.
 	    /*!
@@ -70,6 +70,7 @@
 	    		case 'sendContactDetailsReminder':
 	    		case 'sendSoDetailsReminder':
 	    		case 'addExistingMember':
+	    		case 'uploadCsv':
 	    			return $userIsMemberAdmin; 
 
 	    		case 'changePassword':
@@ -495,46 +496,14 @@
 	    {
 	    	try
 	    	{
-	    		$memberDetails = $this->Member->approveMember($id, $this->_getLoggedInMemberId());
-	    		if($memberDetails)
-		    	{
-		    		$this->Session->setFlash('Member has been approved.');
-
-		    		$adminDetails = $this->Member->getMemberSummaryForMember($this->_getLoggedInMemberId());
-
-		    		// Notify all the member admins
-		    		$this->_sendEmail(
-		    			$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
-		    			'Member Approved',
-		    			'notify_admins_member_approved',
-		    			array(
-		    				'memberName' => $memberDetails['name'],
-		    				'memberEmail' => $memberDetails['email'],
-		    				'memberId' => $id,
-		    				'memberPin' => $memberDetails['pin'],
-		    			)
-		    		);
-
-		    		// E-mail the member
-		    		$this->_sendEmail(
-		    			$memberDetails['email'],
-		    			'Membership Complete',
-		    			'to_member_access_details',
-		    			array( 
-							'adminName' => $adminDetails['name'],
-							'adminEmail' => $adminDetails['email'],
-							'manLink' => Configure::read('hms_help_manual_url'),
-							'outerDoorCode' => Configure::read('hms_access_street_door'),
-							'innerDoorCode' => Configure::read('hms_access_inner_door'),
-							'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
-							'wifiPass' => Configure::read('hms_access_wifi_password'),
-						)
-		    		);
-		    	}
-		    	else
-		    	{
-		    		$this->Session->setFlash('Member details could not be updated.');
-		    	}
+	    		if($this->_approveMember($id))
+	    		{
+	    			$this->Session->setFlash('Member has been approved.');
+	    		}
+	    		else
+	    		{
+	    			$this->Session->setFlash('Member details could not be updated.');
+	    		}
 	    	}
 	    	catch(InvalidStatusException $e)
     		{
@@ -542,6 +511,55 @@
     		}
 	    	
 	    	return $this->redirect($this->referer());
+	    }
+
+	    //! Approve a membership
+	    /*!
+	    	@param int $id The id of the member who we are approving.
+	    */
+	    private function _approveMember($id)
+	    {
+	    	$adminId = $this->_getLoggedInMemberId();
+			$memberDetails = $this->Member->approveMember($id, $adminId);
+    		if($memberDetails)
+	    	{
+	    		$adminDetails = $this->Member->getMemberSummaryForMember($adminId);
+
+	    		// Notify all the member admins
+	    		$this->_sendEmail(
+	    			$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
+	    			'Member Approved',
+	    			'notify_admins_member_approved',
+	    			array(
+	    				'memberName' => $memberDetails['name'],
+	    				'memberEmail' => $memberDetails['email'],
+	    				'memberId' => $id,
+	    				'memberPin' => $memberDetails['pin'],
+	    			)
+	    		);
+
+	    		// E-mail the member
+	    		$this->_sendEmail(
+	    			$memberDetails['email'],
+	    			'Membership Complete',
+	    			'to_member_access_details',
+	    			array( 
+						'adminName' => $adminDetails['name'],
+						'adminEmail' => $adminDetails['email'],
+						'manLink' => Configure::read('hms_help_manual_url'),
+						'outerDoorCode' => Configure::read('hms_access_street_door'),
+						'innerDoorCode' => Configure::read('hms_access_inner_door'),
+						'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
+						'wifiPass' => Configure::read('hms_access_wifi_password'),
+					)
+	    		);
+
+	    		return true;
+	    	}
+	    	else
+	    	{
+	    		return false;
+	    	}
 	    }
 
 	    //! Change a members password
@@ -1268,6 +1286,70 @@
 			}
 
 			return $this->request->clientIp();
+		}
+
+		//! Upload a .csv file of bank transactions and look for members to approve		
+		public function uploadCsv($preview = true)
+		{
+			$this->set('memberList', null);
+			if($this->request->is('post'))
+			{
+				Controller::loadModel('FileUpload');
+
+				$filename = $this->FileUpload->getTmpName($this->request->data);
+
+				if(is_string($filename))
+				{
+					if($this->BankStatement->readfile($filename))
+					{
+						$payRefs = array();
+						for($i = 0; $i < $this->BankStatement->getNumLines(); $i++)
+						{
+							$transaction = $this->BankStatement->getLine($i);
+							if(is_array($transaction))
+							{
+								$ref = $transaction['ref'];
+
+								if(is_string($ref) && strlen($ref) > 0)
+								{
+									array_push($payRefs, $ref);
+								}
+							}
+						}
+
+						$accountIds = $this->Member->Account->getAccountIdsForRefs($payRefs);
+						$members = $this->Member->getMemberSummaryForAccountIds(false, $accountIds);
+
+						$this->set('memberList', $members);
+
+						if($preview)
+						{
+							$this->Nav->add('Approve All', 'members', 'uploadCsv', array(true), 'positive');
+						}
+						else
+						{
+							$flash = '';
+							// Actually approve the members
+							foreach ($members as $member) 
+							{
+								if(true)//if($this->_approveMember($member['id']))
+								{
+									$flash .= 'Successfully approved';
+								}
+								else
+								{
+									$flash .= 'Unable to approve';	
+								}
+
+								$flash .= sprintf(' member %s\n', $member['name']);
+							}
+
+							$this->Session->setFlash($flash);
+							$this->redirect(array('controller' => 'members', 'action' => 'index'));
+						}
+					}
+				}
+			}
 		}
 	}
 ?>

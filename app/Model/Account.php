@@ -106,5 +106,20 @@
 			}
 			return -1;
 		}
+
+		//! Get a list of account ids from a list of payment refs
+		/*!
+			@param array $paymentRefs An array of payment refs.
+			@retval array An array of account ids.
+		*/
+		public function getAccountIdsForRefs($paymentRefs)
+		{
+			if(is_array($paymentRefs))
+			{
+				return array_values($this->find('list', array('conditions' => array('Account.payment_ref' => $paymentRefs))));
+			}
+
+			return array();
+		}
 	}
 ?>
