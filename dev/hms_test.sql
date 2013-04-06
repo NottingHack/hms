@@ -202,6 +202,20 @@ CREATE TABLE IF NOT EXISTS `invoices` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `members_auth`
+--
+
+CREATE TABLE IF NOT EXISTS `members_auth` (
+  `member_id` int(11) NOT NULL DEFAULT '0',
+  `salt` varchar(16) DEFAULT NULL,
+  `passwd` varchar(40) DEFAULT NULL,
+  `last_login` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`member_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `member_group`
 --
 
@@ -220,29 +234,27 @@ INSERT INTO `member_group` (`member_id`, `grp_id`) VALUES
 (1, 2),
 (2, 2),
 (2, 3),
-(3, 1),
 (3, 2),
-(3, 3),
-(3, 4),
-(3, 5),
 (4, 2),
 (4, 4),
 (5, 2),
-(5, 5);
+(5, 5),
+(6, 2);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `members_auth`
+-- Table structure for table `number_trees`
 --
 
-CREATE TABLE IF NOT EXISTS `members_auth` (
-  `member_id` int(11) NOT NULL DEFAULT '0',
-  `salt` varchar(16) DEFAULT NULL,
-  `passwd` varchar(40) DEFAULT NULL,
-  `last_login` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`member_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE IF NOT EXISTS `number_trees` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `lft` int(11) NOT NULL,
+  `rght` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MEMORY DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -254,21 +266,6 @@ CREATE TABLE IF NOT EXISTS `number_tree_twos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `number_tree_id` int(11) NOT NULL,
-  `parent_id` int(11) DEFAULT NULL,
-  `lft` int(11) NOT NULL,
-  `rght` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MEMORY DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `number_trees`
---
-
-CREATE TABLE IF NOT EXISTS `number_trees` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
   `lft` int(11) NOT NULL,
   `rght` int(11) NOT NULL,

@@ -5,15 +5,47 @@ CREATE TABLE IF NOT EXISTS `access_log` (
   `pin` varchar(50) DEFAULT NULL,
   `access_result` int(11) DEFAULT NULL,
   PRIMARY KEY (`access_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9408 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9408;
 
 CREATE TABLE IF NOT EXISTS `account` (
   `account_id` int(11) NOT NULL AUTO_INCREMENT,
   `payment_ref` varchar(18) NOT NULL,
-  `member_id` int(11) NOT NULL,
   PRIMARY KEY (`account_id`),
   UNIQUE KEY `payment_ref` (`payment_ref`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=239 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15;
+
+CREATE TABLE IF NOT EXISTS `addresses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mac_address` varchar(100) DEFAULT NULL,
+  `last_seen` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ignore_addr` tinyint(1) NOT NULL DEFAULT '0',
+  `comments` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `addr` (`mac_address`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=742 ;
+
+CREATE TABLE IF NOT EXISTS `emails` (
+  `email_id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) DEFAULT NULL,
+  `email_to` varchar(200) DEFAULT NULL,
+  `email_cc` varchar(200) DEFAULT NULL,
+  `email_bcc` varchar(200) DEFAULT NULL,
+  `email_subj` varchar(200) DEFAULT NULL,
+  `email_body` text,
+  `email_body_alt` text,
+  `email_status` varchar(16) DEFAULT NULL,
+  `email_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `email_link` int(11) DEFAULT NULL,
+  PRIMARY KEY (`email_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=126 ;
+
+CREATE TABLE IF NOT EXISTS `events` (
+  `event_id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `event_type` varchar(25) DEFAULT NULL,
+  `event_value` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`event_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=30645 ;
 
 CREATE TABLE IF NOT EXISTS `forgotpassword` (
   `member_id` int(11) NOT NULL,
