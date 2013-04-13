@@ -1004,3 +1004,7 @@ pre {
 	width: 100%;
 	text-align: center;
 }
+
+input[type=file] {
+	padding: 0px;
+}

@@ -297,12 +297,24 @@
 		*/
 		public function getMemberSummaryForMember($memberId, $format = true)
 		{
-			$memberList = $this->_getMemberSummary(false, array('Member.member_id' => $memberId), $format);
+			$memberList = $this->getMemberSummaryForMembers(array($memberId), $format);
 			if(!empty($memberList))
 			{
 				return $memberList[0];
 			}
 			return array();
+		}
+
+		//! Get a summary of the member records for a list of members.
+		/*!
+			@param array $memberIds The array of member ids to work with.
+			@param $format If true format the return data.
+			@retval array A summary of the data for the members in the list
+			@sa Member::_getMemberSummary()
+		*/
+		public function getMemberSummaryForMembers($memberIds, $format = true)
+		{
+			return $this->_getMemberSummary(false, array('Member.member_id' => $memberIds), $format);
 		}
 
 		//! Get a summary of the member records for all members.
@@ -315,7 +327,18 @@
 			return $this->_getMemberSummary($paginate);
 		}
 
-		//! Get a summary of the member records for all members.
+		//! Get a summary of the member records for all members with an account id that is in the list passed in.
+		/*!
+			@param array $accountIds Retrieve information about members who have one of these account ids.
+			@retval array A summary of the data of all members with those account ids.
+			@sa Member::_getMemberSummary()
+		*/
+		public function getMemberSummaryForAccountIds($paginate, $accountIds)
+		{
+			return $this->_getMemberSummary($paginate, array( 'Member.account_id' => $accountIds ) );
+		}
+
+		//! Get a summary of the member records for all members with a certain status.
 		/*!
 			@param int $statusId Retrieve information about members who have this status.
 			@retval array A summary of the data of all members of a status.

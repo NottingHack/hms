@@ -66,6 +66,7 @@
 				array( 'name' => 'sendContactDetailsReminder', 		'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 				array( 'name' => 'sendSoDetailsReminder', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 				array( 'name' => 'addExistingMember', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'uploadCsv', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 
 				array( 'name' => 'changePassword', 					'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember' ) ),
 				array( 'name' => 'changePassword', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
@@ -3570,6 +3571,207 @@
 				$this->assertEqual($record['StatusUpdate'][0]['old_status'], $oldStatus, 'StatusUpdate has incorrect oldStatus');
 				$this->assertEqual($record['StatusUpdate'][0]['new_status'], $newStatus, 'StatusUpdate has incorrect oldStatus');
 			}
+		}
+
+		public function testUploadCsvInvalidFile()
+		{
+			$contents = 'iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCM';
+			$guid = null;
+			$this->_setupTestUploadCsv($contents, $guid, function() 
+			{
+				$this->controller->Session->expects($this->once())->method('setFlash')->with('That did not seem to be a valid bank .csv file');
+				$this->controller->Nav->expects($this->never())->method('add');
+			});
+
+			$this->assertArrayHasKey('Location', $this->headers);
+			$this->assertContains('/members/uploadCsv', $this->headers['Location']);
+		}
+
+		public function testUploadCsvDudFile()
+		{
+			$contents = 'This, is not a valid .csv file, even though, it has, the correct, number, of commas';
+			$guid = null;
+			$this->_setupTestUploadCsv($contents, $guid, function() 
+			{
+				$this->controller->Session->expects($this->once())->method('setFlash')->with('That did not seem to be a valid bank .csv file');
+				$this->controller->Nav->expects($this->never())->method('add');
+			});
+
+			$this->assertArrayHasKey('Location', $this->headers);
+			$this->assertContains('/members/uploadCsv', $this->headers['Location']);
+		}
+
+		public function testUploadCsvValidFileNoMembers()
+		{
+			$contents =
+			'Date, Type, Description, Value, Balance, Account Name, Account Number
+			,,,,,,
+			,,,,,,
+			,,,,,,
+			06/02/2013,BAC,"\'A NAME , HSNOTTSVD74BY3C8J4 , FP 06/02/13 0138 , 300000000062834772",15,1664.08,\'NOTTINGHACK,\'558899-45687951
+			,,,,,,
+			06/02/2013,BAC,"\'DOROTHY D D/2011 , DOROTHY DEVAL",15,1679.08,\'NOTTINGHACK,\'558899-45687951
+			,,,,,,
+			06/02/2013,BAC,"\'SIMPMSON T , HSNOTTSTYX339RW347",10,1689.08,\'NOTTINGHACK,\'558899-45687951
+			,,,,,,
+			07/02/2013,BAC,"\'C DAVIES , CHRIS , FP 07/02/13 0034 , 00156265632BBBVSCR",5,1694.08,\'NOTTINGHACK,\'558899-45687951';
+			$guid = null;
+			$this->_setupTestUploadCsv($contents, $guid, function() 
+			{
+				$this->controller->Session->expects($this->once())->method('setFlash')->with('No new member payments in .csv.');
+				$this->controller->Nav->expects($this->never())->method('add');
+			});
+
+			$this->assertArrayHasKey('Location', $this->headers);
+			$this->assertContains('/members', $this->headers['Location']);
+		}
+
+		public function testUploadCsvDudGuid()
+		{
+			$contents = null;
+			$guid = '123456789';
+			$this->_setupTestUploadCsv($contents, $guid, function() {
+				$this->controller->Session->expects($this->never())->method('setFlash');
+				$this->controller->Nav->expects($this->never())->method('add');
+			});
+		}
+
+		public function testUploadValidFile()
+		{
+			$contents = 
+			'Date, Type, Description, Value, Balance, Account Name, Account Number
+			,,,,,,
+			,,,,,,
+			,,,,,,
+			06/02/2013,BAC,"\'A NAME , HSNOTTSFGXWGKF48QB , FP 06/02/13 0138 , 300000000062834772",15,1664.08,\'NOTTINGHACK,\'558899-45687951
+			,,,,,,
+			06/02/2013,BAC,"\'DOROTHY D D/2011 , DOROTHY DEVAL",15,1679.08,\'NOTTINGHACK,\'558899-45687951
+			,,,,,,
+			06/02/2013,BAC,"\'SIMPMSON T , HSNOTTSHVQGT3XF248",10,1689.08,\'NOTTINGHACK,\'558899-45687951
+			,,,,,,
+			07/02/2013,BAC,"\'C DAVIES , CHRIS , FP 07/02/13 0034 , 00156265632BBBVSCR",5,1694.08,\'NOTTINGHACK,\'558899-45687951';
+			$guid = null;
+
+			$generatedGuid = String::uuid();
+			$this->_setupTestUploadCsv($contents, $guid, function() use($generatedGuid) {
+				$this->controller->Session->expects($this->never())->method('setFlash');
+				$this->controller->Nav->expects($this->once())->method('add')->with('Approve All', 'members', 'uploadCsv', array($generatedGuid), 'positive');
+				$this->controller->expects($this->once())->method('getMemberIdSessionKey')->will($this->returnValue($generatedGuid));
+			});
+
+			$this->_setupTestUploadCsv($contents, $generatedGuid, function() {
+				$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+				$this->controller->Session->expects($this->once())->method('setFlash')->with('Successfully approved member Ryan Miles\nSuccessfully approved member Evan Atkinson\n');
+				$this->controller->Nav->expects($this->never())->method('add');
+
+				// Email stuff
+				$this->controller->email->expects($this->exactly(4))->method('config');
+				$this->controller->email->expects($this->exactly(4))->method('from');
+				$this->controller->email->expects($this->exactly(4))->method('sender');
+				$this->controller->email->expects($this->exactly(4))->method('emailFormat');
+				$this->controller->email->expects($this->exactly(4))->method('to');
+				$this->controller->email->expects($this->exactly(4))->method('subject');
+				$this->controller->email->expects($this->exactly(4))->method('template');
+				$this->controller->email->expects($this->exactly(4))->method('viewVars');
+				$this->controller->email->expects($this->exactly(4))->method('send')->will($this->returnValue(true));
+			});
+
+			$this->assertEqual($this->controller->Member->getStatusForMember(13), Status::CURRENT_MEMBER);
+			$this->assertEqual($this->controller->Member->getStatusForMember(14), Status::CURRENT_MEMBER);
+		}
+
+		private function _setupTestUploadCsv($fileContents, $guid, $mockAsserts)
+		{
+			$this->controller = $this->generate('Members', array(
+				'components' => array(
+					'Auth' => array(
+						'user',
+					),
+					'Session' => array(
+						'setFlash',
+					),
+					'Nav' => array(
+						'add',
+					),
+				),
+				'methods' => array(
+					'getMemberIdSessionKey',
+				),
+			));
+
+			$mockEmail = $this->getMock('CakeEmail');
+			$this->controller->email = $mockEmail;
+
+			$this->controller->Member->setDataSource('test');
+			$this->controller->Member->Account->setDataSource('test');
+
+			$action = 'members/uploadCsv';
+			if($guid != null)
+			{
+				$action .= '/' . $guid;
+			}
+
+			if($mockAsserts != null)
+			{
+				$mockAsserts();
+			}
+
+			if($fileContents == null)
+			{
+				$this->testAction($action);
+			}
+			else
+			{
+				$data = $this->_makeFileUploadData($fileContents);
+				$this->testAction($action, array('data' => $data, 'method' => 'post'));
+			}
+		}
+
+		private function _makeFileUploadData($contents)
+		{
+			$filePath = $this->_makeTmpFile($contents);
+			if($filePath != false)
+			{
+				return array(
+					'FileUpload' => array(
+						'filename' => array(
+							'name' => 'uploaded.tmp',
+							'type' => $this->_getFileType($filePath),
+							'tmp_name' => $filePath,
+							'error' => 0,
+							'size' => filesize($filePath),
+						),
+					),
+				);
+			}
+
+			return false;
+		}
+
+		private function _getFileType($filename)
+		{
+			// None of the proper ways to do this seem to work, but it doesn't matter for our tests
+			return 'text';
+		}
+
+		private function _makeTmpFile($contents)
+		{
+			$tmpFile = tempnam(sys_get_temp_dir(), 'tst');
+			if($tmpFile != false)
+			{
+				$filehandle = fopen($tmpFile, 'w');
+				if($filehandle != false)
+				{
+					$success = fwrite($filehandle, $contents);
+					fclose($filehandle);
+					if($success)
+					{
+						return $tmpFile;
+					}
+				}
+			}
+
+			return false;
 		}
 
 		private function _buildFakeRequest($action, $params = array())
