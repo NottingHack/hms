@@ -2,7 +2,7 @@
 
 <?php
 	$this->Html->addCrumb('Members', '/members');
-	$this->Html->addCrumb('Upload CSV', '/members/uploadCsb');
+	$this->Html->addCrumb('Upload CSV', '/members/uploadCsv');
 ?>
 
 <?php if($memberList == null): ?>
@@ -12,6 +12,10 @@
 		echo $this->Form->end('Upload');
 	?>
 <?php else: ?>
+
+	<p>
+		Found payments for the following members:
+	</p>
 
 	<table>
         <tr>

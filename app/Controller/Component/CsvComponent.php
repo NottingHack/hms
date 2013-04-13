@@ -14,6 +14,11 @@
 		*/
 		public function readFile($filePath)
 		{
+			if(!is_string($filePath))
+			{
+				return false;
+			}
+
 			$fileHandle = fopen($filePath, 'r');
 
 			if($fileHandle == 0)
@@ -30,6 +35,11 @@
 				{
 					array_push($this->lines, $data);
 				}
+			}
+
+			if(count($this->lines) <= 0)
+			{
+				return false;
 			}
 
 			fclose($fileHandle);

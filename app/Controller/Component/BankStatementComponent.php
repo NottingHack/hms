@@ -1,10 +1,58 @@
 <?php
 
-	App::uses('CsvComponent', 'Controller/Component');
+	App::uses('Component', 'Controller');
 
 	//! BankStatementComponent is a component to handle parsing of bank statement .csv files
-	class BankStatementComponent extends CsvComponent 
+	class BankStatementComponent extends Component 
 	{
+		public $components = array( 'Csv' ); //!< Needs the CsvComponent
+
+		//! Attempt to read a bank statement .csv file
+		/*!
+			@param string $filePath The path to look for the file.
+			@retval bool True if file was opened successfully and is bank statement csv, false otherwise.
+		*/
+		public function readFile($filePath)
+		{
+			if($this->Csv->readFile($filePath))
+			{
+				// If at-least one of the lines is a valid csv, assume it's ok
+				$foundValidLine = false;
+
+				for($i = 0; $i < $this->Csv->getNumLines(); $i++)
+				{
+					$transaction = $this->getLine($i);
+					if(is_array($transaction))
+					{
+						$foundValidLine = true;
+						break;
+					}
+				}
+
+				return $foundValidLine;
+			}
+
+			return false;
+		}
+
+		//! Iterate over all transactions calling $callback for each valid transaction.
+		/*!
+			@param function $callback The function to call for each valid transaction.
+		*/
+		public function iterate($callback)
+		{
+			for($i = 0; $i < $this->Csv->getNumLines(); $i++)
+			{
+				$transaction = $this->getLine($i);
+				if(is_array($transaction))
+				{
+					$callback(
+						$transaction
+					);
+				}
+			}
+		}
+
 		//! Get the bank statement line at index.
 		/*!
 			@param int $index The index of the line to get.
@@ -12,7 +60,7 @@
 		*/
 		public function getLine($index)
 		{
-			$line = parent::getLine($index);
+			$line = $this->Csv->getLine($index);
 
 			if(	is_array($line) && 
 				count($line) >= 7)
@@ -29,15 +77,7 @@
 				// We don't really have anyway to validate the type...
 				$type = $line[1];
 
-				// Description may be up to 4 items, which for some reason
-				// aren't specified as different .csv fields...
-				$descArr = explode(',', $line[2]);
-				if(count($descArr) <= 0)
-				{
-					return null;
-				}
-
-				$parsedDesc = $this->_parseDesc($descArr);
+				$parsedDesc = $this->_parseDesc($line[2]);
 
 				$value = $line[3];
 				if(!is_numeric($value))
@@ -69,13 +109,20 @@
 			return null;
 		}
 
-		private function _parseDesc($descArr)
+		//! Parse the description field of the transaction.
+		/*!
+			@param string $desc The entire description field.
+			@retval array An array of description data, may include Payee name, payment ref, FP id and transaction id, any of these fields may be null.
+		*/ 
+		private function _parseDesc($desc)
 		{
 			// Null all the values, we don't know how many we'll get
 			$name = null;
 			$ref = null;
 			$fp = null;
 			$id = null;
+
+			$descArr = explode(',', $desc);
 
 			$matchedfp = false;
 			for($i = 0; $i < count($descArr); $i++)
@@ -115,18 +162,23 @@
 			);
 		}
 
-		private function _parseFp($value)
+		//! Parse the FP field of the transaction
+		/*!
+			@param $field The possible FP field.
+			@retval Returns $field if it is a valid FP field, otherwise returns null.
+		*/
+		private function _parseFp($field)
 		{
-			$valArr = explode(' ', $value);
+			$fieldArr = explode(' ', $field);
 
-			if(	count($valArr) >= 2 &&
-				$valArr[0] == "FP")
+			if(	count($fieldArr) >= 2 &&
+				$fieldArr[0] == "FP")
 			{
-				$date = strtotime($valArr[1]);
+				$date = strtotime($fieldArr[1]);
 
 				if($date >= 0 && $date != false)
 				{
-					return $value;
+					return $field;
 				}
 			}
 
