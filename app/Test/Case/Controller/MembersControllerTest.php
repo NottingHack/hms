@@ -3084,7 +3084,7 @@
 				'unlockText' => 'Sup Guy',
 				'balance' => '-985',
 				'creditLimit' => '5000',
-				#'paymentRef' => 'HSNOTTSYT7H4CW3GP9',
+				'paymentRef' => 'HSNOTTSYT7H4CW3GP9',
 				'address' => array(
 					'part1' => '4 Fraser Crescent',
 					'part2' => '',
@@ -3132,7 +3132,6 @@
 				),
 				'Account' => array(
 				    'account_id' => '9',
-				    'payment_ref' => 'HSNOTTSC6P8QV4C9PV',
 				),
 				'Pin' => array(
 				    'pin_id' => '3',
@@ -3167,11 +3166,6 @@
             	),
 	        ));
 
-	        $accountMock = $this->getMock('Account', array('generatePaymentRef', 'getID'));
-	        $accountMock->expects($this->once())->method('generatePaymentRef')->will($this->returnValue('HSNOTTSC6P8QV4C9PV'));
-	        $accountMock->expects($this->any())->method('getID')->will($this->returnValue('9'));
-	        $controllerMock->Member->Account = $accountMock;
-
 			$this->_testEditMember(
 				3, 
 				$adminId, 
@@ -3183,7 +3177,11 @@
 					'455de2ac56' => false
 				), 
 				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace Announcements\n',
-				$controllerMock);
+				$controllerMock,
+				function ($recordData) {
+					unset($recordData['Account']['payment_ref']);
+					return $recordData;
+				});
 		}
 
 		public function testEditMemberEditSetEverythingMemberAdmin()
@@ -3373,7 +3371,7 @@
 			);
 		}
 
-		private function _testEditMember($memberId, $adminId, $inputData, $expectedViewVal, $expectedRecordData, $expectedMailingLists, $expectedFlash, $controllerMock = null)
+		private function _testEditMember($memberId, $adminId, $inputData, $expectedViewVal, $expectedRecordData, $expectedMailingLists, $expectedFlash, $controllerMock = null, $recordCallback = null)
 		{
 			if($controllerMock == null)
 			{
@@ -3411,6 +3409,11 @@
 			$this->_testEditMemberViewVars($expectedViewVal, $expectedMailingLists);
 
 			$record = $this->controller->Member->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+
+			if($recordCallback != null)
+			{
+				$record = $recordCallback($record);
+			}
 
 			$this->assertEqual( $record, $expectedRecordData, 'Member record was not updated correctly.' );
 		}
