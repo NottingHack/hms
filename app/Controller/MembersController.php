@@ -545,8 +545,6 @@
 	    			'Membership Complete',
 	    			'to_member_access_details',
 	    			array( 
-						'adminName' => $adminDetails['name'],
-						'adminEmail' => $adminDetails['email'],
 						'manLink' => Configure::read('hms_help_manual_url'),
 						'outerDoorCode' => Configure::read('hms_access_street_door'),
 						'innerDoorCode' => Configure::read('hms_access_inner_door'),

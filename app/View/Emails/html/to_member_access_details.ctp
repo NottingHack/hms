@@ -7,8 +7,24 @@
 </p>
 
 <p>
-	GateKeeper is our RFID entry system, for which you need a suitable card set up. If you have a CityCard, Nottingham Library card, or Oyster Card, it will work with it, otherwise, we have blank RFIDs for a £1 deposit. Please contact your member admin, <?php echo $this->Text->autoLinkEmails( $adminName . ' (' . $adminEmail . ') ' ); ?>, to arrange a meeting, or visit on the next open hack night and ask people to point you to one of the team.
+	GateKeeper is our RFID entry system, for which you need a suitable card set up. If you have a CityCard, Nottingham Library card, or Oyster Card, it will work with it, otherwise, we have blank RFIDs for a £1 deposit. Please contact someone from the membership team to arrange a meeting, or visit on the next open hack night and ask people to point you to one of the team.
 </p>
+
+<p>
+	Here's a calendar showing when people from the membership team could potentially meet you at the space:
+	<?php echo $this->Html->link('https://www.google.com/calendar/embed?src=bmnnboh643lt5gl0b2ku45c4p0%40group.calendar.google.com&ctz=Europe/London'); ?>
+</p>
+
+<p>
+	NOTE: This doesn't indicate when they *will* be at the space, just when they could potentially meet you to do gatekeeper setup and answer any other questions you might have. Switch to week view to see hours in which people can be available. Here are emails for the current membership team:
+</p>
+
+<p>
+	David Hayward: nachimir@gmail.com<br>
+	Kate Bolin: katebolin@gmail.com<br>
+	Joe Duckhouse: congojoe@gmail.com<br>
+</p>
+
 
 <p>
 	Here's a PDF hackspace manual:<br>
@@ -20,9 +36,9 @@
 </p>
 
 <p>
-Wifi access:<br>
-SSID: <?php echo $wifiSsid; ?><br>
-Pass: <?php echo $wifiPass; ?><br>
+	Wifi access:<br>
+	SSID: <?php echo $wifiSsid; ?><br>
+	Pass: <?php echo $wifiPass; ?><br>
 </p>
 
 <p>

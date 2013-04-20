@@ -984,7 +984,7 @@
 			$mockEmail->expects($this->at(13))->method('to')->with('RyanMiles@dayrep.com');
 			$mockEmail->expects($this->at(14))->method('subject')->with('Membership Complete');
 			$mockEmail->expects($this->at(15))->method('template')->with('to_member_access_details');
-			$mockEmail->expects($this->at(16))->method('viewVars')->with(array('adminName' => 'Jessie Easterwood', 'adminEmail' => 'j.easterwood@googlemail.com', 'manLink' => Configure::read('hms_help_manual_url'), 'outerDoorCode' => Configure::read('hms_access_street_door'), 'innerDoorCode' => Configure::read('hms_access_inner_door'), 'wifiSsid' => Configure::read('hms_access_wifi_ssid'), 'wifiPass' => Configure::read('hms_access_wifi_password')));
+			$mockEmail->expects($this->at(16))->method('viewVars')->with(array('manLink' => Configure::read('hms_help_manual_url'), 'outerDoorCode' => Configure::read('hms_access_street_door'), 'innerDoorCode' => Configure::read('hms_access_inner_door'), 'wifiSsid' => Configure::read('hms_access_wifi_ssid'), 'wifiPass' => Configure::read('hms_access_wifi_password')));
 			$mockEmail->expects($this->at(17))->method('send')->will($this->returnValue(true));
 
             $this->testAction('/members/approveMember/13');
