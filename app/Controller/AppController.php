@@ -22,7 +22,7 @@
 
 App::uses('Controller', 'Controller');
 App::uses('Member', 'Model');
-App::uses('Member', 'Model');
+App::uses('Group', 'Model');
 App::uses('AuthComponent', 'Controller/Auth');
 
 /**
@@ -37,10 +37,10 @@ App::uses('AuthComponent', 'Controller/Auth');
 class AppController extends Controller {
 
     const VERSION_MAJOR = 0;
-    const VERSION_MINOR = 2;
-    const VERSION_BUILD = 0;
+    const VERSION_MINOR = 3;
+    const VERSION_BUILD = 1;
 
-	public $helpers = array('Html', 'Form', 'Nav', 'List');
+	public $helpers = array('Html', 'Form', 'Nav');
 
 	public $components = array(
         'Session',
@@ -48,7 +48,6 @@ class AppController extends Controller {
         	'loginAction' => array(
 	            'controller' => 'members',
 	            'action' => 'login',
-	            #'plugin' => 'users'
 	        ),
             'loginRedirect' => array('controller' => 'pages', 'action' => 'index'),
             'logoutRedirect' => array('controller' => 'pages', 'action' => 'display', 'home'),
@@ -68,16 +67,17 @@ class AppController extends Controller {
     }
 
     public function beforeRender() {
-        # AT [16/09/2012] Send any links added to the NavComponent to the view
+        // Send any links added to the NavComponent to the view
         $this->set('navLinks', $this->Nav->get_allowed_actions());
 
         Controller::loadModel('Member');
 
-        $user = $this->Member->find('first', array('conditions' => array( 'Member.member_id' => AuthComponent::user('Member.member_id') )));
-        if( isset($user) )
+        $loggedInMemberId = $this->Member->getIdForMember($this->Auth->user());
+        if($loggedInMemberId)
         {
             $adminLinks = array();
-            if( Member::isInGroupFullAccess($user) || Member::isInGroupMemberAdmin($user) )
+            if( $this->Member->GroupsMember->isMemberInGroup( $loggedInMemberId, Group::FULL_ACCESS ) || 
+                $this->Member->GroupsMember->isMemberInGroup( $loggedInMemberId, Group::MEMBER_ADMIN ) )
             {
                 $adminLinks = array(
                     'Members' => array( 'controller' => 'members', 'action' => 'index' ),
@@ -85,35 +85,32 @@ class AppController extends Controller {
                     'Mailing Lists' => array( 'controller' => 'mailinglists', 'action' => 'index' ),
                 );
             }
-            else if( Member::isInGroupTourGuide($user) )
-            {
-                $adminLinks = array(
-                    'Add Member' => array( 'controller' => 'members', 'action' => 'add' ),
-                );
-            }
 
             $userMessage = array();
-            if( $user['Member']['member_status'] == '5' )
+            if( $this->Member->getStatusForMember($loggedInMemberId) == Status::PRE_MEMBER_1 )
             {
-                $userMessage = array('Click here to enter your contact details!' => array( 'controller' => 'members', 'action' => 'setup_details', $user['Member']['member_id'] ) );
+                $userMessage = array('Click here to enter your contact details!' => array( 'controller' => 'members', 'action' => 'setupDetails', $loggedInMemberId ) );
             }
 
             $this->set('adminNav', $adminLinks);
             $this->set('userMessage', $userMessage);
-            $this->set('user', $user);    
+            $this->set('memberId', $loggedInMemberId);
+            $this->set('username', $this->Member->getUsernameForMember($this->Auth->user()));
         }
-        
+
         $jsonData = json_decode(file_get_contents('http://lspace.nottinghack.org.uk/status/status.php'));
 
         $this->set('jsonData', $jsonData);
         $this->set('navLinks', $this->Nav->get_allowed_actions());
 
-        $this->set('version', $this->get_version_string());
+        $this->set('version', $this->getVersionString());
     }
 
     public function isAuthorized($user, $request)
     {
-        if(Member::isInGroupFullAccess($user))
+        Controller::loadModel('Member');
+
+        if($this->Member->GroupsMember->isMemberInGroup( $this->Member->getIdForMember($user), Group::FULL_ACCESS ))
         {
             return true;
         }
@@ -121,7 +118,7 @@ class AppController extends Controller {
         return false;
     }
 
-    public function get_version_string()
+    public function getVersionString()
     {
         return sprintf('%d.%d.%d', self::VERSION_MAJOR, self::VERSION_MINOR, self::VERSION_BUILD);
     }

@@ -42,9 +42,9 @@ $cakeDescription = "Nottingham Hackspace Management System";
 			<div class="banner"></div>
 			<div class="userBar">
 				<div class="login">
-					<?php if( isset($user) && $user): ?>
+					<?php if( isset($memberId)): ?>
 						Logged in as: 
-						<?php echo $this->Html->link($user['Member']['username'], array( 'controller' => 'members', 'action' => 'view', AuthComponent::user('Member.member_id') ) ); ?>
+						<?php echo $this->Html->link($username, array( 'controller' => 'members', 'action' => 'view', $memberId ) ); ?>
 						<span class="loginSpace">
 							<?php echo $this->Html->link('Logout', array( 'controller' => 'members', 'action' => 'logout' )) ?>
 						</span>
@@ -87,7 +87,7 @@ $cakeDescription = "Nottingham Hackspace Management System";
 			<div id="crumb">
 				<?php echo $this->Html->getCrumbs(' > ', 'Home'); ?>
 			</div>
-			<?php echo $this->Session->flash(); ?>
+			<?php echo str_replace('\n', '</br>', $this->Session->flash()); ?>
 			<?php echo $this->fetch('content'); ?>
 			<?php
 				# AT [16/09/2012] Use the NavHelper to render any navigation links
@@ -103,7 +103,7 @@ $cakeDescription = "Nottingham Hackspace Management System";
 				<div id="first" class="widget-area">
 					<ul class="xoxo">
 						<li id="menu-item-328" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-328">HMS Version <?php echo $version; ?></li>
-						<li id="menu-item-327" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-327"><a href="https://bitbucket.org/pyroka/hms">Get Source</a></li>
+						<li id="menu-item-327" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-327"><a href="https://github.com/NottingHack/hms">Get Source</a></li>
 						<li id="menu-item-329" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-329"></br></li>
 						<li id="menu-item-330" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-330"><a href="http://nottinghack.org.uk/">Nottinghack Website</a></li>
 						<li id="menu-item-332" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-332">&#169; <?php echo date('Y'); ?> Nottinghack</li>

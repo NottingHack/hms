@@ -16,7 +16,8 @@ class HmsAuthorize extends BaseAuthorize {
 		return parent::controller($controller);
 	}
 
-	public function authorize($user, CakeRequest $request) {
+	public function authorize($user, CakeRequest $request) 
+	{
 		return (bool)$this->_Controller->isAuthorized($user, $request);
 	}
 

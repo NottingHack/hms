@@ -1,0 +1,1 @@
+To setup your dev environment, see [the wiki](https://github.com/NottingHack/hms/wiki/Setting-up-a-Development-Environment)

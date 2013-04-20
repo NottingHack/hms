@@ -1,7 +1,7 @@
-<!-- File: /app/View/Member/setup_login.ctp -->
+<!-- File: /app/View/Member/setupLogin.ctp -->
 
 <p>
-	Please choose a username and password that you'll use to login to HMS
+	Please enter your name and a username and password that you'll use to login to HMS.
 <p>
 
 <?php echo $this->Form->create('Member'); ?>

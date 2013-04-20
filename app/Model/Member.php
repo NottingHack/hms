@@ -1,56 +1,96 @@
 <?php
 
 	App::uses('AppModel', 'Model');
+	App::uses('Status', 'Model');
+	App::uses('InvalidStatusException', 'Error/Exception');
+	App::uses('NotAuthorizedException', 'Error/Exception');
+	App::uses('String', 'Utility');
 
-	class Member extends AppModel {
+	/**
+	 * Model for all member data
+	 *
+	 *
+	 * @package       app.Model
+	 */
+	class Member extends AppModel 
+	{
+		const MIN_PASSWORD_LENGTH = 6; //!< The minimum length passwords must be.
+		const MIN_USERNAME_LENGTH = 3; //!< The minimum length usernames must be.
+		const MAX_USERNAME_LENGTH = 30; //!< The maximum length usernames can be.
 
-		const MIN_PASSWORD_LENGTH = 6;
+		public $primaryKey = 'member_id'; //!< Specify the primary key, since we don't use the default.
 
-		public $primaryKey = 'member_id';
-
+		//! We belong to both the Status and Account models.
+		/*! 
+			Status should be joined on an inner join as it makes no sense to have no status.
+			Account should be likewise, but isn't because we have to play nice with the existing data.
+		*/
 		public $belongsTo =  array(
-			"Status" => array(
-					"className" => "Status",
-					"foreignKey" => "member_status",
-					"type" => "inner"
+			'Status' => array(
+					'className' => 'Status',
+					'foreignKey' => 'member_status',
+					'type' => 'inner'
 			),
-			"Account" => array(
-					"className" => "Account",
-					"foreignKey" => "account_id",
-					#"type" => "inner"
+			'Account' => array(
+					'className' => 'Account',
+					'foreignKey' => 'account_id',
 			),
 		);
 
+		//! We have a Pin.
+		/*!
+			Pin is set to be dependant so it will be deleted when the Member is.
+		*/
 		public $hasOne = array(
 	        'Pin' => array(
-	            'className'    => 'Pin',
-	            'dependent'    => true
-	        ),
-	        'MemberAuth' => array(
-	            'className'    => 'MemberAuth',
-	            'dependent'    => true
+	            'className' => 'Pin',
+	            'dependent' => true
 	        ),
 	    );
 
+		//! We have many StatusUpdate.
+		/*!
+			We only (normally) care about the most recent Status Update.
+		*/
+	    public $hasMany = array(
+	    	'StatusUpdate' => array(
+	    		'order' => 'StatusUpdate.timestamp DESC',
+	    		'limit'	=> '1',	
+	    	),
+	    );
+
+	    //! We have and belong to many Group.
+	    /*!
+	    	Group is set to be unique as it is impossible for the Member to be in the same Group twice.
+	    	We also specify a model to use as the 'with' model so that we can add methods to it.
+	    */
 		public $hasAndBelongsToMany = array(
 	        'Group' =>
 	            array(
-	                'className'              => 'Group',
-	                'joinTable'              => 'member_group',
-	                'foreignKey'             => 'member_id',
-	                'associationForeignKey'  => 'grp_id',
-	                'unique'                 => true,
-	                'conditions'             => '',
-	                'fields'                 => '',
-	                'order'                  => '',
-	                'limit'                  => '',
-	                'offset'                 => '',
-	                'finderQuery'            => '',
-	                'deleteQuery'            => '',
-	                'insertQuery'            => ''
+	                'className' => 'Group',
+	                'joinTable' => 'member_group',
+	                'foreignKey' => 'member_id',
+	                'associationForeignKey' => 'grp_id',
+	                'unique' => true,
+	                'with' => 'GroupsMember',				
 	            ),
 	    );
 
+		//! Validation rules.
+		/*!
+			Name must not be empty.
+			Email must be a valid email (and not empty).
+			Password must not be empty and have a length equal or greater than the Member::MIN_PASSWORD_LENGTH.
+			Password Confirm must not be empty, have a length equal or greater than the Member::MIN_PASSWORD_LENGTH and it's contents much match that of Password.
+			Username must not be empty, be unique (in the database), only contain alpha-numeric characters, and be between Member::MIN_USERNAME_LENGTH and Member::MAX_USERNAME_LENGTH characters long.
+			Member Status must be in the list of valid statuses.
+			Account id must be numeric.
+			Address 1 must not be empty.
+			Address City must not be empty.
+			Address Postcode must not be empty.
+			Contact Number must not be empty.
+			No further validation is performed on the Address and Contact Number fields as a member admin has to check these during membership registration.
+		*/
 		public $validate = array(
 	        'name' => array(
 	            'rule' => 'notEmpty'
@@ -96,10 +136,25 @@
 	                'message'  => 'Aplha-numeric characters only'
 	            ),
 	            'between' => array(
-	                'rule'    => array('between', 3, 30),
+	                'rule'    => array('between', self::MIN_USERNAME_LENGTH, self::MAX_USERNAME_LENGTH),
 	                'message' => 'Between 3 to 30 characters'
 	            ),
 
+	        ),
+	        'account_id' => array(
+	        	'rule' => 'numeric',
+	        ),
+	        'member_status' => array(
+	        	'rule' => array(
+	        		'inList', array(
+	        			Status::PROSPECTIVE_MEMBER,
+	        			Status::PRE_MEMBER_1,
+	        			Status::PRE_MEMBER_2,
+	        			Status::PRE_MEMBER_3,
+	        			Status::CURRENT_MEMBER,
+	        			Status::EX_MEMBER,
+	        		),
+	        	),
 	        ),
 	        'address_1' => array(
 	            'rule' => 'notEmpty'
@@ -115,23 +170,41 @@
 	        ),
 	    );
 
+		//! Use the KrbAuth behaviour for setting passwords and the like.
+		public $actsAs = array('KrbAuth');
+
+		//! MailingList object, for easy mocking.
+	    public $mailingList = null;
+
+		//! Validation function to see if the user-supplied password and password confirmation match.
+		/*!
+			@param array $check The password to be validated.
+			@retval bool True if the supplied password values match, otherwise false.
+		*/
 	    public function passwordConfirmMatchesPassword($check)
 		{
-			return $this->data['Member']['password'] == $this->data['Member']['password_confirm'];
+			return $this->data['Member']['password'] === $check['password_confirm'];
 		}
 
+		//! Validation function to see if the user-supplied username is already taken.
+		/*!
+			@param array $check The username to check.
+			@retval bool True if the supplied username exists in the database (case-insensitive) registered to a different user, otherwise false.
+		*/
 		public function checkUniqueUsername($check)
 		{
-			$lowercaseUsername = strtolower($this->data['Member']['username']);
-			$records = $this->find('all', array(  'fields' => array('Member.username'),
-													'conditions' => array( 
-														'Member.username LIKE' => $lowercaseUsername,
-														'Member.member_id NOT' => $this->data['Member']['member_id'],
-													) 
-												)
+			$lowercaseUsername = strtolower($check['username']);
+			$records = $this->find('all', 
+				array(  'fields' => array('Member.username'),
+					'conditions' => array( 
+						'Member.username LIKE' => $lowercaseUsername,
+						'Member.member_id NOT' => $this->data['Member']['member_id'],
+					) 
+				)
 			);
 
-			foreach ($records as $record) {
+			foreach ($records as $record) 
+			{
 				if(strtolower($record['Member']['username']) == $lowercaseUsername)
 				{
 					return false;
@@ -140,114 +213,1639 @@
 			return true;
 		}
 
+		//! Validation function to see if the user-supplied email matches what's in the database.
+		/*!
+			@param array $check The email to check.
+			@retval bool True if the supplied email value matches the database, otherwise false.
+			@sa Member::addEmailMustMatch()
+			@sa Member::removeEmailMustMatch()
+		*/
 		public function checkEmailMatch($check)
 		{
 			$ourEmail = $this->find('first', array('fields' => array('Member.email'), 'conditions' => array('Member.member_id' => $this->data['Member']['member_id'])));
-			return strcasecmp($ourEmail['Member']['email'], $this->data['Member']['email']) == 0;
+			return strcasecmp($ourEmail['Member']['email'], $check['email']) == 0;
 		}
 
-		public function beforeSave($options = array()) {
-
-			if( isset($this->data['Member']['member_status']) )
-			{
-				# Have to do a few things before we save
-				$memberWillBeCurrentMember = $this->data['Member']['member_status'] == 2;
-
-				if( isset( $this->data['Member'] ) &&
-					isset( $this->data['Member']['member_number'] ) === false &&
-					$memberWillBeCurrentMember)
-				{
-					# We're setting this member to be a 'current member' for the first time, need to modify some things
-
-					# Set the member number and join date
-					# Member number is totally fucked up with hard-coded entries and missing entries, so we need to find what the highest number is
-					$highestMemberNumber = $this->find( 'first', array( 'conditions' => array( 'Member.member_number !=' => null),  'order' => 'Member.member_number DESC', 'fields' => 'Member.member_number' ) );
-					$this->data['Member']['member_number'] = $highestMemberNumber['Member']['member_number'] + 1;
-					$this->data['Member']['join_date'] = date( 'Y-m-d' );
-				}
-			}
-
+		//! Actions to perform before saving any data
+		/*!
+			@param array $options Any options that were passed to the Save method
+			@sa http://book.cakephp.org/2.0/en/models/callback-methods.html#beforesave
+		*/
+		public function beforeSave($options = array()) 
+		{
 			# Must never ever ever alter the balance
 			unset( $this->data['Member']['balance'] );
 
 			return true;
 		}
 
-		public function clearGroupsIfMembershipRevoked($id, $newData) {
-			if( isset($newData['Member']['member_status']) )
-			{
-				# If membership is being revoked, clear all groups
-				if($newData['Member']['member_status'] == 3)
-				{
-					$this->MemberGroup->deleteAll(array( 'MemberGroup.member_id' => $id ));
-				}
-			}
-		}
-
-		public function addToCurrentMemberGroupIfStatusIsCurrentMember($id, $newData) {
-
-			if( isset($newData['Member']['member_status']) )
-			{
-				# If membership is current_member, add to the current member group
-				if($newData['Member']['member_status'] == 2)
-				{
-					$this->MemberGroup->deleteAll(array( 'MemberGroup.member_id' => $id, 'MemberGroup.grp_id' => 2 ));
-
-					# Group 2 is for current members
-					$currentGroups = Hash::extract($newData, 'Group.Group.{n}');
-					print_r($currentGroups);
-					if( in_array(2, $currentGroups) == false )
-					{
-						array_push($currentGroups, array( 'grp_id' => 2, 'member_id' => $id ));
-					}
-
-					$newData['Group']['Group'] = $currentGroups;
-
-					$this->save($newData);
-				}
-			}
-		}
-
-		# Returns true if the member is in the group
-		public function memberInGroup($memberId, $groupId)
-		{
-			return in_array($groupId, Hash::extract( $this->find('first', array( 'conditions' => array( 'Member.member_id' => $memberId ) ) ), 'Group.{n}.grp_id' ));
-		}
-
+		//! Add an extra validation rule to the e-mail field stating that the user supplied e-mail must match what's in the database.
+		/*!
+			@sa Member::checkEmailMatch()
+			@sa Member::removeEmailMustMatch()
+		*/
 		public function addEmailMustMatch()
 		{
 			$this->validator()->add('email', 'emailMustMatch', array( 'rule' => array( 'checkEmailMatch' ), 'message' => 'Incorrect email used' ));
 		}
 
+		//! Remove the 'e-mail must match' validation rule.
+		/*!
+			@sa Member::checkEmailMatch()
+			@sa Member::addEmailMustMatch()
+		*/
 		public function removeEmailMustMatch()
 		{
 			$this->validator()->remove('email', 'emailMustMatch');
 		}
 
-		public static function isInGroup($user, $groupId)
+		//! Find how many members have a certain Status.
+		/*!
+			@param int $status_id The id of the Status record to check.
+			@retval int The number of member records that belong to the Status.
+		*/
+		public function getCountForStatus($status_id)
 		{
-			if(	isset($user) &&
-				isset($user['Group']))
+			return $this->find( 'count', array( 'conditions' => array( $this->belongsTo['Status']['foreignKey'] => $status_id ) ) );
+		}
+
+		//! Find out how many member records exist in the database.
+		/*!
+			@retval int The number of member records in the database.
+		*/
+		public function getCount()
+		{
+			return $this->find( 'count' );
+		}
+
+		//! Find out if we have record of a Member with a specific e-mail address.
+		/*!
+			@param string $email E-mail address to check.
+			@retval bool True if there is a Member with this e-mail, false otherwise.
+		*/
+		public function doesMemberExistWithEmail($email)
+		{
+			return $this->find( 'count', array( 'conditions' => array( 'Member.email' => strtolower($email) ) ) ) > 0;
+		}
+
+		//! Get a summary of the member records for a specific member.
+		/*!
+			@param int $memberId The id of the member to work with.
+			@param $format If true format the return data.
+			@retval array A summary of the data for a specific member.
+			@sa Member::_getMemberSummary()
+		*/
+		public function getMemberSummaryForMember($memberId, $format = true)
+		{
+			$memberList = $this->getMemberSummaryForMembers(array($memberId), $format);
+			if(!empty($memberList))
 			{
-				return in_array($groupId, Hash::extract($user['Group'], '{n}.grp_id'));
+				return $memberList[0];
+			}
+			return array();
+		}
+
+		//! Get a summary of the member records for a list of members.
+		/*!
+			@param array $memberIds The array of member ids to work with.
+			@param $format If true format the return data.
+			@retval array A summary of the data for the members in the list
+			@sa Member::_getMemberSummary()
+		*/
+		public function getMemberSummaryForMembers($memberIds, $format = true)
+		{
+			return $this->_getMemberSummary(false, array('Member.member_id' => $memberIds), $format);
+		}
+
+		//! Get a summary of the member records for all members.
+		/*!
+			@retval array A summary of the data of all members.
+			@sa Member::_getMemberSummary()
+		*/
+		public function getMemberSummaryAll($paginate)
+		{
+			return $this->_getMemberSummary($paginate);
+		}
+
+		//! Get a summary of the member records for all members with an account id that is in the list passed in.
+		/*!
+			@param array $accountIds Retrieve information about members who have one of these account ids.
+			@retval array A summary of the data of all members with those account ids.
+			@sa Member::_getMemberSummary()
+		*/
+		public function getMemberSummaryForAccountIds($paginate, $accountIds)
+		{
+			return $this->_getMemberSummary($paginate, array( 'Member.account_id' => $accountIds ) );
+		}
+
+		//! Get a summary of the member records for all members with a certain status.
+		/*!
+			@param int $statusId Retrieve information about members who have this status.
+			@retval array A summary of the data of all members of a status.
+			@sa Member::_getMemberSummary()
+		*/
+		public function getMemberSummaryForStatus($paginate, $statusId)
+		{
+			return $this->_getMemberSummary($paginate, array( 'Member.member_status' => $statusId ) );
+		}
+
+		//! Get a summary of the member records for all member records where their name, email, username or handle is similar to the keyword.
+		/*!
+			@param string $keyword Term to search for.
+			@retval array A summary of the data of all members who match the query.
+			@sa Member::_getMemberSummary()
+		*/
+		public function getMemberSummaryForSearchQuery($paginate, $keyword)
+		{
+			return $this->_getMemberSummary( $paginate,
+				array( 'OR' => 
+					array(
+						"Member.name Like'%$keyword%'", 
+						"Member.email Like'%$keyword%'",
+						"Member.username Like'%$keyword%'",
+						"Member.handle Like'%$keyword%'",
+					)
+				)
+			);
+		}
+
+		//! Format an array of member infos.
+		/*!
+			@param array $memberInfoList The array of member infos.
+			@param bool $removeNullEntries If true then entries that have a value of null, false or an empty array won't exist in the final array.
+			@retval array An array of formatted member infos.
+		*/
+		public function formatMemberInfoList($memberInfoList, $removeNullEntries)
+		{
+			$formattedInfos = array();
+			foreach ($memberInfoList as $memberInfo) 
+			{
+				array_push($formattedInfos, $this->formatMemberInfo($memberInfo, $removeNullEntries));
+			}
+			return $formattedInfos;
+		}
+
+		//! Format member information into a nicer arrangement.
+		/*!
+			@param $info The info to format, usually retrieved from Member::_getMemberSummary or Member::getMemberDetails.
+			@param bool $removeNullEntries If true then entries that have a value of null, false or an empty array won't exist in the final array.
+			@retval array An array of member information, formatted so that nothing needs to know database rows.
+			@sa Member::_getMemberSummary
+			@sa Member::getMemberDetails
+		*/
+		public function formatMemberInfo($memberInfo, $removeNullEntries)
+		{
+			/*
+	    	    Data should be presented to the view in an array like so:
+				[id] => member id
+				[name] => member name
+				[username] => member username
+				[handle] => member handle
+				[email] => member email
+				[groups] => 
+					[n] =>
+						[id] => group id
+						[description] => group description
+				[status] => 
+					[id] => status id
+					[name] => name of the status
+				[joinDate] => member join data
+				[unlockText] => member unlock text
+				[balance] => member balance
+				[creditLimit] => member credit limit
+				[pin] => member pin
+				[paymentRef] => member payment ref
+				[address] =>
+					[part1] => member address part 1
+					[part2] => member address part 2
+					[city] => member address part 2
+					[postcode] => member address postcode
+				[contactNumber] => member contact number
+				[lastStatusUpdate] => 
+					[id] => member id
+					[by] => admin member id
+					[by_username] => admin username
+					[from] => previous status id
+					[to] => current status id
+					[at] => time the update happened
+	    	*/
+
+    		$id = Hash::get($memberInfo, 'Member.member_id');
+    		$name = Hash::get($memberInfo, 'Member.name');
+    		$username = Hash::get($memberInfo, 'Member.username');
+    		$handle = Hash::get($memberInfo, 'Member.handle');
+    		$email = Hash::get($memberInfo, 'Member.email');
+
+    		$status = array();
+    		if(array_key_exists('Status', $memberInfo))
+    		{
+    			$status['id'] = Hash::get($memberInfo, 'Status.status_id');
+    			$status['name'] = Hash::get($memberInfo, 'Status.title');
+    		}
+
+    		$joinDate = Hash::get($memberInfo, 'Member.join_date');
+    		$unlockText = Hash::get($memberInfo, 'Member.unlock_text');
+
+    		$groups = array();
+    		if(array_key_exists('Group', $memberInfo))
+    		{
+    			foreach($memberInfo['Group'] as $group)
+	    		{
+	    			array_push($groups,
+		    			array(
+		    				'id' => Hash::get($group, 'grp_id'),
+		    				'description' => Hash::get($group, 'grp_description'),
+		    			)
+		    		);
+	    		}
+    		}
+
+    		$balance = Hash::get($memberInfo, 'Member.balance');
+    		$creditLimit = Hash::get($memberInfo, 'Member.credit_limit');
+    		$pin = Hash::get($memberInfo, 'Pin.pin');
+    		$paymentRef = Hash::get($memberInfo, 'Account.payment_ref');
+    		$address = array(
+    			'part1' => Hash::get($memberInfo, 'Member.address_1'),
+    			'part2' => Hash::get($memberInfo, 'Member.address_2'),
+    			'city' => Hash::get($memberInfo, 'Member.address_city'),
+    			'postcode' => Hash::get($memberInfo, 'Member.address_postcode'),
+    		);
+    		$contactNumber = Hash::get($memberInfo, 'Member.contact_number');
+
+    		$lastStatusUpdate = null;
+    		if(Hash::check($memberInfo, 'StatusUpdate.0.id'))
+    		{
+				$lastStatusUpdate = $this->StatusUpdate->formatStatusUpdate(Hash::get($memberInfo, 'StatusUpdate.0.id'));
+    		}
+
+			$allValues = array(
+				'id' => $id,
+				'name' => $name,
+				'username' => $username,
+				'handle' => $handle,
+				'email' => $email,
+				'groups' => $groups,
+				'status' => $status,
+				'joinDate' => $joinDate,
+				'unlockText' => $unlockText,
+				'paymentRef'=> $paymentRef,
+				'balance' => $balance,
+				'creditLimit' => $creditLimit,
+				'pin' => $pin,
+				'address' => $address,
+				'contactNumber' => $contactNumber,
+				'lastStatusUpdate' => $lastStatusUpdate,
+			);
+
+			if(!$removeNullEntries)
+			{
+				return $allValues;
+			}
+
+			// Filter out any values that are null or false etc.
+			$onlyValidValues = array();
+
+			foreach ($allValues as $key => $value) 
+			{
+				if(isset($value) != false)
+				{
+					if(is_array($value) && empty($value))
+					{
+						continue;
+					}
+					$onlyValidValues[$key] = $value;
+				}
+			}
+
+			// Address part 1 is required so if any part of the address exists then that will
+			if(!$onlyValidValues['address']['part1'])
+			{
+				unset($onlyValidValues['address']);
+			}
+
+			return $onlyValidValues;
+		}
+
+		//! Create a member info array for a new member.
+		/*!
+			@param string $email The e-mail address for the new member.
+			@retval array An array of member info suitable for saving.
+		*/
+		public function createNewMemberInfo($email)
+		{
+			return array(
+				'Member' => array(
+					'email' => $email,
+					'member_status' => Status::PROSPECTIVE_MEMBER,
+				),
+			);
+		}
+
+		//! Get the Status for a member, may hit the database.
+		/*!
+			@param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
+			@retval int The status for the member, or 0 if status could not be found.
+		*/
+		public function getIdForMember($memberData)
+		{
+			if(!isset($memberData))
+			{
+				return 0;
+			}
+
+			if(is_array($memberData))
+			{
+				$memberData = Hash::get($memberData, 'Member.member_id');
+			}
+
+			return $memberData;
+		}
+
+		//! Get the username for a member, may hit the database.
+		/*!
+			@param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
+			@retval int The username for the member, or 0 if username could not be found.
+		*/
+		public function getUsernameForMember($memberData)
+		{
+			if(!isset($memberData))
+			{
+				return 0;
+			}
+
+			if(is_array($memberData))
+			{
+				$status = Hash::get($memberData, 'Member.username');
+				if(isset($status))
+				{
+					return $status;
+				}
+				else
+				{
+					$memberData = Hash::get($memberData, 'Member.member_id');
+				}
+			}
+
+			$memberInfo = $this->find('first', array('fields' => array('Member.username'), 'conditions' => array('Member.member_id' => $memberData) ));
+			if(is_array($memberInfo))
+			{
+				return Hash::get($memberInfo, 'Member.username');
+			}
+
+			return 0;
+		}
+
+		//! Get the Status for a member, may hit the database.
+		/*!
+			@param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
+			@retval int The status for the member, or 0 if status could not be found.
+		*/
+		public function getStatusForMember($memberData)
+		{
+			if(!isset($memberData))
+			{
+				return 0;
+			}
+
+			if(is_array($memberData))
+			{
+				$status = Hash::get($memberData, 'Member.member_status');
+				if(isset($status))
+				{
+					return (int)$status;
+				}
+				else
+				{
+					$memberData = Hash::get($memberData, 'Member.member_id');
+				}
+			}
+
+			$memberInfo = $this->find('first', array('fields' => array('Member.member_status'), 'conditions' => array('Member.member_id' => $memberData) ));
+			if(is_array($memberInfo))
+			{
+				$status = Hash::get($memberInfo, 'Member.member_status');
+				if(isset($status))
+				{
+					return (int)$status;
+				}
+			}
+
+			return 0;
+		}
+
+		//! Get the email for a member, may hit the database.
+		/*!
+			@param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
+			@retval int The email for the member, or null if email could not be found.
+		*/
+		public function getEmailForMember($memberData)
+		{
+			if(!isset($memberData))
+			{
+				return null;
+			}
+
+			if(is_array($memberData))
+			{
+				$email = Hash::get($memberData, 'Member.email');
+				if(isset($email))
+				{
+					return $email;
+				}
+				else
+				{
+					$memberData = Hash::get($memberData, 'Member.member_id');
+				}
+			}
+
+			$memberInfo = $this->find('first', array('fields' => array('Member.email'), 'conditions' => array('Member.member_id' => $memberData) ));
+			if(is_array($memberInfo))
+			{
+				$email = Hash::get($memberInfo, 'Member.email');
+				if(isset($email))
+				{
+					return $email;
+				}
+			}
+
+			return null;
+		}
+
+		//! Get a list of e-mail addresses for all members in a Group.
+		/*!
+			@param int $groupId The id of the group the members must belong to.
+			@retval array A list of member e-mails.
+		*/
+		public function getEmailsForMembersInGroup($groupId)
+		{
+			$memberIds = $this->GroupsMember->getMemberIdsForGroup($groupId);
+			if(count($memberIds) > 0)
+			{
+				$emails = $this->find('all', array('fields' => array('email'), 'conditions' => array('Member.member_id' => $memberIds)));
+				return Hash::extract( $emails, '{n}.Member.email' );
+			}
+			return array();
+		}
+
+		//! Attempt to register a new member record.
+		/*!
+			@param array $data Information to use to create the new member record.
+			@retval mixed Array of details if the member record was created or didn't need to be, or null if member record could not be created.
+		*/
+		public function registerMember($data)
+		{
+			if(!isset($data) || !is_array($data))
+			{
+				return null;
+			}
+
+			if( (isset($data['Member']) && isset($data['Member']['email'])) == false )
+			{
+				return null;
+			}
+
+			$this->set($data);
+
+			// Need to validate only the e-mail
+			if( !$this->validates( array( 'fieldList' => array( 'email' ) ) ) )
+			{
+				// Failed
+				return null;
+			}
+
+			// Grab the e-mail
+			$email = $data['Member']['email'];
+
+			// Start to build the result data
+			$resultDetails = array();
+			$resultDetails['email'] = $email;
+
+			// Do we already know about this e-mail?
+			$memberInfo = $this->findByEmail( $email );
+
+			// Find only returns an array if it was successful
+			$newMember = !is_array($memberInfo);
+			$resultDetails['createdRecord'] = $newMember;
+
+			$memberId = -1;
+			if($newMember)
+			{
+				$memberInfo = $this->createNewMemberInfo( $email );
+				$memberInfo['MailingLists'] = Hash::get($data, 'MailingLists');
+
+				$saveResult = $this->_saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' ), 'MailingLists' => array()), 0);
+				if( !is_array($saveResult) )
+				{
+					// Save failed for reasons.
+					return null;
+				}
+
+				$resultDetails['mailingLists'] = Hash::get($saveResult, 'mailingLists');
+
+				$memberId = $this->id;
+			}
+			else
+			{
+				$memberId = Hash::get($memberInfo, 'Member.member_id');
+			}
+			
+			$resultDetails['status'] = (int)$this->getStatusForMember( $memberInfo );
+			$resultDetails['memberId'] = $memberId;
+
+			// Success!
+			return $resultDetails;
+		}
+
+		//! Attempt to set-up login details for a member.
+		/*!
+			@param int $memberId The id of the member to set-up the login details for.
+			@param array $data The data to use.
+			@retval bool True on success, otherwise false.
+		*/
+		public function setupLogin($memberId, $data)
+		{
+			if(!isset($memberId) || $memberId <= 0)
+			{
+				return false;
+			}
+
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus == 0)
+			{
+				return false;
+			}
+
+			if($memberStatus != Status::PROSPECTIVE_MEMBER )
+			{
+				throw new InvalidStatusException( 'Member does not have status: ' . Status::PROSPECTIVE_MEMBER );
+			}
+
+			if(!isset($data) || !is_array($data))
+			{
+				return false;
+			}
+
+			if( ( isset($data['Member']) && 
+				  isset($data['Member']['name']) &&
+				  isset($data['Member']['username']) &&
+				  isset($data['Member']['email']) &&
+				  isset($data['Member']['password']) ) == false )
+			{
+				return false;
+			}
+
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if(!$memberInfo)
+			{
+				return false;
+			}
+
+			// Merge all the data, set the handle to be the same as the username for now
+			$hardcodedData = array(
+				'handle' => $data['Member']['username'],
+				'member_status' => Status::PRE_MEMBER_1,
+			);
+			unset($data['Member']['member_id']);
+			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $data['Member'], $hardcodedData));
+
+			$this->set($dataToSave);
+
+			$this->addEmailMustMatch();
+
+			$saveOk = false;
+			if($this->validates(array( 'fieldList' => array('member_id', 'name', 'username', 'handle', 'email', 'password', 'password_confirm', 'member_status'))))
+			{
+				$saveOk = is_array($this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'name', 'username', 'handle', 'member_status')), $memberId));
+			}
+
+			$this->removeEmailMustMatch();
+
+			return $saveOk;
+		}
+
+		//! Attempt to set-up contact details for a member.
+		/*!
+			@param int $memberId The id of the member to set-up the contact details for.
+			@param array $data The data to use.
+			@retval bool True on success, otherwise false.
+		*/
+		public function setupDetails($memberId, $data)
+		{
+			if(!isset($memberId) || $memberId <= 0)
+			{
+				return false;
+			}
+
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus == 0)
+			{
+				return false;
+			}
+
+			if($memberStatus != Status::PRE_MEMBER_1 )
+			{
+				throw new InvalidStatusException( 'Member does not have status: ' . Status::PRE_MEMBER_1 );
+			}
+
+			if(!isset($data) || !is_array($data))
+			{
+				return false;
+			}
+
+			if( ( isset($data['Member']) && 
+				  isset($data['Member']['address_1']) &&
+				  isset($data['Member']['address_city']) &&
+				  isset($data['Member']['address_postcode']) &&
+				  isset($data['Member']['contact_number']) ) == false )
+			{
+				return false;
+			}
+
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if(!$memberInfo)
+			{
+				return false;
+			}
+
+			$hardcodedData = array(
+				'member_status' => Status::PRE_MEMBER_2,
+			);
+			unset($data['Member']['member_id']);
+			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $data['Member'], $hardcodedData));
+
+			$this->set($dataToSave);
+
+			if(	$this->validates(array( 'fieldList' => array('member_id', 'address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number', 'member_status'))) )
+			{
+				return is_array($this->_saveMemberData(
+					$dataToSave, 
+					array('Member' => 
+						array(
+							'member_id', 
+							'address_1', 
+							'address_2', 
+							'address_city', 
+							'address_postcode', 
+							'contact_number', 
+							'member_status'
+						)
+					),
+					$memberId)
+				);
 			}
 
 			return false;
 		}
 
-		public static function isInGroupFullAccess($user)
+		//! Mark a members contact details as invalid.
+		/*
+			@param int $memberId The id of the member.
+			@param array $data The data to use.
+			@param int $adminId The id of the member admin who is rejecting the details.
+			@retval bool True if the members data was altered successfully, false otherwise.
+		*/
+		public function rejectDetails($memberId, $data, $adminId)
 		{
-			return Member::isInGroup($user, 1);
+			// Need some extra validation
+	    	$memberEmail = ClassRegistry::init('MemberEmail');
+
+	    	if(!isset($memberId) || $memberId <= 0)
+			{
+				return false;
+			}
+
+			if(!isset($adminId) || $adminId <= 0)
+			{
+				return false;
+			}
+
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus == 0)
+			{
+				return false;
+			}
+
+			if($memberStatus != Status::PRE_MEMBER_2 )
+			{
+				throw new InvalidStatusException( 'Member does not have status: ' . Status::PRE_MEMBER_2 );
+			}
+
+			if(!isset($data) || !is_array($data))
+			{
+				return false;
+			}
+
+			if( ( isset($data['MemberEmail']) && 
+				  isset($data['MemberEmail']['message']) ) == false )
+			{
+				return false;
+			}
+
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if(!$memberInfo)
+			{
+				return false;
+			}
+
+			$hardcodedData = array(
+				'member_status' => Status::PRE_MEMBER_1,
+			);
+			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $hardcodedData));
+
+			$this->set($dataToSave);
+
+			if( $memberEmail->validates( array( 'fieldList' => array( 'body' ) ) ) )
+			{
+				return is_array($this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'member_status')), $adminId));
+			}
 		}
 
-		public static function isInGroupMemberAdmin($user)
+		//! Mark a members details as valid.
+		/*!
+			@param int $memberId The id of the member who's details we want to mark as valid.
+			@param array $data The account data to use.
+			@param int $adminId The id of the member admin who's accepting the details.
+			@retval mixed Array of member details on success, or null on failure.
+		*/
+		public function acceptDetails($memberId, $data, $adminId)
 		{
-			return Member::isInGroup($user, 5);
+			if(!isset($memberId) || $memberId <= 0)
+			{
+				return null;
+			}
+
+			if(!isset($adminId) || $adminId <= 0)
+			{
+				return false;
+			}
+
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus == 0)
+			{
+				return null;
+			}
+
+			if($memberStatus != Status::PRE_MEMBER_2 )
+			{
+				throw new InvalidStatusException( 'Member does not have status: ' . Status::PRE_MEMBER_2 );
+			}
+
+			if(!isset($data) || !is_array($data))
+			{
+				return null;
+			}
+
+			if( ( isset($data['Account']) && 
+				  isset($data['Account']['account_id']) ) == false )
+			{
+				return null;
+			}
+
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if(!$memberInfo)
+			{
+				return null;
+			}
+
+			$hardcodedData = array(
+				'member_status' => Status::PRE_MEMBER_3,
+			);
+			unset($data['Member']);
+			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $hardcodedData));
+
+			$dataToSave = Hash::merge($dataToSave, $data);
+
+			$this->set($dataToSave);
+
+			if( is_array($this->_saveMemberData($dataToSave, array('Member' => array( 'member_id', 'member_status', 'account_id' ), 'Account' => 'account_id'), $adminId)) )
+			{
+				return $this->getSoDetails($memberId);
+			}
+
+			return null;
 		}
 
-		public static function isInGroupTourGuide($user)
+		//! Approve a member, making them a current member.
+		/*
+			@param int $memberId The id of the member to approve.
+			@param int $adminId The id of the member admin who is approving the member.
+			@retval mixed Array of member details on success, or null on failure.
+		*/
+		public function approveMember($memberId, $adminId)
 		{
-			return Member::isInGroup($user, 6);
+			if(!isset($memberId) || $memberId <= 0)
+			{
+				return null;
+			}
+
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus == 0)
+			{
+				return null;
+			}
+
+			if($memberStatus != Status::PRE_MEMBER_3 )
+			{
+				throw new InvalidStatusException( 'Member does not have status: ' . Status::PRE_MEMBER_3 );
+			}
+
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if(!$memberInfo)
+			{
+				return null;
+			}
+
+			$hardcodedMemberData = array(
+				'member_status' => Status::CURRENT_MEMBER,
+				'unlock_text' => 'Welcome ' . $memberInfo['Member']['name'],
+				'credit_limit' => 5000,
+				'join_date' => date( 'Y-m-d' ),
+			);
+			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $hardcodedMemberData));
+			$dataToSave['Pin'] = array(
+				'unlock_text' => 'Welcome',
+				'pin' => $this->Pin->generateUniquePin(),
+				'state' => 40,
+				'member_id' => $memberId,
+			);
+
+			$this->set($dataToSave);
+
+			$fieldsToSave = array(
+				'Member' => array( 
+					'member_id',
+					'member_status', 
+					'unlock_text', 
+					'credit_limit', 
+					'join_date' 
+				), 
+				'Pin' => array(
+					'unlock_text', 
+					'pin', 
+					'state', 
+					'member_id'
+				)
+			);
+
+			if( is_array($this->_saveMemberData($dataToSave, $fieldsToSave, $adminId)) )
+			{
+				return $this->getApproveDetails($memberId);
+			}
+
+			return null;
+		}
+
+		//! Change a users password.
+		/*
+			@param int $memberId The id of the member whose password is being changed.
+			@param int $adminId The id of the member who is changing the password.
+			@param array $data The array of password data.
+		*/
+		public function changePassword($memberId, $adminId, $data)
+		{
+			// Need some extra validation
+	    	$changePasswordModel = ClassRegistry::init('ChangePassword');
+
+	    	if(!isset($memberId) || $memberId <= 0)
+			{
+				return false;
+			}
+
+			if(!isset($adminId) || $adminId <= 0)
+			{
+				return false;
+			}
+
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus == 0)
+			{
+				return false;
+			}
+
+			if($memberStatus == Status::PROSPECTIVE_MEMBER )
+			{
+				throw new InvalidStatusException( 'Member has status: ' . Status::PROSPECTIVE_MEMBER );
+			}
+
+			if(	$memberId != $adminId && 
+				!($this->GroupsMember->isMemberInGroup($adminId, Group::MEMBER_ADMIN) || $this->GroupsMember->isMemberInGroup($adminId, Group::FULL_ACCESS)))
+			{
+				throw new NotAuthorizedException('Only member admins can change another members password.');
+			}
+
+			if(!isset($data) || !is_array($data))
+			{
+				return false;
+			}
+
+			if( ( isset($data['ChangePassword']) && 
+				  isset($data['ChangePassword']['current_password']) &&
+				  isset($data['ChangePassword']['new_password']) &&
+				  isset($data['ChangePassword']['new_password_confirm']) ) == false )
+			{
+				return false;
+			}
+
+			$changePasswordModel->set($data);
+			if(!$changePasswordModel->validates())
+			{
+				return false;
+			}
+
+			$passwordToCheckMember = $this->find('first', array('conditions' => array('Member.member_id' => $adminId)));
+			if(!$passwordToCheckMember)
+			{
+				return false;
+			}
+
+			$passwordToSetMember = ($adminId === $memberId) ? $passwordToCheckMember : $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+
+			if(!$passwordToSetMember)
+			{
+				return false;
+			}
+
+			if($this->krbCheckPassword(Hash::get($passwordToCheckMember, 'Member.username'), Hash::get($data, 'ChangePassword.current_password')))
+			{
+				return $this->krbChangePassword(Hash::get($passwordToSetMember, 'Member.username'),Hash::get($data, 'ChangePassword.new_password'));
+			}
+
+			return false;
+		}
+
+		//! Generate a forgot password request from an e-mail.
+		/*
+			@param array $data Array of data containing the user submitted e-mail.
+			@retval mixed An array of id and email data if creation succeeded, false otherwise.
+		*/
+		public function createForgotPassword($data)
+		{
+			// Need some extra validation
+	    	$forgotPasswordModel = ClassRegistry::init('ForgotPassword');
+
+	    	if(!isset($data) || !is_array($data))
+			{
+				return false;
+			}
+
+			if( ( isset($data['ForgotPassword']) && 
+				  isset($data['ForgotPassword']['email']) ) == false )
+			{
+				return false;
+			}
+
+			if ( isset($data['ForgotPassword']['new_password']) ||
+			  	isset($data['ForgotPassword']['new_password_confirm']) )
+			{
+				return false;
+			}
+
+			$emailAddress = Hash::get($data, 'ForgotPassword.email');
+
+			$memberInfo = $this->find('first', array('conditions' => array('Member.email' => $emailAddress), 'fields' => array('Member.member_id', 'Member.member_status')));
+			if($memberInfo)
+			{
+				$memberStatus = $this->getStatusForMember( $memberInfo );
+				if($memberStatus == 0)
+				{
+					return false;
+				}
+
+				if($memberStatus == Status::PROSPECTIVE_MEMBER )
+				{
+					throw new InvalidStatusException( 'Member has status: ' . Status::PROSPECTIVE_MEMBER );
+				}
+
+				$guid = $forgotPasswordModel->createNewEntry(Hash::get($memberInfo, 'Member.member_id'));
+				if($guid != null)
+				{
+					return array('id' => $guid, 'email' => $emailAddress);
+				}
+			}
+
+			return false;
+		}
+
+		//! Complete a forgot password request
+		/*
+			@param string $guid The id of the forgot password request.
+			@param array $data Array of data containing the user submitted e-mail.
+			@retval bool True if password was changed, false otherwise.
+		*/
+		public function completeForgotPassword($guid, $data)
+		{
+			if(!ForgotPassword::isValidGuid($guid))
+			{
+				return false;
+			}
+
+			// Need some extra validation
+	    	$forgotPasswordModel = ClassRegistry::init('ForgotPassword');
+
+	    	if(!isset($data) || !is_array($data))
+			{
+				return false;
+			}
+
+			if( ( isset($data['ForgotPassword']) && 
+				  isset($data['ForgotPassword']['email']) &&
+				  isset($data['ForgotPassword']['new_password']) &&
+				  isset($data['ForgotPassword']['new_password_confirm'])  ) == false )
+			{
+				return false;
+			}
+
+			$forgotPasswordModel->set($data);
+			if($forgotPasswordModel->validates())
+			{
+				$emailAddress = Hash::get($data, 'ForgotPassword.email');
+
+				$memberInfo = $this->find('first', array('conditions' => array('Member.email' => $emailAddress), 'fields' => array('Member.member_id')));
+				if($memberInfo)
+				{
+					$memberId = $this->getIdForMember($memberInfo);
+					if(	$memberId > 0 && 
+						$forgotPasswordModel->isEntryValid($guid, $memberId))
+					{
+						$username = $this->getUsernameForMember($memberId);
+						if($username)
+						{
+							$password = Hash::get($data, 'ForgotPassword.new_password');
+
+							$dataSource = $this->getDataSource();
+							$dataSource->begin();
+
+							if( ($this->setPassword($username, $password, true) &&
+								$forgotPasswordModel->expireEntry($guid)) )
+							{
+								$dataSource->commit();
+								return true;
+							}
+							
+							$dataSource->rollback();
+							return false;
+						}
+					}
+				}				
+			}
+			return false;
+		}
+
+		//! Update all the updatable info for a member.
+		/*!
+			@param int $memberId The id of the member to update.
+			@param array $data The array of new data.
+			@param int $adminId The id of the member who is updating the details.
+			@retval bool True if member details were updated ok, false otherwise.
+		*/
+		public function updateDetails($memberId, $data, $adminId)
+		{
+			if(!is_numeric($memberId) || $memberId <= 0)
+			{
+				return false;
+			}
+
+			if(!is_array($data) || empty($data))
+			{
+				return false;
+			}
+
+			$data['Member']['member_id'] = $memberId;
+
+			$fieldsToSave = array(
+				'Member' => array(
+					'member_id',
+					'name',
+					'username',
+					'handle',
+					'email',
+					'unlock_text',
+					'account_id',
+					'address_1',
+					'address_2',
+					'address_city',
+					'address_postcode',
+					'contact_number',
+				),
+				'Group' => array(
+				),
+				'MailingLists' => array(
+				),
+			);
+			return $this->_saveMemberData($data, $fieldsToSave, $adminId);
+		}
+
+		//! Get a members name, email and payment ref.
+		/*
+			@param int $memberId The id of the member to get the details for.
+			@retval mixed Array of info on success, null on failure.
+		*/
+		public function getSoDetails($memberId)
+		{
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if($memberInfo)
+			{
+				$name = Hash::get($memberInfo, 'Member.name');
+				$email = Hash::get($memberInfo, 'Member.email');
+				$paymentRef = Hash::get($memberInfo, 'Account.payment_ref');
+
+				if(isset($name) && isset($email) && isset($paymentRef))
+				{
+					return array(
+						'name' => $name,
+						'email' => $email,
+						'paymentRef' => $paymentRef,
+					);
+				}
+			}
+			return null;
+		}
+
+		//! Get a members name, email and pin.
+		/*
+			@param int $memberId The id of the member to get the details for.
+			@retval mixed Array of info on success, null on failure.
+		*/
+		public function getApproveDetails($memberId)
+		{
+			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+			if($memberInfo)
+			{
+				$name = Hash::get($memberInfo, 'Member.name');
+				$email = Hash::get($memberInfo, 'Member.email');
+				$pin = Hash::get($memberInfo, 'Pin.pin');
+
+				if(isset($name) && isset($email) && isset($pin))
+				{
+					return array(
+						'name' => $name,
+						'email' => $email,
+						'pin' => $pin,
+					);
+				}
+			}
+			return null;
+		}
+
+		//! Get a list of account and member details that is suitable for populating a drop-down box
+		/*!
+			@retval null List of values on success, null on failure.
+		*/
+		public function getReadableAccountList()
+		{
+			$memberList = $this->find('list', array(
+				'fields' => array('member_id', 'name', 'account_id'), 
+				'conditions' => array('Member.account_id !=' => null))
+			);
+
+			$accountList = array();
+			foreach ($memberList as $accountId => $members) 
+			{
+				$memberNames = array();
+				foreach ($members as $id => $name) 
+				{
+					array_push($memberNames, $name);
+				}
+				
+				$accountList[$accountId] = String::toList($memberNames);
+			}
+			$accountList['-1'] = 'Create new';
+			ksort($accountList);
+
+			return $accountList;
+		}
+
+		//! Revoke a members membership.
+		/*!
+			@param int $memberId The id of the membership to revoke.
+			@param int $adminId The id of the member doing the revoking.
+			@retval bool True if membership was revoked, false otherwise.
+		*/
+		public function revokeMembership($memberId, $adminId)
+		{
+			return $this->_setMemberStatus($memberId, $adminId, Status::EX_MEMBER, Status::CURRENT_MEMBER);
+		}
+
+
+		//! Reinstate an ex-members membership.
+		/*!
+			@param int $memberId The id of the membership to reinstate.
+			@param int $adminId The id of the member doing the reinstating.
+			@retval bool True if membership was reinstated, false otherwise.
+		*/
+		public function reinstateMembership($memberId, $adminId)
+		{
+			return $this->_setMemberStatus($memberId, $adminId, Status::CURRENT_MEMBER, Status::EX_MEMBER);
+		}
+
+		//! Set a members member_status.
+		/*!
+			@param int $memberId The id of the member to change the status of.
+			@param int $adminId The id of the member doing then changing.
+			@param int $newStatus The new member_status.
+			@param int $requiredCurrentStatus The status the member must currently have.
+			@retval bool True if status was set, otherwise false.
+		*/
+		private function _setMemberStatus($memberId, $adminId, $newStatus, $requiredCurrentStatus)
+		{
+			if(	!is_numeric($memberId) ||
+				!is_numeric($adminId) ||
+				!is_numeric($newStatus) ||
+				!is_numeric($requiredCurrentStatus))
+			{
+				return false;
+			}
+
+			if(	!($this->GroupsMember->isMemberInGroup($adminId, Group::MEMBER_ADMIN) || $this->GroupsMember->isMemberInGroup($adminId, Group::FULL_ACCESS)))
+			{
+				throw new NotAuthorizedException('Only member admins can change member status.');
+			}
+
+			$memberStatus = $this->getStatusForMember( $memberId );
+			if($memberStatus != $requiredCurrentStatus )
+			{
+				throw new InvalidStatusException( 'Member doesn\'t have the correct status.' );
+			}
+
+			$data = array(
+				'Member' => array(
+					'member_id' => $memberId,
+					'member_status' => $newStatus,
+				),
+			);
+
+			$fieldsToSave = array(
+				'Member' => array(
+					'member_id',
+					'member_status'
+				),
+			);
+
+			return is_array($this->_saveMemberData($data, $fieldsToSave, $adminId));
+		}
+
+		//! Validate that e-mail data is ok.
+		/*!
+			@param array $data The data to validate.
+			@retval mixed Array of e-mail data if $data is valid, false otherwise.
+		*/
+		public function validateEmail($data)
+		{
+			if(	is_array($data) &&
+				isset($data['MemberEmail']) &&
+				isset($data['MemberEmail']['subject']) &&
+				isset($data['MemberEmail']['message']) )
+			{
+				$emailModel = ClassRegistry::init('MemberEmail');
+				$emailModel->set($data);
+				if($emailModel->validates($data))
+				{
+					return array('subject' => Hash::get($data, 'MemberEmail.subject'), 'message' => Hash::get($data, 'MemberEmail.message'));
+				}
+			}
+			return false;
+		}
+
+		//! Sanitise an array of member info, removing certain fields.
+		/*!
+			@param array $memberInfo The array of member info to sanitise.
+			@param bool $showAdminFeatures If true then all data should be shown.
+			@param bool $showFinances If true then finance data should be shown.
+			@param bool $hasJoined If true then show data that is only relevant to members who have joined.
+			@param bool $showAccount If true then show account info.
+			@param bool $showStatus If true then show member status.
+			@retval mixed The array of sanitised member info, or false on error.
+		*/
+		public function sanitiseMemberInfo($memberInfo, $showAdminFeatures, $showFinances, $hasJoined, $showAccount, $showStatus)
+		{
+			if(is_array($memberInfo) && !empty($memberInfo))
+			{
+
+				// Hide things they shouldn't be seeing
+		    	if(!$showAdminFeatures)
+		    	{
+		    		unset($memberInfo['Pin']);
+		    		unset($memberInfo['StatusUpdate']);
+		    		unset($memberInfo['Group']);
+		    	}
+
+		    	if(!$showFinances)
+		    	{
+		    		unset($memberInfo['Member']['balance']);
+		    		unset($memberInfo['Member']['credit_limit']);
+		    	}
+
+		    	if(!$hasJoined)
+		    	{
+		    		unset($memberInfo['Member']['join_date']);
+		    		unset($memberInfo['Member']['unlock_text']);
+		    	}
+
+		    	if(!$showAccount)
+		    	{
+		    		unset($memberInfo['Member']['account_id']);
+		    		unset($memberInfo['Account']);	
+		    	}
+
+		    	if(!$showAdminFeatures || !$showStatus)
+		    	{
+		    		unset($memberInfo['Status']);
+		    		unset($memberInfo['Member']['member_status']);
+		    	}
+
+		    	$unsetIfNull = array('username', 'handle', 'name', 'account_id', 'contact_number', 'address_1', 'address_2', 'address_city', 'address_postcode', 'member_number');
+		    	foreach ($unsetIfNull as $index) 
+		    	{
+		    		if(	array_key_exists($index, $memberInfo['Member']) && 
+		    			!isset($memberInfo['Member'][$index]) )
+			    	{
+			    		unset($memberInfo['Member'][$index]);
+			    	}
+		    	}
+
+				return $memberInfo;
+			}
+			return false;
+		}
+
+		//! Create or save a member record, and all associated data.
+		/*! 
+			@param array $memberInfo The information to use to create or update the member record.
+			@param array $fields The fields that should be saved.
+			@param int $adminId The id of the member who is making the change that needs saving.
+			@retval mixed Array of result data if save succeed, false otherwise.
+		*/
+		private function _saveMemberData($memberInfo, $fields, $adminId)
+		{
+			$result = array();
+
+			$dataSource = $this->getDataSource();
+			$dataSource->begin();
+
+			$memberId = Hash::get( $memberInfo, 'Member.member_id' );
+
+			// If the member already exists, sort out the groups
+			$oldStatus = 0;
+			$newStatus = (int)$this->getStatusForMember( $memberInfo );
+			if($memberId != null)
+			{
+				$oldStatus = (int)$this->getStatusForMember( $memberId );
+
+				$newGroups = array( 'Group' );
+				if( $newStatus != Status::CURRENT_MEMBER )
+				{
+					$newGroups['Group'] = array();
+				}
+				else
+				{
+					// Get a list of existing groups this member is a part of
+					// Maybe from the data to be saved, maybe from the existing member data...
+					$existingGroups = array();
+					if(	isset($fields['Group']) && 
+						isset($memberInfo['Group']) && 
+						isset($memberInfo['Group']['Group']) )
+					{
+						if(!is_array($memberInfo['Group']['Group']))
+						{
+							// Someone has attempted to wipe all groups
+							$existingGroups = array();
+						}
+						else
+						{
+							// Group data is coming in..
+							foreach ($memberInfo['Group']['Group'] as $key => $value) 
+							{
+								array_push($existingGroups, $value);
+							}
+						}
+					}
+					else
+					{
+						// We'll need to save it now
+						$fields['Group'] = array();
+
+						// Use the groups currently associated with this member
+						$existingGroups = $this->GroupsMember->getGroupIdsForMember( $memberId );
+					}
+
+					if(!in_array(Group::CURRENT_MEMBERS, $existingGroups))
+					{
+						array_push($existingGroups, Group::CURRENT_MEMBERS);
+					}
+
+					$groupIdx = 0;
+					foreach ($existingGroups as $group) 
+					{
+						$newGroups['Group'][$groupIdx] = $group;
+						$groupIdx++;
+					}
+				}
+
+				$memberInfo['Group'] = $newGroups;
+
+				// Do we have to change the password?
+				if(	isset($memberInfo['Member']['username']) && 
+					isset($memberInfo['Member']['password']) )
+				{
+					$username = Hash::get($memberInfo, 'Member.username');
+					$password = Hash::get($memberInfo, 'Member.password');
+
+			    	if(!$this->setPassword($username, $password, true))
+			    	{
+			    		$dataSource->rollback();
+			    		return false;
+			    	}
+				}
+			}
+			else
+			{
+				$this->Create();
+			}
+
+			// Do we want to be saving an account id?
+			if(	isset($fields['Member']) && 
+				is_array($fields['Member']) && 
+				in_array('account_id', $fields['Member']))
+			{
+				// Attempt to get the account id we're meant to be saving, try from the account field first.
+				$accountId = Hash::get($memberInfo, 'Account.account_id');
+
+				if(!isset($accountId))
+				{
+					// Try the member field?
+					$accountId = Hash::get($memberInfo, 'Member.account_id');
+				}
+
+				// Do we actually have an account id?
+				if(isset($accountId))
+				{
+					// Check with the Account model if this account exists or not
+					// should return the id of the account we should be saving
+					$accountId = $this->Account->setupAccountIfNeeded($accountId);
+					if($accountId < 0)
+					{
+						// Either account creation failed or account does not exist.
+						$dataSource->rollback();
+						return false;
+					}
+
+					// Set the account id in the member info, as it may have changed.
+					$memberInfo = Hash::insert($memberInfo, 'Member.account_id', $accountId);
+				}
+			}
+
+			unset($memberInfo['Account']);
+
+			$safeMemberInfo = array();
+			// Need to unset anything in the $memberInfo that's not in $fields.
+			foreach ($fields as $allowedModel => $allowedFields) 
+			{
+				if(is_array($allowedFields))
+				{
+					if(isset($memberInfo[$allowedModel]))
+					{
+						// If the field entry array is empty, then all the children of that are valid
+						if(empty($allowedFields))
+						{
+							$safeMemberInfo[$allowedModel] = $memberInfo[$allowedModel];
+						}
+						else
+						{
+							$validValues = array();
+
+							// Copy any 'safe' values
+							foreach ($allowedFields as $allowedField) 
+							{
+								if(isset($memberInfo[$allowedModel][$allowedField]))
+								{
+									$validValues[$allowedField] = $memberInfo[$allowedModel][$allowedField];
+								}
+							}
+
+							// Don't bother adding it to the safe member info if it's empty
+							if(!empty($validValues))
+							{
+								$safeMemberInfo[$allowedModel] = $validValues;
+							}
+						}	
+					}
+				}
+			}
+
+			$mailingListsInData = Hash::check($memberInfo, 'MailingLists.MailingLists');
+			$mailingLists = array();
+			if($mailingListsInData)
+			{
+				$mailingLists = Hash::get($memberInfo, 'MailingLists.MailingLists');
+				// $mailingLists will be an empty string if no mailing lists are selected
+				if(is_string($mailingLists))
+				{
+					$mailingLists = array();
+				}
+			}
+
+			$memberEmail = $this->getEmailForMember($memberInfo);
+
+			if(	$mailingListsInData &&
+				$memberEmail)
+			{
+				$mailingList = $this->getMailingList();
+				$result['mailingLists'] = $mailingList->updateSubscriptions( $memberEmail, $mailingLists );
+			}
+
+			if( !$this->saveAll( $safeMemberInfo, array( 'fieldList' => $fields )) )
+			{
+				$dataSource->rollback();
+				return false;
+			}
+
+			// Do we need to create a status update record?
+			if($newStatus != $oldStatus)
+			{
+				// If $memberId is null then we've just created this member.
+				if($memberId == null)
+				{
+					$memberId = $this->id;
+				}
+
+				// Admin id of 0 means the member is making the change themselves
+				if($adminId === 0)
+				{
+					$adminId = $memberId;
+				}
+
+				if(!$this->StatusUpdate->createNewRecord( $memberId, $adminId, $oldStatus, $newStatus ))
+				{
+					$dataSource->rollback();
+					return false;
+				}
+			}
+
+			// We're good
+			$dataSource->commit();
+			return $result;
+		}
+
+		//! Get a MailingList model.
+		/*!
+			@retval MailingList The MailingList model.
+		*/
+		public function getMailingList()
+		{
+			if($this->mailingList == null)
+			{
+				$this->mailingList = ClassRegistry::init('MailingList');
+			}
+			return $this->mailingList;
+		}
+
+		//! Set the password for the member, with the option to create a new password entry if needed.
+		/*!
+			@param string $username The username of the member.
+			@param string $password The new password.
+			@param bool $allowCreate If true, will create a new auth record for a member that doesn't currently have one.
+			@retval bool True if the password was set ok, false otherwise.
+		*/
+		private function setPassword($username, $password, $allowCreate)
+		{
+			switch ($this->krbUserExists($username)) 
+	    	{
+	    		case TRUE:
+	    			return $this->krbChangePassword($username, $password);
+
+	    		case FALSE:
+	    			return ($allowCreate && $this->krbAddUser($username, $password));
+
+	    		default:
+	    			return false;
+	    	}
+	    	return false;
+		}
+
+
+		//! Get a summary of the member records for all members that match the conditions.
+		/*!
+			@param bool $paginate If true, just return the query for pagination instead of the data.
+			@param array $conditions An array of conditions to decide which member records to access.
+			@param bool $format If true format the data first, otherwise just return it in the same format as the datasource gives it us.
+			@retval array A summary (id, name, email, Status and Groups) of the data of all members that match the conditions.
+		*/
+		private function _getMemberSummary($paginate, $conditions = array(), $format = true)
+		{
+			$findOptions = array('conditions' => $conditions);
+
+			if($paginate)
+			{
+				return $findOptions;
+			}
+
+			$info = $this->find( 'all', $findOptions );
+
+			if($format)
+			{
+				return $this->formatMemberInfoList($info, false);
+			}
+			return $info;
 		}
 	}
 ?>

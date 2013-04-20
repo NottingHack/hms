@@ -6,7 +6,7 @@
 
 <div class="search">
 <?php
-    echo $this->form->create("Member",array('action' => 'search')); 
+    echo $this->form->create("Member", array('action' => 'search', 'type' => 'GET'));
     echo $this->form->input("query", array('label' => ''));
     echo $this->form->end("Search"); 
 ?>
@@ -26,22 +26,24 @@
             No. Members with this status
         </th>
     </tr>
-    <?php foreach ($memberStatusCount as $title => $data): ?>
+        <?php
+            foreach ($memberStatusInfo as $data):
+        ?>
         <tr>
             <td>
-                <?php echo $this->Html->link($title, array('controller' => 'members', 'action' => 'list_members_with_status', $data['id'])); ?>
+                <?php echo $this->Html->link($data['name'], array('controller' => 'members', 'action' => 'listMembersWithStatus', $data['id'])); ?>
             </td>
             <td>
-                <?php echo $data['desc']; ?>
+                <?php echo $data['description']; ?>
             </td>
             <td>
                 <?php echo $data['count'] ?>
             </td>
         </tr>
-    <? endforeach; ?>
+    <?php endforeach; ?>
     <tr>
         <td>
-            <?php echo $this->Html->link('All', array('controller' => 'members', 'action' => 'list_members')); ?>
+            <?php echo $this->Html->link('All', array('controller' => 'members', 'action' => 'listMembers')); ?>
         </td>
         <td>
             All Members

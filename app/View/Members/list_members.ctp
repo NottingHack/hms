@@ -2,107 +2,70 @@
 
 <?php
     $this->Html->addCrumb('Members', '/members');
-    $this->Html->addCrumb('List Members', '/members/list_members_with_status');
-    if(isset($statusData))
+    $this->Html->addCrumb('List Members', '/members/listMembersWithStatus');
+    if( isset($statusInfo) &&
+        isset($statusInfo['id']) &&
+        isset($statusInfo['name']) )
     {
-        $this->Html->addCrumb($statusData['title'], '/members/list_members_with_status/' . $statusData['status_id']);
+        $this->Html->addCrumb($statusInfo['name'], '/members/listMembersWithStatus/' . $statusInfo['id']);
     }
-
-    # Don't show the join date for prospective members
-    # But make this list inclusive, not exclusive in case other status Id's are added in future
-    $showJoinDate = 
-        isset($statusData) &&
-            ( $statusData['status_id'] == 2 ||
-              $statusData['status_id'] == 3 );
 ?>
 
-<table>
-    <?php if(count($members) > 0): ?>
-    <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <?php if($showJoinDate): ?>
-            <th>Join Date</th>
-        <?php endif; ?>
-        <th>Groups</th>
-        <?php
-            if(isset($statusData) === false)
-            {
-                echo '<th>Status</th>';
-            }
-        ?>
-        <th>Actions</th>
-    </tr>
-    <?php foreach ($members as $member): ?>
-    <tr>
-        <td>
-            <?php echo $this->Html->link($member['Member']['name'], array('controller' => 'members', 'action' => 'view', $member['Member']['member_id'])); ?>
-        </td>
-        <td><?php echo $member['Member']['email']; ?></td>
-        <?php if($showJoinDate): ?>
-            <td><?php echo $member['Member']['join_date']; ?></td>
-        <?php endif; ?>
-        <td>
-            <?php
-                $numGroups = count($member['Group']);
-                if($numGroups === 0)
-                {
-                    echo 'None';
-                }
-                else
-                {
-                    for($i = 0; $i < $numGroups; $i++) {
-                        echo $this->Html->link($member['Group'][$i]['grp_description'], array('controller' => 'groups', 'action' => 'view', $member['Group'][$i]['grp_id']));
-                        if($i < $numGroups - 1)
+<?php if(count($memberList) > 0): ?>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Groups</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        <?php foreach ($memberList as $member): ?>
+            <tr>
+                <td>
+                    <?php echo $this->Html->link($member['name'], array('controller' => 'members', 'action' => 'view', $member['id'])); ?>
+                </td>
+                <td><?php echo $member['email']; ?></td>
+                <td>
+                    <?php
+                        $numGroups = count($member['groups']);
+                        if($numGroups === 0)
                         {
-                            echo ', ';
+                            echo 'None';
                         }
-                    }
-                }
-            ?>
-        </td>
-        <?php
-            if(isset($statusData) === false)
-            {
-                echo '<td>' . $this->Html->link($member['Status']['title'], array('controller' => 'members', 'action' => 'list_members_with_status', $member['Status']['status_id'])) . '</td>';
-            }
-        ?>
-        <td>
-            <?php 
-                switch ($member['Member']['member_status']) {
+                        else
+                        {
+                            for($i = 0; $i < $numGroups; $i++) {
+                                echo $this->Html->link($member['groups'][$i]['description'], array('controller' => 'groups', 'action' => 'view', $member['groups'][$i]['id']));
+                                if($i < $numGroups - 1)
+                                {
+                                    echo ', ';
+                                }
+                            }
+                        }
+                    ?>
+                </td>
+                <td>
+                    <?php echo $this->Html->link($member['status']['name'], array('controller' => 'members', 'action' => 'listMembersWithStatus', $member['status']['id'])); ?>
+                </td>
+                <td>
+                    <?php
+                        foreach ($member['actions'] as $action) 
+                        {
+                            $linkOptions = $action['params'];
+                            $linkOptions['controller'] = $action['controller'];
+                            $linkOptions['action'] = $action['action'];
 
-                    case 1: # Prospective member
-                        echo $this->Html->link('Send Membership Reminder', array('controller' => 'members', 'action' => 'send_membership_reminder', $member['Member']['member_id']));
-                        break;
-
-                    case 2: # Current member
-                        echo $this->Html->link("Revoke membership", array('controller' => 'members', 'action' => 'set_member_status', $member['Member']['member_id'], 3));
-                        break;
-
-                    case 3: # Ex-member
-                        echo $this->Html->link("Reinstate membership", array('controller' => 'members', 'action' => 'set_member_status', $member['Member']['member_id'], 2));
-                        break;
-
-                    case 5: # Waiting for contact details
-                        echo $this->Html->link('Send Contact Details Reminder', array('controller' => 'members', 'action' => 'send_contact_details_reminder', $member['Member']['member_id']));
-                        break;
-
-                    case 6: # Prospective member
-                        echo $this->Html->link("Check contact details", array('controller' => 'members', 'action' => 'view', $member['Member']['member_id']));
-                        break;
-
-                    case 7: # Waiting for SO
-                        echo $this->Html->link('Send SO Details Reminder', array('controller' => 'members', 'action' => 'send_so_details_reminder', $member['Member']['member_id']));
-                        echo '</br>';
-                        echo $this->Html->link('Approve Member', array('controller' => 'members', 'action' => 'approve_member', $member['Member']['member_id']));
-                        break;
-                }
-            ?>
-        </td>
-    </tr>
-    <?php endforeach; ?>
+                            echo $this->Html->link($action['title'], $linkOptions);
+                        }
+                    ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <div class="paginate">
+        <?php echo $this->Paginator->numbers(); ?>
+    </div>
 <?php else: ?>
     <p> No members to list. </p>
 <?php endif; ?>
-
-</table>

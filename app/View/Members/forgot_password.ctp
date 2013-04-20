@@ -1,10 +1,10 @@
 <!-- File: /app/View/Member/forgot_password.ctp -->
 
 <?php
-    $this->Html->addCrumb('Forgot Password', '/members/forgot_password');
+    $this->Html->addCrumb('Forgot Password', '/members/forgotPassword');
 ?>
 
-<?php if(isset($guid) && $guid != null): ?>
+<?php if(!$createRequest): ?>
 
     <p>Please confirm your e-mail address and enter your new password below</p>
     <?php

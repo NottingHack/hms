@@ -3,7 +3,7 @@
 </p>
 
 <p>
-	If you'd like to become a Nottingham Hackspace member, the first step is is to <?php echo $this->Html->link('create an HMS account', array('controller' => 'members', 'action' => 'setup_login', $memberId, 'full_base' => true)); ?>.
+	If you'd like to become a Nottingham Hackspace member, the first step is is to <?php echo $this->Html->link('create an HMS account', array('controller' => 'members', 'action' => 'setupLogin', $memberId, 'full_base' => true)); ?>.
 </p>
 
 <p>
@@ -24,7 +24,7 @@
 
 <p>
 	Here's the URL for the public google group:<br>
-	https://groups.google.com/group/nottinghack?hl=en
+	<?php echo $this->Html->link('https://groups.google.com/group/nottinghack?hl=en'); ?>
 </p>
 
 <p>
@@ -33,5 +33,5 @@
 
 <p>
 	Thanks,<br>
-	Nottingham Hackspace Member Admins
+	Nottinghack Member Admin Team
 </p>

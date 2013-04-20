@@ -16,5 +16,5 @@
 
 <p>
 	Thanks,<br>
-	Nottingham Hackspace Member Admins
+	Nottinghack Member Admin Team
 </p>

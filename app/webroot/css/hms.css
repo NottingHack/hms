@@ -994,3 +994,17 @@ pre {
 .big_button {
 	font-size: 130%;
 }
+
+.currency_negative {
+	color: #ff0000;
+}
+
+.paginate {
+	margin: 0px auto;
+	width: 100%;
+	text-align: center;
+}
+
+input[type=file] {
+	padding: 0px;
+}

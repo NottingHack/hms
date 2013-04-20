@@ -30,7 +30,8 @@ App::uses('Xml', 'Utility');
  * @package       app.Controller
  * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
  */
-class PagesController extends AppController {
+class PagesController extends AppController 
+{
 
 	var $component = array('Auth'); 
 /**
@@ -72,7 +73,7 @@ class PagesController extends AppController {
 			$title_for_layout = Inflector::humanize($path[$count - 1]);
 		}
 
-		# AT [18/09/2012] Dynamic content on a 'static' page? Why not.
+		// Dynamic content on a 'static' page? Why not.
 		if( method_exists($this, $page) )
 		{
 			call_user_func( array($this, $page) );
@@ -89,21 +90,24 @@ class PagesController extends AppController {
 
     public function home()
     {
-    	# AT [29/09/2012] TODO: Cache this
-    	if(AuthComponent::user())
+    	Controller::loadModel('Member');
+
+        $loggedInMemberId = $this->Member->getIdForMember($this->Auth->user());
+
+    	if($loggedInMemberId)
     	{
     		if($this->referer() == Router::url(array('controller' => 'members', 'action' => 'login'), true))
     		{
-	    		# Redirect if the user wants to be elsewhere
-	    		$memberStatus = AuthComponent::user('Member.member_status');
-	    		switch($memberStatus)
+	    		// Redirect if the user wants to be elsewhere
+	    		switch($this->Member->getStatusForMember($loggedInMemberId))
 	    		{
-	    			case 5:
-	    			$this->redirect(array('controller' => 'members', 'action' => 'setup_details', AuthComponent::user('Member.member_id')));
-	    			return;
+	    			case Status::PRE_MEMBER_1:
+	    				return $this->redirect(array('controller' => 'members', 'action' => 'setupDetails', $loggedInMemberId));
 	    		}
 	    	}
 	    	
+
+	    	// TODO: Cache this
 	    	$parsed_xml = Xml::build('http://nottinghack.org.uk/?feed=rss2');
 			$this->set('rssData', $parsed_xml);
 		}

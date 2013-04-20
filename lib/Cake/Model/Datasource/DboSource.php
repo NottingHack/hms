@@ -447,6 +447,9 @@ class DboSource extends DataSource {
  */
 	protected function _execute($sql, $params = array(), $prepareOptions = array()) {
 		$sql = trim($sql);
+
+		CakeLog::Write('activity', $sql);
+
 		if (preg_match('/^(?:CREATE|ALTER|DROP)/i', $sql)) {
 			$statements = array_filter(explode(';', $sql));
 			if (count($statements) > 1) {
