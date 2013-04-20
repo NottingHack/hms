@@ -14,15 +14,6 @@
 	echo $this->Form->input('email');
 	echo $this->Form->input('unlock_text');
 
-	if( isset($this->data['Member']['status_id']) )
-	{
-		echo $this->Form->input('member_status', array( 
-				'options' => $statuses, 
-				'type' => 'select',
-				'selected' => $this->Html->value('Status.Status'),
-			) 
-		);
-	}
 
 	echo $this->Form->input('address_1', array( 'label' => 'Address part 1 (House name/number and street)' ) );
 	echo $this->Form->input('address_2', array( 'label' => 'Address part 2' ) );
@@ -31,7 +22,7 @@
 
 	echo $this->Form->input('contact_number' );
 
-	if( isset($this->data['Member']['account_id']) )
+	if( isset($member['paymentRef']) )
 	{
 		echo $this->Form->input('account_id', array( 
 				'options' => $accounts,
@@ -41,13 +32,13 @@
 	}
 
 	# Pin details
-	if( isset($this->data['Pin']) )
+	if( isset($member['pin']) )
 	{
 		echo $this->Form->input('Pin.pin', array( 'readonly' => 'readonly' ));
 		echo $this->Form->input('Pin.expiry', array('type'=>'date', 'empty' => true, 'minYear' => date("Y"), 'orderYear' => 'asc', 'dateFormat' => 'DMY'));
 	}
 
-	if( isset($this->data['Group']) )
+	if( isset($member['groups']) )
 	{
 
 		echo '<fieldset>';
