@@ -10,7 +10,7 @@
 	Account number: <?php echo $accountNum; ?><br>
 	Sort Code: <?php echo $sortCode; ?><br>
 	Account name: <?php echo $accountName; ?><br>
-	Reference: <?php echo $reference; ?><br>
+	Reference: <?php echo $paymentRef; ?><br>
 </p>
 
 <p>
