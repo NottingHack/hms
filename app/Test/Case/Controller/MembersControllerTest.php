@@ -3580,11 +3580,13 @@
 		{
 			$contents = 'iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCM';
 			$guid = null;
-			$this->_setupTestUploadCsv($contents, $guid, function() 
-			{
-				$this->controller->Session->expects($this->once())->method('setFlash')->with('That did not seem to be a valid bank .csv file');
-				$this->controller->Nav->expects($this->never())->method('add');
-			});
+
+			$this->_setupTestUploadCsv();
+
+			$this->controller->Session->expects($this->once())->method('setFlash')->with('That did not seem to be a valid bank .csv file');
+			$this->controller->Nav->expects($this->never())->method('add');
+
+			$this->_runTestUploadCsv($contents, $guid);
 
 			$this->assertArrayHasKey('Location', $this->headers);
 			$this->assertContains('/members/uploadCsv', $this->headers['Location']);
@@ -3594,11 +3596,10 @@
 		{
 			$contents = 'This, is not a valid .csv file, even though, it has, the correct, number, of commas';
 			$guid = null;
-			$this->_setupTestUploadCsv($contents, $guid, function() 
-			{
-				$this->controller->Session->expects($this->once())->method('setFlash')->with('That did not seem to be a valid bank .csv file');
-				$this->controller->Nav->expects($this->never())->method('add');
-			});
+			$this->_setupTestUploadCsv();
+			$this->controller->Session->expects($this->once())->method('setFlash')->with('That did not seem to be a valid bank .csv file');
+			$this->controller->Nav->expects($this->never())->method('add');
+			$this->_runTestUploadCsv($contents, $guid);
 
 			$this->assertArrayHasKey('Location', $this->headers);
 			$this->assertContains('/members/uploadCsv', $this->headers['Location']);
@@ -3619,11 +3620,12 @@
 			,,,,,,
 			07/02/2013,BAC,"\'C DAVIES , CHRIS , FP 07/02/13 0034 , 00156265632BBBVSCR",5,1694.08,\'NOTTINGHACK,\'558899-45687951';
 			$guid = null;
-			$this->_setupTestUploadCsv($contents, $guid, function() 
-			{
-				$this->controller->Session->expects($this->once())->method('setFlash')->with('No new member payments in .csv.');
-				$this->controller->Nav->expects($this->never())->method('add');
-			});
+			$this->_setupTestUploadCsv();
+
+			$this->controller->Session->expects($this->once())->method('setFlash')->with('No new member payments in .csv.');
+			$this->controller->Nav->expects($this->never())->method('add');
+
+			$this->_runTestUploadCsv($contents, $guid);
 
 			$this->assertArrayHasKey('Location', $this->headers);
 			$this->assertContains('/members', $this->headers['Location']);
@@ -3633,10 +3635,10 @@
 		{
 			$contents = null;
 			$guid = '123456789';
-			$this->_setupTestUploadCsv($contents, $guid, function() {
-				$this->controller->Session->expects($this->never())->method('setFlash');
-				$this->controller->Nav->expects($this->never())->method('add');
-			});
+			$this->_setupTestUploadCsv();
+			$this->controller->Session->expects($this->never())->method('setFlash');
+			$this->controller->Nav->expects($this->never())->method('add');
+			$this->_runTestUploadCsv($contents, $guid);
 		}
 
 		public function testUploadValidFile()
@@ -3656,34 +3658,36 @@
 			$guid = null;
 
 			$generatedGuid = String::uuid();
-			$this->_setupTestUploadCsv($contents, $guid, function() use($generatedGuid) {
-				$this->controller->Session->expects($this->never())->method('setFlash');
-				$this->controller->Nav->expects($this->once())->method('add')->with('Approve All', 'members', 'uploadCsv', array($generatedGuid), 'positive');
-				$this->controller->expects($this->once())->method('getMemberIdSessionKey')->will($this->returnValue($generatedGuid));
-			});
+			$this->_setupTestUploadCsv();
+			$this->controller->Session->expects($this->never())->method('setFlash');
+			$this->controller->Nav->expects($this->once())->method('add')->with('Approve All', 'members', 'uploadCsv', array($generatedGuid), 'positive');
+			$this->controller->expects($this->once())->method('getMemberIdSessionKey')->will($this->returnValue($generatedGuid));
 
-			$this->_setupTestUploadCsv($contents, $generatedGuid, function() {
-				$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
-				$this->controller->Session->expects($this->once())->method('setFlash')->with('Successfully approved member Ryan Miles\nSuccessfully approved member Evan Atkinson\n');
-				$this->controller->Nav->expects($this->never())->method('add');
+			$this->_runTestUploadCsv($contents, $guid);
 
-				// Email stuff
-				$this->controller->email->expects($this->exactly(4))->method('config');
-				$this->controller->email->expects($this->exactly(4))->method('from');
-				$this->controller->email->expects($this->exactly(4))->method('sender');
-				$this->controller->email->expects($this->exactly(4))->method('emailFormat');
-				$this->controller->email->expects($this->exactly(4))->method('to');
-				$this->controller->email->expects($this->exactly(4))->method('subject');
-				$this->controller->email->expects($this->exactly(4))->method('template');
-				$this->controller->email->expects($this->exactly(4))->method('viewVars');
-				$this->controller->email->expects($this->exactly(4))->method('send')->will($this->returnValue(true));
-			});
+			$this->_setupTestUploadCsv();
+			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+			$this->controller->Session->expects($this->once())->method('setFlash')->with('Successfully approved member Ryan Miles\nSuccessfully approved member Evan Atkinson\n');
+			$this->controller->Nav->expects($this->never())->method('add');
+
+			// Email stuff
+			$this->controller->email->expects($this->exactly(4))->method('config');
+			$this->controller->email->expects($this->exactly(4))->method('from');
+			$this->controller->email->expects($this->exactly(4))->method('sender');
+			$this->controller->email->expects($this->exactly(4))->method('emailFormat');
+			$this->controller->email->expects($this->exactly(4))->method('to');
+			$this->controller->email->expects($this->exactly(4))->method('subject');
+			$this->controller->email->expects($this->exactly(4))->method('template');
+			$this->controller->email->expects($this->exactly(4))->method('viewVars');
+			$this->controller->email->expects($this->exactly(4))->method('send')->will($this->returnValue(true));
+			
+			$this->_runTestUploadCsv($contents, $generatedGuid);
 
 			$this->assertEqual($this->controller->Member->getStatusForMember(13), Status::CURRENT_MEMBER);
 			$this->assertEqual($this->controller->Member->getStatusForMember(14), Status::CURRENT_MEMBER);
 		}
 
-		private function _setupTestUploadCsv($fileContents, $guid, $mockAsserts)
+		private function _setupTestUploadCsv()
 		{
 			$this->controller = $this->generate('Members', array(
 				'components' => array(
@@ -3707,16 +3711,14 @@
 
 			$this->controller->Member->setDataSource('test');
 			$this->controller->Member->Account->setDataSource('test');
+		}
 
+		private function _runTestUploadCsv($fileContents, $guid)
+		{
 			$action = 'members/uploadCsv';
 			if($guid != null)
 			{
 				$action .= '/' . $guid;
-			}
-
-			if($mockAsserts != null)
-			{
-				$mockAsserts();
 			}
 
 			if($fileContents == null)
