@@ -66,7 +66,7 @@
 				count($line) >= 7)
 			{
 				// Parse the date first
-				$date = strtotime($line[0]);
+				$date = $this->_parseDate($line[0]);
 
 				if($date == false || $date < 0)
 				{
@@ -174,7 +174,7 @@
 			if(	count($fieldArr) >= 2 &&
 				$fieldArr[0] == "FP")
 			{
-				$date = strtotime($fieldArr[1]);
+				$date = $this->_parseDate($fieldArr[1]);
 
 				if($date >= 0 && $date != false)
 				{
@@ -183,6 +183,16 @@
 			}
 
 			return null;
+		}
+
+		//! Attempt to parse a date from the bank statement
+		/*!
+			@param string $date Date to attempt to parse.
+			@retval mixed If date can be parsed, returns that date as a unix epoch timestamp, otherwise returns false.
+		*/
+		private function _parseDate($date)
+		{
+			return strtotime(str_replace('/', '-', $date));
 		}
 	}
 
