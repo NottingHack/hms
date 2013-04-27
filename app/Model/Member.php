@@ -1327,7 +1327,9 @@
 					'address_postcode',
 					'contact_number',
 				),
-				'Group' => array(
+				'GroupsMember' => array(
+					'member_id', 
+					'grp_id',
 				),
 				'MailingLists' => array(
 				),
@@ -1601,10 +1603,11 @@
 					// Get a list of existing groups this member is a part of
 					// Maybe from the data to be saved, maybe from the existing member data...
 					$existingGroups = array();
-					if(	isset($fields['Group']) && 
+					if(	isset($fields['GroupsMember']) && 
 						isset($memberInfo['Group']) && 
 						isset($memberInfo['Group']['Group']) )
 					{
+						$fields['Group'] = array();
 						if(!is_array($memberInfo['Group']['Group']))
 						{
 							// Someone has attempted to wipe all groups
@@ -1623,6 +1626,7 @@
 					{
 						// We'll need to save it now
 						$fields['Group'] = array();
+						$fields['GroupsMember'] = array('member_id', 'grp_id');
 
 						// Use the groups currently associated with this member
 						$existingGroups = $this->GroupsMember->getGroupIdsForMember( $memberId );
