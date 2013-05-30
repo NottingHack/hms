@@ -15,13 +15,6 @@
 	</dd>
 
 	<dt>
-		Handle
-	</dt>
-	<dd>
-		<?php echo $member['handle']; ?>
-	</dd>
-
-	<dt>
 		Email
 	</dt>
 	<dd>

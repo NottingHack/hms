@@ -9,7 +9,10 @@
 	echo $this->Form->create('Member');
 	echo $this->Form->hidden('member_id');
 	//echo $this->Form->input('username');
-	echo $this->Form->input('handle');
+	if(isset($member['handle']))
+	{
+		echo $this->Form->input('handle');
+	}
 	echo $this->Form->input('name');
 	echo $this->Form->input('email');
 	echo $this->Form->input('unlock_text');
