@@ -8,6 +8,12 @@
 
 <dl>
 	<dt>
+		Name
+	</dt>
+	<dd>
+		<?php echo $member['name']; ?>
+	</dd>
+	<dt>
 		Username
 	</dt>
 	<dd>
