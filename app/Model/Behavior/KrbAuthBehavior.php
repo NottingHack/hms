@@ -23,7 +23,7 @@
 			Configure::config('default', new PhpReader());
 			Configure::load('krb', 'default');
 
-			$this->useDummy = true;//Configure::read('krb_useDummy');
+			$this->useDummy = Configure::read('krb_useDummy');
 			if(	isset($this->useDummy) == false ||
 				$this->useDummy == false)
 			{
