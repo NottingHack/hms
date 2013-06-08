@@ -382,7 +382,7 @@ function setupTempFolders()
 				echo "Folder $folder already exists, deleting...$newline";
 				deleteDir($folder);
 			}
-			if(mkdir($folder, true))
+			if(mkdir($folder, 0777, true))
 			{
 				echo "Created folder: $folder$newline";
 			}
