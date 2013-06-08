@@ -7,6 +7,7 @@ $shortopts .= 'h:'; // Users handle
 $shortopts .= 'n:'; // Users name
 $shortopts .= 'e:'; // Users e-mail
 $shortopts .= 'k';  // If present, use the 'proper' krb auth script instead of the dummy.
+$shortopts .= 'f';  // If present, set-up the tmp folders
 
 $options = getopt($shortopts);
 
@@ -34,6 +35,13 @@ if(!is_array($options))
 		$_POST['realKrb'] == "on" )
 	{
 		$userRealKrb = true;
+	}
+
+	$setupTempFolders = false;
+	if(	isset($_POST['setuptmpfolders']) &&
+		$_POST['setuptmpfolders'] == "on" )
+	{
+		$setupTempFolders = true;
 	}
 
 	$name = 'A. Adminson';
@@ -78,6 +86,11 @@ if(!is_array($options))
 	if($userRealKrb)
 	{
 		$options['k'] = false;
+	}
+
+	if($setupTempFolders)
+	{
+		$options['f'] = false;
 	}
 
 	$newline = "<br />";
@@ -326,10 +339,66 @@ function copyKrbLibFile()
 	}
 }
 
+function deleteDir($dirPath) {
+    if (! is_dir($dirPath)) {
+        throw new InvalidArgumentException("$dirPath must be a directory");
+    }
+    if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+        $dirPath .= '/';
+    }
+    $files = glob($dirPath . '*', GLOB_MARK);
+    foreach ($files as $file) {
+        if (is_dir($file)) {
+            deleteDir($file);
+        } else {
+            unlink($file);
+        }
+    }
+    rmdir($dirPath);
+}
+
+function setupTempFolders()
+{
+	global $options;
+	global $newline;
+
+	if(array_key_exists('f', $options))
+	{
+		$foldersToMake = array(
+			'../app/tmp',
+			'../app/tmp/cache',
+			'../app/tmp/cache/models',
+			'../app/tmp/cache/persistent',
+			'../app/tmp/cache/views',
+			'../app/tmp/logs',
+			'../app/tmp/sessions',
+			'../app/tmp/tests',
+		);
+
+		foreach ($foldersToMake as $folder) 
+		{
+			if(file_exists($folder))
+			{
+				echo "Folder $folder already exists, deleting...$newline";
+				deleteDir($folder);
+			}
+			if(mkdir($folder, true))
+			{
+				echo "Created folder: $folder$newline";
+			}
+			else
+			{
+				echo "Failed to create folder: $folder$newline";
+			}
+		}
+	}
+}
+
 echo("Started$newline");
 createConfigFiles();
 createDatabases();
 copyKrbLibFile();
+setupTempFolders();
 echo("Finished$newline");
 
 ?>
