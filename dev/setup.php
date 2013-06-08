@@ -2,6 +2,7 @@
 
 $shortopts = '';
 $shortopts .= 'd'; 	// If present, create the database
+$shortopts .= 'p';  // If present, populate the database
 $shortopts .= 'h:'; // Users handle
 $shortopts .= 'n:'; // Users name
 $shortopts .= 'e:'; // Users e-mail
@@ -19,6 +20,13 @@ if(!is_array($options))
 		$_POST['createdb'] == "on" )
 	{
 		$createDb = true;
+	}
+
+	$populateDb = false;
+	if(	isset($_POST['populatedb']) &&
+		$_POST['populatedb'] == "on" )
+	{
+		$populateDb = true;
 	}
 
 	$userRealKrb = false;
@@ -60,6 +68,11 @@ if(!is_array($options))
 	if($createDb)
 	{
 		$options['d'] = false;
+	}
+
+	if($populateDb)
+	{
+		$options['p'] = false;
 	}
 
 	if($userRealKrb)
@@ -170,10 +183,12 @@ function createDatabases()
 	global $aSettings;
 	global $newline;
 
-	if (array_key_exists('d', $options)) 
+	$createDb = array_key_exists('d', $options);
+	$populateDb = array_key_exists('p', $options);
+	if ($createDb || $populateDb) 
 	{
 		// Main Database
-		$oDB = new mysqli($aSettings['database']['default_host'], $aSettings['database']['default_login'], $aSettings['database']['default_password'], $aSettings['database']['default_database']);
+		$oDB = new mysqli($aSettings['database']['default_host'], $aSettings['database']['default_login'], $aSettings['database']['default_password']);
 
 		if ($oDB->connect_error) 
 		{
@@ -181,34 +196,60 @@ function createDatabases()
 		}
 		else 
 		{
-			if ($oDB->multi_query(file_get_contents('hms.sql'))) 
+			$defaultDbName = $aSettings['database']['default_database'];
+			if($createDb)
 			{
-				echo("Created main database$newline");
-				$oDB->store_result();
-				while ($oDB->more_results()) 
+				if(!$oDB->query("DROP DATABASE " . $defaultDbName))
 				{
-					$oDB->next_result();
-					$oDB->store_result();
+					echo "Failed to drop database: $defaultDbName$newline";
 				}
-				// set up dev user
-				$sSql = "INSERT INTO `members` (`member_id`, `member_number`, `name`, `email`, `join_date`, `handle`, `unlock_text`, `balance`, `credit_limit`, `member_status`, `username`, `account_id`, `address_1`, `address_2`, `address_city`, `address_postcode`, `contact_number`) VALUES";
-				$sSql .= "(6, 111, '" . $options['n'] . "', '" . $options['e'] . "', '" . date("Y-m-d") . "', '" . $options['h'] . "', 'Welcome " . $options['h'] . "', -1200, 5000, 5, '" . $options['h'] . "', NULL, NULL, NULL, NULL, NULL, NULL);";
+				if(!$oDB->query("CREATE DATABASE " . $defaultDbName))
+				{
+					echo "Failed to drop database: $defaultDbName$newline";
+				}
+				else
+				{
+					echo "Created database: $defaultDbName$newline";
+				}
+			}
 
-				if ($oDB->query($sSql)) 
-				{
-					echo("Created DEV user$newline");
-				}
-				else 
-				{
-					echo("Failed to create DEV user, was your input valid?$newline");
-					echo($oDB->error . $newline);
-				}
-			}
-			else 
+			if($oDB->select_db($defaultDbName))
 			{
-				echo("Failed to create main database$newline");
+				if($populateDb)
+				{
+					if ($oDB->multi_query(file_get_contents('hms.sql'))) 
+					{
+						echo("Populated main database$newline");
+						$oDB->store_result();
+						while ($oDB->more_results()) 
+						{
+							$oDB->next_result();
+							$oDB->store_result();
+						}
+						// set up dev user
+						$sSql = "INSERT INTO `members` (`member_id`, `member_number`, `name`, `email`, `join_date`, `handle`, `unlock_text`, `balance`, `credit_limit`, `member_status`, `username`, `account_id`, `address_1`, `address_2`, `address_city`, `address_postcode`, `contact_number`) VALUES";
+						$sSql .= "(6, 111, '" . $options['n'] . "', '" . $options['e'] . "', '" . date("Y-m-d") . "', '" . $options['h'] . "', 'Welcome " . $options['h'] . "', -1200, 5000, 5, '" . $options['h'] . "', NULL, NULL, NULL, NULL, NULL, NULL);";
+
+						if ($oDB->query($sSql)) 
+						{
+							echo("Created DEV user$newline");
+						}
+						else 
+						{
+							echo("Failed to create DEV user, was your input valid?$newline");
+							echo($oDB->error . $newline);
+						}
+					}
+					else 
+					{
+						echo("Failed to populate main database$newline");
+					}
+				}
 			}
-			
+			else
+			{
+				echo "Unable to select database: $defaultDbName$newline";
+			}
 		}
 		$oDB->close();
 
@@ -221,12 +262,40 @@ function createDatabases()
 		}
 		else 
 		{
-			if ($oDB->multi_query(file_get_contents('hms_test.sql'))) {
-				echo("Created test database$newline");
-			}
-			else 
+			$testDbName = $aSettings['database']['test_database'];
+			if($createDb)
 			{
-				echo("Failed to create test database$newline");
+				if(!$oDB->query("DROP DATABASE " . $testDbName))
+				{
+					echo "Failed to drop database: $testDbName$newline";
+				}
+				if(!$oDB->query("CREATE DATABASE " . $testDbName))
+				{
+					echo "Failed to drop database: $testDbName$newline";
+				}
+				else
+				{
+					echo "Created database: $testDbName$newline";
+				}
+			}
+
+			if($oDB->select_db($testDbName))
+			{
+				if($populateDb)
+				{
+					if ($oDB->multi_query(file_get_contents('hms_test.sql'))) 
+					{
+						echo("Populated test database$newline");
+					}
+					else 
+					{
+						echo("Failed to populate test database$newline");
+					}
+				}
+			}
+			else
+			{
+				echo "Unable to select database: $testDbName$newline";
 			}
 		}
 		$oDB->close();
