@@ -436,6 +436,9 @@ function setupTempFolders()
 				<li>
 					<a href="../" class="positive">Go to HMS</a>
 				</li>
+				<li>
+					<a href="../test.php" class="positive">Run Tests</a>
+				</li>
 			</ul>
 		</p>
 

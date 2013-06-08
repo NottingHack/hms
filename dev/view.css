@@ -41,6 +41,7 @@ p.results
 	list-style-type: none;
 	white-space: nowrap;
 	padding: 0;
+	display: inline;
 }
 .actions ul li a {
 	font-weight: normal;
