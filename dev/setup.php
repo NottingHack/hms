@@ -13,6 +13,13 @@ $options = getopt($shortopts);
 
 $newline = "\n";
 
+function logMessage($message)
+{
+	global $newline;
+	
+	echo sprintf("[%s] %s$newline", date("H:i:s"), $message);
+}
+
 if(!is_array($options))
 {
 	// Must be being invoked from a browser, grab the options that way
@@ -101,7 +108,7 @@ if(!( isset($options['h']) &&
 	  isset($options['n']) && 
 	  isset($options['e']) ) )
 {
-	echo "Missing required arguments";
+	logMessage("Missing required arguments");
 	exit(1);
 }
 
@@ -144,6 +151,8 @@ $aSettings = array(
 
 include('hms.settings');
 
+
+
 function replaceFields($sTemplate, $aFields) 
 {
 	foreach ($aFields as $sName => $sValue) 
@@ -156,7 +165,6 @@ function replaceFields($sTemplate, $aFields)
 function createConfigFiles()
 {
 	global $aSettings;
-	global $newline;
 
 	$sPath = '../app/Config/';
 
@@ -181,11 +189,11 @@ function createConfigFiles()
 
 		if (file_put_contents($sPath . $sFileName . '.php', $sFile) !== FALSE) 
 		{
-			echo("Created " . $sFileName . '.php' . $newline);
+			logMessage("Created $sFileName.php");
 		}
 		else 
 		{
-			echo("Failed to create " . $sFileName . '.php' . $newline);
+			logMessage("Failed to create $sFileName.php");
 		}
 	}
 }
@@ -194,7 +202,6 @@ function createDatabases()
 {
 	global $options;
 	global $aSettings;
-	global $newline;
 
 	$createDb = array_key_exists('d', $options);
 	$populateDb = array_key_exists('p', $options);
@@ -205,7 +212,7 @@ function createDatabases()
 
 		if ($oDB->connect_error) 
 		{
-			echo("Couldn't connect to main database$newline");
+			logMessage("Couldn't connect to main database");
 		}
 		else 
 		{
@@ -214,15 +221,15 @@ function createDatabases()
 			{
 				if(!$oDB->query("DROP DATABASE " . $defaultDbName))
 				{
-					echo "Failed to drop database: $defaultDbName$newline";
+					logMessage("Failed to drop database: $defaultDbName");
 				}
 				if(!$oDB->query("CREATE DATABASE " . $defaultDbName))
 				{
-					echo "Failed to drop database: $defaultDbName$newline";
+					logMessage("Failed to drop database: $defaultDbName");
 				}
 				else
 				{
-					echo "Created database: $defaultDbName$newline";
+					logMessage("Created database: $defaultDbName");
 				}
 			}
 
@@ -232,7 +239,7 @@ function createDatabases()
 				{
 					if ($oDB->multi_query(file_get_contents('hms.sql'))) 
 					{
-						echo("Populated main database$newline");
+						logMessage("Populated main database");
 						$oDB->store_result();
 						while ($oDB->more_results()) 
 						{
@@ -245,23 +252,23 @@ function createDatabases()
 
 						if ($oDB->query($sSql)) 
 						{
-							echo("Created DEV user$newline");
+							logMessage("Created DEV user");
 						}
 						else 
 						{
-							echo("Failed to create DEV user, was your input valid?$newline");
-							echo($oDB->error . $newline);
+							logMessage("Failed to create DEV user, was your input valid?");
+							logMessage($oDB->error);
 						}
 					}
 					else 
 					{
-						echo("Failed to populate main database$newline");
+						logMessage("Failed to populate main database");
 					}
 				}
 			}
 			else
 			{
-				echo "Unable to select database: $defaultDbName$newline";
+				logMessage("Unable to select database: $defaultDbName");
 			}
 		}
 		$oDB->close();
@@ -271,7 +278,7 @@ function createDatabases()
 
 		if ($oDB->connect_error) 
 		{
-			echo("Couldn't connect to test database$newline");
+			logMessage("Couldn't connect to test database");
 		}
 		else 
 		{
@@ -280,15 +287,15 @@ function createDatabases()
 			{
 				if(!$oDB->query("DROP DATABASE " . $testDbName))
 				{
-					echo "Failed to drop database: $testDbName$newline";
+					logMessage("Failed to drop database: $testDbName");
 				}
 				if(!$oDB->query("CREATE DATABASE " . $testDbName))
 				{
-					echo "Failed to drop database: $testDbName$newline";
+					logMessage("Failed to drop database: $testDbName");
 				}
 				else
 				{
-					echo "Created database: $testDbName$newline";
+					logMessage("Created database: $testDbName");
 				}
 			}
 
@@ -298,17 +305,17 @@ function createDatabases()
 				{
 					if ($oDB->multi_query(file_get_contents('hms_test.sql'))) 
 					{
-						echo("Populated test database$newline");
+						logMessage("Populated test database");
 					}
 					else 
 					{
-						echo("Failed to populate test database$newline");
+						logMessage("Failed to populate test database");
 					}
 				}
 			}
 			else
 			{
-				echo "Unable to select database: $testDbName$newline";
+				logMessage("Unable to select database: $testDbName");
 			}
 		}
 		$oDB->close();
@@ -318,7 +325,6 @@ function createDatabases()
 function copyKrbLibFile()
 {
 	global $options;
-	global $newline;
 
 	$toFile = "../app/Lib/Krb/krb5_auth.php";
 	$fromFile = "krb5_auth.dummy";
@@ -327,16 +333,18 @@ function copyKrbLibFile()
 		$fromFile = "krb5_auth.real";
 	}
 
-	echo "Attempting to copy $fromFile to $toFile... ";
+	$message = "Attempting to copy $fromFile to $toFile... ";
 
 	if(copy($fromFile, $toFile))
 	{
-		echo "Copy successful$newline";
+		$message .= "Copy successful";
 	}
 	else
 	{
-		echo "Copy failed$newline";
+		$message .= "Copy failed";
 	}
+
+	logMessage($message);
 }
 
 function deleteDir($dirPath) {
@@ -360,7 +368,6 @@ function deleteDir($dirPath) {
 function setupTempFolders()
 {
 	global $options;
-	global $newline;
 
 	if(array_key_exists('f', $options))
 	{
@@ -379,26 +386,64 @@ function setupTempFolders()
 		{
 			if(file_exists($folder))
 			{
-				echo "Folder $folder already exists, deleting...$newline";
+				logMessage("Folder $folder already exists, deleting...");
 				deleteDir($folder);
 			}
 			if(mkdir($folder, 0777, true))
 			{
-				echo "Created folder: $folder$newline";
+				logMessage("Created folder: $folder");
 			}
 			else
 			{
-				echo "Failed to create folder: $folder$newline";
+				logMessage("Failed to create folder: $folder");
 			}
 		}
 	}
 }
-
-echo("Started$newline");
-createConfigFiles();
-createDatabases();
-copyKrbLibFile();
-setupTempFolders();
-echo("Finished$newline");
-
 ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>HMS Setup</title>
+<link rel="stylesheet" type="text/css" href="view.css" media="all">
+<script type="text/javascript" src="view.js"></script>
+
+</head>
+<body id="main_body" >
+	<img id="top" src="top.png" alt="">
+	<div id="form_container">
+		<h1><a>Invisible Text</a></h1>
+		<div class="results_header">
+			<div class="form_description">
+				<h2>HMS Setup</h2>
+				<p>Get up and running with HMS easily</p>
+			</div>
+		</div>
+
+		<p class="results">
+			<?php
+				logMessage("Started");
+				createConfigFiles();
+				createDatabases();
+				copyKrbLibFile();
+				setupTempFolders();
+				logMessage("Finished");
+			?>
+
+			<ul class="actions">
+				<li>
+					<a href="../" class="positive">Go to HMS</a>
+				</li>
+			</ul>
+		</p>
+
+		<div id="footer">
+			Generated by <a href="http://www.phpform.org">pForm</a>
+		</div>
+	</div>
+	<img id="bottom" src="bottom.png" alt="">
+	</body>
+</html>
+
