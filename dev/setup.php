@@ -326,11 +326,25 @@ function copyKrbLibFile()
 {
 	global $options;
 
-	$toFile = "../app/Lib/Krb/krb5_auth.php";
-	$fromFile = "krb5_auth.dummy";
+	$krbFolder = '../app/Lib/Krb/';
+
+	$toFile = $krbFolder . 'krb5_auth.php';
+	$fromFile = 'krb5_auth.dummy';
 	if(array_key_exists('k', $options))
 	{
-		$fromFile = "krb5_auth.real";
+		$fromFile = 'krb5_auth.real';
+	}
+
+	if(!file_exists($krbFolder))
+	{
+		if(mkdir($krbFolder))
+		{
+			logMessage("Created folder at: $krbFolder");
+		}
+		else
+		{
+			logMessage("Failed to create folder at: $krbFolder");
+		}
 	}
 
 	$message = "Attempting to copy $fromFile to $toFile... ";
