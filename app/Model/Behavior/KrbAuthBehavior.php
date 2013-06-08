@@ -10,7 +10,6 @@
 	class KrbAuthBehavior extends ModelBehavior
 	{
 		private $krbObj = null; //<! KrbAuth object.
-		private $useDummy = false; //!< If true, don't actually use KrbAuth object and return true for all queries.
 
 		//! Perform initial setup.
 		/*!
@@ -23,12 +22,7 @@
 			Configure::config('default', new PhpReader());
 			Configure::load('krb', 'default');
 
-			$this->useDummy = Configure::read('krb_use_dummy');
-			if(	isset($this->useDummy) == false ||
-				$this->useDummy == false)
-			{
-				$this->krbObj = new krb5_auth(Configure::read('krb_username'), Configure::read('krb_tab'), Configure::read('krb_relm'));
-			}
+			$this->krbObj = new krb5_auth(Configure::read('krb_username'), Configure::read('krb_tab'), Configure::read('krb_relm'));
 		}
 
 		//! Check to see if the password is correct.
@@ -40,11 +34,6 @@
 		*/
 		public function krbCheckPassword(Model $model, $username, $password)
 		{
-			if($this->useDummy)
-			{
-				return true;
-			}
-
 			return $this->krbObj->check_password($username, $password);
 		}
 
@@ -57,11 +46,6 @@
 		*/
 		public function krbAddUser(Model $model, $username, $password)
 		{
-			if($this->useDummy)
-			{
-				return true;
-			}
-
 			return $this->krbObj->add_user($username, $password);
 		}
 
@@ -73,11 +57,6 @@
 		*/
 		public function krbDeleteUser(Model $model, $username)
 		{
-			if($this->useDummy)
-			{
-				return true;
-			}
-
 			return $this->krbObj->delete_user($username);
 		}
 
@@ -90,11 +69,6 @@
 		*/
 		public function krbChangePassword(Model $model, $username, $newPass)
 		{
-			if($this->useDummy)
-			{
-				return true;
-			}
-			
 			return $this->krbObj->change_password($username, $newPass);
 		}
 
@@ -106,11 +80,6 @@
 		*/
 		public function krbUserExists(Model $model, $username)
 		{
-			if($this->useDummy)
-			{
-				return true;
-			}
-
 			return $this->krbObj->user_exists($username);
 		}
 	}
