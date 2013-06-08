@@ -15,8 +15,8 @@
         public function testGetDescription()
         {
             $this->assertIdentical( Hash::get($this->Group->getDescription(1), 'Group.grp_description'), 'Full Access', 'Returned incorrect title for group 1.' );
-            $this->assertIdentical( $this->Group->getDescription(0), false, 'Returned incorrect title for group 0.' );
-            $this->assertIdentical( $this->Group->getDescription(null), false, 'Returned incorrect title for group null.' );
+            $this->assertEqual( $this->Group->getDescription(0), array(), 'Returned incorrect title for group 0.' );
+            $this->assertEqual( $this->Group->getDescription(null), array(), 'Returned incorrect title for group null.' );
         }
     }
 

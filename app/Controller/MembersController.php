@@ -1,5 +1,6 @@
 <?php
 	
+	App::uses('AppController', 'Controller');
 	App::uses('HmsAuthenticate', 'Controller/Component/Auth');
 	App::uses('Member', 'Model');
 	App::uses('ForgotPassword', 'Model');

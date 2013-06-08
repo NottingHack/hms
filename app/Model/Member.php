@@ -723,8 +723,8 @@
 			// Do we already know about this e-mail?
 			$memberInfo = $this->findByEmail( $email );
 
-			// Find only returns an array if it was successful
-			$newMember = !is_array($memberInfo);
+			// Find returns an empty array for no results
+			$newMember = count($memberInfo) == 0;
 			$resultDetails['createdRecord'] = $newMember;
 
 			$memberId = -1;
