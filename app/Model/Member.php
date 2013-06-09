@@ -37,18 +37,7 @@
 			),
 		);
 
-		//! We have a Pin.
-		/*!
-			Pin is set to be dependant so it will be deleted when the Member is.
-		*/
-		public $hasOne = array(
-	        'Pin' => array(
-	            'className' => 'Pin',
-	            'dependent' => true
-	        ),
-	    );
-
-		//! We have many StatusUpdate.
+		//! We have many StatusUpdate, and many Pins (although in practice is it rare to have more than one pin)
 		/*!
 			We only (normally) care about the most recent Status Update.
 		*/
@@ -57,6 +46,9 @@
 	    		'order' => 'StatusUpdate.timestamp DESC',
 	    		'limit'	=> '1',	
 	    	),
+	    	'Pin' => array(
+	            'className' => 'Pin',
+	        ),
 	    );
 
 	    //! We have and belong to many Group.
@@ -413,7 +405,11 @@
 				[unlockText] => member unlock text
 				[balance] => member balance
 				[creditLimit] => member credit limit
-				[pin] => member pin
+				[pins] => 
+					[n] =>
+						[id] => pin id
+						[pin] => pin number
+						[statee] => pin state (see constance defined in Pin.php)
 				[paymentRef] => member payment ref
 				[address] =>
 					[part1] => member address part 1
@@ -462,7 +458,21 @@
 
     		$balance = Hash::get($memberInfo, 'Member.balance');
     		$creditLimit = Hash::get($memberInfo, 'Member.credit_limit');
-    		$pin = Hash::get($memberInfo, 'Pin.pin');
+    		$pins = array();
+    		if(array_key_exists('Pin', $memberInfo))
+    		{
+	    		foreach ($memberInfo['Pin'] as $pin) 
+	    		{
+	    			array_push($pins, 
+	    				array(
+	    					'id' => Hash::get($pin, 'pin_id'),
+	    					'pin' => Hash::get($pin, 'pin'),
+	    					'state' => Hash::get($pin, 'state'),
+	    				)
+	    			);
+	    		}
+	    	}
+
     		$paymentRef = Hash::get($memberInfo, 'Account.payment_ref');
     		$address = array(
     			'part1' => Hash::get($memberInfo, 'Member.address_1'),
@@ -491,7 +501,7 @@
 				'paymentRef'=> $paymentRef,
 				'balance' => $balance,
 				'creditLimit' => $creditLimit,
-				'pin' => $pin,
+				'pin' => $pins,
 				'address' => $address,
 				'contactNumber' => $contactNumber,
 				'lastStatusUpdate' => $lastStatusUpdate,
@@ -1055,6 +1065,16 @@
 				return null;
 			}
 
+			// Create a pin first..
+			$dataSource = $this->getDataSource();
+			$dataSource->begin();
+
+			if( !$this->Pin->createNewRecord($memberId) )
+			{
+				$dataSource->rollback();
+				return null;
+			}
+
 			$hardcodedMemberData = array(
 				'member_status' => Status::CURRENT_MEMBER,
 				'unlock_text' => 'Welcome ' . $memberInfo['Member']['name'],
@@ -1062,12 +1082,7 @@
 				'join_date' => date( 'Y-m-d' ),
 			);
 			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $hardcodedMemberData));
-			$dataToSave['Pin'] = array(
-				'unlock_text' => 'Welcome',
-				'pin' => $this->Pin->generateUniquePin(),
-				'state' => 40,
-				'member_id' => $memberId,
-			);
+			
 
 			$this->set($dataToSave);
 
@@ -1089,6 +1104,7 @@
 
 			if( is_array($this->_saveMemberData($dataToSave, $fieldsToSave, $adminId)) )
 			{
+				$dataSource->commit();
 				return $this->getApproveDetails($memberId);
 			}
 
@@ -1371,11 +1387,12 @@
 		public function getApproveDetails($memberId)
 		{
 			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
+
 			if($memberInfo)
 			{
 				$name = Hash::get($memberInfo, 'Member.name');
 				$email = Hash::get($memberInfo, 'Member.email');
-				$pin = Hash::get($memberInfo, 'Pin.pin');
+				$pin = Hash::get($memberInfo, 'Pin.0.pin');
 
 				if(isset($name) && isset($email) && isset($pin))
 				{

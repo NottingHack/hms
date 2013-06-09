@@ -37,8 +37,15 @@
 	# Pin details
 	if( isset($member['pin']) )
 	{
-		echo $this->Form->input('Pin.pin', array( 'readonly' => 'readonly' ));
-		echo $this->Form->input('Pin.expiry', array('type'=>'date', 'empty' => true, 'minYear' => date("Y"), 'orderYear' => 'asc', 'dateFormat' => 'DMY'));
+
+		echo '<fieldset>';
+		echo '<legend>Pins</legend>';
+
+		for($i = 0; $i < count($member['pin']); $i++)
+		{
+			echo $this->Form->input("Pin.$i.pin", array( 'readonly' => 'readonly' ));	
+			//echo $this->Form->input('Pin.expiry', array('type'=>'date', 'empty' => true, 'minYear' => date("Y"), 'orderYear' => 'asc', 'dateFormat' => 'DMY'));
+		}
 	}
 
 	if( isset($member['groups']) )

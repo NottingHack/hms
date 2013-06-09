@@ -1824,7 +1824,13 @@
 				'unlockText' => 'Hey Kelly',
 				'balance' => '-5649',
 				'creditLimit' => '5000',
-				'pin' => '5436',
+				'pin' => array(
+					0 => array( 
+						'id' => 4,
+						'pin' => '5436',
+						'state' => 30,
+					)
+				),
 				'paymentRef' => 'HSNOTTSYT7H4CW3GP9',
 				'address' => array(
 					'part1' => '8 Elm Close',
@@ -1901,7 +1907,13 @@
 				'unlockText' => 'Hey Kelly',
 				'balance' => '-5649',
 				'creditLimit' => '5000',
-				'pin' => '5436',
+				'pin' => array(
+					0 => array( 
+						'id' => 4,
+						'pin' => '5436',
+						'state' => 30,
+					)
+				),
 				'paymentRef' => 'HSNOTTSYT7H4CW3GP9',
 				'address' => array(
 					'part1' => '8 Elm Close',
@@ -2287,13 +2299,15 @@
 				    'payment_ref' => 'HSNOTTSK2R62GQW684',
 				),
 				'Pin' => array(
-				    'pin_id' => '2',
-				    'pin' => '7422',
-				    'unlock_text' => 'NOT USED',
-				    'date_added' => '2012-12-03 23:56:43',
-				    'expiry' => null,
-				    'state' => '30',
-				    'member_id' => '2',
+					0 => array(
+					    'pin_id' => '2',
+					    'pin' => '7422',
+					    'unlock_text' => 'NOT USED',
+					    'date_added' => '2012-12-03 23:56:43',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '2',
+				    ),
 				),
 				'StatusUpdate' => array(
 				),
@@ -2355,13 +2369,15 @@
 				    'payment_ref' => 'INEEDNOPAYMENTREF',
 				),
 				'Pin' => array(
-				    'pin_id' => '4',
-				    'pin' => '5555',
-				    'unlock_text' => 'MAYBE USED',
-				    'date_added' => '2010-01-01 00:00:00',
-				    'expiry' => 'NEVER!',
-				    'state' => '22',
-				    'member_id' => '15',
+					0 => array(
+					    'pin_id' => '4',
+					    'pin' => '5555',
+					    'unlock_text' => 'MAYBE USED',
+					    'date_added' => '2010-01-01 00:00:00',
+					    'expiry' => 'NEVER!',
+					    'state' => '22',
+					    'member_id' => '15',
+				    ),
 				),
 				'StatusUpdate' => array(
 					0 => array(
@@ -2436,13 +2452,15 @@
 				    'payment_ref' => 'HSNOTTSK2R62GQW684',
 				),
 				'Pin' => array(
-				    'pin_id' => '2',
-				    'pin' => '7422',
-				    'unlock_text' => 'NOT USED',
-				    'date_added' => '2012-12-03 23:56:43',
-				    'expiry' => null,
-				    'state' => '30',
-				    'member_id' => '2',
+					0 => array( 
+					    'pin_id' => '2',
+					    'pin' => '7422',
+					    'unlock_text' => 'NOT USED',
+					    'date_added' => '2012-12-03 23:56:43',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '2',
+					),
 				),
 				'StatusUpdate' => array(
 				),
@@ -2531,7 +2549,13 @@
 					'postcode' => 'OX9 7AP',
 				),
 				'contactNumber' => '079 0644 8720',
-				'pin' => '5436',
+				'pin' => array(
+					0 => array( 
+						'id' => 4,
+						'pin' => '5436',
+						'state' => 30,
+					)
+				),
 				'groups' => array(
 					0 => array(
 				        'id' => '2',
@@ -2586,13 +2610,15 @@
 				    'payment_ref' => 'HSNOTTSCV3TFFDGXXY',
 				),
 				'Pin' => array(
-				    'pin_id' => '4',
-				    'pin' => '5436',
-				    'unlock_text' => 'NOT USED',
-				    'date_added' => '2012-12-18 21:01:05',
-				    'expiry' => null,
-				    'state' => '30',
-				    'member_id' => '4',
+					0 => array(
+					    'pin_id' => '4',
+					    'pin' => '5436',
+					    'unlock_text' => 'NOT USED',
+					    'date_added' => '2012-12-18 21:01:05',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '4',
+					),
 				),
 				'StatusUpdate' => array(
 					0 => array(
@@ -2691,7 +2717,13 @@
 					'postcode' => 'EC4M 8SH',
 				),
 				'contactNumber' => '077 1755 4342',
-				'pin' => '7422',
+				'pin' => array(
+					0 => array( 
+						'id' => 2,
+						'pin' => '7422',
+						'state' => '30',
+					)
+				),
 				'groups' => array(
 					0 => array(
 				        'id' => '2',
@@ -2738,13 +2770,15 @@
 				    'payment_ref' => 'HSNOTTSCV3TFFDGXXY',
 				),
 				'Pin' => array(
-				    'pin_id' => '2',
-				    'pin' => '7422',
-				    'unlock_text' => 'NOT USED',
-				    'date_added' => '2012-12-03 23:56:43',
-				    'expiry' => null,
-				    'state' => '30',
-				    'member_id' => '2',
+					0 => array( 
+					    'pin_id' => '2',
+					    'pin' => '7422',
+					    'unlock_text' => 'NOT USED',
+					    'date_added' => '2012-12-03 23:56:43',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '2',
+					),
 				),
 				'StatusUpdate' => array(
 				),
@@ -2826,7 +2860,13 @@
 					'postcode' => 'EH53 0DR',
 				),
 				'contactNumber' => '070 0036 0548',
-				'pin' => '3014',
+				'pin' => array(
+					0 => array( 
+						'id' => 5,
+						'pin' => '3014',
+						'state' => '30',
+					)
+				),
 				'groups' => array(
 					0 => array(
 				        'id' => '2',
@@ -2873,13 +2913,15 @@
 				    'payment_ref' => 'HSNOTTSCV3TFFDGXXY',
 				),
 				'Pin' => array(
-				    'pin_id' => '5',
-				    'pin' => '3014',
-				    'unlock_text' => 'NOT USED',
-				    'date_added' => '2012-12-19 19:54:12',
-				    'expiry' => null,
-				    'state' => '30',
-				    'member_id' => '5',
+					0 => array(
+					    'pin_id' => '5',
+					    'pin' => '3014',
+					    'unlock_text' => 'NOT USED',
+					    'date_added' => '2012-12-19 19:54:12',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '5',
+					),
 				),
 				'StatusUpdate' => array(
 				),
@@ -2961,7 +3003,13 @@
 					'postcode' => 'IV51 9DR',
 				),
 				'contactNumber' => '077 7181 0959',
-				'pin' => '5142',
+				'pin' => array(
+					0 => array( 
+						'id' => 3,
+						'pin' => '5142',
+						'state' => '30',
+					)
+				),
 				'groups' => array(
 					0 => array(
 				        'id' => '2',
@@ -3004,13 +3052,15 @@
 				    'payment_ref' => 'HSNOTTSYT7H4CW3GP9',
 				),
 				'Pin' => array(
-				    'pin_id' => '3',
-				    'pin' => '5142',
-				    'unlock_text' => 'NOT USED',
-				    'date_added' => '2012-12-18 20:15:00',
-				    'expiry' => null,
-				    'state' => '30',
-				    'member_id' => '3',
+					0 => array( 
+					    'pin_id' => '3',
+					    'pin' => '5142',
+					    'unlock_text' => 'NOT USED',
+					    'date_added' => '2012-12-18 20:15:00',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '3',
+					),
 				),
 				'StatusUpdate' => array(
 				),
@@ -3092,7 +3142,13 @@
 					'postcode' => 'IV51 9DR',
 				),
 				'contactNumber' => '077 7181 0959',
-				'pin' => '5142',
+				'pin' => array(
+					0 => array( 
+						'id' => 3,
+						'pin' => '5142',
+						'state' => '30',
+					)
+				),
 				'groups' => array(
 					0 => array(
 				        'id' => '2',
@@ -3134,13 +3190,15 @@
 				    'account_id' => '9',
 				),
 				'Pin' => array(
-				    'pin_id' => '3',
-				    'pin' => '5142',
-				    'unlock_text' => 'NOT USED',
-				    'date_added' => '2012-12-18 20:15:00',
-				    'expiry' => null,
-				    'state' => '30',
-				    'member_id' => '3',
+					0 => array(
+					    'pin_id' => '3',
+					    'pin' => '5142',
+					    'unlock_text' => 'NOT USED',
+					    'date_added' => '2012-12-18 20:15:00',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '3',
+					),
 				),
 				'StatusUpdate' => array(
 				),
@@ -3226,13 +3284,15 @@
 				    'payment_ref' => 'HSNOTTSYT7H4CW3GP9',
 				),
 				'Pin' => array(
-				    'pin_id' => '4',
-				    'pin' => '9995',
-				    'unlock_text' => 'Might be used',
-				    'date_added' => '2011-04-06 04:23:59',
-				    'expiry' => '2011-04-06',
-				    'state' => '20',
-				    'member_id' => '1',
+					0 => array(
+					    'pin_id' => '4',
+					    'pin' => '9995',
+					    'unlock_text' => 'Might be used',
+					    'date_added' => '2011-04-06 04:23:59',
+					    'expiry' => '2011-04-06',
+					    'state' => '20',
+					    'member_id' => '1',
+					),
 				),
 				'StatusUpdate' => array(
 					0 => array(
@@ -3280,7 +3340,13 @@
 					'postcode' => 'IV51 9DR',
 				),
 				'contactNumber' => '077 7181 0959',
-				'pin' => '5142',
+				'pin' => array(
+					0 => array( 
+						'id' => 3,
+						'pin' => '5142',
+						'state' => '30',
+					)
+				),
 				'groups' => array(
 					0 => array(
 				        'id' => '2',
@@ -3323,13 +3389,15 @@
 				    'payment_ref' => 'HSNOTTS6762KC8JD7H',
 				),
 				'Pin' => array(
-				    'pin_id' => '3',
-				    'pin' => '5142',
-				    'unlock_text' => 'NOT USED',
-				    'date_added' => '2012-12-18 20:15:00',
-				    'expiry' => null,
-				    'state' => '30',
-				    'member_id' => '3',
+					0 => array(
+					    'pin_id' => '3',
+					    'pin' => '5142',
+					    'unlock_text' => 'NOT USED',
+					    'date_added' => '2012-12-18 20:15:00',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '3',
+					),
 				),
 				'StatusUpdate' => array(
 				),

@@ -1464,10 +1464,9 @@
             $this->assertEqual( $record['Member']['address_postcode'], 'TS5 3HD', 'Record has incorrect address postcode.' );
             $this->assertEqual( $record['Member']['contact_number'], '078 1957 5612', 'Record has incorrect contact number.' );
 
-            $this->assertEqual( $record['Pin']['unlock_text'], 'Welcome', 'Record has incorrect pin unlock text.' );
-            //$this->assertEqual( $record['Pin']['pin'], 'Welcome', 'Record has incorrect pin.' );
-            $this->assertEqual( $record['Pin']['state'], 40, 'Record has incorrect pin state.' );
-            $this->assertEqual( $record['Pin']['member_id'], 14, 'Record has incorrect pin member id.' );
+            $this->assertEqual( $record['Pin'][0]['unlock_text'], 'Welcome', 'Record has incorrect pin unlock text.' );
+            $this->assertEqual( $record['Pin'][0]['state'], 40, 'Record has incorrect pin state.' );
+            $this->assertEqual( $record['Pin'][0]['member_id'], 14, 'Record has incorrect pin member id.' );
 
             $this->assertEqual( $record['Group'], array( '0' => array( 'grp_id' => Group::CURRENT_MEMBERS, 'grp_description' => 'Current Members') ), 'Record has incorrect group.' );
 
