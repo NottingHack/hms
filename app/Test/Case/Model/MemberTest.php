@@ -1697,7 +1697,7 @@
             $this->assertIdentical( $this->Member->getSoDetails(2076), null, 'Invalid data was not handled correctly.' );
             $this->assertIdentical( $this->Member->getSoDetails(array()), null, 'Invalid data was not handled correctly.' );
 
-            $this->assertEqual( $this->Member->getSoDetails(2), array('name' => 'Annabelle Santini', 'email' => 'a.santini@hotmail.com', 'paymentRef' => 'HSNOTTSK2R62GQW684'), 'Valid data was not handled correctly.' );            
+            $this->assertEqual( $this->Member->getSoDetails(2), array('name' => 'Annabelle Santini', 'email' => 'a.santini@hotmail.com', 'paymentRef' => 'HSNOTTSK2R62GQW6'), 'Valid data was not handled correctly.' );            
         }
 
         public function testGetApproveDetails()

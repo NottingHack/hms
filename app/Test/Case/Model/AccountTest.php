@@ -17,7 +17,7 @@
             $paymentRef = $this->Account->generatePaymentRef();
             $prefix = 'HSNOTTS';
 
-            $this->assertIdentical( strlen($paymentRef), 18, 'Payment ref is incorrect length.' );
+            $this->assertIdentical( strlen($paymentRef), 16, 'Payment ref is incorrect length.' );
             $this->assertTextStartsWith( $prefix, $paymentRef );
 
             // Check for unsafe chars...

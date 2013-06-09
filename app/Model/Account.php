@@ -50,7 +50,7 @@
 			$prefix = 'HSNOTTS';
 
 			// Payment references can be up to 18 chars according to: http://www.bacs.co.uk/Bacs/Businesses/BacsDirectCredit/Receiving/Pages/PaymentReferenceInformation.aspx
-			$maxRefLength = 18;
+			$maxRefLength = 16;
 
 			$paymentRef = '';
 			do
