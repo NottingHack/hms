@@ -11,5 +11,5 @@
 /dist
 .DS_Store
 /tags
-/dev/hms.settings
+/dev/setup/hms.settings
 app/Lib/Krb/krb5_auth.php
