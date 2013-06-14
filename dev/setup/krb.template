@@ -1,0 +1,9 @@
+<?php
+    
+    $config = array(
+        'krb_username' => 'hms_test/web',
+        'krb_tab' => './hms.keytab',
+        'krb_relm' => 'NOTTINGTEST.ORG.UK',
+        'krb_use_dummy' => true
+        );    
+?>
