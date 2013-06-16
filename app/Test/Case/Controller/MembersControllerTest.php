@@ -556,7 +556,8 @@
 			$validData = array(
 				7 => array(
 					'Member' => array(
-						'name' => 'Cheryl',
+						'firstname' => 'Cheryl',
+						'surname' => 'Thompson',
 						'username' => 'dayrep',
 						'email' => 'CherylLCarignan@teleworm.us',
 						'password' => 'hunter2',
@@ -565,7 +566,8 @@
 				),
 				8 => array(
 					'Member' => array(
-						'name' => 'Melvin',
+						'firstname' => 'Melvin',
+						'surname' => 'Android',
 						'username' => 'retgar',
 						'email' => 'MelvinJFerrell@dayrep.com',
 						'password' => 'q1w2e3r4t5',
@@ -2342,13 +2344,13 @@
 			$inputData = array(
             	'Member' => array(
             		'member_id' => '243',
+            		'name' => 'Nat',
             		'account_id' => '325',
             		'member_status' => '1',
             		'join_date' => '2013-12-30',
             		'balance' => '100000',
             		'credit_limit' => '20000',
             		'member_number' => '4954365',
-					'name' => 'Nat',
 					'username' => 'foo',
 					'handle' => 'thisisahandle',
 					'email' => 'totallydifferent@hotmail.com',

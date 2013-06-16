@@ -83,7 +83,9 @@
         public function testBeforeSave()
         {
             $this->Member->data['Member']['balance'] = -400;
+
             $this->Member->beforeSave();
+
             $this->assertFalse(isset($this->Member->data['Member']['balance']), 'BeforeSave failed to unset Member.balance.');
         }
 
@@ -696,7 +698,8 @@
         {
             $data = array(
                 'Member' => array(
-                    'name' => 'FooBarson',
+                    'firstname' => 'Foo',
+                    'surname' => 'Barson',
                     'username' => 'fubbby',
                     'email' => 'CherylLCarignan@teleworm.us',
                     'password' => 'hunter2',
@@ -723,7 +726,7 @@
             $this->assertArrayHasKey( 'handle', $record['Member'], 'Record Member does not have handle key.' );
             $this->assertEqual( $record['Member']['handle'], 'fubbby', 'Record has incorrect handle.' );
             $this->assertArrayHasKey( 'name', $record['Member'], 'Record Member does not have name key.' );
-            $this->assertEqual( $record['Member']['name'], 'FooBarson', 'Record has incorrect name.' );
+            $this->assertEqual( $record['Member']['name'], 'Foo Barson', 'Record has incorrect name.' );
 
             $this->assertArrayHasKey( 'StatusUpdate', $record, 'Record does not have status update key.' );
             $this->assertEqual( count($record['StatusUpdate']), 1, 'Record has incorrect number of status updates.' );
@@ -747,7 +750,8 @@
             $data = array(
                 'Member' => array(
                     'member_id' => 9,
-                    'name' => 'FooBarson',
+                    'firstname' => 'Foo',
+                    'surname' => 'Barson',
                     'email' => 'CherylLCarignan@teleworm.us',
                     'join_date' => '2010-09-22',
                     'handle' => 'bildestonelectrician',
@@ -775,7 +779,7 @@
             $this->assertInternalType( 'array', $record, 'Could not find record.' );
 
             $this->assertEqual( $record['Member']['member_id'], 7, 'Record has incorrect member_id.' );
-            $this->assertEqual( $record['Member']['name'], 'FooBarson', 'Record has incorrect name.' );
+            $this->assertEqual( $record['Member']['name'], 'Foo Barson', 'Record has incorrect name.' );
             $this->assertEqual( $record['Member']['email'], 'CherylLCarignan@teleworm.us', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
             $this->assertEqual( $record['Member']['handle'], 'fubbby', 'Record has incorrect handle.' ); // Handle should be the same as the username

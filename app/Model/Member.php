@@ -84,8 +84,11 @@
 			No further validation is performed on the Address and Contact Number fields as a member admin has to check these during membership registration.
 		*/
 		public $validate = array(
-	        'name' => array(
+	        'firstname' => array(
 	            'rule' => 'notEmpty'
+	        ),
+	        'surname' => array(
+	        	'rule' => 'notEmpty'
 	        ),
 	        'email' => array(
 	        	'email'
@@ -225,7 +228,7 @@
 		*/
 		public function beforeSave($options = array()) 
 		{
-			# Must never ever ever alter the balance
+			// Must never ever ever alter the balance
 			unset( $this->data['Member']['balance'] );
 
 			return true;
@@ -796,7 +799,8 @@
 			}
 
 			if( ( isset($data['Member']) && 
-				  isset($data['Member']['name']) &&
+				  isset($data['Member']['firstname']) &&
+				  isset($data['Member']['surname']) &&
 				  isset($data['Member']['username']) &&
 				  isset($data['Member']['email']) &&
 				  isset($data['Member']['password']) ) == false )
@@ -823,8 +827,15 @@
 			$this->addEmailMustMatch();
 
 			$saveOk = false;
-			if($this->validates(array( 'fieldList' => array('member_id', 'name', 'username', 'handle', 'email', 'password', 'password_confirm', 'member_status'))))
+			if($this->validates(array( 'fieldList' => array('member_id', 'firstname', 'surname', 'username', 'handle', 'email', 'password', 'password_confirm', 'member_status'))))
 			{
+
+				// Join the names
+				$dataToSave['Member']['name'] = sprintf('%s %s', Hash::get($dataToSave, 'Member.firstname'), Hash::get($dataToSave, 'Member.surname'));
+				// Now unset the firstname and surname, don't want to be saving these
+				unset($dataToSave['Member']['firstname']);
+				unset($dataToSave['Member']['surname']);
+
 				$saveOk = is_array($this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'name', 'username', 'handle', 'member_status')), $memberId));
 			}
 
