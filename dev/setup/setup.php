@@ -1,419 +1,508 @@
 <?php
 
-$shortopts = '';
-$shortopts .= 'd'; 	// If present, create the database
-$shortopts .= 'p';  // If present, populate the database
-$shortopts .= 'h:'; // Users handle
-$shortopts .= 'n:'; // Users name
-$shortopts .= 'e:'; // Users e-mail
-$shortopts .= 'k';  // If present, use the 'proper' krb auth script instead of the dummy.
-$shortopts .= 'f';  // If present, set-up the tmp folders
-
-$options = getopt($shortopts);
-
-$newline = "\n";
-
-function logMessage($message)
-{
-	global $newline;
-	
-	echo sprintf("[%s] %s$newline", date("H:i:s"), $message);
-}
-
-if(!is_array($options))
-{
-	// Must be being invoked from a browser, grab the options that way
-	$createDb = false;
-	if(	isset($_POST['createdb']) &&
-		$_POST['createdb'] == "on" )
+	//! Setup is a class that is responsible for parsing options and then performing certain steps based on those options.
+	class Setup
 	{
-		$createDb = true;
-	}
+		private $newline = null; 	//!< Newline character, different depending on output (HTML or text).
 
-	$populateDb = false;
-	if(	isset($_POST['populatedb']) &&
-		$_POST['populatedb'] == "on" )
-	{
-		$populateDb = true;
-	}
+		//! Options
+		private $createDb = false;			//!< If true create the instrumentation and instrumentation_test databases.
+		private $populateDb = false;		//!< If true populate the databases with default tables and data.
+		private $useRealKrb = false;		//!< If true then use the real KRB Auth lib, otherwise use a dummy one.
+		private $setupTempFolders = false;	//!< If true create the temporary folders CakePHP needs.
 
-	$userRealKrb = false;
-	if(	isset($_POST['realKrb']) &&
-		$_POST['realKrb'] == "on" )
-	{
-		$userRealKrb = true;
-	}
+		//! The following details are used to create a HMS login for the user with admin rights.
+		private $name = '';					//!< Name of the user.
+		private $username = '';				//!< Username of the user.
+		private $email = '';				//!< Email of the user.
 
-	$setupTempFolders = false;
-	if(	isset($_POST['setuptmpfolders']) &&
-		$_POST['setuptmpfolders'] == "on" )
-	{
-		$setupTempFolders = true;
-	}
-
-	$name = 'A. Adminson';
-	$email = 'info@example.org';
-	$handle = 'admin';
-
-	if(isset($_POST['yourname']))
-	{
-		$name = $_POST['yourname'];
-	}
-
-	if(isset($_POST['youremail']))
-	{
-		$email = $_POST['youremail'];
-	}
-
-	if(isset($_POST['yourhandle']))
-	{
-		$handle = $_POST['yourhandle'];
-	}
-
-	$options = array(
-		'h' => $handle,
-		'n' => $name,
-		'e' => $email,
-	);
-
-	// Set the boolean options
-	// getopt sets the value to false if the option is there
-	// and doesn't have that key in the array otherwise.
-	// So we emulate PHP's stupid behaviour
-	if($createDb)
-	{
-		$options['d'] = false;
-	}
-
-	if($populateDb)
-	{
-		$options['p'] = false;
-	}
-
-	if($userRealKrb)
-	{
-		$options['k'] = false;
-	}
-
-	if($setupTempFolders)
-	{
-		$options['f'] = false;
-	}
-
-	$newline = "<br />";
-}
-
-// Check for required params...
-if(!( isset($options['h']) && 
-	  isset($options['n']) && 
-	  isset($options['e']) ) )
-{
-	logMessage("Missing required arguments");
-	exit(1);
-}
-
-// Sets up the environment for HMS development
-// requires a settings file:
-// hms.settings
-// Uses these settings if not found:
-
-$aSettings = array(
-	'database'	=>	array(
-		'default_host'		=>	'localhost',
-		'default_login'		=>	'hms',
-		'default_password'	=>	'',
-		'default_database'	=>	'hms',
-		'test_host'			=>	'localhost',
-		'test_login'		=>	'hms',
-		'test_password'		=>	'',
-		'test_database'		=>	'hms_test'
-	),
-	'hms'	=>	array(
-		'streetdoor'	=>	'1234',
-		'innerdoor'		=>	'1234',
-		'wifi'			=>	'123456',
-	),
-	'krb' =>	array(
-
-	),
-	'mailchimp'	=> array(
-		'key'	=>	'123456',
-		'list'	=>	'123456',
-	),
-	'email'	=>	array(
-		'from_address'	=>	'site@localhost',
-		'host'			=>	'localhost',
-		'port'			=>	25,
-		'username'		=>	'user',
-		'password'		=>	'secret',
-	),
-);
-
-include('hms.settings');
-
-
-
-function replaceFields($sTemplate, $aFields) 
-{
-	foreach ($aFields as $sName => $sValue) 
-	{
-		$sTemplate = str_replace('%%' . $sName . '%%', $sValue, $sTemplate);
-	}
-	return $sTemplate;
-}
-
-function createConfigFiles()
-{
-	global $aSettings;
-
-	$sPath = '../app/Config/';
-
-	$aFiles = array(
-		'database',
-		'hms',
-		'krb',
-		'mailchimp',
-		'email',
-		);
-
-	// Create each of the config files
-	foreach ($aFiles as $sFileName) 
-	{
-		if (!file_exists($sFileName . '.template')) 
+		//! Replace variables in a template using the options in fields.
+		/*!
+			@param string $template The template to work with.
+			@param array $fields Key-value pair of names and the values to substitute.
+			@retval string The template with values replaced.
+		*/
+		private function _replaceFields($template, $fields) 
 		{
-			continue;
-		}
-		$sFile = file_get_contents($sFileName . '.template');
-
-		$sFile = replaceFields($sFile, $aSettings[$sFileName]);
-
-		if (file_put_contents($sPath . $sFileName . '.php', $sFile) !== FALSE) 
-		{
-			logMessage("Created $sFileName.php");
-		}
-		else 
-		{
-			logMessage("Failed to create $sFileName.php");
-		}
-	}
-}
-
-function createDatabases()
-{
-	global $options;
-	global $aSettings;
-
-	$createDb = array_key_exists('d', $options);
-	$populateDb = array_key_exists('p', $options);
-	if ($createDb || $populateDb) 
-	{
-		// Main Database
-		$oDB = new mysqli($aSettings['database']['default_host'], $aSettings['database']['default_login'], $aSettings['database']['default_password']);
-
-		if ($oDB->connect_error) 
-		{
-			logMessage("Couldn't connect to main database");
-		}
-		else 
-		{
-			$defaultDbName = $aSettings['database']['default_database'];
-			if($createDb)
+			foreach ($fields as $name => $value) 
 			{
-				if(!$oDB->query("DROP DATABASE " . $defaultDbName))
+				$template = str_replace('%%' . $name . '%%', $value, $template);
+			}
+			return $template;
+		}
+
+		//! Create the config files HMS needs to run.
+		/*!
+			@param array $settings The settings to use.
+		*/
+		private function _createConfigFiles($settings)
+		{
+			$path = '../../app/Config/';
+
+			$files = array(
+				'database',
+				'hms',
+				'krb',
+				'mailchimp',
+				'email',
+				);
+
+			// Create each of the config files
+			foreach ($files as $fileName) 
+			{
+				if (!file_exists($fileName . '.template')) 
 				{
-					logMessage("Failed to drop database: $defaultDbName");
+					continue;
 				}
-				if(!$oDB->query("CREATE DATABASE " . $defaultDbName))
+				$file = file_get_contents($fileName . '.template');
+
+				$file = $this->_replaceFields($file, $settings[$fileName]);
+
+				if (file_put_contents($path . $fileName . '.php', $file) !== FALSE) 
 				{
-					logMessage("Failed to drop database: $defaultDbName");
+					$this->_logMessage("Created $fileName.php");
+				}
+				else 
+				{
+					$this->_logMessage("Failed to create $fileName.php");
+				}
+			}
+		}
+
+		//! Create and/or populate the databases for HMS
+		/*!
+			@param array $settings The settings to use.
+		*/
+		private function _createDatabases($settings)
+		{
+			if ($this->createDb || $this->populateDb) 
+			{
+				// Main Database
+				$oDB = new mysqli($settings['database']['default_host'], $settings['database']['default_login'], $settings['database']['default_password']);
+
+				if ($oDB->connect_error) 
+				{
+					$this->_logMessage("Couldn't connect to main database");
+				}
+				else 
+				{
+					$defaultDbName = $settings['database']['default_database'];
+					if($this->createDb)
+					{
+						if(!$oDB->query("DROP DATABASE " . $defaultDbName))
+						{
+							$this->_logMessage("Failed to drop database: $defaultDbName");
+						}
+						if(!$oDB->query("CREATE DATABASE " . $defaultDbName))
+						{
+							$this->_logMessage("Failed to drop database: $defaultDbName");
+						}
+						else
+						{
+							$this->_logMessage("Created database: $defaultDbName");
+						}
+					}
+
+					if($oDB->select_db($defaultDbName))
+					{
+						if($this->populateDb)
+						{
+							if ($oDB->multi_query(file_get_contents('hms.sql'))) 
+							{
+								$this->_logMessage("Populated main database");
+								$oDB->store_result();
+								while ($oDB->more_results()) 
+								{
+									$oDB->next_result();
+									$oDB->store_result();
+								}
+								// set up dev user
+								$sSql = "INSERT INTO `members` (`member_id`, `member_number`, `name`, `email`, `join_date`, `handle`, `unlock_text`, `balance`, `credit_limit`, `member_status`, `username`, `account_id`, `address_1`, `address_2`, `address_city`, `address_postcode`, `contact_number`) VALUES";
+								$sSql .= "(6, 111, '" . $this->name . "', '" . $this->email . "', '" . date("Y-m-d") . "', '" . $this->username . "', 'Welcome " . $this->username . "', -1200, 5000, 5, '" . $this->username . "', NULL, NULL, NULL, NULL, NULL, NULL);";
+
+								if ($oDB->query($sSql)) 
+								{
+									$this->_logMessage("Created DEV user");
+								}
+								else 
+								{
+									$this->_logMessage("Failed to create DEV user, was your input valid?");
+									_logMessage($oDB->error);
+								}
+							}
+							else 
+							{
+								$this->_logMessage("Failed to populate main database");
+							}
+						}
+					}
+					else
+					{
+						$this->_logMessage("Unable to select database: $defaultDbName");
+					}
+				}
+				$oDB->close();
+
+				// Test Database
+				$oDB = new mysqli($settings['database']['test_host'], $settings['database']['test_login'], $settings['database']['test_password'], $settings['database']['test_database']);
+
+				if ($oDB->connect_error) 
+				{
+					$this->_logMessage("Couldn't connect to test database");
+				}
+				else 
+				{
+					$testDbName = $settings['database']['test_database'];
+					if($this->createDb)
+					{
+						if(!$oDB->query("DROP DATABASE " . $testDbName))
+						{
+							$this->_logMessage("Failed to drop database: $testDbName");
+						}
+						if(!$oDB->query("CREATE DATABASE " . $testDbName))
+						{
+							$this->_logMessage("Failed to drop database: $testDbName");
+						}
+						else
+						{
+							$this->_logMessage("Created database: $testDbName");
+						}
+					}
+
+					if($oDB->select_db($testDbName))
+					{
+						if($this->populateDb)
+						{
+							if ($oDB->multi_query(file_get_contents('hms_test.sql'))) 
+							{
+								$this->_logMessage("Populated test database");
+							}
+							else 
+							{
+								$this->_logMessage("Failed to populate test database");
+							}
+						}
+					}
+					else
+					{
+						$this->_logMessage("Unable to select database: $testDbName");
+					}
+				}
+				$oDB->close();
+			}
+		}
+
+		//! Copy either the real or dummy KRB Auth lib file to the lib folder.
+		private function _copyKrbLibFile()
+		{
+			$krbFolder = '../../app/Lib/Krb/';
+
+			$toFile = $krbFolder . 'krb5_auth.php';
+			$fromFile = 'krb5_auth.dummy';
+
+			if($this->useRealKrb)
+			{
+				$fromFile = 'krb5_auth.real';
+			}
+
+			if(!file_exists($krbFolder))
+			{
+				if(mkdir($krbFolder))
+				{
+					$this->_logMessage("Created folder at: $krbFolder");
 				}
 				else
 				{
-					logMessage("Created database: $defaultDbName");
+					$this->_logMessage("Failed to create folder at: $krbFolder");
 				}
 			}
 
-			if($oDB->select_db($defaultDbName))
-			{
-				if($populateDb)
-				{
-					if ($oDB->multi_query(file_get_contents('hms.sql'))) 
-					{
-						logMessage("Populated main database");
-						$oDB->store_result();
-						while ($oDB->more_results()) 
-						{
-							$oDB->next_result();
-							$oDB->store_result();
-						}
-						// set up dev user
-						$sSql = "INSERT INTO `members` (`member_id`, `member_number`, `name`, `email`, `join_date`, `handle`, `unlock_text`, `balance`, `credit_limit`, `member_status`, `username`, `account_id`, `address_1`, `address_2`, `address_city`, `address_postcode`, `contact_number`) VALUES";
-						$sSql .= "(6, 111, '" . $options['n'] . "', '" . $options['e'] . "', '" . date("Y-m-d") . "', '" . $options['h'] . "', 'Welcome " . $options['h'] . "', -1200, 5000, 5, '" . $options['h'] . "', NULL, NULL, NULL, NULL, NULL, NULL);";
+			$message = "Attempting to copy $fromFile to $toFile... ";
 
-						if ($oDB->query($sSql)) 
-						{
-							logMessage("Created DEV user");
-						}
-						else 
-						{
-							logMessage("Failed to create DEV user, was your input valid?");
-							logMessage($oDB->error);
-						}
-					}
-					else 
-					{
-						logMessage("Failed to populate main database");
-					}
-				}
+			if(copy($fromFile, $toFile))
+			{
+				$message .= "Copy successful";
 			}
 			else
 			{
-				logMessage("Unable to select database: $defaultDbName");
+				$message .= "Copy failed";
+			}
+
+			$this->_logMessage($message);
+		}
+
+		//! Given a path to a directory, delete the directory and all it's contents.
+		/*!
+			@param string $dirPath The path to the directory to delete.
+		*/
+		private function _deleteDir($dirPath) 
+		{
+		    if (!is_dir($dirPath)) 
+		    {
+		        throw new InvalidArgumentException("$dirPath must be a directory");
+		    }
+
+		    if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') 
+		    {
+		        $dirPath .= '/';
+		    }
+
+		    $files = glob($dirPath . '*', GLOB_MARK);
+		    foreach ($files as $file) 
+		    {
+		        if (is_dir($file)) 
+		        {
+		            $this->_deleteDir($file);
+		        } 
+		        else
+		        {
+		            unlink($file);
+		        }
+		    }
+		    rmdir($dirPath);
+		}
+
+		//! Create the temporary folders for HMS, will delete the old ones if they exist.
+		private function _setupTempFolders()
+		{
+			if($this->setupTempFolders)
+			{
+				$foldersToMake = array(
+					'../../app/tmp',
+					'../../app/tmp/cache',
+					'../../app/tmp/cache/models',
+					'../../app/tmp/cache/persistent',
+					'../../app/tmp/cache/views',
+					'../../app/tmp/logs',
+					'../../app/tmp/sessions',
+					'../../app/tmp/tests',
+				);
+
+				foreach ($foldersToMake as $folder) 
+				{
+					if(file_exists($folder))
+					{
+						$this->_logMessage("Folder $folder already exists, deleting...");
+						$this->_deleteDir($folder);
+					}
+					if(mkdir($folder, 0777, true))
+					{
+						$this->_logMessage("Created folder: $folder");
+					}
+					else
+					{
+						$this->_logMessage("Failed to create folder: $folder");
+					}
+				}
 			}
 		}
-		$oDB->close();
 
-		// Test Database
-		$oDB = new mysqli($aSettings['database']['test_host'], $aSettings['database']['test_login'], $aSettings['database']['test_password'], $aSettings['database']['test_database']);
-
-		if ($oDB->connect_error) 
+		//! Get the appropriate newline character.
+		/*
+			@retval string An a string representing a newline for the current output.
+		*/
+		private function _getNewline()
 		{
-			logMessage("Couldn't connect to test database");
-		}
-		else 
-		{
-			$testDbName = $aSettings['database']['test_database'];
-			if($createDb)
+			if(!isset($this->newline))
 			{
-				if(!$oDB->query("DROP DATABASE " . $testDbName))
+				// Note: Like most things in PHP this function isn't reliable:
+				// http://php.net/manual/en/function.php-sapi-name.php
+				$sapiType = php_sapi_name();
+
+				if($sapiType == 'cli')
 				{
-					logMessage("Failed to drop database: $testDbName");
-				}
-				if(!$oDB->query("CREATE DATABASE " . $testDbName))
-				{
-					logMessage("Failed to drop database: $testDbName");
+					// We're probably being called from command line.
+					$newline = '\n';
 				}
 				else
 				{
-					logMessage("Created database: $testDbName");
+					// We're probably being called from the web.
+					$newline = '<br/>';
 				}
 			}
+			
+			return $newline;
+		}
 
-			if($oDB->select_db($testDbName))
+		//! Format and write a log message, prepends timestamp and appends a newline.
+		/*!
+			@param string $message The message to write.
+		*/
+		private function _logMessage($message)
+		{
+			echo sprintf("[%s] %s%s", date("H:i:s"), $message, $this->_getNewline());
+		}
+
+		//! Given an index in the web var array, return a bool version
+		/*!
+			@param mixed $index The index of the web var to parse.
+			@retval bool True if value is set, false otherwise.
+		*/
+		private function _parseBoolFromWebVar($index)
+		{
+			return array_key_exists($index, $_POST) &&
+					$_POST[$index] == 'on';
+		}
+
+		//! Given an index in the web var array, return a string version
+		/*!
+			@param mixed $index The index of the web var to parse.
+			@retval mixed String of value if value is set, null otherwise.
+		*/
+		private function parseStringFromWebVar($index)
+		{
+			if(array_key_exists($index, $_POST) && 
+				isset($_POST[$index]))
 			{
-				if($populateDb)
-				{
-					if ($oDB->multi_query(file_get_contents('hms_test.sql'))) 
-					{
-						logMessage("Populated test database");
-					}
-					else 
-					{
-						logMessage("Failed to populate test database");
-					}
-				}
+				return (string)$_POST[$index];
+			}
+
+			return null;
+		}
+
+		//! Given an index and an array, return a bool version
+		/*!
+			@param mixed $index The index of the array to parse.
+			@param array $array The array to parse.
+			@retval bool True if value is set, false otherwise.
+		*/
+		private function _parseBoolFromArray($index, $array)
+		{
+			return array_key_exists($index, $array);
+		}
+
+		//! Given an index and an array, return a string version
+		/*!
+			@param mixed $index The index of the array to parse.
+			@param array $array The array to parse.
+			@retval mixed String of value if value is set, null otherwise.
+		*/
+		private function _parseStringFromArray($index, $array)
+		{
+			if(array_key_exists($index))
+			{
+				return (string)$array[$index];
+			}
+
+			return null;
+		}
+
+		//! Parse the options from either the command-line or the web
+		/*!
+			@retval bool True if options have been parsed correctly, false otherwise.
+		*/
+		private function _parseOptions()
+		{
+			$shortopts = '';
+			$shortopts .= 'd'; 	// If present, create the database
+			$shortopts .= 'p';  // If present, populate the database
+			$shortopts .= 'h:'; // Users handle
+			$shortopts .= 'n:'; // Users name
+			$shortopts .= 'e:'; // Users e-mail
+			$shortopts .= 'k';  // If present, use the 'proper' krb auth script instead of the dummy.
+			$shortopts .= 'f';  // If present, set-up the tmp folders
+
+			$options = getopt($shortopts);
+
+			// If options is not an array then either the arguments passed were invalid or there was none
+			// so try to parse from $_POST.
+			if(!is_array($options))
+			{
+				$this->createDb = $this->_parseBoolFromWebVar('createdb');
+				$this->populateDb = $this->_parseBoolFromWebVar('populatedb');
+				$this->useRealKrb = $this->_parseBoolFromWebVar('realKrb');
+				$this->setupTempFolders = $this->_parseBoolFromWebVar('setuptmpfolders');
+
+				$this->name = $this->parseStringFromWebVar('yourname');
+				$this->username = $this->parseStringFromWebVar('yourhandle');
+				$this->email = $this->parseStringFromWebVar('youremail');
 			}
 			else
 			{
-				logMessage("Unable to select database: $testDbName");
+				// Options is an array, so parse that out to our variables.
+				$this->createDb = $this->_parseBoolFromArray('d', $options);
+				$this->populateDb = $this->_parseBoolFromArray('p', $options);
+				$this->useRealKrb = $this->_parseBoolFromArray('k', $options);
+				$this->setupTempFolders = $this->_parseBoolFromArray('f', $options);
+
+				$this->name = $this->_parseStringFromArray('n', $options);
+				$this->username = $this->_parseStringFromArray('h', $options);
+				$this->email = $this->_parseStringFromArray('e', $options);
 			}
-		}
-		$oDB->close();
-	}
-}
 
-function copyKrbLibFile()
-{
-	global $options;
-
-	$krbFolder = '../app/Lib/Krb/';
-
-	$toFile = $krbFolder . 'krb5_auth.php';
-	$fromFile = 'krb5_auth.dummy';
-	if(array_key_exists('k', $options))
-	{
-		$fromFile = 'krb5_auth.real';
-	}
-
-	if(!file_exists($krbFolder))
-	{
-		if(mkdir($krbFolder))
-		{
-			logMessage("Created folder at: $krbFolder");
-		}
-		else
-		{
-			logMessage("Failed to create folder at: $krbFolder");
-		}
-	}
-
-	$message = "Attempting to copy $fromFile to $toFile... ";
-
-	if(copy($fromFile, $toFile))
-	{
-		$message .= "Copy successful";
-	}
-	else
-	{
-		$message .= "Copy failed";
-	}
-
-	logMessage($message);
-}
-
-function deleteDir($dirPath) {
-    if (! is_dir($dirPath)) {
-        throw new InvalidArgumentException("$dirPath must be a directory");
-    }
-    if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
-        $dirPath .= '/';
-    }
-    $files = glob($dirPath . '*', GLOB_MARK);
-    foreach ($files as $file) {
-        if (is_dir($file)) {
-            deleteDir($file);
-        } else {
-            unlink($file);
-        }
-    }
-    rmdir($dirPath);
-}
-
-function setupTempFolders()
-{
-	global $options;
-
-	if(array_key_exists('f', $options))
-	{
-		$foldersToMake = array(
-			'../app/tmp',
-			'../app/tmp/cache',
-			'../app/tmp/cache/models',
-			'../app/tmp/cache/persistent',
-			'../app/tmp/cache/views',
-			'../app/tmp/logs',
-			'../app/tmp/sessions',
-			'../app/tmp/tests',
-		);
-
-		foreach ($foldersToMake as $folder) 
-		{
-			if(file_exists($folder))
+			// Certain variables are required
+			if(! (isset($this->name) && isset($this->username) && isset($this->email)) )
 			{
-				logMessage("Folder $folder already exists, deleting...");
-				deleteDir($folder);
+				return false;
 			}
-			if(mkdir($folder, 0777, true))
+
+			return true;
+		}
+
+		//! Get the settings to use, either default setting or those loaded in from a file.
+		private function _getSettings()
+		{
+			// Default settings
+			$aSettings = array(
+				'database'	=>	array(
+					'default_host'		=>	'localhost',
+					'default_login'		=>	'hms',
+					'default_password'	=>	'',
+					'default_database'	=>	'hms',
+					'test_host'			=>	'localhost',
+					'test_login'		=>	'hms',
+					'test_password'		=>	'',
+					'test_database'		=>	'hms_test'
+				),
+				'hms'	=>	array(
+					'streetdoor'	=>	'1234',
+					'innerdoor'		=>	'1234',
+					'wifi'			=>	'123456',
+				),
+				'krb' =>	array(
+
+				),
+				'mailchimp'	=> array(
+					'key'	=>	'123456',
+					'list'	=>	'123456',
+				),
+				'email'	=>	array(
+					'from_address'	=>	'site@localhost',
+					'host'			=>	'localhost',
+					'port'			=>	25,
+					'username'		=>	'user',
+					'password'		=>	'secret',
+				),
+			);
+
+			include('hms.settings');
+
+			return $aSettings;
+		}
+
+		//! Run all selected setup steps.
+		public function run()
+		{
+			if(!$this->_parseOptions())
 			{
-				logMessage("Created folder: $folder");
+				$this->_logMessage('Invalid arguments.');
+				exit(1);
 			}
-			else
-			{
-				logMessage("Failed to create folder: $folder");
-			}
+
+			$this->_logMessage("Started");
+
+			$settings = $this->_getSettings();
+
+			$this->_createConfigFiles($settings);
+			$this->_createDatabases($settings);
+			$this->_copyKrbLibFile();
+			$this->_setupTempFolders();
+
+
+			$this->_logMessage("Finished");
 		}
 	}
-}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -438,20 +527,16 @@ function setupTempFolders()
 
 		<p class="results">
 			<?php
-				logMessage("Started");
-				createConfigFiles();
-				createDatabases();
-				copyKrbLibFile();
-				setupTempFolders();
-				logMessage("Finished");
+				$setup = new Setup();
+				$setup->run();
 			?>
 
 			<ul class="actions">
 				<li>
-					<a href="../" class="positive">Go to HMS</a>
+					<a href="../../" class="positive">Go to HMS</a>
 				</li>
 				<li>
-					<a href="../test.php" class="positive">Run Tests</a>
+					<a href="../../test.php" class="positive">Run Tests</a>
 				</li>
 			</ul>
 		</p>
