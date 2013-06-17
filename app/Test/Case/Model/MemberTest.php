@@ -86,7 +86,7 @@
 
             $this->Member->beforeSave();
 
-            $this->assertFalse(isset($this->Member->data['Member']['balance']), 'BeforeSave failed to unset Member.balance.');
+            $this->assertFalse(isset($this->Member->data['Member']['balance']), 'BeforeSave failed to unset Member.balance.');  
         }
 
         public function testAddEmailMustMatch()
@@ -144,7 +144,8 @@
                 $this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
                 $this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
 
-                $this->assertArrayHasKey( 'name', $memberInfo, 'Member has no name.' ); 
+                $this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' ); 
+                $this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' ); 
                 $this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
                 $this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
 
@@ -180,7 +181,8 @@
                 $this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
                 $this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
 
-                $this->assertArrayHasKey( 'name', $memberInfo, 'Member has no name.' ); 
+                $this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' ); 
+                $this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' ); 
                 $this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
                 $this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
 
@@ -244,7 +246,8 @@
             $this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
             $this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
 
-            $this->assertArrayHasKey( 'name', $memberInfo, 'Member has no name.' ); 
+            $this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' ); 
+            $this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' ); 
             $this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
             $this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
 
@@ -270,7 +273,8 @@
                 $this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
                 $this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
 
-                $this->assertArrayHasKey( 'name', $memberInfo, 'Member has no name.' ); 
+                $this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' ); 
+                $this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' ); 
                 $this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
                 $this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
 
@@ -518,7 +522,8 @@
             $data = array(
                 'Member' => array(
                     'member_id' => 4,
-                    'name' => 'Kelly Savala',
+                    'firstname' => 'Kelly',
+                    'surname' => 'Savala',
                     'email' => $newEmail,
                     'join_date' => '2010-09-22',
                     'handle' => 'bildestonelectrician',
@@ -558,7 +563,8 @@
             $this->assertNotIdentical( $record, null, 'Could not find record.' );
             $this->assertInternalType( 'array', $record, 'Could not find record.' );
 
-            $this->assertEqual( $record['Member']['name'], null, 'Record has incorrect name.' );
+            $this->assertEqual( $record['Member']['firstname'], null, 'Record has incorrect firstname.' );
+            $this->assertEqual( $record['Member']['surname'], null, 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'foo@srsaegrttfd.com', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
             $this->assertEqual( $record['Member']['handle'], null, 'Record has incorrect handle.' );
@@ -590,7 +596,8 @@
 
             $data = array(
                 'Member' => array(
-                    'name' => 'FooBarson',
+                    'firstname' => 'Foo',
+                    'surname' => 'Barson',
                     'username' => 'fubbby',
                     'email' => 'not@correct.com',
                     'password' => 'hunter2',
@@ -606,7 +613,8 @@
             $data = array(
                 1 => array(
                     'Member' => array(
-                        'name' => 'FooBarson',
+                        'firstname' => 'Foo',
+                        'surname' => 'Barson',
                         'username' => 'fubbby',
                         'email' => 'm.pryce@example.org',
                         'password' => 'hunter2',
@@ -615,7 +623,8 @@
                 ),
                 6 => array(
                     'Member' => array(
-                        'name' => 'FooBarson',
+                        'firstname' => 'Foo',
+                        'surname' => 'Barson',
                         'username' => 'fubbby',
                         'email' => 'g.garratte@foobar.org',
                         'password' => 'hunter2',
@@ -624,7 +633,8 @@
                 ),
                 9 => array(
                     'Member' => array(
-                        'name' => 'FooBarson',
+                        'firstname' => 'Foo',
+                        'surname' => 'Barson',
                         'username' => 'fubbby',
                         'email' => 'DorothyDRussell@dayrep.com',
                         'password' => 'hunter2',
@@ -633,7 +643,8 @@
                 ),
                 10 => array(
                     'Member' => array(
-                        'name' => 'FooBarson',
+                        'firstname' => 'Foo',
+                        'surname' => 'Barson',
                         'username' => 'fubbby',
                         'email' => 'HugoJLorenz@dayrep.com',
                         'password' => 'hunter2',
@@ -642,7 +653,8 @@
                 ),
                 11 => array(
                     'Member' => array(
-                        'name' => 'FooBarson',
+                        'firstname' => 'Foo',
+                        'surname' => 'Barson',
                         'username' => 'fubbby',
                         'email' => 'BettyCParis@teleworm.us',
                         'password' => 'hunter2',
@@ -651,7 +663,8 @@
                 ),
                 12 => array(
                     'Member' => array(
-                        'name' => 'FooBarson',
+                        'firstname' => 'Foo',
+                        'surname' => 'Barson',
                         'username' => 'fubbby',
                         'email' => 'RoyJForsman@teleworm.us',
                         'password' => 'hunter2',
@@ -660,7 +673,8 @@
                 ),
                 13 => array(
                     'Member' => array(
-                        'name' => 'FooBarson',
+                        'firstname' => 'Foo',
+                        'surname' => 'Barson',
                         'username' => 'fubbby',
                         'email' => 'RyanMiles@dayrep.com',
                         'password' => 'hunter2',
@@ -669,7 +683,8 @@
                 ),
                 14 => array(
                     'Member' => array(
-                        'name' => 'FooBarson',
+                        'firstname' => 'Foo',
+                        'surname' => 'Barson',
                         'username' => 'fubbby',
                         'email' => 'EvanAtkinson@teleworm.us',
                         'password' => 'hunter2',
@@ -725,8 +740,10 @@
             $this->assertEqual( $record['Member']['username'], 'fubbby', 'Record has incorrect username.' );
             $this->assertArrayHasKey( 'handle', $record['Member'], 'Record Member does not have handle key.' );
             $this->assertEqual( $record['Member']['handle'], 'fubbby', 'Record has incorrect handle.' );
-            $this->assertArrayHasKey( 'name', $record['Member'], 'Record Member does not have name key.' );
-            $this->assertEqual( $record['Member']['name'], 'Foo Barson', 'Record has incorrect name.' );
+            $this->assertArrayHasKey( 'firstname', $record['Member'], 'Record Member does not firstname name key.' );
+            $this->assertEqual( $record['Member']['firstname'], 'Foo', 'Record has incorrect firstname.' );
+            $this->assertArrayHasKey( 'surname', $record['Member'], 'Record Member does not surname name key.' );
+            $this->assertEqual( $record['Member']['surname'], 'Barson', 'Record has incorrect surname.' );
 
             $this->assertArrayHasKey( 'StatusUpdate', $record, 'Record does not have status update key.' );
             $this->assertEqual( count($record['StatusUpdate']), 1, 'Record has incorrect number of status updates.' );
@@ -779,7 +796,8 @@
             $this->assertInternalType( 'array', $record, 'Could not find record.' );
 
             $this->assertEqual( $record['Member']['member_id'], 7, 'Record has incorrect member_id.' );
-            $this->assertEqual( $record['Member']['name'], 'Foo Barson', 'Record has incorrect name.' );
+            $this->assertEqual( $record['Member']['firstname'], 'Foo', 'Record has incorrect firstname.' );
+            $this->assertEqual( $record['Member']['surname'], 'Barson', 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'CherylLCarignan@teleworm.us', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
             $this->assertEqual( $record['Member']['handle'], 'fubbby', 'Record has incorrect handle.' ); // Handle should be the same as the username
@@ -912,7 +930,8 @@
             $data = array(
                 'Member' => array(
                     'member_id' => 14,
-                    'name' => 'FooBarson',
+                    'firstname' => 'Foo',
+                    'surname' => 'Barson',
                     'email' => 'CherylLCarignan@teleworm.us',
                     'join_date' => '2010-09-22',
                     'handle' => 'bildestonelectrician',
@@ -940,7 +959,8 @@
             $this->assertInternalType( 'array', $record, 'Could not find record.' );
 
             $this->assertEqual( $record['Member']['member_id'], 9, 'Record has incorrect member_id.' );
-            $this->assertEqual( $record['Member']['name'], 'Dorothy D. Russell', 'Record has incorrect name.' );
+            $this->assertEqual( $record['Member']['firstname'], 'Dorothy', 'Record has incorrect firstname.' );
+            $this->assertEqual( $record['Member']['surname'], 'Russell', 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'DorothyDRussell@dayrep.com', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
             $this->assertEqual( $record['Member']['handle'], 'Warang29', 'Record has incorrect handle.' );
@@ -1054,7 +1074,8 @@
             $data = array(
                 'Member' => array(
                     'member_id' => 14,
-                    'name' => 'FooBarson',
+                    'firstname' => 'Foo',
+                    'surname' => 'Barson',
                     'email' => 'CherylLCarignan@teleworm.us',
                     'join_date' => '2010-09-22',
                     'handle' => 'bildestonelectrician',
@@ -1088,7 +1109,8 @@
             $this->assertInternalType( 'array', $record, 'Could not find record.' );
 
             $this->assertEqual( $record['Member']['member_id'], 11, 'Record has incorrect member_id.' );
-            $this->assertEqual( $record['Member']['name'], 'Betty C. Paris', 'Record has incorrect name.' );
+            $this->assertEqual( $record['Member']['firstname'], 'Betty', 'Record has incorrect firstname.' );
+            $this->assertEqual( $record['Member']['surname'], 'Paris', 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'BettyCParis@teleworm.us', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
             $this->assertEqual( $record['Member']['handle'], 'Beltonstlend51', 'Record has incorrect handle.' );
@@ -1159,8 +1181,10 @@
 
             $this->assertNotEqual( $return, null, 'Failed creating a new account.' );
             $this->assertInternalType( 'array', $return, 'Failed creating new account.' );
-            $this->assertArrayHasKey( 'name', $return, 'Return array is invalid.' );
-            $this->assertEqual( $return['name'], 'Betty C. Paris', 'Return array has invalid name.' );
+            $this->assertArrayHasKey( 'firstname', $return, 'Return array is invalid.' );
+            $this->assertEqual( $return['firstname'], 'Betty', 'Return array has invalid firstname.' );
+            $this->assertArrayHasKey( 'surname', $return, 'Return array is invalid.' );
+            $this->assertEqual( $return['surname'], 'Paris', 'Return array has invalid surname.' );
             $this->assertArrayHasKey( 'email', $return, 'Return array is invalid.' );
             $this->assertEqual( $return['email'], 'BettyCParis@teleworm.us', 'Return array has invalid email.' );
             $this->assertArrayHasKey( 'paymentRef', $return, 'Return array is invalid.' );
@@ -1210,8 +1234,10 @@
 
             $this->assertNotEqual( $return, null, 'Failed creating a new account.' );
             $this->assertInternalType( 'array', $return, 'Failed creating new account.' );
-            $this->assertArrayHasKey( 'name', $return, 'Return array is invalid.' );
-            $this->assertEqual( $return['name'], 'Roy J. Forsman', 'Return array has invalid name.' );
+            $this->assertArrayHasKey( 'firstname', $return, 'Return array is invalid.' );
+            $this->assertEqual( $return['firstname'], 'Roy', 'Return array has invalid firstname.' );
+            $this->assertArrayHasKey( 'surname', $return, 'Return array is invalid.' );
+            $this->assertEqual( $return['surname'], 'Forsman', 'Return array has invalid surname.' );
             $this->assertArrayHasKey( 'email', $return, 'Return array is invalid.' );
             $this->assertEqual( $return['email'], 'RoyJForsman@teleworm.us', 'Return array has invalid email.' );
             $this->assertArrayHasKey( 'paymentRef', $return, 'Return array is invalid.' );
@@ -1263,8 +1289,10 @@
 
             $this->assertNotEqual( $return, null, 'Failed creating a new account.' );
             $this->assertInternalType( 'array', $return, 'Failed creating new account.' );
-            $this->assertArrayHasKey( 'name', $return, 'Return array is invalid.' );
-            $this->assertEqual( $return['name'], 'Roy J. Forsman', 'Return array has invalid name.' );
+            $this->assertArrayHasKey( 'firstname', $return, 'Return array is invalid.' );
+            $this->assertEqual( $return['firstname'], 'Roy', 'Return array has invalid firstname.' );
+            $this->assertArrayHasKey( 'surname', $return, 'Return array is invalid.' );
+            $this->assertEqual( $return['surname'], 'Forsman', 'Return array has invalid surname.' );
             $this->assertArrayHasKey( 'email', $return, 'Return array is invalid.' );
             $this->assertEqual( $return['email'], 'RoyJForsman@teleworm.us', 'Return array has invalid email.' );
             $this->assertArrayHasKey( 'paymentRef', $return, 'Return array is invalid.' );
@@ -1303,7 +1331,8 @@
             $data = array(
                 'Member' => array(
                     'member_id' => 14,
-                    'name' => 'FooBarson',
+                    'firstname' => 'Foo',
+                    'surname' => 'Barson',
                     'email' => 'CherylLCarignan@teleworm.us',
                     'join_date' => '2010-09-22',
                     'handle' => 'bildestonelectrician',
@@ -1336,7 +1365,8 @@
             $this->assertInternalType( 'array', $record, 'Could not find record.' );
 
             $this->assertEqual( $record['Member']['member_id'], 11, 'Record has incorrect member_id.' );
-            $this->assertEqual( $record['Member']['name'], 'Betty C. Paris', 'Record has incorrect name.' );
+            $this->assertEqual( $record['Member']['firstname'], 'Betty', 'Record has incorrect firstname.' );
+            $this->assertEqual( $record['Member']['surname'], 'Paris', 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'BettyCParis@teleworm.us', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
             $this->assertEqual( $record['Member']['handle'], 'Beltonstlend51', 'Record has incorrect handle.' );
@@ -1358,7 +1388,8 @@
             $data = array(
                 'Member' => array(
                     'member_id' => 14,
-                    'name' => 'FooBarson',
+                    'firstname' => 'Foo',
+                    'surname' => 'Barson',
                     'email' => 'CherylLCarignan@teleworm.us',
                     'join_date' => '2010-09-22',
                     'handle' => 'bildestonelectrician',
@@ -1391,7 +1422,8 @@
             $this->assertInternalType( 'array', $record, 'Could not find record.' );
 
             $this->assertEqual( $record['Member']['member_id'], 11, 'Record has incorrect member_id.' );
-            $this->assertEqual( $record['Member']['name'], 'Betty C. Paris', 'Record has incorrect name.' );
+            $this->assertEqual( $record['Member']['firstname'], 'Betty', 'Record has incorrect firstname.' );
+            $this->assertEqual( $record['Member']['surname'], 'Paris', 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'BettyCParis@teleworm.us', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
             $this->assertEqual( $record['Member']['handle'], 'Beltonstlend51', 'Record has incorrect handle.' );
@@ -1443,8 +1475,10 @@
 
             $this->assertNotEqual( $return, null, 'Failed approving member.' );
             $this->assertInternalType( 'array', $return, 'Failed approving member.' );
-            $this->assertArrayHasKey( 'name', $return, 'Return array is invalid.' );
-            $this->assertEqual( $return['name'], 'Evan Atkinson', 'Return array has invalid name.' );
+            $this->assertArrayHasKey( 'firstname', $return, 'Return array is invalid.' );
+            $this->assertEqual( $return['firstname'], 'Evan', 'Return array has invalid firstname.' );
+            $this->assertArrayHasKey( 'surname', $return, 'Return array is invalid.' );
+            $this->assertEqual( $return['surname'], 'Atkinson', 'Return array has invalid surname.' );
             $this->assertArrayHasKey( 'email', $return, 'Return array is invalid.' );
             $this->assertEqual( $return['email'], 'EvanAtkinson@teleworm.us', 'Return array has invalid email.' );
             $this->assertArrayHasKey( 'pin', $return, 'Return array is invalid.' );
@@ -1452,11 +1486,12 @@
             $record = $this->Member->findByMemberId(14);
 
             $this->assertEqual( $record['Member']['member_id'], 14, 'Record has incorrect member_id.' );
-            $this->assertEqual( $record['Member']['name'], 'Evan Atkinson', 'Record has incorrect name.' );
+            $this->assertEqual( $record['Member']['firstname'], 'Evan', 'Record has incorrect firstname.' );
+            $this->assertEqual( $record['Member']['surname'], 'Atkinson', 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'EvanAtkinson@teleworm.us', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], date('Y-m-d'), 'Record has incorrect join date.' );
             $this->assertEqual( $record['Member']['handle'], 'Sookinium', 'Record has incorrect handle.' );
-            $this->assertEqual( $record['Member']['unlock_text'], 'Welcome Evan Atkinson', 'Record has incorrect unlock text.' );
+            $this->assertEqual( $record['Member']['unlock_text'], 'Welcome Evan', 'Record has incorrect unlock text.' );
             $this->assertEqual( $record['Member']['balance'], 0, 'Record has incorrect balance.' );
             $this->assertEqual( $record['Member']['credit_limit'], 5000, 'Record has incorrect credit limit.' );
             $this->assertEqual( $record['Member']['member_status'], Status::CURRENT_MEMBER, 'Record has incorrect status.' );
@@ -1701,7 +1736,7 @@
             $this->assertIdentical( $this->Member->getSoDetails(2076), null, 'Invalid data was not handled correctly.' );
             $this->assertIdentical( $this->Member->getSoDetails(array()), null, 'Invalid data was not handled correctly.' );
 
-            $this->assertEqual( $this->Member->getSoDetails(2), array('name' => 'Annabelle Santini', 'email' => 'a.santini@hotmail.com', 'paymentRef' => 'HSNOTTSK2R62GQW6'), 'Valid data was not handled correctly.' );            
+            $this->assertEqual( $this->Member->getSoDetails(2), array('firstname' => 'Annabelle', 'surname' => 'Santini', 'email' => 'a.santini@hotmail.com', 'paymentRef' => 'HSNOTTSK2R62GQW6'), 'Valid data was not handled correctly.' );            
         }
 
         public function testGetApproveDetails()
@@ -1712,13 +1747,13 @@
             $this->assertIdentical( $this->Member->getApproveDetails(2076), null, 'Invalid data was not handled correctly.' );
             $this->assertIdentical( $this->Member->getApproveDetails(array()), null, 'Invalid data was not handled correctly.' );
 
-            $this->assertEqual( $this->Member->getApproveDetails(4), array('name' => 'Kelly Savala', 'email' => 'k.savala@yahoo.co.uk', 'pin' => '5436'), 'Valid data was not handled correctly.' );            
+            $this->assertEqual( $this->Member->getApproveDetails(4), array('firstname' => 'Kelly', 'surname' => 'Savala', 'email' => 'k.savala@yahoo.co.uk', 'pin' => '5436'), 'Valid data was not handled correctly.' );            
         }
 
 
         public function testGetReadableAccountList()
         {
-            $expectedResult = array( '-1' => 'Create new', '1' => 'Mathew Pryce', '2' => 'Annabelle Santini', '3' => 'Guy Viles, Kelly Savala and Jessie Easterwood', '6' => 'Guy Garrette', '7' => 'Ryan Miles', '8' => 'Evan Atkinson' );
+            $expectedResult = array( '-1' => 'Create new', '1' => 'Mathew Pryce', '2' => 'Annabelle Santini', '3' => 'Jessie Easterwood, Kelly Savala and Guy Viles', '6' => 'Guy Garrette', '7' => 'Ryan Miles', '8' => 'Evan Atkinson' );
             $this->assertEqual( $this->Member->getReadableAccountList(), $expectedResult, 'Invalid result.' );
         }
 

@@ -8,10 +8,16 @@
 
 <dl>
 	<dt>
-		Name
+		First Name
 	</dt>
 	<dd>
-		<?php echo $member['name']; ?>
+		<?php echo $member['firstname']; ?>
+	</dd>
+	<dt>
+		Surname
+	</dt>
+	<dd>
+		<?php echo $member['surname']; ?>
 	</dd>
 	<dt>
 		Username

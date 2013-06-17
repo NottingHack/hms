@@ -13,7 +13,8 @@
 	{
 		echo $this->Form->input('handle');
 	}
-	echo $this->Form->input('name');
+	echo $this->Form->input('firstname');
+	echo $this->Form->input('surname');
 	echo $this->Form->input('email');
 	echo $this->Form->input('unlock_text');
 
@@ -34,7 +35,7 @@
 		);
 	}
 
-	# Pin details
+	// Pin details
 	if( isset($member['pin']) )
 	{
 

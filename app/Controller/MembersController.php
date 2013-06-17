@@ -470,7 +470,7 @@
 							'notify_admins_payment_incoming',
 							array(
 								'memberId' => $id,
-								'memberName' => $memberDetails['name'],
+								'memberName' => sprintf('%s %s', $memberDetails['firstname'], $memberDetails['surname']),
 								'memberEmail' => $memberDetails['email'],
 								'memberPayRef' => $memberDetails['paymentRef'],
 							)
@@ -533,7 +533,7 @@
 	    			'Member Approved',
 	    			'notify_admins_member_approved',
 	    			array(
-	    				'memberName' => $memberDetails['name'],
+	    				'memberName' => sprintf('%s %s', $memberDetails['firstname'], $memberDetails['surname']),
 	    				'memberEmail' => $memberDetails['email'],
 	    				'memberId' => $id,
 	    				'memberPin' => $memberDetails['pin'],
@@ -774,7 +774,7 @@
 	    			'Bank Details',
 	    			'to_member_so_details',
 	    			array( 
-						'name' => $memberSoDetails['name'],
+						'name' => sprintf('%s %s', $memberSoDetails['firstname'], $memberSoDetails['surname']),
 						'paymentRef' => $memberSoDetails['paymentRef'],
 						'accountNum' => Configure::read('hms_so_accountNumber'),
 						'sortCode' => Configure::read('hms_so_sortCode'),
@@ -1408,7 +1408,7 @@
 							$flash .= 'Unable to approve';	
 						}
 
-						$flash .= sprintf(' member %s\n', $member['name']);
+						$flash .= sprintf(' member %s %s\n', $member['firstname'], $member['surname']);
 					}
 
 					$this->Session->delete($guid);

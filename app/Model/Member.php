@@ -355,7 +355,8 @@
 			return $this->_getMemberSummary( $paginate,
 				array( 'OR' => 
 					array(
-						"Member.name Like'%$keyword%'", 
+						"Member.firstname Like'%$keyword%'", 
+						"Member.surname Like'%$keyword%'", 
 						"Member.email Like'%$keyword%'",
 						"Member.username Like'%$keyword%'",
 						"Member.handle Like'%$keyword%'",
@@ -430,7 +431,8 @@
 	    	*/
 
     		$id = Hash::get($memberInfo, 'Member.member_id');
-    		$name = Hash::get($memberInfo, 'Member.name');
+    		$firstname = Hash::get($memberInfo, 'Member.firstname');
+    		$surname = Hash::get($memberInfo, 'Member.surname');
     		$username = Hash::get($memberInfo, 'Member.username');
     		$handle = Hash::get($memberInfo, 'Member.handle');
     		$email = Hash::get($memberInfo, 'Member.email');
@@ -493,7 +495,8 @@
 
 			$allValues = array(
 				'id' => $id,
-				'name' => $name,
+				'firstname' => $firstname,
+				'surname' => $surname,
 				'username' => $username,
 				'handle' => $handle,
 				'email' => $email,
@@ -829,14 +832,7 @@
 			$saveOk = false;
 			if($this->validates(array( 'fieldList' => array('member_id', 'firstname', 'surname', 'username', 'handle', 'email', 'password', 'password_confirm', 'member_status'))))
 			{
-
-				// Join the names
-				$dataToSave['Member']['name'] = sprintf('%s %s', Hash::get($dataToSave, 'Member.firstname'), Hash::get($dataToSave, 'Member.surname'));
-				// Now unset the firstname and surname, don't want to be saving these
-				unset($dataToSave['Member']['firstname']);
-				unset($dataToSave['Member']['surname']);
-
-				$saveOk = is_array($this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'name', 'username', 'handle', 'member_status')), $memberId));
+				$saveOk = is_array($this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'firstname', 'surname', 'username', 'handle', 'member_status')), $memberId));
 			}
 
 			$this->removeEmailMustMatch();
@@ -1088,7 +1084,7 @@
 
 			$hardcodedMemberData = array(
 				'member_status' => Status::CURRENT_MEMBER,
-				'unlock_text' => 'Welcome ' . $memberInfo['Member']['name'],
+				'unlock_text' => 'Welcome ' . $memberInfo['Member']['firstname'],
 				'credit_limit' => 5000,
 				'join_date' => date( 'Y-m-d' ),
 			);
@@ -1342,7 +1338,8 @@
 			$fieldsToSave = array(
 				'Member' => array(
 					'member_id',
-					'name',
+					'firstname',
+					'surname',
 					'username',
 					'handle',
 					'email',
@@ -1374,14 +1371,19 @@
 			$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
 			if($memberInfo)
 			{
-				$name = Hash::get($memberInfo, 'Member.name');
+				$firstname = Hash::get($memberInfo, 'Member.firstname');
+				$surname = Hash::get($memberInfo, 'Member.surname');
 				$email = Hash::get($memberInfo, 'Member.email');
 				$paymentRef = Hash::get($memberInfo, 'Account.payment_ref');
 
-				if(isset($name) && isset($email) && isset($paymentRef))
+				if(	isset($firstname) && 
+					isset($surname) && 
+					isset($email) && 
+					isset($paymentRef))
 				{
 					return array(
-						'name' => $name,
+						'firstname' => $firstname,
+						'surname' => $surname,
 						'email' => $email,
 						'paymentRef' => $paymentRef,
 					);
@@ -1401,14 +1403,19 @@
 
 			if($memberInfo)
 			{
-				$name = Hash::get($memberInfo, 'Member.name');
+				$firstname = Hash::get($memberInfo, 'Member.firstname');
+				$surname = Hash::get($memberInfo, 'Member.surname');
 				$email = Hash::get($memberInfo, 'Member.email');
 				$pin = Hash::get($memberInfo, 'Pin.0.pin');
 
-				if(isset($name) && isset($email) && isset($pin))
+				if(	isset($firstname) && 
+					isset($surname) && 
+					isset($email) && 
+					isset($pin) )
 				{
 					return array(
-						'name' => $name,
+						'firstname' => $firstname,
+						'surname' => $surname,
 						'email' => $email,
 						'pin' => $pin,
 					);
@@ -1423,18 +1430,24 @@
 		*/
 		public function getReadableAccountList()
 		{
-			$memberList = $this->find('list', array(
-				'fields' => array('member_id', 'name', 'account_id'), 
-				'conditions' => array('Member.account_id !=' => null))
+			$memberList = $this->find('all', array(
+				'fields' => array('Member.member_id', 'Member.firstname', 'Member.surname', 'Member.account_id'),
+				'order' => array('Member.account_id ASC'),
+				'conditions' => array('Member.account_id !=' => null)
+				)
 			);
 
+			// Group the member list by the account id
+			$groupedMemberList = Hash::combine($memberList, '{n}.Member.member_id', '{n}.Member', '{n}.Member.account_id');
+
 			$accountList = array();
-			foreach ($memberList as $accountId => $members) 
+			foreach ($groupedMemberList as $accountId => $members) 
 			{
 				$memberNames = array();
-				foreach ($members as $id => $name) 
+				foreach ($members as $id => $data) 
 				{
-					array_push($memberNames, $name);
+					$fullName = sprintf('%s %s', $data['firstname'], $data['surname']);
+					array_push($memberNames, $fullName);
 				}
 				
 				$accountList[$accountId] = String::toList($memberNames);
@@ -1583,7 +1596,7 @@
 		    		unset($memberInfo['Member']['member_status']);
 		    	}
 
-		    	$unsetIfNull = array('username', 'handle', 'name', 'account_id', 'contact_number', 'address_1', 'address_2', 'address_city', 'address_postcode', 'member_number');
+		    	$unsetIfNull = array('username', 'handle', 'firstname', 'surname', 'account_id', 'contact_number', 'address_1', 'address_2', 'address_city', 'address_postcode', 'member_number');
 		    	foreach ($unsetIfNull as $index) 
 		    	{
 		    		if(	array_key_exists($index, $memberInfo['Member']) && 

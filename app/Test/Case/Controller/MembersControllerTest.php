@@ -24,6 +24,7 @@
             $this->MembersController->Member->mailingList = $this->_getMailingListMock();
         }
 
+
         private function _getMailingListMock()
         {
         	$mailingListTestCase = new MailingListTest();
@@ -237,7 +238,8 @@
 				$this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
 				$this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
 
-				$this->assertArrayHasKey( 'name', $memberInfo, 'Member has no name.' ); 
+				$this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' ); 
+                $this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' ); 
 				$this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
 				$this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
 
@@ -293,7 +295,8 @@
 					$this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
 					$this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
 
-					$this->assertArrayHasKey( 'name', $memberInfo, 'Member has no name.' ); 
+					$this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' ); 
+                	$this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' ); 
 					$this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
 					$this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
 
@@ -836,7 +839,7 @@
 
 				$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
 				$this->assertArrayHasKey( 'accounts', $this->vars, 'No view value called \'accounts\'.' );
-				$this->assertEqual( $this->vars['accounts'], array( '-1' => 'Create new', '1' => 'Mathew Pryce', '2' => 'Annabelle Santini', '3' => 'Guy Viles, Kelly Savala and Jessie Easterwood', '6' => 'Guy Garrette', '7' => 'Ryan Miles', '8' => 'Evan Atkinson' ), 'Accounts view var not set correctly.' );
+				$this->assertEqual( $this->vars['accounts'], array( '-1' => 'Create new', '1' => 'Mathew Pryce', '2' => 'Annabelle Santini', '3' => 'Jessie Easterwood, Kelly Savala and Guy Viles', '6' => 'Guy Garrette', '7' => 'Ryan Miles', '8' => 'Evan Atkinson' ), 'Accounts view var not set correctly.' );
 
 				$this->assertArrayHasKey('name', $this->vars, 'No view value called \'name\' for member: ' . $memberId . '.' );
             }
@@ -868,7 +871,7 @@
 			$this->controller->email = $mockEmail;
 
 			$fakePaymentRef = 'HSNOTTSTYX339RW4';
-			$this->controller->Member->expects($this->exactly(2))->method('getSoDetails')->will($this->returnValue(array('name' => 'Roy J. Forsman', 'email' => 'RoyJForsman@teleworm.us', 'paymentRef' => $fakePaymentRef)));
+			$this->controller->Member->expects($this->exactly(2))->method('getSoDetails')->will($this->returnValue(array('firstname' => 'Roy', 'surname' => 'Forsman', 'email' => 'RoyJForsman@teleworm.us', 'paymentRef' => $fakePaymentRef)));
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
             $mockEmail->expects($this->exactly(2))->method('config');
@@ -888,7 +891,7 @@
 			$mockEmail->expects($this->at(4))->method('to')->with('RoyJForsman@teleworm.us');
 			$mockEmail->expects($this->at(5))->method('subject')->with('Bank Details');
 			$mockEmail->expects($this->at(6))->method('template')->with('to_member_so_details');
-			$mockEmail->expects($this->at(7))->method('viewVars')->with(array('name' => 'Roy J. Forsman', 'paymentRef' => $fakePaymentRef, 'accountNum' => Configure::read('hms_so_accountNumber'), 'sortCode' => Configure::read('hms_so_sortCode'), 'accountName' => Configure::read('hms_so_accountName') ));
+			$mockEmail->expects($this->at(7))->method('viewVars')->with(array('name' => 'Roy Forsman', 'paymentRef' => $fakePaymentRef, 'accountNum' => Configure::read('hms_so_accountNumber'), 'sortCode' => Configure::read('hms_so_sortCode'), 'accountName' => Configure::read('hms_so_accountName') ));
 			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
 
 			$mockEmail->expects($this->at(9))->method('config')->with('smtp');
@@ -898,7 +901,7 @@
 			$mockEmail->expects($this->at(13))->method('to')->with(array('j.easterwood@googlemail.com'));
 			$mockEmail->expects($this->at(14))->method('subject')->with('Impending Payment');
 			$mockEmail->expects($this->at(15))->method('template')->with('notify_admins_payment_incoming');
-			$mockEmail->expects($this->at(16))->method('viewVars')->with(array('memberId' => '12', 'memberName' => 'Roy J. Forsman', 'memberEmail' => 'RoyJForsman@teleworm.us', 'memberPayRef' => $fakePaymentRef));
+			$mockEmail->expects($this->at(16))->method('viewVars')->with(array('memberId' => '12', 'memberName' => 'Roy Forsman', 'memberEmail' => 'RoyJForsman@teleworm.us', 'memberPayRef' => $fakePaymentRef));
 			$mockEmail->expects($this->at(17))->method('send')->will($this->returnValue(true));
 
             $this->testAction('/members/acceptDetails/12', array('data' => $data, 'method' => 'post'));
@@ -907,7 +910,7 @@
 
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
 			$this->assertArrayHasKey( 'accounts', $this->vars, 'No view value called \'accounts\'.' );
-			$this->assertEqual( $this->vars['accounts'], array( '-1' => 'Create new', '1' => 'Mathew Pryce', '2' => 'Annabelle Santini', '3' => 'Guy Viles, Kelly Savala and Jessie Easterwood', '6' => 'Guy Garrette', '7' => 'Ryan Miles', '8' => 'Evan Atkinson' ), 'Accounts view var not set correctly.' );
+			$this->assertEqual( $this->vars['accounts'], array( '-1' => 'Create new', '1' => 'Mathew Pryce', '2' => 'Annabelle Santini', '3' => 'Jessie Easterwood, Kelly Savala and Guy Viles', '6' => 'Guy Garrette', '7' => 'Ryan Miles', '8' => 'Evan Atkinson' ), 'Accounts view var not set correctly.' );
 		}
 
 		public function testApproveMemberWithInvalidMembers()
@@ -957,7 +960,7 @@
 			$mockEmail = $this->getMock('CakeEmail');
 			$this->controller->email = $mockEmail;
             $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
-            $this->controller->Member->expects($this->exactly(1))->method('getApproveDetails')->will($this->returnValue(array('name' => 'Ryan Miles', 'id' => 13, 'email' => 'RyanMiles@dayrep.com', 'pin' => '2234')));
+            $this->controller->Member->expects($this->exactly(1))->method('getApproveDetails')->will($this->returnValue(array('firstname' => 'Ryan', 'surname' => 'Miles', 'id' => 13, 'email' => 'RyanMiles@dayrep.com', 'pin' => '2234')));
 
             $mockEmail->expects($this->exactly(2))->method('config');
 			$mockEmail->expects($this->exactly(2))->method('from');
@@ -1804,7 +1807,8 @@
 
 			$expectedMemberInfo = array(
 				'id' => '4',
-				'name' => 'Kelly Savala',
+				'firstname' => 'Kelly',
+				'surname' => 'Savala',
 				'username' => 'huskycolossus',
 				'handle' => 'bildestonelectrician',
 				'email' => 'k.savala@yahoo.co.uk',
@@ -1887,7 +1891,8 @@
 
 			$expectedMemberInfo = array(
 				'id' => '4',
-				'name' => 'Kelly Savala',
+				'firstname' => 'Kelly',
+				'surname' => 'Savala',
 				'username' => 'huskycolossus',
 				'handle' => 'bildestonelectrician',
 				'email' => 'k.savala@yahoo.co.uk',
@@ -1970,7 +1975,8 @@
 
 			$expectedMemberInfo = array(
 				'id' => '4',
-				'name' => 'Kelly Savala',
+				'firstname' => 'Kelly',
+				'surname' => 'Savala',
 				'username' => 'huskycolossus',
 				'handle' => 'bildestonelectrician',
 				'email' => 'k.savala@yahoo.co.uk',
@@ -2067,7 +2073,8 @@
 
 			$expectedMemberInfo = array(
 				'id' => '9',
-				'name' => 'Dorothy D. Russell',
+				'firstname' => 'Dorothy',
+				'surname' => 'Russell',
 				'username' => 'Warang29',
 				'handle' => 'Warang29',
 				'email' => 'DorothyDRussell@dayrep.com',
@@ -2110,7 +2117,8 @@
 
 			$expectedMemberInfo = array(
 				'id' => '11',
-				'name' => 'Betty C. Paris',
+				'firstname' => 'Betty',
+				'surname' => 'Paris',
 				'username' => 'Beltonstlend51',
 				'handle' => 'Beltonstlend51',
 				'email' => 'BettyCParis@teleworm.us',
@@ -2159,7 +2167,8 @@
 
 			$expectedMemberInfo = array(
 				'id' => '4',
-				'name' => 'Kelly Savala',
+				'firstname' => 'Kelly',
+				'surname' => 'Savala',
 				'username' => 'huskycolossus',
 				'handle' => 'bildestonelectrician',
 				'email' => 'k.savala@yahoo.co.uk',
@@ -2209,7 +2218,8 @@
 
 			$expectedMemberVal = array(
 				'id' => '2',
-				'name' => 'Annabelle Santini',
+				'firstname' => 'Annabelle',
+				'surname' => 'Santini',
 				'username' => 'pecanpaella',
 				'handle' => 'mammetwarpsgrove',
 				'email' => 'a.santini@hotmail.com',
@@ -2233,7 +2243,8 @@
 		{
 			$inputData = array(
             	'Member' => array(
-					'name' => 'Nat',
+					'firstname' => 'Nat',
+					'surname' => 'Gillian',
 					'username' => 'foo',
 					'handle' => 'thisisahandle',
 					'email' => 'a.santini@hotmail.com',
@@ -2253,7 +2264,8 @@
 
 			$expectedViewVal = array(
 				'id' => '2',
-				'name' => 'Annabelle Santini',
+				'firstname' => 'Annabelle',
+				'surname' => 'Santini',
 				'username' => 'pecanpaella',
 				'handle' => 'mammetwarpsgrove',
 				'email' => 'a.santini@hotmail.com',
@@ -2280,7 +2292,8 @@
             		'balance' => '0',
             		'credit_limit' => '5000',
             		'member_number' => null,
-					'name' => 'Nat',
+					'firstname' => 'Nat',
+					'surname' => 'Gillian',
 					'username' => 'foo',
 					'handle' => 'thisisahandle',
 					'email' => 'a.santini@hotmail.com',
@@ -2344,7 +2357,8 @@
 			$inputData = array(
             	'Member' => array(
             		'member_id' => '243',
-            		'name' => 'Nat',
+            		'firstname' => 'Nat',
+            		'surname' => 'Gillian',
             		'account_id' => '325',
             		'member_status' => '1',
             		'join_date' => '2013-12-30',
@@ -2406,7 +2420,8 @@
 
 			$expectedViewVal = array(
 				'id' => '2',
-				'name' => 'Annabelle Santini',
+				'firstname' => 'Annabelle',
+				'surname' => 'Santini',
 				'username' => 'pecanpaella',
 				'handle' => 'mammetwarpsgrove',
 				'email' => 'a.santini@hotmail.com',
@@ -2433,7 +2448,8 @@
             		'balance' => '0',
             		'credit_limit' => '5000',
             		'member_number' => null,
-					'name' => 'Nat',
+					'firstname' => 'Nat',
+            		'surname' => 'Gillian',
 					'username' => 'foo',
 					'handle' => 'thisisahandle',
 					'email' => 'totallydifferent@hotmail.com',
@@ -2505,7 +2521,8 @@
 		{
 			$inputData = array(
             	'Member' => array(
-					'name' => 'Ser Dantus',
+					'firstname' => 'Ser',
+					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
 					'email' => 'k.savala@yahoo.co.uk',
@@ -2535,7 +2552,8 @@
 
 			$expectedViewVal = array(
 				'id' => '4',
-				'name' => 'Kelly Savala',
+				'firstname' => 'Kelly',
+				'surname' => 'Savala',
 				'username' => 'huskycolossus',
 				'handle' => 'bildestonelectrician',
 				'email' => 'k.savala@yahoo.co.uk',
@@ -2591,7 +2609,8 @@
             		'balance' => '-5649',
             		'credit_limit' => '5000',
             		'member_number' => null,
-					'name' => 'Ser Dantus',
+					'firstname' => 'Ser',
+					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
 					'email' => 'k.savala@yahoo.co.uk',
@@ -2676,7 +2695,8 @@
 		{
 			$inputData = array(
             	'Member' => array(
-					'name' => 'Ser Dantus',
+					'firstname' => 'Ser',
+					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
 					'email' => 'a.santini@hotmail.com',
@@ -2703,7 +2723,8 @@
 
 			$expectedViewVal = array(
 				'id' => '2',
-				'name' => 'Annabelle Santini',
+				'firstname' => 'Annabelle',
+				'surname' => 'Santini',
 				'username' => 'pecanpaella',
 				'handle' => 'mammetwarpsgrove',
 				'email' => 'a.santini@hotmail.com',
@@ -2751,7 +2772,8 @@
             		'balance' => '0',
             		'credit_limit' => '5000',
             		'member_number' => null,
-					'name' => 'Ser Dantus',
+					'firstname' => 'Ser',
+					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
 					'email' => 'a.santini@hotmail.com',
@@ -2820,7 +2842,8 @@
 		{
 			$inputData = array(
             	'Member' => array(
-					'name' => 'Ser Dantus',
+					'firstname' => 'Ser',
+					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
 					'email' => 'not_the_same@gmail.com',
@@ -2846,7 +2869,8 @@
 
 			$expectedViewVal = array(
 				'id' => '5',
-				'name' => 'Jessie Easterwood',
+				'firstname' => 'Jessie',
+				'surname' => 'Easterwood',
 				'username' => 'chollertonbanker',
 				'handle' => 'dailyponcy',
 				'email' => 'j.easterwood@googlemail.com',
@@ -2894,7 +2918,8 @@
             		'balance' => '-3465',
             		'credit_limit' => '5000',
             		'member_number' => null,
-					'name' => 'Ser Dantus',
+					'firstname' => 'Ser',
+					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
 					'email' => 'not_the_same@gmail.com',
@@ -2963,7 +2988,8 @@
 		{
 			$inputData = array(
             	'Member' => array(
-					'name' => 'Ser Dantus',
+					'firstname' => 'Ser',
+					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
 					'email' => 'not_the_same@gmail.com',
@@ -2989,7 +3015,8 @@
 
 			$expectedViewVal = array(
 				'id' => '3',
-				'name' => 'Guy Viles',
+				'firstname' => 'Guy',
+				'surname' => 'Viles',
 				'username' => 'buntweyr',
 				'handle' => 'doyltcameraman',
 				'email' => 'g.viles@gmail.com',
@@ -3033,7 +3060,8 @@
             		'balance' => '-985',
             		'credit_limit' => '5000',
             		'member_number' => null,
-					'name' => 'Ser Dantus',
+					'firstname' => 'Ser',
+					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
 					'email' => 'not_the_same@gmail.com',
@@ -3102,7 +3130,8 @@
 		{
 			$inputData = array(
             	'Member' => array(
-					'name' => 'Ser Dantus',
+					'firstname' => 'Ser',
+					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
 					'email' => 'not_the_same@gmail.com',
@@ -3128,7 +3157,8 @@
 
 			$expectedViewVal = array(
 				'id' => '3',
-				'name' => 'Guy Viles',
+				'firstname' => 'Guy',
+				'surname' => 'Viles',
 				'username' => 'buntweyr',
 				'handle' => 'doyltcameraman',
 				'email' => 'g.viles@gmail.com',
@@ -3172,7 +3202,8 @@
             		'balance' => '-985',
             		'credit_limit' => '5000',
             		'member_number' => null,
-					'name' => 'Ser Dantus',
+					'firstname' => 'Ser',
+					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
 					'email' => 'not_the_same@gmail.com',
@@ -3265,7 +3296,8 @@
             		'balance' => '-6575',
             		'credit_limit' => '8976',
             		'member_number' => '325436',
-					'name' => 'Ser Dantus',
+					'firstname' => 'Ser',
+					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
 					'email' => 'not_the_same@gmail.com',
@@ -3326,7 +3358,8 @@
 
 			$expectedViewVal = array(
 				'id' => '3',
-				'name' => 'Guy Viles',
+				'firstname' => 'Guy',
+				'surname' => 'Viles',
 				'username' => 'buntweyr',
 				'handle' => 'doyltcameraman',
 				'email' => 'g.viles@gmail.com',
@@ -3370,7 +3403,8 @@
             		'balance' => '-985',
             		'credit_limit' => '5000',
             		'member_number' => null,
-					'name' => 'Ser Dantus',
+					'firstname' => 'Ser',
+					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'handle' => 'fubfubfub',
 					'email' => 'not_the_same@gmail.com',
@@ -3502,7 +3536,7 @@
 				'-1' => 'Create new', 
 				'1' => 'Mathew Pryce', 
 				'2' => 'Annabelle Santini', 
-				'3' => 'Guy Viles, Kelly Savala and Jessie Easterwood', 
+				'3' => 'Jessie Easterwood, Kelly Savala and Guy Viles', 
 				'6' => 'Guy Garrette', 
 				'7' => 'Ryan Miles', 
 				'8' => 'Evan Atkinson' 

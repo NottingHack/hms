@@ -117,8 +117,8 @@
 									$oDB->store_result();
 								}
 								// set up dev user
-								$sSql = "INSERT INTO `members` (`member_id`, `member_number`, `name`, `email`, `join_date`, `handle`, `unlock_text`, `balance`, `credit_limit`, `member_status`, `username`, `account_id`, `address_1`, `address_2`, `address_city`, `address_postcode`, `contact_number`) VALUES";
-								$sSql .= "(6, 111, '" . $this->name . "', '" . $this->email . "', '" . date("Y-m-d") . "', '" . $this->username . "', 'Welcome " . $this->username . "', -1200, 5000, 5, '" . $this->username . "', NULL, NULL, NULL, NULL, NULL, NULL);";
+								$sSql = "INSERT INTO `members` (`member_id`, `member_number`, `firstname`, `surname`, `email`, `join_date`, `handle`, `unlock_text`, `balance`, `credit_limit`, `member_status`, `username`, `account_id`, `address_1`, `address_2`, `address_city`, `address_postcode`, `contact_number`) VALUES";
+								$sSql .= "(6, 111, '" . $this->firstname . "', '" . $this->surname . "', '" . $this->email . "', '" . date("Y-m-d") . "', '" . $this->username . "', 'Welcome " . $this->username . "', -1200, 5000, 5, '" . $this->username . "', NULL, NULL, NULL, NULL, NULL, NULL);";
 
 								if ($oDB->query($sSql)) 
 								{
@@ -397,7 +397,8 @@
 			$shortopts .= 'd'; 	// If present, create the database
 			$shortopts .= 'p';  // If present, populate the database
 			$shortopts .= 'h:'; // Users handle
-			$shortopts .= 'n:'; // Users name
+			$shortopts .= 'n:'; // Users firstname
+			$shortopts .= 's:'; // Users surname
 			$shortopts .= 'e:'; // Users e-mail
 			$shortopts .= 'k';  // If present, use the 'proper' krb auth script instead of the dummy.
 			$shortopts .= 'f';  // If present, set-up the tmp folders
@@ -413,9 +414,10 @@
 				$this->useRealKrb = $this->_parseBoolFromWebVar('realKrb');
 				$this->setupTempFolders = $this->_parseBoolFromWebVar('setuptmpfolders');
 
-				$this->name = $this->parseStringFromWebVar('yourname');
-				$this->username = $this->parseStringFromWebVar('yourhandle');
-				$this->email = $this->parseStringFromWebVar('youremail');
+				$this->firstname = $this->parseStringFromWebVar('firstname');
+				$this->surname = $this->parseStringFromWebVar('surname');
+				$this->username = $this->parseStringFromWebVar('username');
+				$this->email = $this->parseStringFromWebVar('email');
 			}
 			else
 			{
@@ -425,15 +427,19 @@
 				$this->useRealKrb = $this->_parseBoolFromArray('k', $options);
 				$this->setupTempFolders = $this->_parseBoolFromArray('f', $options);
 
-				$this->name = $this->_parseStringFromArray('n', $options);
+				$this->firstname = $this->_parseStringFromArray('n', $options);
+				$this->surname = $this->_parseStringFromArray('s', $options);
 				$this->username = $this->_parseStringFromArray('h', $options);
 				$this->email = $this->_parseStringFromArray('e', $options);
 			}
 
 			// Certain variables are required
-			if(! (isset($this->name) && isset($this->username) && isset($this->email)) )
+			if($this->populateDb)
 			{
-				return false;
+				if(! (isset($this->firstname) && isset($this->surname) && isset($this->username) && isset($this->email)) )
+				{
+					return false;
+				}
 			}
 
 			return true;
