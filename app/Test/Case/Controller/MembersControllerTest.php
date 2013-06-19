@@ -326,7 +326,7 @@
 		public function testSearch()
 		{
 			$data = array(
-		        'query' => 'and',
+		        'query' => 'teleworm',
 		    );
 
 		    $this->testAction('/members/search', array('data' => $data, 'method' => 'get'));
@@ -335,13 +335,15 @@
 			$this->assertArrayHasKey( 'memberList', $this->vars, 'No view value called \'memberList\'.' ); 
 
 			$this->assertInternalType( 'array', $this->vars['memberList'], 'No array by the name of memberInfo' );
+			$this->assertGreaterThan( 0, count($this->vars['memberList']), 'No search results returned.' );
 
 			foreach ($this->vars['memberList'] as $memberInfo)
 			{
 				$this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
 				$this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
 
-				$this->assertArrayHasKey( 'name', $memberInfo, 'Member has no name.' ); 
+				$this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' ); 
+				$this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' ); 
 				$this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
 				$this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
 
@@ -538,7 +540,8 @@
 			$invalidData = array(
 				8 => array(
 					'Member' => array(
-						'name' => 'Tony',
+						'firstname' => 'Tony',
+						'surname' => 'Benett',
 						'username' => 'dayrep',
 						'email' => 'aefsarwgesthbbs@easwrgtu.com',
 						'password' => 'hunter2',
