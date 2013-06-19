@@ -335,6 +335,18 @@
 	    			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));		
 	    		}
 	    	}
+
+	    	// We seem to get redirected to this method after the login redirect that happens above.
+	    	// So let's detect that case and send them where they should go:
+	    	$loggedInMemberId = $this->Member->getIdForMember($this->Auth->user());
+	    	if($loggedInMemberId)
+        	{
+        		switch($this->Member->getStatusForMember($loggedInMemberId))
+	    		{
+	    			case Status::PRE_MEMBER_1:
+	    				return $this->redirect(array('controller' => 'members', 'action' => 'setupDetails', $loggedInMemberId));
+	    		}
+        	}
 	    }
 
 	    //! Allow a member who is logged in to set-up their contact details.
