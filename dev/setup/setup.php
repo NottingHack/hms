@@ -357,7 +357,7 @@
 				if($sapiType == 'cli')
 				{
 					// We're probably being called from command line.
-					$newline = '\n';
+					$newline = PHP_EOL;
 				}
 				else
 				{
