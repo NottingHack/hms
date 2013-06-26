@@ -12,9 +12,54 @@
 		private $setupTempFolders = false;	//!< If true create the temporary folders CakePHP needs.
 
 		//! The following details are used to create a HMS login for the user with admin rights.
-		private $name = '';					//!< Name of the user.
+		private $firstname = '';			//!< Firstname of the user.
+		private $surname = '';				//!< Surname of the user.
 		private $username = '';				//!< Username of the user.
 		private $email = '';				//!< Email of the user.
+
+		//! Set up the database options.
+		/*
+			@param bool $createDb If true then the database will be created.
+			@param bool $populateDb If true then database will be populated.
+		*/
+		public function setDatabaseOptions($createDb, $populateDb)
+		{
+			$this->createDb = $createDb;
+			$this->populateDb = $populateDb;
+		}
+
+		//! Set if we should use the real KRB lib or not.
+		/*!
+			@param bool $userRealKrb If true then the real KRB code will be copied in to the lib folder, if false, a dummy file will be copied.
+		*/
+		public function setUseRealKrb($useRealKrb)
+		{
+			$this->useRealKrb = $useRealKrb;
+		}
+
+		//! Set if we should create the temporary folders CakePHP requires.
+		/*!
+			@param bool $setupTempFolders If true then temporary folders will be created.
+		*/
+		public function setSetupTempFolders($setupTempFolders)
+		{
+			$this->setupTempFolders = $setupTempFolders;
+		}
+
+		//! Set up the user info.
+		/*
+			@param string $firstname First name of the user.
+			@param string $surname Surname of the user.
+			@param string $username Username of the user.
+			@param string $email Users e-mail.
+		*/
+		public function setUserInfo($firstname, $surname, $username, $email)
+		{
+			$this->firstname = $firstname;
+			$this->surname = $surname;
+			$this->username = $username;
+			$this->email = $email;
+		}
 
 		//! Replace variables in a template using the options in fields.
 		/*!
@@ -333,106 +378,12 @@
 			echo sprintf("[%s] %s%s", date("H:i:s"), $message, $this->_getNewline());
 		}
 
-		//! Given an index in the web var array, return a bool version
+		//! Check if the options used are valid.
 		/*!
-			@param mixed $index The index of the web var to parse.
-			@retval bool True if value is set, false otherwise.
+			@retval bool True if options are valid, false otherwise.
 		*/
-		private function _parseBoolFromWebVar($index)
+		private function _validateOptions()
 		{
-			return array_key_exists($index, $_POST) &&
-					$_POST[$index] == 'on';
-		}
-
-		//! Given an index in the web var array, return a string version
-		/*!
-			@param mixed $index The index of the web var to parse.
-			@retval mixed String of value if value is set, null otherwise.
-		*/
-		private function parseStringFromWebVar($index)
-		{
-			if(array_key_exists($index, $_POST) && 
-				isset($_POST[$index]))
-			{
-				return (string)$_POST[$index];
-			}
-
-			return null;
-		}
-
-		//! Given an index and an array, return a bool version
-		/*!
-			@param mixed $index The index of the array to parse.
-			@param array $array The array to parse.
-			@retval bool True if value is set, false otherwise.
-		*/
-		private function _parseBoolFromArray($index, $array)
-		{
-			return array_key_exists($index, $array);
-		}
-
-		//! Given an index and an array, return a string version
-		/*!
-			@param mixed $index The index of the array to parse.
-			@param array $array The array to parse.
-			@retval mixed String of value if value is set, null otherwise.
-		*/
-		private function _parseStringFromArray($index, $array)
-		{
-			if(array_key_exists($index, $array))
-			{
-				return (string)$array[$index];
-			}
-
-			return null;
-		}
-
-		//! Parse the options from either the command-line or the web
-		/*!
-			@retval bool True if options have been parsed correctly, false otherwise.
-		*/
-		private function _parseOptions()
-		{
-			$shortopts = '';
-			$shortopts .= 'd'; 	// If present, create the database
-			$shortopts .= 'p';  // If present, populate the database
-			$shortopts .= 'h:'; // Users handle
-			$shortopts .= 'n:'; // Users firstname
-			$shortopts .= 's:'; // Users surname
-			$shortopts .= 'e:'; // Users e-mail
-			$shortopts .= 'k';  // If present, use the 'proper' krb auth script instead of the dummy.
-			$shortopts .= 'f';  // If present, set-up the tmp folders
-
-			$options = getopt($shortopts);
-
-			// If options is not an array then either the arguments passed were invalid or there was none
-			// so try to parse from $_POST.
-			if(!is_array($options))
-			{
-				$this->createDb = $this->_parseBoolFromWebVar('createdb');
-				$this->populateDb = $this->_parseBoolFromWebVar('populatedb');
-				$this->useRealKrb = $this->_parseBoolFromWebVar('realKrb');
-				$this->setupTempFolders = $this->_parseBoolFromWebVar('setuptmpfolders');
-
-				$this->firstname = $this->parseStringFromWebVar('firstname');
-				$this->surname = $this->parseStringFromWebVar('surname');
-				$this->username = $this->parseStringFromWebVar('username');
-				$this->email = $this->parseStringFromWebVar('email');
-			}
-			else
-			{
-				// Options is an array, so parse that out to our variables.
-				$this->createDb = $this->_parseBoolFromArray('d', $options);
-				$this->populateDb = $this->_parseBoolFromArray('p', $options);
-				$this->useRealKrb = $this->_parseBoolFromArray('k', $options);
-				$this->setupTempFolders = $this->_parseBoolFromArray('f', $options);
-
-				$this->firstname = $this->_parseStringFromArray('n', $options);
-				$this->surname = $this->_parseStringFromArray('s', $options);
-				$this->username = $this->_parseStringFromArray('h', $options);
-				$this->email = $this->_parseStringFromArray('e', $options);
-			}
-
 			// Certain variables are required
 			if($this->populateDb)
 			{
@@ -489,7 +440,7 @@
 		//! Run all selected setup steps.
 		public function run()
 		{
-			if(!$this->_parseOptions())
+			if(!$this->_validateOptions())
 			{
 				$this->_logMessage('Invalid arguments.');
 				exit(1);
@@ -510,48 +461,3 @@
 	}
 
 ?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>HMS Setup</title>
-<link rel="stylesheet" type="text/css" href="view.css" media="all">
-<script type="text/javascript" src="view.js"></script>
-
-</head>
-<body id="main_body" >
-	<img id="top" src="top.png" alt="">
-	<div id="form_container">
-		<h1><a>Invisible Text</a></h1>
-		<div class="results_header">
-			<div class="form_description">
-				<h2>HMS Setup</h2>
-				<p>Get up and running with HMS easily</p>
-			</div>
-		</div>
-
-		<p class="results">
-			<?php
-				$setup = new Setup();
-				$setup->run();
-			?>
-
-			<ul class="actions">
-				<li>
-					<a href="../../" class="positive">Go to HMS</a>
-				</li>
-				<li>
-					<a href="../../test.php" class="positive">Run Tests</a>
-				</li>
-			</ul>
-		</p>
-
-		<div id="footer">
-			Generated by <a href="http://www.phpform.org">pForm</a>
-		</div>
-	</div>
-	<img id="bottom" src="bottom.png" alt="">
-	</body>
-</html>
-
