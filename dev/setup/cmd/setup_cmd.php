@@ -1,6 +1,6 @@
 <?php
 
-	require_once('./setup.php');
+	require_once('../lib/setup.php');
 
 	//! Given an index and an array, return a bool version
 	/*!

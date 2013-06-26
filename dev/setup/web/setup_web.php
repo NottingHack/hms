@@ -1,5 +1,5 @@
 <?php
-	require_once('./setup.php');
+	require_once('../lib/setup.php');
 
 	//! Given an index in the POST var array, return a bool version
 	/*!
@@ -53,10 +53,10 @@
 
 			<ul class="actions">
 				<li>
-					<a href="../../" class="positive">Go to HMS</a>
+					<a href="../../../" class="positive">Go to HMS</a>
 				</li>
 				<li>
-					<a href="../../test.php" class="positive">Run Tests</a>
+					<a href="../../../test.php" class="positive">Run Tests</a>
 				</li>
 			</ul>
 		</p>

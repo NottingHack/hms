@@ -17,6 +17,16 @@
 		private $username = '';				//!< Username of the user.
 		private $email = '';				//!< Email of the user.
 
+		//! Given a relative path from this file, get an absolute path.
+		/*!
+			@param string $path The relative path to convert.
+			@retval string The absolute path.
+		*/
+		private function _makeAbsolutePath($path)
+		{
+			return dirname(__FILE__) . '/' . basename($path);
+		}
+
 		//! Set up the database options.
 		/*
 			@param bool $createDb If true then the database will be created.
@@ -82,7 +92,7 @@
 		*/
 		private function _createConfigFiles($settings)
 		{
-			$path = '../../app/Config/';
+			$path = '../../../app/Config/';
 
 			$files = array(
 				'database',
@@ -152,7 +162,7 @@
 					{
 						if($this->populateDb)
 						{
-							if ($oDB->multi_query(file_get_contents('hms.sql'))) 
+							if ($oDB->multi_query(file_get_contents($this->_makeAbsolutePath('/hms.sql')))) 
 							{
 								$this->_logMessage("Populated main database");
 								$oDB->store_result();
@@ -218,7 +228,7 @@
 					{
 						if($this->populateDb)
 						{
-							if ($oDB->multi_query(file_get_contents('hms_test.sql'))) 
+							if ($oDB->multi_query(file_get_contents($this->_makeAbsolutePath('/hms_test.sql'))))
 							{
 								$this->_logMessage("Populated test database");
 							}
@@ -240,7 +250,7 @@
 		//! Copy either the real or dummy KRB Auth lib file to the lib folder.
 		private function _copyKrbLibFile()
 		{
-			$krbFolder = '../../app/Lib/Krb/';
+			$krbFolder = '../../../app/Lib/Krb/';
 
 			$toFile = $krbFolder . 'krb5_auth.php';
 			$fromFile = 'krb5_auth.dummy';
@@ -262,18 +272,16 @@
 				}
 			}
 
-			$message = "Attempting to copy $fromFile to $toFile... ";
+			$this->_logMessage("Attempting to copy $fromFile to $toFile");
 
-			if(copy($fromFile, $toFile))
+			if(copy($this->_makeAbsolutePath($fromFile), $toFile))
 			{
-				$message .= "Copy successful";
+				$this->_logMessage('Copy successful');
 			}
 			else
 			{
-				$message .= "Copy failed";
+				$this->_logMessage('Copy failed');
 			}
-
-			$this->_logMessage($message);
 		}
 
 		//! Given a path to a directory, delete the directory and all it's contents.
@@ -313,14 +321,14 @@
 			if($this->setupTempFolders)
 			{
 				$foldersToMake = array(
-					'../../app/tmp',
-					'../../app/tmp/cache',
-					'../../app/tmp/cache/models',
-					'../../app/tmp/cache/persistent',
-					'../../app/tmp/cache/views',
-					'../../app/tmp/logs',
-					'../../app/tmp/sessions',
-					'../../app/tmp/tests',
+					'../../../app/tmp',
+					'../../../app/tmp/cache',
+					'../../../app/tmp/cache/models',
+					'../../../app/tmp/cache/persistent',
+					'../../../app/tmp/cache/views',
+					'../../../app/tmp/logs',
+					'../../../app/tmp/sessions',
+					'../../../app/tmp/tests',
 				);
 
 				foreach ($foldersToMake as $folder) 
