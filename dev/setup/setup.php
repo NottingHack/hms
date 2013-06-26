@@ -379,7 +379,7 @@
 		*/
 		private function _parseStringFromArray($index, $array)
 		{
-			if(array_key_exists($index))
+			if(array_key_exists($index, $array))
 			{
 				return (string)$array[$index];
 			}
