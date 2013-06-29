@@ -63,8 +63,10 @@ h1
 	min-height:0;
 	padding:0;
 	text-decoration:none;
-	text-indent:-8000px;
-	
+	font-size: 160%;
+	font-weight: 400;
+	color: rgb(229, 242, 255);
+	padding: 10px;
 }
 
 h1 a

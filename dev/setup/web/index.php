@@ -1,6 +1,7 @@
 <?php
 	require('./setup_header.php');
 ?>
+		<form id="form_646271" class="appnitro"  method="post" action="setup_web.php">
 			<ul >
 				<li id="li_1" >
 					<label class="description" for="firstname">First Name: </label>

@@ -10,9 +10,4 @@
 <body id="main_body" >
 	<img id="top" src="top.png" alt="">
 	<div id="form_container">
-		<h1><a>Invisible Text</a></h1>
-		<form id="form_646271" class="appnitro"  method="post" action="setup_web.php">
-			<div class="form_description">
-				<h2>HMS Setup</h2>
-				<p>Get up and running with HMS easily</p>
-			</div>
+		<h1>HMS Setup</h1>
