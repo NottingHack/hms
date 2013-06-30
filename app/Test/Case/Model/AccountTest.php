@@ -14,7 +14,7 @@
 
         public function testGeneratePaymentRef()
         {
-            $paymentRef = $this->Account->generatePaymentRef();
+            $paymentRef = $this->Account->generateUniquePaymentRef();
             $prefix = 'HSNOTTS';
 
             $this->assertIdentical( strlen($paymentRef), 16, 'Payment ref is incorrect length.' );

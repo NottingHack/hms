@@ -1,7 +1,7 @@
 <?php
 
 	App::uses('Component', 'Controller');
-	App::uses('Lib', 'CsvReader');
+	App::import('Lib/CsvReader', 'CsvReader');
 
 	//! CsvComponent is a component to handle both uploading and getting data from .csv files
 	class CsvComponent extends Component 
@@ -17,7 +17,7 @@
 		{
 			parent::__construct($collection, $settings);
 
-			$this->CsvReader = new CsvReader();
+			$this->csvReader = new CsvReader();
 		}
 
 		//! Attempt to read a .csv file
@@ -27,7 +27,7 @@
 		*/
 		public function readFile($filePath)
 		{
-			return $this->CsvReader->readFile($filePath);
+			return $this->csvReader->readFile($filePath);
 		}
 
 		//! Get the number of lines available.
@@ -36,7 +36,7 @@
 		*/
 		public function getNumLines()
 		{
-			return $this->CsvReader->getNumLines();
+			return $this->csvReader->getNumLines();
 		}
 
 		//! Get the line at index.
@@ -46,7 +46,7 @@
 		*/
 		public function getLine($index)
 		{
-			return $this->CsvReader->getLine($index);
+			return $this->csvReader->getLine($index);
 		}
 	}
 
