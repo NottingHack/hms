@@ -12,4 +12,10 @@
 .DS_Store
 /tags
 /dev/setup/lib/hms.settings
+/dev/setup/lib/sql/account_data.sql
+/dev/setup/lib/sql/member_group_data.sql
+/dev/setup/lib/sql/members_data.sql
+/dev/setup/lib/sql/pins_data.sql
+/dev/setup/lib/sql/rfid_tags_data.sql
+/dev/setup/lib/sql/status_updates_data.sql
 app/Lib/Krb/krb5_auth.php

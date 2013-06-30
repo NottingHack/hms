@@ -172,7 +172,7 @@
 		*/
 		public function getAccountsSql()
 		{
-			return $this->_getSql($this->accounts, 'accounts');
+			return $this->_getSql($this->accounts, 'account');
 		}
 
 		//! Get an SQL string of the pins data.
@@ -406,7 +406,7 @@
 				'admin_id' => $adminId,
 				'old_status' => $oldStatus,
 				'new_status' => $newStatus,
-				'timestamp' => $timestamp,
+				'timestamp' => date('Y-m-d H:i:s', $timestamp),
 			);
 
 			array_push($this->statusUpdates, $record);
