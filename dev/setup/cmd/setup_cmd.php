@@ -39,6 +39,7 @@
 	$shortopts .= 'e:'; // Users e-mail
 	$shortopts .= 'k';  // If present, use the 'proper' krb auth script instead of the dummy.
 	$shortopts .= 'f';  // If present, set-up the tmp folders
+	$shortopts .= 'v';  // If present, use development configs
 
 	$options = getopt($shortopts);
 
@@ -49,6 +50,7 @@
 		$setup->setDatabaseOptions( parseBoolFromArray('d', $options), parseBoolFromArray('p', $options) );
 		$setup->setUseRealKrb( parseBoolFromArray('k', $options) );
 		$setup->setSetupTempFolders( parseBoolFromArray('f', $options) );
+		$setup->setUseDevelopmentConfigs( parseBoolFromArray('v', $options) );
 		$setup->setUserInfo(
 			parseStringFromArray('n', $options),
 			parseStringFromArray('s', $options),

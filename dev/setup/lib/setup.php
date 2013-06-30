@@ -9,10 +9,11 @@
 		private $newline = null; 	//!< Newline character, different depending on output (HTML or text).
 
 		//! Options
-		private $createDb = false;			//!< If true create the instrumentation and instrumentation_test databases.
-		private $populateDb = false;		//!< If true populate the databases with default tables and data.
-		private $useRealKrb = false;		//!< If true then use the real KRB Auth lib, otherwise use a dummy one.
-		private $setupTempFolders = false;	//!< If true create the temporary folders CakePHP needs.
+		private $createDb = false;				//!< If true create the instrumentation and instrumentation_test databases.
+		private $populateDb = false;			//!< If true populate the databases with default tables and data.
+		private $useRealKrb = false;			//!< If true then use the real KRB Auth lib, otherwise use a dummy one.
+		private $setupTempFolders = false;		//!< If true create the temporary folders CakePHP needs.
+		private $useDevelopmentConfigs = true;	//!< If true then use the development version of config files
 
 		//! The following details are used to create a HMS login for the user with admin rights.
 		private $firstname = '';			//!< Firstname of the user.
@@ -41,6 +42,15 @@
 		}
 
 		//! Set if we should create the temporary folders CakePHP requires.
+		/*!
+			@param bool $setupTempFolders If true then temporary folders will be created.
+		*/
+		public function setUseDevelopmentConfigs($useDevelopmentConfigs)
+		{
+			$this->useDevelopmentConfigs = $useDevelopmentConfigs;
+		}
+
+		//! Set if we should use the development or production configs.
 		/*!
 			@param bool $setupTempFolders If true then temporary folders will be created.
 		*/
@@ -85,7 +95,7 @@
 		*/
 		private function _createConfigFiles($settings)
 		{
-			$path = '../../../app/Config/';
+			$configPath = '../../../app/Config/';
 
 			$files = array(
 				'database',
@@ -93,22 +103,41 @@
 				'krb',
 				'mailchimp',
 				'email',
-				);
+				'debug',
+			);
+
+			// ... Not that I'm OCD or anything
+			asort($files);
 
 			// Create each of the config files
 			foreach ($files as $fileName) 
 			{
-				if (!file_exists($fileName . '.template')) 
+				// First check for dev/production templates
+				$templateType = 'production';
+				if($this->useDevelopmentConfigs)
 				{
-					continue;
+					$templateType = 'development';
 				}
-				$file = file_get_contents($fileName . '.template');
 
-				$file = $this->_replaceFields($file, $settings[$fileName]);
-
-				if (file_put_contents($path . $fileName . '.php', $file) !== FALSE) 
+				$templateFilePath = makeAbsolutePath("$fileName.$templateType.template");
+				if (!file_exists($templateFilePath))
 				{
-					$this->_logMessage("Created $fileName.php");
+					// Fall back to the regular template
+					$templateFilePath = makeAbsolutePath("$fileName.template");
+
+					if(!file_exists($templateFilePath))
+					{
+						$this->_logMessage("Skipping config file: $filename because we couldn't find a matching template");
+						continue;
+					}
+				}
+
+				$currentContents = file_get_contents($templateFilePath);
+				$newContents = $this->_replaceFields($currentContents, $settings[$fileName]);
+
+				if (file_put_contents("$configPath$fileName.php", $newContents) !== FALSE) 
+				{
+					$this->_logMessage("Created $fileName.php from template $templateFilePath");
 				}
 				else 
 				{
