@@ -207,7 +207,7 @@
 		*/
 		private function _generateData()
 		{
-			$totalMembersToGenerate = 20;
+			$totalMembersToGenerate = 200;
 			$membersRemaining = $totalMembersToGenerate;
 
 			$genDetails = array();

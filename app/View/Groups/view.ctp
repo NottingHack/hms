@@ -18,7 +18,7 @@
 <ul>
 	<?php foreach ($group['Member'] as $member): ?>
 	<li>
-		<?php echo $this->Html->link($member['name'], array('controller' => 'members', 'action' => 'view', $member['member_id'] )); ?>
+		<?php echo $this->Html->link(sprintf('%s %s', $member['firstname'], $member['surname']), array('controller' => 'members', 'action' => 'view', $member['member_id'] )); ?>
 	</li>
 	<?php endforeach; ?>
 </ul>
