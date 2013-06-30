@@ -98,7 +98,10 @@
 		{
 			if(is_string($value))
 			{
-				return "'" . mysql_real_escape_string($value) . "'";
+				// Note that this escaping is not secure
+				// but it's about the best we can do without connecting
+				// to a database.
+				return "'" . str_replace("'", "\'", $value) . "'";
 			}
 
 			if(is_numeric($value))
