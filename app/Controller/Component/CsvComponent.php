@@ -1,11 +1,24 @@
 <?php
 
 	App::uses('Component', 'Controller');
+	App::uses('Lib', 'CsvReader');
 
 	//! CsvComponent is a component to handle both uploading and getting data from .csv files
 	class CsvComponent extends Component 
 	{
-		var $lines = array();	//!< Array of lines found in the file
+		private $csvReader; //!< Calls to work with the .csv file are redirected to this CsvReader.
+
+		//! Constructor
+		/*!
+			@param ComponentCollection $collection A ComponentCollection this component can use to lazy load its components
+ 			@param array $settings Array of configuration settings.
+ 		*/
+		public function __construct(ComponentCollection $collection, $settings = array()) 
+		{
+			parent::__construct($collection, $settings);
+
+			$this->CsvReader = new CsvReader();
+		}
 
 		//! Attempt to read a .csv file
 		/*!
@@ -14,37 +27,7 @@
 		*/
 		public function readFile($filePath)
 		{
-			if(!is_string($filePath))
-			{
-				return false;
-			}
-
-			$fileHandle = fopen($filePath, 'r');
-
-			if($fileHandle == 0)
-			{
-				return false;
-			}
-
-			$this->lines = array();
-
-			while (($data = fgetcsv($fileHandle)) !== FALSE) 
-			{
-				// Ignore blank lines
-				if($data != null)
-				{
-					array_push($this->lines, $data);
-				}
-			}
-
-			if(count($this->lines) <= 0)
-			{
-				return false;
-			}
-
-			fclose($fileHandle);
-
-			return true;
+			return $this->CsvReader->readFile($filePath);
 		}
 
 		//! Get the number of lines available.
@@ -53,7 +36,7 @@
 		*/
 		public function getNumLines()
 		{
-			return count($this->lines);
+			return $this->CsvReader->getNumLines();
 		}
 
 		//! Get the line at index.
@@ -63,13 +46,7 @@
 		*/
 		public function getLine($index)
 		{
-			if(	$index >= 0 &&
-				$index < $this->getNumLines())
-			{
-				return $this->lines[$index];
-			}
-
-			return null;
+			return $this->CsvReader->getLine($index);
 		}
 	}
 

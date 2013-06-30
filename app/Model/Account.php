@@ -35,14 +35,13 @@
 	        ),
 	    );
 
-	    //! Generate a unique payment reference
+	    //! Generate a payment reference
 	    /*!
 	    	@retval string A unique (at the time of function-call) payment reference.
-	    	@sa http://www.bacs.co.uk/Bacs/Businesses/BacsDirectCredit/Receiving/Pages/PaymentReferenceInformation.aspx
 	    */
-		public function generatePaymentRef()
-		{
-			// Payment ref is a randomly generates string of 'safechars'
+	    public static function generatePaymentRef()
+	    {
+	    	// Payment ref is a randomly generates string of 'safechars'
 			// Stolen from London Hackspace code
 			$safeChars = "2346789BCDFGHJKMPQRTVWXY";
 
@@ -52,14 +51,27 @@
 			// Payment references can be up to 18 chars according to: http://www.bacs.co.uk/Bacs/Businesses/BacsDirectCredit/Receiving/Pages/PaymentReferenceInformation.aspx
 			$maxRefLength = 16;
 
+			$paymentRef = $prefix;
+			for($i = strlen($prefix); $i < $maxRefLength; $i++)
+			{
+				$paymentRef .= $safeChars[ rand(0, strlen($safeChars) - 1) ];
+			}
+
+			return $paymentRef;
+	    }
+
+	    //! Generate a unique payment reference
+	    /*!
+	    	@retval string A unique (at the time of function-call) payment reference.
+	    	@sa http://www.bacs.co.uk/Bacs/Businesses/BacsDirectCredit/Receiving/Pages/PaymentReferenceInformation.aspx
+	    */
+		public function generateUniquePaymentRef()
+		{
 			$paymentRef = '';
 			do
 			{
-				$paymentRef = $prefix;
-				for($i = strlen($prefix); $i < $maxRefLength; $i++)
-				{
-					$paymentRef .= $safeChars[ rand(0, strlen($safeChars) - 1) ];
-				}
+				$paymentRef = Account::generatePaymentRef();
+
 			} while( $this->find('count', array( 'conditions' => array( 'Account.payment_ref' =>  $paymentRef) )) > 0 );
 
 			return $paymentRef;
@@ -80,7 +92,7 @@
 					$this->Create();
 					$data = array(
 						'Account' => array(
-							'payment_ref' => $this->generatePaymentRef(),
+							'payment_ref' => $this->generateUniquePaymentRef(),
 						),
 					);
 

@@ -310,10 +310,10 @@ CREATE TABLE IF NOT EXISTS `rfid_tags` (
   PRIMARY KEY (`rfid_serial`,`state`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `rfid_tags` (`member_id`, `rfid_serial`, `state`) VALUES
-(1, '1008759360', 10),
-(2, '102800066', 10),
-(3, '1034720438', 10);
+INSERT INTO `rfid_tags` (`member_id`, `rfid_serial`, `state`, `last_used`) VALUES
+(1, '1008759360', 10, NULL),
+(2, '102800066', 10, NULL),
+(3, '1034720438', 10, NULL);
 
 CREATE TABLE IF NOT EXISTS `service_status` (
   `service_name` varchar(256) NOT NULL,
