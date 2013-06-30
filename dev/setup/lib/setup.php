@@ -604,6 +604,13 @@
 
 			$settings = $this->_getSettings();
 
+			// Connect to the database, if we do this mysql_real_escape_string might work
+			$oDB = new mysqli($settings['database']['default_host'], $settings['database']['default_login'], $settings['database']['default_password']);
+			if ($oDB->connect_error) 
+			{
+				$this->_logMessage("Couldn't connect to main database");
+			}
+
 			$this->_createConfigFiles($settings);
 			if(!$this->_generateData())
 			{
