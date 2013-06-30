@@ -1,0 +1,6 @@
+INSERT INTO `members` (`member_id`, `member_number`, `firstname`, `surname`, `email`, `join_date`, `handle`, `unlock_text`, `balance`, `credit_limit`, `member_status`, `username`, `account_id`, `address_1`, `address_2`, `address_city`, `address_postcode`, `contact_number`) VALUES
+(1, 1011, 'Alexander', 'Reid', 'test1@example.com', '2012-12-05', 'alexreid', 'Welcome Alex', 0, 5000, 5, 'alexreid', NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 18, 'Adam', 'Pickering', 'test2@example.com', '2011-02-24', 'apick', 'Welcome Adam!', -300, 5000, 5, 'apick', NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 1, 'Jasmine', 'Morley', 'test3@example.com', '2010-08-18', 'morley', 'Welcome Jasmine', 0, 5000, 5, 'morley', NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 5, 'Oscar', 'Brooks', 'test4@example.com', '2010-09-22', 'brooky', 'Back Again Oscar?', 0, 5000, 5, 'brooky', NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 6, 'Jodie', 'Allen', 'test5@example.com', '2010-09-22', 'jodie', 'Welcome Jodie', -1200, 5000, 5, 'jodie', NULL, NULL, NULL, NULL, NULL, NULL);

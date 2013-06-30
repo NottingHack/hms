@@ -24,7 +24,16 @@
 		*/
 		private function _makeAbsolutePath($path)
 		{
-			return dirname(__FILE__) . '/' . basename($path);
+			if(count($path) > 0)
+			{
+				$firstChar = $path[0];
+				if(	$firstChar != '/' &&
+					$firstChar != '\\' )
+				{
+					$path = '/' . $path;
+				}
+			}
+			return dirname(__FILE__) . $path;
 		}
 
 		//! Set up the database options.
@@ -124,6 +133,57 @@
 			}
 		}
 
+		private function _getSqlFilesContaining($name)
+		{
+			$validFiles = array();
+			$dirList = scandir($this->_makeAbsolutePath('./sql'));
+
+			foreach ($dirList as $filename) 
+			{
+				if( pathinfo($filename, PATHINFO_EXTENSION) == 'sql' &&
+					strpos($filename, $name) !== FALSE )
+				{
+					array_push($validFiles, $this->_makeAbsolutePath('./sql/' . $filename));
+				}
+			}
+
+			return $validFiles;
+		}
+
+		private function _runQueryFromFile($databaseObj, $filepath)
+		{
+			$this->_logMessage("Executing SQL in: $filepath");
+			if ($databaseObj->multi_query(file_get_contents($filepath)))
+			{
+				$databaseObj->store_result();
+				while ($databaseObj->more_results()) 
+				{
+					$databaseObj->next_result();
+					$databaseObj->store_result();
+				}
+			}
+		}
+
+		private function _runAllQueriesInFileList($databaseObj, $fileList)
+		{
+			foreach ($fileList as $file) 
+			{
+				$this->_runQueryFromFile($databaseObj, $file);
+			}
+		}
+
+		private function _runSchemaQueries($databaseObj)
+		{
+			$files = $this->_getSqlFilesContaining('schema');
+			$this->_runAllQueriesInFileList($databaseObj, $files);
+		}
+
+		private function _runDataQueries($databaseObj)
+		{
+			$files = $this->_getSqlFilesContaining('data');
+			$this->_runAllQueriesInFileList($databaseObj, $files);
+		}
+
 		//! Create and/or populate the databases for HMS
 		/*!
 			@param array $settings The settings to use.
@@ -162,32 +222,21 @@
 					{
 						if($this->populateDb)
 						{
-							if ($oDB->multi_query(file_get_contents($this->_makeAbsolutePath('/hms.sql')))) 
-							{
-								$this->_logMessage("Populated main database");
-								$oDB->store_result();
-								while ($oDB->more_results()) 
-								{
-									$oDB->next_result();
-									$oDB->store_result();
-								}
-								// set up dev user
-								$sSql = "INSERT INTO `members` (`member_id`, `member_number`, `firstname`, `surname`, `email`, `join_date`, `handle`, `unlock_text`, `balance`, `credit_limit`, `member_status`, `username`, `account_id`, `address_1`, `address_2`, `address_city`, `address_postcode`, `contact_number`) VALUES";
-								$sSql .= "(6, 111, '" . $this->firstname . "', '" . $this->surname . "', '" . $this->email . "', '" . date("Y-m-d") . "', '" . $this->username . "', 'Welcome " . $this->username . "', -1200, 5000, 5, '" . $this->username . "', NULL, NULL, NULL, NULL, NULL, NULL);";
+							$this->_runSchemaQueries($oDB);
+							$this->_runDataQueries($oDB);
 
-								if ($oDB->query($sSql)) 
-								{
-									$this->_logMessage("Created DEV user");
-								}
-								else 
-								{
-									$this->_logMessage("Failed to create DEV user, was your input valid?");
-									_logMessage($oDB->error);
-								}
+							// set up dev user
+							$sSql = "INSERT INTO `members` (`member_id`, `member_number`, `firstname`, `surname`, `email`, `join_date`, `handle`, `unlock_text`, `balance`, `credit_limit`, `member_status`, `username`, `account_id`, `address_1`, `address_2`, `address_city`, `address_postcode`, `contact_number`) VALUES";
+							$sSql .= "(6, 111, '" . $this->firstname . "', '" . $this->surname . "', '" . $this->email . "', '" . date("Y-m-d") . "', '" . $this->username . "', 'Welcome " . $this->username . "', -1200, 5000, 5, '" . $this->username . "', NULL, NULL, NULL, NULL, NULL, NULL);";
+
+							if ($oDB->query($sSql)) 
+							{
+								$this->_logMessage("Created DEV user");
 							}
 							else 
 							{
-								$this->_logMessage("Failed to populate main database");
+								$this->_logMessage("Failed to create DEV user, was your input valid?");
+								$this->_logMessage($oDB->error);
 							}
 						}
 					}
@@ -199,7 +248,7 @@
 				$oDB->close();
 
 				// Test Database
-				$oDB = new mysqli($settings['database']['test_host'], $settings['database']['test_login'], $settings['database']['test_password'], $settings['database']['test_database']);
+				$oDB = new mysqli($settings['database']['test_host'], $settings['database']['test_login'], $settings['database']['test_password']);
 
 				if ($oDB->connect_error) 
 				{
@@ -224,24 +273,7 @@
 						}
 					}
 
-					if($oDB->select_db($testDbName))
-					{
-						if($this->populateDb)
-						{
-							if ($oDB->multi_query(file_get_contents($this->_makeAbsolutePath('/hms_test.sql'))))
-							{
-								$this->_logMessage("Populated test database");
-							}
-							else 
-							{
-								$this->_logMessage("Failed to populate test database");
-							}
-						}
-					}
-					else
-					{
-						$this->_logMessage("Unable to select database: $testDbName");
-					}
+					
 				}
 				$oDB->close();
 			}

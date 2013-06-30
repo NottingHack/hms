@@ -5,6 +5,7 @@
 		public $useDbConfig = 'test';
 		public $table = 'member_group';
 		
+		// This array looks pointless, but without it the create function below isn't called.
 		public $fields = array(
           'member_id' => array('type' => 'integer', 'null' => false, 'key' => 'primary'),
           'grp_id' => array('type' => 'integer', 'null' => false, 'key' => 'primary'),
@@ -28,13 +29,13 @@
 
 		public function create($db)
 		{
-			return true;
-		}
+			// Unfortunately due to the way our tables are set up
+			// and the way CakePHP works, if you try to make CakePHP auto-generate this table
+			// it doesn't work.
+			// Thankfully we can override the creation here
 
-		public function drop($db)
-		{
-			$this->truncate($db);
-			return true;
+			$sqlStatement = "CREATE TABLE IF NOT EXISTS `member_group` ( `member_id` int(11) NOT NULL, `grp_id` int(11) NOT NULL, PRIMARY KEY (`member_id`,`grp_id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+			return $db->execute($sqlStatement);
 		}
 	}
 
