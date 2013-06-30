@@ -7,11 +7,15 @@
 	require_once(CAKE_PATH . 'Core/Object.php');
 	require_once(CAKE_PATH . 'Event/CakeEventListener.php');
 	require_once(CAKE_PATH . 'Model/Model.php');
+	require_once(CAKE_PATH . 'Utility/String.php');
 	require_once(APP_PATH . 'Model/AppModel.php');
 	require_once(APP_PATH . 'Model/Status.php');
 	require_once(APP_PATH . 'Model/Account.php');
 	require_once(APP_PATH . 'Model/Pin.php');
+	require_once(APP_PATH . 'Model/Group.php');
 	require_once(APP_PATH . 'Lib/CsvReader/CsvReader.php');
+
+	require_once('utils.php');
 
 	/*
 		This script is used to generate realistic(ish) data for use when manually testing HMS.
@@ -25,6 +29,7 @@
 		private $stockData = array(); //!< The stock data used to populate other fields.
 
 		private $members = array(); //!< Array of members.
+		private $membersGroup = array(); //!< Array of which members are in which groups
 		private $accounts = array(); //!< Array of accounts.
 		private $pins = array(); //!< Array of pins.
 		private $rfidTags = array(); //!< Array of rfid tags.
@@ -33,7 +38,7 @@
 		//! Constructor
 		function __construct()
 		{
-			$this->_parseCsv('./FakeNameGeneratorDataShort.csv');
+			$this->_parseCsv('./FakeNameGeneratorData.csv');
 		}
 
 		//! Given a relative path from this file, get an absolute path.
@@ -54,7 +59,7 @@
 		{
 			$csvReader = new CsvReader();
 
-			if($csvReader->readFile($this->_makeAbsolutePath($filepath)))
+			if($csvReader->readFile(makeAbsolutePath($filepath)))
 			{
 				$numLines = $csvReader->getNumLines();
 
@@ -84,11 +89,125 @@
 			}
 		}
 
+		//! Get the SQL version of a value.
+		/*!
+			@param mixed $value The value to transform.
+			@retval string SQL version of the value.
+		*/
+		private function _sqlize($value)
+		{
+			if(is_string($value))
+			{
+				return "'" . mysql_real_escape_string($value) . "'";
+			}
+
+			if(is_numeric($value))
+			{
+				return (string)$value;
+			}
+
+			if($value == null)
+			{
+				return 'NULL';
+			}
+		}
+
+		//! Get the MYSql of an array
+		/*!
+			@param array $array The array to use.
+			@param string $title The name of the table
+			@retval string MYSql string of array data.
+		*/
+		private function _getSql($array, $title)
+		{
+			$headers = array_keys($array[0]);
+			$formattedHeaders = array_map( function ($val) { return "`$val`"; }, $headers );
+
+			$sql = "INSERT INTO `$title` (";
+			$sql .= implode(', ', $formattedHeaders);
+			$sql .= ") VALUES" . PHP_EOL;
+
+			for($i = 0; $i < count($array); $i++)
+			{
+				$values = $array[$i];
+
+				$formattedValues = array_map( function ($val) { return $this->_sqlize($val); }, $values );
+				$sql .= "(" . implode(', ', $formattedValues) . ")";
+
+				if($i < count($array) - 1)
+				{
+					$sql .= ',';
+				}
+				else
+				{
+					$sql .= ';';
+				}
+				$sql .= PHP_EOL;
+			}
+
+			return $sql;
+		}
+
+		//! Get an SQL string of the members data.
+		/*!
+			@retval string SQL string for the members data.
+		*/
+		public function getMembersSql()
+		{
+			return $this->_getSql($this->members, 'members');
+		}
+
+		//! Get an SQL string of the membersGroup data.
+		/*!
+			@retval string SQL string for the membersGroup data.
+		*/
+		public function getMembersGroupSql()
+		{
+			return $this->_getSql($this->membersGroup, 'member_group');
+		}
+
+		//! Get an SQL string of the accounts data.
+		/*!
+			@retval string SQL string for the accounts data.
+		*/
+		public function getAccountsSql()
+		{
+			return $this->_getSql($this->accounts, 'accounts');
+		}
+
+		//! Get an SQL string of the pins data.
+		/*!
+			@retval string SQL string for the pins data.
+		*/
+		public function getPinsSql()
+		{
+			return $this->_getSql($this->pins, 'pins');
+		}
+
+		//! Get an SQL string of the RFID tags data.
+		/*!
+			@retval string SQL string for the RFID tags data.
+		*/
+		public function getRfidTagsSql()
+		{
+			return $this->_getSql($this->rfidTags, 'rfid_tags');
+		}
+
+		//! Get an SQL string of the status updates data.
+		/*!
+			@retval string SQL string for the status updates data.
+		*/
+		public function getStatusUpdatesSql()
+		{
+			return $this->_getSql($this->statusUpdates, 'status_updates');
+		}
+
 		//! Generate a new member record
 		/*!
 			@param int $membershipStage The stage of membership this member should be at, see Status model for details.
+			@param array $details Optional array of details that will be forced on the member being generated.
 		*/
-		public function generateMember($membershipStage)
+		public function generateMember($membershipStage, $details = array())
 		{
 			$memberId = count($this->members) + 1;
 
@@ -122,6 +241,38 @@
 				{
 					$this->_registerCard($memberId, $registerTime);
 				}
+
+				// Add the member to some random groups if they're a current member
+				if($membershipStage == Status::CURRENT_MEMBER)
+				{
+					// Will always be in current members group
+					$groupList = array( Group::CURRENT_MEMBERS );
+
+					$possibleGroups = array(
+						Group::FULL_ACCESS,
+						Group::GATEKEEPER_ADMIN,
+						Group::SNACKSPACE_ADMIN,
+						Group::MEMBER_ADMIN,
+					);
+
+					$numGroupsToAdd = rand(0, 2);
+					for($i = 0; $i < $numGroupsToAdd; $i++)
+					{
+						$index = array_rand($possibleGroups);
+						$groupId = $possibleGroups[$index];
+						array_splice($possibleGroups, $index, 1);
+
+						array_push($groupList, $groupId);
+					}
+
+					// Groups can be overriden by the details array
+					if( isset($details['groups']) )
+					{
+						$groupList = $details['groups'];
+					}
+
+					$this->_setMemberGroups($memberId, $groupList);
+				}
 			}
 
 			// Need to generate status updates for all levels of membership
@@ -150,10 +301,11 @@
 
 			$stockData = $this->_getStockData();
 
-			$firstname = $stockData['GivenName'];
-			$surname = $stockData['Surname'];
-			$email = $stockData['EmailAddress'];
-			$handle = $stockData['Username'];
+			$firstname = $this->_useValOrDefault($details, 'firstname', $stockData['GivenName']);
+			$surname = $this->_useValOrDefault($details, 'surname', $stockData['Surname']);
+			$email = $this->_useValOrDefault($details, 'email', $stockData['EmailAddress']);
+			$handle = $this->_useValOrDefault($details, 'username', $stockData['Username']);
+
 			$username = $handle;
 
 			$address = array(
@@ -185,9 +337,55 @@
 				'contact_number' => $contactNumber
 			);
 
-			var_dump($record);
-
 			array_push($this->members, $record);
+		}
+
+		//! Return $array[$key] if it is set, otherwise return $default.
+		/*!
+			@param array $array The array to address.
+			@param mixed $key The index to use.
+			@param mixed $default The value to use if $val us not set.
+			@retval mixed $array[$key]  if it is set, otherwise return $default.
+		*/
+		private function _useValOrDefault($array, $key, $default)
+		{
+			if(array_key_exists($key, $array))
+			{
+				return $array[$key];
+			}
+
+			return $default;
+		}
+
+		//! Set the groups which a member will belong to.
+		/*!
+			@param int $memberId The id of the member who's groups we're setting.
+			@param array $groupList List of group id's.
+		*/
+		private function _setMemberGroups($memberId, $groupList)
+		{
+			// Firstly remove all the current groups assigned to the member
+			for($i = 0; $i < count($this->membersGroup); )
+			{
+				if($this->membersGroup[$i]['member_id'] == $memberId)
+				{
+					array_splice($this->membersGroup, $i, 1);
+					// Don't increment since we've altered the array
+					continue;
+				}
+				$i++;
+			}
+
+			// Now add a record for each of the items in $groupList
+			foreach ($groupList as $groupId) 
+			{
+				$record = array(
+					'member_id' => $memberId,
+					'grp_id' => $groupId,
+				);
+
+				array_push($this->membersGroup, $record);
+			}
 		}
 
 		//! Generate a status update record
@@ -207,11 +405,9 @@
 				'member_id' => $memberId,
 				'admin_id' => $adminId,
 				'old_status' => $oldStatus,
-				'newStatus' => $newStatus,
+				'new_status' => $newStatus,
 				'timestamp' => $timestamp,
 			);
-
-			var_dump($record);
 
 			array_push($this->statusUpdates, $record);
 		}
@@ -268,8 +464,6 @@
 				'last_used' => $lastUsed,
 			);
 
-			var_dump($record);
-
 			array_push($this->rfidTags, $record);
 		}
 
@@ -287,8 +481,6 @@
 				'account_id' => $accountId,
 				'payment_ref' => $accountRef,
 			);
-
-			var_dump($record);
 
 			array_push($this->accounts, $record);
 
@@ -315,8 +507,6 @@
 				'state' => 30,
 				'member_id' => $memberId
 			);
-
-			var_dump($record);
 
 			array_push($this->pins, $record);
 		}

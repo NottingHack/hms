@@ -1,5 +1,8 @@
 <?php
 
+	require_once('utils.php');
+	require_once('data_generator.php');
+
 	//! Setup is a class that is responsible for parsing options and then performing certain steps based on those options.
 	class Setup
 	{
@@ -16,25 +19,6 @@
 		private $surname = '';				//!< Surname of the user.
 		private $username = '';				//!< Username of the user.
 		private $email = '';				//!< Email of the user.
-
-		//! Given a relative path from this file, get an absolute path.
-		/*!
-			@param string $path The relative path to convert.
-			@retval string The absolute path.
-		*/
-		private function _makeAbsolutePath($path)
-		{
-			if(count($path) > 0)
-			{
-				$firstChar = $path[0];
-				if(	$firstChar != '/' &&
-					$firstChar != '\\' )
-				{
-					$path = '/' . $path;
-				}
-			}
-			return dirname(__FILE__) . $path;
-		}
 
 		//! Set up the database options.
 		/*
@@ -136,14 +120,14 @@
 		private function _getSqlFilesContaining($name)
 		{
 			$validFiles = array();
-			$dirList = scandir($this->_makeAbsolutePath('./sql'));
+			$dirList = scandir(makeAbsolutePath('./sql'));
 
 			foreach ($dirList as $filename) 
 			{
 				if( pathinfo($filename, PATHINFO_EXTENSION) == 'sql' &&
 					strpos($filename, $name) !== FALSE )
 				{
-					array_push($validFiles, $this->_makeAbsolutePath('./sql/' . $filename));
+					array_push($validFiles, makeAbsolutePath('./sql/' . $filename));
 				}
 			}
 
@@ -182,6 +166,121 @@
 		{
 			$files = $this->_getSqlFilesContaining('data');
 			$this->_runAllQueriesInFileList($databaseObj, $files);
+		}
+
+		//! Divide $membersRemaining by $divisor, return the result and adjust $membersRemaining.
+		/*!
+			@param ref int $membersRemaining The number of members left to distribute.
+			@param int $divisor The portion of members that should be used.
+			@retval int The number of members used.
+		*/
+		private function _distribureMembers(&$membersRemaining, $divisor)
+		{
+			$numUsed = (int)($membersRemaining / $divisor);
+			$membersRemaining -= $numUsed;
+			return $numUsed;
+		}
+
+		//! Write $data to the file at $path, overwriting the file if it exists.
+		/*!
+			@param string $path The path to the file.
+			@param string $data The data to write.
+			@retval bool True if data was written successfully, false otherwise.
+		*/
+		private function _writeToFile($path, $data)
+		{
+			$handle = fopen(makeAbsolutePath($path), 'w');
+			if($handle)
+			{
+				$result = fwrite($handle, $data);
+				fclose($handle);
+
+				return $result !== FALSE;
+			}
+
+			return false;
+		}
+
+		//! Generate the data that will populate the database.
+		/*!
+			@retval bool True if data was generated and written correctly, false otherwise.
+		*/
+		private function _generateData()
+		{
+			$totalMembersToGenerate = 20;
+			$membersRemaining = $totalMembersToGenerate;
+
+			$genDetails = array();
+
+			// Half the members should be current members
+			$genDetails[Status::CURRENT_MEMBER] = $this->_distribureMembers($membersRemaining, 2);
+			
+			// 1/3rd of the remaining members should be ex members
+			$genDetails[Status::EX_MEMBER] = $this->_distribureMembers($membersRemaining, 3);
+
+			// Distribute the rest of the members evenly over the other statuses
+			$toAssign = (int)floor($membersRemaining / 4);
+
+			$genDetails[Status::PROSPECTIVE_MEMBER] = $toAssign;
+			$genDetails[Status::PRE_MEMBER_1] = $toAssign;
+			$genDetails[Status::PRE_MEMBER_2] = $toAssign;
+			$genDetails[Status::PRE_MEMBER_3] = $toAssign;
+
+			$membersRemaining -= ($toAssign * 4);
+
+
+			// Any left? Make them current members
+			$genDetails[Status::CURRENT_MEMBER] += $membersRemaining;
+
+			$this->_logMessage("Generating data for $totalMembersToGenerate members.");
+
+			// Generate!
+			$gen = new DataGenerator();
+			foreach ($genDetails as $status => $num) 
+			{
+				for($i = 0; $i < $num; $i++)
+				{
+					$gen->generateMember($status);
+				}	
+			}
+
+			// Finally generate the dev user
+			$details = array(
+				'firstname' => $this->firstname,
+				'surname' => $this->surname,
+				'email' => $this->email,
+				'username' => $this->username,
+				'groups' => array(
+					Group::CURRENT_MEMBERS, Group::FULL_ACCESS, Group::MEMBER_ADMIN,
+				),
+			);
+			$gen->generateMember(Status::CURRENT_MEMBER, $details);
+
+			$this->_logMessage('Writing SQL files');
+
+			$pathsAndFunctions = array(
+				'./sql/members_data.sql' => function() use (&$gen) { return $gen->getMembersSql(); },
+				'./sql/member_group_data.sql' => function() use (&$gen) { return $gen->getMembersGroupSql(); },
+				'./sql/account_data.sql' => function() use (&$gen) { return $gen->getAccountsSql(); },
+				'./sql/pins_data.sql' => function() use (&$gen) { return $gen->getPinsSql(); },
+				'./sql/rfid_tags_data.sql' => function() use (&$gen) { return $gen->getRfidTagsSql(); },
+				'./sql/status_updates_data.sql' => function() use (&$gen) { return $gen->getStatusUpdatesSql(); },
+			);
+
+			foreach ($pathsAndFunctions as $path => $func) 
+			{
+				if($this->_writeToFile($path, $func()))
+				{
+					$this->_logMessage("Wrote $path");
+				}
+				else
+				{
+					$this->_logMessage("Failed to write $path");
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		//! Create and/or populate the databases for HMS
@@ -224,20 +323,6 @@
 						{
 							$this->_runSchemaQueries($oDB);
 							$this->_runDataQueries($oDB);
-
-							// set up dev user
-							$sSql = "INSERT INTO `members` (`member_id`, `member_number`, `firstname`, `surname`, `email`, `join_date`, `handle`, `unlock_text`, `balance`, `credit_limit`, `member_status`, `username`, `account_id`, `address_1`, `address_2`, `address_city`, `address_postcode`, `contact_number`) VALUES";
-							$sSql .= "(6, 111, '" . $this->firstname . "', '" . $this->surname . "', '" . $this->email . "', '" . date("Y-m-d") . "', '" . $this->username . "', 'Welcome " . $this->username . "', -1200, 5000, 5, '" . $this->username . "', NULL, NULL, NULL, NULL, NULL, NULL);";
-
-							if ($oDB->query($sSql)) 
-							{
-								$this->_logMessage("Created DEV user");
-							}
-							else 
-							{
-								$this->_logMessage("Failed to create DEV user, was your input valid?");
-								$this->_logMessage($oDB->error);
-							}
 						}
 					}
 					else
@@ -306,7 +391,7 @@
 
 			$this->_logMessage("Attempting to copy $fromFile to $toFile");
 
-			if(copy($this->_makeAbsolutePath($fromFile), $toFile))
+			if(copy(makeAbsolutePath($fromFile), $toFile))
 			{
 				$this->_logMessage('Copy successful');
 			}
@@ -491,6 +576,11 @@
 			$settings = $this->_getSettings();
 
 			$this->_createConfigFiles($settings);
+			if(!$this->_generateData())
+			{
+				$this->_logMessage('Failed to generate and write data.');
+				exit(1);
+			}
 			$this->_createDatabases($settings);
 			$this->_copyKrbLibFile();
 			$this->_setupTempFolders();
