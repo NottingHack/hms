@@ -28,6 +28,7 @@
 		private $accounts = array(); //!< Array of accounts.
 		private $pins = array(); //!< Array of pins.
 		private $rfidTags = array(); //!< Array of rfid tags.
+		private $statusUpdates = array(); //!< Array of status updates
 
 		//! Constructor
 		function __construct()
@@ -96,29 +97,55 @@
 			$joinDate = '';
 			$accountId = null;
 
+			// Make it so they registered some time in the last year
+			$now = time();
+			$lastYear = strtotime('last year');
+			$registerTimestamp = rand($lastYear, $now);
+
 			if((int)$membershipStage >= Status::CURRENT_MEMBER)
 			{
 				$creditLimit = 5000;
 				$balance = rand(-$creditLimit, 0);
 
-				// Make it so they joined some time in the last year
-				$now = time();
-				$lastYear = strtotime('last year');
-				$joinTimestamp = rand($lastYear, $now);
-				$joinDate = date('Y-m-d', $joinTimestamp);
+				
+				$joinDate = date('Y-m-d', $registerTimestamp);
 
 				$accountId = $this->_generateAccount();
-				$this->_generatePin($memberId, $joinTimestamp);
+				$this->_generatePin($memberId, $registerTimestamp);
 
 				// Has this member set up access yet?
 				// Pick a date within a week of the join date
 				// and if that date has passed then member has set up a card
-				$weekAfterJoin = strtotime('+1 week', $joinTimestamp);
-				$registerTime = rand($joinTimestamp, $weekAfterJoin);
+				$weekAfterJoin = strtotime('+1 week', $registerTimestamp);
+				$registerTime = rand($registerTimestamp, $weekAfterJoin);
 				if($registerTime <= $now)
 				{
 					$this->_registerCard($memberId, $registerTime);
 				}
+			}
+
+			// Need to generate status updates for all levels of membership
+			// Spread the updates over some time
+			$firstStatusUpdateTime = strtotime('-2 weeks', $registerTimestamp);
+			$currentStatusUpdateTime = $firstStatusUpdateTime;
+			for($i = 0; $i < $membershipStage; $i++)
+			{
+				// The 'admin' making the change is the member
+				// until the later membership stages
+				$adminId = $memberId;
+				if(	$i >= Status::PRE_MEMBER_2 && 
+					count($this->members) > 0)
+				{
+					$adminDataIdx = array_rand($this->members);
+					$adminId = $this->members[$adminDataIdx]['member_id'];
+				}
+
+				$this->_generateStatusUpdate($memberId, $adminId, $i, $i + 1, $currentStatusUpdateTime);
+
+				// Advance the status update time
+				// may produce weirdness if it picks a time close to registerTimestamp with a few
+				// status updates left to go but it shouldn't matter
+				$currentStatusUpdateTime = rand($currentStatusUpdateTime, $registerTimestamp);
 			}
 
 			$stockData = $this->_getStockData();
@@ -163,6 +190,32 @@
 			array_push($this->members, $record);
 		}
 
+		//! Generate a status update record
+		/*!
+			@param int $memberId The id of the member.
+			@param int $adminId The id of the admin making the change.
+			@param int $oldStatus The previous status of the member.
+			@param int $newStatus The new status of the member.
+			@param int $timestamp The timestamp of the update.
+		*/
+		private function _generateStatusUpdate($memberId, $adminId, $oldStatus, $newStatus, $timestamp)
+		{
+			$recordId = count($this->statusUpdates) + 1;
+
+			$record = array(
+				'id' => $recordId,
+				'member_id' => $memberId,
+				'admin_id' => $adminId,
+				'old_status' => $oldStatus,
+				'newStatus' => $newStatus,
+				'timestamp' => $timestamp,
+			);
+
+			var_dump($record);
+
+			array_push($this->statusUpdates, $record);
+		}
+
 		//! Register an rfid card using the members pin.
 		/*!
 			@param int $memberId The id of the member to register the card to.
@@ -173,9 +226,9 @@
 			// Registering a card effects the PIN
 			for($i = 0; $i < count($this->pins); $i++)
 			{
-				if($this->pin[$i]['member_id'] == $memberId)
+				if($this->pins[$i]['member_id'] == $memberId)
 				{
-					$this->pin[$i]['state'] = 40;
+					$this->pins[$i]['state'] = 40;
 					break;
 				}
 			}
@@ -215,6 +268,8 @@
 				'last_used' => $lastUsed,
 			);
 
+			var_dump($record);
+
 			array_push($this->rfidTags, $record);
 		}
 
@@ -232,6 +287,8 @@
 				'account_id' => $accountId,
 				'payment_ref' => $accountRef,
 			);
+
+			var_dump($record);
 
 			array_push($this->accounts, $record);
 
@@ -258,6 +315,8 @@
 				'state' => 30,
 				'member_id' => $memberId
 			);
+
+			var_dump($record);
 
 			array_push($this->pins, $record);
 		}
