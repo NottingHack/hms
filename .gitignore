@@ -4,6 +4,7 @@
 /app/Config/hms.keytab
 /app/Config/mailchimp.php
 /app/Config/email.php
+/app/Config/debug.php
 /app/tmp
 /lib/Cake/Console/Templates/skel/tmp/
 /vendors
