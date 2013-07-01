@@ -3,4 +3,4 @@ CREATE TABLE IF NOT EXISTS `account` (
   `payment_ref` varchar(18) NOT NULL,
   PRIMARY KEY (`account_id`),
   UNIQUE KEY `payment_ref` (`payment_ref`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;

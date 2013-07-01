@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS `pins` (
   `state` int(11) DEFAULT NULL,
   `member_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`pin_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=166 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;

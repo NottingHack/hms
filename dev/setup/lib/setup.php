@@ -9,11 +9,11 @@
 		private $newline = null; 	//!< Newline character, different depending on output (HTML or text).
 
 		//! Options
-		private $createDb = false;				//!< If true create the instrumentation and instrumentation_test databases.
-		private $populateDb = false;			//!< If true populate the databases with default tables and data.
-		private $useRealKrb = false;			//!< If true then use the real KRB Auth lib, otherwise use a dummy one.
-		private $setupTempFolders = false;		//!< If true create the temporary folders CakePHP needs.
-		private $useDevelopmentConfigs = true;	//!< If true then use the development version of config files
+		private $createDb = false;					//!< If true create the instrumentation and instrumentation_test databases.
+		private $populateDb = false;				//!< If true populate the databases with default tables and data.
+		private $useRealKrb = false;				//!< If true then use the real KRB Auth lib, otherwise use a dummy one.
+		private $setupTempFolders = false;			//!< If true create the temporary folders CakePHP needs.
+		private $environmentType = 'production';	//!< Prefer files with this suffix.
 
 		//! The following details are used to create a HMS login for the user with admin rights.
 		private $firstname = '';			//!< Firstname of the user.
@@ -41,16 +41,16 @@
 			$this->useRealKrb = $useRealKrb;
 		}
 
-		//! Set if we should create the temporary folders CakePHP requires.
+		//! Set if we should use development or production configs, settings and databases.
 		/*!
-			@param bool $setupTempFolders If true then temporary folders will be created.
+			@param bool $useDevelopmentEnv If true then use development configs, settings and databases.
 		*/
-		public function setUseDevelopmentConfigs($useDevelopmentConfigs)
+		public function setUseDevelopmentEnvironment($useDevelopmentEnv)
 		{
-			$this->useDevelopmentConfigs = $useDevelopmentConfigs;
+			$this->environmentType = $useDevelopmentEnv ? 'development' : 'production';
 		}
 
-		//! Set if we should use the development or production configs.
+		//! Set if we should create the temporary folders.
 		/*!
 			@param bool $setupTempFolders If true then temporary folders will be created.
 		*/
@@ -113,13 +113,7 @@
 			foreach ($files as $fileName) 
 			{
 				// First check for dev/production templates
-				$templateType = 'production';
-				if($this->useDevelopmentConfigs)
-				{
-					$templateType = 'development';
-				}
-
-				$templateFilePath = makeAbsolutePath("$fileName.$templateType.template");
+				$templateFilePath = makeAbsolutePath("$fileName.{$this->environmentType}.template");
 				if (!file_exists($templateFilePath))
 				{
 					// Fall back to the regular template
@@ -156,7 +150,17 @@
 				if( pathinfo($filename, PATHINFO_EXTENSION) == 'sql' &&
 					strpos($filename, $name) !== FALSE )
 				{
-					array_push($validFiles, makeAbsolutePath('./sql/' . $filename));
+					// Check if it passes the environment type test.
+					$parts = explode('.', basename($filename));
+					if(count($parts) > 1)
+					{
+						// Is this file for all environment types or the one we're currently using?
+						if(	$parts[1] == 'sql' || 
+							$parts[1] == $this->environmentType)
+						{
+							array_push($validFiles, makeAbsolutePath('./sql/' . $filename));
+						}
+					}
 				}
 			}
 

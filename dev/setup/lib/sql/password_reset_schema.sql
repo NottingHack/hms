@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS `password_reset` (
   `pr_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `pr_completed` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`reset_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;

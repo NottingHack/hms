@@ -36,8 +36,8 @@
 						<label class="choice" for="populatedb">Populate Database</label>
 						<input id="setuptmpfolders" name="setuptmpfolders" class="element checkbox" type="checkbox" checked="checked" />
 						<label class="choice" for="setuptmpfolders">Setup Temp Folders</label>
-						<input id="usedevelopmentconfigs" name="usedevelopmentconfigs" class="element checkbox" type="checkbox" checked="checked" />
-						<label class="choice" for="usedevelopmentconfigs">Use development config files</label>
+						<input id="usedevelopmentenv" name="usedevelopmentenv" class="element checkbox" type="checkbox" checked="checked" />
+						<label class="choice" for="usedevelopmentenv">Use development configs, databases and settings</label>
 						<input id="realkrb" name="realkrb" class="element checkbox" type="checkbox" />
 						<label class="choice" for="realkrb">Real KRB Auth (keep this off unless you know what you're doing)</label>
 					</span>

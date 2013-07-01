@@ -3,4 +3,4 @@ CREATE TABLE IF NOT EXISTS `status` (
   `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
   PRIMARY KEY (`status_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
