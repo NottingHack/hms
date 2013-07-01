@@ -1,0 +1,40 @@
+<?php
+
+    class MCAPI 
+    {
+
+        var $errorMessage = '';
+        var $errorCode = 0;
+        
+        function MCAPI($apikey, $secure=false)
+        {
+            
+        }
+       
+        function useSecure($val)
+        {
+
+        }
+        
+        function lists($filters=array (), $start=0, $limit=25) 
+        {
+
+        }
+        
+        function listSubscribe($id, $email_address, $merge_vars=NULL, $email_type='html', $double_optin=true, $update_existing=false, $replace_interests=true, $send_welcome=false) 
+        {
+
+        }
+
+        function listUnsubscribe($id, $email_address, $delete_member=false, $send_goodbye=true, $send_notify=true) 
+        {
+
+        }
+
+        function listMembers($id, $status='subscribed', $since=NULL, $start=0, $limit=100) 
+        {
+
+        }
+    }
+
+?>

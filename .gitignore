@@ -20,3 +20,4 @@
 /dev/setup/lib/sql/rfid_tags_data.sql
 /dev/setup/lib/sql/status_updates_data.sql
 app/Lib/Krb/krb5_auth.php
+app/Lib/MailChimp/MCAPI.php

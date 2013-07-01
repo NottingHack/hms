@@ -397,28 +397,23 @@
 			}
 		}
 
-		//! Copy either the real or dummy KRB Auth lib file to the lib folder.
-		private function _copyKrbLibFile()
+		//! Copy a file from one location to another, creating the folder if needed.
+		/*!
+			@param string $fromFile The path to copy the file from.
+			@param string $toFile The path to copy the file to.
+		*/
+		private function _copyLibFile($fromFile, $toFile)
 		{
-			$krbFolder = '../../../app/Lib/Krb/';
-
-			$toFile = $krbFolder . 'krb5_auth.php';
-			$fromFile = 'krb5_auth.dummy';
-
-			if($this->useRealKrb)
+			$libFolder = dirname($toFile);
+			if(!file_exists($libFolder))
 			{
-				$fromFile = 'krb5_auth.real';
-			}
-
-			if(!file_exists($krbFolder))
-			{
-				if(mkdir($krbFolder))
+				if(mkdir($libFolder))
 				{
-					$this->_logMessage("Created folder at: $krbFolder");
+					$this->_logMessage("Created folder at: $libFolder");
 				}
 				else
 				{
-					$this->_logMessage("Failed to create folder at: $krbFolder");
+					$this->_logMessage("Failed to create folder at: $libFolder");
 				}
 			}
 
@@ -433,6 +428,21 @@
 				$this->_logMessage('Copy failed');
 			}
 		}
+
+		//! Copy either the real or dummy KRB Auth lib file to the lib folder.
+		private function _copyKrbLibFile()
+		{
+			$fromFile = $this->useRealKrb ? 'krb5_auth.real' : 'krb5_auth.dummy';
+			$this->_copyLibFile($fromFile, '../../../app/Lib/Krb/krb5_auth.php');
+		}
+
+		//! Copy either the production or development MCAPI file.
+		private function _copyMcapiLibFile()
+		{
+			$fromFile = "MCAPI.{$this->environmentType}";
+			$this->_copyLibFile($fromFile, '../../../app/Lib/MailChimp/MCAPI.php');
+		}
+
 
 		//! Given a path to a directory, delete the directory and all it's contents.
 		/*!
@@ -616,6 +626,7 @@
 			}
 			$this->_createDatabases($settings);
 			$this->_copyKrbLibFile();
+			$this->_copyMcapiLibFile();
 			$this->_setupTempFolders();
 
 
