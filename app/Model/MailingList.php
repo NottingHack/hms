@@ -33,8 +33,16 @@
 
 			// Set-up mailchimp
 			$this->apikey = Configure::read('mailchimp_apiKey');
-			$this->api = new MCAPI($this->apikey);
-			$this->api->useSecure(true);
+			$this->api = new MCAPI($this->apikey, true);
+			
+			// Bit hacky, we need to tell the MCAPI class
+			// which dbConfig to use, but we can't add a method on
+			// to the production MCAPI class, so we have to check if
+			// it exists first.
+			if(method_exists($this->api, 'setConfig'))
+			{
+				$this->api->setConfig($this->useDbConfig);
+			}
 		}
 
 		//! List summary information about all mailing lists.
@@ -95,7 +103,7 @@
 				$cachedResult = $this->_getCachedResult($cacheName);
 				if($cachedResult != null)
 				{
-					return $cachedResult;
+					//return $cachedResult;
 				}
 			}
 			$result = $this->api->listMembers($listId, 'subscribed', null, 0, 5000 );

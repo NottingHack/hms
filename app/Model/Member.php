@@ -703,6 +703,16 @@
 			return array();
 		}
 
+		//! Get a list of e-mail addresses for all members.
+		/*!
+			@retval array A list of member e-mails.
+		*/
+		public function getEmailsForAllMember()
+		{
+			$emails = $this->find('all', array('fields' => array('email')));
+			return Hash::extract( $emails, '{n}.Member.email' );
+		}
+
 		//! Attempt to register a new member record.
 		/*!
 			@param array $data Information to use to create the new member record.

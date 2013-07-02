@@ -5,7 +5,11 @@
 ?>
 
 <?php
-	if(count($mailingLists) > 0):
+	if(count($mailingLists) <= 0):
+	
+		echo 'No mailing lists';
+	
+	else:
 ?>
 
 <table>
@@ -31,10 +35,6 @@
 
 </table>
 
-<?
-	else:
-?>
-		No mailing lists
 <?php
 	endif;
 ?>

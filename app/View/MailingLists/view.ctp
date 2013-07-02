@@ -59,9 +59,9 @@
 <?php if($membersSubscribedCount > 0): ?>
 	<h3>Subscribed Members (<?php echo $membersSubscribedCount; ?>)</h3>
 	<ul>
-	<?php foreach (Hash::sort($membersSubscribed, '{n}.Member.name', 'asc') as $memberInfo): ?>
+	<?php foreach ($membersSubscribed as $memberInfo): ?>
 		<li>
-			<?php echo $this->Html->link($memberInfo['Member']['name'], array('controller' => 'members', 'action' => 'view', $memberInfo['Member']['member_id'])); ?>
+			<?php echo $this->Html->link(sprintf('%s %s', $memberInfo['firstname'], $memberInfo['surname']), array('controller' => 'members', 'action' => 'view', $memberInfo['id'])); ?>
 		</li>
 	<?php endforeach; ?>
 	</ul>
@@ -73,9 +73,9 @@
 <?php if($membersSubscribedCount > 0): ?>
 	<h3>Non-Subscribed Members (<?php echo $membersNotSubscribedCount; ?>)</h3>
 	<ul>
-	<?php foreach (Hash::sort($membersNotSubscribed, '{n}.Member.name', 'asc') as $memberInfo): ?>
+	<?php foreach ($membersNotSubscribed as $memberInfo): ?>
 		<li>
-			<?php echo $this->Html->link($memberInfo['Member']['name'], array('controller' => 'members', 'action' => 'view', $memberInfo['Member']['member_id'])); ?>
+			<?php echo $this->Html->link(sprintf('%s %s', $memberInfo['firstname'], $memberInfo['surname']), array('controller' => 'members', 'action' => 'view', $memberInfo['id'])); ?>
 		</li>
 	<?php endforeach; ?>
 	</ul>
