@@ -759,16 +759,50 @@
 				$memberInfo = $this->createNewMemberInfo( $email );
 				$memberInfo['MailingLists'] = Hash::get($data, 'MailingLists');
 
-				$saveResult = $this->_saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' ), 'MailingLists' => array()), 0);
-				if( !is_array($saveResult) )
+				// If the user ticked no boxes, the $memberInfo['MailingLists']['MailingLists']
+				// might not be an array
+				if(!is_array($memberInfo['MailingLists']['MailingLists']))
 				{
-					// Save failed for reasons.
-					return null;
+					$memberInfo['MailingLists']['MailingLists'] = array();
 				}
 
-				$resultDetails['mailingLists'] = Hash::get($saveResult, 'mailingLists');
+				$this->set( $memberInfo );
+				if( $this->validates() )
+				{
+					// If this e-mail is already subscribed to any mailing list
+					// but hasn't checked the box for that mailing list, pretend they have.
+					// Otherwise they will get unsubscribed from said mailing list
 
-				$memberId = $this->id;
+					$mailingList = $this->getMailingList();
+					$listAndStatus = $mailingList->getListsAndSubscribeStatus($email, false);
+
+					foreach ($listAndStatus['data'] as $list) 
+					{
+						// Are they actually subscribed to this list?
+						if($list['subscribed'])
+						{
+							// Have they ticked the box for that list?
+							if(!in_array($list['id'], $memberInfo['MailingLists']['MailingLists']))
+							{
+								// Nope, add it to the list
+								array_push($memberInfo['MailingLists']['MailingLists'], $list['id']);
+							}
+						}
+					}
+
+					$saveResult = $this->_saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' ), 'MailingLists' => array()), 0);
+
+					if( !is_array($saveResult) )
+					{
+						// Save failed for reasons.
+						return null;
+					}
+
+					$resultDetails['mailingLists'] = Hash::get($saveResult, 'mailingLists');
+
+					$memberId = $this->id;
+				}
+
 			}
 			else
 			{
@@ -1787,7 +1821,8 @@
 				}
 			}
 
-			$mailingListsInData = Hash::check($memberInfo, 'MailingLists.MailingLists');
+			$mailingListsInData = 	array_key_exists('MailingLists', $memberInfo) &&
+									array_key_exists('MailingLists', $memberInfo['MailingLists']);
 			$mailingLists = array();
 			if($mailingListsInData)
 			{

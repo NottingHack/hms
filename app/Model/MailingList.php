@@ -34,7 +34,7 @@
 			// Set-up mailchimp
 			$this->apikey = Configure::read('mailchimp_apiKey');
 			$this->api = new MCAPI($this->apikey, true);
-			
+
 			// Bit hacky, we need to tell the MCAPI class
 			// which dbConfig to use, but we can't add a method on
 			// to the production MCAPI class, so we have to check if

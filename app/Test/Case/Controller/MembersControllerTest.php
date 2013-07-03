@@ -13,7 +13,7 @@
 
 	class MembersControllerTest extends ControllerTestCase
 	{
-		public $fixtures = array( 'app.Member', 'app.Status', 'app.Group', 'app.GroupsMember', 'app.Account', 'app.Pin', 'app.StatusUpdate', 'app.ForgotPassword' );
+		public $fixtures = array( 'app.Member', 'app.Status', 'app.Group', 'app.GroupsMember', 'app.Account', 'app.Pin', 'app.StatusUpdate', 'app.ForgotPassword', 'app.MailingLists', 'app.MailingListSubscriptions' );
 
 		public function setUp() 
         {
@@ -21,14 +21,6 @@
 
             $this->MembersController = new MembersController();
             $this->MembersController->constructClasses();
-            $this->MembersController->Member->mailingList = $this->_getMailingListMock();
-        }
-
-
-        private function _getMailingListMock()
-        {
-        	$mailingListTestCase = new MailingListTest();
-        	return $mailingListTestCase->getMockMailingList();
         }
 
         private function _testMailingListView($expectedResults)
@@ -48,6 +40,43 @@
         		$this->assertEqual($listData['subscribed'], $expectedResults[$listData['id']], 'List data subscribed has incorrect value for id ' . $listData['id']);
         	}
         }
+
+        private function _constructMailingList()
+        {
+        	App::uses('MailingList', 'Model');
+			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue(new MailingList(false, null, 'test')));
+			$this->controller->Member->mailingList = new MailingList(false, null, 'test');
+        }
+
+        private function _mockMemberEmail()
+		{
+			$this->controller = $this->generate('Members', array(
+				'methods' => array(
+					'getMailingList',
+				),
+				'components' => array(
+					'Auth' => array(
+						'user',
+					),
+					'Session' => array(
+						'setFlash',
+					),
+				),
+			));
+
+			$this->_constructMailingList();
+
+			$mockEmail = $this->getMock('CakeEmail');
+			$this->controller->email = $mockEmail;
+
+			return $mockEmail;
+		}
+
+		private function _testRegisterMailingListViewVars()
+		{
+			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
+			$this->assertArrayHasKey( 'mailingLists', $this->vars, 'No view value called \'memberList\'.' );
+		}
 
 		public function testIsAuthorized()
 		{
@@ -440,6 +469,18 @@
 			$this->assertContains('/pages/home', $this->headers['Location']);
 		}
 
+		public function testRegisterMemberDoesNotUnsubscribe()
+		{
+			$emailAddress = 'alreadySubscribed@dayrep.com';
+
+			$mockEmail = $this->_mockMemberEmail();
+
+			$this->controller->Session->expects($this->once())->method('setFlash')->with('Registration successful, please check your inbox.');
+
+			$this->testAction('/members/register', array('data' => array('Member' => array('email' => $emailAddress), 'MailingLists' => array('MailingLists' => '')), 'method' => 'post'));
+		}
+
+		
 		public function testRegisterExistingPropspectiveMember()
 		{
 			// Test with an email address belonging to a member who is currently a prospective member
@@ -1795,7 +1836,7 @@
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
-			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
+			$this->_constructMailingList();
 
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
@@ -1879,7 +1920,7 @@
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(1));
 
-			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
+			$this->_constructMailingList();
 
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
@@ -1963,7 +2004,7 @@
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(4));
 
-			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
+			$this->_constructMailingList();
 
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
@@ -2018,7 +2059,7 @@
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
-			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
+			$this->_constructMailingList();
 
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(7));
@@ -2061,7 +2102,7 @@
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(9));
 
-			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
+			$this->_constructMailingList();
 
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(9));
@@ -2104,7 +2145,7 @@
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(11));
 
-			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
+			$this->_constructMailingList();
 
 			$this->controller->Nav->expects($this->exactly(4))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(11));
@@ -2155,7 +2196,7 @@
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(4));
 
-			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
+			$this->_constructMailingList();
 
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
@@ -2214,7 +2255,7 @@
 
             $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
 
-            $this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
+            $this->_constructMailingList();
 
 			$this->testAction('members/edit/2');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
@@ -3503,11 +3544,9 @@
 
             $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue($adminId));
 
-            $this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
+            $this->_constructMailingList();
 
            	$this->controller->Session->expects($this->once())->method('setFlash')->with($expectedFlash);
-
-            $this->controller->Member->mailingList = $this->_getMailingListMock();
 
 			$this->testAction('members/edit/' . $memberId, array('data' => $inputData, 'method' => 'post'));
 			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
@@ -3566,38 +3605,6 @@
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
 			$this->assertArrayHasKey( 'members', $this->vars, 'No view value called \'members\'.' );
 			$this->assertArrayHasKey( 'status', $this->vars, 'No view value called \'status\'.' );
-		}
-
-		private function _testRegisterMailingListViewVars()
-		{
-			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
-			$this->assertArrayHasKey( 'mailingLists', $this->vars, 'No view value called \'memberList\'.' );
-		}
-
-		private function _mockMemberEmail()
-		{
-			$this->controller = $this->generate('Members', array(
-				'methods' => array(
-					'getMailingList',
-				),
-				'components' => array(
-					'Auth' => array(
-						'user',
-					),
-					'Session' => array(
-						'setFlash',
-					),
-				),
-			));
-
-			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue($this->_getMailingListMock()));
-
-			$mockEmail = $this->getMock('CakeEmail');
-			$this->controller->email = $mockEmail;
-
-			$this->controller->Member->mailingList = $this->_getMailingListMock();
-
-			return $mockEmail;
 		}
 
 		public function testRevokeMembershipAsNonAdmin()

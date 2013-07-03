@@ -6,242 +6,18 @@
     {
         public $useTable = false;
         
-        public $fixtures = array( 'app.Status', 'app.Member', 'app.Account', 'app.Pin', 'app.Group', 'app.GroupsMember' );
+        public $fixtures = array( 'app.Status', 'app.Member', 'app.Account', 'app.Pin', 'app.Group', 'app.GroupsMember', 'app.MailingLists', 'app.MailingListSubscriptions' );
 
-        public function getMailingListMock($listId)
+        
+        private function _createMailingListModel()
         {
-            $data = array(
-                '0a6da449c9' => array(
-                    'id' => '0a6da449c9',
-                    'web_id' => '30569',
-                    'name' => 'Nottingham Hackspace Announcements',
-                    'date_created' => '2012-06-28 19:12:00',
-                    'email_type_option' => '1',
-                    'use_awesomebar' => false,
-                    'default_from_name' => 'Nottingham Hackspace',
-                    'default_from_email' => 'info@nottinghack.org.uk',
-                    'default_subject' => 'An Announcement From Nottingham Hackspace',
-                    'default_language' => 'en',
-                    'list_rating' => '3.5',
-                    'subscribe_url_short' => 'http://eepurl.com/ncaln',
-                    'subscribe_url_long' => 'http://nottinghack.us5.list-manage.com/subscribe?u=a4e59e4c29bd40e76419a037b&id=0a6da449c9',
-                    'beamer_address' => 'YTRlNTllNGMyOWJkNDBlNzY0MTlhMDM3Yi02YTkzMzc3ZS05ZTU5LTQ2ZmUtOTQ5Ni04ODQyYTAzOWVlN2Y=@campaigns.mailchimp.com',
-                    'visibility' => 'pub',
-                    'stats' => array(
-                        'member_count' => 276,
-                        'unsubscribe_count' => 6,
-                        'cleaned_count' => 1,
-                        'member_count_since_send' => 8,
-                        'unsubscribe_count_since_send' => 0,
-                        'cleaned_count_since_send' => 0,
-                        'campaign_count' => 24,
-                        'grouping_count' => 0,
-                        'group_count' => 0,
-                        'merge_var_count' => 2,
-                        'avg_sub_rate' => 22,
-                        'avg_unsub_rate' => 1,
-                        'target_sub_rate' => 1,
-                        'open_rate' => 46.108140225787,
-                        'click_rate' => 13.967310549777,
-                    ),
-                    'modules' => array(),
-                ),
-
-                '455de2ac56' => array(
-                    'id' => '455de2ac56',
-                    'web_id' => '64789',
-                    'name' => 'Nottingham Hackspace The Other List',
-                    'date_created' => '2013-01-12 14:43:00',
-                    'email_type_option' => '1',
-                    'use_awesomebar' => false,
-                    'default_from_name' => 'Nottingham Hackspace',
-                    'default_from_email' => 'info@nottinghack.org.uk',
-                    'default_subject' => 'Something Else From Nottingham Hackspace',
-                    'default_language' => 'en',
-                    'list_rating' => '2.3',
-                    'subscribe_url_short' => 'http://eepurl.com/sdfet',
-                    'subscribe_url_long' => 'http://nottinghack.us5.list-manage.com/subscribe?u=a4e59e4c29bd40e76419a037b&id=455de2ac56',
-                    'beamer_address' => 'YTRlNTllNGMyOWJkNDBlNzY0MTlhMDM3Yi02YTkzMzc3ZS05ZTU5LTQ2ZmUtOTQ5Ni04ODQyYTAzOWVlN2Y=@campaigns.mailchimp.com',
-                    'visibility' => 'pub',
-                        'stats' => array(
-                            'member_count' => 23,
-                            'unsubscribe_count' => 2,
-                            'cleaned_count' => 1,
-                            'member_count_since_send' => 3,
-                            'unsubscribe_count_since_send' => 1,
-                            'cleaned_count_since_send' => 0,
-                            'campaign_count' => 2,
-                            'grouping_count' => 0,
-                            'group_count' => 0,
-                            'merge_var_count' => 2,
-                            'avg_sub_rate' => 3,
-                            'avg_unsub_rate' => 1,
-                            'target_sub_rate' => 1,
-                            'open_rate' => 24.108140225787,
-                            'click_rate' => 91.967310549777,
-                        ),
-                        'modules' => array(),
-                    ),
-            );
-            
-            if(array_key_exists($listId, $data))
-            {
-                return $data[$listId];
-            }
-
-            return false;
-        }
-
-        public function listMailingListsMock()
-        {
-            $data = array(
-                'total' => 2,
-                'data' => array(
-                    $this->getMailingListMock('0a6da449c9'),
-                    $this->getMailingListMock('455de2ac56'),
-                ),
-            );
-
-            return $data;
-        }
-
-        public function listSubscribersMock($listId)
-        {
-            switch($listId)
-            {
-                case '0a6da449c9':
-                    return array(
-                        'total' => 45,
-                        'data' => array(
-                            array(
-                                'email' => 'm.pryce@example.org',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'a.santini@hotmail.com',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'g.viles@gmail.com',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'k.savala@yahoo.co.uk',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'j.easterwood@googlemail.com',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'CherylLCarignan@teleworm.us',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'MelvinJFerrell@dayrep.com',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'DorothyDRussell@dayrep.com',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'HugoJLorenz@dayrep.com',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                        ),
-                    );
-                    break;
-
-                case '455de2ac56':
-                    return array(
-                        'total' => 45,
-                        'data' => array(
-                            array(
-                                'email' => 'EvanAtkinson@teleworm.us',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'RyanMiles@dayrep.com',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'RoyJForsman@teleworm.us',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'BettyCParis@teleworm.us',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'HugoJLorenz@dayrep.com',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'DorothyDRussell@dayrep.com',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'MelvinJFerrell@dayrep.com',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'CherylLCarignan@teleworm.us',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                            array(
-                                'email' => 'g.garratte@foobar.org',
-                                'timestamp' => '2012-06-28 19:12:00',
-                            ),
-                        ),
-                    );
-                    break;
-            }
-
-            return false;
-        }
-
-        public function getMockMailingList()
-        {
-            $mockModel = $this->getMock(
-                'MailingList',
-                array(
-                    'listMailinglists',
-                    'getMailinglist',
-                    'listSubscribers',
-                    'subscribe',
-                    'unsubscribe',
-                    'errorCode',
-                    'errorMsg',
-                )
-            );
-
-            $mockModel->expects($this->any())->method('listMailingLists')->will($this->returnCallback(array($this, 'listMailingListsMock')));
-            $mockModel->expects($this->any())->method('getMailinglist')->will($this->returnCallback(array($this, 'getMailingListMock')));
-            $mockModel->expects($this->any())->method('listSubscribers')->will($this->returnCallback(array($this, 'listSubscribersMock')));
-            $mockModel->expects($this->any())->method('subscribe')->will($this->returnValue(true));
-            $mockModel->expects($this->any())->method('unsubscribe')->will($this->returnValue(true));
-
-            return $mockModel;
-        }
-
-        private function _createMailingListModel($useMock)
-        {
-            if($useMock)
-            {
-                $this->MailingList = $this->getMockMailingList();
-
-            }
-            else
-            {
-                $this->MailingList = ClassRegistry::init('MailingList');
-            }
+            $this->MailingList = ClassRegistry::init('MailingList');
         }
 
         public function testCacheMailingListsEqualsMailingLists()
         {
-            $this->_createMailingListModel(false);
-
+            $this->_createMailingListModel();
+            
             $uncached = $this->MailingList->listMailinglists(false);
             $cached = $this->MailingList->listMailinglists(true);
 
@@ -252,7 +28,7 @@
 
         public function testCacheGetListEqualsGetList()
         {
-            $this->_createMailingListModel(false);
+            $this->_createMailingListModel();
 
             $allMailingLists = $this->MailingList->listMailinglists(false);
             foreach ($allMailingLists['data'] as $mailingList) 
@@ -269,7 +45,7 @@
 
         public function testCacheListSubscribersEqualsListSubscribers()
         {
-            $this->_createMailingListModel(false);
+            $this->_createMailingListModel();
 
             $allMailingLists = $this->MailingList->listMailinglists(false);
             foreach ($allMailingLists['data'] as $mailingList) 
@@ -286,7 +62,7 @@
 
         public function testIsEmailAddressSubscriberInvalidData()
         {
-            $this->_createMailingListModel(true);
+            $this->_createMailingListModel();
 
             $this->assertFalse($this->MailingList->isEmailAddressSubscriber('', ''), 'Invalid data was not handled correctly');
             $this->assertFalse($this->MailingList->isEmailAddressSubscriber(array(), ''), 'Invalid data was not handled correctly');
@@ -296,7 +72,7 @@
 
         public function testIsEmailAddressSubscriberValidData()
         {
-            $this->_createMailingListModel(true);
+            $this->_createMailingListModel();
 
             // Test with unknown list
             $this->assertFalse($this->MailingList->isEmailAddressSubscriber('CherylLCarignan@teleworm.us', '0'), 'Unknown list not handled correctly');
@@ -310,7 +86,7 @@
 
         public function testGetListsAndSubscribedStatus()
         {
-            $this->_createMailingListModel(true);
+            $this->_createMailingListModel();
 
             $data = array(
                 'nonexistant@gmail.com' => array(
@@ -357,7 +133,7 @@
 
         public function testUpdateSubscriptions()
         {
-            $this->_createMailingListModel(true);
+            $this->_createMailingListModel();
 
             $data = array(
                 'nonexistant@gmail.com' => array(
