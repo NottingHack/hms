@@ -298,6 +298,8 @@
 				'./sql/pins_data.sql' => function() use (&$gen) { return $gen->getPinsSql(); },
 				'./sql/rfid_tags_data.sql' => function() use (&$gen) { return $gen->getRfidTagsSql(); },
 				'./sql/status_updates_data.sql' => function() use (&$gen) { return $gen->getStatusUpdatesSql(); },
+				'./sql/mailinglists_data.development.sql' => function() use (&$gen) { return $gen->getMailingListsSql(); },
+				'./sql/mailinglist_subscriptions_data.development.sql' => function() use (&$gen) { return $gen->getMailingListSubscriptionsSql(); },
 			);
 
 			foreach ($pathsAndFunctions as $path => $func) 
