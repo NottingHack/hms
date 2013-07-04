@@ -18,7 +18,7 @@
 	 */
 	class MembersController extends AppController 
 	{
-	    
+
 	    //! We need the Html, Form, Tinymce and Currency helpers.
 	    /*!
 	    	@sa http://api20.cakephp.org/class/html-helper
@@ -1290,14 +1290,18 @@
 			try
 			{
 				$ip = Configure::read('forceRequestIp');
+				if (!isset($ip)) {
+					throw new ConfigureException('IP not in config file');
+				}
 				return $ip;
 			}
 			catch(ConfigureException $ex)
 			{
 				// We don't care.
 			}
-
-			return $this->request->clientIp();
+			
+			return $_SERVER["SERVER_ADDR"];
+			#return $this->request->clientIp();
 		}
 
 		//! Upload a .csv file of bank transactions and look for members to approve
