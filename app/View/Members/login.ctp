@@ -5,7 +5,7 @@
     <fieldset>
         <legend><?php echo __('Please enter your username and password'); ?></legend>
     <?php
-        echo $this->Form->input('username', array('label'=>'Username or Email'));
+        echo $this->Form->input('usernameOrEmail', array('label'=>'Username or Email'));
         echo $this->Form->input('password');
     ?>
     <?php echo $this->Html->link('Forgot Password?', array('controller' => 'members', 'action' => 'forgotPassword')); ?>

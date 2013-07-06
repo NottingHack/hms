@@ -136,6 +136,9 @@
 	            ),
 
 	        ),
+	        'usernameOrEmail' => array(
+	        	'notEmpty',
+			),
 	        'account_id' => array(
 	        	'rule' => 'numeric',
 	        ),
