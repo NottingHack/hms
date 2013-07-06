@@ -12,16 +12,16 @@
 
             # Find the member
             # Try username first
-            $memberInfo = $memberModel->find('first', array( 'conditions' => array( 'Member.username' => $request->data['User']['username'] ) ) );
+            $memberInfo = $memberModel->find('first', array( 'conditions' => array( 'Member.username' => $request->data['User']['usernameOrEmail'] ) ) );
 
             if( isset($memberInfo) &&
                 $memberInfo != null)
             {
-                return $memberModel->krbCheckPassword($request->data['User']['username'], $request->data['User']['password']) ? $memberInfo : false;
+                return $memberModel->krbCheckPassword($request->data['User']['usernameOrEmail'], $request->data['User']['password']) ? $memberInfo : false;
             }
 
             # See if they used their email address instead
-            $memberInfo = $memberModel->find('first', array( 'conditions' => array( 'Member.email' => $request->data['User']['username'] ) ) );
+            $memberInfo = $memberModel->find('first', array( 'conditions' => array( 'Member.email' => $request->data['User']['usernameOrEmail'] ) ) );
             if( isset($memberInfo) &&
                 $memberInfo != null)
             {

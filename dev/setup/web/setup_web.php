@@ -33,7 +33,7 @@
 	$setup->setDatabaseOptions( parseBoolFromWebVar('createdb'), parseBoolFromWebVar('populatedb') );
 	$setup->setUseRealKrb( parseBoolFromWebVar('realKrb') );
 	$setup->setSetupTempFolders( parseBoolFromWebVar('setuptmpfolders') );
-	$setup->setUseDevelopmentConfigs( parseBoolFromWebVar('usedevelopmentconfigs') );
+	$setup->setUseDevelopmentEnvironment( parseBoolFromWebVar('usedevelopmentenv') );
 	$setup->setUserInfo(
 		parseStringFromWebVar('firstname'),
 		parseStringFromWebVar('surname'),

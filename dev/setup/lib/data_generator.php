@@ -28,27 +28,124 @@
 	{
 		private $stockData = array(); //!< The stock data used to populate other fields.
 
-		private $members = array(); //!< Array of members.
-		private $membersGroup = array(); //!< Array of which members are in which groups
-		private $accounts = array(); //!< Array of accounts.
-		private $pins = array(); //!< Array of pins.
-		private $rfidTags = array(); //!< Array of rfid tags.
-		private $statusUpdates = array(); //!< Array of status updates
+		private $members = array(); 					//!< Array of members.
+		private $membersGroup = array(); 				//!< Array of which members are in which groups
+		private $accounts = array(); 					//!< Array of accounts.
+		private $pins = array(); 						//!< Array of pins.
+		private $rfidTags = array(); 					//!< Array of rfid tags.
+		private $statusUpdates = array(); 				//!< Array of status updates
+		private $mailingLists = array();				//!< Array of mailing lists.
+		private $mailingListSubscriptions = array();	//!< Array of mailing list subscriptions
 
 		//! Constructor
 		function __construct()
 		{
 			$this->_parseCsv('./FakeNameGeneratorData.csv');
+
+			$this->_populateMailingLists();
 		}
 
-		//! Given a relative path from this file, get an absolute path.
-		/*!
-			@param string $path The relative path to convert.
-			@retval string The absolute path.
-		*/
-		private function _makeAbsolutePath($path)
+		//! Populate the mailing lists array
+		private function _populateMailingLists()
 		{
-			return dirname(__FILE__) . '/' . basename($path);
+			$this->mailingLists = array(
+				array(
+					'id' => '0a6da449c9',
+					'web_id' => '30569',
+					'name' => 'Nottingham Hackspace Announcements',
+					'date_created' => '2012-06-28 19:12:00',
+					'email_type_option' => '1',
+					'use_awesomebar' => false,
+					'default_from_name' => 'Nottingham Hackspace',
+					'default_from_email' => 'info@nottinghack.org.uk',
+					'default_subject' => 'An Announcement From Nottingham Hackspace',
+					'default_language' => 'en',
+					'list_rating' => '3.5',
+					'subscribe_url_short' => 'http://eepurl.com/ncaln',
+					'subscribe_url_long' => 'http://nottinghack.us5.list-manage.com/subscribe?u=a4e59e4c29bd40e76419a037b&id=0a6da449c9',
+					'beamer_address' => 'YTRlNTllNGMyOWJkNDBlNzY0MTlhMDM3Yi02YTkzMzc3ZS05ZTU5LTQ2ZmUtOTQ5Ni04ODQyYTAzOWVlN2Y=@campaigns.mailchimp.com',
+					'visibility' => 'pub',
+					'member_count' => 0,
+					'unsubscribe_count' => 6,
+					'cleaned_count' => 1,
+					'member_count_since_send' => 8,
+					'unsubscribe_count_since_send' => 0,
+					'cleaned_count_since_send' => 0,
+					'campaign_count' => 24,
+					'grouping_count' => 0,
+					'group_count' => 0,
+					'merge_var_count' => 2,
+					'avg_sub_rate' => 22,
+					'avg_unsub_rate' => 1,
+					'target_sub_rate' => 1,
+					'open_rate' => 46.108140225787,
+					'click_rate' => 13.967310549777,
+	            ),
+	            array(
+					'id' => '455de2ac56',
+					'web_id' => '64789',
+					'name' => 'Nottingham Hackspace The Other List',
+					'date_created' => '2013-01-12 14:43:00',
+					'email_type_option' => '1',
+					'use_awesomebar' => false,
+					'default_from_name' => 'Nottingham Hackspace',
+					'default_from_email' => 'info@nottinghack.org.uk',
+					'default_subject' => 'Something Else From Nottingham Hackspace',
+					'default_language' => 'en',
+					'list_rating' => '2.3',
+					'subscribe_url_short' => 'http://eepurl.com/sdfet',
+					'subscribe_url_long' => 'http://nottinghack.us5.list-manage.com/subscribe?u=a4e59e4c29bd40e76419a037b&id=455de2ac56',
+					'beamer_address' => 'YTRlNTllNGMyOWJkNDBlNzY0MTlhMDM3Yi02YTkzMzc3ZS05ZTU5LTQ2ZmUtOTQ5Ni04ODQyYTAzOWVlN2Y=@campaigns.mailchimp.com',
+					'visibility' => 'pub',
+					'member_count' => 0,
+					'unsubscribe_count' => 2,
+					'cleaned_count' => 1,
+					'member_count_since_send' => 3,
+					'unsubscribe_count_since_send' => 1,
+					'cleaned_count_since_send' => 0,
+					'campaign_count' => 2,
+					'grouping_count' => 0,
+					'group_count' => 0,
+					'merge_var_count' => 2,
+					'avg_sub_rate' => 3,
+					'avg_unsub_rate' => 1,
+					'target_sub_rate' => 1,
+					'open_rate' => 24.108140225787,
+					'click_rate' => 91.967310549777,
+	            ),
+			);
+
+			// Subscribe some random e-mails
+			$emailChars = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','u','r','s','t','v','w','x','y','z');
+			$emailDomains = array(
+				'foo.org',
+				'example.com',
+				'bar.net',
+				'loa.fr',
+				'bmail.co.uk',
+			);
+
+			foreach ($this->mailingLists as $list) 
+			{
+				$numToAdd = rand(10, 30);
+				for($i = 0; $i < $numToAdd; $i++)
+				{
+					$timestamp = rand(strtotime('last year'), time());
+
+					$numCharsInEmail = rand(4, count($emailChars) - 1);
+
+					$email = '';
+					for($j = 0; $j < $numCharsInEmail; $j++)
+					{
+						$email .= $emailChars[array_rand($emailChars)];
+					}
+
+					$email .= '@';
+					$email .= $emailDomains[array_rand($emailDomains)];
+
+					$this->_subscribeEmailToList($email, $list['id'], $timestamp);
+				}
+			}
 		}
 
 		//! Parse a CSV file, adding the data to the stockData array.
@@ -205,6 +302,24 @@
 			return $this->_getSql($this->statusUpdates, 'status_updates');
 		}
 
+		//! Get an SQL string of the mailing lists data.
+		/*!
+			@retval string SQL string for the mailing lists data.
+		*/
+		public function getMailingListsSql()
+		{
+			return $this->_getSql($this->mailingLists, 'mailinglists');
+		}
+
+		//! Get an SQL string of the mailing list subscriptions data.
+		/*!
+			@retval string SQL string for the mailing list subscriptions data.
+		*/
+		public function getMailingListSubscriptionsSql()
+		{
+			return $this->_getSql($this->mailingListSubscriptions, 'mailinglist_subscriptions');
+		}
+
 		//! Generate a new member record
 		/*!
 			@param int $membershipStage The stage of membership this member should be at, see Status model for details.
@@ -319,6 +434,15 @@
 			);
 
 			$contactNumber = $stockData['TelephoneNumber'];
+
+			// Subscribe this member to some lists maybe
+			foreach ($this->mailingLists as $list) 
+			{
+				if(rand(0, 100) <= 70)
+				{
+					$this->_subscribeEmailToList($email, $list['id'], $registerTimestamp);
+				}
+			}
 
 			$record = array(
 				'member_id' => $memberId,
@@ -554,6 +678,34 @@
 			$data = $this->stockData[$index];
 			array_splice($this->stockData, $index, 1);
 			return $data;
+		}
+
+		//! Subscribe an e-mail to a mailing list.
+		/*!
+			@param string $email The e-mail address to subscribe.
+			@param string $listId The id of the list to subscribe them to.
+			@param int $timestamp The time the subscription happened.
+		*/
+		private function _subscribeEmailToList($email, $listId, $timestamp)
+		{
+			$recordId = count($this->mailingListSubscriptions) + 1;
+
+			$record = array(
+				'mailinglist_id' => $listId,
+				'email' => $email,
+				'timestamp' => date('Y-m-d H:i:s', $timestamp),
+			);
+
+			array_push($this->mailingListSubscriptions, $record);
+
+			// Adjust the number of members subscribed to a list
+			for($i = 0; $i < count($this->mailingLists); $i++)
+			{
+				if($this->mailingLists[$i]['id'] == $listId)
+				{
+					$this->mailingLists[$i]['member_count']++;
+				}
+			}
 		}
 	}
 ?>

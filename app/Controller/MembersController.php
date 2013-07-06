@@ -34,7 +34,7 @@
 	    	@sa MailChimpComponent
 	    	@sa KrbComponent
 	    */
-	    public $components = array('MailChimp', 'BankStatement');
+	    public $components = array('BankStatement');
 
 	    //! Test to see if a user is authorized to make a request.
 	    /*!

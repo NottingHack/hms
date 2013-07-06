@@ -1,0 +1,160 @@
+<?php
+
+    App::uses('ConnectionManager', 'Model');
+
+    class MCAPI 
+    {
+        var $useDbConfig = 'default';
+        var $errorMessage = '';
+        var $errorCode = 0;
+
+        private $dbSource = null;
+        
+        //! Constructor
+        /*!
+            @param string $apiKey Not used.
+            @param bool $secure Not used.
+        */
+        public function MCAPI($apikey, $secure=false)
+        {
+            $this->_initDbSource();
+        }
+       
+        //! Set which database config we should use.
+        /*!
+            @param string $configName The name of the config to use.
+        */
+        public function setConfig($configName)
+        {
+            $this->useDbConfig = $configName;
+            $this->_initDbSource();
+        }
+        
+        //! Get data about one or more lists.
+        /*
+            @param $filter Only return lists that match this filter.
+            @param int $start Not used.
+            @param int $limit Not used.
+        */
+        public function lists($filters=array (), $start=0, $limit=25) 
+        {
+            $query = "SELECT * FROM `mailinglists`";
+            if(isset($filters['list_id']))
+            {
+                $query .= " WHERE `id` = '{$filters['list_id']}'";
+            }
+            $listInfo = $this->_runQuery($query);
+
+            // Have to 'massage' the data slightly
+            $statsKeys = array(
+                 'member_count',
+                 'unsubscribe_count',
+                 'cleaned_count',
+                 'member_count_since_send',
+                 'unsubscribe_count_since_send',
+                 'cleaned_count_since_send',
+                 'campaign_count',
+                 'grouping_count',
+                 'group_count',
+                 'merge_var_count',
+                 'avg_sub_rate',
+                 'avg_unsub_rate',
+                 'target_sub_rate',
+                 'open_rate',
+                 'click_rate',
+            );
+
+            for($i = 0; $i < $listInfo['total']; $i++)
+            {
+                $statsArray = array();
+                foreach ($listInfo['data'][$i] as $key => $value) 
+                {
+                    if(in_array($key, $statsKeys))
+                    {
+                        // This data belongs in the stat block
+                        $statsArray[$key] = $value;
+                        unset($listInfo['data'][$i][$key]);
+                    }   
+                }
+
+                $listInfo['data'][$i]['stats'] = $statsArray;
+                $listInfo['data'][$i]['modules'] = array();
+            }
+
+            return $listInfo;
+        }
+        
+        //! Subscribe an e-mail address to a list.
+        /*!
+            @param string $id The id of the list to subscribe to.
+            @param string $email_address The e-mail address to subscribe.
+            @param string $email_type Not used.
+            @param bool $double_optin Not used.
+            @param bool $update_existing Not used.
+            @param bool $replace_interests Not used.
+            @param bool $send_welcome Not used.
+        */
+        public function listSubscribe($id, $email_address, $merge_vars=NULL, $email_type='html', $double_optin=true, $update_existing=false, $replace_interests=true, $send_welcome=false) 
+        {
+            $timestamp = date('Y-m-d H:i:s');
+            $query = "INSERT INTO `mailinglist_subscriptions` (`mailinglist_id`, `email`, `timestamp`) VALUES ('$id', '$email_address', '$timestamp')";
+            $this->_runQuery($query);
+            return true;
+        }
+
+        //! Unsubscribe an e-mail address from a list.
+        /*
+            @param string $id The id of the list to unsubscrbe from.
+            @param string $email_address The e-mail address to unsubscribe.
+            @param bool $delete_member Not used.
+            @param bool $send_goodbye Not used.
+            @param bool $send_notify Not used.
+        */
+        public function listUnsubscribe($id, $email_address, $delete_member=false, $send_goodbye=true, $send_notify=true) 
+        {
+            $query = "DELETE FROM `mailinglist_subscriptions` WHERE `mailinglist_id` = '$id' AND `email` = '$email_address'";
+            $this->_runQuery($query);
+            return true;
+        }
+
+        //! List details about e-mail addresses subscribed to a list.
+        /*!
+            @param string $id The list to get subscribers from.
+            @param string $status Not used.
+            @param int $start Not used.
+            @param int $limit Not used.
+        */
+        public function listMembers($id, $status='subscribed', $since=NULL, $start=0, $limit=100) 
+        {
+            $query = "SELECT `email`, `timestamp` FROM `mailinglist_subscriptions` WHERE `mailinglist_id` = '$id'";
+            return $this->_runQuery($query);
+        }
+
+        //! Create the DatabaseSource object.
+        private function _initDbSource()
+        {
+            $this->dbSource = ConnectionManager::getDataSource($this->useDbConfig);
+        }
+
+        //! Run an SQL query, return the results in a manner consistent with the real API.
+        /*!
+            @param string $query The query to run.
+        */
+        private function _runQuery($query)
+        {
+            $result = $this->dbSource->execute($query);
+
+            $data = array();
+            while(($row = $result->fetch(PDO::FETCH_ASSOC)))
+            {
+                array_push($data, $row);
+            }
+
+            return array(
+                'total' => count($data),
+                'data' => $data,
+            );
+        }
+    }
+
+?>

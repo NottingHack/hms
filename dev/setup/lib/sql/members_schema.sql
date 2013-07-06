@@ -20,4 +20,4 @@ CREATE TABLE IF NOT EXISTS `members` (
   PRIMARY KEY (`member_id`),
   UNIQUE KEY `member_name` (`handle`),
   UNIQUE KEY `member_number` (`member_number`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=199 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;

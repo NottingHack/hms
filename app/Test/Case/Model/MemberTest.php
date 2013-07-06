@@ -5,15 +5,15 @@
 
     class MemberTest extends CakeTestCase 
     {
-        public $fixtures = array( 'app.GroupsMember', 'app.member', 'app.Status', 'app.Group', 'app.Account', 'app.Pin', 'app.StatusUpdate', 'app.ForgotPassword' );
+        public $fixtures = array( 'app.GroupsMember', 'app.member', 'app.Status', 'app.Group', 'app.Account', 'app.Pin', 'app.StatusUpdate', 'app.ForgotPassword', 'app.MailingLists', 'app.MailingListSubscriptions' );
 
         public function setUp() 
         {
             parent::setUp();
 
-            $mailingListTest = new MailingListTest();
             $this->Member = ClassRegistry::init('Member');
-            $this->Member->mailingList = $mailingListTest->getMockMailingList();
+            App::uses('MailingList', 'Model');
+            $this->Member->mailingList = new MailingList(false, null, 'test');
         }
 
         public function testPasswordConfirmMatchesPassword()
@@ -385,6 +385,7 @@
 
             $this->assertEqual( $this->Member->getEmailsForMembersInGroup(Group::CURRENT_MEMBERS), array( 'm.pryce@example.org', 'a.santini@hotmail.com', 'g.viles@gmail.com', 'k.savala@yahoo.co.uk', 'j.easterwood@googlemail.com' ), 'Incorrect return value for Current Member group.' );
         }
+
 
         public function testRegisterMember()
         {

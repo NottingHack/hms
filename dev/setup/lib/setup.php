@@ -9,11 +9,11 @@
 		private $newline = null; 	//!< Newline character, different depending on output (HTML or text).
 
 		//! Options
-		private $createDb = false;				//!< If true create the instrumentation and instrumentation_test databases.
-		private $populateDb = false;			//!< If true populate the databases with default tables and data.
-		private $useRealKrb = false;			//!< If true then use the real KRB Auth lib, otherwise use a dummy one.
-		private $setupTempFolders = false;		//!< If true create the temporary folders CakePHP needs.
-		private $useDevelopmentConfigs = true;	//!< If true then use the development version of config files
+		private $createDb = false;					//!< If true create the instrumentation and instrumentation_test databases.
+		private $populateDb = false;				//!< If true populate the databases with default tables and data.
+		private $useRealKrb = false;				//!< If true then use the real KRB Auth lib, otherwise use a dummy one.
+		private $setupTempFolders = false;			//!< If true create the temporary folders CakePHP needs.
+		private $environmentType = 'production';	//!< Prefer files with this suffix.
 
 		//! The following details are used to create a HMS login for the user with admin rights.
 		private $firstname = '';			//!< Firstname of the user.
@@ -41,16 +41,16 @@
 			$this->useRealKrb = $useRealKrb;
 		}
 
-		//! Set if we should create the temporary folders CakePHP requires.
+		//! Set if we should use development or production configs, settings and databases.
 		/*!
-			@param bool $setupTempFolders If true then temporary folders will be created.
+			@param bool $useDevelopmentEnv If true then use development configs, settings and databases.
 		*/
-		public function setUseDevelopmentConfigs($useDevelopmentConfigs)
+		public function setUseDevelopmentEnvironment($useDevelopmentEnv)
 		{
-			$this->useDevelopmentConfigs = $useDevelopmentConfigs;
+			$this->environmentType = $useDevelopmentEnv ? 'development' : 'production';
 		}
 
-		//! Set if we should use the development or production configs.
+		//! Set if we should create the temporary folders.
 		/*!
 			@param bool $setupTempFolders If true then temporary folders will be created.
 		*/
@@ -113,13 +113,7 @@
 			foreach ($files as $fileName) 
 			{
 				// First check for dev/production templates
-				$templateType = 'production';
-				if($this->useDevelopmentConfigs)
-				{
-					$templateType = 'development';
-				}
-
-				$templateFilePath = makeAbsolutePath("$fileName.$templateType.template");
+				$templateFilePath = makeAbsolutePath("$fileName.{$this->environmentType}.template");
 				if (!file_exists($templateFilePath))
 				{
 					// Fall back to the regular template
@@ -156,7 +150,17 @@
 				if( pathinfo($filename, PATHINFO_EXTENSION) == 'sql' &&
 					strpos($filename, $name) !== FALSE )
 				{
-					array_push($validFiles, makeAbsolutePath('./sql/' . $filename));
+					// Check if it passes the environment type test.
+					$parts = explode('.', basename($filename));
+					if(count($parts) > 1)
+					{
+						// Is this file for all environment types or the one we're currently using?
+						if(	$parts[1] == 'sql' || 
+							$parts[1] == $this->environmentType)
+						{
+							array_push($validFiles, makeAbsolutePath('./sql/' . $filename));
+						}
+					}
 				}
 			}
 
@@ -294,6 +298,8 @@
 				'./sql/pins_data.sql' => function() use (&$gen) { return $gen->getPinsSql(); },
 				'./sql/rfid_tags_data.sql' => function() use (&$gen) { return $gen->getRfidTagsSql(); },
 				'./sql/status_updates_data.sql' => function() use (&$gen) { return $gen->getStatusUpdatesSql(); },
+				'./sql/mailinglists_data.development.sql' => function() use (&$gen) { return $gen->getMailingListsSql(); },
+				'./sql/mailinglist_subscriptions_data.development.sql' => function() use (&$gen) { return $gen->getMailingListSubscriptionsSql(); },
 			);
 
 			foreach ($pathsAndFunctions as $path => $func) 
@@ -393,28 +399,23 @@
 			}
 		}
 
-		//! Copy either the real or dummy KRB Auth lib file to the lib folder.
-		private function _copyKrbLibFile()
+		//! Copy a file from one location to another, creating the folder if needed.
+		/*!
+			@param string $fromFile The path to copy the file from.
+			@param string $toFile The path to copy the file to.
+		*/
+		private function _copyLibFile($fromFile, $toFile)
 		{
-			$krbFolder = '../../../app/Lib/Krb/';
-
-			$toFile = $krbFolder . 'krb5_auth.php';
-			$fromFile = 'krb5_auth.dummy';
-
-			if($this->useRealKrb)
+			$libFolder = dirname($toFile);
+			if(!file_exists($libFolder))
 			{
-				$fromFile = 'krb5_auth.real';
-			}
-
-			if(!file_exists($krbFolder))
-			{
-				if(mkdir($krbFolder))
+				if(mkdir($libFolder))
 				{
-					$this->_logMessage("Created folder at: $krbFolder");
+					$this->_logMessage("Created folder at: $libFolder");
 				}
 				else
 				{
-					$this->_logMessage("Failed to create folder at: $krbFolder");
+					$this->_logMessage("Failed to create folder at: $libFolder");
 				}
 			}
 
@@ -429,6 +430,21 @@
 				$this->_logMessage('Copy failed');
 			}
 		}
+
+		//! Copy either the real or dummy KRB Auth lib file to the lib folder.
+		private function _copyKrbLibFile()
+		{
+			$fromFile = $this->useRealKrb ? 'krb5_auth.real' : 'krb5_auth.dummy';
+			$this->_copyLibFile($fromFile, '../../../app/Lib/Krb/krb5_auth.php');
+		}
+
+		//! Copy either the production or development MCAPI file.
+		private function _copyMcapiLibFile()
+		{
+			$fromFile = "MCAPI.{$this->environmentType}";
+			$this->_copyLibFile($fromFile, '../../../app/Lib/MailChimp/MCAPI.php');
+		}
+
 
 		//! Given a path to a directory, delete the directory and all it's contents.
 		/*!
@@ -612,6 +628,7 @@
 			}
 			$this->_createDatabases($settings);
 			$this->_copyKrbLibFile();
+			$this->_copyMcapiLibFile();
 			$this->_setupTempFolders();
 
 
