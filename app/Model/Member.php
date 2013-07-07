@@ -1198,7 +1198,7 @@
 			}
 
 			if(	$memberId != $adminId && 
-				!($this->GroupsMember->isMemberInGroup($adminId, Group::MEMBER_ADMIN) || $this->GroupsMember->isMemberInGroup($adminId, Group::FULL_ACCESS)))
+				!($this->GroupsMember->isMemberInGroup($adminId, Group::MEMBERSHIP_ADMIN) || $this->GroupsMember->isMemberInGroup($adminId, Group::FULL_ACCESS)))
 			{
 				throw new NotAuthorizedException('Only member admins can change another members password.');
 			}
@@ -1546,7 +1546,7 @@
 				return false;
 			}
 
-			if(	!($this->GroupsMember->isMemberInGroup($adminId, Group::MEMBER_ADMIN) || $this->GroupsMember->isMemberInGroup($adminId, Group::FULL_ACCESS)))
+			if(	!($this->GroupsMember->isMemberInGroup($adminId, Group::MEMBERSHIP_ADMIN) || $this->GroupsMember->isMemberInGroup($adminId, Group::FULL_ACCESS)))
 			{
 				throw new NotAuthorizedException('Only member admins can change member status.');
 			}

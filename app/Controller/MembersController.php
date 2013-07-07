@@ -51,7 +51,7 @@
 	    	}
 
 	    	$userId = $this->Member->getIdForMember($user);
-	    	$userIsMemberAdmin = $this->Member->GroupsMember->isMemberInGroup( $userId, Group::MEMBER_ADMIN );
+	    	$userIsMemberAdmin = $this->Member->GroupsMember->isMemberInGroup( $userId, Group::MEMBERSHIP_ADMIN );
 	    	$actionHasParams = isset( $request->params ) && isset($request->params['pass']) && count( $request->params['pass'] ) > 0;
 	    	$userIdIsSet = is_numeric($userId);
 
@@ -108,7 +108,7 @@
 	        	'setupDetails'
 	        );
 
-	    	$userIsMemberAdmin = $this->Member->GroupsMember->isMemberInGroup( $this->_getLoggedInMemberId(), Group::MEMBER_ADMIN );
+	    	$userIsMemberAdmin = $this->Member->GroupsMember->isMemberInGroup( $this->_getLoggedInMemberId(), Group::MEMBERSHIP_ADMIN );
 	    	$isLocal = $this->isRequestLocal();
 
 	    	// We have to put register here, as is isAuthorized()
@@ -238,7 +238,7 @@
 					if( $result['createdRecord'] === true )
 					{
 						$this->_sendEmail(
-	                		$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
+	                		$this->Member->getEmailsForMembersInGroup(Group::MEMBERSHIP_ADMIN),
 	                		'New Prospective Member Notification',
 	                		'notify_admins_member_added',
 	                		array( 
@@ -373,7 +373,7 @@
 		    			$this->Session->setFlash('Contact details saved.');
 
 						$this->_sendEmail(
-							$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
+							$this->Member->getEmailsForMembersInGroup(Group::MEMBERSHIP_ADMIN),
 							'New Member Contact Details',
 							'notify_admins_check_contact_details',
 							array( 
@@ -477,7 +477,7 @@
 		    			$this->_sendSoDetailsToMember($id);
 
 						$this->_sendEmail(
-							$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
+							$this->Member->getEmailsForMembersInGroup(Group::MEMBERSHIP_ADMIN),
 							'Impending Payment',
 							'notify_admins_payment_incoming',
 							array(
@@ -541,7 +541,7 @@
 
 	    		// Notify all the member admins
 	    		$this->_sendEmail(
-	    			$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
+	    			$this->Member->getEmailsForMembersInGroup(Group::MEMBERSHIP_ADMIN),
 	    			'Member Approved',
 	    			'notify_admins_member_approved',
 	    			array(
@@ -986,7 +986,7 @@
 					$viewerId = $this->_getLoggedInMemberId();
 
 	    			$showAdminFeatures = 
-			    		(	$this->Member->GroupsMember->isMemberInGroup($viewerId, Group::MEMBER_ADMIN) || 
+			    		(	$this->Member->GroupsMember->isMemberInGroup($viewerId, Group::MEMBERSHIP_ADMIN) || 
 			    			$this->Member->GroupsMember->isMemberInGroup($viewerId, Group::FULL_ACCESS) );
 
 		    		// Only show the finance stuff to admins, current or ex members

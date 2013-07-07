@@ -370,7 +370,7 @@
 						Group::FULL_ACCESS,
 						Group::GATEKEEPER_ADMIN,
 						Group::SNACKSPACE_ADMIN,
-						Group::MEMBER_ADMIN,
+						Group::MEMBERSHIP_ADMIN,
 					);
 
 					$numGroupsToAdd = rand(0, 2);

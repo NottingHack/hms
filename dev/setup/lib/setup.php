@@ -284,7 +284,7 @@
 				'email' => $this->email,
 				'username' => $this->username,
 				'groups' => array(
-					Group::CURRENT_MEMBERS, Group::FULL_ACCESS, Group::MEMBER_ADMIN,
+					Group::CURRENT_MEMBERS, Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN,
 				),
 			);
 			$gen->generateMember(Status::CURRENT_MEMBER, $details);
