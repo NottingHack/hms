@@ -7,7 +7,7 @@
  */
 class MVIdea extends MemberVoiceAppModel {
 	public $useTable = 'ideas';
-	public $name = "Idea";
+	public $alias = 'Idea';
 	
 	public $hasAndBelongsToMany = array(
 		'Category'	=>	array(
