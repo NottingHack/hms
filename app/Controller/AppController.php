@@ -51,7 +51,7 @@ class AppController extends Controller {
 	            'action' => 'login',
 	        ),
             'loginRedirect' => array('plugin' => null, 'controller' => 'pages', 'action' => 'index'),
-            'logoutRedirect' => array('plugin' => null 'controller' => 'pages', 'action' => 'display', 'home'),
+            'logoutRedirect' => array('plugin' => null, 'controller' => 'pages', 'action' => 'display', 'home'),
             'Hms' => array(
                 'fields' => array('username' => 'email'),
                 'userModel' => 'Member',
