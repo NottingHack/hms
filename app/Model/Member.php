@@ -15,8 +15,6 @@
 	class Member extends AppModel 
 	{
 		const MIN_PASSWORD_LENGTH = 6; //!< The minimum length passwords must be.
-		const MIN_USERNAME_LENGTH = 3; //!< The minimum length usernames must be.
-		const MAX_USERNAME_LENGTH = 30; //!< The maximum length usernames can be.
 
 		public $primaryKey = 'member_id'; //!< Specify the primary key, since we don't use the default.
 
@@ -69,29 +67,28 @@
 	    );
 
 		//! Validation rules.
-		/*!
-			Name must not be empty.
-			Email must be a valid email (and not empty).
-			Password must not be empty and have a length equal or greater than the Member::MIN_PASSWORD_LENGTH.
-			Password Confirm must not be empty, have a length equal or greater than the Member::MIN_PASSWORD_LENGTH and it's contents much match that of Password.
-			Username must not be empty, be unique (in the database), only contain alpha-numeric characters, and be between Member::MIN_USERNAME_LENGTH and Member::MAX_USERNAME_LENGTH characters long.
-			Member Status must be in the list of valid statuses.
-			Account id must be numeric.
-			Address 1 must not be empty.
-			Address City must not be empty.
-			Address Postcode must not be empty.
-			Contact Number must not be empty.
-			No further validation is performed on the Address and Contact Number fields as a member admin has to check these during membership registration.
-		*/
 		public $validate = array(
 	        'firstname' => array(
-	            'rule' => 'notEmpty'
+	            'length' => array(
+	            	'rule' => array('between', 1, 100),
+	            	'message' => 'Firstname must be between 1 and 100 characters long',
+	            ),
 	        ),
 	        'surname' => array(
-	        	'rule' => 'notEmpty'
+	        	'length' => array(
+	            	'rule' => array('between', 1, 100),
+	            	'message' => 'Surname must be between 1 and 100 characters long',
+	            ),
 	        ),
 	        'email' => array(
-	        	'email'
+	        	'length' => array(
+	            	'rule' => array('between', 1, 100),
+	            	'required' => true,
+	            	'message' => 'Firstname must be between 1 and 100 characters long',
+	            ),
+	            'content' => array(
+	            	'rule' => 'email',
+	            ),
 	        ),
 	        'password' => array(
 	        	'noEmpty' => array(
@@ -131,16 +128,28 @@
 	                'message'  => 'Aplha-numeric characters only'
 	            ),
 	            'between' => array(
-	                'rule'    => array('between', self::MIN_USERNAME_LENGTH, self::MAX_USERNAME_LENGTH),
-	                'message' => 'Between 3 to 30 characters'
+	                'rule'    => array('between', 3, 50),
+	                'message' => 'Username must be between 3 to 50 characters long'
 	            ),
-
+	        ),
+	        'unlock_text' => array(
+	        	'length' => array(
+	        		'rule' => array('between', 1, 95),
+	        		'message' => 'Unlock text must be between 1 and 95 characters long',
+	        	),
 	        ),
 	        'usernameOrEmail' => array(
 	        	'notEmpty',
 			),
 	        'account_id' => array(
-	        	'rule' => 'numeric',
+	        	 'length' => array(
+	        		'rule' => array('between', 1, 11),
+	        		'message' => 'Account id must be between 1 and 12 characters long',
+	        	),
+	        	'content' => array(
+	        		'rule' => 'numeric',
+	        		'message' => 'Account id must be a number',
+	        	),
 	        ),
 	        'member_status' => array(
 	        	'rule' => array(
@@ -155,16 +164,36 @@
 	        	),
 	        ),
 	        'address_1' => array(
-	            'rule' => 'notEmpty'
+	            'length' => array(
+	        		'rule' => array('between', 1, 100),
+	        		'message' => 'Address must be between 1 and 100 characters long',
+	        	),
+	        ),
+	        'address_2' => array(
+	            'foo' => array(
+	        		'rule' => array('maxLength', 100),
+	        		'required' => false,
+	        		'allowEmpty' => true,
+	        		'message' => 'Address must be no more than 100 characters long',
+	        	),
 	        ),
 	        'address_city' => array(
-	            'rule' => 'notEmpty'
+	            'length' => array(
+	        		'rule' => array('between', 1, 100),
+	        		'message' => 'City must be between 1 and 100 characters long',
+	        	),
 	        ),
 	        'address_postcode' => array(
-	            'rule' => 'notEmpty'
+	            'length' => array(
+	        		'rule' => array('between', 1, 100),
+	        		'message' => 'Postcode must be between 1 and 100 characters long',
+	        	),
 	        ),
 	        'contact_number' => array(
-	            'rule' => 'notEmpty'
+	            'length' => array(
+	        		'rule' => array('between', 1, 20),
+	        		'message' => 'Contact number must be between 1 and 20 characters long',
+	        	),
 	        ),
 	    );
 
@@ -770,7 +799,7 @@
 				}
 
 				$this->set( $memberInfo );
-				if( $this->validates() )
+				if( $this->validates( array( 'Member' => array('member_id', 'email', 'member_status' ) ) ) )
 				{
 					// If this e-mail is already subscribed to any mailing list
 					// but hasn't checked the box for that mailing list, pretend they have.
@@ -794,7 +823,6 @@
 					}
 
 					$saveResult = $this->_saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' ), 'MailingLists' => array()), 0);
-
 					if( !is_array($saveResult) )
 					{
 						// Save failed for reasons.
@@ -805,7 +833,6 @@
 
 					$memberId = $this->id;
 				}
-
 			}
 			else
 			{

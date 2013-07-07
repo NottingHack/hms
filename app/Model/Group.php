@@ -54,7 +54,11 @@
 		*/
 	    public $validate = array(
 	        'grp_description' => array(
-	            'rule' => 'notEmpty'
+	            'length' => array(
+	            	'rule' => array('between', 1, 200),
+	            	'required' => true,
+	            	'message' => 'Group description must be between 1 and 200 characters long',
+	            ),
 	        ),
 	    );
 

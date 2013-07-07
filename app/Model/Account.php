@@ -28,10 +28,21 @@
 		*/
 	    public $validate = array(
 	    	'account_id' => array(
-	        	'rule' => 'numeric',
+	    		'content' => array(
+	        		'rule' => 'numeric',
+	        		'message' => 'Only numbers are allowed',
+	        	),
+	        	'length' => array(
+	        		'rule' => array('between', 1, 11),
+	        		'message' => 'Number must be between 1 and 11 characters long',
+	        	),
 	        ),
 	        'payment_ref' => array(
-	            'rule' => 'notEmpty'
+	            'length' => array(
+	            	'rule' => array('between', 1, 18),
+	            	'required' => true,
+	            	'message' => 'Payment Ref must be between 1 and 18 characters long'
+	            ),
 	        ),
 	    );
 

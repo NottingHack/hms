@@ -628,7 +628,6 @@
 			$record = array(
 				'pin_id' => $pinId,
 				'pin' => $pin,
-				'unlock_text' => 'NOT USED',
 				'date_added' => date("Y-m-d H:i:s", $joinTimestamp),
 				'expiry' => null,
 				'state' => 30,
