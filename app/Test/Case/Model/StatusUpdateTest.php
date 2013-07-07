@@ -1,4 +1,4 @@
-47<?php
+<?php
 
     App::uses('StatusUpdate', 'Model');
 
