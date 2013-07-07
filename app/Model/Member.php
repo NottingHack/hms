@@ -1491,7 +1491,7 @@
 			foreach ($groupedMemberList as $accountId => $members) 
 			{
 				$memberNames = array();
-				foreach ($members as $id => $data) 
+				foreach (Hash::sort($members, '{n}.surname', 'asc') as $id => $data) 
 				{
 					$fullName = sprintf('%s %s', $data['firstname'], $data['surname']);
 					array_push($memberNames, $fullName);
@@ -1604,9 +1604,10 @@
 			@param bool $hasJoined If true then show data that is only relevant to members who have joined.
 			@param bool $showAccount If true then show account info.
 			@param bool $showStatus If true then show member status.
+			@param bool $showPersonalDetails If true then show member personal details.
 			@retval mixed The array of sanitised member info, or false on error.
 		*/
-		public function sanitiseMemberInfo($memberInfo, $showAdminFeatures, $showFinances, $hasJoined, $showAccount, $showStatus)
+		public function sanitiseMemberInfo($memberInfo, $showAdminFeatures, $showFinances, $hasJoined, $showAccount, $showStatus, $showPersonalDetails)
 		{
 			if(is_array($memberInfo) && !empty($memberInfo))
 			{
@@ -1643,7 +1644,16 @@
 		    		unset($memberInfo['Member']['member_status']);
 		    	}
 
-		    	$unsetIfNull = array('username', 'handle', 'firstname', 'surname', 'account_id', 'contact_number', 'address_1', 'address_2', 'address_city', 'address_postcode', 'member_number');
+		    	if(!$showPersonalDetails)
+		    	{
+		    		unset($memberInfo['Member']['address_1']);
+		    		unset($memberInfo['Member']['address_2']);
+		    		unset($memberInfo['Member']['address_city']);
+		    		unset($memberInfo['Member']['address_postcode']);
+		    		unset($memberInfo['Member']['contact_number']);
+		    	}
+
+		    	$unsetIfNull = array('username', 'handle', 'firstname', 'surname', 'account_id', 'contact_number', 'address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number');
 		    	foreach ($unsetIfNull as $index) 
 		    	{
 		    		if(	array_key_exists($index, $memberInfo['Member']) && 

@@ -133,6 +133,9 @@
 
 	<?php endif; ?>
 
+	<?php
+		if(array_key_exists('address', $member)):
+	?>
 	<dt>
 		Address
 	</dt>
@@ -165,6 +168,13 @@
 			}
 		?>
 	</dd>
+	<?php
+		endif;
+	?>
+
+	<?php
+		if(array_key_exists('contactNumber', $member)):
+	?>
 	<dt>
 		Contact No.
 	</dt>
@@ -182,6 +192,9 @@
 			}
 		?>
 	</dd>
+	<?php
+		endif;
+	?>
 	<dt>
 		Mailing Lists
 	</dt>
