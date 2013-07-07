@@ -46,11 +46,12 @@ class AppController extends Controller {
         'Session',
         'Auth' => array(
         	'loginAction' => array(
+                'plugin' => null,
 	            'controller' => 'members',
 	            'action' => 'login',
 	        ),
-            'loginRedirect' => array('controller' => 'pages', 'action' => 'index'),
-            'logoutRedirect' => array('controller' => 'pages', 'action' => 'display', 'home'),
+            'loginRedirect' => array('plugin' => null, 'controller' => 'pages', 'action' => 'index'),
+            'logoutRedirect' => array('plugin' => null 'controller' => 'pages', 'action' => 'display', 'home'),
             'Hms' => array(
                 'fields' => array('username' => 'email'),
                 'userModel' => 'Member',
@@ -80,9 +81,9 @@ class AppController extends Controller {
                 $this->Member->GroupsMember->isMemberInGroup( $loggedInMemberId, Group::MEMBER_ADMIN ) )
             {
                 $adminLinks = array(
-                    'Members' => array( 'controller' => 'members', 'action' => 'index' ),
-                    'Groups' => array( 'controller' => 'groups', 'action' => 'index' ),
-                    'Mailing Lists' => array( 'controller' => 'mailinglists', 'action' => 'index' ),
+                    'Members' => array( 'plugin' => null, 'controller' => 'members', 'action' => 'index' ),
+                    'Groups' => array( 'plugin' => null, 'controller' => 'groups', 'action' => 'index' ),
+                    'Mailing Lists' => array( 'plugin' => null, 'controller' => 'mailinglists', 'action' => 'index' ),
                 );
             }
 
