@@ -20,6 +20,6 @@
 /dev/setup/lib/sql/rfid_tags_data.sql
 /dev/setup/lib/sql/status_updates_data.sql
 /dev/setup/lib/sql/mailinglists_data.development.sql
-/dev/setup/lib/sql/mailinglist_subsctiprions_data.development.sql
+/dev/setup/lib/sql/mailinglist_subscriptions_data.development.sql
 app/Lib/Krb/krb5_auth.php
 app/Lib/MailChimp/MCAPI.php
