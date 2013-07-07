@@ -17,10 +17,7 @@
 <table>
     <tr>
         <th>
-            Member Type
-        </th>
-        <th>
-            Description
+            Member Status
         </th>
         <th>
             No. Members with this status
@@ -34,19 +31,13 @@
                 <?php echo $this->Html->link($data['name'], array('controller' => 'members', 'action' => 'listMembersWithStatus', $data['id'])); ?>
             </td>
             <td>
-                <?php echo $data['description']; ?>
-            </td>
-            <td>
                 <?php echo $data['count'] ?>
             </td>
         </tr>
     <?php endforeach; ?>
     <tr>
         <td>
-            <?php echo $this->Html->link('All', array('controller' => 'members', 'action' => 'listMembers')); ?>
-        </td>
-        <td>
-            All Members
+            <?php echo $this->Html->link('Total', array('controller' => 'members', 'action' => 'listMembers')); ?>
         </td>
         <td>
             <?php echo $memberTotalCount; ?>

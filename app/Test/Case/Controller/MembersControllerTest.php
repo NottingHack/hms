@@ -2462,7 +2462,6 @@
 				'Status' => array(
 				    'status_id' => '5',
 				    'title' => 'Current Member',
-				    'description' => 'Active member',
 				),
 				'Account' => array(
 				    'account_id' => '2',
@@ -2533,7 +2532,6 @@
 				'Status' => array(
 				    'status_id' => '3',
 				    'title' => 'Special Status',
-				    'description' => 'All the awesome',
 				),
 				'Account' => array(
 				    'account_id' => '56',
@@ -2618,7 +2616,6 @@
 				'Status' => array(
 				    'status_id' => '5',
 				    'title' => 'Current Member',
-				    'description' => 'Active member',
 				),
 				'Account' => array(
 				    'account_id' => '2',
@@ -2779,7 +2776,6 @@
 				'Status' => array(
 				    'status_id' => '5',
 				    'title' => 'Current Member',
-				    'description' => 'Active member'
 				),
 				'Account' => array(
 				    'account_id' => '4',
@@ -2942,7 +2938,6 @@
 				'Status' => array(
 				    'status_id' => '5',
 				    'title' => 'Current Member',
-				    'description' => 'Active member'
 				),
 				'Account' => array(
 				    'account_id' => '4',
@@ -3088,7 +3083,6 @@
 				'Status' => array(
 				    'status_id' => '5',
 				    'title' => 'Current Member',
-				    'description' => 'Active member'
 				),
 				'Account' => array(
 				    'account_id' => '4',
@@ -3238,7 +3232,6 @@
 				'Status' => array(
 				    'status_id' => '5',
 				    'title' => 'Current Member',
-				    'description' => 'Active member'
 				),
 				'Account' => array(
 				    'account_id' => '3',
@@ -3396,7 +3389,6 @@
 				'Status' => array(
 				    'status_id' => '5',
 				    'title' => 'Current Member',
-				    'description' => 'Active member'
 				),
 				'Account' => array(
 				    'account_id' => '9',
@@ -3498,7 +3490,6 @@
 				'Status' => array(
 				    'status_id' => '1',
 				    'title' => 'Full Access',
-				    'description' => 'All the things'
 				),
 				'Account' => array(
 				    'account_id' => '1',
@@ -3613,7 +3604,6 @@
 				'Status' => array(
 				    'status_id' => '5',
 				    'title' => 'Current Member',
-				    'description' => 'Active member'
 				),
 				'Account' => array(
 				    'account_id' => '1',

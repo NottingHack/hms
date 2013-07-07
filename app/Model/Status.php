@@ -87,14 +87,12 @@
 	    	{
 	    		$id = Hash::get($status, 'Status.status_id');
 	    		$name = Hash::get($status, 'Status.title');
-	    		$description = Hash::get($status, 'Status.description');
 	    		$count = count( Hash::extract($status, 'Member') );
 
 	    		array_push($formattedInfo,
 	    			array(
 	    				'id' => $id,
 	    				'name' => $name,
-	    				'description' => $description,
 	    				'count' => $count,
 	    			)
 	    		);

@@ -25,7 +25,6 @@
                 $this->assertGreaterThan( 0, $statusInfo['id'], 'Status id is invalid.' );
 
                 $this->assertArrayHasKey( 'name', $statusInfo, 'Status has no name.' ); 
-                $this->assertArrayHasKey( 'description', $statusInfo, 'Status has no description.' ); 
                 $this->assertArrayHasKey( 'count', $statusInfo, 'Status has no count.' ); 
 
                 $expectedMemberCount = $this->Status->Member->find('count', array('conditions' => array('Member.member_status' => $statusInfo['id'])));
@@ -46,7 +45,6 @@
             $this->assertGreaterThan( 0, $statusList['id'], 'Status id is invalid.' );
 
             $this->assertArrayHasKey( 'name', $statusList, 'Status has no name.' ); 
-            $this->assertArrayHasKey( 'description', $statusList, 'Status has no description.' ); 
             $this->assertArrayHasKey( 'count', $statusList, 'Status has no count.' ); 
 
             $expectedMemberCount = $this->Status->Member->find('count', array('conditions' => array('Member.member_status' => $statusList['id'])));
