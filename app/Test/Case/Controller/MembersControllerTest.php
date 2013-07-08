@@ -1856,7 +1856,7 @@
 			$this->testAction('members/view/4');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-			$this->_testMailingListView(array('0a6da449c9' => true, '455de2ac56' => false));
+			$this->_testMailingListView(array('us8gz1v8rq' => true, '455de2ac56' => false));
 
 			$expectedMemberInfo = array(
 				'id' => '4',
@@ -1940,7 +1940,7 @@
 			$this->testAction('members/view/3');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-			$this->_testMailingListView(array('0a6da449c9' => true, '455de2ac56' => false));
+			$this->_testMailingListView(array('us8gz1v8rq' => true, '455de2ac56' => false));
 
 			$expectedMemberInfo = array(
 				'id' => '3',
@@ -2013,7 +2013,7 @@
 			$this->testAction('members/view/4');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-			$this->_testMailingListView(array('0a6da449c9' => true, '455de2ac56' => false));
+			$this->_testMailingListView(array('us8gz1v8rq' => true, '455de2ac56' => false));
 
 			$expectedMemberInfo = array(
 				'id' => '4',
@@ -2097,7 +2097,7 @@
 			$this->testAction('members/view/3');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-			$this->_testMailingListView(array('0a6da449c9' => true, '455de2ac56' => false));
+			$this->_testMailingListView(array('us8gz1v8rq' => true, '455de2ac56' => false));
 
 			$expectedMemberInfo = array(
 				'id' => '3',
@@ -2152,7 +2152,7 @@
 			$this->testAction('members/view/7');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-			$this->_testMailingListView(array('0a6da449c9' => true, '455de2ac56' => true));
+			$this->_testMailingListView(array('us8gz1v8rq' => true, '455de2ac56' => true));
 
 			$expectedMemberInfo = array(
 				'id' => '7',
@@ -2195,7 +2195,7 @@
 			$this->testAction('members/view/9');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-			$this->_testMailingListView(array('0a6da449c9' => true, '455de2ac56' => true));
+			$this->_testMailingListView(array('us8gz1v8rq' => true, '455de2ac56' => true));
 
 			$expectedMemberInfo = array(
 				'id' => '9',
@@ -2239,7 +2239,7 @@
 			$this->testAction('members/view/11');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-			$this->_testMailingListView(array('0a6da449c9' => false, '455de2ac56' => true));
+			$this->_testMailingListView(array('us8gz1v8rq' => false, '455de2ac56' => true));
 
 			$expectedMemberInfo = array(
 				'id' => '11',
@@ -2289,7 +2289,7 @@
 			$this->testAction('members/view/4');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-			$this->_testMailingListView(array('0a6da449c9' => true, '455de2ac56' => false));
+			$this->_testMailingListView(array('us8gz1v8rq' => true, '455de2ac56' => false));
 
 			$expectedMemberInfo = array(
 				'id' => '4',
@@ -2391,7 +2391,7 @@
 				),
 				'contactNumber' => '077 1755 4342',
 			);
-			$this->_testEditMemberViewVars($expectedMemberVal, array('0a6da449c9' => true, '455de2ac56' => false));
+			$this->_testEditMemberViewVars($expectedMemberVal, array('us8gz1v8rq' => true, '455de2ac56' => false));
 		}
 
 		public function testEditMemberEditOwn()
@@ -2497,10 +2497,10 @@
 				$expectedViewVal, 
 				$expectedRecordData, 
 				array(
-					'0a6da449c9' => true, 
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				),
-				'Details updated.\nSuccessfully unsubscribed from Nottingham Hackspace Announcements\nSuccessfully subscribed to Nottingham Hackspace The Other List\n'
+				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace The Other List\nSuccessfully unsubscribed from Nottingham Hackspace Announcements\n'
 				);
 		}
 
@@ -2563,7 +2563,7 @@
 				),
 				'MailingLists' => array(
 					'MailingLists' => array(
-						'0a6da449c9'
+						'us8gz1v8rq'
 					)
 				),
 			);
@@ -2647,7 +2647,7 @@
 				$expectedViewVal, 
 				$expectedRecordData, 
 				array(
-					'0a6da449c9' => true, 
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				),
 				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace Announcements\n'
@@ -2691,7 +2691,7 @@
 				),
 				'MailingLists' => array(
 					'MailingLists' => array(
-						'0a6da449c9',
+						'us8gz1v8rq',
 						'455de2ac56',
 					)
 				),
@@ -2818,7 +2818,7 @@
 				$expectedViewVal, 
 				$expectedRecordData, 
 				array(
-					'0a6da449c9' => true, 
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				),
 				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace The Other List\n'
@@ -2962,10 +2962,10 @@
 				$expectedViewVal, 
 				$expectedRecordData, 
 				array(
-					'0a6da449c9' => true, 
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				),
-				'Details updated.\nSuccessfully unsubscribed from Nottingham Hackspace Announcements\nSuccessfully subscribed to Nottingham Hackspace The Other List\n'
+				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace The Other List\nSuccessfully unsubscribed from Nottingham Hackspace Announcements\n'
 			);
 		}
 
@@ -3003,7 +3003,7 @@
 				),
 				'MailingLists' => array(
 					'MailingLists' => array(
-						'0a6da449c9',
+						'us8gz1v8rq',
 					)
 				),
 			);
@@ -3105,7 +3105,7 @@
 				$expectedViewVal, 
 				$expectedRecordData, 
 				array(
-					'0a6da449c9' => true, 
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				),
 				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace Announcements\n'
@@ -3260,7 +3260,7 @@
 				$expectedViewVal, 
 				$expectedRecordData, 
 				array(
-					'0a6da449c9' => true, 
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				),
 				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace The Other List\n'
@@ -3301,7 +3301,7 @@
 				),
 				'MailingLists' => array(
 					'MailingLists' => array(
-						'0a6da449c9',
+						'us8gz1v8rq',
 					)
 				),
 			);
@@ -3428,7 +3428,7 @@
 				$expectedViewVal, 
 				$expectedRecordData, 
 				array(
-					'0a6da449c9' => true, 
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				), 
 				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace Announcements\n',
@@ -3511,7 +3511,7 @@
 				),
 				'MailingLists' => array(
 					'MailingLists' => array(
-						'0a6da449c9',
+						'us8gz1v8rq',
 						'455de2ac56',
 					)
 				),
@@ -3643,10 +3643,10 @@
 				$expectedViewVal, 
 				$expectedRecordData, 
 				array(
-					'0a6da449c9' => true, 
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				)
-				,'Details updated.\nSuccessfully subscribed to Nottingham Hackspace Announcements\nSuccessfully subscribed to Nottingham Hackspace The Other List\n'
+				,'Details updated.\nSuccessfully subscribed to Nottingham Hackspace The Other List\nSuccessfully subscribed to Nottingham Hackspace Announcements\n'
 			);
 		}
 

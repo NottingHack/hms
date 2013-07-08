@@ -389,7 +389,6 @@
 
         public function testRegisterMember()
         {
-            /*
             // Test invalid data
             $this->assertIdentical( $this->Member->registerMember(null), null, 'Null data was not handled correctly.' );
             $this->assertIdentical( $this->Member->registerMember('fofe'), null, 'Non-array data was not handled correctly.' );
@@ -459,13 +458,13 @@
                 $this->assertIdentical( $result['status'], $status, 'Result has incorrect status.' );
 
                 $this->assertArrayHasKey( 'memberId', $result, 'Result does not have member id.' );
-            }*/
+            }
 
             $beforeTimestamp = time();
 
             // Test with a new e-mail
             $newEmail = 'foo@srsaegrttfd.com';
-            $result = $this->Member->registerMember( array('Member' => array('email' => $newEmail), 'MailingLists' => array('MailingLists' => array('0a6da449c9'))) );
+            $result = $this->Member->registerMember( array('Member' => array('email' => $newEmail), 'MailingLists' => array('MailingLists' => array('us8gz1v8rq'))) );
 
             $afterTimestamp = time();
 
@@ -484,7 +483,7 @@
             $this->assertArrayHasKey( 'memberId', $result, 'Result does not have member id.' );
 
             $this->assertArrayHasKey( 'mailingLists', $result, 'Result does not have mailingLists.' );
-            $this->assertEqual( $result['mailingLists'], array(array('list' => '0a6da449c9', 'action' => 'subscribe', 'successful' => true, 'name' => 'Nottingham Hackspace Announcements')), 'Result has incorrect mailingLists.' );
+            $this->assertEqual( $result['mailingLists'], array(array('list' => 'us8gz1v8rq', 'action' => 'subscribe', 'successful' => true, 'name' => 'Nottingham Hackspace Announcements')), 'Result has incorrect mailingLists.' );
 
 
             $record = $this->Member->findByEmail($newEmail);

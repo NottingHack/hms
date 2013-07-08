@@ -90,22 +90,22 @@
 
             $data = array(
                 'nonexistant@gmail.com' => array(
-                    '0a6da449c9' => false, 
+                    'us8gz1v8rq' => false, 
                     '455de2ac56' => false,
                 ),
 
                 'm.pryce@example.org' => array(
-                    '0a6da449c9' => true, 
+                    'us8gz1v8rq' => true, 
                     '455de2ac56' => false,
                 ),
 
                 'g.garratte@foobar.org' => array(
-                    '0a6da449c9' => false, 
+                    'us8gz1v8rq' => false, 
                     '455de2ac56' => true,
                 ),
 
                 'HugoJLorenz@dayrep.com' => array(
-                    '0a6da449c9' => true, 
+                    'us8gz1v8rq' => true, 
                     '455de2ac56' => true,  
                 ),
             );
@@ -138,21 +138,21 @@
             $data = array(
                 'nonexistant@gmail.com' => array(
                     'lists' => array(
-                        '0a6da449c9', 
+                        'us8gz1v8rq', 
                         '455de2ac56',
                     ),
                     'results' => array(
-                        array(
-                            'list' => '0a6da449c9',
-                            'action' => 'subscribe',
-                            'successful' => true,
-                            'name' => 'Nottingham Hackspace Announcements',
-                        ),
                         array(
                             'list' => '455de2ac56',
                             'action' => 'subscribe',
                             'successful' => true,
                             'name' => 'Nottingham Hackspace The Other List',
+                        ),
+                        array(
+                            'list' => 'us8gz1v8rq',
+                            'action' => 'subscribe',
+                            'successful' => true,
+                            'name' => 'Nottingham Hackspace Announcements',
                         ),
                     ),
                 ),
@@ -163,16 +163,16 @@
                     ),
                     'results' => array(
                         array(
-                            'list' => '0a6da449c9',
-                            'action' => 'unsubscribe',
-                            'successful' => true,
-                            'name' => 'Nottingham Hackspace Announcements',
-                        ),
-                        array(
                             'list' => '455de2ac56',
                             'action' => 'subscribe',
                             'successful' => true,
                             'name' => 'Nottingham Hackspace The Other List',
+                        ),
+                        array(
+                            'list' => 'us8gz1v8rq',
+                            'action' => 'unsubscribe',
+                            'successful' => true,
+                            'name' => 'Nottingham Hackspace Announcements',
                         ),
                     ),
                 ),
@@ -195,16 +195,16 @@
                     ),
                     'results' => array(
                         array(
-                            'list' => '0a6da449c9',
-                            'action' => 'unsubscribe',
-                            'successful' => true,
-                            'name' => 'Nottingham Hackspace Announcements',
-                        ),
-                        array(
                             'list' => '455de2ac56',
                             'action' => 'unsubscribe',
                             'successful' => true,
                             'name' => 'Nottingham Hackspace The Other List',
+                        ),
+                         array(
+                            'list' => 'us8gz1v8rq',
+                            'action' => 'unsubscribe',
+                            'successful' => true,
+                            'name' => 'Nottingham Hackspace Announcements',
                         ),
                     ),
                 ),

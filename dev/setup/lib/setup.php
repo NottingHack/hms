@@ -89,53 +89,46 @@
 			return $template;
 		}
 
-		//! Create the config files HMS needs to run.
+		//! Create the config files for the current environment, delete any no-longer needed config files.
 		/*!
 			@param array $settings The settings to use.
 		*/
-		private function _createConfigFiles($settings)
+		private function _setupConfigFiles($settings)
 		{
 			$configPath = '../../../app/Config/';
 
-			$files = array(
-				'database',
-				'hms',
-				'krb',
-				'mailchimp',
-				'email',
-				'debug',
-			);
-
 			// ... Not that I'm OCD or anything
-			asort($files);
+			asort($settings);
 
 			// Create each of the config files
-			foreach ($files as $fileName) 
+			foreach ($settings as $settingName => $settingData) 
 			{
 				// First check for dev/production templates
-				$templateFilePath = makeAbsolutePath("$fileName.{$this->environmentType}.template");
+				$templateFilePath = makeAbsolutePath("$settingName.{$this->environmentType}.template");
 				if (!file_exists($templateFilePath))
 				{
 					// Fall back to the regular template
-					$templateFilePath = makeAbsolutePath("$fileName.template");
+					$templateFilePath = makeAbsolutePath("$settingName.template");
 
 					if(!file_exists($templateFilePath))
 					{
-						$this->_logMessage("Skipping config file: $filename because we couldn't find a matching template");
+						$fullFilePath = makeAbsolutePath("$configPath$settingName.php");
+						$this->_logMessage("Deleting settings file at $fullFilePath because we couldn't find a matching template");
+						unlink($fullFilePath);
 						continue;
 					}
 				}
 
 				$currentContents = file_get_contents($templateFilePath);
-				$newContents = $this->_replaceFields($currentContents, $settings[$fileName]);
+				$newContents = $this->_replaceFields($currentContents, $settingData);
 
-				if (file_put_contents("$configPath$fileName.php", $newContents) !== FALSE) 
+				if (file_put_contents("$configPath$settingName.php", $newContents) !== FALSE) 
 				{
-					$this->_logMessage("Created $fileName.php from template $templateFilePath");
+					$this->_logMessage("Created $settingName.php from template $templateFilePath");
 				}
 				else 
 				{
-					$this->_logMessage("Failed to create $fileName.php");
+					$this->_logMessage("Failed to create $settingName.php");
 				}
 			}
 		}
@@ -570,7 +563,7 @@
 		private function _getSettings()
 		{
 			// Default settings
-			$aSettings = array(
+			$defaultSettings = array(
 				'database'	=>	array(
 					'default_host'		=>	'localhost',
 					'default_login'		=>	'hms',
@@ -586,25 +579,45 @@
 					'innerdoor'		=>	'1234',
 					'wifi'			=>	'123456',
 				),
+				'debug' => array(
+				),
 				'krb' =>	array(
 
 				),
 				'mailchimp'	=> array(
-					'key'	=>	'123456',
-					'list'	=>	'123456',
+					'key'	=>	'w1zg905ych1e090og9pvjb7td6b05vlg-2y8',
+					'list'	=>	'us8gz1v8rq',
 				),
 				'email'	=>	array(
 					'from_address'	=>	'site@localhost',
 					'host'			=>	'localhost',
 					'port'			=>	25,
 					'username'		=>	'user',
-					'password'		=>	'secret',
+					'password'		=>	'hunter2',
 				),
 			);
 
-			include('hms.settings');
+			$overrideSettings = 'hms.settings';
+			if(file_exists(makeAbsolutePath($overrideSettings)))
+			{
+				include($overrideSettings);
+			}
 
-			return $aSettings;
+			// Merge the default and override settings, preferring the override ones	
+			$finalSettings = array();
+			foreach ($defaultSettings as $name => $values)
+			{
+				if(array_key_exists($name, $aSettings))
+				{
+					$finalSettings[$name] = $aSettings[$name];
+				}
+				else
+				{
+					$finalSettings[$name] = $defaultSettings[$name];
+				}
+			}
+
+			return $finalSettings;
 		}
 
 		//! Run all selected setup steps.
@@ -620,7 +633,7 @@
 
 			$settings = $this->_getSettings();
 
-			$this->_createConfigFiles($settings);
+			$this->_setupConfigFiles($settings);
 			if(!$this->_generateData())
 			{
 				$this->_logMessage('Failed to generate and write data.');

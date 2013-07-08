@@ -2,6 +2,6 @@
     
     $config = array(
         'mailchimp_apiKey' => '%%key%%',
-        'mailchimp_listId' => '%%list%%', // Nottingham Hackspace Announcements, retrieved by the lists() function
+        'mailchimp_listId' => '%%list%%',
         );    
 ?>
