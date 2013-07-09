@@ -539,6 +539,8 @@
 		private function _logMessage($message)
 		{
 			echo sprintf("[%s] %s%s", date("H:i:s"), $message, $this->_getNewline());
+			ob_flush();
+    		flush();
 		}
 
 		//! Check if the options used are valid.
