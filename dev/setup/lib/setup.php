@@ -6,6 +6,8 @@
 	//! Setup is a class that is responsible for parsing options and then performing certain steps based on those options.
 	class Setup
 	{
+		private $logIndet = 0;			//!< Indent level for the log
+
 		//! Options
 		private $createDb = false;					//!< If true create the instrumentation and instrumentation_test databases.
 		private $populateDb = false;				//!< If true populate the databases with default tables and data.
@@ -18,6 +20,24 @@
 		private $surname = '';				//!< Surname of the user.
 		private $username = '';				//!< Username of the user.
 		private $email = '';				//!< Email of the user.
+
+
+		//! Increase the log indent level
+		private function _pushLogIndent()
+		{
+			$this->logIndet++;
+		}
+
+		//! Decrease the log indent level
+		private function _popLogIndent()
+		{
+			$this->logIndet--;
+			if($this->logIndet < 0)
+			{
+				$this->logIndet = 0;
+				$this->_logMessage('Warning: Log indent was popped too many times.');
+			}
+		}
 
 		//! Set up the database options.
 		/*
@@ -93,6 +113,9 @@
 		*/
 		private function _setupConfigFiles($settings)
 		{
+			$this->_logMessage('Setting up config files');
+			$this->_pushLogIndent();
+
 			$configPath = '../../../app/Config/';
 
 			// ... Not that I'm OCD or anything
@@ -129,6 +152,8 @@
 					$this->_logMessage("Failed to create $settingName.php");
 				}
 			}
+
+			$this->_popLogIndent();
 		}
 
 		private function _getSqlFilesContaining($name)
@@ -317,6 +342,9 @@
 		{
 			if ($this->createDb || $this->populateDb) 
 			{
+				$this->_logMessage('Creating and/or populating databases');
+				$this->_pushLogIndent();
+
 				// Main Database
 				$oDB = new mysqli($settings['database']['default_host'], $settings['database']['default_login'], $settings['database']['default_password']);
 
@@ -327,7 +355,7 @@
 				else 
 				{
 					$defaultDbName = $settings['database']['default_database'];
-					if($this->createDb)
+					if($this->createDb || $this->populateDb)
 					{
 						if(!$oDB->query("DROP DATABASE " . $defaultDbName))
 						{
@@ -368,7 +396,7 @@
 				else 
 				{
 					$testDbName = $settings['database']['test_database'];
-					if($this->createDb)
+					if($this->createDb || $this->populateDb)
 					{
 						if(!$oDB->query("DROP DATABASE " . $testDbName))
 						{
@@ -387,6 +415,12 @@
 					
 				}
 				$oDB->close();
+
+				// If we've just created the data in the database then we're already on
+				// the latest database version
+				$this->_writeDbVersion($this->_getCodeVersion());
+
+				$this->_popLogIndent();
 			}
 		}
 
@@ -425,15 +459,25 @@
 		//! Copy either the real or dummy KRB Auth lib file to the lib folder.
 		private function _copyKrbLibFile()
 		{
+			$this->_logMessage('Copying KRB lib file');
+			$this->_pushLogIndent();
+
 			$fromFile = $this->useRealKrb ? 'krb5_auth.real' : 'krb5_auth.dummy';
 			$this->_copyLibFile($fromFile, '../../../app/Lib/Krb/krb5_auth.php');
+
+			$this->_popLogIndent();
 		}
 
 		//! Copy either the production or development MCAPI file.
 		private function _copyMcapiLibFile()
 		{
+			$this->_logMessage('Copying MCAPI lib file');
+			$this->_pushLogIndent();
+
 			$fromFile = "MCAPI.{$this->environmentType}";
 			$this->_copyLibFile($fromFile, '../../../app/Lib/MailChimp/MCAPI.php');
+
+			$this->_popLogIndent();
 		}
 
 
@@ -473,6 +517,9 @@
 		{
 			if($this->setupTempFolders)
 			{
+				$this->_logMessage('Setting up temp folders');
+				$this->_pushLogIndent();
+
 				$foldersToMake = array(
 					'../../../app/tmp',
 					'../../../app/tmp/cache',
@@ -500,6 +547,8 @@
 						$this->_logMessage("Failed to create folder: $folder");
 					}
 				}
+
+				$this->_popLogIndent();
 			}
 		}
 
@@ -516,29 +565,25 @@
 			return ($sapiType == 'cli');
 		}
 
-		//! Get the appropriate newline character.
-		/*
-			@retval string An a string representing a newline for the current output.
-		*/
-		private function _getNewline()
-		{
-			if($this->_isOnCommandline())
-			{
-				return PHP_EOL;
-			}
-			// We're probably being called from the web.
-			return '<br/>';
-		}
-
 		//! Format and write a log message, prepends timestamp and appends a newline.
 		/*!
 			@param string $message The message to write.
 		*/
 		private function _logMessage($message)
 		{
-			echo sprintf("[%s] %s%s", date("H:i:s"), $message, $this->_getNewline());
-			if(!$this->_isOnCommandline())
+			$timestamp = date("H:i:s");
+			if($this->_isOnCommandline())
 			{
+				echo sprintf("[%s]%s%s%s", $timestamp, str_repeat("    ", $this->logIndet), $message, PHP_EOL);	
+			}
+			else
+			{
+				echo '<span class="logLine">';
+				echo "[$timestamp] ";
+				echo str_repeat('<span class="logSpacer"> </span>', $this->logIndet + 1);
+				echo $message;
+				echo '</span>';
+
 				ob_flush();
     			flush();
 			}
@@ -623,6 +668,252 @@
 			return $finalSettings;
 		}
 
+		//! Given an array of version information, check if it is valid.
+		/*!
+			@param array $version An array of version data.
+			@retval bool True if version is valid, false otherwise.
+		*/
+		private function _isValidVersion($version)
+		{
+			return 
+				array_key_exists('major', $version) &&
+				array_key_exists('minor', $version) &&
+				array_key_exists('build', $version);
+		}
+
+		//! Read the current version from the code.
+		/*
+			@retval mixed Array of the code version number, or null on error.
+		*/
+		private function _getCodeVersion()
+		{
+			$versionFilePath = '../../../app/Controller/AppController.php';
+
+			$version = array();
+			$lines = explode(';', file_get_contents(makeAbsolutePath($versionFilePath)));
+
+			$versionIds = array(
+				"VERSION_MAJOR" => 'major',
+				"VERSION_MINOR" => 'minor',
+				"VERSION_BUILD" => 'build',
+			);
+
+			foreach ($lines as $line) 
+			{
+				foreach ($versionIds as $codeId => $arrayIdx) 
+				{
+					$matches = array();
+					$regex = $codeId . " = (\d+?)";
+					if(preg_match("/$regex/", trim($line), $matches))
+					{
+						$version[$arrayIdx] = $matches[1];
+					}
+				}
+			}
+
+			if($this->_isValidVersion($version))
+			{
+				return $version;
+			}
+			return null;
+		}
+
+		//! Write a version to the database version file.
+		/*!
+			@param string $version The version to write.
+		*/
+		private function _writeDbVersion($version)
+		{
+			$path = makeAbsolutePath('database.version');
+			$versionStr = $this->_versionToString($version);
+			$this->_logMessage("Writing db version $versionStr to $path");
+			file_put_contents($path, $versionStr);
+		}
+
+		//! Attempt to read the database version from the database.version file
+		/*!
+			@retval mixed Array of version data if successful, null on error.
+		*/
+		private function _readDbVersion()
+		{
+			$path = makeAbsolutePath('database.version');
+			$trimmedContents = trim(file_get_contents($path));
+			$version = $this->_stringToVersion($trimmedContents);
+			if($this->_isValidVersion($version))
+			{
+				return $version;
+			}
+			return null;
+		}
+
+		//! Get the difference between two versions.
+		/*!
+			@param array $versionA An array of version data.
+			@param array $versionB An array of version data.
+			@retval mixed An integer representing the difference between the versions, or null on error.
+		*/
+		private function _compareVersions($versionA, $versionB)
+		{
+			$numA = $this->_versionToNumber($versionA);
+			$numB = $this->_versionToNumber($versionB);
+
+			if($numA == null || $numB == null)
+			{
+				return null;
+			}
+
+			return $numA - $numB;
+		}
+
+		//! Given an array of version data, get a number uniquely representing that version.
+		/*!
+			@param array $version An array of version data.
+			@retval mixed A number representing $version on success, or null on error.
+		*/
+		private function _versionToNumber($version)
+		{
+			if($this->_isValidVersion($version))
+			{
+				$number = 0;
+				$multiplier = 1;
+
+				$versionParts = array($version['build'], $version['minor'], $version['major']);
+
+				foreach ($versionParts as $part) 
+				{
+					$number += ((int)$part) * $multiplier;
+					$multiplier *= 10;
+				}
+
+				return $number;
+			}
+			return null;
+		}
+
+		//! Given an array of version data, return a string representation of that version.
+		/*!
+			@param array $version An array of version data.
+			@retval string A string representing the version data.
+		*/
+		private function _versionToString($version)
+		{
+			return sprintf('%s.%s.%s', $version['major'], $version['minor'], $version['build']);
+		}
+
+		//! Given a string representation of a version, return an array of version data.
+		/*!
+			@param string $versionStr A string representing a version.
+			@retval array An array of version data.
+		*/
+		private function _stringToVersion($versionStr)
+		{
+			list($major, $minor, $build) = explode('.', $versionStr);
+			return compact('major', 'minor', 'build');
+		}
+
+		//! Update the database to the current version.
+		private function _runDatabaseUpdate()
+		{
+			$this->_logMessage('Updating database');
+			$this->_pushLogIndent();
+
+			// Find out what version we're updating from
+			$currentDbVersion = $this->_readDbVersion();
+			if($currentDbVersion == null)
+			{
+				$this->_logMessage('Error: Could not read current database version');
+				return;
+			}
+
+			// Find out which version we should be updating to
+			$codeVersion = $this->_getCodeVersion();
+			if($codeVersion == null)
+			{
+				$this->_logMessage('Error: Could not get code version');
+				return;
+			}
+
+			$this->_logMessage(sprintf('Updating from version: %s to version %s', 
+				$this->_versionToString($currentDbVersion), $this->_versionToString($codeVersion)));
+
+			// Ok, lets get started.
+			// First we find all the update files, and sort them by version
+			$updatesPath = makeAbsolutePath('updates');
+			$updateFiles = array();
+			$files = glob($updatesPath . '/*.php');
+			foreach ($files as $file) 
+			{
+				if(is_file($file))
+				{
+					$fileParts = pathinfo($file);
+					$fileVersion = $this->_stringToVersion($fileParts['filename']);
+					if(!$this->_isValidVersion($fileVersion))
+					{
+						$this->_logMessage("Warning: Found update php with a filename that is not a valid version $file");
+						continue;
+					}
+
+					$versionNumber = $this->_versionToNumber($fileVersion);
+					$updateFiles[$versionNumber] = array(
+						'path' => $file,
+						'version' => $fileVersion,
+					);
+				}
+			}
+
+			ksort($updateFiles);
+
+			// Then execute the version file for any version that's ahead of us
+			// until we hit the code version
+			$currentVersionNumber = $this->_versionToNumber($currentDbVersion);
+			$codeVersionNumber = $this->_versionToNumber($codeVersion);
+
+			foreach ($updateFiles as $versionNumber => $data) 
+			{
+				if(	$versionNumber > $currentVersionNumber &&
+					$versionNumber <= $codeVersionNumber )
+				{
+					$this->_logMessage('Executing update ' . $data['path']);
+
+					if($this->_executeUpdate($data['path']))
+					{
+						$this->_writeDbVersion($data['version']);
+						$currentVersionNumber = $versionNumber;
+
+						$this->_logMessage('Updated to version: ' . $this->_versionToString($data['version']));
+					}
+					else
+					{
+						$this->_logMessage('Error: Failed to execute update ' . $data['path']);
+					}
+				}
+			}
+			$this->_popLogIndent();
+		}
+
+		//! Attempt to execute the contents of an update file.
+		/*
+			@param string $path The path to the update file.
+			@retval bool True if execution was successful, false otherwise.
+		*/
+		private function _executeUpdate($path)
+		{
+			if(file_exists($path))
+			{
+				ob_start();
+				include($path);
+				$messages = ob_get_clean();
+				$this->_pushLogIndent();
+				foreach (explode(PHP_EOL, $messages) as $message)
+				{
+					$this->_logMessage($message);
+				}
+				$this->_popLogIndent();
+				return true;
+			}
+			return false;
+		}
+
 		//! Run all selected setup steps.
 		public function run()
 		{
@@ -643,6 +934,7 @@
 				exit(1);
 			}
 			$this->_createDatabases($settings);
+			$this->_runDatabaseUpdate();
 			$this->_copyKrbLibFile();
 			$this->_copyMcapiLibFile();
 			$this->_setupTempFolders();

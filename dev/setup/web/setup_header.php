@@ -8,6 +8,5 @@
 
 </head>
 <body id="main_body" >
-	<img id="top" src="top.png" alt="">
 	<div id="form_container">
 		<h1>HMS Setup</h1>

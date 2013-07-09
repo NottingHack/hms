@@ -46,7 +46,7 @@
 <?php
 	require('./setup_header.php');
 ?>
-			<p class="results">
+	<p class="results">
 			<?php
 
 				$setup->run();

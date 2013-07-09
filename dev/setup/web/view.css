@@ -10,10 +10,9 @@ body
 #form_container
 {
 	background:#fff;
-	
-	margin:0 auto;
+	margin:30px auto;
 	text-align:left;
-	width:640px;
+	width:1000px;
 }
 
 #top
@@ -26,11 +25,9 @@ body
 
 #footer
 {
-	width:640px;
 	clear:both;
 	color:#999999;
 	text-align:center;
-	width:640px;
 	padding-bottom: 15px;
 	font-size: 85%;
 }
@@ -51,8 +48,9 @@ body
 
 form.appnitro
 {
-	margin:20px 20px 0;
+	margin: 20px auto;
 	padding:0 0 20px;
+	width: 50%;
 }
 
 /**** Logo Section  *****/
@@ -431,22 +429,22 @@ select.select[class]
 
 input.small
 {
-	width:25%;
+	width:50%;
 }
 
 select.small
 {
-	width:25%;
+	width:50%;
 }
 
 input.medium
 {
-	width:50%;
+	width:80%;
 }
 
 select.medium
 {
-	width:50%;
+	width:80%;
 }
 
 input.large
@@ -965,4 +963,17 @@ p.results
 }
 .actions a.positive:hover {
 	background: #5BA150;
+}
+
+.logLine {
+	display: block;
+	padding: 0px 5px;
+}
+
+.logLine:hover {
+	background-color: #eee;
+}
+
+.logSpacer {
+	margin-left: 20px;
 }
