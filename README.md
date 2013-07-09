@@ -18,4 +18,4 @@ At the moment, HMS is very Nottingham Hackspace orientated.  Feel free to use HM
 
 Version 2.0 of HMS should be more hackspace-agnostic.
 
-More information can be found on the wiki: https://github.com/NottingHack/hms/wiki
+More information can be found on the [wiki](https://github.com/NottingHack/hms/wiki)
