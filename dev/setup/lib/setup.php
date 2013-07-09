@@ -6,8 +6,6 @@
 	//! Setup is a class that is responsible for parsing options and then performing certain steps based on those options.
 	class Setup
 	{
-		private $newline = null; 	//!< Newline character, different depending on output (HTML or text).
-
 		//! Options
 		private $createDb = false;					//!< If true create the instrumentation and instrumentation_test databases.
 		private $populateDb = false;				//!< If true populate the databases with default tables and data.
@@ -505,31 +503,31 @@
 			}
 		}
 
+		//! Check to see if we're running on the command line
+		/*
+			@ratval bool True if we're running on the command line, false otherwise.
+		*/
+		private function _isOnCommandline()
+		{
+			// Note: Like most things in PHP this function isn't reliable:
+			// http://php.net/manual/en/function.php-sapi-name.php
+			$sapiType = php_sapi_name();
+
+			return ($sapiType == 'cli');
+		}
+
 		//! Get the appropriate newline character.
 		/*
 			@retval string An a string representing a newline for the current output.
 		*/
 		private function _getNewline()
 		{
-			if(!isset($this->newline))
+			if($this->_isOnCommandline())
 			{
-				// Note: Like most things in PHP this function isn't reliable:
-				// http://php.net/manual/en/function.php-sapi-name.php
-				$sapiType = php_sapi_name();
-
-				if($sapiType == 'cli')
-				{
-					// We're probably being called from command line.
-					$newline = PHP_EOL;
-				}
-				else
-				{
-					// We're probably being called from the web.
-					$newline = '<br/>';
-				}
+				return PHP_EOL;
 			}
-			
-			return $newline;
+			// We're probably being called from the web.
+			return '<br/>';
 		}
 
 		//! Format and write a log message, prepends timestamp and appends a newline.
@@ -539,8 +537,11 @@
 		private function _logMessage($message)
 		{
 			echo sprintf("[%s] %s%s", date("H:i:s"), $message, $this->_getNewline());
-			ob_flush();
-    		flush();
+			if(!$this->_isOnCommandline())
+			{
+				ob_flush();
+    			flush();
+			}
 		}
 
 		//! Check if the options used are valid.
