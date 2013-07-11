@@ -1,0 +1,104 @@
+/* Reset code inside */
+div.memberVoice, div.memberVoice * {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+div.memberVoice {
+	position: relative;
+}
+
+div.memberVoice ul.mvIdeas {
+	list-style: none;
+}
+
+div.memberVoice ul.mvIdeas li {
+	position: relative;
+	margin: 0 0 40px 0;
+}
+
+/* Idea Detail */
+div.memberVoice div.mvIdeaDetail {
+	margin-left: 90px;
+}
+
+div.memberVoice div.mvIdeaDetail h2 {
+	font-size: 1.4em;
+	margin: 0 0 10px 0;
+	font-weight: bold;
+}
+
+div.memberVoice div.mvIdeaDetail div.mvMeta {
+	font-size: 0.8em;
+	margin: 15px 0 0 0;
+	color: #999999;
+}
+
+
+/* Voting column */
+
+div.memberVoice div.mvIdeaVotes {
+	width: 70px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+/* Votes count */
+div.memberVoice div.mvVoteCount {
+	border-radius: 7px;
+	border: 1px solid #195905;
+}
+
+div.memberVoice div.mvVoteCount strong {
+	display: block;
+	font-size: 1.4em;
+	text-align: center;
+	margin: 5px 0 2px 0;
+}
+
+div.memberVoice div.mvVoteCount span {
+	display: block;
+	font-size: 0.9em;
+	text-align: center;
+	margin: 0px 0 5px 0;
+}
+
+/* Voting Buttons */
+div.mvVoting {
+	position: relative;
+	margin-top: 5px;
+}
+
+a.mvVote {
+	display: block;
+	position: absolute;
+	top: 0px;
+	width: 30px;
+	height: 30px;
+	border-radius: 7px;
+	border: 1px solid #000000;
+}
+
+a.mvVote:hover {
+	background-position: 0px 0px;
+}
+
+a.mvUp {
+	border-color: #195905;
+	left: 0px;
+	background: url('../img/voteup.png') no-repeat;
+	background-position: 0px -30px;
+}
+
+a.mvDown {
+	border-color: #DB0000;
+	right: 0px;
+	background: url('../img/votedown.png') no-repeat;
+	background-position: 0px -30px;
+}
+
+a.mvVoted {
+	background-position: 0px 0px;
+}
