@@ -27,13 +27,29 @@ $cakeDescription = "Nottingham Hackspace Management System";
 		<?php echo $title_for_layout; ?>
 	</title>
 	<?php
-		echo $this->Html->meta('icon');
+		echo $this->Html->meta('icon', null, array('inline' => false));
 
-		echo $this->Html->css('hms');
+		echo $this->Html->css('hms', null, array('inline' => false));
+
+		/* Set up jQuery UI.  We'll include jQuery later using a conditional */
+		echo $this->Html->script('jquery-ui-1.10.3.custom.min', array('inline' => false));
+		echo $this->Html->css('jquery/jquery-ui-1.10.3.custom.min.css', null, array('inline' => false));
 
 		echo $this->fetch('meta');
+		echo("\n");
 		echo $this->fetch('css');
+		echo("\n");
+		/* Now actual jQuery */
+	?>
+		<!--[if lt IE 9]>
+		    <script src="<?php echo(JS_URL); ?>jquery-1.10.2.min.js"></script>
+		<![endif]-->
+		<!--[if gte IE 9]><!-->
+		    <script src="<?php echo(JS_URL); ?>jquery-2.0.3.min.js"></script>
+		<!--<![endif]-->
+	<?php
 		echo $this->fetch('script');
+		echo("\n");
 	?>
 </head>
 <body>
