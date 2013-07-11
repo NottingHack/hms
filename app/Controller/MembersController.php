@@ -50,40 +50,44 @@
 	    		return true;
 	    	}
 
-	    	$userId = $this->Member->getIdForMember($user);
-	    	$userIsMemberAdmin = $this->Member->GroupsMember->isMemberInGroup( $userId, Group::MEMBER_ADMIN );
+	    	$memberId = $this->Member->getIdForMember($user);
+	    	$memberIsMembershipAdmin = $this->Member->GroupsMember->isMemberInGroup( $memberId, Group::MEMBERSHIP_ADMIN );
+	    	$memberIsOnMembershipTeam = $this->Member->GroupsMember->isMemberInGroup( $memberId, Group::MEMBERSHIP_TEAM );
 	    	$actionHasParams = isset( $request->params ) && isset($request->params['pass']) && count( $request->params['pass'] ) > 0;
-	    	$userIdIsSet = is_numeric($userId);
+	    	$memberIdIsSet = is_numeric($memberId);
+
+	    	$firstParamIsMemberId = ( $actionHasParams && $memberIdIsSet && $request->params['pass'][0] == $memberId );
 
 	    	switch ($request->action) 
 	    	{
-	    		case 'index':
-	    		case 'listMembers':
-	    		case 'listMembersWithStatus':
-	    		case 'emailMembersWithStatus':
-	    		case 'search':
 	    		case 'revokeMembership':
 	    		case 'reinstateMembership':
 	    		case 'acceptDetails':
 	    		case 'rejectDetails':
-	    		case 'approveMember':
+	    		case 'addExistingMember':
+	    		case 'uploadCsv':
+	    		case 'emailMembersWithStatus':
+	    			return $memberIsMembershipAdmin; 
+
 	    		case 'sendMembershipReminder':
 	    		case 'sendContactDetailsReminder':
 	    		case 'sendSoDetailsReminder':
-	    		case 'addExistingMember':
-	    		case 'uploadCsv':
-	    			return $userIsMemberAdmin; 
+	    		case 'approveMember':
+	    		case 'index':
+	    		case 'listMembers':
+	    		case 'listMembersWithStatus':
+	    		case 'search':
+	    			return $memberIsMembershipAdmin || $memberIsOnMembershipTeam;
 
 	    		case 'changePassword':
-	    		case 'view':
 	    		case 'edit':
+	    			return $memberIsMembershipAdmin || $firstParamIsMemberId;
+
+	    		case 'view':
+	    			return $memberIsMembershipAdmin || $memberIsOnMembershipTeam || $firstParamIsMemberId;
+
 	    		case 'setupDetails':
-	    			if( $userIsMemberAdmin || 
-	    				( $actionHasParams && $userIdIsSet && $request->params['pass'][0] == $userId ) )
-	    			{
-	    				return true;
-	    			}
-	    			break;
+	    			return $firstParamIsMemberId;
 	    	}
 
 	    	return false;
@@ -108,14 +112,16 @@
 	        	'setupDetails'
 	        );
 
-	    	$userIsMemberAdmin = $this->Member->GroupsMember->isMemberInGroup( $this->_getLoggedInMemberId(), Group::MEMBER_ADMIN );
+	        $memberId = $this->_getLoggedInMemberId();
+	    	$memberIsMembershipAdmin = $this->Member->GroupsMember->isMemberInGroup( $memberId, Group::MEMBERSHIP_ADMIN );
+	    	$memberIsOnMembershipTeam = $this->Member->GroupsMember->isMemberInGroup( $memberId, Group::MEMBERSHIP_TEAM );
 	    	$isLocal = $this->isRequestLocal();
 
 	    	// We have to put register here, as is isAuthorized()
 	        // cannot be used to check access to functions if they can
 	        // ever be accessed by a user that is not logged in
 	    	if( $isLocal ||
-	    		$userIsMemberAdmin )
+	    		( $memberIsMembershipAdmin || $memberIsOnMembershipTeam ) )
 	    	{
 	    		array_push($allowedActionsArray, 'register');
 	    	}
@@ -238,7 +244,7 @@
 					if( $result['createdRecord'] === true )
 					{
 						$this->_sendEmail(
-	                		$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
+	                		$this->Member->getEmailsForMembersInGroup(Group::MEMBERSHIP_ADMIN),
 	                		'New Prospective Member Notification',
 	                		'notify_admins_member_added',
 	                		array( 
@@ -373,7 +379,7 @@
 		    			$this->Session->setFlash('Contact details saved.');
 
 						$this->_sendEmail(
-							$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
+							$this->Member->getEmailsForMembersInGroup(Group::MEMBERSHIP_ADMIN),
 							'New Member Contact Details',
 							'notify_admins_check_contact_details',
 							array( 
@@ -477,7 +483,7 @@
 		    			$this->_sendSoDetailsToMember($id);
 
 						$this->_sendEmail(
-							$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
+							$this->Member->getEmailsForMembersInGroup(Group::MEMBERSHIP_ADMIN),
 							'Impending Payment',
 							'notify_admins_payment_incoming',
 							array(
@@ -541,7 +547,7 @@
 
 	    		// Notify all the member admins
 	    		$this->_sendEmail(
-	    			$this->Member->getEmailsForMembersInGroup(Group::MEMBER_ADMIN),
+	    			$this->Member->getEmailsForMembersInGroup(Group::MEMBERSHIP_ADMIN),
 	    			'Member Approved',
 	    			'notify_admins_member_approved',
 	    			array(
@@ -807,7 +813,8 @@
 	    	$showAdminFeatures = false;
 	    	$showFinances = false;
 	    	$hasJoined = false;
-	    	$canView = $this->_getViewPermissions($id, $showAdminFeatures, $showFinances, $hasJoined);
+	    	$showPersonalDetails = false;
+	    	$canView = $this->_getViewPermissions($id, $showAdminFeatures, $showFinances, $hasJoined, $showPersonalDetails);
 
 	    	if($canView)
 	    	{
@@ -821,7 +828,7 @@
 			    	$mailingLists = $this->MailingList->getListsAndSubscribeStatus($memberEmail);
 					$this->set('mailingLists', $mailingLists);
 
-	    			$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined, true, true);
+	    			$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined, true, true, $showPersonalDetails);
 	    			if($sanitisedMemberInfo)
 	    			{
 	    				$formattedInfo = $this->Member->formatMemberInfo($sanitisedMemberInfo, true);
@@ -861,7 +868,8 @@
 	    	$showAdminFeatures = false;
 	    	$showFinances = false;
 	    	$hasJoined = false;
-	    	$canEdit = $this->_getViewPermissions($id, $showAdminFeatures, $showFinances, $hasJoined);
+	    	$showPersonalDetails = false;
+	    	$canEdit = $this->_getViewPermissions($id, $showAdminFeatures, $showFinances, $hasJoined, $showPersonalDetails);
 	    	if($canEdit)
 	    	{
 	    		$rawMemberInfo = $this->Member->getMemberSummaryForMember($id, false);
@@ -873,7 +881,7 @@
 			    	$mailingLists = $this->MailingList->getListsAndSubscribeStatus($memberEmail);
 					$this->set('mailingLists', $mailingLists);
 
-		    		$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined, true, true);
+		    		$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined, true, true, $showPersonalDetails);
 		    		$formattedMemberInfo = $this->Member->formatMemberInfo($sanitisedMemberInfo, true);
 			    	if($formattedMemberInfo)
 			    	{
@@ -884,7 +892,7 @@
 			    		if(	$this->request->is('post') ||
 			    			$this->request->is('put'))
 			    		{
-			    			$sanitisedData = $this->Member->sanitiseMemberInfo($this->request->data, $showAdminFeatures, $showFinances, $hasJoined, $showAdminFeatures, false);
+			    			$sanitisedData = $this->Member->sanitiseMemberInfo($this->request->data, $showAdminFeatures, $showFinances, $hasJoined, $showAdminFeatures, false, $showPersonalDetails);
 			    			if($sanitisedData)
 			    			{
 			    				$updateResult = $this->Member->updateDetails($id, $sanitisedData, $this->_getLoggedInMemberId());
@@ -975,8 +983,9 @@
 			@param ref bool $showAdminFeatures If this is set to true then admin features should be shown.
 			@param ref bool $showFinances If this is set to true then financial information should be shown.
 			@param ref bool $hasJoined If this is set to true then the member has joined.
+			@param ref bool $showPersonalDetails If this is set to true then show personal information about the member.
 		*/
-		private function _getViewPermissions($memberId, &$showAdminFeatures, &$showFinances, &$hasJoined)
+		private function _getViewPermissions($memberId, &$showAdminFeatures, &$showFinances, &$hasJoined, &$showPersonalDetails)
 		{
 			if(is_numeric($memberId))
 			{
@@ -985,14 +994,18 @@
 				{
 					$viewerId = $this->_getLoggedInMemberId();
 
-	    			$showAdminFeatures = 
-			    		(	$this->Member->GroupsMember->isMemberInGroup($viewerId, Group::MEMBER_ADMIN) || 
-			    			$this->Member->GroupsMember->isMemberInGroup($viewerId, Group::FULL_ACCESS) );
+					$memberHasFullAccess = $this->Member->GroupsMember->isMemberInGroup($viewerId, Group::FULL_ACCESS);
+					$memberIsMembershipAdmin = $this->Member->GroupsMember->isMemberInGroup($viewerId, Group::MEMBERSHIP_ADMIN);
+					$memberIsOnMembershipTeam = $this->Member->GroupsMember->isMemberInGroup($viewerId, Group::MEMBERSHIP_TEAM);
+
+	    			$showAdminFeatures = ($memberHasFullAccess || $memberIsMembershipAdmin || $memberIsOnMembershipTeam);
 
 		    		// Only show the finance stuff to admins, current or ex members
 		    		$hasJoined = in_array($memberStatus, array(Status::CURRENT_MEMBER, Status::EX_MEMBER));
 
 		    		$viewingOwnProfile = $viewerId == $memberId;
+
+		    		$showPersonalDetails = ($memberHasFullAccess || $memberIsMembershipAdmin || $viewingOwnProfile);
 
 			    	$showFinances = ($showAdminFeatures || $viewingOwnProfile)  && $hasJoined;
 

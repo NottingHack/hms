@@ -464,7 +464,7 @@
 
             // Test with a new e-mail
             $newEmail = 'foo@srsaegrttfd.com';
-            $result = $this->Member->registerMember( array('Member' => array('email' => $newEmail), 'MailingLists' => array('MailingLists' => array('0a6da449c9'))) );
+            $result = $this->Member->registerMember( array('Member' => array('email' => $newEmail), 'MailingLists' => array('MailingLists' => array('us8gz1v8rq'))) );
 
             $afterTimestamp = time();
 
@@ -483,7 +483,7 @@
             $this->assertArrayHasKey( 'memberId', $result, 'Result does not have member id.' );
 
             $this->assertArrayHasKey( 'mailingLists', $result, 'Result does not have mailingLists.' );
-            $this->assertEqual( $result['mailingLists'], array(array('list' => '0a6da449c9', 'action' => 'subscribe', 'successful' => true, 'name' => 'Nottingham Hackspace Announcements')), 'Result has incorrect mailingLists.' );
+            $this->assertEqual( $result['mailingLists'], array(array('list' => 'us8gz1v8rq', 'action' => 'subscribe', 'successful' => true, 'name' => 'Nottingham Hackspace Announcements')), 'Result has incorrect mailingLists.' );
 
 
             $record = $this->Member->findByEmail($newEmail);
@@ -507,7 +507,7 @@
             $this->assertArrayHasKey( 'old_status', $record['StatusUpdate'][0], 'Record does not have old_status key.' );
             $this->assertArrayHasKey( 'new_status', $record['StatusUpdate'][0], 'Record does not have new_status key.' );
             $this->assertArrayHasKey( 'timestamp', $record['StatusUpdate'][0], 'Record does not have timestamp key.' );
-            $this->assertEqual( $record['StatusUpdate'][0]['id'], 3, 'Record has incorrect id.' );
+            $this->assertEqual( $record['StatusUpdate'][0]['id'], 4, 'Record has incorrect id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['member_id'], 15, 'Record has incorrect member_id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['admin_id'], 15, 'Record has incorrect admin_id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['old_status'], 0, 'Record has incorrect old_status.' );
@@ -754,7 +754,7 @@
             $this->assertArrayHasKey( 'old_status', $record['StatusUpdate'][0], 'Record does not have old_status key.' );
             $this->assertArrayHasKey( 'new_status', $record['StatusUpdate'][0], 'Record does not have new_status key.' );
             $this->assertArrayHasKey( 'timestamp', $record['StatusUpdate'][0], 'Record does not have timestamp key.' );
-            $this->assertEqual( $record['StatusUpdate'][0]['id'], 3, 'Record has incorrect id.' );
+            $this->assertEqual( $record['StatusUpdate'][0]['id'], 4, 'Record has incorrect id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['member_id'], 7, 'Record has incorrect member_id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['admin_id'], 7, 'Record has incorrect admin_id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['old_status'], Status::PROSPECTIVE_MEMBER, 'Record has incorrect old_status.' );
@@ -880,7 +880,7 @@
                 ),
             );
 
-            $statusUpdateCount = 3;
+            $statusUpdateCount = 4;
             foreach ($data as $memberId => $memberData) 
             {
                 $beforeTimestamp = time();
@@ -1034,7 +1034,7 @@
                 ),
             );
 
-            $statusUpdateCount = 3;
+            $statusUpdateCount = 4;
             foreach ($data as $memberId => $memberData) 
             {
                 $beforeTimestamp = time();
@@ -1208,7 +1208,7 @@
             $this->assertArrayHasKey( 'old_status', $record['StatusUpdate'][0], 'Record does not have old_status key.' );
             $this->assertArrayHasKey( 'new_status', $record['StatusUpdate'][0], 'Record does not have new_status key.' );
             $this->assertArrayHasKey( 'timestamp', $record['StatusUpdate'][0], 'Record does not have timestamp key.' );
-            $this->assertEqual( $record['StatusUpdate'][0]['id'], 3, 'Record has incorrect id.' );
+            $this->assertEqual( $record['StatusUpdate'][0]['id'], 4, 'Record has incorrect id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['member_id'], 11, 'Record has incorrect member_id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['admin_id'], 5, 'Record has incorrect admin_id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['old_status'], Status::PRE_MEMBER_2, 'Record has incorrect old_status.' );
@@ -1263,7 +1263,7 @@
             $this->assertArrayHasKey( 'old_status', $record['StatusUpdate'][0], 'Record does not have old_status key.' );
             $this->assertArrayHasKey( 'new_status', $record['StatusUpdate'][0], 'Record does not have new_status key.' );
             $this->assertArrayHasKey( 'timestamp', $record['StatusUpdate'][0], 'Record does not have timestamp key.' );
-            $this->assertEqual( $record['StatusUpdate'][0]['id'], 3, 'Record has incorrect id.' );
+            $this->assertEqual( $record['StatusUpdate'][0]['id'], 4, 'Record has incorrect id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['member_id'], 12, 'Record has incorrect member_id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['admin_id'], 5, 'Record has incorrect admin_id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['old_status'], Status::PRE_MEMBER_2, 'Record has incorrect old_status.' );
@@ -1318,7 +1318,7 @@
             $this->assertArrayHasKey( 'old_status', $record['StatusUpdate'][0], 'Record does not have old_status key.' );
             $this->assertArrayHasKey( 'new_status', $record['StatusUpdate'][0], 'Record does not have new_status key.' );
             $this->assertArrayHasKey( 'timestamp', $record['StatusUpdate'][0], 'Record does not have timestamp key.' );
-            $this->assertEqual( $record['StatusUpdate'][0]['id'], 3, 'Record has incorrect id.' );
+            $this->assertEqual( $record['StatusUpdate'][0]['id'], 4, 'Record has incorrect id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['member_id'], 12, 'Record has incorrect member_id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['admin_id'], 5, 'Record has incorrect admin_id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['old_status'], Status::PRE_MEMBER_2, 'Record has incorrect old_status.' );
@@ -1504,7 +1504,6 @@
             $this->assertEqual( $record['Member']['address_postcode'], 'TS5 3HD', 'Record has incorrect address postcode.' );
             $this->assertEqual( $record['Member']['contact_number'], '078 1957 5612', 'Record has incorrect contact number.' );
 
-            $this->assertEqual( $record['Pin'][0]['unlock_text'], 'Welcome', 'Record has incorrect pin unlock text.' );
             $this->assertEqual( $record['Pin'][0]['state'], 40, 'Record has incorrect pin state.' );
             $this->assertEqual( $record['Pin'][0]['member_id'], 14, 'Record has incorrect pin member id.' );
 
@@ -1518,7 +1517,7 @@
             $this->assertArrayHasKey( 'old_status', $record['StatusUpdate'][0], 'Record does not have old_status key.' );
             $this->assertArrayHasKey( 'new_status', $record['StatusUpdate'][0], 'Record does not have new_status key.' );
             $this->assertArrayHasKey( 'timestamp', $record['StatusUpdate'][0], 'Record does not have timestamp key.' );
-            $this->assertEqual( $record['StatusUpdate'][0]['id'], 3, 'Record has incorrect id.' );
+            $this->assertEqual( $record['StatusUpdate'][0]['id'], 4, 'Record has incorrect id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['member_id'], 14, 'Record has incorrect member_id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['admin_id'], 5, 'Record has incorrect admin_id.' );
             $this->assertEqual( $record['StatusUpdate'][0]['old_status'], Status::PRE_MEMBER_3, 'Record has incorrect old_status.' );

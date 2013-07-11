@@ -50,7 +50,7 @@
 		{
 			$this->mailingLists = array(
 				array(
-					'id' => '0a6da449c9',
+					'id' => 'us8gz1v8rq',
 					'web_id' => '30569',
 					'name' => 'Nottingham Hackspace Announcements',
 					'date_created' => '2012-06-28 19:12:00',
@@ -62,7 +62,7 @@
 					'default_language' => 'en',
 					'list_rating' => '3.5',
 					'subscribe_url_short' => 'http://eepurl.com/ncaln',
-					'subscribe_url_long' => 'http://nottinghack.us5.list-manage.com/subscribe?u=a4e59e4c29bd40e76419a037b&id=0a6da449c9',
+					'subscribe_url_long' => 'http://nottinghack.us5.list-manage.com/subscribe?u=a4e59e4c29bd40e76419a037b&id=us8gz1v8rq',
 					'beamer_address' => 'YTRlNTllNGMyOWJkNDBlNzY0MTlhMDM3Yi02YTkzMzc3ZS05ZTU5LTQ2ZmUtOTQ5Ni04ODQyYTAzOWVlN2Y=@campaigns.mailchimp.com',
 					'visibility' => 'pub',
 					'member_count' => 0,
@@ -370,7 +370,7 @@
 						Group::FULL_ACCESS,
 						Group::GATEKEEPER_ADMIN,
 						Group::SNACKSPACE_ADMIN,
-						Group::MEMBER_ADMIN,
+						Group::MEMBERSHIP_ADMIN,
 					);
 
 					$numGroupsToAdd = rand(0, 2);
@@ -628,7 +628,6 @@
 			$record = array(
 				'pin_id' => $pinId,
 				'pin' => $pin,
-				'unlock_text' => 'NOT USED',
 				'date_added' => date("Y-m-d H:i:s", $joinTimestamp),
 				'expiry' => null,
 				'state' => 30,

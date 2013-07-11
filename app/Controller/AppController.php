@@ -78,7 +78,7 @@ class AppController extends Controller {
         {
             $adminLinks = array();
             if( $this->Member->GroupsMember->isMemberInGroup( $loggedInMemberId, Group::FULL_ACCESS ) || 
-                $this->Member->GroupsMember->isMemberInGroup( $loggedInMemberId, Group::MEMBER_ADMIN ) )
+                $this->Member->GroupsMember->isMemberInGroup( $loggedInMemberId, Group::MEMBERSHIP_ADMIN ) )
             {
                 $adminLinks = array(
                     'Members' => array( 'plugin' => null, 'controller' => 'members', 'action' => 'index' ),

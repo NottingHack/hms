@@ -6,8 +6,6 @@
 	//! Setup is a class that is responsible for parsing options and then performing certain steps based on those options.
 	class Setup
 	{
-		private $newline = null; 	//!< Newline character, different depending on output (HTML or text).
-
 		//! Options
 		private $createDb = false;					//!< If true create the instrumentation and instrumentation_test databases.
 		private $populateDb = false;				//!< If true populate the databases with default tables and data.
@@ -89,53 +87,46 @@
 			return $template;
 		}
 
-		//! Create the config files HMS needs to run.
+		//! Create the config files for the current environment, delete any no-longer needed config files.
 		/*!
 			@param array $settings The settings to use.
 		*/
-		private function _createConfigFiles($settings)
+		private function _setupConfigFiles($settings)
 		{
 			$configPath = '../../../app/Config/';
 
-			$files = array(
-				'database',
-				'hms',
-				'krb',
-				'mailchimp',
-				'email',
-				'debug',
-			);
-
 			// ... Not that I'm OCD or anything
-			asort($files);
+			asort($settings);
 
 			// Create each of the config files
-			foreach ($files as $fileName) 
+			foreach ($settings as $settingName => $settingData) 
 			{
 				// First check for dev/production templates
-				$templateFilePath = makeAbsolutePath("$fileName.{$this->environmentType}.template");
+				$templateFilePath = makeAbsolutePath("$settingName.{$this->environmentType}.template");
 				if (!file_exists($templateFilePath))
 				{
 					// Fall back to the regular template
-					$templateFilePath = makeAbsolutePath("$fileName.template");
+					$templateFilePath = makeAbsolutePath("$settingName.template");
 
 					if(!file_exists($templateFilePath))
 					{
-						$this->_logMessage("Skipping config file: $filename because we couldn't find a matching template");
+						$fullFilePath = makeAbsolutePath("$configPath$settingName.php");
+						$this->_logMessage("Deleting settings file at $fullFilePath because we couldn't find a matching template");
+						unlink($fullFilePath);
 						continue;
 					}
 				}
 
 				$currentContents = file_get_contents($templateFilePath);
-				$newContents = $this->_replaceFields($currentContents, $settings[$fileName]);
+				$newContents = $this->_replaceFields($currentContents, $settingData);
 
-				if (file_put_contents("$configPath$fileName.php", $newContents) !== FALSE) 
+				if (file_put_contents("$configPath$settingName.php", $newContents) !== FALSE) 
 				{
-					$this->_logMessage("Created $fileName.php from template $templateFilePath");
+					$this->_logMessage("Created $settingName.php from template $templateFilePath");
 				}
 				else 
 				{
-					$this->_logMessage("Failed to create $fileName.php");
+					$this->_logMessage("Failed to create $settingName.php");
 				}
 			}
 		}
@@ -284,7 +275,7 @@
 				'email' => $this->email,
 				'username' => $this->username,
 				'groups' => array(
-					Group::CURRENT_MEMBERS, Group::FULL_ACCESS, Group::MEMBER_ADMIN,
+					Group::CURRENT_MEMBERS, Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN,
 				),
 			);
 			$gen->generateMember(Status::CURRENT_MEMBER, $details);
@@ -512,31 +503,31 @@
 			}
 		}
 
+		//! Check to see if we're running on the command line
+		/*
+			@ratval bool True if we're running on the command line, false otherwise.
+		*/
+		private function _isOnCommandline()
+		{
+			// Note: Like most things in PHP this function isn't reliable:
+			// http://php.net/manual/en/function.php-sapi-name.php
+			$sapiType = php_sapi_name();
+
+			return ($sapiType == 'cli');
+		}
+
 		//! Get the appropriate newline character.
 		/*
 			@retval string An a string representing a newline for the current output.
 		*/
 		private function _getNewline()
 		{
-			if(!isset($this->newline))
+			if($this->_isOnCommandline())
 			{
-				// Note: Like most things in PHP this function isn't reliable:
-				// http://php.net/manual/en/function.php-sapi-name.php
-				$sapiType = php_sapi_name();
-
-				if($sapiType == 'cli')
-				{
-					// We're probably being called from command line.
-					$newline = PHP_EOL;
-				}
-				else
-				{
-					// We're probably being called from the web.
-					$newline = '<br/>';
-				}
+				return PHP_EOL;
 			}
-			
-			return $newline;
+			// We're probably being called from the web.
+			return '<br/>';
 		}
 
 		//! Format and write a log message, prepends timestamp and appends a newline.
@@ -546,6 +537,11 @@
 		private function _logMessage($message)
 		{
 			echo sprintf("[%s] %s%s", date("H:i:s"), $message, $this->_getNewline());
+			if(!$this->_isOnCommandline())
+			{
+				ob_flush();
+    			flush();
+			}
 		}
 
 		//! Check if the options used are valid.
@@ -570,7 +566,7 @@
 		private function _getSettings()
 		{
 			// Default settings
-			$aSettings = array(
+			$defaultSettings = array(
 				'database'	=>	array(
 					'default_host'		=>	'localhost',
 					'default_login'		=>	'hms',
@@ -586,25 +582,45 @@
 					'innerdoor'		=>	'1234',
 					'wifi'			=>	'123456',
 				),
+				'debug' => array(
+				),
 				'krb' =>	array(
 
 				),
 				'mailchimp'	=> array(
-					'key'	=>	'123456',
-					'list'	=>	'123456',
+					'key'	=>	'w1zg905ych1e090og9pvjb7td6b05vlg-2y8',
+					'list'	=>	'us8gz1v8rq',
 				),
 				'email'	=>	array(
 					'from_address'	=>	'site@localhost',
 					'host'			=>	'localhost',
 					'port'			=>	25,
 					'username'		=>	'user',
-					'password'		=>	'secret',
+					'password'		=>	'hunter2',
 				),
 			);
 
-			include('hms.settings');
+			$overrideSettings = 'hms.settings';
+			if(file_exists(makeAbsolutePath($overrideSettings)))
+			{
+				include($overrideSettings);
+			}
 
-			return $aSettings;
+			// Merge the default and override settings, preferring the override ones	
+			$finalSettings = array();
+			foreach ($defaultSettings as $name => $values)
+			{
+				if(array_key_exists($name, $aSettings))
+				{
+					$finalSettings[$name] = $aSettings[$name];
+				}
+				else
+				{
+					$finalSettings[$name] = $defaultSettings[$name];
+				}
+			}
+
+			return $finalSettings;
 		}
 
 		//! Run all selected setup steps.
@@ -620,7 +636,7 @@
 
 			$settings = $this->_getSettings();
 
-			$this->_createConfigFiles($settings);
+			$this->_setupConfigFiles($settings);
 			if(!$this->_generateData())
 			{
 				$this->_logMessage('Failed to generate and write data.');

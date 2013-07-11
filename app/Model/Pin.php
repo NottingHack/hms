@@ -31,21 +31,33 @@
     	);
 
 	    //! Validation rules.
-	    /*!
-	    	Pin must not be empty.
-	    	Member Id must not be empty.
-	    	Unlock Text must not be empty.
-	    */
 	    public $validate = array(
 	        'pin' => array(
-	            'rule' => 'notEmpty'
+	            'length' => array(
+	        		'rule' => array('between', 1, 12),
+	        		'message' => 'Pin must be between 1 and 12 characters long',
+	        	),
+	        ),
+	        'state' => array(
+	            'length' => array(
+	        		'rule' => array('between', 1, 11),
+	        		'message' => 'State must be between 1 and 11 characters long',
+	        	),
+	        	'content' => array(
+	        		'rule' => 'numeric',
+	        		'message' => 'State must be a number',
+	        	),
 	        ),
 	        'member_id' => array(
-	        	'rule' => 'notEmpty'
+	        	 'length' => array(
+	        		'rule' => array('maxLength', 11),
+	        		'message' => 'Member id must be no more than 11 characters long',
+	        	),
+	        	'content' => array(
+	        		'rule' => 'numeric',
+	        		'message' => 'Member id must be a number',
+	        	),
 	        ),
-	        'unlock_text' => array(
-	            'rule' => 'notEmpty'
-	        )
 	    );
 
 	    //! Generate a random pin.
@@ -88,7 +100,6 @@
 
 				$data = array( 'Pin' => 
 					array(
-						'unlock_text' => 'Welcome',
 						'pin' => $this->generateUniquePin(),
 						'state' => Pin::STATE_ENROLL,
 						'member_id' => $memberId,

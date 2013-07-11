@@ -25,6 +25,8 @@
 			array('member_id' => 4, 'grp_id' => 4),
 
 			array('member_id' => 5, 'grp_id' => 5),
+
+			array('member_id' => 4, 'grp_id' => 6),
 		);
 
 		public function create($db)
