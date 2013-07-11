@@ -6,20 +6,32 @@
 	//! Setup is a class that is responsible for parsing options and then performing certain steps based on those options.
 	class Setup
 	{
-		private $logIndet = 0;			//!< Indent level for the log
+		private $logIndet = 0;						//!< Indent level for the log
+		private $settings = array();				//!< Array of settings data
 
 		//! Options
-		private $createDb = false;					//!< If true create the instrumentation and instrumentation_test databases.
-		private $populateDb = false;				//!< If true populate the databases with default tables and data.
+		private $createDb = false;					//!< If true create the instrumentation and instrumentation_test databases and populate them with tables and data.
 		private $useRealKrb = false;				//!< If true then use the real KRB Auth lib, otherwise use a dummy one.
 		private $setupTempFolders = false;			//!< If true create the temporary folders CakePHP needs.
 		private $environmentType = 'production';	//!< Prefer files with this suffix.
 
 		//! The following details are used to create a HMS login for the user with admin rights.
-		private $firstname = '';			//!< Firstname of the user.
-		private $surname = '';				//!< Surname of the user.
-		private $username = '';				//!< Username of the user.
-		private $email = '';				//!< Email of the user.
+		private $firstname = '';					//!< Firstname of the user.
+		private $surname = '';						//!< Surname of the user.
+		private $username = '';						//!< Username of the user.
+		private $email = '';						//!< Email of the user.
+
+
+		//! Constructor
+		public function __construct()
+		{
+			if(!$this->_validateOptions())
+			{
+				$this->_logMessage('Invalid arguments.');
+				exit(1);
+			}
+			$this->settings = $this->_getSettings();
+		}
 
 
 		//! Increase the log indent level
@@ -41,13 +53,11 @@
 
 		//! Set up the database options.
 		/*
-			@param bool $createDb If true then the database will be created.
-			@param bool $populateDb If true then database will be populated.
+			@param bool $createDb If true then the database will be created..
 		*/
-		public function setDatabaseOptions($createDb, $populateDb)
+		public function setCreateDatabase($createDb)
 		{
 			$this->createDb = $createDb;
-			$this->populateDb = $populateDb;
 		}
 
 		//! Set if we should use the real KRB lib or not.
@@ -111,12 +121,14 @@
 		/*!
 			@param array $settings The settings to use.
 		*/
-		private function _setupConfigFiles($settings)
+		private function _setupConfigFiles()
 		{
 			$this->_logMessage('Setting up config files');
 			$this->_pushLogIndent();
 
 			$configPath = '../../../app/Config/';
+
+			$settings = $this->settings;
 
 			// ... Not that I'm OCD or anything
 			asort($settings);
@@ -183,18 +195,26 @@
 			return $validFiles;
 		}
 
-		private function _runQueryFromFile($databaseObj, $filepath)
+		private function _runQuery($databaseObj, $query)
 		{
-			$this->_logMessage("Executing SQL in: $filepath");
-			if ($databaseObj->multi_query(file_get_contents($filepath)))
+			$results = array();
+			if ($databaseObj->multi_query($query))
 			{
-				$databaseObj->store_result();
+				array_push($results, $databaseObj->store_result());
 				while ($databaseObj->more_results()) 
 				{
 					$databaseObj->next_result();
-					$databaseObj->store_result();
+					array_push($results, $databaseObj->store_result());
 				}
 			}
+
+			return $results;
+		}
+
+		private function _runQueryFromFile($databaseObj, $filepath)
+		{
+			$this->_logMessage("Executing SQL in: $filepath");
+			$this->_runQuery($databaseObj, file_get_contents($filepath));
 		}
 
 		private function _runAllQueriesInFileList($databaseObj, $fileList)
@@ -334,87 +354,93 @@
 			return true;
 		}
 
+		//! Get a mysqli database connection.
+		/*!
+			@param string $connName The name of the connection to get (e.g. default/test)
+			@param bool $select If true then the database will be selected.
+			@retval mixed A mysql connection on success, or null on failure.
+		*/
+		private function _getDbConnection($connName, $select)
+		{
+			$hostName = $connName . '_host';
+			$login = $connName . '_login';
+			$password = $connName . '_password';
+			$database = $connName . '_database';
+
+			$settings = $this->settings['database'];
+
+			if( array_key_exists($hostName, $settings) && 
+				array_key_exists($login, $settings) &&
+				array_key_exists($password, $settings) &&
+				array_key_exists($database, $settings) )
+			{
+				$conn = new mysqli($settings[$hostName], $settings[$login], $settings[$password]);
+				if($select)
+				{
+					$conn->select_db($settings[$database]);
+				}
+				return $conn;
+			}
+
+			return null;
+		}
+
+		//! Set-up a database.
+		/*!
+			@param string $prefix The prefix of the database to create.
+			@param bool $populate If true then run schema and data queries on the newly created database.
+		*/
+		private function _setupDatabase($prefix, $populate)
+		{
+			$conn = $this->_getDbConnection($prefix, false);
+
+			if ($conn->connect_error) 
+			{
+				$this->_logMessage("Couldn't connect to main database");
+			}
+			else 
+			{
+				$dbName = $this->settings['database'][$prefix . '_database'];
+				if(!$conn->query("DROP DATABASE " . $dbName))
+				{
+					$this->_logMessage("Failed to drop database: $dbName");
+				}
+				if(!$conn->query("CREATE DATABASE " . $dbName))
+				{
+					$this->_logMessage("Failed to drop database: $dbName");
+				}
+				else
+				{
+					$this->_logMessage("Created database: $dbName");
+				}
+
+				if( $populate &&
+					$conn->select_db($dbName))
+				{
+					$this->_runSchemaQueries($conn);
+					$this->_runDataQueries($conn);
+				}
+				else
+				{
+					$this->_logMessage("Unable to select database: $dbName");
+				}
+			}
+			$conn->close();
+		}
+
 		//! Create and/or populate the databases for HMS
 		/*!
 			@param array $settings The settings to use.
 		*/
-		private function _createDatabases($settings)
+		private function _createDatabases()
 		{
-			if ($this->createDb || $this->populateDb) 
+			if ($this->createDb) 
 			{
 				$this->_logMessage('Creating and/or populating databases');
 				$this->_pushLogIndent();
 
-				// Main Database
-				$oDB = new mysqli($settings['database']['default_host'], $settings['database']['default_login'], $settings['database']['default_password']);
-
-				if ($oDB->connect_error) 
-				{
-					$this->_logMessage("Couldn't connect to main database");
-				}
-				else 
-				{
-					$defaultDbName = $settings['database']['default_database'];
-					if($this->createDb || $this->populateDb)
-					{
-						if(!$oDB->query("DROP DATABASE " . $defaultDbName))
-						{
-							$this->_logMessage("Failed to drop database: $defaultDbName");
-						}
-						if(!$oDB->query("CREATE DATABASE " . $defaultDbName))
-						{
-							$this->_logMessage("Failed to drop database: $defaultDbName");
-						}
-						else
-						{
-							$this->_logMessage("Created database: $defaultDbName");
-						}
-					}
-
-					if($oDB->select_db($defaultDbName))
-					{
-						if($this->populateDb)
-						{
-							$this->_runSchemaQueries($oDB);
-							$this->_runDataQueries($oDB);
-						}
-					}
-					else
-					{
-						$this->_logMessage("Unable to select database: $defaultDbName");
-					}
-				}
-				$oDB->close();
-
-				// Test Database
-				$oDB = new mysqli($settings['database']['test_host'], $settings['database']['test_login'], $settings['database']['test_password']);
-
-				if ($oDB->connect_error) 
-				{
-					$this->_logMessage("Couldn't connect to test database");
-				}
-				else 
-				{
-					$testDbName = $settings['database']['test_database'];
-					if($this->createDb || $this->populateDb)
-					{
-						if(!$oDB->query("DROP DATABASE " . $testDbName))
-						{
-							$this->_logMessage("Failed to drop database: $testDbName");
-						}
-						if(!$oDB->query("CREATE DATABASE " . $testDbName))
-						{
-							$this->_logMessage("Failed to drop database: $testDbName");
-						}
-						else
-						{
-							$this->_logMessage("Created database: $testDbName");
-						}
-					}
-
-					
-				}
-				$oDB->close();
+				$this->_setupDatabase('default', true);
+				$this->_setupDatabase('test', false);
 
 				// If we've just created the data in the database then we're already on
 				// the latest database version
@@ -596,7 +622,7 @@
 		private function _validateOptions()
 		{
 			// Certain variables are required
-			if($this->populateDb)
+			if($this->createDb)
 			{
 				if(! (isset($this->firstname) && isset($this->surname) && isset($this->username) && isset($this->email)) )
 				{
@@ -724,10 +750,13 @@
 		*/
 		private function _writeDbVersion($version)
 		{
-			$path = makeAbsolutePath('database.version');
 			$versionStr = $this->_versionToString($version);
-			$this->_logMessage("Writing db version $versionStr to $path");
-			file_put_contents($path, $versionStr);
+			$this->_logMessage("Writing db version $versionStr to database");
+
+			$conn = $this->_getDbConnection('default', true);
+			$this->_runQueryFromFile($conn, makeAbsolutePath('sql/hms_meta_schema.sql'));
+			$this->_runQuery($conn, "DELETE FROM `hms_meta` WHERE 1");
+			$this->_runQuery($conn, "INSERT INTO `hms_meta` (`version`) VALUES ('$versionStr')");
 		}
 
 		//! Attempt to read the database version from the database.version file
@@ -736,13 +765,19 @@
 		*/
 		private function _readDbVersion()
 		{
-			$path = makeAbsolutePath('database.version');
-			$trimmedContents = trim(file_get_contents($path));
-			$version = $this->_stringToVersion($trimmedContents);
-			if($this->_isValidVersion($version))
+			$conn = $this->_getDbConnection('default', true);
+			$result = $this->_runQuery($conn, "SELECT * FROM `hms_meta`");
+			if(is_array($result) && count($result) > 0)
 			{
-				return $version;
+				$key = 'version';
+				$data = $result[0]->fetch_assoc();
+
+				if(array_key_exists($key, $data))
+				{
+					return $this->_stringToVersion($data[$key]);
+				}
 			}
+
 			return null;
 		}
 
@@ -917,23 +952,15 @@
 		//! Run all selected setup steps.
 		public function run()
 		{
-			if(!$this->_validateOptions())
-			{
-				$this->_logMessage('Invalid arguments.');
-				exit(1);
-			}
-
 			$this->_logMessage("Started");
 
-			$settings = $this->_getSettings();
-
-			$this->_setupConfigFiles($settings);
+			$this->_setupConfigFiles();
 			if(!$this->_generateData())
 			{
 				$this->_logMessage('Failed to generate and write data.');
 				exit(1);
 			}
-			$this->_createDatabases($settings);
+ 			$this->_createDatabases();
 			$this->_runDatabaseUpdate();
 			$this->_copyKrbLibFile();
 			$this->_copyMcapiLibFile();

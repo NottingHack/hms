@@ -31,9 +31,7 @@
 					<label class="description" for="element_4">Settings: </label>
 					<span>
 						<input id="createdb" name="createdb" class="element checkbox" type="checkbox" checked="checked" />
-						<label class="choice" for="createdb">Create Databases</label>
-						<input id="populatedb" name="populatedb" class="element checkbox" type="checkbox" checked="checked" />
-						<label class="choice" for="populatedb">Populate Database</label>
+						<label class="choice" for="createdb">Create Databases and tables</label>
 						<input id="setuptmpfolders" name="setuptmpfolders" class="element checkbox" type="checkbox" checked="checked" />
 						<label class="choice" for="setuptmpfolders">Setup Temp Folders</label>
 						<input id="usedevelopmentenv" name="usedevelopmentenv" class="element checkbox" type="checkbox" checked="checked" />
