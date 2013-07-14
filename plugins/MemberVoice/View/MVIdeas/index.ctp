@@ -5,6 +5,9 @@ $this->Html->addCrumb('MemberVoice', '/membervoice/ideas');
 /* Load our CSS */
 $this->Html->css("MemberVoice.mvideas", null, array('inline' => false));
 
+/* Load the Ideas JS */
+$this->Html->script('MemberVoice.idea', array('inline' => false));
+
 /* Enclose all HTML to isolate css */
 ?>
 

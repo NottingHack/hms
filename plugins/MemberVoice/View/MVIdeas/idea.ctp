@@ -4,7 +4,7 @@ $this->Html->addCrumb('MemberVoice', '/membervoice/ideas');
 $this->Html->addCrumb($idea['Idea']['id'] , '/membervoice/ideas/view' . $idea['Idea']['id']);
 
 /* Load our CSS */
-$this->Html->css("MemberVoice.mvideas", null, array('inline' => false));
+$this->Html->css('MemberVoice.mvideas', null, array('inline' => false));
 
 /* Enclose all HTML to isolate css */
 ?>
