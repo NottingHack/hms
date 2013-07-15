@@ -26,7 +26,7 @@ if (count($ideas) > 0):
 	foreach ($ideas as $idea):
 ?>
 
-<li class="mvIdea">
+<li class="mvIdea" id="mvIdea<?php echo($idea['Idea']['id']); ?>">
 
 <div class="mvIdeaDetail">
 	<h2><?php echo($this->Html->link($idea['Idea']['idea'], array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'idea', $idea['Idea']['id'] ))); ?></h2>
@@ -45,7 +45,16 @@ if (count($ideas) > 0):
 		<span>vote<?php echo($idea['Idea']['votes'] == 1 ? "" : "s"); ?></span>
 	</div>
 
-	<?php echo($this->element('vote', array('id' => $idea['Idea']['id']))); ?>
+	<?php
+	$hasVoted = 0;
+	foreach ($idea['Vote'] as $vote) {
+		if ($vote['user_id'] == $user) {
+			$hasVoted = $vote['votes'];
+		}
+	}
+	echo($this->element('vote', array('id' => $idea['Idea']['id'], 'hasVoted' => $hasVoted)));
+
+	?>
 
 </div>
 
@@ -65,9 +74,3 @@ endif;
 /* End isolation block */
 ?>
 </div>
-
-<?php
-
-debug($ideas);
-
-?>

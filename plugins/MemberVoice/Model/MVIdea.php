@@ -28,6 +28,65 @@ class MVIdea extends MemberVoiceAppModel {
 				'className'	=>	'MemberVoice.MVStatus',
 			)
 		);
+
+	public function saveVote($ideaID, $userID, $votes) {
+		$idea = $this->find('first', array('conditions' => array('Idea.id' => $ideaID)));
+		$newvotes = $idea['Idea']['votes'];
+		
+		/* Has this user already voted? */
+		$voted = false;
+		foreach ($idea['Vote'] as $vote) {
+			if ($vote['user_id'] == $userID) {
+				$voted = $vote['id'];
+				$oldvote = $vote['votes'];
+			}
+		}
+
+		/* Ok, what shall we do? */
+		if ($voted == false and $votes == 0) {
+			/* trying to clear a vote that doesn't exist! Don't do anything */
+			return false;
+		}
+		else if ($voted == false) {
+			/* new vote, just save */
+			$newvotes = $newvotes + $votes;
+		}
+		else if ($voted !== false) {
+			/* remove old vote first */
+			$newvotes = $newvotes - $oldvote;
+
+			$this->Vote->delete($voted);
+
+			if ($votes == 0) {
+				/* was clearing vote, no need to do anything else */
+				return $newvotes;
+			}
+			else {
+				$newvotes = $newvotes + $votes;
+			}
+		}
+
+		/* Actually save! */
+		$data = array(
+					  'Idea' => array(
+									  'id'		=>	$ideaID,
+									  'votes'	=>	$newvotes,
+									  ),
+					  'Vote' => array(
+									  array(
+											'user_id'	=>	$userID,
+											'idea_id'	=>	$ideaID,
+											'votes'		=>	$votes,
+											),
+									  ),
+					  );
+		if ($this->saveAssociated($data)) {
+			return $newvotes;
+		}
+		else {
+			return false;
+		}
+	}
 }
 
 ?>

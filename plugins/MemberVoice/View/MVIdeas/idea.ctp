@@ -37,3 +37,5 @@ $this->Html->css('MemberVoice.mvideas', null, array('inline' => false));
 /* End isolation block */
 ?>
 </div>
+
+<?php debug($ideas); ?>
