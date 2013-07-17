@@ -11,6 +11,7 @@ div.memberVoice {
 
 div.memberVoice ul.mvIdeas {
 	list-style: none;
+	margin-right: 250px;
 }
 
 div.memberVoice ul.mvIdeas li {
@@ -66,12 +67,12 @@ div.memberVoice div.mvVoteCount span {
 }
 
 /* Voting Buttons */
-div.mvVoting {
+div.memberVoice div.mvVoting {
 	position: relative;
 	margin-top: 5px;
 }
 
-a.mvVote {
+div.memberVoice a.mvVote {
 	display: block;
 	position: absolute;
 	top: 0px;
@@ -81,24 +82,55 @@ a.mvVote {
 	border: 1px solid #000000;
 }
 
-a.mvVote:hover {
+div.memberVoice a.mvVote:hover {
 	background-position: 0px 0px;
 }
 
-a.mvUp {
+div.memberVoice a.mvUp {
 	border-color: #195905;
 	left: 0px;
 	background: url('../img/voteup.png') no-repeat;
 	background-position: 0px -30px;
 }
 
-a.mvDown {
+div.memberVoice a.mvDown {
 	border-color: #DB0000;
 	right: 0px;
 	background: url('../img/votedown.png') no-repeat;
 	background-position: 0px -30px;
 }
 
-a.mvVoted {
+div.memberVoice a.mvVoted {
 	background-position: 0px 0px;
+}
+
+/* Categories */
+div.memberVoice ul.mvCategories {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 230px;
+	list-style-type: none;
+}
+
+div.memberVoice ul.mvCategories li {
+	margin: 0 0 10px 0;
+}
+
+div.memberVoice ul.mvCategories li a {
+	display: block;
+	background: #195905;
+	border: 1px solid #195905;
+	color: #FFFFFF;
+	font-weight: normal;
+	padding: 5px;
+	margin-left: 15px;
+}
+
+div.memberVoice ul.mvCategories li a:hover,
+div.memberVoice ul.mvCategories li a.mvSelected {
+	background: #FFFFFF;
+	color: #195905;
+	text-decoration: none;
+	margin-left: 0px;
 }

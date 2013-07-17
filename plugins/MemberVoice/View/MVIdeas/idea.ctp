@@ -6,10 +6,20 @@ $this->Html->addCrumb($idea['Idea']['id'] , '/membervoice/ideas/view' . $idea['I
 /* Load our CSS */
 $this->Html->css('MemberVoice.mvideas', null, array('inline' => false));
 
+/* The JSON URL */
+$this->append('script');
+echo('<script type="text/javascript">' . "\n");
+echo('var mvVoteUrl = "' . $voteurl . '";' . "\n");
+echo('</script>' ."\n");
+$this->end();
+
+/* Load the Ideas JS */
+$this->Html->script('MemberVoice.idea', array('inline' => false));
+
 /* Enclose all HTML to isolate css */
 ?>
 
-<div class="memberVoice">
+<div class="memberVoice" id="mvIdea<?php echo($idea['Idea']['id']); ?>">
 
 <div class="mvIdeaDetail">
 	<h2><?php echo($idea['Idea']['idea']); ?></h2>
@@ -28,7 +38,16 @@ $this->Html->css('MemberVoice.mvideas', null, array('inline' => false));
 		<span>vote<?php echo($idea['Idea']['votes'] == 1 ? "" : "s"); ?></span>
 	</div>
 
-	<!-- Voting code - need some member detail from the controller -->
+	<?php
+	$hasVoted = 0;
+	foreach ($idea['Vote'] as $vote) {
+		if ($vote['user_id'] == $user) {
+			$hasVoted = $vote['votes'];
+		}
+	}
+	echo($this->element('vote', array('id' => $idea['Idea']['id'], 'hasVoted' => $hasVoted)));
+
+	?>
 
 </div>
 
@@ -37,5 +56,3 @@ $this->Html->css('MemberVoice.mvideas', null, array('inline' => false));
 /* End isolation block */
 ?>
 </div>
-
-<?php debug($ideas); ?>

@@ -4,10 +4,45 @@ class MVIdeasController extends MemberVoiceAppController {
 
 	public $components = array('RequestHandler');
 
-	public function index() {
-		$ideas = $this->MVIdea->find('all', array('conditions' => array('Status.status !=' => array('Complete','Cancelled'))));
+	public $paginate = array(
+							'limit' => 5,
+							'order' => array(
+											'Idea.votes' => 'desc'
+											)
+							);
+
+	public function index($id = null) {
+		/* If an array is passed, restrict to that category */
+		if (!$id) {
+			$conditions = array(
+								'Status.status !='	=> array('Complete','Cancelled'),
+								);
+		}
+		else {
+			$conditions = array(
+								'Status.status !='	=> array('Complete','Cancelled'),
+								'CategoriesIdeas.category_id'		=>	$id,
+								);
+			$this->paginate['joins'] = array(
+											array(
+												'table' => 'mv_categories_ideas',
+												'alias' => 'CategoriesIdeas',
+												'type' => 'INNER',
+												'conditions' => array(
+													'Idea.id = CategoriesIdeas.idea_id',
+												)
+											),
+										);
+			$category = $this->MVIdea->Category->find('first', array('conditions' => array('Category.id' => $id)));
+			$this->set('category', $category);
+		}
+		$ideas = $this->paginate('MVIdea', $conditions);
+		$categories = $this->MVIdea->Category->find('all', array('order' => 'Category.category'));
+
 		$this->set('ideas', $ideas);
+		$this->set('categories', $categories);
 		$this->set('user', $this->_getUserID());
+		$this->set('voteurl', $this->_getVoteUrl());
 	}
 
 	public function idea($id = null) {
@@ -18,7 +53,12 @@ class MVIdeasController extends MemberVoiceAppController {
 		if (!$idea) {
 			throw new NotFoundException(__('Invalid post'));
 		}
+		$categories = $this->MVIdea->Category->find('all', array('order' => 'Category.category'));
+
 		$this->set('idea', $idea);
+		$this->set('categories', $categories);
+		$this->set('user', $this->_getUserID());
+		$this->set('voteurl', $this->_getVoteUrl());
 	}
 
 	public function vote($id = null) {
@@ -55,6 +95,17 @@ class MVIdeasController extends MemberVoiceAppController {
 
 		$this->set('return', $return);
 		$this->set('_serialize', 'return');
+	}
+
+	private function _getVoteUrl() {
+		if (method_exists("Router", "baseUrl")) {
+			$url = Router::baseUrl();
+		}
+		else {
+			$url = FULL_BASE_URL;
+		}
+		$url .= Router::url(array('plugin' => 'MemberVoice', 'controller' => 'MVIdeas', 'action' => 'vote'));;
+		return $url;
 	}
 }
 

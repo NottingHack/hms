@@ -1,9 +1,19 @@
 <?php
 /* Breadcrumbs */
-$this->Html->addCrumb('MemberVoice', '/membervoice/ideas');
+$this->Html->addCrumb('MemberVoice', $this->Html->url(array('plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index', 'base' => false)));
+if (isset($category)) {
+	$this->Html->addCrumb($category['Category']['category'], $this->Html->url(array('plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index', 'base' => false, $category['Category']['id'])));
+}
 
 /* Load our CSS */
 $this->Html->css("MemberVoice.mvideas", null, array('inline' => false));
+
+/* The JSON URL */
+$this->append('script');
+echo('<script type="text/javascript">' . "\n");
+echo('var mvVoteUrl = "' . $voteurl . '";' . "\n");
+echo('</script>' ."\n");
+$this->end();
 
 /* Load the Ideas JS */
 $this->Html->script('MemberVoice.idea', array('inline' => false));
@@ -66,11 +76,21 @@ if (count($ideas) > 0):
 	?>
 </ul>
 <?php
+/* Pagination links */
+echo '<div class="paginate">';
+echo $this->Paginator->numbers();
+echo '</div>';
+
 endif;
-?>
 
+$args = array(
+			'categories' => $categories
+			);
+if (isset($category)) {
+	$args['thisCategory'] = $category;
+}
+echo($this->element('categories', $args));
 
-<?php
 /* End isolation block */
 ?>
 </div>

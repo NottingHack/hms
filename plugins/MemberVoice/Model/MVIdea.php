@@ -43,6 +43,7 @@ class MVIdea extends MemberVoiceAppModel {
 		}
 
 		/* Ok, what shall we do? */
+		$saveVote = true;
 		if ($voted == false and $votes == 0) {
 			/* trying to clear a vote that doesn't exist! Don't do anything */
 			return false;
@@ -58,8 +59,9 @@ class MVIdea extends MemberVoiceAppModel {
 			$this->Vote->delete($voted);
 
 			if ($votes == 0) {
-				/* was clearing vote, no need to do anything else */
-				return $newvotes;
+				/* was clearing vote, just save the idea */
+				$saveVote = false;
+
 			}
 			else {
 				$newvotes = $newvotes + $votes;
@@ -72,14 +74,16 @@ class MVIdea extends MemberVoiceAppModel {
 									  'id'		=>	$ideaID,
 									  'votes'	=>	$newvotes,
 									  ),
-					  'Vote' => array(
-									  array(
-											'user_id'	=>	$userID,
-											'idea_id'	=>	$ideaID,
-											'votes'		=>	$votes,
-											),
-									  ),
 					  );
+		if ($saveVote) {
+			$data['Vote'] = array(
+								  array(
+										'user_id'	=>	$userID,
+										'idea_id'	=>	$ideaID,
+										'votes'		=>	$votes,
+										),
+								  );
+		}
 		if ($this->saveAssociated($data)) {
 			return $newvotes;
 		}

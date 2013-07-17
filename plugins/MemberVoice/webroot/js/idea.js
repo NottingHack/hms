@@ -41,7 +41,7 @@ function sendVote() {
 function _sendVote() {
 	if (mvIdea.search(/^\d+$/) == 0) {
 		$.ajax({
-			url: window.location.href + '/vote/' + mvIdea + '.json',
+			url: mvVoteUrl + '/' + mvIdea + '.json',
 			data: {vote: mvVote},
 			dataType: 'json',
 			type: 'POST',
@@ -58,7 +58,7 @@ function clear() {
 
 function showVote(data, textSuccess) {
 	if (data.responseid == 200) {
-		var idea = $('li#mvIdea' + data.id);
+		var idea = $('#mvIdea' + data.id);
 		$('div.mvVoteCount strong', idea).html(data.votes);
 		if (data.votes  == 1 || data.votes == -1) {
 			text = 'vote';
