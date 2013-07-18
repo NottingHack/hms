@@ -27,13 +27,33 @@ $cakeDescription = "Nottingham Hackspace Management System";
 		<?php echo $title_for_layout; ?>
 	</title>
 	<?php
-		echo $this->Html->meta('icon');
+		$this->Html->meta('icon', null, array('inline' => false));
 
-		echo $this->Html->css('hms');
+		$this->Html->css('hms', null, array('inline' => false));
+
+		/* Set up jQuery UI.  We'll include jQuery later using a conditional */
+		$this->Html->script('jquery-ui-1.10.3.custom.min', array('inline' => false));
+
+		$this->Html->css('jquery/jquery-ui-1.10.3.custom.min.css', null, array('inline' => false));
 
 		echo $this->fetch('meta');
+		echo("\n");
 		echo $this->fetch('css');
+		echo("\n");
+		/* Now actual jQuery */
+
+		$jQuery1 = Router::url('/') . JS_URL . 'jquery-1.10.2.min.js';
+		$jQuery2 = Router::url('/') . JS_URL . 'jquery-2.0.3.min.js';
+	?>
+		<!--[if lt IE 9]>
+		    <script type="text/javascript" src="<?php echo($jQuery1); ?>"></script>
+		<![endif]-->
+		<!--[if gte IE 9]><!-->
+		    <script type="text/javascript" src="<?php echo($jQuery2); ?>"></script>
+		<!--<![endif]-->
+	<?php
 		echo $this->fetch('script');
+		echo("\n");
 	?>
 </head>
 <body>
