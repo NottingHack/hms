@@ -1,33 +1,65 @@
 <?php
 
+	ini_set('max_execution_time', 600); // Give us 10 mins to execute, we might be doing a lot
+
 	require_once('utils.php');
 	require_once('data_generator.php');
 
 	//! Setup is a class that is responsible for parsing options and then performing certain steps based on those options.
 	class Setup
 	{
+		private $logIndet = 0;						//!< Indent level for the log
+		private $settings = array();				//!< Array of settings data
+
 		//! Options
-		private $createDb = false;					//!< If true create the instrumentation and instrumentation_test databases.
-		private $populateDb = false;				//!< If true populate the databases with default tables and data.
+		private $createDb = false;					//!< If true create the instrumentation and instrumentation_test databases and populate them with tables and data.
 		private $useRealKrb = false;				//!< If true then use the real KRB Auth lib, otherwise use a dummy one.
 		private $setupTempFolders = false;			//!< If true create the temporary folders CakePHP needs.
 		private $environmentType = 'production';	//!< Prefer files with this suffix.
 
 		//! The following details are used to create a HMS login for the user with admin rights.
-		private $firstname = '';			//!< Firstname of the user.
-		private $surname = '';				//!< Surname of the user.
-		private $username = '';				//!< Username of the user.
-		private $email = '';				//!< Email of the user.
+		private $firstname = '';					//!< Firstname of the user.
+		private $surname = '';						//!< Surname of the user.
+		private $username = '';						//!< Username of the user.
+		private $email = '';						//!< Email of the user.
+
+
+		//! Constructor
+		public function __construct()
+		{
+			if(!$this->_validateOptions())
+			{
+				$this->_logMessage('Invalid arguments.');
+				exit(1);
+			}
+			$this->settings = $this->_getSettings();
+		}
+
+
+		//! Increase the log indent level
+		private function _pushLogIndent()
+		{
+			$this->logIndet++;
+		}
+
+		//! Decrease the log indent level
+		private function _popLogIndent()
+		{
+			$this->logIndet--;
+			if($this->logIndet < 0)
+			{
+				$this->logIndet = 0;
+				$this->_logMessage('Warning: Log indent was popped too many times.');
+			}
+		}
 
 		//! Set up the database options.
 		/*
-			@param bool $createDb If true then the database will be created.
-			@param bool $populateDb If true then database will be populated.
+			@param bool $createDb If true then the database will be created..
 		*/
-		public function setDatabaseOptions($createDb, $populateDb)
+		public function setCreateDatabase($createDb)
 		{
 			$this->createDb = $createDb;
-			$this->populateDb = $populateDb;
 		}
 
 		//! Set if we should use the real KRB lib or not.
@@ -91,9 +123,14 @@
 		/*!
 			@param array $settings The settings to use.
 		*/
-		private function _setupConfigFiles($settings)
+		private function _setupConfigFiles()
 		{
+			$this->_logMessage('Setting up config files');
+			$this->_pushLogIndent();
+
 			$configPath = '../../../app/Config/';
+
+			$settings = $this->settings;
 
 			// ... Not that I'm OCD or anything
 			asort($settings);
@@ -129,9 +166,16 @@
 					$this->_logMessage("Failed to create $settingName.php");
 				}
 			}
+
+			$this->_popLogIndent();
 		}
 
-		private function _getSqlFilesContaining($name)
+		//! Get an array of all sql files in the ./sql folder that are valid for the current configuration and contain a certain string.
+		/*!
+			@param string $substr Files returned must contain this string.
+			@retval array A list of filenames for sql files that match the $subStr and environment criteria.
+		*/
+		private function _getSqlFilesContaining($subStr)
 		{
 			$validFiles = array();
 			$dirList = scandir(makeAbsolutePath('./sql'));
@@ -139,7 +183,7 @@
 			foreach ($dirList as $filename) 
 			{
 				if( pathinfo($filename, PATHINFO_EXTENSION) == 'sql' &&
-					strpos($filename, $name) !== FALSE )
+					strpos($filename, $subStr) !== FALSE )
 				{
 					// Check if it passes the environment type test.
 					$parts = explode('.', basename($filename));
@@ -158,38 +202,105 @@
 			return $validFiles;
 		}
 
+		//! Run a query on a database object, returning the result
+		/*!
+			@param mysqli $databaseObj A database object to run the query on.
+			@param string $query The query to run.
+			@retval mixed An array of results if query is successful, or null on error.
+		*/
+		private function _runQuery($databaseObj, $query)
+		{
+			$results = array();
+			if ($databaseObj->multi_query($query))
+			{
+				do
+				{
+					if($result = $databaseObj->store_result())
+					{
+						array_push($results, $result->fetch_all(MYSQLI_ASSOC));	
+						$result->free();
+					}
+
+					if(!$databaseObj->more_results())
+					{
+						break;
+					}
+					$databaseObj->next_result();
+				} while(true);
+
+				// If we only ran one query and got one result
+				// just return that
+				if(count($results) == 1)
+				{
+					return $results[0];
+				}
+
+				return $results;
+			}
+			else
+			{
+				if($databaseObj->error) 
+				{
+					$this->_logMessage(sprintf('Error: Query - %s failed with message - %s', $query, $databaseObj->error));
+				}
+			}
+
+			return null;
+		}
+
+		//! Run a query from a file.
+		/*!
+			@param mysqli $databaseObj A database object to run the query on.
+			@param string $filepath Path to the file containing the query to run.
+			@retval mixed An array of results if query is successful, or null on error.
+		*/
 		private function _runQueryFromFile($databaseObj, $filepath)
 		{
 			$this->_logMessage("Executing SQL in: $filepath");
-			if ($databaseObj->multi_query(file_get_contents($filepath)))
-			{
-				$databaseObj->store_result();
-				while ($databaseObj->more_results()) 
-				{
-					$databaseObj->next_result();
-					$databaseObj->store_result();
-				}
-			}
+			return $this->_runQuery($databaseObj, file_get_contents($filepath));
 		}
 
+		//! Given a list of files containing sql queries, run all the queries.
+		/*!
+			@param mysqli $databaseObj A database object to run the queries on.
+			@param string $fileList The list of files.
+			@retval mixed An array of results of the queries that succeded.
+		*/
 		private function _runAllQueriesInFileList($databaseObj, $fileList)
 		{
+			$results = array();
 			foreach ($fileList as $file) 
 			{
-				$this->_runQueryFromFile($databaseObj, $file);
+				$queryResult = $this->_runQueryFromFile($databaseObj, $file);
+				if(is_array($queryResult))
+				{
+					array_merge($queryResult);
+				}
 			}
+
+			return $results;
 		}
 
+		//! Run all queries marked as 'schema'.
+		/*!
+			@param mysqli $databaseObj A database object to run the queries on.
+			@retval mixed An array of results of the queries that succeded.
+		*/
 		private function _runSchemaQueries($databaseObj)
 		{
 			$files = $this->_getSqlFilesContaining('schema');
-			$this->_runAllQueriesInFileList($databaseObj, $files);
+			return $this->_runAllQueriesInFileList($databaseObj, $files);
 		}
 
+		//! Run all queries marked as 'data'.
+		/*!
+			@param mysqli $databaseObj A database object to run the queries on.
+			@retval mixed An array of results of the queries that succeded.
+		*/
 		private function _runDataQueries($databaseObj)
 		{
 			$files = $this->_getSqlFilesContaining('data');
-			$this->_runAllQueriesInFileList($databaseObj, $files);
+			return $this->_runAllQueriesInFileList($databaseObj, $files);
 		}
 
 		//! Divide $membersRemaining by $divisor, return the result and adjust $membersRemaining.
@@ -231,6 +342,9 @@
 		*/
 		private function _generateData()
 		{
+			$this->_logMessage('Generating test data');
+			$this->_pushLogIndent();
+
 			$totalMembersToGenerate = 200;
 			$membersRemaining = $totalMembersToGenerate;
 
@@ -302,91 +416,108 @@
 				else
 				{
 					$this->_logMessage("Failed to write $path");
+					$this->_popLogIndent();
 					return false;
 				}
 			}
 
+			$this->_popLogIndent();
 			return true;
+		}
+
+		//! Get a mysqli database connection.
+		/*!
+			@param string $connName The name of the connection to get (e.g. default/test)
+			@param bool $select If true then the database will be selected.
+			@retval mixed A mysql connection on success, or null on failure.
+		*/
+		private function _getDbConnection($connName, $select)
+		{
+			$hostName = $connName . '_host';
+			$login = $connName . '_login';
+			$password = $connName . '_password';
+			$database = $connName . '_database';
+
+			$settings = $this->settings['database'];
+
+			if( array_key_exists($hostName, $settings) && 
+				array_key_exists($login, $settings) &&
+				array_key_exists($password, $settings) &&
+				array_key_exists($database, $settings) )
+			{
+				$conn = new mysqli($settings[$hostName], $settings[$login], $settings[$password]);
+				if($select)
+				{
+					$conn->select_db($settings[$database]);
+				}
+				return $conn;
+			}
+
+			return null;
+		}
+
+		//! Set-up a database.
+		/*!
+			@param string $prefix The prefix of the database to create.
+			@param bool $populate If true then run schema and data queries on the newly created database.
+		*/
+		private function _setupDatabase($prefix, $populate)
+		{
+			$conn = $this->_getDbConnection($prefix, false);
+
+			if ($conn->connect_error) 
+			{
+				$this->_logMessage("Couldn't connect to main database");
+			}
+			else 
+			{
+				$dbName = $this->settings['database'][$prefix . '_database'];
+				if(!$conn->query("DROP DATABASE " . $dbName))
+				{
+					$this->_logMessage("Failed to drop database: $dbName");
+				}
+				if(!$conn->query("CREATE DATABASE " . $dbName))
+				{
+					$this->_logMessage("Failed to drop database: $dbName");
+				}
+				else
+				{
+					$this->_logMessage("Created database: $dbName");
+				}
+
+				if( $populate &&
+					$conn->select_db($dbName))
+				{
+					$this->_runSchemaQueries($conn);
+					$this->_runDataQueries($conn);
+				}
+				else
+				{
+					$this->_logMessage("Unable to select database: $dbName");
+				}
+			}
+			$conn->close();
 		}
 
 		//! Create and/or populate the databases for HMS
 		/*!
 			@param array $settings The settings to use.
 		*/
-		private function _createDatabases($settings)
+		private function _createDatabases()
 		{
-			if ($this->createDb || $this->populateDb) 
+			if ($this->createDb) 
 			{
-				// Main Database
-				$oDB = new mysqli($settings['database']['default_host'], $settings['database']['default_login'], $settings['database']['default_password']);
+				$this->_logMessage('Creating and/or populating databases');
+				$this->_pushLogIndent();
 
-				if ($oDB->connect_error) 
-				{
-					$this->_logMessage("Couldn't connect to main database");
-				}
-				else 
-				{
-					$defaultDbName = $settings['database']['default_database'];
-					if($this->createDb)
-					{
-						if(!$oDB->query("DROP DATABASE " . $defaultDbName))
-						{
-							$this->_logMessage("Failed to drop database: $defaultDbName");
-						}
-						if(!$oDB->query("CREATE DATABASE " . $defaultDbName))
-						{
-							$this->_logMessage("Failed to drop database: $defaultDbName");
-						}
-						else
-						{
-							$this->_logMessage("Created database: $defaultDbName");
-						}
-					}
+				$this->_setupDatabase('default', true);
+				$this->_setupDatabase('test', false);
 
-					if($oDB->select_db($defaultDbName))
-					{
-						if($this->populateDb)
-						{
-							$this->_runSchemaQueries($oDB);
-							$this->_runDataQueries($oDB);
-						}
-					}
-					else
-					{
-						$this->_logMessage("Unable to select database: $defaultDbName");
-					}
-				}
-				$oDB->close();
+				// If we've just created the data in the database then we're already on
+				// the latest database version
+				$this->_writeDbVersion($this->_getCodeVersion());
 
-				// Test Database
-				$oDB = new mysqli($settings['database']['test_host'], $settings['database']['test_login'], $settings['database']['test_password']);
-
-				if ($oDB->connect_error) 
-				{
-					$this->_logMessage("Couldn't connect to test database");
-				}
-				else 
-				{
-					$testDbName = $settings['database']['test_database'];
-					if($this->createDb)
-					{
-						if(!$oDB->query("DROP DATABASE " . $testDbName))
-						{
-							$this->_logMessage("Failed to drop database: $testDbName");
-						}
-						if(!$oDB->query("CREATE DATABASE " . $testDbName))
-						{
-							$this->_logMessage("Failed to drop database: $testDbName");
-						}
-						else
-						{
-							$this->_logMessage("Created database: $testDbName");
-						}
-					}
-
-					
-				}
-				$oDB->close();
+				$this->_popLogIndent();
 			}
 		}
 
@@ -425,15 +556,25 @@
 		//! Copy either the real or dummy KRB Auth lib file to the lib folder.
 		private function _copyKrbLibFile()
 		{
+			$this->_logMessage('Copying KRB lib file');
+			$this->_pushLogIndent();
+
 			$fromFile = $this->useRealKrb ? 'krb5_auth.real' : 'krb5_auth.dummy';
 			$this->_copyLibFile($fromFile, '../../../app/Lib/Krb/krb5_auth.php');
+
+			$this->_popLogIndent();
 		}
 
 		//! Copy either the production or development MCAPI file.
 		private function _copyMcapiLibFile()
 		{
+			$this->_logMessage('Copying MCAPI lib file');
+			$this->_pushLogIndent();
+
 			$fromFile = "MCAPI.{$this->environmentType}";
 			$this->_copyLibFile($fromFile, '../../../app/Lib/MailChimp/MCAPI.php');
+
+			$this->_popLogIndent();
 		}
 
 
@@ -473,6 +614,9 @@
 		{
 			if($this->setupTempFolders)
 			{
+				$this->_logMessage('Setting up temp folders');
+				$this->_pushLogIndent();
+
 				$foldersToMake = array(
 					'../../../app/tmp',
 					'../../../app/tmp/cache',
@@ -500,6 +644,8 @@
 						$this->_logMessage("Failed to create folder: $folder");
 					}
 				}
+
+				$this->_popLogIndent();
 			}
 		}
 
@@ -516,29 +662,25 @@
 			return ($sapiType == 'cli');
 		}
 
-		//! Get the appropriate newline character.
-		/*
-			@retval string An a string representing a newline for the current output.
-		*/
-		private function _getNewline()
-		{
-			if($this->_isOnCommandline())
-			{
-				return PHP_EOL;
-			}
-			// We're probably being called from the web.
-			return '<br/>';
-		}
-
 		//! Format and write a log message, prepends timestamp and appends a newline.
 		/*!
 			@param string $message The message to write.
 		*/
 		private function _logMessage($message)
 		{
-			echo sprintf("[%s] %s%s", date("H:i:s"), $message, $this->_getNewline());
-			if(!$this->_isOnCommandline())
+			$timestamp = date("H:i:s");
+			if($this->_isOnCommandline())
 			{
+				echo sprintf("[%s]%s%s%s", $timestamp, str_repeat("    ", $this->logIndet), $message, PHP_EOL);	
+			}
+			else
+			{
+				echo '<span class="logLine">';
+				echo "[$timestamp] ";
+				echo str_repeat('<span class="logSpacer"> </span>', $this->logIndet + 1);
+				echo $message;
+				echo '</span>';
+
 				ob_flush();
     			flush();
 			}
@@ -551,7 +693,7 @@
 		private function _validateOptions()
 		{
 			// Certain variables are required
-			if($this->populateDb)
+			if($this->createDb)
 			{
 				if(! (isset($this->firstname) && isset($this->surname) && isset($this->username) && isset($this->email)) )
 				{
@@ -623,26 +765,332 @@
 			return $finalSettings;
 		}
 
+		//! Given an array of version information, check if it is valid.
+		/*!
+			@param array $version An array of version data.
+			@retval bool True if version is valid, false otherwise.
+		*/
+		private function _isValidVersion($version)
+		{
+			return 
+				array_key_exists('major', $version) &&
+				array_key_exists('minor', $version) &&
+				array_key_exists('build', $version);
+		}
+
+		//! Read the current version from the code.
+		/*
+			@retval mixed Array of the code version number, or null on error.
+		*/
+		private function _getCodeVersion()
+		{
+			$versionFilePath = '../../../app/Controller/AppController.php';
+
+			$version = array();
+			$lines = explode(';', file_get_contents(makeAbsolutePath($versionFilePath)));
+
+			$versionIds = array(
+				"VERSION_MAJOR" => 'major',
+				"VERSION_MINOR" => 'minor',
+				"VERSION_BUILD" => 'build',
+			);
+
+			foreach ($lines as $line) 
+			{
+				foreach ($versionIds as $codeId => $arrayIdx) 
+				{
+					$matches = array();
+					$regex = $codeId . " = (\d+?)";
+					if(preg_match("/$regex/", trim($line), $matches))
+					{
+						$version[$arrayIdx] = $matches[1];
+					}
+				}
+			}
+
+			if($this->_isValidVersion($version))
+			{
+				return $version;
+			}
+			return null;
+		}
+
+		//! Write a version to the database version file.
+		/*!
+			@param string $version The version to write.
+		*/
+		private function _writeDbVersion($version)
+		{
+			$versionStr = $this->_versionToString($version);
+			$this->_logMessage("Writing db version $versionStr to database");
+
+			$conn = $this->_getDbConnection('default', true);
+			$this->_runQueryFromFile($conn, makeAbsolutePath('sql/hms_meta_schema.sql'));
+			$this->_runQuery($conn, "DELETE FROM `hms_meta` WHERE 1");
+			$this->_runQuery($conn, "INSERT INTO `hms_meta` (`version`) VALUES ('$versionStr')");
+		}
+
+		//! Attempt to read the database version from the database.version file
+		/*!
+			@retval mixed Array of version data if successful, null on error.
+		*/
+		private function _readDbVersion()
+		{
+			$conn = $this->_getDbConnection('default', true);
+			$result = $this->_runQuery($conn, "SELECT * FROM `hms_meta`");
+			if(is_array($result) && count($result) > 0)
+			{
+				$key = 'version';
+				$data = $result[0];
+
+				if(array_key_exists($key, $data))
+				{
+					return $this->_stringToVersion($data[$key]);
+				}
+			}
+
+			return null;
+		}
+
+		//! Get the difference between two versions.
+		/*!
+			@param array $versionA An array of version data.
+			@param array $versionB An array of version data.
+			@retval mixed An integer representing the difference between the versions, or null on error.
+		*/
+		private function _compareVersions($versionA, $versionB)
+		{
+			$numA = $this->_versionToNumber($versionA);
+			$numB = $this->_versionToNumber($versionB);
+
+			if($numA == null || $numB == null)
+			{
+				return null;
+			}
+
+			return $numA - $numB;
+		}
+
+		//! Given an array of version data, get a number uniquely representing that version.
+		/*!
+			@param array $version An array of version data.
+			@retval mixed A number representing $version on success, or null on error.
+		*/
+		private function _versionToNumber($version)
+		{
+			if($this->_isValidVersion($version))
+			{
+				$number = 0;
+				$multiplier = 1;
+
+				$versionParts = array($version['build'], $version['minor'], $version['major']);
+
+				foreach ($versionParts as $part) 
+				{
+					$number += ((int)$part) * $multiplier;
+					$multiplier *= 10;
+				}
+
+				return $number;
+			}
+			return null;
+		}
+
+		//! Given an array of version data, return a string representation of that version.
+		/*!
+			@param array $version An array of version data.
+			@retval string A string representing the version data.
+		*/
+		private function _versionToString($version)
+		{
+			return sprintf('%s.%s.%s', $version['major'], $version['minor'], $version['build']);
+		}
+
+		//! Given a string representation of a version, return an array of version data.
+		/*!
+			@param string $versionStr A string representing a version.
+			@retval array An array of version data.
+		*/
+		private function _stringToVersion($versionStr)
+		{
+			list($major, $minor, $build) = explode('.', $versionStr);
+			return compact('major', 'minor', 'build');
+		}
+
+		//! Update the database to the current version.
+		private function _runDatabaseUpdate()
+		{
+			if(!$this->createDb)
+			{
+				$this->_logMessage('Updating database');
+				$this->_pushLogIndent();
+
+				// Find out what version we're updating from
+				$currentDbVersion = $this->_readDbVersion();
+				if($currentDbVersion == null)
+				{
+					$this->_logMessage('Error: Could not read current database version');
+					return;
+				}
+
+				// Find out which version we should be updating to
+				$codeVersion = $this->_getCodeVersion();
+				if($codeVersion == null)
+				{
+					$this->_logMessage('Error: Could not get code version');
+					return;
+				}
+
+				$currentVersionNumber = $this->_versionToNumber($currentDbVersion);
+				$codeVersionNumber = $this->_versionToNumber($codeVersion);
+
+				if( ($currentVersionNumber - $codeVersionNumber) == 0 )
+				{
+					$this->_logMessage('No update required');
+					$this->_popLogIndent();
+					return;
+				}
+
+				$this->_logMessage(sprintf('Updating from version: %s to version %s', 
+					$this->_versionToString($currentDbVersion), $this->_versionToString($codeVersion)));
+
+				// Ok, lets get started.
+				// First we find all the update files, and sort them by version
+				$updatesPath = makeAbsolutePath('updates');
+				$updateFiles = array();
+				$files = glob($updatesPath . '/*.php');
+				foreach ($files as $file) 
+				{
+					if(is_file($file))
+					{
+						$fileParts = pathinfo($file);
+						$fileVersion = $this->_stringToVersion($fileParts['filename']);
+						if(!$this->_isValidVersion($fileVersion))
+						{
+							$this->_logMessage("Warning: Found update php with a filename that is not a valid version $file");
+							continue;
+						}
+
+						$versionNumber = $this->_versionToNumber($fileVersion);
+						$updateFiles[$versionNumber] = array(
+							'path' => $file,
+							'version' => $fileVersion,
+						);
+					}
+				}
+
+				ksort($updateFiles);
+
+				// Then execute the version file for any version that's ahead of us
+				// until we hit the code version
+				foreach ($updateFiles as $versionNumber => $data) 
+				{
+					if(	$versionNumber > $currentVersionNumber &&
+						$versionNumber <= $codeVersionNumber )
+					{
+						$this->_logMessage('Executing update ' . $data['path']);
+
+						if($this->_executeUpdate($data['path']))
+						{
+							$this->_writeDbVersion($data['version']);
+							$currentVersionNumber = $versionNumber;
+
+							$this->_logMessage('Updated to version: ' . $this->_versionToString($data['version']));
+						}
+						else
+						{
+							$this->_logMessage('Error: Failed to execute update ' . $data['path']);
+						}
+					}
+				}
+
+				// There will be some sql files that need to be ran even during an update
+				$sqlFiles = array(
+					'mailinglists',
+					'mailinglist_subscriptions',
+				);
+
+				$conn = $this->_getDbConnection('default', true);
+
+				foreach ($sqlFiles as $filename) 
+				{
+					$schemaFiles = $this->_getSqlFilesContaining($filename . '_schema');
+
+					// Kill the databases that are in thiese files
+					foreach ($schemaFiles as $file) 
+					{
+						$tableName = $this->_getTableNameFromSchemaFile($file);
+						if($tableName == null)
+						{
+							$this->_logMessage("Error: Unable to parse table name from file: $file");
+						}
+						$this->_logMessage("Dropping table `$tableName`");
+						$this->_runQuery($conn, "DROP TABLE `$tableName`");
+
+						$this->_runQueryFromFile($conn, $file);
+					}
+
+					// And add the data
+					$dataFiles = $this->_getSqlFilesContaining($filename . '_data');
+					foreach ($dataFiles as $file) 
+					{
+						$this->_runQueryFromFile($conn, $file);
+					}
+				}
+
+				$this->_popLogIndent();
+			}
+		}
+
+		//! Given the path to an sql file that creats a table, get the name of the table
+		/*!
+			@param string $path The path to the file to read.
+			@retval mixed The name of the table if read successfully, null otherwise.
+		*/
+		private function _getTableNameFromSchemaFile($path)
+		{
+			$contents = file_get_contents($path);
+
+			$matches;
+			if(preg_match("/CREATE TABLE(.+)`(.+)`/", $contents, $matches))
+			{
+				return $matches[2];
+			}
+
+			return null;
+		}
+
+		//! Attempt to execute the contents of an update file.
+		/*
+			@param string $path The path to the update file.
+			@retval bool True if execution was successful, false otherwise.
+		*/
+		private function _executeUpdate($path)
+		{
+			if(file_exists($path))
+			{
+				ob_start();
+				$this->_pushLogIndent();
+				include($path);
+				$this->_popLogIndent();
+				return true;
+			}
+			return false;
+		}
+
 		//! Run all selected setup steps.
 		public function run()
 		{
-			if(!$this->_validateOptions())
-			{
-				$this->_logMessage('Invalid arguments.');
-				exit(1);
-			}
-
 			$this->_logMessage("Started");
 
-			$settings = $this->_getSettings();
-
-			$this->_setupConfigFiles($settings);
+			$this->_setupConfigFiles();
 			if(!$this->_generateData())
 			{
 				$this->_logMessage('Failed to generate and write data.');
 				exit(1);
 			}
-			$this->_createDatabases($settings);
+ 			$this->_createDatabases();
+			$this->_runDatabaseUpdate();
 			$this->_copyKrbLibFile();
 			$this->_copyMcapiLibFile();
 			$this->_setupTempFolders();

@@ -32,7 +32,6 @@
 
 	$shortopts = '';
 	$shortopts .= 'd'; 	// If present, create the database
-	$shortopts .= 'p';  // If present, populate the database
 	$shortopts .= 'h:'; // Users handle
 	$shortopts .= 'n:'; // Users firstname
 	$shortopts .= 's:'; // Users surname
@@ -47,7 +46,7 @@
 	{
 		$setup = new Setup();
 
-		$setup->setDatabaseOptions( parseBoolFromArray('d', $options), parseBoolFromArray('p', $options) );
+		$setup->setCreateDatabase( parseBoolFromArray('d', $options) );
 		$setup->setUseRealKrb( parseBoolFromArray('k', $options) );
 		$setup->setSetupTempFolders( parseBoolFromArray('f', $options) );
 		$setup->setUseDevelopmentEnvironment( parseBoolFromArray('v', $options) );

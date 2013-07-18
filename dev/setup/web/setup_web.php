@@ -30,7 +30,7 @@
 
 	$setup = new Setup();
 
-	$setup->setDatabaseOptions( parseBoolFromWebVar('createdb'), parseBoolFromWebVar('populatedb') );
+	$setup->setCreateDatabase( parseBoolFromWebVar('createdb') );
 	$setup->setUseRealKrb( parseBoolFromWebVar('realKrb') );
 	$setup->setSetupTempFolders( parseBoolFromWebVar('setuptmpfolders') );
 	$setup->setUseDevelopmentEnvironment( parseBoolFromWebVar('usedevelopmentenv') );
@@ -46,7 +46,7 @@
 <?php
 	require('./setup_header.php');
 ?>
-			<p class="results">
+	<p class="results">
 			<?php
 
 				$setup->run();
