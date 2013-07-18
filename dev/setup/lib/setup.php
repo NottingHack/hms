@@ -1,5 +1,7 @@
 <?php
 
+	ini_set('max_execution_time', 600); // Give us 10 mins to execute, we might be doing a lot
+
 	require_once('utils.php');
 	require_once('data_generator.php');
 
@@ -168,7 +170,12 @@
 			$this->_popLogIndent();
 		}
 
-		private function _getSqlFilesContaining($name)
+		//! Get an array of all sql files in the ./sql folder that are valid for the current configuration and contain a certain string.
+		/*!
+			@param string $substr Files returned must contain this string.
+			@retval array A list of filenames for sql files that match the $subStr and environment criteria.
+		*/
+		private function _getSqlFilesContaining($subStr)
 		{
 			$validFiles = array();
 			$dirList = scandir(makeAbsolutePath('./sql'));
@@ -176,7 +183,7 @@
 			foreach ($dirList as $filename) 
 			{
 				if( pathinfo($filename, PATHINFO_EXTENSION) == 'sql' &&
-					strpos($filename, $name) !== FALSE )
+					strpos($filename, $subStr) !== FALSE )
 				{
 					// Check if it passes the environment type test.
 					$parts = explode('.', basename($filename));
@@ -195,46 +202,105 @@
 			return $validFiles;
 		}
 
+		//! Run a query on a database object, returning the result
+		/*!
+			@param mysqli $databaseObj A database object to run the query on.
+			@param string $query The query to run.
+			@retval mixed An array of results if query is successful, or null on error.
+		*/
 		private function _runQuery($databaseObj, $query)
 		{
 			$results = array();
 			if ($databaseObj->multi_query($query))
 			{
-				array_push($results, $databaseObj->store_result());
-				while ($databaseObj->more_results()) 
+				do
 				{
+					if($result = $databaseObj->store_result())
+					{
+						array_push($results, $result->fetch_all(MYSQLI_ASSOC));	
+						$result->free();
+					}
+
+					if(!$databaseObj->more_results())
+					{
+						break;
+					}
 					$databaseObj->next_result();
-					array_push($results, $databaseObj->store_result());
+				} while(true);
+
+				// If we only ran one query and got one result
+				// just return that
+				if(count($results) == 1)
+				{
+					return $results[0];
+				}
+
+				return $results;
+			}
+			else
+			{
+				if($databaseObj->error) 
+				{
+					$this->_logMessage(sprintf('Error: Query - %s failed with message - %s', $query, $databaseObj->error));
+				}
+			}
+
+			return null;
+		}
+
+		//! Run a query from a file.
+		/*!
+			@param mysqli $databaseObj A database object to run the query on.
+			@param string $filepath Path to the file containing the query to run.
+			@retval mixed An array of results if query is successful, or null on error.
+		*/
+		private function _runQueryFromFile($databaseObj, $filepath)
+		{
+			$this->_logMessage("Executing SQL in: $filepath");
+			return $this->_runQuery($databaseObj, file_get_contents($filepath));
+		}
+
+		//! Given a list of files containing sql queries, run all the queries.
+		/*!
+			@param mysqli $databaseObj A database object to run the queries on.
+			@param string $fileList The list of files.
+			@retval mixed An array of results of the queries that succeded.
+		*/
+		private function _runAllQueriesInFileList($databaseObj, $fileList)
+		{
+			$results = array();
+			foreach ($fileList as $file) 
+			{
+				$queryResult = $this->_runQueryFromFile($databaseObj, $file);
+				if(is_array($queryResult))
+				{
+					array_merge($queryResult);
 				}
 			}
 
 			return $results;
 		}
 
-		private function _runQueryFromFile($databaseObj, $filepath)
-		{
-			$this->_logMessage("Executing SQL in: $filepath");
-			$this->_runQuery($databaseObj, file_get_contents($filepath));
-		}
-
-		private function _runAllQueriesInFileList($databaseObj, $fileList)
-		{
-			foreach ($fileList as $file) 
-			{
-				$this->_runQueryFromFile($databaseObj, $file);
-			}
-		}
-
+		//! Run all queries marked as 'schema'.
+		/*!
+			@param mysqli $databaseObj A database object to run the queries on.
+			@retval mixed An array of results of the queries that succeded.
+		*/
 		private function _runSchemaQueries($databaseObj)
 		{
 			$files = $this->_getSqlFilesContaining('schema');
-			$this->_runAllQueriesInFileList($databaseObj, $files);
+			return $this->_runAllQueriesInFileList($databaseObj, $files);
 		}
 
+		//! Run all queries marked as 'data'.
+		/*!
+			@param mysqli $databaseObj A database object to run the queries on.
+			@retval mixed An array of results of the queries that succeded.
+		*/
 		private function _runDataQueries($databaseObj)
 		{
 			$files = $this->_getSqlFilesContaining('data');
-			$this->_runAllQueriesInFileList($databaseObj, $files);
+			return $this->_runAllQueriesInFileList($databaseObj, $files);
 		}
 
 		//! Divide $membersRemaining by $divisor, return the result and adjust $membersRemaining.
@@ -276,6 +342,9 @@
 		*/
 		private function _generateData()
 		{
+			$this->_logMessage('Generating test data');
+			$this->_pushLogIndent();
+
 			$totalMembersToGenerate = 200;
 			$membersRemaining = $totalMembersToGenerate;
 
@@ -347,10 +416,12 @@
 				else
 				{
 					$this->_logMessage("Failed to write $path");
+					$this->_popLogIndent();
 					return false;
 				}
 			}
 
+			$this->_popLogIndent();
 			return true;
 		}
 
@@ -770,7 +841,7 @@
 			if(is_array($result) && count($result) > 0)
 			{
 				$key = 'version';
-				$data = $result[0]->fetch_assoc();
+				$data = $result[0];
 
 				if(array_key_exists($key, $data))
 				{
@@ -849,81 +920,144 @@
 		//! Update the database to the current version.
 		private function _runDatabaseUpdate()
 		{
-			$this->_logMessage('Updating database');
-			$this->_pushLogIndent();
-
-			// Find out what version we're updating from
-			$currentDbVersion = $this->_readDbVersion();
-			if($currentDbVersion == null)
+			if(!$this->createDb)
 			{
-				$this->_logMessage('Error: Could not read current database version');
-				return;
-			}
+				$this->_logMessage('Updating database');
+				$this->_pushLogIndent();
 
-			// Find out which version we should be updating to
-			$codeVersion = $this->_getCodeVersion();
-			if($codeVersion == null)
-			{
-				$this->_logMessage('Error: Could not get code version');
-				return;
-			}
-
-			$this->_logMessage(sprintf('Updating from version: %s to version %s', 
-				$this->_versionToString($currentDbVersion), $this->_versionToString($codeVersion)));
-
-			// Ok, lets get started.
-			// First we find all the update files, and sort them by version
-			$updatesPath = makeAbsolutePath('updates');
-			$updateFiles = array();
-			$files = glob($updatesPath . '/*.php');
-			foreach ($files as $file) 
-			{
-				if(is_file($file))
+				// Find out what version we're updating from
+				$currentDbVersion = $this->_readDbVersion();
+				if($currentDbVersion == null)
 				{
-					$fileParts = pathinfo($file);
-					$fileVersion = $this->_stringToVersion($fileParts['filename']);
-					if(!$this->_isValidVersion($fileVersion))
-					{
-						$this->_logMessage("Warning: Found update php with a filename that is not a valid version $file");
-						continue;
-					}
-
-					$versionNumber = $this->_versionToNumber($fileVersion);
-					$updateFiles[$versionNumber] = array(
-						'path' => $file,
-						'version' => $fileVersion,
-					);
+					$this->_logMessage('Error: Could not read current database version');
+					return;
 				}
-			}
 
-			ksort($updateFiles);
-
-			// Then execute the version file for any version that's ahead of us
-			// until we hit the code version
-			$currentVersionNumber = $this->_versionToNumber($currentDbVersion);
-			$codeVersionNumber = $this->_versionToNumber($codeVersion);
-
-			foreach ($updateFiles as $versionNumber => $data) 
-			{
-				if(	$versionNumber > $currentVersionNumber &&
-					$versionNumber <= $codeVersionNumber )
+				// Find out which version we should be updating to
+				$codeVersion = $this->_getCodeVersion();
+				if($codeVersion == null)
 				{
-					$this->_logMessage('Executing update ' . $data['path']);
+					$this->_logMessage('Error: Could not get code version');
+					return;
+				}
 
-					if($this->_executeUpdate($data['path']))
-					{
-						$this->_writeDbVersion($data['version']);
-						$currentVersionNumber = $versionNumber;
+				$currentVersionNumber = $this->_versionToNumber($currentDbVersion);
+				$codeVersionNumber = $this->_versionToNumber($codeVersion);
 
-						$this->_logMessage('Updated to version: ' . $this->_versionToString($data['version']));
-					}
-					else
+				if( ($currentVersionNumber - $codeVersionNumber) == 0 )
+				{
+					$this->_logMessage('No update required');
+					$this->_popLogIndent();
+					return;
+				}
+
+				$this->_logMessage(sprintf('Updating from version: %s to version %s', 
+					$this->_versionToString($currentDbVersion), $this->_versionToString($codeVersion)));
+
+				// Ok, lets get started.
+				// First we find all the update files, and sort them by version
+				$updatesPath = makeAbsolutePath('updates');
+				$updateFiles = array();
+				$files = glob($updatesPath . '/*.php');
+				foreach ($files as $file) 
+				{
+					if(is_file($file))
 					{
-						$this->_logMessage('Error: Failed to execute update ' . $data['path']);
+						$fileParts = pathinfo($file);
+						$fileVersion = $this->_stringToVersion($fileParts['filename']);
+						if(!$this->_isValidVersion($fileVersion))
+						{
+							$this->_logMessage("Warning: Found update php with a filename that is not a valid version $file");
+							continue;
+						}
+
+						$versionNumber = $this->_versionToNumber($fileVersion);
+						$updateFiles[$versionNumber] = array(
+							'path' => $file,
+							'version' => $fileVersion,
+						);
 					}
 				}
+
+				ksort($updateFiles);
+
+				// Then execute the version file for any version that's ahead of us
+				// until we hit the code version
+				foreach ($updateFiles as $versionNumber => $data) 
+				{
+					if(	$versionNumber > $currentVersionNumber &&
+						$versionNumber <= $codeVersionNumber )
+					{
+						$this->_logMessage('Executing update ' . $data['path']);
+
+						if($this->_executeUpdate($data['path']))
+						{
+							$this->_writeDbVersion($data['version']);
+							$currentVersionNumber = $versionNumber;
+
+							$this->_logMessage('Updated to version: ' . $this->_versionToString($data['version']));
+						}
+						else
+						{
+							$this->_logMessage('Error: Failed to execute update ' . $data['path']);
+						}
+					}
+				}
+
+				// There will be some sql files that need to be ran even during an update
+				$sqlFiles = array(
+					'mailinglists',
+					'mailinglist_subscriptions',
+				);
+
+				$conn = $this->_getDbConnection('default', true);
+
+				foreach ($sqlFiles as $filename) 
+				{
+					$schemaFiles = $this->_getSqlFilesContaining($filename . '_schema');
+
+					// Kill the databases that are in thiese files
+					foreach ($schemaFiles as $file) 
+					{
+						$tableName = $this->_getTableNameFromSchemaFile($file);
+						if($tableName == null)
+						{
+							$this->_logMessage("Error: Unable to parse table name from file: $file");
+						}
+						$this->_logMessage("Dropping table `$tableName`");
+						$this->_runQuery($conn, "DROP TABLE `$tableName`");
+
+						$this->_runQueryFromFile($conn, $file);
+					}
+
+					// And add the data
+					$dataFiles = $this->_getSqlFilesContaining($filename . '_data');
+					foreach ($dataFiles as $file) 
+					{
+						$this->_runQueryFromFile($conn, $file);
+					}
+				}
+
+				$this->_popLogIndent();
 			}
-			$this->_popLogIndent();
+		}
+
+		//! Given the path to an sql file that creats a table, get the name of the table
+		/*!
+			@param string $path The path to the file to read.
+			@retval mixed The name of the table if read successfully, null otherwise.
+		*/
+		private function _getTableNameFromSchemaFile($path)
+		{
+			$contents = file_get_contents($path);
+
+			$matches;
+			if(preg_match("/CREATE TABLE(.+)`(.+)`/", $contents, $matches))
+			{
+				return $matches[2];
+			}
+
+			return null;
 		}
 
 		//! Attempt to execute the contents of an update file.
@@ -936,13 +1070,8 @@
 			if(file_exists($path))
 			{
 				ob_start();
-				include($path);
-				$messages = ob_get_clean();
 				$this->_pushLogIndent();
-				foreach (explode(PHP_EOL, $messages) as $message)
-				{
-					$this->_logMessage($message);
-				}
+				include($path);
 				$this->_popLogIndent();
 				return true;
 			}
