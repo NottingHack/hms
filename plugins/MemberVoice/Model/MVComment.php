@@ -7,11 +7,18 @@
  */
 class MVComment extends MemberVoiceAppModel {
 	public $useTable = 'comments';
-	public $belongsTo = array(
-		'Member'	=>	array(
-				'className'	=>	'Member',
-			)
-		);
+	public $alias = 'Comment';
+	public $belongsTo = array();
+
+	public function __construct() {
+		$this->belongsTo['User'] = array(
+										'className'		=>	$this->mvUserModel,
+										'foreignKey'	=>	'user_id',
+										);
+
+
+		parent::__construct();
+	}
 }
 
 ?>

@@ -2,6 +2,8 @@
 
 class MVIdeasController extends MemberVoiceAppController {
 
+	public $helpers = array('Html', 'Form', 'Paginator', 'Tinymce');
+
 	public $components = array('RequestHandler');
 
 	public $paginate = array(
@@ -54,9 +56,13 @@ class MVIdeasController extends MemberVoiceAppController {
 			throw new NotFoundException(__('Invalid post'));
 		}
 		$categories = $this->MVIdea->Category->find('all', array('order' => 'Category.category'));
+		$comments = $this->MVIdea->Comment->find('all', array('conditions' => array('Comment.idea_id' => $id)));
 
 		$this->set('idea', $idea);
 		$this->set('categories', $categories);
+		$this->set('comments', $comments);
+		$this->set('firstname', $this->mvFirstName);
+		$this->set('lastname', $this->mvLastName);
 		$this->set('user', $this->_getUserID());
 		$this->set('voteurl', $this->_getVoteUrl());
 	}

@@ -1,7 +1,7 @@
 <?php
 /* Breadcrumbs */
 $this->Html->addCrumb('MemberVoice', '/membervoice/ideas');
-$this->Html->addCrumb($idea['Idea']['id'] , '/membervoice/ideas/view' . $idea['Idea']['id']);
+$this->Html->addCrumb($idea['Idea']['id'] , '/membervoice/ideas/idea/' . $idea['Idea']['id']);
 
 /* Load our CSS */
 $this->Html->css('MemberVoice.mvideas', null, array('inline' => false));
@@ -24,12 +24,6 @@ $this->Html->script('MemberVoice.idea', array('inline' => false));
 <div class="mvIdeaDetail">
 	<h2><?php echo($idea['Idea']['idea']); ?></h2>
 	<p><?php echo($idea['Idea']['description']); ?></p>
-	<div class="mvMeta">
-		<p><?php
-			echo(count($idea['Comment']) . " Comment");
-			echo(count($idea['Comment']) == 1 ? "" : "s");
-		?></p>
-	</div>
 </div>
 
 <div class="mvIdeaVotes">
@@ -51,6 +45,48 @@ $this->Html->script('MemberVoice.idea', array('inline' => false));
 
 </div>
 
+<div class="mvIdeaComments">
+	<h3><a name="comments">Comments</a></h3>
+
+	<?php
+
+	if (count($comments) > 0) {
+		$start = 'Join';
+		?>
+		<ul class="mvComments">
+		<?php
+		foreach ($comments as $comment) :
+			?>
+			<li class="mvComment"><p><?php echo(str_replace("\n", '</p><p>', $comment['Comment']['comment'])); ?></p><div class="mvAuthor"><p><strong>Author</strong></p><p><?php echo($comment['User'][$firstname] . ' ' . $comment['User'][$lastname]); ?></p></div></li>
+			<?php
+		endforeach;
+		?>
+	</ul>
+		<?php
+	}
+	else {
+		$start = 'Start';
+		echo('<p>No comments yet!</p>');
+	}
+
+	?>
+
+	<h3><?php echo($start); ?> the conversation:</h3>
+	<?php
+	echo $this->Form->create('Comment', array('url' => $this->Html->url(array('plugin' => 'membervoice', 'controller' => 'comments', 'action' => 'add', 'base' => false))));
+	/*echo $this->Tinymce->input(
+		'Comment.comment', 
+		array( 'label' => 'Message' ),
+		array( 'language'=>'en' ), 
+		'basic' 
+		);*/
+	echo $this->Form->input('Comment.comment');
+	echo $this->Form->hidden('Comment.idea_id', array('value' => $idea['Idea']['id']));
+	echo $this->Form->hidden('Comment.user_id', array('value' => $user));
+	echo $this->Form->end('Comment');
+
+?>
+</div>
 
 <?php
 /* End isolation block */

@@ -42,10 +42,12 @@ if (count($ideas) > 0):
 	<h2><?php echo($this->Html->link($idea['Idea']['idea'], array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'idea', $idea['Idea']['id'] ))); ?></h2>
 	<p><?php echo($idea['Idea']['description']); ?></p>
 	<div class="mvMeta">
-		<p><?php
+		<p><a href="<?php
+			echo($this->Html->url(array('plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'idea', $idea['Idea']['id'])));
+		?>#comments"><?php
 			echo(count($idea['Comment']) . " Comment");
 			echo(count($idea['Comment']) == 1 ? "" : "s");
-		?></p>
+		?></a></p>
 	</div>
 </div>
 

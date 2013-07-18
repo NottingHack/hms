@@ -20,7 +20,8 @@ div.memberVoice ul.mvIdeas li {
 }
 
 /* Idea Detail */
-div.memberVoice div.mvIdeaDetail {
+div.memberVoice div.mvIdeaDetail,
+div.memberVoice div.mvIdeaComments {
 	margin-left: 90px;
 }
 
@@ -34,6 +35,11 @@ div.memberVoice div.mvIdeaDetail div.mvMeta {
 	font-size: 0.8em;
 	margin: 15px 0 0 0;
 	color: #999999;
+}
+
+div.memberVoice div.mvIdeaDetail div.mvMeta a {
+	color: #999999;
+	font-weight: normal;
 }
 
 
@@ -133,4 +139,46 @@ div.memberVoice ul.mvCategories li a.mvSelected {
 	color: #195905;
 	text-decoration: none;
 	margin-left: 0px;
+}
+
+/* Comments */
+div.memberVoice div.mvIdeaComments h3 {
+	margin: 20px 0 10px 0;
+}
+
+div.memberVoice div.mvIdeaComments h3 a {
+	cursor: default;
+	font-weight: normal;
+}
+
+div.memberVoice div.mvIdeaComments h3 a:hover {
+	text-decoration: none;
+}
+
+div.memberVoice div.mvIdeaComments textarea {
+	border: 1px solid #195905;
+	font-size: 1em;
+	font-weight: normal;
+}
+
+div.memberVoice div.mvIdeaComments ul.mvComments {
+	list-style-type: none;
+}
+
+div.memberVoice div.mvIdeaComments ul.mvComments li {
+	position: relative;
+	padding-left: 130px;
+	min-height: 40px;
+}
+
+div.memberVoice div.mvIdeaComments ul.mvComments li div.mvAuthor {
+	position: absolute;
+	top: 0px;
+	left: 20px;
+	width: 90px;
+}
+
+div.memberVoice div.mvIdeaComments ul.mvComments li div.mvAuthor p {
+	font-size: 0.8em;
+	color: #999999;
 }
