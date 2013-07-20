@@ -45,7 +45,7 @@
                 array('id' => 1, 'member_id' => 1, 'subject' => 'Test email 1', 'timestamp' => '2012-12-17 19:19:59' ),
 			);
 
-			$this->_testViewVars($expectedEmails);
+			$this->_testViewVars($expectedEmails, null);
 		}
 
 		public function testViewInvalidData()
@@ -118,7 +118,7 @@
 		{
 			$this->_testViewMemberAsMemberId($memberId, $viewerId);
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
-			$this->_testViewVars($this->_getExpectedEmailsForMember($memberId));
+			$this->_testViewVars($this->_getExpectedEmailsForMember($memberId), $memberId);
 		}
 
 		private function _testViewMemberAsMemberId($memberId, $viewerId)
@@ -137,13 +137,44 @@
 			$this->testAction('emailRecords/view/' . $memberId);
 		}
 
-		private function _testViewVars($expectedEmails)
+		private function _testViewVars($expectedEmails, $memberId)
 		{
-			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
-			$this->assertArrayHasKey( 'emails', $this->vars, 'No view value for emails.' );
-			$this->assertInternalType( 'array', $this->vars['emails'], 'Emails view value is not an array.' );
 
-			$this->assertEqual( $this->vars['emails'], $expectedEmails, 'Emails vuew value is incorrect.' );
+			if(!isset($memberId))
+			{	
+				$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
+			}
+			else
+			{
+				$this->assertIdentical( count($this->vars), 3, 'Unexpected number of view values.' );	
+				$this->assertEqual( $this->vars['id'], $memberId, 'Id view value is incorrect.' );
+			}
+
+			$this->assertArrayHasKey( 'emails', $this->vars, 'No view value for emails.' );
+			$this->assertArrayHasKey( 'memberNames', $this->vars, 'No view value for memberNames.' );
+			$this->assertInternalType( 'array', $this->vars['emails'], 'Emails view value is not an array.' );
+			$this->assertInternalType( 'array', $this->vars['memberNames'], 'MemberNames view value is not an array.' );
+
+			$this->assertEqual( $this->vars['emails'], $expectedEmails, 'Emails view value is incorrect.' );
+
+			$expectedMemberNames = array(
+                1 => 'Mathew Pryce',
+                2 => 'Annabelle Santini',
+                3 => 'Guy Viles',
+                4 => 'Kelly Savala',
+                5 => 'Jessie Easterwood',
+                6 => 'Guy Garrette',
+                7 => 'CherylLCarignan@teleworm.us',
+                8 => 'MelvinJFerrell@dayrep.com',
+                9 => 'Dorothy Russell',
+                10 => 'Hugo Lorenz',
+                11 => 'Betty Paris',
+                12 => 'Roy Forsman',
+                13 => 'Ryan Miles',
+                14 => 'Evan Atkinson',
+            );
+
+			$this->assertEqual( $this->vars['memberNames'], $expectedMemberNames, 'MemberNames view value is incorrect.' );
 		}
 	}
 

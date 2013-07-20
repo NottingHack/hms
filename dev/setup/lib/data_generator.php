@@ -472,6 +472,27 @@
 				}
 			}
 
+			$unlockText = 'Welcome ' . $firstname;
+
+			// Clear any data that wouldn't be set yet
+			if((int)$membershipStage <= Status::PRE_MEMBER_1)
+			{
+				$firstname = null;
+				$surname = null;
+				$joinDate = '';
+				$handle = null;
+				$unlockText = null;
+				$balance = 0;
+				$creditLimit = 0;
+				$username = null;
+				$accountId = null;
+				$address[0] = null;
+				$address[1] = null;
+				$address[2] = null;
+				$address[3] = null;
+				$contactNumber = null;
+			}
+
 			$record = array(
 				'member_id' => $memberId,
 				'firstname' => $firstname,
@@ -479,7 +500,7 @@
 				'email' => $email,
 				'join_date' => $joinDate,
 				'handle' => $handle,
-				'unlock_text' => 'Welcome ' . $firstname,
+				'unlock_text' => $unlockText,
 				'balance' => $balance,
 				'credit_limit' => $creditLimit,
 				'member_status' => $membershipStage,

@@ -42,25 +42,16 @@
 	    	return false;
 	    }
 
-	    //! Perform any actions that should be performed before any controller action
-	    /*!
-	    	@sa http://api20.cakephp.org/class/controller#method-ControllerbeforeFilter
-	    */
-	    public function beforeFilter() 
+	    private function _setupEmailListView($emails)
 	    {
-	        parent::beforeFilter();
-
-	        $allowedActionsArray = array(
-	        	'index', 
-	        	'view',
-	        );
-
-	        $this->Auth->allow($allowedActionsArray);
+	    	Controller::loadModel('Member');
+	    	$this->set('memberNames', $this->Member->getBestMemberNames());
+	    	$this->set('emails', $emails);
 	    }
 
 	    public function index()
 	    {
-	    	$this->set('emails', $this->EmailRecord->getAllEmails());
+	    	$this->_setupEmailListView($this->EmailRecord->getAllEmails());
 	    }
 
 	    public function view($id = null) 
@@ -77,7 +68,8 @@
 
 	        if($canView)
 	        {
-	        	$this->set('emails', $this->EmailRecord->getAllEmailsForMember($id));
+	        	$this->_setupEmailListView($this->EmailRecord->getAllEmailsForMember($id));
+	        	$this->set('id', $id);
 	        }
 	        else
 	        {

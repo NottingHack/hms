@@ -1008,3 +1008,16 @@ pre {
 input[type=file] {
 	padding: 0px;
 }
+
+.emailRecordDay {
+	margin-top: 15px;
+}
+
+.emailRecordDay ul {
+	list-style: none;
+	margin-top: 10px;
+}
+
+.emailRecordDay ul li {
+	margin: 5px 12px;
+}

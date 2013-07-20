@@ -1,8 +1,9 @@
 <!-- File: /app/View/Member/edit.ctp -->
 
 <?php
+	$name = array_key_exists('username', $member) ? $member['username'] : $member['email'];
 	$this->Html->addCrumb('Members', '/members');
-	$this->Html->addCrumb('Edit ' . $member['username'], '/members/view/' . $member['id']);
+	$this->Html->addCrumb("Edit $name", '/members/view/' . $member['id']);
 ?>
 
 <?php
@@ -13,10 +14,23 @@
 	{
 		echo $this->Form->input('handle');
 	}
-	echo $this->Form->input('firstname');
-	echo $this->Form->input('surname');
+
+	if(isset($member['firstname']))
+	{
+		echo $this->Form->input('firstname');
+	}
+
+	if(isset($member['surname']))
+	{
+		echo $this->Form->input('surname');
+	}
+
 	echo $this->Form->input('email');
-	echo $this->Form->input('unlock_text');
+
+	if(isset($member['unlockText']))
+	{
+		echo $this->Form->input('unlock_text');
+	}
 
 	if(array_key_exists('address', $member))
 	{

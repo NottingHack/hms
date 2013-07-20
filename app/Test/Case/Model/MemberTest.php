@@ -1825,6 +1825,28 @@
 
             $this->assertEqual( $this->Member->emailToMemberId($emailList), $expectedResults, 'Unknown e-mail was not excluded from array results.' );
         }
+
+        public function testGetBestMemberNames()
+        {
+            $expectedResults = array(
+                1 => 'Mathew Pryce',
+                2 => 'Annabelle Santini',
+                3 => 'Guy Viles',
+                4 => 'Kelly Savala',
+                5 => 'Jessie Easterwood',
+                6 => 'Guy Garrette',
+                7 => 'CherylLCarignan@teleworm.us',
+                8 => 'MelvinJFerrell@dayrep.com',
+                9 => 'Dorothy Russell',
+                10 => 'Hugo Lorenz',
+                11 => 'Betty Paris',
+                12 => 'Roy Forsman',
+                13 => 'Ryan Miles',
+                14 => 'Evan Atkinson',
+            );
+
+            $this->assertEqual( $this->Member->getBestMemberNames(), $expectedResults, 'Results were not correct.' );
+        }
     }
 
 ?>
