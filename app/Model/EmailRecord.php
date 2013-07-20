@@ -31,6 +31,32 @@
 	        ),
 	    );
 
+	    //! Get information about all the emails sent.
+	    /*!
+	    	@retval array An array of record data, or null if data could not be found.
+	    */
+	    public function getAllEmails()
+	    {
+	    	$result = $this->find('all', array( 'order' => 'EmailRecord.timestamp DESC' ));
+    		return $this->_formatEmilRecords($result);
+	    }
+
+	    //! Get information about all the emails sent to a member.
+	    /*!
+	    	@param int $memberId The id of the member to look for.
+	    	@retval array An array of record data, or null if data could not be found.
+	    */
+	    public function getAllEmailsForMember($memberId)
+	    {
+	    	if(is_numeric($memberId))
+	    	{
+	    		$result = $this->find('all', array( 'order' => 'EmailRecord.timestamp DESC', 'conditions' => array('EmailRecord.member_id' => $memberId) ));
+	    		return $this->_formatEmilRecords($result);
+	    	}
+
+	    	return null;
+	    }
+
 	    //! Get the most recent email record for a member.
 	    /*!
 	    	@param int $memberId The id of the member to look for.
@@ -49,6 +75,26 @@
 	    	}
 
 	    	return null;
+	    }
+
+	    //! Given an array of data for multiple records from the database, format it so other classes can use it.
+	    /*!
+   			@param array $recordList An array of records data.
+   			@retval mixed A formatted array of data, or null on error.
+   		*/
+	    private function _formatEmilRecords($recordList)
+	    {
+	    	if(	is_array($recordList) &&
+    			count($recordList) > 0)
+    		{
+    			$formattedList = array();
+    			foreach ($recordList as $record) 
+    			{
+    				array_push($formattedList, $this->_formatEmailRecord($record));	
+    			}
+    			return $formattedList;
+    		}
+    		return null;
 	    }
 
 	    //! Given an array of data from the database, format it so other classes can use it.

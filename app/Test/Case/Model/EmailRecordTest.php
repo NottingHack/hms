@@ -12,6 +12,41 @@
             $this->EmailRecord = ClassRegistry::init('EmailRecord');
         }
 
+        public function testGetAllEmails()
+        {
+            $expectedData = array(
+                array('id' => 4, 'member_id' => 4, 'subject' => 'Test email 2', 'timestamp' => '2013-06-05 13:51:04' ),
+                array('id' => 8, 'member_id' => 4, 'subject' => 'Test email 7', 'timestamp' => '2013-04-13 22:51:09' ),
+                array('id' => 3, 'member_id' => 3, 'subject' => 'Test email 2', 'timestamp' => '2013-03-23 05:42:21' ),
+                array('id' => 6, 'member_id' => 4, 'subject' => 'Test email 5', 'timestamp' => '2013-03-16 15:15:23' ),
+                array('id' => 7, 'member_id' => 4, 'subject' => 'Test email 6', 'timestamp' => '2013-02-19 17:47:26' ),
+                array('id' => 5, 'member_id' => 4, 'subject' => 'Test email 3', 'timestamp' => '2013-01-23 09:23:42' ),
+                array('id' => 2, 'member_id' => 2, 'subject' => 'Test email 1', 'timestamp' => '2012-12-17 19:20:00' ),
+                array('id' => 1, 'member_id' => 1, 'subject' => 'Test email 1', 'timestamp' => '2012-12-17 19:19:59' ),
+            );
+            $this->assertEqual( $this->EmailRecord->getAllEmails(), $expectedData, 'Incorrect data returned.' );
+        }
+
+        public function testGetAllEmailsForMemberInvalidData()
+        {
+            $this->assertEqual( $this->EmailRecord->getAllEmailsForMember(null), null, 'Null data not handled correctly.' );
+            $this->assertEqual( $this->EmailRecord->getAllEmailsForMember('foo'), null, 'String data not handled correctly.' );
+            $this->assertEqual( $this->EmailRecord->getAllEmailsForMember(array(3)), null, 'Array data not handled correctly.' );
+            $this->assertEqual( $this->EmailRecord->getAllEmailsForMember(0), null, 'Invalid integer data not handled correctly.' );
+        }
+
+        public function testAllEmailsForMemberalidData()
+        {
+            $expectedData = array(
+                array('id' => 4, 'member_id' => '4', 'subject' => 'Test email 2', 'timestamp' => '2013-06-05 13:51:04' ),
+                array('id' => 8, 'member_id' => '4', 'subject' => 'Test email 7', 'timestamp' => '2013-04-13 22:51:09' ),
+                array('id' => 6, 'member_id' => '4', 'subject' => 'Test email 5', 'timestamp' => '2013-03-16 15:15:23' ),
+                array('id' => 7, 'member_id' => '4', 'subject' => 'Test email 6', 'timestamp' => '2013-02-19 17:47:26' ),
+                array('id' => 5, 'member_id' => '4', 'subject' => 'Test email 3', 'timestamp' => '2013-01-23 09:23:42' ),
+            );
+            $this->assertEqual( $this->EmailRecord->getAllEmailsForMember(4), $expectedData, 'Valid data not handled correctly.' );
+        }
+
         public function testGetMostRecentEmailForMemberInvalidData()
         {
             $this->assertEqual( $this->EmailRecord->getMostRecentEmailForMember(null), null, 'Null data not handled correctly.' );
@@ -77,7 +112,7 @@
 
         public function getLastRecordId()
         {
-            $lastRecord = $this->EmailRecord->find('first', array( 'order' => 'EmailRecord.timestamp DESC') );
+            $lastRecord = $this->EmailRecord->find('first', array( 'order' => 'EmailRecord.hms_email_id DESC') );
             $lastRecordId = $lastRecord['EmailRecord']['hms_email_id'];
             return $lastRecordId;
         }

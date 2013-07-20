@@ -838,6 +838,8 @@
 	    						if($lastEmailRecord != null)
 	    						{
 	    							$formattedInfo['lastEmail'] = $lastEmailRecord;
+
+	    							$this->Nav->add('View Email History', 'emailrecords', 'view', array($id));
 	    						}
 	    					}
 
@@ -862,7 +864,7 @@
 	    		}
 	    	}
 	    	
-	    	// Couldn't find a record with that id...
+	    	// Nope, not allowed to view that
 	    	return $this->redirect($this->referer());
 	    }
 
@@ -1249,15 +1251,6 @@
     		}
 
     		return $actions;
-		}
-
-		//! Get the id of the currently logged in Member.
-		/*!
-			@retval int The id of the currently logged in Member, or 0 if not found.
-		*/
-		private function _getLoggedInMemberId()
-		{
-			return $this->Member->getIdForMember($this->Auth->user());
 		}
 
 		//! Test to see if a request is coming from within the hackspace.

@@ -163,4 +163,14 @@ class AppController extends Controller {
         $email->viewVars($viewVars);
         return $email->send();
     }
+
+    //! Get the id of the currently logged in Member.
+    /*!
+        @retval int The id of the currently logged in Member, or 0 if not found.
+    */
+    protected function _getLoggedInMemberId()
+    {
+        Controller::loadModel('Member');
+        return $this->Member->getIdForMember($this->Auth->user());
+    }
 }

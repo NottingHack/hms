@@ -7,11 +7,14 @@
 	App::build(array('TestCase' => array('%s' . 'Test' . DS . 'Case' . DS . 'Model' . DS)), App::REGISTER);
 	App::uses('EmailRecordTest', 'TestCase');
 
+	App::build(array('TestController' => array('%s' . 'Test' . DS . 'Lib' . DS)), App::REGISTER);
+	App::uses('HmsControllerTestBase', 'TestController');
+
 	App::uses('PhpReader', 'Configure');
 	Configure::config('default', new PhpReader());
 	Configure::load('hms', 'default');
 
-	class MembersControllerTest extends ControllerTestCase
+	class MembersControllerTest extends HmsControllerTestBase
 	{
 		public $fixtures = array( 'app.Member', 'app.Status', 'app.Group', 'app.GroupsMember', 'app.Account', 'app.Pin', 'app.StatusUpdate', 'app.ForgotPassword', 'app.MailingLists', 'app.MailingListSubscriptions', 'app.EmailRecord' );
 
@@ -78,7 +81,7 @@
 			$this->assertArrayHasKey( 'mailingLists', $this->vars, 'No view value called \'memberList\'.' );
 		}
 
-		/*public function testIsAuthorized()
+		public function testIsAuthorized()
 		{
 			// Need fake requests for all the functions we need to test
 			$fakeRequestDetails = array(
@@ -111,51 +114,7 @@
 				array( 'name' => 'setupDetails', 					'params' => array('otherId'), 	'access' => array( 'fullAccessMember' ) ),
 			);
 
-			$testUsers = array(
-				'fullAccessMember' => array(
-					'ourId' => 1,
-					'otherId' => 3,
-				),
-
-				'memberAdminMember' => array(
-					'ourId' => 5,
-					'otherId' => 2,
-				),
-
-				'membershipTeamMember' => array(
-					'ourId' => 4,
-					'otherId' => 5,
-				),
-
-				'normalMember' => array(
-					'ourId' => 3,
-					'otherId' => 1,
-				),
-			);
-
-			foreach($testUsers as $userName => $user)
-			{
-				$userId = $user['ourId'];
-				$userInfo = $this->MembersController->Member->findByMemberId($userId);
-				foreach($fakeRequestDetails as $reqDetails)
-				{
-					$actionName = $reqDetails['name'];
-					$params = array();
-
-					if(!empty($reqDetails['params']))
-					{
-						foreach($reqDetails['params'] as $param)
-						{
-							array_push($params, $user[$param]);
-						}
-					}
-
-					$requestObj = $this->_buildFakeRequest($actionName, $params);
-					$expectedResult = in_array($userName, $reqDetails['access']);
-					$actualResult = $this->MembersController->isAuthorized($userInfo, $requestObj);
-					$this->assertIdentical( $actualResult, $expectedResult, sprintf('isAuthorized returned %s for %s (id: %d) when accessing %s.', $actualResult ? 'true' : 'false', $userName, $userId, $requestObj->url));
-				}
-			}
+			$this->_testIsAuthorized($this->MembersController, $fakeRequestDetails);
 		}
 
 		public function testIsRequestLocal()
@@ -886,7 +845,7 @@
 			$emailRecord = ClassRegistry::init('EmailRecord');
 			$emailRecord->setDataSource('test');
 
-			$lastEmailRecord = $emailRecord->find('first', array( 'order' => 'EmailRecord.timestamp DESC') );
+			$lastEmailRecord = $emailRecord->find('first', array( 'order' => 'EmailRecord.hms_email_id DESC') );
             $lastEmailRecordId = $lastEmailRecord['EmailRecord']['hms_email_id'];
 
 			$beforeTime = time();
@@ -1907,7 +1866,7 @@
 			// Should redirect
 			$this->testAction('members/view/4');
 			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
-		}*/
+		}
 
 		public function testViewMemberAsMemberAdmin()
 		{
@@ -1929,10 +1888,11 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(3))->method('add');
-			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
-			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
-			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
+			$this->controller->Nav->expects($this->exactly(4))->method('add');
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailrecords', 'view', array(4));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
+			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
 
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/4');
@@ -2019,10 +1979,11 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(3))->method('add');
-			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(3));
-			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(3));
-			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(3));
+			$this->controller->Nav->expects($this->exactly(4))->method('add');
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailrecords', 'view', array(3));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(3));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(3));
+			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(3));
 
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/3');
@@ -2098,10 +2059,11 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(3))->method('add');
-			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
-			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
-			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
+			$this->controller->Nav->expects($this->exactly(4))->method('add');
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailrecords', 'view', array(4));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
+			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
 
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/4');
@@ -2380,10 +2342,11 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(3))->method('add');
-			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(4));
-			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
-			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
+			$this->controller->Nav->expects($this->exactly(4))->method('add');
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailrecords', 'view', array(4));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
+			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
 
 			// Should not redirect, and should populate 
 			$this->testAction('members/view/4');
@@ -4128,26 +4091,6 @@
 			}
 
 			return false;
-		}
-
-		private function _buildFakeRequest($action, $params = array())
-		{
-			$url = '/' . 'MembersController' . '/' . $action;
-
-			if(count($params) > 0)
-			{
-				$url .= '/' . join($params, '/');
-			}
-
-			$request = new CakeRequest($url, false);
-			$request->addParams(array(
-				'plugin' => null,
-				'controller' => 'MembersController',
-				'action' => $action,
-				'pass' => $params,
-			));
-
-			return $request;
 		}
 	}
 
