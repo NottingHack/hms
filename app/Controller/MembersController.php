@@ -29,10 +29,9 @@
 	    */
 	    public $helpers = array('Html', 'Form', 'Paginator', 'Tinymce', 'Currency', 'Mailinglist');
 
-	    //! We need the MailChimp and Krb components.
+	    //! We need the BankStatement components.
 	    /*!
-	    	@sa MailChimpComponent
-	    	@sa KrbComponent
+	    	@sa BankStatementComponent
 	    */
 	    public $components = array('BankStatement');
 
@@ -92,9 +91,6 @@
 
 	    	return false;
 	    }
-
-	    //! Email object, for easy mocking.
-	    public $email = null;
 
 	    //! Perform any actions that should be performed before any controller action
 	    /*!
@@ -1082,33 +1078,6 @@
 			{
 				return $this->redirect($this->referer());
 			}
-		}
-
-		//! Send an e-mail to one or more email addresses.
-		/*
-			@param mixed $to Either an array of email address strings, or a string containing a singular e-mail address.
-			@param string $subject The subject of the email.
-			@param string $template Which email view template to use.
-			@param array $viewVars Array containing all the variables to pass to the view.
-			@retval bool True if e-mail was sent, false otherwise.
-		*/
-		private function _sendEmail($to, $subject, $template, $viewVars = array())
-		{
-			if($this->email == null)
-			{
-				$this->email = new CakeEmail();
-			}
-
-			$email = $this->email;
-			$email->config('smtp');
-			$email->from(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
-			$email->sender(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
-			$email->emailFormat('html');
-			$email->to($to);
-			$email->subject($subject);
-			$email->template($template);
-			$email->viewVars($viewVars);
-			return $email->send();
 		}
 
 		//! Attempt to login as a member.
