@@ -1929,6 +1929,33 @@
 			return $this->mailingList;
 		}
 
+		//! Given either a single e-mail or an array of e-mails, return a member id or array of member ids.
+		/*!
+			@param mixed $email Either a single e-mail address or an array of e-mail addresses.
+			@retval mixed If $email is a single e-mail, returns the member id of the record matching that e-mail (or null if none can be found). 
+						  If $email is an array of e-mail addresses, return an array of all matching member ids that can be found.
+						  Returns null on error.
+		*/
+		public function emailToMemberId($email)
+		{
+			if(is_array($email) || is_string($email))
+			{
+				$records = $this->find('list', array( 'fields' => array('Member.member_id', 'Member.email'), 'conditions' => array('Member.email' => $email) ));
+
+				if(is_array($records) && count($records) > 0)
+				{
+
+					$idList = array_keys($records);
+					if(count($idList) == 1)
+					{
+						return $idList[0];
+					}
+					return $idList;
+				}
+			}
+			return null;
+		}
+
 		//! Set the password for the member, with the option to create a new password entry if needed.
 		/*!
 			@param string $username The username of the member.

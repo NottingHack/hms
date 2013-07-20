@@ -1773,6 +1773,58 @@
             $data = array('subject' => 'This is a subject', 'message' => 'Lorem impus sit dom amet.');
             $this->assertEqual( $this->Member->validateEmail(array('MemberEmail' => $data)), $data, 'Valid data was not handled correctly.' );   
         }
+
+        public function testEmailToMemberIdInvalidData()
+        {
+            $this->assertEqual( $this->Member->emailToMemberId(null), null, 'Null input was not handled correctly.' );
+            $this->assertEqual( $this->Member->emailToMemberId(435), null, 'Numeric input was not handled correctly.' );
+        }
+
+        public function testEmailToMemberIdReturnsNullForUnknownEmail()
+        {
+            $this->assertEqual( $this->Member->emailToMemberId('totallymadeupemailthatdoesntexist@ffooosadff.cdf'), null, 'Unknown email input was not handled correctly.' );
+        }
+
+        public function testEmailToMemberIdHandlesSingleKnownEmail()
+        {
+            $this->assertEqual( $this->Member->emailToMemberId('g.garratte@foobar.org'), 6, 'Single known email input was not handled correctly.' );
+        }
+
+        public function testEmailToMemberIdHandlesMultipleKnownEmails()
+        {
+            $emailList = array(
+                'm.pryce@example.org',      
+                'a.santini@hotmail.com',
+                'g.viles@gmail.com',
+                'k.savala@yahoo.co.uk',
+                'j.easterwood@googlemail.com',
+                'g.garratte@foobar.org',
+            );
+
+            $expectedResults = array(
+                1, 2, 3, 4, 5, 6
+            );
+            $this->assertEqual( $this->Member->emailToMemberId($emailList), $expectedResults, 'Miltuple known email input was not handled correctly.' );
+        }
+
+        public function testEmailToMemberIdExcludesUnknownEmailFromArrayResults()
+        {
+            $emailList = array(
+                'm.pryce@example.org',      
+                'a.santini@hotmail.com',
+                'g.viles@gmail.com',
+                'totallymadeupemailthatdoesntexist@ffooosadff.cdf',
+                'k.savala@yahoo.co.uk',
+                'j.easterwood@googlemail.com',
+                'g.garratte@foobar.org',
+            );
+
+            $expectedResults = array(
+                1, 2, 3, 4, 5, 6
+            );
+
+            $this->assertEqual( $this->Member->emailToMemberId($emailList), $expectedResults, 'Unknown e-mail was not excluded from array results.' );
+        }
     }
 
 ?>

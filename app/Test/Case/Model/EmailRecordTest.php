@@ -26,7 +26,7 @@
 
         public function testCreateHandlesSingleRecord()
         {
-            $lastRecordId = $this->_getLastRecordId();
+            $lastRecordId = $this->getLastRecordId();
             $memberId = 1;
             $subject = 'Test subject';
             $timeBefore = time();
@@ -35,12 +35,12 @@
 
             // Check the record was inserted
             $createdRecord = $this->EmailRecord->findByHmsEmailId($lastRecordId + 1);
-            $this->_validateRecord($createdRecord, $memberId, $subject, $timeBefore, $timeAfter);
+            self::validateRecord($this, $createdRecord, $memberId, $subject, $timeBefore, $timeAfter);
         }
 
         public function testCreateHandlesMultipleRecords()
         {
-            $lastRecordId = $this->_getLastRecordId();
+            $lastRecordId = $this->getLastRecordId();
             $memberIdList = array(1, 2, 3, 6, 4, 7);
             $subject = 'Test subject';
             $timeBefore = time();
@@ -51,33 +51,33 @@
             foreach ($memberIdList as $memberId) 
             {
                 $createdRecord = $this->EmailRecord->findByHmsEmailId($recordIdToCheck);
-                $this->_validateRecord($createdRecord, $memberId, $subject, $timeBefore, $timeAfter);
+                self::validateRecord($this, $createdRecord, $memberId, $subject, $timeBefore, $timeAfter);
                 $recordIdToCheck++;
             }
         }
 
-        private function _getLastRecordId()
+        public function getLastRecordId()
         {
             $lastRecord = $this->EmailRecord->find('first', array( 'order' => 'EmailRecord.timestamp DESC') );
             $lastRecordId = $lastRecord['EmailRecord']['hms_email_id'];
             return $lastRecordId;
         }
 
-        private function _validateRecord($record, $expectedMemberId, $expectedSubject, $timeBefore, $timeAfter)
+        public static function validateRecord($asserter, $record, $expectedMemberId, $expectedSubject, $timeBefore, $timeAfter)
         {
-            $this->assertInternalType( 'array', $record, 'Record was not created correctly.' );
-            $this->assertArrayHasKey( 'EmailRecord', $record, 'Record was not created correctly.' );
+            $asserter->assertInternalType( 'array', $record, 'Record was not created correctly.' );
+            $asserter->assertArrayHasKey( 'EmailRecord', $record, 'Record was not created correctly.' );
 
-            $this->assertInternalType( 'array', $record['EmailRecord'], 'Record was not created correctly.' );
-            $this->assertArrayHasKey( 'hms_email_id', $record['EmailRecord'], 'Record was not created correctly.' );
-            $this->assertArrayHasKey( 'member_id', $record['EmailRecord'], 'Record was not created correctly.' );
-            $this->assertArrayHasKey( 'subject', $record['EmailRecord'], 'Record was not created correctly.' );
-            $this->assertArrayHasKey( 'timestamp', $record['EmailRecord'], 'Record was not created correctly.' );
+            $asserter->assertInternalType( 'array', $record['EmailRecord'], 'Record was not created correctly.' );
+            $asserter->assertArrayHasKey( 'hms_email_id', $record['EmailRecord'], 'Record was not created correctly.' );
+            $asserter->assertArrayHasKey( 'member_id', $record['EmailRecord'], 'Record was not created correctly.' );
+            $asserter->assertArrayHasKey( 'subject', $record['EmailRecord'], 'Record was not created correctly.' );
+            $asserter->assertArrayHasKey( 'timestamp', $record['EmailRecord'], 'Record was not created correctly.' );
 
-            $this->assertEqual( $expectedMemberId, $record['EmailRecord']['member_id'], 'Member id is incorrect in created record.' );
-            $this->assertEqual( $expectedSubject, $record['EmailRecord']['subject'], 'Subject is incorrect in created record.' );
-            $this->assertGreaterThanOrEqual( $timeBefore, strtotime($record['EmailRecord']['timestamp']), 'Record has incorrect timestamp.' );
-            $this->assertLessThanOrEqual( $timeAfter, strtotime($record['EmailRecord']['timestamp']), 'Record has incorrect timestamp.' );
+            $asserter->assertEqual( $expectedMemberId, $record['EmailRecord']['member_id'], 'Member id is incorrect in created record.' );
+            $asserter->assertEqual( $expectedSubject, $record['EmailRecord']['subject'], 'Subject is incorrect in created record.' );
+            $asserter->assertGreaterThanOrEqual( $timeBefore, strtotime($record['EmailRecord']['timestamp']), 'Record has incorrect timestamp.' );
+            $asserter->assertLessThanOrEqual( $timeAfter, strtotime($record['EmailRecord']['timestamp']), 'Record has incorrect timestamp.' );
         }
     }
 
