@@ -405,6 +405,7 @@
 				'./sql/status_updates_data.sql' => function() use (&$gen) { return $gen->getStatusUpdatesSql(); },
 				'./sql/mailinglists_data.development.sql' => function() use (&$gen) { return $gen->getMailingListsSql(); },
 				'./sql/mailinglist_subscriptions_data.development.sql' => function() use (&$gen) { return $gen->getMailingListSubscriptionsSql(); },
+				'./sql/hms_emails_data.development.sql' => function() use (&$gen) { return $gen->getEmailRecordSql(); },
 			);
 
 			foreach ($pathsAndFunctions as $path => $func) 

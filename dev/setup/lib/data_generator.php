@@ -29,13 +29,14 @@
 		private $stockData = array(); //!< The stock data used to populate other fields.
 
 		private $members = array(); 					//!< Array of members.
-		private $membersGroup = array(); 				//!< Array of which members are in which groups
+		private $membersGroup = array(); 				//!< Array of which members are in which groups.
 		private $accounts = array(); 					//!< Array of accounts.
 		private $pins = array(); 						//!< Array of pins.
 		private $rfidTags = array(); 					//!< Array of rfid tags.
-		private $statusUpdates = array(); 				//!< Array of status updates
+		private $statusUpdates = array(); 				//!< Array of status updates.
 		private $mailingLists = array();				//!< Array of mailing lists.
-		private $mailingListSubscriptions = array();	//!< Array of mailing list subscriptions
+		private $mailingListSubscriptions = array();	//!< Array of mailing list subscriptions.
+		private $emailRecords = array();				//!< Array of email records.
 
 		//! Constructor
 		function __construct()
@@ -320,6 +321,15 @@
 			return $this->_getSql($this->mailingListSubscriptions, 'mailinglist_subscriptions');
 		}
 
+		//! Get an SQL string of the email record data.
+		/*!
+			@retval string SQL string for the email record data.
+		*/
+		public function getEmailRecordSql()
+		{
+			return $this->_getSql($this->emailRecords, 'hms_emails');
+		}
+
 		//! Generate a new member record
 		/*!
 			@param int $membershipStage The stage of membership this member should be at, see Status model for details.
@@ -417,6 +427,24 @@
 				$currentStatusUpdateTime = rand($currentStatusUpdateTime, $registerTimestamp);
 			}
 
+			// Generate some unrealistic email records
+			$numEmailRecords = rand(1, 4);
+			$fromTimestamp = $registerTimestamp;
+			$toTimestamp = $now;
+			$subjects = array(
+				'Contact Details',
+				'Banking Details',
+				'Membership Update',
+				'Door Codes Have Changed',
+			);
+			for($i = 0; $i < $numEmailRecords; $i++)
+			{
+				$recordTimestamp = rand($fromTimestamp, $toTimestamp);
+				$fromTimestamp = $recordTimestamp;
+				$subject = $subjects[array_rand($subjects)];
+				$this->_generateEmailRecord($memberId, $subject, $recordTimestamp);
+			}
+
 			$stockData = $this->_getStockData();
 
 			$firstname = $this->_useValOrDefault($details, 'firstname', $stockData['GivenName']);
@@ -465,6 +493,26 @@
 			);
 
 			array_push($this->members, $record);
+		}
+
+		//! Create a new e-mail record.
+		/*!
+			@param int $memberId The id of the member the e-mail was sent to.
+			@param string $subject The subject of the e-mail.
+			@param int $timestamp Unix timestamp for the time the e-mail was sent.
+		*/
+		private function _generateEmailRecord($memberId, $subject, $timestamp)
+		{
+			$recordId = count($this->emailRecords) + 1;
+
+			$record = array(
+				'hms_email_id' => $recordId,
+				'member_id' => $memberId,
+				'subject' => $subject,
+				'timestamp' => date('Y-m-d H:i:s', $timestamp),
+			);
+
+			array_push($this->emailRecords, $record);
 		}
 
 		//! Return $array[$key] if it is set, otherwise return $default.
