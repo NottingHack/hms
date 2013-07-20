@@ -29,11 +29,18 @@ class MVIdea extends MemberVoiceAppModel {
 			)
 		);
 
+	//! Saves votes for an idea
+	/*!
+		@param integer $ideaID ID of idea to save this vote against
+		@param mixed $userID ID of currently logged in user
+		@param integer $votes Number of votes to apply, one of -1, 0, 1
+		@retval mixed either false on failure, or total sum of votes for idea on success
+	*/
 	public function saveVote($ideaID, $userID, $votes) {
 		$idea = $this->find('first', array('conditions' => array('Idea.id' => $ideaID)));
 		$newvotes = $idea['Idea']['votes'];
 		
-		/* Has this user already voted? */
+		// Has this user already voted?
 		$voted = false;
 		foreach ($idea['Vote'] as $vote) {
 			if ($vote['user_id'] == $userID) {
@@ -42,24 +49,24 @@ class MVIdea extends MemberVoiceAppModel {
 			}
 		}
 
-		/* Ok, what shall we do? */
+		// Ok, what shall we do?
 		$saveVote = true;
 		if ($voted == false and $votes == 0) {
-			/* trying to clear a vote that doesn't exist! Don't do anything */
+			// trying to clear a vote that doesn't exist! Don't do anything
 			return false;
 		}
 		else if ($voted == false) {
-			/* new vote, just save */
+			// new vote, just save
 			$newvotes = $newvotes + $votes;
 		}
 		else if ($voted !== false) {
-			/* remove old vote first */
+			// remove old vote first
 			$newvotes = $newvotes - $oldvote;
 
 			$this->Vote->delete($voted);
 
 			if ($votes == 0) {
-				/* was clearing vote, just save the idea */
+				// was clearing vote, just save the idea
 				$saveVote = false;
 
 			}
@@ -68,7 +75,7 @@ class MVIdea extends MemberVoiceAppModel {
 			}
 		}
 
-		/* Actually save! */
+		// Actually save!
 		$data = array(
 					  'Idea' => array(
 									  'id'		=>	$ideaID,

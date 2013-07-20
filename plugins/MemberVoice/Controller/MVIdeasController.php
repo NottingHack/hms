@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Controller for Ideas in MemberVoice
+ *
+ *
+ * @package       plugin.MemberVoice.Controller
+ */
 class MVIdeasController extends MemberVoiceAppController {
 
 	public $helpers = array('Html', 'Form', 'Paginator', 'Tinymce');
@@ -13,8 +18,12 @@ class MVIdeasController extends MemberVoiceAppController {
 											)
 							);
 
+	//! Main view. Shows either all ideas or just ideas from a category
+	/*!
+		@param integer $id ID of category to show.  If null, show all
+	*/
 	public function index($id = null) {
-		/* If an array is passed, restrict to that category */
+		// If an array is passed, restrict to that category
 		if (!$id) {
 			$conditions = array(
 								'Status.status !='	=> array('Complete','Cancelled'),
@@ -25,6 +34,7 @@ class MVIdeasController extends MemberVoiceAppController {
 								'Status.status !='	=> array('Complete','Cancelled'),
 								'CategoriesIdeas.category_id'		=>	$id,
 								);
+			// Add join details to the paginate array
 			$this->paginate['joins'] = array(
 											array(
 												'table' => 'mv_categories_ideas',
@@ -35,29 +45,44 @@ class MVIdeasController extends MemberVoiceAppController {
 												)
 											),
 										);
+			// Get the category details and send to view
 			$category = $this->MVIdea->Category->find('first', array('conditions' => array('Category.id' => $id)));
 			$this->set('category', $category);
 		}
+		// Get the ideas based on the conditions set above
 		$ideas = $this->paginate('MVIdea', $conditions);
+		// Get a list of all categories for the nav bar in view
 		$categories = $this->MVIdea->Category->find('all', array('order' => 'Category.category'));
 
+		// Set the view variables
 		$this->set('ideas', $ideas);
 		$this->set('categories', $categories);
 		$this->set('user', $this->_getUserID());
 		$this->set('voteurl', $this->_getVoteUrl());
 	}
 
+	//! Show a single idea
+	/*!
+		@param integer $id ID of idea to show
+	*/
 	public function idea($id = null) {
+		// Throw an error if an id is not passed
 		if (!$id) {
-			throw new NotFoundException(__('Invalid post'));
+			throw new NotFoundException(__('Invalid idea'));
 		}
+
+		// Locate the idea, throw an error if not found
 		$idea = $this->MVIdea->find('first', array('conditions' => array('Idea.id' => $id)));
 		if (!$idea) {
-			throw new NotFoundException(__('Invalid post'));
+			throw new NotFoundException(__('Invalid idea'));
 		}
+
+		// Get a list of all categories for the nav bar in view
 		$categories = $this->MVIdea->Category->find('all', array('order' => 'Category.category'));
+		// Get the comments for this idea
 		$comments = $this->MVIdea->Comment->find('all', array('conditions' => array('Comment.idea_id' => $id)));
 
+		// Set the view variables
 		$this->set('idea', $idea);
 		$this->set('categories', $categories);
 		$this->set('comments', $comments);
@@ -67,42 +92,68 @@ class MVIdeasController extends MemberVoiceAppController {
 		$this->set('voteurl', $this->_getVoteUrl());
 	}
 
+	//! Vote for an idea. This does not have a view, it is accessed via AJAX
+	/*!
+		@param integer $id ID of idea to vote for
+		Rest of the input comes via a post
+	*/
 	public function vote($id = null) {
+		/* This is the array that will be JSON'd and sent back
+		   We'll populate it using a big if statement */
 		$return = array();
+
+		// Send an error if no idea is set
 		if (!$id) {
 			$return['responseid'] = 201;
 			$return['response'] = 'No ID provided';
 		}
-		$idea = $this->MVIdea->find('first', array('conditions' => array('Idea.id' => $id)));
-		if (!$idea) {
-			$return['responseid'] = 202;
-			$return['response'] = 'Idea not found';
-		}
-
-		$return['id'] = $id;
-		if ($this->request->data['vote'] == null) {
-			$return['responseid'] = 203;
-			$return['response'] = 'No vote provided';
-		}
-		if ($this->request->data['vote'] != 1 and $this->request->data['vote'] != -1 and $this->request->data['vote'] != 0) {
-			$return['responseid'] = 204;
-			$return['response'] = 'Vote not valid';
-		}		
-		
-		$return['votes'] = $this->MVIdea->saveVote($id, $this->_getUserID(), $this->request->data['vote']);
-		if ($return['votes'] !== false) {
-			$return['responseid'] = 200;
-			$return['voted'] = $this->request->data['vote'];
-		}
 		else {
-			$return['responseid'] = 205;
-			$return['response'] = 'Vote failed';
+			// Look up the idea
+			$idea = $this->MVIdea->find('first', array('conditions' => array('Idea.id' => $id)));
+
+			// Send an error if the idea is not found
+			if (!$idea) {
+				$return['responseid'] = 202;
+				$return['response'] = 'Idea not found';
+			}
+			else {
+				// Ok, we defintely have an idea, so set the id in the return
+				$return['id'] = $id;
+				// Now check the votes - are they null?
+				if ($this->request->data['vote'] == null) {
+					$return['responseid'] = 203;
+					$return['response'] = 'No vote provided';
+				}
+				// Is the vote in the expected range?  can only be -1, 0 or 1
+				elseif ($this->request->data['vote'] != 1 and $this->request->data['vote'] != -1 and $this->request->data['vote'] != 0) {
+					$return['responseid'] = 204;
+					$return['response'] = 'Vote not valid';
+				}	
+				else {
+					// Vote is valid, save the vote and put the return value in the return array
+					$return['votes'] = $this->MVIdea->saveVote($id, $this->_getUserID(), $this->request->data['vote']);
+					// Did it save?
+					if ($return['votes'] !== false) {
+						$return['responseid'] = 200;
+						$return['voted'] = $this->request->data['vote'];
+					}
+					else {
+						$return['responseid'] = 205;
+						$return['response'] = 'Vote failed';
+					}
+				}
+			}
 		}
 
+		// Send the JSON back
 		$this->set('return', $return);
 		$this->set('_serialize', 'return');
 	}
 
+	//! Returns the URL for voting
+	/*!
+		Used for the javascript to set up the AJAX
+	*/
 	private function _getVoteUrl() {
 		if (method_exists("Router", "baseUrl")) {
 			$url = Router::baseUrl();
