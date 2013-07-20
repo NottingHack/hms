@@ -237,4 +237,28 @@
 			</dd>
 		<?php endif; ?>
 	<?php endif; ?>
+
+	<?php
+		if(array_key_exists('lastEmail', $member)):
+	?>
+	<dt>
+		Last Email
+	</dt>
+	<dd>
+		<?php
+			if( isset($member['lastEmail']) &&
+				$member['lastEmail'] != null )
+			{
+				echo sprintf('%s on %s', $member['lastEmail']['subject'], date('d-M-Y \a\t H:i', strtotime($member['lastEmail']['timestamp'])));
+			}
+			else
+			{
+				echo "None";
+			}
+		?>
+	</dd>
+	<?php
+		endif;
+	?>
+
 </dl>

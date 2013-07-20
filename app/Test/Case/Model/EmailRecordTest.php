@@ -12,6 +12,25 @@
             $this->EmailRecord = ClassRegistry::init('EmailRecord');
         }
 
+        public function testGetMostRecentEmailForMemberInvalidData()
+        {
+            $this->assertEqual( $this->EmailRecord->getMostRecentEmailForMember(null), null, 'Null data not handled correctly.' );
+            $this->assertEqual( $this->EmailRecord->getMostRecentEmailForMember('foo'), null, 'String data not handled correctly.' );
+            $this->assertEqual( $this->EmailRecord->getMostRecentEmailForMember(array(3)), null, 'Array data not handled correctly.' );
+            $this->assertEqual( $this->EmailRecord->getMostRecentEmailForMember(0), null, 'Invalid integer data not handled correctly.' );
+        }
+
+        public function testGetMostRecentEmailForMemberValidData()
+        {
+            $expectedData = array(
+                'id' => '4',
+                'member_id' => '4',
+                'subject' => 'Test email 2',
+                'timestamp' => '2013-06-05 13:51:04'
+            );
+            $this->assertEqual( $this->EmailRecord->getMostRecentEmailForMember(4), $expectedData, 'Valid data not handled correctly.' );
+        }
+
         public function testCreateReturnsFalseForInvalidData()
         {
             $this->assertFalse( $this->EmailRecord->createNewRecord(1, ''), 'creteNewRecord did not handle empty subject correctly.' );

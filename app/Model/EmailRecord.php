@@ -31,6 +31,41 @@
 	        ),
 	    );
 
+	    //! Get the most recent email record for a member.
+	    /*!
+	    	@param int $memberId The id of the member to look for.
+	    	@retval array An array of record data, or null if data could not be found.
+	    */
+	    public function getMostRecentEmailForMember($memberId)
+	    {
+	    	if(is_numeric($memberId))
+	    	{
+	    		$result = $this->find('first', array( 'order' => 'EmailRecord.timestamp DESC', 'conditions' => array('EmailRecord.member_id' => $memberId) ));
+	    		if(	is_array($result) &&
+	    			count($result) > 0)
+	    		{
+	    			return $this->_formatEmailRecord($result);
+	    		}
+	    	}
+
+	    	return null;
+	    }
+
+	    //! Given an array of data from the database, format it so other classes can use it.
+	    /*!
+   			@param array $data An array of record data.
+   			@retval array A formatted array of data.
+   		*/
+	    private function _formatEmailRecord($data)
+	    {
+	    	return array(
+	    		'id' => Hash::get($data, 'EmailRecord.hms_email_id'),
+	    		'member_id' => Hash::get($data, 'EmailRecord.member_id'),
+	    		'subject' => Hash::get($data, 'EmailRecord.subject'),
+	    		'timestamp' => Hash::get($data, 'EmailRecord.timestamp'),
+	    	);
+	    }
+
 		//! Create one or more new EmailRecord entry
 		/*!
 			@param mixed $to Either a single member_id or an array of member id's that the e-mail was sent to.

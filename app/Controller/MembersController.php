@@ -830,6 +830,17 @@
 	    				$formattedInfo = $this->Member->formatMemberInfo($sanitisedMemberInfo, true);
 	    				if($formattedInfo)
 	    				{
+	    					if($showAdminFeatures)
+	    					{
+	    						// Grab the data for the last e-mail
+	    						Controller::loadModel('EmailRecord');
+	    						$lastEmailRecord = $this->EmailRecord->getMostRecentEmailForMember($id);
+	    						if($lastEmailRecord != null)
+	    						{
+	    							$formattedInfo['lastEmail'] = $lastEmailRecord;
+	    						}
+	    					}
+
 	    					$this->set('member', $formattedInfo);
 
 					    	$this->Nav->add('Edit', 'members', 'edit', array( $id ) );
