@@ -17,16 +17,16 @@ class MVCommentsController extends MemberVoiceAppController {
 			if ($this->MVComment->save($this->request->data)) {
 				// Set a session flash message and redirect.
 				$this->Session->setFlash('Comment Saved!');
-				$this->redirect(array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'idea', $this->request->data['Comment']['idea_id'] ));
+				return $this->redirect(array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'idea', $this->request->data['Comment']['idea_id'] ));
 			}
 			else {
 				$this->Session->setFlash('Save Failed');
-				$this->redirect(array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'idea', $this->request->data['Comment']['idea_id'] ));
+				return $this->redirect(array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'idea', $this->request->data['Comment']['idea_id'] ));
 			}
 		}
 		else {
 			$this->Session->setFlash('Comment not saved');
-			$this->redirect(array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ));
+			return $this->redirect(array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ));
 		}
 	}
 }

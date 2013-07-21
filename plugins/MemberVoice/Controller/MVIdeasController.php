@@ -104,7 +104,7 @@ class MVIdeasController extends MemberVoiceAppController {
 
 		// Send an error if no idea is set
 		if (!$id) {
-			$return['responseid'] = 201;
+			$return['responseid'] = MVVote::VOTE_NO_ID;
 			$return['response'] = 'No ID provided';
 		}
 		else {
@@ -113,32 +113,41 @@ class MVIdeasController extends MemberVoiceAppController {
 
 			// Send an error if the idea is not found
 			if (!$idea) {
-				$return['responseid'] = 202;
+				$return['responseid'] = MVVote::VOTE_NOT_FOUND;
 				$return['response'] = 'Idea not found';
 			}
 			else {
 				// Ok, we defintely have an idea, so set the id in the return
 				$return['id'] = $id;
+
+				// Save vote to local var for testing
+				if (isset($this->request->data['vote'])) {
+					$vote = $this->request->data['vote'];
+				}
+				else {
+					$vote = null;
+				}
+
 				// Now check the votes - are they null?
-				if ($this->request->data['vote'] == null) {
-					$return['responseid'] = 203;
+				if ($vote == null) {
+					$return['responseid'] = MVVote::VOTE_MISSING;
 					$return['response'] = 'No vote provided';
 				}
 				// Is the vote in the expected range?  can only be -1, 0 or 1
-				elseif ($this->request->data['vote'] != 1 and $this->request->data['vote'] != -1 and $this->request->data['vote'] != 0) {
-					$return['responseid'] = 204;
+				elseif ($vote < -1 && $vote > 1) {
+					$return['responseid'] = MVVote::VOTE_INVALID;
 					$return['response'] = 'Vote not valid';
 				}	
 				else {
 					// Vote is valid, save the vote and put the return value in the return array
-					$return['votes'] = $this->MVIdea->saveVote($id, $this->_getUserID(), $this->request->data['vote']);
+					$return['votes'] = $this->MVIdea->saveVote($id, $this->_getUserID(), $vote);
 					// Did it save?
 					if ($return['votes'] !== false) {
-						$return['responseid'] = 200;
-						$return['voted'] = $this->request->data['vote'];
+						$return['responseid'] = MVVote::VOTE_VALID;
+						$return['voted'] = $vote;
 					}
 					else {
-						$return['responseid'] = 205;
+						$return['responseid'] = MVVote::VOTE_NOT_SAVED;
 						$return['response'] = 'Vote failed';
 					}
 				}

@@ -57,7 +57,7 @@ function clear() {
 }
 
 function showVote(data, textSuccess) {
-	if (data.responseid == 200) {
+	if (data.responseid == 1) {
 		var idea = $('#mvIdea' + data.id);
 		$('div.mvVoteCount strong', idea).html(data.votes);
 		if (data.votes  == 1 || data.votes == -1) {
@@ -81,7 +81,8 @@ function showVote(data, textSuccess) {
 		}
 	}
 	else {
-		alert(data.responseid);
+		errorDialog("Vote Failed", "Error: " + data.responseid + "<br />" + data.response);
+		//alert(data.responseid);
 	}
 }
 
@@ -110,5 +111,21 @@ function confirmDialog(sTitle, sMsg, sButtonTrue, sButtonFalse, fTrueFunction, f
 		resizable: false,
 		modal: true,
 		buttons: oButtons
+	});
+}
+
+function errorDialog(sTitle, sMsg) {
+	var sHTML;
+	
+	sHTML = '<div id="dialog-error" title="' + sTitle + '">';
+	sHTML += '<p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>';
+	sHTML += sMsg;
+	sHTML += '</p></div>';
+
+	$('body').append(sHTML);
+
+	$( "#dialog-error" ).dialog({
+		resizable: false,
+		modal: true
 	});
 }
