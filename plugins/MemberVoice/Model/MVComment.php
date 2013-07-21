@@ -15,13 +15,13 @@ class MVComment extends MemberVoiceAppModel {
 		We need to access properties in the parent object within the belongsTo array
 	*/
 	public function __construct() {
+		// Make sure we call the parent constructor
+		parent::__construct();
+		
 		$this->belongsTo['User'] = array(
 										'className'		=>	$this->mvUserModel,
 										'foreignKey'	=>	'user_id',
 										);
-
-		// Make sure we call the parent constructor
-		parent::__construct();
 	}
 }
 
