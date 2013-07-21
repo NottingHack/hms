@@ -28,6 +28,8 @@
 	{
 		private $stockData = array(); //!< The stock data used to populate other fields.
 
+		private $takenUsernames = array();	//!< List of ataken usernames
+
 		private $members = array(); 					//!< Array of members.
 		private $membersGroup = array(); 				//!< Array of which members are in which groups.
 		private $accounts = array(); 					//!< Array of accounts.
@@ -450,9 +452,12 @@
 			$firstname = $this->_useValOrDefault($details, 'firstname', $stockData['GivenName']);
 			$surname = $this->_useValOrDefault($details, 'surname', $stockData['Surname']);
 			$email = $this->_useValOrDefault($details, 'email', $stockData['EmailAddress']);
-			$handle = $this->_useValOrDefault($details, 'username', $stockData['Username']);
+			$username = $this->_useValOrDefault($details, 'username', $stockData['Username']);
 
-			$username = $handle;
+			while(in_array($username, $this->takenUsernames))
+			{
+				$username .= (string)rand(0, 9);
+			}
 
 			$address = array(
 				$stockData['StreetAddress'],
@@ -480,7 +485,6 @@
 				$firstname = null;
 				$surname = null;
 				$joinDate = '';
-				$handle = null;
 				$unlockText = null;
 				$balance = 0;
 				$creditLimit = 0;
@@ -493,13 +497,14 @@
 				$contactNumber = null;
 			}
 
+			array_push($this->takenUsernames, $username);
+
 			$record = array(
 				'member_id' => $memberId,
 				'firstname' => $firstname,
 				'surname' => $surname,
 				'email' => $email,
 				'join_date' => $joinDate,
-				'handle' => $handle,
 				'unlock_text' => $unlockText,
 				'balance' => $balance,
 				'credit_limit' => $creditLimit,
