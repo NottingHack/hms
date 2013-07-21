@@ -1929,6 +1929,63 @@
 			return $this->mailingList;
 		}
 
+		//! Given either a single e-mail or an array of e-mails, return a member id or array of member ids.
+		/*!
+			@param mixed $email Either a single e-mail address or an array of e-mail addresses.
+			@retval mixed If $email is a single e-mail, returns the member id of the record matching that e-mail (or null if none can be found). 
+						  If $email is an array of e-mail addresses, return an array of all matching member ids that can be found.
+						  Returns null on error.
+		*/
+		public function emailToMemberId($email)
+		{
+			if(is_array($email) || is_string($email))
+			{
+				$records = $this->find('list', array( 'fields' => array('Member.member_id', 'Member.email'), 'conditions' => array('Member.email' => $email) ));
+
+				if(is_array($records) && count($records) > 0)
+				{
+
+					$idList = array_keys($records);
+					if(count($idList) == 1)
+					{
+						return $idList[0];
+					}
+					return $idList;
+				}
+			}
+			return null;
+		}
+
+		//! Get a list of member names or e-mails (if we don't have their name) for all members.
+		/*!
+			@retval array Array of member info, indexed by member id.
+		*/
+		public function getBestMemberNames()
+		{
+			$records = $this->find('all', array( 'fields' => array('Member.member_id', 'Member.firstname', 'Member.surname', 'Member.email')));
+
+			$idAndBestName = array();
+
+			foreach ($records as $record) 
+			{
+				$id = Hash::get($record, 'Member.member_id');
+				$firstname = Hash::get($record, 'Member.firstname');
+				$surname = Hash::get($record, 'Member.surname');
+				$email = Hash::get($record, 'Member.email');
+
+				$bestName = $email;
+
+				if(is_string($firstname) && strlen(trim($firstname)) > 0)
+				{
+					$bestName = trim("$firstname $surname");
+				}
+
+				$idAndBestName[$id] = $bestName;
+			}
+
+			return $idAndBestName;
+		}
+
 		//! Set the password for the member, with the option to create a new password entry if needed.
 		/*!
 			@param string $username The username of the member.

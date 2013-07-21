@@ -2,29 +2,37 @@
 
 <?php
 	$this->Html->addCrumb('Members', '/members');
-	$this->Html->addCrumb($member['username'], '/members/view/' . $member['id']);
+	$this->Html->addCrumb(isset($member['username']) ? $member['username'] : $member['email'], '/members/view/' . $member['id']);
 ?>
 
 
 <dl>
+	<?php if(isset($member['firstname'])): ?>
 	<dt>
 		First Name
 	</dt>
 	<dd>
 		<?php echo $member['firstname']; ?>
 	</dd>
+	<?php endif; ?>
+
+	<?php if(isset($member['surname'])): ?>
 	<dt>
 		Surname
 	</dt>
 	<dd>
 		<?php echo $member['surname']; ?>
 	</dd>
+	<?php endif; ?>
+
+	<?php if(isset($member['username'])): ?>
 	<dt>
 		Username
 	</dt>
 	<dd>
 		<?php echo $member['username']; ?>
 	</dd>
+	<?php endif; ?>
 
 	<dt>
 		Email
@@ -237,4 +245,28 @@
 			</dd>
 		<?php endif; ?>
 	<?php endif; ?>
+
+	<?php
+		if(array_key_exists('lastEmail', $member)):
+	?>
+	<dt>
+		Last Email
+	</dt>
+	<dd>
+		<?php
+			if( isset($member['lastEmail']) &&
+				$member['lastEmail'] != null )
+			{
+				echo sprintf('%s on %s', $member['lastEmail']['subject'], date('d-M-Y \a\t H:i', strtotime($member['lastEmail']['timestamp'])));
+			}
+			else
+			{
+				echo "None";
+			}
+		?>
+	</dd>
+	<?php
+		endif;
+	?>
+
 </dl>

@@ -29,10 +29,9 @@
 	    */
 	    public $helpers = array('Html', 'Form', 'Paginator', 'Tinymce', 'Currency', 'Mailinglist');
 
-	    //! We need the MailChimp and Krb components.
+	    //! We need the BankStatement components.
 	    /*!
-	    	@sa MailChimpComponent
-	    	@sa KrbComponent
+	    	@sa BankStatementComponent
 	    */
 	    public $components = array('BankStatement');
 
@@ -92,9 +91,6 @@
 
 	    	return false;
 	    }
-
-	    //! Email object, for easy mocking.
-	    public $email = null;
 
 	    //! Perform any actions that should be performed before any controller action
 	    /*!
@@ -834,6 +830,19 @@
 	    				$formattedInfo = $this->Member->formatMemberInfo($sanitisedMemberInfo, true);
 	    				if($formattedInfo)
 	    				{
+	    					if($showAdminFeatures)
+	    					{
+	    						// Grab the data for the last e-mail
+	    						Controller::loadModel('EmailRecord');
+	    						$lastEmailRecord = $this->EmailRecord->getMostRecentEmailForMember($id);
+	    						if($lastEmailRecord != null)
+	    						{
+	    							$formattedInfo['lastEmail'] = $lastEmailRecord;
+
+	    							$this->Nav->add('View Email History', 'emailrecords', 'view', array($id));
+	    						}
+	    					}
+
 	    					$this->set('member', $formattedInfo);
 
 					    	$this->Nav->add('Edit', 'members', 'edit', array( $id ) );
@@ -855,7 +864,7 @@
 	    		}
 	    	}
 	    	
-	    	// Couldn't find a record with that id...
+	    	// Nope, not allowed to view that
 	    	return $this->redirect($this->referer());
 	    }
 
@@ -1084,33 +1093,6 @@
 			}
 		}
 
-		//! Send an e-mail to one or more email addresses.
-		/*
-			@param mixed $to Either an array of email address strings, or a string containing a singular e-mail address.
-			@param string $subject The subject of the email.
-			@param string $template Which email view template to use.
-			@param array $viewVars Array containing all the variables to pass to the view.
-			@retval bool True if e-mail was sent, false otherwise.
-		*/
-		private function _sendEmail($to, $subject, $template, $viewVars = array())
-		{
-			if($this->email == null)
-			{
-				$this->email = new CakeEmail();
-			}
-
-			$email = $this->email;
-			$email->config('smtp');
-			$email->from(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
-			$email->sender(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
-			$email->emailFormat('html');
-			$email->to($to);
-			$email->subject($subject);
-			$email->template($template);
-			$email->viewVars($viewVars);
-			return $email->send();
-		}
-
 		//! Attempt to login as a member.
 		public function login() 
 		{
@@ -1269,15 +1251,6 @@
     		}
 
     		return $actions;
-		}
-
-		//! Get the id of the currently logged in Member.
-		/*!
-			@retval int The id of the currently logged in Member, or 0 if not found.
-		*/
-		private function _getLoggedInMemberId()
-		{
-			return $this->Member->getIdForMember($this->Auth->user());
 		}
 
 		//! Test to see if a request is coming from within the hackspace.

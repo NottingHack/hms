@@ -42,6 +42,9 @@ class AppController extends Controller {
 
 	public $helpers = array('Html', 'Form', 'Nav');
 
+    //! Email object, for easy mocking.
+    public $email = null;
+
 	public $components = array(
         'Session',
         'Auth' => array(
@@ -124,4 +127,50 @@ class AppController extends Controller {
         return sprintf('%d.%d.%d', self::VERSION_MAJOR, self::VERSION_MINOR, self::VERSION_BUILD);
     }
 
+    //! Send an e-mail to one or more email addresses.
+    /*
+        @param mixed $to Either an array of email address strings, or a string containing a singular e-mail address.
+        @param string $subject The subject of the email.
+        @param string $template Which email view template to use.
+        @param array $viewVars Array containing all the variables to pass to the view, Defaults to empty array.
+        @param bool $record If true then the sending of this e-mail we be recorded. Defaults to true.
+        @retval bool True if e-mail was sent, false otherwise.
+    */
+    protected function _sendEmail($to, $subject, $template, $viewVars = array(), $record = true)
+    {
+        if($this->email == null)
+        {
+            $this->email = new CakeEmail();
+        }
+
+        if($record)
+        {
+            Controller::loadModel('Member');
+            Controller::loadModel('EmailRecord');
+
+            $memberIdList = $this->Member->emailToMemberId($to);
+            $this->EmailRecord->createNewRecord($memberIdList, $subject);
+        }
+
+        $email = $this->email;
+        $email->config('smtp');
+        $email->from(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+        $email->sender(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+        $email->emailFormat('html');
+        $email->to($to);
+        $email->subject($subject);
+        $email->template($template);
+        $email->viewVars($viewVars);
+        return $email->send();
+    }
+
+    //! Get the id of the currently logged in Member.
+    /*!
+        @retval int The id of the currently logged in Member, or 0 if not found.
+    */
+    protected function _getLoggedInMemberId()
+    {
+        Controller::loadModel('Member');
+        return $this->Member->getIdForMember($this->Auth->user());
+    }
 }

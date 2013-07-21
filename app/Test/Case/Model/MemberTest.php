@@ -5,7 +5,7 @@
 
     class MemberTest extends CakeTestCase 
     {
-        public $fixtures = array( 'app.GroupsMember', 'app.member', 'app.Status', 'app.Group', 'app.Account', 'app.Pin', 'app.StatusUpdate', 'app.ForgotPassword', 'app.MailingLists', 'app.MailingListSubscriptions' );
+        public $fixtures = array( 'app.GroupsMember', 'app.member', 'app.Status', 'app.Group', 'app.Account', 'app.Pin', 'app.StatusUpdate', 'app.ForgotPassword', 'app.MailingLists', 'app.MailingListSubscriptions', 'app.EmailRecord' );
 
         public function setUp() 
         {
@@ -1772,6 +1772,80 @@
         {
             $data = array('subject' => 'This is a subject', 'message' => 'Lorem impus sit dom amet.');
             $this->assertEqual( $this->Member->validateEmail(array('MemberEmail' => $data)), $data, 'Valid data was not handled correctly.' );   
+        }
+
+        public function testEmailToMemberIdInvalidData()
+        {
+            $this->assertEqual( $this->Member->emailToMemberId(null), null, 'Null input was not handled correctly.' );
+            $this->assertEqual( $this->Member->emailToMemberId(435), null, 'Numeric input was not handled correctly.' );
+        }
+
+        public function testEmailToMemberIdReturnsNullForUnknownEmail()
+        {
+            $this->assertEqual( $this->Member->emailToMemberId('totallymadeupemailthatdoesntexist@ffooosadff.cdf'), null, 'Unknown email input was not handled correctly.' );
+        }
+
+        public function testEmailToMemberIdHandlesSingleKnownEmail()
+        {
+            $this->assertEqual( $this->Member->emailToMemberId('g.garratte@foobar.org'), 6, 'Single known email input was not handled correctly.' );
+        }
+
+        public function testEmailToMemberIdHandlesMultipleKnownEmails()
+        {
+            $emailList = array(
+                'm.pryce@example.org',      
+                'a.santini@hotmail.com',
+                'g.viles@gmail.com',
+                'k.savala@yahoo.co.uk',
+                'j.easterwood@googlemail.com',
+                'g.garratte@foobar.org',
+            );
+
+            $expectedResults = array(
+                1, 2, 3, 4, 5, 6
+            );
+            $this->assertEqual( $this->Member->emailToMemberId($emailList), $expectedResults, 'Miltuple known email input was not handled correctly.' );
+        }
+
+        public function testEmailToMemberIdExcludesUnknownEmailFromArrayResults()
+        {
+            $emailList = array(
+                'm.pryce@example.org',      
+                'a.santini@hotmail.com',
+                'g.viles@gmail.com',
+                'totallymadeupemailthatdoesntexist@ffooosadff.cdf',
+                'k.savala@yahoo.co.uk',
+                'j.easterwood@googlemail.com',
+                'g.garratte@foobar.org',
+            );
+
+            $expectedResults = array(
+                1, 2, 3, 4, 5, 6
+            );
+
+            $this->assertEqual( $this->Member->emailToMemberId($emailList), $expectedResults, 'Unknown e-mail was not excluded from array results.' );
+        }
+
+        public function testGetBestMemberNames()
+        {
+            $expectedResults = array(
+                1 => 'Mathew Pryce',
+                2 => 'Annabelle Santini',
+                3 => 'Guy Viles',
+                4 => 'Kelly Savala',
+                5 => 'Jessie Easterwood',
+                6 => 'Guy Garrette',
+                7 => 'CherylLCarignan@teleworm.us',
+                8 => 'MelvinJFerrell@dayrep.com',
+                9 => 'Dorothy Russell',
+                10 => 'Hugo Lorenz',
+                11 => 'Betty Paris',
+                12 => 'Roy Forsman',
+                13 => 'Ryan Miles',
+                14 => 'Evan Atkinson',
+            );
+
+            $this->assertEqual( $this->Member->getBestMemberNames(), $expectedResults, 'Results were not correct.' );
         }
     }
 
