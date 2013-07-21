@@ -9,10 +9,9 @@
 <?php
 	echo $this->Form->create('Member');
 	echo $this->Form->hidden('member_id');
-	//echo $this->Form->input('username');
-	if(isset($member['handle']))
+	if(isset($member['username']))
 	{
-		echo $this->Form->input('handle');
+		echo $this->Form->input('username');
 	}
 
 	if(isset($member['firstname']))
