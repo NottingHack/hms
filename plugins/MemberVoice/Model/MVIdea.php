@@ -42,8 +42,10 @@ class MVIdea extends MemberVoiceAppModel {
 		
 		// Has this user already voted?
 		$voted = false;
-		foreach ($idea['Vote'] as $vote) {
-			if ($vote['user_id'] == $userID) {
+		foreach ($idea['Vote'] as $vote)
+		{
+			if ($vote['user_id'] == $userID)
+			{
 				$voted = $vote['id'];
 				$oldvote = $vote['votes'];
 			}
@@ -51,26 +53,31 @@ class MVIdea extends MemberVoiceAppModel {
 
 		// Ok, what shall we do?
 		$saveVote = true;
-		if ($voted == false and $votes == 0) {
+		if ($voted == false and $votes == 0)
+		{
 			// trying to clear a vote that doesn't exist! Don't do anything
 			return false;
 		}
-		else if ($voted == false) {
+		elseif ($voted == false)
+		{
 			// new vote, just save
 			$newvotes = $newvotes + $votes;
 		}
-		else if ($voted !== false) {
+		elseif ($voted !== false)
+		{
 			// remove old vote first
 			$newvotes = $newvotes - $oldvote;
 
 			$this->Vote->delete($voted);
 
-			if ($votes == 0) {
+			if ($votes == 0)
+			{
 				// was clearing vote, just save the idea
 				$saveVote = false;
 
 			}
-			else {
+			else
+			{
 				$newvotes = $newvotes + $votes;
 			}
 		}
@@ -91,10 +98,12 @@ class MVIdea extends MemberVoiceAppModel {
 										),
 								  );
 		}
-		if ($this->saveAssociated($data)) {
+		if ($this->saveAssociated($data))
+		{
 			return $newvotes;
 		}
-		else {
+		else
+		{
 			return false;
 		}
 	}

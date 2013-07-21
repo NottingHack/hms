@@ -4,7 +4,8 @@
 			echo($this->Html->url(array('plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index')));
 		?>"
 		<?php
-			if (!isset($thisCategory)) {
+			if (!isset($thisCategory))
+			{
 				echo(' class="mvSelected"');
 			}
 			?>>
@@ -19,7 +20,8 @@
 			echo($this->Html->url(array('plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index', $category['Category']['id'])));
 		?>"
 		<?php
-			if (isset($thisCategory) and $category['Category']['id'] == $thisCategory['Category']['id']) {
+			if (isset($thisCategory) and $category['Category']['id'] == $thisCategory['Category']['id'])
+			{
 				echo(' class="mvSelected"');
 			}
 			?>>

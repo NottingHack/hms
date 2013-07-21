@@ -1,7 +1,8 @@
 <?php
 /* Breadcrumbs */
 $this->Html->addCrumb('MemberVoice', $this->Html->url(array('plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index', 'base' => false)));
-if (isset($category)) {
+if (isset($category))
+{
 	$this->Html->addCrumb($category['Category']['category'], $this->Html->url(array('plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index', 'base' => false, $category['Category']['id'])));
 }
 
@@ -59,8 +60,10 @@ if (count($ideas) > 0):
 
 	<?php
 	$hasVoted = 0;
-	foreach ($idea['Vote'] as $vote) {
-		if ($vote['user_id'] == $user) {
+	foreach ($idea['Vote'] as $vote)
+	{
+		if ($vote['user_id'] == $user)
+		{
 			$hasVoted = $vote['votes'];
 		}
 	}
@@ -88,7 +91,8 @@ endif;
 $args = array(
 			'categories' => $categories
 			);
-if (isset($category)) {
+if (isset($category))
+{
 	$args['thisCategory'] = $category;
 }
 echo($this->element('categories', $args));

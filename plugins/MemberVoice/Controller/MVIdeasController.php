@@ -24,12 +24,14 @@ class MVIdeasController extends MemberVoiceAppController {
 	*/
 	public function index($id = null) {
 		// If an array is passed, restrict to that category
-		if (!$id) {
+		if (!$id)
+		{
 			$conditions = array(
 								'Status.status !='	=> array('Complete','Cancelled'),
 								);
 		}
-		else {
+		else
+		{
 			$conditions = array(
 								'Status.status !='	=> array('Complete','Cancelled'),
 								'CategoriesIdeas.category_id'		=>	$id,
@@ -67,13 +69,15 @@ class MVIdeasController extends MemberVoiceAppController {
 	*/
 	public function idea($id = null) {
 		// Throw an error if an id is not passed
-		if (!$id) {
+		if (!$id)
+		{
 			throw new NotFoundException(__('Invalid idea'));
 		}
 
 		// Locate the idea, throw an error if not found
 		$idea = $this->MVIdea->find('first', array('conditions' => array('Idea.id' => $id)));
-		if (!$idea) {
+		if (!$idea)
+		{
 			throw new NotFoundException(__('Invalid idea'));
 		}
 
@@ -103,50 +107,61 @@ class MVIdeasController extends MemberVoiceAppController {
 		$return = array();
 
 		// Send an error if no idea is set
-		if (!$id) {
+		if (!$id)
+		{
 			$return['responseid'] = MVVote::VOTE_NO_ID;
 			$return['response'] = 'No ID provided';
 		}
-		else {
+		else
+		{
 			// Look up the idea
 			$idea = $this->MVIdea->find('first', array('conditions' => array('Idea.id' => $id)));
 
 			// Send an error if the idea is not found
-			if (!$idea) {
+			if (!$idea)
+			{
 				$return['responseid'] = MVVote::VOTE_NOT_FOUND;
 				$return['response'] = 'Idea not found';
 			}
-			else {
+			else
+			{
 				// Ok, we defintely have an idea, so set the id in the return
 				$return['id'] = $id;
 
 				// Save vote to local var for testing
-				if (isset($this->request->data['vote'])) {
+				if (isset($this->request->data['vote']))
+				{
 					$vote = $this->request->data['vote'];
 				}
-				else {
+				else
+				{
 					$vote = null;
 				}
 
 				// Now check the votes - are they null?
-				if ($vote == null) {
+				if ($vote == null)
+				{
 					$return['responseid'] = MVVote::VOTE_MISSING;
 					$return['response'] = 'No vote provided';
 				}
 				// Is the vote in the expected range?  can only be -1, 0 or 1
-				elseif ($vote < -1 && $vote > 1) {
+				elseif ($vote < -1 && $vote > 1)
+				{
 					$return['responseid'] = MVVote::VOTE_INVALID;
 					$return['response'] = 'Vote not valid';
 				}	
-				else {
+				else
+				{
 					// Vote is valid, save the vote and put the return value in the return array
 					$return['votes'] = $this->MVIdea->saveVote($id, $this->_getUserID(), $vote);
 					// Did it save?
-					if ($return['votes'] !== false) {
+					if ($return['votes'] !== false)
+					{
 						$return['responseid'] = MVVote::VOTE_VALID;
 						$return['voted'] = $vote;
 					}
-					else {
+					else
+					{
 						$return['responseid'] = MVVote::VOTE_NOT_SAVED;
 						$return['response'] = 'Vote failed';
 					}
@@ -164,10 +179,12 @@ class MVIdeasController extends MemberVoiceAppController {
 		Used for the javascript to set up the AJAX
 	*/
 	private function _getVoteUrl() {
-		if (method_exists("Router", "baseUrl")) {
+		if (method_exists("Router", "baseUrl"))
+		{
 			$url = Router::baseUrl();
 		}
-		else {
+		else
+		{
 			$url = FULL_BASE_URL;
 		}
 		$url .= Router::url(array('plugin' => 'MemberVoice', 'controller' => 'MVIdeas', 'action' => 'vote'));;

@@ -34,8 +34,10 @@ $this->Html->script('MemberVoice.idea', array('inline' => false));
 
 	<?php
 	$hasVoted = 0;
-	foreach ($idea['Vote'] as $vote) {
-		if ($vote['user_id'] == $user) {
+	foreach ($idea['Vote'] as $vote)
+	{
+		if ($vote['user_id'] == $user)
+		{
 			$hasVoted = $vote['votes'];
 		}
 	}
