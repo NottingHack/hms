@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS `members` (
   `surname` varchar(100) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
   `join_date` date NOT NULL,
-  `handle` varchar(100) DEFAULT NULL,
   `unlock_text` varchar(95) DEFAULT NULL,
   `balance` int(11) NOT NULL DEFAULT '0',
   `credit_limit` int(11) NOT NULL DEFAULT '0',
@@ -17,5 +16,5 @@ CREATE TABLE IF NOT EXISTS `members` (
   `address_postcode` varchar(100) DEFAULT NULL,
   `contact_number` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`member_id`),
-  UNIQUE KEY `member_name` (`handle`)
+  UNIQUE KEY `member_name` (`username`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
