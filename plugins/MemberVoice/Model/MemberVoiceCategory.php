@@ -5,13 +5,13 @@
  *
  * @package       plugin.MemberVoice.Model
  */
-class MVCategory extends MemberVoiceAppModel {
+class MemberVoiceCategory extends MemberVoiceAppModel {
 	public $useTable = 'categories';
 	public $alias = 'Category';
 	
 	public $hasAndBelongsToMany = array(
 		'Idea'	=>	array(
-				'className'	=>	'MemberVoice.MVIdea',
+				'className'	=>	'MemberVoice.MemberVoiceIdea',
 				'joinTable'	=>	'mv_categories_ideas',
 			)
 		);

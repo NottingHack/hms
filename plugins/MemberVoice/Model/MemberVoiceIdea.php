@@ -5,27 +5,27 @@
  *
  * @package       plugin.MemberVoice.Model
  */
-class MVIdea extends MemberVoiceAppModel {
+class MemberVoiceIdea extends MemberVoiceAppModel {
 	public $useTable = 'ideas';
 	public $alias = 'Idea';
 	
 	public $hasAndBelongsToMany = array(
 		'Category'	=>	array(
-				'className'	=>	'MemberVoice.MVCategory',
+				'className'	=>	'MemberVoice.MemberVoiceCategory',
 				'joinTable'	=>	'mv_categories_ideas',
 			)
 		);
 	public $hasMany = array(
 		'Vote'	=>	array(
-				'className'	=>	'MemberVoice.MVVote',
+				'className'	=>	'MemberVoice.MemberVoiceVote',
 			),
 		'Comment'	=>	array(
-				'className'	=>	'MemberVoice.MVComment',
+				'className'	=>	'MemberVoice.MemberVoiceComment',
 			),
 		);
 	public $belongsTo = array(
 		'Status'	=>	array(
-				'className'	=>	'MemberVoice.MVStatus',
+				'className'	=>	'MemberVoice.MemberVoiceStatus',
 			)
 		);
 
@@ -63,7 +63,7 @@ class MVIdea extends MemberVoiceAppModel {
 			// new vote, just save
 			$newvotes = $newvotes + $votes;
 		}
-		elseif ($voted !== false)
+		else
 		{
 			// remove old vote first
 			$newvotes = $newvotes - $oldvote;

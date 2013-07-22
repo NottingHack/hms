@@ -5,7 +5,7 @@
  *
  * @package       plugin.MemberVoice.Model
  */
-class MVStatus extends MemberVoiceAppModel {
+class MemberVoiceStatus extends MemberVoiceAppModel {
 	public $useTable = 'statuses';
 }
 

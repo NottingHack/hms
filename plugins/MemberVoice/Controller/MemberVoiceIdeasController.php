@@ -5,7 +5,7 @@
  *
  * @package       plugin.MemberVoice.Controller
  */
-class MVIdeasController extends MemberVoiceAppController {
+class MemberVoiceIdeasController extends MemberVoiceAppController {
 
 	public $helpers = array('Html', 'Form', 'Paginator', 'Tinymce');
 
@@ -20,11 +20,11 @@ class MVIdeasController extends MemberVoiceAppController {
 
 	//! Main view. Shows either all ideas or just ideas from a category
 	/*!
-		@param integer $id ID of category to show.  If null, show all
+		@param integer $categoryId ID of category to show.  If null, show all
 	*/
-	public function index($id = null) {
-		// If an array is passed, restrict to that category
-		if (!$id)
+	public function index($categoryId = null) {
+		// If an category ID is passed, restrict to that category
+		if (!$categoryId)
 		{
 			$conditions = array(
 								'Status.status !='	=> array('Complete','Cancelled'),
@@ -34,7 +34,7 @@ class MVIdeasController extends MemberVoiceAppController {
 		{
 			$conditions = array(
 								'Status.status !='	=> array('Complete','Cancelled'),
-								'CategoriesIdeas.category_id'		=>	$id,
+								'CategoriesIdeas.category_id'		=>	$categoryId,
 								);
 			// Add join details to the paginate array
 			$this->paginate['joins'] = array(
@@ -48,13 +48,13 @@ class MVIdeasController extends MemberVoiceAppController {
 											),
 										);
 			// Get the category details and send to view
-			$category = $this->MVIdea->Category->find('first', array('conditions' => array('Category.id' => $id)));
+			$category = $this->MemberVoiceIdea->Category->find('first', array('conditions' => array('Category.id' => $categoryId)));
 			$this->set('category', $category);
 		}
 		// Get the ideas based on the conditions set above
-		$ideas = $this->paginate('MVIdea', $conditions);
+		$ideas = $this->paginate('MemberVoiceIdea', $conditions);
 		// Get a list of all categories for the nav bar in view
-		$categories = $this->MVIdea->Category->find('all', array('order' => 'Category.category'));
+		$categories = $this->MemberVoiceIdea->Category->find('all', array('order' => 'Category.category'));
 
 		// Set the view variables
 		$this->set('ideas', $ideas);
@@ -71,20 +71,20 @@ class MVIdeasController extends MemberVoiceAppController {
 		// Throw an error if an id is not passed
 		if (!$id)
 		{
-			throw new NotFoundException(__('Invalid idea'));
+			throw new NotFoundException(__('No idea was specified'));
 		}
 
 		// Locate the idea, throw an error if not found
-		$idea = $this->MVIdea->find('first', array('conditions' => array('Idea.id' => $id)));
+		$idea = $this->MemberVoiceIdea->find('first', array('conditions' => array('Idea.id' => $id)));
 		if (!$idea)
 		{
-			throw new NotFoundException(__('Invalid idea'));
+			throw new NotFoundException(__('Specified Idea was not found'));
 		}
 
 		// Get a list of all categories for the nav bar in view
-		$categories = $this->MVIdea->Category->find('all', array('order' => 'Category.category'));
+		$categories = $this->MemberVoiceIdea->Category->find('all', array('order' => 'Category.category'));
 		// Get the comments for this idea
-		$comments = $this->MVIdea->Comment->find('all', array('conditions' => array('Comment.idea_id' => $id)));
+		$comments = $this->MemberVoiceIdea->Comment->find('all', array('conditions' => array('Comment.idea_id' => $id)));
 
 		// Set the view variables
 		$this->set('idea', $idea);
@@ -109,18 +109,18 @@ class MVIdeasController extends MemberVoiceAppController {
 		// Send an error if no idea is set
 		if (!$id)
 		{
-			$return['responseid'] = MVVote::VOTE_NO_ID;
+			$return['responseid'] = MemberVoiceVote::VOTE_NO_ID;
 			$return['response'] = 'No ID provided';
 		}
 		else
 		{
 			// Look up the idea
-			$idea = $this->MVIdea->find('first', array('conditions' => array('Idea.id' => $id)));
+			$idea = $this->MemberVoiceIdea->find('first', array('conditions' => array('Idea.id' => $id)));
 
 			// Send an error if the idea is not found
 			if (!$idea)
 			{
-				$return['responseid'] = MVVote::VOTE_NOT_FOUND;
+				$return['responseid'] = MemberVoiceVote::VOTE_NOT_FOUND;
 				$return['response'] = 'Idea not found';
 			}
 			else
@@ -141,28 +141,28 @@ class MVIdeasController extends MemberVoiceAppController {
 				// Now check the votes - are they null?
 				if ($vote == null)
 				{
-					$return['responseid'] = MVVote::VOTE_MISSING;
+					$return['responseid'] = MemberVoiceVote::VOTE_MISSING;
 					$return['response'] = 'No vote provided';
 				}
 				// Is the vote in the expected range?  can only be -1, 0 or 1
 				elseif ($vote < -1 && $vote > 1)
 				{
-					$return['responseid'] = MVVote::VOTE_INVALID;
+					$return['responseid'] = MemberVoiceVote::VOTE_INVALID;
 					$return['response'] = 'Vote not valid';
 				}	
 				else
 				{
 					// Vote is valid, save the vote and put the return value in the return array
-					$return['votes'] = $this->MVIdea->saveVote($id, $this->_getUserID(), $vote);
+					$return['votes'] = $this->MemberVoiceIdea->saveVote($id, $this->_getUserID(), $vote);
 					// Did it save?
 					if ($return['votes'] !== false)
 					{
-						$return['responseid'] = MVVote::VOTE_VALID;
+						$return['responseid'] = MemberVoiceVote::VOTE_VALID;
 						$return['voted'] = $vote;
 					}
 					else
 					{
-						$return['responseid'] = MVVote::VOTE_NOT_SAVED;
+						$return['responseid'] = MemberVoiceVote::VOTE_NOT_SAVED;
 						$return['response'] = 'Vote failed';
 					}
 				}
@@ -187,7 +187,7 @@ class MVIdeasController extends MemberVoiceAppController {
 		{
 			$url = FULL_BASE_URL;
 		}
-		$url .= Router::url(array('plugin' => 'MemberVoice', 'controller' => 'MVIdeas', 'action' => 'vote'));;
+		$url .= Router::url(array('plugin' => 'MemberVoice', 'controller' => 'MemberVoiceIdeas', 'action' => 'vote'));
 		return $url;
 	}
 }

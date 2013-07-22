@@ -5,7 +5,7 @@
  *
  * @package       plugin.MemberVoice.Model
  */
-class MVVote extends MemberVoiceAppModel {
+class MemberVoiceVote extends MemberVoiceAppModel {
 	public $useTable = 'votes';
 
 	const VOTE_VALID = 1; //!< Return value for valid vote

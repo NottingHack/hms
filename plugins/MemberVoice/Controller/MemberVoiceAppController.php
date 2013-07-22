@@ -14,13 +14,13 @@ class MemberVoiceAppController extends AppController {
 	public $mvFirstName = 'firstname';
 	public $mvLastName = 'surname';
 
-	//! Returns the userID of teh currently logged in user
+	//! Returns the userID of the currently logged in user
 	/*!
 		@retval mixed The userID as defined by the containing application
 		This function is the only function that needs to be aware of the outside app.
 	*/
 	protected function _getUserID() {
-		return $this->Member->getIdForMember($this->Auth->user());
+		return $this->_getLoggedInMemberId();
 	}
 }
 ?>

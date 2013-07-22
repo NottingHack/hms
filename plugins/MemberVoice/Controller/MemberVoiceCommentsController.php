@@ -5,7 +5,7 @@
  *
  * @package       plugin.MemberVoice.Controller
  */
-class MVCommentsController extends MemberVoiceAppController {
+class MemberVoiceCommentsController extends MemberVoiceAppController {
 
 	//! Saves a new comment to the database
 	/*!
@@ -15,7 +15,7 @@ class MVCommentsController extends MemberVoiceAppController {
 		if ($this->request->is('post'))
 		{
 			// If the form data can be validated and saved...
-			if ($this->MVComment->save($this->request->data))
+			if ($this->MemberVoiceComment->save($this->request->data))
 			{
 				// Set a session flash message and redirect.
 				$this->Session->setFlash('Comment Saved!');

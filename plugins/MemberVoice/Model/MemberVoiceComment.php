@@ -5,7 +5,7 @@
  *
  * @package       plugin.MemberVoice.Model
  */
-class MVComment extends MemberVoiceAppModel {
+class MemberVoiceComment extends MemberVoiceAppModel {
 	public $useTable = 'comments';
 	public $alias = 'Comment';
 	public $belongsTo = array();

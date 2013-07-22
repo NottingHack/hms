@@ -1,7 +1,7 @@
 <?php
 /* Breadcrumbs */
 $this->Html->addCrumb('MemberVoice', '/membervoice/ideas');
-$this->Html->addCrumb($idea['Idea']['id'] , '/membervoice/ideas/idea/' . $idea['Idea']['id']);
+$this->Html->addCrumb($idea['Idea']['idea'] , '/membervoice/ideas/idea/' . $idea['Idea']['id']);
 
 /* Load our CSS */
 $this->Html->css('MemberVoice.mvideas', null, array('inline' => false));
