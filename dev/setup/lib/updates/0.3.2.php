@@ -37,14 +37,20 @@
 	$massQuery = '';
 	foreach ($allMembers as $member) 
 	{
-		$nameParts = explode(' ', $member['firstname']);
-		if(count($nameParts) > 0)
+		$massQuery .= "UPDATE `members` SET ";
+		if($member['firstname'] == null)
 		{
+			$massQuery .= "`firstname`=NULL `surname`=NULL";
+		}
+		else
+		{
+			$nameParts = explode(' ', $member['firstname']);
 			$firstname = $conn->real_escape_string(array_shift($nameParts));
 			$surname = $conn->real_escape_string(implode(' ', $nameParts));
 
-			$massQuery .= "UPDATE `members` SET `firstname`='$firstname',`surname`='$surname' WHERE `member_id` = {$member['member_id']}" . ';';
+			$massQuery .= "`firstname`='$firstname',`surname`='$surname'";
 		}
+		$massQuery .= "WHERE `member_id` = {$member['member_id']}" . ';';
 	}
 
 	$this->_runQuery($conn, $massQuery);
