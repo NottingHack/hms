@@ -7,6 +7,15 @@
 
 
 <dl>
+	<?php if(isset($member['username'])): ?>
+	<dt>
+		Username
+	</dt>
+	<dd>
+		<?php echo $member['username']; ?>
+	</dd>
+	<?php endif; ?>
+	
 	<?php if(isset($member['firstname'])): ?>
 	<dt>
 		First Name
@@ -22,15 +31,6 @@
 	</dt>
 	<dd>
 		<?php echo $member['surname']; ?>
-	</dd>
-	<?php endif; ?>
-
-	<?php if(isset($member['username'])): ?>
-	<dt>
-		Username
-	</dt>
-	<dd>
-		<?php echo $member['username']; ?>
 	</dd>
 	<?php endif; ?>
 

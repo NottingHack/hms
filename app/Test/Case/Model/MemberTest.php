@@ -568,7 +568,6 @@
             $this->assertEqual( $record['Member']['surname'], null, 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'foo@srsaegrttfd.com', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
-            $this->assertEqual( $record['Member']['handle'], null, 'Record has incorrect handle.' );
             $this->assertEqual( $record['Member']['unlock_text'], null, 'Record has incorrect unlock text.' );
             $this->assertEqual( $record['Member']['balance'], 0, 'Record has incorrect balance.' );
             $this->assertEqual( $record['Member']['credit_limit'], 0, 'Record has incorrect credit limit.' );
@@ -739,8 +738,6 @@
             $this->assertEqual( $record['Member']['member_status'], Status::PRE_MEMBER_1, 'Record has incorrect status.' );
             $this->assertArrayHasKey( 'username', $record['Member'], 'Record Member does not have username key.' );
             $this->assertEqual( $record['Member']['username'], 'fubbby', 'Record has incorrect username.' );
-            $this->assertArrayHasKey( 'handle', $record['Member'], 'Record Member does not have handle key.' );
-            $this->assertEqual( $record['Member']['handle'], 'fubbby', 'Record has incorrect handle.' );
             $this->assertArrayHasKey( 'firstname', $record['Member'], 'Record Member does not firstname name key.' );
             $this->assertEqual( $record['Member']['firstname'], 'Foo', 'Record has incorrect firstname.' );
             $this->assertArrayHasKey( 'surname', $record['Member'], 'Record Member does not surname name key.' );
@@ -801,7 +798,6 @@
             $this->assertEqual( $record['Member']['surname'], 'Barson', 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'CherylLCarignan@teleworm.us', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
-            $this->assertEqual( $record['Member']['handle'], 'fubbby', 'Record has incorrect handle.' ); // Handle should be the same as the username
             $this->assertEqual( $record['Member']['unlock_text'], null, 'Record has incorrect unlock text.' );
             $this->assertEqual( $record['Member']['balance'], 0, 'Record has incorrect balance.' );
             $this->assertEqual( $record['Member']['credit_limit'], 0, 'Record has incorrect credit limit.' );
@@ -964,7 +960,6 @@
             $this->assertEqual( $record['Member']['surname'], 'Russell', 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'DorothyDRussell@dayrep.com', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
-            $this->assertEqual( $record['Member']['handle'], 'Warang29', 'Record has incorrect handle.' );
             $this->assertEqual( $record['Member']['unlock_text'], null, 'Record has incorrect unlock text.' );
             $this->assertEqual( $record['Member']['balance'], 0, 'Record has incorrect balance.' );
             $this->assertEqual( $record['Member']['credit_limit'], 0, 'Record has incorrect credit limit.' );
@@ -1114,7 +1109,6 @@
             $this->assertEqual( $record['Member']['surname'], 'Paris', 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'BettyCParis@teleworm.us', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
-            $this->assertEqual( $record['Member']['handle'], 'Beltonstlend51', 'Record has incorrect handle.' );
             $this->assertEqual( $record['Member']['unlock_text'], null, 'Record has incorrect unlock text.' );
             $this->assertEqual( $record['Member']['balance'], 0, 'Record has incorrect balance.' );
             $this->assertEqual( $record['Member']['credit_limit'], 0, 'Record has incorrect credit limit.' );
@@ -1370,7 +1364,6 @@
             $this->assertEqual( $record['Member']['surname'], 'Paris', 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'BettyCParis@teleworm.us', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
-            $this->assertEqual( $record['Member']['handle'], 'Beltonstlend51', 'Record has incorrect handle.' );
             $this->assertEqual( $record['Member']['unlock_text'], null, 'Record has incorrect unlock text.' );
             $this->assertEqual( $record['Member']['balance'], 0, 'Record has incorrect balance.' );
             $this->assertEqual( $record['Member']['credit_limit'], 0, 'Record has incorrect credit limit.' );
@@ -1427,7 +1420,6 @@
             $this->assertEqual( $record['Member']['surname'], 'Paris', 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'BettyCParis@teleworm.us', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], '0000-00-00', 'Record has incorrect join date.' );
-            $this->assertEqual( $record['Member']['handle'], 'Beltonstlend51', 'Record has incorrect handle.' );
             $this->assertEqual( $record['Member']['unlock_text'], null, 'Record has incorrect unlock text.' );
             $this->assertEqual( $record['Member']['balance'], 0, 'Record has incorrect balance.' );
             $this->assertEqual( $record['Member']['credit_limit'], 0, 'Record has incorrect credit limit.' );
@@ -1491,7 +1483,6 @@
             $this->assertEqual( $record['Member']['surname'], 'Atkinson', 'Record has incorrect surname.' );
             $this->assertEqual( $record['Member']['email'], 'EvanAtkinson@teleworm.us', 'Record has incorrect email.' );
             $this->assertEqual( $record['Member']['join_date'], date('Y-m-d'), 'Record has incorrect join date.' );
-            $this->assertEqual( $record['Member']['handle'], 'Sookinium', 'Record has incorrect handle.' );
             $this->assertEqual( $record['Member']['unlock_text'], 'Welcome Evan', 'Record has incorrect unlock text.' );
             $this->assertEqual( $record['Member']['balance'], 0, 'Record has incorrect balance.' );
             $this->assertEqual( $record['Member']['credit_limit'], 5000, 'Record has incorrect credit limit.' );

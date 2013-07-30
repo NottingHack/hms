@@ -376,7 +376,7 @@
 			return $this->_getMemberSummary($paginate, array( 'Member.member_status' => $statusId ) );
 		}
 
-		//! Get a summary of the member records for all member records where their name, email, username or handle is similar to the keyword.
+		//! Get a summary of the member records for all member records where their name, email or username is similar to the keyword.
 		/*!
 			@param string $keyword Term to search for.
 			@retval array A summary of the data of all members who match the query.
@@ -391,7 +391,6 @@
 						"Member.surname Like'%$keyword%'", 
 						"Member.email Like'%$keyword%'",
 						"Member.username Like'%$keyword%'",
-						"Member.handle Like'%$keyword%'",
 					)
 				)
 			);
@@ -428,7 +427,6 @@
 				[id] => member id
 				[name] => member name
 				[username] => member username
-				[handle] => member handle
 				[email] => member email
 				[groups] => 
 					[n] =>
@@ -466,7 +464,6 @@
     		$firstname = Hash::get($memberInfo, 'Member.firstname');
     		$surname = Hash::get($memberInfo, 'Member.surname');
     		$username = Hash::get($memberInfo, 'Member.username');
-    		$handle = Hash::get($memberInfo, 'Member.handle');
     		$email = Hash::get($memberInfo, 'Member.email');
 
     		$status = array();
@@ -530,7 +527,6 @@
 				'firstname' => $firstname,
 				'surname' => $surname,
 				'username' => $username,
-				'handle' => $handle,
 				'email' => $email,
 				'groups' => $groups,
 				'status' => $status,
@@ -891,9 +887,8 @@
 				return false;
 			}
 
-			// Merge all the data, set the handle to be the same as the username for now
+			// Merge all the data
 			$hardcodedData = array(
-				'handle' => $data['Member']['username'],
 				'member_status' => Status::PRE_MEMBER_1,
 			);
 			unset($data['Member']['member_id']);
@@ -904,9 +899,9 @@
 			$this->addEmailMustMatch();
 
 			$saveOk = false;
-			if($this->validates(array( 'fieldList' => array('member_id', 'firstname', 'surname', 'username', 'handle', 'email', 'password', 'password_confirm', 'member_status'))))
+			if($this->validates(array( 'fieldList' => array('member_id', 'firstname', 'surname', 'username', 'email', 'password', 'password_confirm', 'member_status'))))
 			{
-				$saveOk = is_array($this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'firstname', 'surname', 'username', 'handle', 'member_status')), $memberId));
+				$saveOk = is_array($this->_saveMemberData($dataToSave, array('Member' => array('member_id', 'firstname', 'surname', 'username', 'member_status')), $memberId));
 			}
 
 			$this->removeEmailMustMatch();
@@ -1415,7 +1410,6 @@
 					'firstname',
 					'surname',
 					'username',
-					'handle',
 					'email',
 					'unlock_text',
 					'account_id',
@@ -1680,7 +1674,7 @@
 		    		unset($memberInfo['Member']['contact_number']);
 		    	}
 
-		    	$unsetIfNull = array('username', 'handle', 'firstname', 'surname', 'account_id', 'contact_number', 'address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number');
+		    	$unsetIfNull = array('username', 'firstname', 'surname', 'account_id', 'contact_number', 'address_1', 'address_2', 'address_city', 'address_postcode', 'contact_number');
 		    	foreach ($unsetIfNull as $index) 
 		    	{
 		    		if(	array_key_exists($index, $memberInfo['Member']) && 

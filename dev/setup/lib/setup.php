@@ -855,46 +855,47 @@
 
 		//! Get the difference between two versions.
 		/*!
-			@param array $versionA An array of version data.
-			@param array $versionB An array of version data.
+			@param mixed $versionA An array of version data, or a string that can be converted into an array.
+			@param mixed $versionB An array of version data, or a string that can be converted into an array.
 			@retval mixed An integer representing the difference between the versions, or null on error.
 		*/
 		private function _compareVersions($versionA, $versionB)
 		{
-			$numA = $this->_versionToNumber($versionA);
-			$numB = $this->_versionToNumber($versionB);
+			if(is_string($versionA))
+			{
+				$versionA = $this->_stringToVersion($versionA);
+			}
 
-			if($numA == null || $numB == null)
+			if(is_string($versionB))
+			{
+				$versionB = $this->_stringToVersion($versionB);
+			}
+
+			if($versionA == null || $versionB == null)
 			{
 				return null;
 			}
 
-			return $numA - $numB;
-		}
+			$majorDiff = $versionA['major'] - $versionB['major'];
+			$minorDiff = $versionA['minor'] - $versionB['minor'];
+			$buildDiff = $versionA['build'] - $versionB['build'];
 
-		//! Given an array of version data, get a number uniquely representing that version.
-		/*!
-			@param array $version An array of version data.
-			@retval mixed A number representing $version on success, or null on error.
-		*/
-		private function _versionToNumber($version)
-		{
-			if($this->_isValidVersion($version))
+			if($majorDiff != 0)
 			{
-				$number = 0;
-				$multiplier = 1;
-
-				$versionParts = array($version['build'], $version['minor'], $version['major']);
-
-				foreach ($versionParts as $part) 
-				{
-					$number += ((int)$part) * $multiplier;
-					$multiplier *= 10;
-				}
-
-				return $number;
+				return $majorDiff;
 			}
-			return null;
+
+			if($minorDiff != 0)
+			{
+				return $minorDiff;
+			}
+
+			if($buildDiff != 0)
+			{
+				return $buildDiff;
+			}
+
+			return 0;
 		}
 
 		//! Given an array of version data, return a string representation of that version.
@@ -942,10 +943,7 @@
 					return;
 				}
 
-				$currentVersionNumber = $this->_versionToNumber($currentDbVersion);
-				$codeVersionNumber = $this->_versionToNumber($codeVersion);
-
-				if( ($currentVersionNumber - $codeVersionNumber) == 0 )
+				if( $this->_compareVersions($currentDbVersion, $codeVersion) == 0 )
 				{
 					$this->_logMessage('No update required');
 					$this->_popLogIndent();
@@ -972,35 +970,37 @@
 							continue;
 						}
 
-						$versionNumber = $this->_versionToNumber($fileVersion);
-						$updateFiles[$versionNumber] = array(
-							'path' => $file,
-							'version' => $fileVersion,
-						);
+						$updateFiles[$this->_versionToString($fileVersion)] = $file;
 					}
 				}
 
-				ksort($updateFiles);
+				$updateFiles['20.54.980'] = '';
+				$updateFiles['2.1.14'] = '';
+				$updateFiles['1.9.75'] = '';
+				uksort($updateFiles, array($this, "_compareVersions"));
 
 				// Then execute the version file for any version that's ahead of us
 				// until we hit the code version
-				foreach ($updateFiles as $versionNumber => $data) 
+				foreach ($updateFiles as $updateVersion => $path) 
 				{
-					if(	$versionNumber > $currentVersionNumber &&
-						$versionNumber <= $codeVersionNumber )
+					$currentVersionDiff = $this->_compareVersions($updateVersion, $currentDbVersion);
+					$codeVersionDiff = $this->_compareVersions($updateVersion, $codeVersion);
+
+					if(	$currentVersionDiff > 0 &&
+						$codeVersionDiff <= 0 )
 					{
-						$this->_logMessage('Executing update ' . $data['path']);
+						$this->_logMessage('Executing update ' . $path);
 
-						if($this->_executeUpdate($data['path']))
+						if($this->_executeUpdate($path))
 						{
-							$this->_writeDbVersion($data['version']);
-							$currentVersionNumber = $versionNumber;
+							$this->_writeDbVersion($this->_stringToVersion($updateVersion));
+							$currentDbVersion = $updateVersion;
 
-							$this->_logMessage('Updated to version: ' . $this->_versionToString($data['version']));
+							$this->_logMessage('Updated to version: ' . $updateVersion);
 						}
 						else
 						{
-							$this->_logMessage('Error: Failed to execute update ' . $data['path']);
+							$this->_logMessage('Error: Failed to execute update ' . $path);
 						}
 					}
 				}
