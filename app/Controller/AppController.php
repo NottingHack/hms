@@ -87,6 +87,7 @@ class AppController extends Controller {
                     'Members' => array( 'plugin' => null, 'controller' => 'members', 'action' => 'index' ),
                     'Groups' => array( 'plugin' => null, 'controller' => 'groups', 'action' => 'index' ),
                     'Mailing Lists' => array( 'plugin' => null, 'controller' => 'mailinglists', 'action' => 'index' ),
+                    'MemberVoice' => array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ),
                 );
             }
 
