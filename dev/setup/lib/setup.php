@@ -827,8 +827,7 @@
 
 			$conn = $this->_getDbConnection('default', true);
 			$this->_runQueryFromFile($conn, makeAbsolutePath('sql/hms_meta_schema.sql'));
-			$this->_runQuery($conn, "DELETE FROM `hms_meta` WHERE 1");
-			$this->_runQuery($conn, "INSERT INTO `hms_meta` (`version`) VALUES ('$versionStr')");
+			$this->_runQuery($conn, "INSERT INTO `hms_meta` (`name`, `value`) VALUES ('db_version', '$versionStr') ON DUPLICATE KEY UPDATE value='$versionStr'");
 		}
 
 		//! Attempt to read the database version from the database.version file
@@ -838,10 +837,10 @@
 		private function _readDbVersion()
 		{
 			$conn = $this->_getDbConnection('default', true);
-			$result = $this->_runQuery($conn, "SELECT * FROM `hms_meta`");
+			$result = $this->_runQuery($conn, "SELECT `value` FROM `hms_meta` WHERE `name`='db_version'");
 			if(is_array($result) && count($result) > 0)
 			{
-				$key = 'version';
+				$key = 'value';
 				$data = $result[0];
 
 				if(array_key_exists($key, $data))
@@ -934,6 +933,7 @@
 					$this->_logMessage('Error: Could not read current database version');
 					return;
 				}
+				$this->logMessage('DB Version: ' . $currentDbVersion);
 
 				// Find out which version we should be updating to
 				$codeVersion = $this->_getCodeVersion();
@@ -942,6 +942,7 @@
 					$this->_logMessage('Error: Could not get code version');
 					return;
 				}
+				$this->logMessage('Code Version: ' . $codeVersion);
 
 				if( $this->_compareVersions($currentDbVersion, $codeVersion) == 0 )
 				{
@@ -978,6 +979,7 @@
 				$updateFiles['2.1.14'] = '';
 				$updateFiles['1.9.75'] = '';
 				uksort($updateFiles, array($this, "_compareVersions"));
+				var_dump($updateFiles);
 
 				// Then execute the version file for any version that's ahead of us
 				// until we hit the code version
