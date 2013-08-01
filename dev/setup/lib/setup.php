@@ -933,7 +933,7 @@
 					$this->_logMessage('Error: Could not read current database version');
 					return;
 				}
-				$this->logMessage('DB Version: ' . $currentDbVersion);
+				$this->_logMessage('DB Version: ' . $this->_versionToString($currentDbVersion));
 
 				// Find out which version we should be updating to
 				$codeVersion = $this->_getCodeVersion();
@@ -942,7 +942,7 @@
 					$this->_logMessage('Error: Could not get code version');
 					return;
 				}
-				$this->logMessage('Code Version: ' . $codeVersion);
+				$this->_logMessage('Code Version: ' . $this->_versionToString($codeVersion));
 
 				if( $this->_compareVersions($currentDbVersion, $codeVersion) == 0 )
 				{
@@ -975,11 +975,7 @@
 					}
 				}
 
-				$updateFiles['20.54.980'] = '';
-				$updateFiles['2.1.14'] = '';
-				$updateFiles['1.9.75'] = '';
 				uksort($updateFiles, array($this, "_compareVersions"));
-				var_dump($updateFiles);
 
 				// Then execute the version file for any version that's ahead of us
 				// until we hit the code version
