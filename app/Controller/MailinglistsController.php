@@ -72,7 +72,7 @@
 	    private function _getMemberEmails()
 	    {
 	    	$this->loadModel('Member');
-	    	$memberEmails = $this->Member->getEmailsForAllMember();
+	    	$memberEmails = $this->Member->getEmailsForAllMembers();
 	    	return $memberEmails;
 	    }
 	}

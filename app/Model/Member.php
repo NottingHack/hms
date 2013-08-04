@@ -735,7 +735,7 @@
 		/*!
 			@retval array A list of member e-mails.
 		*/
-		public function getEmailsForAllMember()
+		public function getEmailsForAllMembers()
 		{
 			$emails = $this->find('all', array('fields' => array('email')));
 			return Hash::extract( $emails, '{n}.Member.email' );
