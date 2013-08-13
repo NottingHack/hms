@@ -11,8 +11,6 @@
 	        return false;
 	    }
 
-	    //$source = str_replace('\\', '/', realpath($source));
-
 	    if (is_dir($source) === true)
 	    {
 	        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
@@ -23,9 +21,9 @@
 
 	            // Ignore "." and ".." folders
 	            if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
+	            {
 	                continue;
-
-	            //$file = realpath($file);
+	            }
 
 	            if (is_dir($file) === true)
 	            {
