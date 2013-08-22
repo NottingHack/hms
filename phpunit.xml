@@ -16,7 +16,6 @@
 	    <directory suffix=".php">./app/Controller</directory>
 	    <directory suffix=".php">./app/Lib</directory>
 	    <directory suffix=".php">./app/Model</directory>
-	    <directory suffix=".php">./dev</directory>
 	    <directory suffix=".php">./plugins</directory>
 	    <exclude>
 	      <directory suffix=".php">./lib</directory>
