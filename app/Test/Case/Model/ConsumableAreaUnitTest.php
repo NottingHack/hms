@@ -1,15 +1,15 @@
 <?php
 
-    App::uses('ConsumableSupplier', 'Model');
+    App::uses('ConsumableArea', 'Model');
 
-    class ConsumableSupplierUnitTest extends CakeTestCase 
+    class ConsumableAreaUnitTest extends CakeTestCase 
     {
-        public $fixtures = array( 'app.ConsumableSupplier' );
+        public $fixtures = array( 'app.ConsumableArea' );
 
         public function setUp() 
         {
         	parent::setUp();
-            $this->ConsumableSupplier = ClassRegistry::init('ConsumableSupplier');
+            $this->ConsumableArea = ClassRegistry::init('ConsumableArea');
         }
 
         /**
@@ -17,7 +17,7 @@
          */
         public function test_Add_CalledWithNullData_ThrowsException()
         {
-            $this->ConsumableSupplier->add(null);
+            $this->ConsumableArea->add(null);
         }
 
         /**
@@ -25,7 +25,7 @@
          */
         public function test_Add_CalledWithNonArrayData_ThrowsException()
         {
-            $this->ConsumableSupplier->add('thisIsNotAnArray');
+            $this->ConsumableArea->add('thisIsNotAnArray');
         }
 
         /**
@@ -33,8 +33,8 @@
          */
         public function test_Add_CalledWithNoInnerArray_ThrowsException()
         {
-            $this->ConsumableSupplier->add(array(
-                'ConsumableSupplier' => null
+            $this->ConsumableArea->add(array(
+                'ConsumableArea' => null
                 )
             );
         }
@@ -44,12 +44,10 @@
          */
         public function test_Add_CalledWithNoName_ThrowsException()
         {
-            $this->ConsumableSupplier->add(
+            $this->ConsumableArea->add(
                 array(
-                    'ConsumableSupplier' => array(
+                    'ConsumableArea' => array(
                         'description' => 'valid description',
-                        'address' => 'valid address',
-                        'url' => 'valid url',
                     )
                 )
             );
@@ -60,13 +58,11 @@
          */
         public function test_Add_CalledWithInvalidName_ThrowsException()
         {
-            $this->ConsumableSupplier->add(
+            $this->ConsumableArea->add(
                 array(
-                    'ConsumableSupplier' => array(
+                    'ConsumableArea' => array(
                         'name' => null,
                         'description' => 'valid description',
-                        'address' => 'valid address',
-                        'url' => 'valid url',
                     )
                 )
             );
@@ -75,61 +71,55 @@
         public function test_Add_CalledWithValidData_CallsSaveWithSameData()
         {
             $validData = array(
-                'ConsumableSupplier' => array(
+                'ConsumableArea' => array(
                     'name' => 'valid name',
                     'description' => 'valid description',
-                    'address' => 'valid address',
-                    'url' => 'valid url',
                 )
             );
 
-            $this->ConsumableSupplier = $this->getMockForModel('ConsumableSupplier', array('save'));
+            $this->ConsumableArea = $this->getMockForModel('ConsumableArea', array('save'));
 
-            $this->ConsumableSupplier->expects($this->once())
+            $this->ConsumableArea->expects($this->once())
                                      ->method('save')
                                      ->with($this->equalTo($validData));
 
-            $this->ConsumableSupplier->add($validData);
+            $this->ConsumableArea->add($validData);
         }
 
         public function test_Add_CalledWithValidData_ReturnsTrue()
         {
             $validData = array(
-                'ConsumableSupplier' => array(
+                'ConsumableArea' => array(
                     'name' => 'valid name',
                     'description' => 'valid description',
-                    'address' => 'valid address',
-                    'url' => 'valid url',
                 )
             );
 
-            $this->ConsumableSupplier = $this->getMockForModel('ConsumableSupplier', array('save'));
+            $this->ConsumableArea = $this->getMockForModel('ConsumableArea', array('save'));
 
-            $this->ConsumableSupplier->expects($this->once())
+            $this->ConsumableArea->expects($this->once())
                                      ->method('save')
                                      ->will($this->returnValue(true));
 
-            $this->assertTrue($this->ConsumableSupplier->add($validData));
+            $this->assertTrue($this->ConsumableArea->add($validData));
         }
 
         public function test_Add_WithSaveFailing_ReturnsFalse()
         {
             $validData = array(
-                'ConsumableSupplier' => array(
+                'ConsumableArea' => array(
                     'name' => 'valid name',
                     'description' => 'valid description',
-                    'address' => 'valid address',
-                    'url' => 'valid url',
                 )
             );
 
-            $this->ConsumableSupplier = $this->getMockForModel('ConsumableSupplier', array('save'));
+            $this->ConsumableArea = $this->getMockForModel('ConsumableArea', array('save'));
 
-            $this->ConsumableSupplier->expects($this->once())
+            $this->ConsumableArea->expects($this->once())
                                      ->method('save')
                                      ->will($this->returnValue(false));
 
-            $this->assertFalse($this->ConsumableSupplier->add($validData));
+            $this->assertFalse($this->ConsumableArea->add($validData));
         }
 
         /**
@@ -137,7 +127,7 @@
          */
         public function test_Get_WithNullId_ThrowsException()
         {
-            $this->ConsumableSupplier->get(null);
+            $this->ConsumableArea->get(null);
         }
 
         /**
@@ -145,7 +135,7 @@
          */
         public function test_Get_WithStringId_ThrowsException()
         {
-            $this->ConsumableSupplier->get('invalidId');
+            $this->ConsumableArea->get('invalidId');
         }
 
         /**
@@ -153,7 +143,7 @@
          */
         public function test_Get_WithNegativeId_ThrowsException()
         {
-            $this->ConsumableSupplier->get(-4);
+            $this->ConsumableArea->get(-4);
         }
 
         public function test_Get_WithPositiveNumericId_CallsFindWithSameId()
@@ -161,146 +151,130 @@
             $validId = 1;
 
 
-            $this->ConsumableSupplier = $this->getMockForModel('ConsumableSupplier', array('find'));
+            $this->ConsumableArea = $this->getMockForModel('ConsumableArea', array('find'));
 
-            $this->ConsumableSupplier->expects($this->once())
+            $this->ConsumableArea->expects($this->once())
                                      ->method('find')
                                      ->with($this->anything(),
-                                            $this->contains(array('ConsumableSupplier.supplier_id' => $validId)));
+                                            $this->contains(array('ConsumableArea.area_id' => $validId)));
 
-            $this->ConsumableSupplier->get($validId);
+            $this->ConsumableArea->get($validId);
         }
 
         public function test_Get_WhenFindReturnsNull_ReturnsEmptyArray()
         {
             $validId = 1;
 
-            $this->ConsumableSupplier = $this->getMockForModel('ConsumableSupplier', array('find'));
+            $this->ConsumableArea = $this->getMockForModel('ConsumableArea', array('find'));
 
-            $this->ConsumableSupplier->expects($this->once())
+            $this->ConsumableArea->expects($this->once())
                                      ->method('find')
                                      ->will($this->returnValue(null));
 
-            $this->assertIdentical(array(), $this->ConsumableSupplier->get($validId));
+            $this->assertIdentical(array(), $this->ConsumableArea->get($validId));
         }
 
         public function test_Get_WhenFindReturnsRecord_WillReturnFormattedRecord()
         {
             $recordFindReturns = array(
-                'ConsumableSupplier' => array(
-                    'supplier_id' => 1,
+                'ConsumableArea' => array(
+                    'area_id' => 1,
                     'name' => 'a',
                     'description' => 'a',
-                    'address' => 'a',
-                    'url' => 'a',
                 )
             );
 
-            $this->ConsumableSupplier = $this->getMockForModel('ConsumableSupplier', array('find'));
-            $this->ConsumableSupplier->expects($this->once())
+            $this->ConsumableArea = $this->getMockForModel('ConsumableArea', array('find'));
+            $this->ConsumableArea->expects($this->once())
                                      ->method('find')
                                      ->will($this->returnValue($recordFindReturns));
 
             $expectedResult = array(
-                'supplier_id' => 1,
+                'area_id' => 1,
                 'name' => 'a',
                 'description' => 'a',
-                'address' => 'a',
-                'url' => 'a',
             );
 
-            $this->assertEqual($expectedResult, $this->ConsumableSupplier->get(1));
+            $this->assertEqual($expectedResult, $this->ConsumableArea->get(1));
         }
 
         public function test_GetAll_WhenFindReturnsEmptyArray_WillReturnEmptyArray()
         {
-            $this->ConsumableSupplier = $this->getMockForModel('ConsumableSupplier', array('find'));
+            $this->ConsumableArea = $this->getMockForModel('ConsumableArea', array('find'));
 
-            $this->ConsumableSupplier->expects($this->once())
+            $this->ConsumableArea->expects($this->once())
                                      ->method('find')
                                      ->will($this->returnValue(array()));
 
-            $this->assertEqual(array(), $this->ConsumableSupplier->getAll());
+            $this->assertEqual(array(), $this->ConsumableArea->getAll());
         }
 
         public function test_GetAll_WhenFindReturnsSingleRecord_WillReturnSingleFormattedRecord()
         {
             $recordFindReturns = array(
                 array(
-                    'ConsumableSupplier' => array(
-                        'supplier_id' => 1,
+                    'ConsumableArea' => array(
+                        'area_id' => 1,
                         'name' => 'a',
                         'description' => 'a',
-                        'address' => 'a',
-                        'url' => 'a',
                     )
                 )
             );
 
-            $this->ConsumableSupplier = $this->getMockForModel('ConsumableSupplier', array('find'));
-            $this->ConsumableSupplier->expects($this->once())
+            $this->ConsumableArea = $this->getMockForModel('ConsumableArea', array('find'));
+            $this->ConsumableArea->expects($this->once())
                                      ->method('find')
                                      ->will($this->returnValue($recordFindReturns));
 
             $expectedResult = array(
                 array(
-                    'supplier_id' => 1,
+                    'area_id' => 1,
                     'name' => 'a',
                     'description' => 'a',
-                    'address' => 'a',
-                    'url' => 'a',
                 )
             );
 
-            $this->assertEqual($expectedResult, $this->ConsumableSupplier->getAll());
+            $this->assertEqual($expectedResult, $this->ConsumableArea->getAll());
         }
 
         public function test_GetAll_WhenFindReturnsMultipleRecords_WillReturnMultipleFormattedRecords()
         {
             $recordFindReturns = array(
                 array(
-                    'ConsumableSupplier' => array(
-                        'supplier_id' => 1,
+                    'ConsumableArea' => array(
+                        'area_id' => 1,
                         'name' => 'a',
                         'description' => 'a',
-                        'address' => 'a',
-                        'url' => 'a',
                     )
                 ),
                 array(
-                    'ConsumableSupplier' => array(
-                        'supplier_id' => 2,
+                    'ConsumableArea' => array(
+                        'area_id' => 2,
                         'name' => 'b',
                         'description' => 'b',
-                        'address' => 'b',
-                        'url' => 'b',
                     )
                 ),
             );
 
-            $this->ConsumableSupplier = $this->getMockForModel('ConsumableSupplier', array('find'));
-            $this->ConsumableSupplier->expects($this->once())
+            $this->ConsumableArea = $this->getMockForModel('ConsumableArea', array('find'));
+            $this->ConsumableArea->expects($this->once())
                                      ->method('find')
                                      ->will($this->returnValue($recordFindReturns));
 
             $expectedResult = array(
                 array(
-                    'supplier_id' => 1,
+                    'area_id' => 1,
                     'name' => 'a',
                     'description' => 'a',
-                    'address' => 'a',
-                    'url' => 'a',
                 ),
                 array(
-                    'supplier_id' => 2,
+                    'area_id' => 2,
                     'name' => 'b',
                     'description' => 'b',
-                    'address' => 'b',
-                    'url' => 'b',
                 )
             );
 
-            $this->assertEqual($expectedResult, $this->ConsumableSupplier->getAll());
+            $this->assertEqual($expectedResult, $this->ConsumableArea->getAll());
         }
     }
 

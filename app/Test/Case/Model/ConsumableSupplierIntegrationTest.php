@@ -28,8 +28,8 @@
 
             $this->assertGreaterThan($prevCount, $this->ConsumableSupplier->find('count'));
 
-            // Remove the supplier_id field, since we can't reliably know what it is
             $record = $this->ConsumableSupplier->findByName('valid name');
+            // Remove the supplier_id field, since we can't reliably know what it is
             unset($record['ConsumableSupplier']['supplier_id']);
             $this->assertEqual($validData, $record);
         }
