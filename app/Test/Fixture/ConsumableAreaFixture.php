@@ -8,6 +8,7 @@
 		public $records = array(
 			array( 'area_id' => 1, 'name' => 'a', 'description' => 'a' ),
 			array( 'area_id' => 2, 'name' => 'b', 'description' => 'b' ),
+			array( 'area_id' => 3, 'name' => 'c', 'description' => 'c' ),
 		);
 	}
 

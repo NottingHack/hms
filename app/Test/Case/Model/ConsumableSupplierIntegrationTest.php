@@ -34,7 +34,7 @@
             $this->assertEqual($validData, $record);
         }
 
-        public function test_View_WithIdOfExistingRecord_CorrectlyRetrievesRecordFromFixture()
+        public function test_Get_WithIdOfExistingRecord_CorrectlyRetrievesRecordFromFixture()
         {
             $expectedResult = array(
                 'supplier_id' => 1,
@@ -47,12 +47,12 @@
             $this->assertEqual($expectedResult, $this->ConsumableSupplier->get(1));
         }
 
-        public function test_View_WithIdOfNonExistantRecord_ReturnsEmptyArray()
+        public function test_Get_WithIdOfNonExistantRecord_ReturnsEmptyArray()
         {
             $this->assertEqual(array(), $this->ConsumableSupplier->get(10));
         }
 
-        public function test_ViewAll_WhenCalled_ReturnsFormattedRecordsFromFixture()
+        public function test_GetAll_WhenCalled_ReturnsFormattedRecordsFromFixture()
         {
             $expectedResult = array(
                 array(

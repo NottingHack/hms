@@ -4,7 +4,7 @@
 
     class ConsumableAreaUnitTest extends CakeTestCase 
     {
-        public $fixtures = array( 'app.ConsumableArea' );
+        public $fixtures = array( 'app.ConsumableArea', 'app.ConsumableRepeatPurchase' );
 
         public function setUp() 
         {
@@ -181,7 +181,17 @@
                     'area_id' => 1,
                     'name' => 'a',
                     'description' => 'a',
-                )
+                ),
+                'ConsumableRepeatPurchase' => array(
+                    array(
+                        'repeat_purchase_id' => 1,
+                        'name' => 'a',
+                        'description' => 'a',
+                        'min' => '0',
+                        'max' => '10',
+                        'area_id' => 1,
+                    )
+                ),
             );
 
             $this->ConsumableArea = $this->getMockForModel('ConsumableArea', array('find'));
@@ -193,6 +203,16 @@
                 'area_id' => 1,
                 'name' => 'a',
                 'description' => 'a',
+                'repeatPurchases' => array(
+                    array(
+                        'repeat_purchase_id' => 1,
+                        'name' => 'a',
+                        'description' => 'a',
+                        'min' => '0',
+                        'max' => '10',
+                        'area_id' => 1,
+                    ),
+                ),
             );
 
             $this->assertEqual($expectedResult, $this->ConsumableArea->get(1));
@@ -217,7 +237,17 @@
                         'area_id' => 1,
                         'name' => 'a',
                         'description' => 'a',
-                    )
+                    ),
+                    'ConsumableRepeatPurchase' => array(
+                        array(
+                            'repeat_purchase_id' => 1,
+                            'name' => 'a',
+                            'description' => 'a',
+                            'min' => '0',
+                            'max' => '10',
+                            'area_id' => 1,
+                        )
+                    ),
                 )
             );
 
@@ -231,6 +261,16 @@
                     'area_id' => 1,
                     'name' => 'a',
                     'description' => 'a',
+                    'repeatPurchases' => array(
+                        array(
+                            'repeat_purchase_id' => 1,
+                            'name' => 'a',
+                            'description' => 'a',
+                            'min' => '0',
+                            'max' => '10',
+                            'area_id' => 1,
+                        )
+                    ),
                 )
             );
 
@@ -245,14 +285,34 @@
                         'area_id' => 1,
                         'name' => 'a',
                         'description' => 'a',
-                    )
+                    ),
+                    'ConsumableRepeatPurchase' => array(
+                        array(
+                            'repeat_purchase_id' => 1,
+                            'name' => 'a',
+                            'description' => 'a',
+                            'min' => '0',
+                            'max' => '10',
+                            'area_id' => 1,
+                        )
+                    ),
                 ),
                 array(
                     'ConsumableArea' => array(
                         'area_id' => 2,
                         'name' => 'b',
                         'description' => 'b',
-                    )
+                    ),
+                    'ConsumableRepeatPurchase' => array(
+                        array(
+                            'repeat_purchase_id' => 2,
+                            'name' => 'b',
+                            'description' => 'b',
+                            'min' => '0',
+                            'max' => '10',
+                            'area_id' => 2,
+                        ),
+                    ),
                 ),
             );
 
@@ -266,11 +326,31 @@
                     'area_id' => 1,
                     'name' => 'a',
                     'description' => 'a',
+                    'repeatPurchases' => array(
+                    array(
+                            'repeat_purchase_id' => 1,
+                            'name' => 'a',
+                            'description' => 'a',
+                            'min' => '0',
+                            'max' => '10',
+                            'area_id' => 1,
+                        ),
+                    ),
                 ),
                 array(
                     'area_id' => 2,
                     'name' => 'b',
                     'description' => 'b',
+                    'repeatPurchases' => array(
+                        array(
+                            'repeat_purchase_id' => 2,
+                            'name' => 'b',
+                            'description' => 'b',
+                            'min' => '0',
+                            'max' => '10',
+                            'area_id' => 2,
+                        ),
+                    ),
                 )
             );
 

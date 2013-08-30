@@ -32,11 +32,6 @@
 		*/
 		public function add($data)
 		{
-			if(!is_array($data))
-			{
-				throw new InvalidArgumentException('$data must be of type array');
-			}
-
 			$this->create($data);
 			if(!$this->validates())
 			{

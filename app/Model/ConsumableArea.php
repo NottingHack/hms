@@ -18,12 +18,20 @@
 	        'name' => array(
 	            'notEmpty' => array(
 	            	'rule' => 'notEmpty',
-	            	'message' => 'Supplier must have at-least a name',
+	            	'message' => 'Area must have at-least a name',
 	            	'required' => true,
 	            	'allowEmpty' => false,
 	            )
 	        ),
 	    );
+
+	    //! We haveMany ConsumableRepeatPurchase
+		public $hasMany = array(
+			'ConsumableRepeatPurchase' => array(
+				'className' => 'ConsumableRepeatPurchase',
+            	'foreignKey' => 'area_id'
+			),
+		);
 
 		//! Add a new area
 		/*!
@@ -32,11 +40,6 @@
 		*/
 		public function add($data)
 		{
-			if(!is_array($data))
-			{
-				throw new InvalidArgumentException('$data must be of type array');
-			}
-
 			$this->create($data);
 			if(!$this->validates())
 			{
@@ -89,8 +92,8 @@
 		*/
 		private function _formatRecord($record)
 		{
-			// Just need to remove the model name, for now.
 			$formattedData = $record['ConsumableArea'];
+			$formattedData['repeatPurchases'] = $record['ConsumableRepeatPurchase'];
 			return $formattedData;
 		}
 	}
