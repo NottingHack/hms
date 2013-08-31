@@ -18,14 +18,12 @@
 			Also have a ConsumableSupplier (but that may be null)
 			Also have a ConsumableArea
 			May have a ConsumableRepeatPurchase if this request was spawned from a repeat purchase
-			Has a ConsumableRequestStatus
 		*/
 		public $hasOne = array(
 			'ConsumableRequestStatus',
 			'ConsumableSupplier',
 			'ConsumableArea',
 			'ConsumableRepeatPurchase',
-			'ConsumableRequestStatus',
 		);
 
 		/*!
@@ -34,5 +32,57 @@
 		public $hasMany = array(
 			'ConsumableRequestComment',
 		);
+
+		//! Validation rules.
+	    public $validate = array(
+	        'title' => array(
+	            'notEmpty' => array(
+	            	'rule' => 'notEmpty',
+	            	'message' => 'Request must have a title',
+	            	'required' => true,
+	            	'allowEmpty' => false,
+	            )
+	        ),
+	        'detail' => array(
+	            'notEmpty' => array(
+	            	'rule' => 'notEmpty',
+	            	'message' => 'Request must have a detailed description',
+	            	'required' => true,
+	            	'allowEmpty' => false,
+	            )
+	        ),
+	        'request_status_id' => array(
+	            'number' => array(
+	            	'rule' => array('naturalNumber', false),
+	        		'message' => 'Request must have a valid status',
+	            	'required' => true,
+	            	'allowEmpty' => false,
+	            )
+	        ),
+	        'supplier_id' => array(
+	        	'number' => array(
+	        		'rule' => array('naturalNumber', false),
+	        		'message' => 'Supplier must be valid',
+	        		'required' => false,
+	        		'allowEmpty' => true,
+	        	),
+	        ),
+	        'area_id' => array(
+	        	'number' => array(
+	        		'rule' => array('naturalNumber', false),
+	        		'message' => 'Area must be valid',
+	        		'required' => false,
+	        		'allowEmpty' => true,
+	        	),
+	        ),
+	        'repeat_purchase_id' => array(
+	        	'number' => array(
+	        		'rule' => array('naturalNumber', false),
+	        		'message' => 'Repeat Purchase must be valid',
+	        		'required' => false,
+	        		'allowEmpty' => true,
+	        	),
+	        ),
+	    );
 	}
 ?>
