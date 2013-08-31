@@ -7,5 +7,7 @@ CREATE TABLE IF NOT EXISTS `consumable_requests` (
   `supplier_id` int(11) DEFAULT NULL,
   `area_id` int(11) DEFAULT NULL,
   `repeat_purchase_id` int(11) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`request_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;

@@ -32,6 +32,10 @@
 				'className' => 'ConsumableRepeatPurchase',
             	'foreignKey' => 'repeat_purchase_id'
 			),
+			'Member' => array(
+				'className' => 'Member',
+				'foreignKey' => 'member_id',
+			),
 		);
 
 		public $hasMany = array(
@@ -87,6 +91,14 @@
 	        	'number' => array(
 	        		'rule' => array('naturalNumber', false),
 	        		'message' => 'Repeat Purchase must be valid',
+	        		'required' => false,
+	        		'allowEmpty' => true,
+	        	),
+	        ),
+	        'member_id' => array(
+	        	'number' => array(
+	        		'rule' => array('naturalNumber', false),
+	        		'message' => 'Member must be valid',
 	        		'required' => false,
 	        		'allowEmpty' => true,
 	        	),
