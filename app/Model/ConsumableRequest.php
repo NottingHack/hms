@@ -109,9 +109,10 @@
 		//! Add a new request
 		/*!
 			@param array $data An array of data to create the request.
+			@param mixed $memberId Either the id of the adding the request, or null if annon request.
 			@retval bool True if record was created successfully, false otherwise.
 		*/
-		public function add($data)
+		public function add($data, $memberId)
 		{
 			// The status of a request being added must be 'Pending'
 			if(	is_array($data) && 
@@ -119,6 +120,7 @@
 				is_array($data['ConsumableRequest']) )
 			{
 				$data['ConsumableRequest']['request_status_id'] = ConsumableRequestStatus::PENDING;
+				$data['ConsumableRequest']['member_id'] = $memberId;
 			}
 			
 			$this->create($data);
@@ -133,9 +135,10 @@
 		//! Add a new request from a repeat purchase
 		/*!
 			@param int $repeatPurchaseId The id of the repeat purchase to use to create the request.
+			@param mixed $memberId Either the id of the adding the request, or null if annon request.
 			@retval bool True if records was created successfully, false otherwise.
 		*/
-		public function addFromRepeatPurchase($repeatPurchaseId)
+		public function addFromRepeatPurchase($repeatPurchaseId, $memberId)
 		{
 			if( !( is_numeric($repeatPurchaseId) &&
 					$repeatPurchaseId > 0 ) )
@@ -157,11 +160,10 @@
 					'supplier_id' => $this->_getLsatSupplierForRepeatPurchase($repeatPurchaseId),
 					'area_id' => $repeatPurchaseRecord['ConsumableRepeatPurchase']['area_id'],
 					'repeat_purchase_id' => $repeatPurchaseId,
-					'member_id' => null,
 				),
 			);
 
-			return $this->add($addData);
+			return $this->add($addData, $memberId);
 		}
 
 		//! Given an array of repeat purchase data, return a string for use in the 'detail' field of a request.

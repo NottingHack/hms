@@ -17,7 +17,7 @@
          */
         public function test_Add_CalledWithNullData_ThrowsException()
         {
-            $this->ConsumableRequest->add(null);
+            $this->ConsumableRequest->add(null, null);
         }
 
         /**
@@ -25,7 +25,7 @@
          */
         public function test_Add_CalledWithNonArrayData_ThrowsException()
         {
-            $this->ConsumableRequest->add('thisIsNotAnArray');
+            $this->ConsumableRequest->add('thisIsNotAnArray', null);
         }
 
         /**
@@ -35,7 +35,8 @@
         {
             $this->ConsumableRequest->add(array(
                 'ConsumableRequest' => null
-                )
+                ),
+            null
             );
         }
 
@@ -51,9 +52,9 @@
                         'supplier_id' => 1,
                         'area_id' => 1,
                         'repeat_purchase_id' => 1,
-                        'member_id' => null,
                     ),
-                )
+                ),
+                null
             );
         }
 
@@ -69,9 +70,9 @@
                         'supplier_id' => 1,
                         'area_id' => 1,
                         'repeat_purchase_id' => 1,
-                        'member_id' => null,
                     ),
-                )
+                ),
+                null
             );
         }
 
@@ -88,9 +89,9 @@
                         'supplier_id' => -1,
                         'area_id' => 1,
                         'repeat_purchase_id' => 1,
-                        'member_id' => null,
                     ),
-                )
+                ),
+                null
             );
         }
 
@@ -107,9 +108,9 @@
                         'supplier_id' => 0,
                         'area_id' => 1,
                         'repeat_purchase_id' => 1,
-                        'member_id' => null,
                     ),
-                )
+                ),
+                null
             );
         }
 
@@ -126,9 +127,9 @@
                         'supplier_id' => 'a',
                         'area_id' => 1,
                         'repeat_purchase_id' => 1,
-                        'member_id' => null,
                     ),
-                )
+                ),
+                null
             );
         }
 
@@ -145,9 +146,9 @@
                         'supplier_id' => 1,
                         'area_id' => -1,
                         'repeat_purchase_id' => 1,
-                        'member_id' => null,
                     ),
-                )
+                ),
+                null
             );
         }
 
@@ -164,9 +165,9 @@
                         'supplier_id' => 1,
                         'area_id' => 0,
                         'repeat_purchase_id' => 1,
-                        'member_id' => null,
                     ),
-                )
+                ),
+                null
             );
         }
 
@@ -183,9 +184,9 @@
                         'supplier_id' => 1,
                         'area_id' => 'f',
                         'repeat_purchase_id' => 1,
-                        'member_id' => null,
                     ),
-                )
+                ),
+                null
             );
         }
 
@@ -202,9 +203,9 @@
                         'supplier_id' => 1,
                         'area_id' => 1,
                         'repeat_purchase_id' => -1,
-                        'member_id' => null,
                     ),
-                )
+                ),
+                null
             );
         }
 
@@ -221,9 +222,9 @@
                         'supplier_id' => 1,
                         'area_id' => 1,
                         'repeat_purchase_id' => 0,
-                        'member_id' => null,
                     ),
-                )
+                ),
+                null
             );
         }
 
@@ -240,9 +241,9 @@
                         'supplier_id' => 1,
                         'area_id' => 1,
                         'repeat_purchase_id' => 'f',
-                        'member_id' => null,
                     ),
-                )
+                ),
+                null
             );
         }
 
@@ -259,9 +260,9 @@
                         'supplier_id' => 1,
                         'area_id' => 1,
                         'repeat_purchase_id' => 1,
-                        'member_id' => -1,
                     ),
-                )
+                ),
+                -1
             );
         }
 
@@ -278,9 +279,9 @@
                         'supplier_id' => 1,
                         'area_id' => 1,
                         'repeat_purchase_id' => 1,
-                        'member_id' => 0,
                     ),
-                )
+                ),
+                0
             );
         }
 
@@ -297,9 +298,9 @@
                         'supplier_id' => 1,
                         'area_id' => 1,
                         'repeat_purchase_id' => 1,
-                        'member_id' => 'a',
                     ),
-                )
+                ),
+                'a'
             );
         }
 
@@ -331,11 +332,10 @@
                     'supplier_id' => 1,
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
-            $this->ConsumableRequest->add($validData);
+            $this->ConsumableRequest->add($validData, null);
         }
 
         public function test_Add_CalledWithAllValidDataButNoUrl_CallsSaveWithSameData()
@@ -365,11 +365,10 @@
                     'supplier_id' => 1,
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
-            $this->ConsumableRequest->add($validData);
+            $this->ConsumableRequest->add($validData, null);
         }
 
         public function test_Add_CalledWithAllValidDataButNoSuppplierId_CallsSaveWithSameData()
@@ -399,11 +398,10 @@
                     'url' => 'a',
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
-            $this->ConsumableRequest->add($validData);
+            $this->ConsumableRequest->add($validData, null);
         }
 
         public function test_Add_CalledWithAllValidDataButNoAreaId_CallsSaveWithSameData()
@@ -432,11 +430,10 @@
                     'url' => 'a',
                     'supplier_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
-            $this->ConsumableRequest->add($validData);
+            $this->ConsumableRequest->add($validData, null);
         }
 
         public function test_Add_CalledWithAllValidDataButNoRepeatPurchaseId_CallsSaveWithSameData()
@@ -465,14 +462,13 @@
                     'url' => 'a',
                     'supplier_id' => 1,
                     'area_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
-            $this->ConsumableRequest->add($validData);
+            $this->ConsumableRequest->add($validData, null);
         }
 
-        public function test_Add_CalledWithAllValidDataButNoMemberId_CallsSaveWithSameData()
+        public function test_Add_CalledWithAllValidDataWithValidMemberId_CallsSaveWithSameData()
         {
             $expectedData = array(
                 'ConsumableRequest' => array(
@@ -482,6 +478,7 @@
                     'request_status_id' => 1,
                     'supplier_id' => 1,
                     'area_id' => 1,
+                    'member_id' => 1,
                 ),
             );
 
@@ -500,7 +497,7 @@
                 ),
             );
 
-            $this->ConsumableRequest->add($validData);
+            $this->ConsumableRequest->add($validData, 1);
         }
 
         public function test_Add_CalledWithStatusId_CallsSaveWithStatusIdSetToPending()
@@ -532,11 +529,10 @@
                     'supplier_id' => 1,
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
-            $this->ConsumableRequest->add($inputData);
+            $this->ConsumableRequest->add($inputData, null);
         }
 
         public function test_Add_CalledWithValidData_ReturnsTrue()
@@ -549,7 +545,6 @@
                     'supplier_id' => 1,
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
@@ -559,7 +554,7 @@
                                      ->method('save')
                                      ->will($this->returnValue(true));
 
-            $this->assertTrue($this->ConsumableRequest->add($validData));
+            $this->assertTrue($this->ConsumableRequest->add($validData, null));
         }
 
         public function test_Add_WithSaveFailing_ReturnsFalse()
@@ -572,7 +567,6 @@
                     'supplier_id' => 1,
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
@@ -582,7 +576,7 @@
                                      ->method('save')
                                      ->will($this->returnValue(false));
 
-            $this->assertFalse($this->ConsumableRequest->add($validData));
+            $this->assertFalse($this->ConsumableRequest->add($validData, null));
         }
 
         /**
@@ -590,7 +584,7 @@
          */
         public function test_AddFromRepeatPurchase_WithNullPurchaseId_ThrowsException()
         {
-            $this->ConsumableRequest->addFromRepeatPurchase(null);
+            $this->ConsumableRequest->addFromRepeatPurchase(null, null);
         }
 
         /**
@@ -598,7 +592,7 @@
          */
         public function test_AddFromRepeatPurchase_WithNegativePurchaseId_ThrowsException()
         {
-            $this->ConsumableRequest->addFromRepeatPurchase(-1);
+            $this->ConsumableRequest->addFromRepeatPurchase(-1, null);
         }
 
         /**
@@ -606,7 +600,7 @@
          */
         public function test_AddFromRepeatPurchase_WithZeroPurchaseId_ThrowsException()
         {
-            $this->ConsumableRequest->addFromRepeatPurchase(0);
+            $this->ConsumableRequest->addFromRepeatPurchase(0, null);
         }
 
         /**
@@ -614,7 +608,7 @@
          */
         public function test_AddFromRepeatPurchase_WithNonNumericPurchaseId_ThrowsException()
         {
-            $this->ConsumableRequest->addFromRepeatPurchase(0);
+            $this->ConsumableRequest->addFromRepeatPurchase(0, null);
         }
 
         /**
@@ -629,7 +623,7 @@
                                                              ->method('find')
                                                              ->will($this->returnValue(array()));
 
-            $this->ConsumableRequest->addFromRepeatPurchase(1);
+            $this->ConsumableRequest->addFromRepeatPurchase(1, null);
         }
     }
 ?>

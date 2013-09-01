@@ -30,12 +30,11 @@
                     'supplier_id' => 1,
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
             $prevCount = $this->ConsumableRequest->find('count');
-            $this->ConsumableRequest->add($inputData);
+            $this->ConsumableRequest->add($inputData, null);
             $this->assertGreaterThan($prevCount, $this->ConsumableRequest->find('count'));
 
 
@@ -92,7 +91,7 @@
         public function test_AddFromRepeatPurchase_WithValidData_CorrectlyCreatesRecord()
         {
             $prevCount = $this->ConsumableRequest->find('count');
-            $this->ConsumableRequest->addFromRepeatPurchase(1);
+            $this->ConsumableRequest->addFromRepeatPurchase(1, null);
             $this->assertGreaterThan($prevCount, $this->ConsumableRequest->find('count'));
 
             $record = $this->ConsumableRequest->findByRequestId($this->ConsumableRequest->id);
