@@ -72,7 +72,7 @@
 	            	'allowEmpty' => false,
 	            )
 	        ),
-	        'supplier_id' => array(
+	        'request_id' => array(
 	        	'number' => array(
 	        		'rule' => array('naturalNumber', false),
 	        		'message' => 'Supplier must be valid',
@@ -166,6 +166,60 @@
 			return $this->add($addData, $memberId);
 		}
 
+		//! Get the request information for a record.
+		/*!
+			@param int $id The if od the request to get the information from.
+			@retval array An array of request data.
+		*/
+		public function get($id)
+		{
+			if(!is_numeric($id) || 
+				$id <= 0)
+			{
+				throw new InvalidArgumentException('$id must be numeric and greater than zero');
+			}
+
+			$record = $this->findByRequestId($id);
+			if(!is_array($record) || count($record) == 0)
+			{
+				return array();
+			}
+
+			return $this->_formatRecord($record);
+		}
+
+		//! Get the request information for all records.
+		/*!
+			@retval array An array of request data
+		*/
+		public function getAll()
+		{
+			$formattedRecords = array();
+			foreach ($this->find('all') as $index => $record) 
+			{
+				array_push($formattedRecords, $this->_formatRecord($record));
+			}
+			return $formattedRecords;
+		}
+
+		//! Format a record for use outside of this class
+		/*!
+			@param array $record The data to be formatted.
+			@retval array The formatted data.
+		*/
+		private function _formatRecord($record)
+		{
+			$formattedData = $record['ConsumableRequest'];
+
+			$formattedData['status'] = $record['ConsumableRequestStatus'];
+			$formattedData['supplier'] = $record['ConsumableSupplier'];
+			$formattedData['area'] = $record['ConsumableArea'];
+			$formattedData['repeatPurchase'] = $record['ConsumableRepeatPurchase'];
+			$formattedData['member'] = $record['Member'];
+			$formattedData['comments'] = $record['ConsumableRequestComment'];
+			return $formattedData;
+		}
+
 		//! Given an array of repeat purchase data, return a string for use in the 'detail' field of a request.
 		/*!
 			@param array $data The repeat purchase data.
@@ -180,10 +234,10 @@
 			);
 		}
 
-		//! Given the id of a repeat purchase, get the id of the supplier most recently used to fulfil the request
+		//! Given the id of a repeat purchase, get the id of the request most recently used to fulfil the request
 		/*!
 			@oaram int $id The id of the repeat purchase.
-			@retval mixed Either the id of a supplier, or null of none found.
+			@retval mixed Either the id of a request, or null of none found.
 		*/
 		private function _getLsatSupplierForRepeatPurchase($id)
 		{			
