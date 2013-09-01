@@ -24,3 +24,6 @@
 /dev/setup/lib/sql/hms_emails_data.development.sql
 app/Lib/Krb/krb5_auth.php
 app/Lib/MailChimp/MCAPI.php
+/coverage_report
+junit.xml
+coverage.xml
