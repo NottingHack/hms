@@ -22,5 +22,19 @@ class MemberVoiceAppController extends AppController {
 	protected function _getUserID() {
 		return $this->_getLoggedInMemberId();
 	}
+
+	public function isAuthorized($user, $request) {
+		if(parent::isAuthorized($user, $request)) {
+			return true;
+		}
+
+		$memberId = $this->Member->getIdForMember($user);
+
+		if ($memberId > 0) {
+			return true;
+		}
+
+		return false;
+	}
 }
 ?>
