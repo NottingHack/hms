@@ -4,7 +4,7 @@
 
     class ConsumableRequestUnitTest extends CakeTestCase 
     {
-        public $fixtures = array( 'app.ConsumableRequest' );
+        public $fixtures = array( 'app.ConsumableRequest', 'app.ConsumableRepeatPurchase' );
 
         public function setUp() 
         {
@@ -318,8 +318,8 @@
                 ),
             );
 
-            $this->ConsumableRepeatPurchase = $this->getMockForModel('ConsumableRequest', array('save'));
-            $this->ConsumableRepeatPurchase->expects($this->once())
+            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('save'));
+            $this->ConsumableRequest->expects($this->once())
                                      ->method('save')
                                      ->with($this->equalTo($expectedData));
 
@@ -335,7 +335,7 @@
                 ),
             );
 
-            $this->ConsumableRepeatPurchase->add($validData);
+            $this->ConsumableRequest->add($validData);
         }
 
         public function test_Add_CalledWithAllValidDataButNoUrl_CallsSaveWithSameData()
@@ -353,8 +353,8 @@
             );
             
 
-            $this->ConsumableRepeatPurchase = $this->getMockForModel('ConsumableRequest', array('save'));
-            $this->ConsumableRepeatPurchase->expects($this->once())
+            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('save'));
+            $this->ConsumableRequest->expects($this->once())
                                      ->method('save')
                                      ->with($this->equalTo($expectedData));
 
@@ -369,7 +369,7 @@
                 ),
             );
 
-            $this->ConsumableRepeatPurchase->add($validData);
+            $this->ConsumableRequest->add($validData);
         }
 
         public function test_Add_CalledWithAllValidDataButNoSuppplierId_CallsSaveWithSameData()
@@ -386,8 +386,8 @@
                 ),
             );
 
-            $this->ConsumableRepeatPurchase = $this->getMockForModel('ConsumableRequest', array('save'));
-            $this->ConsumableRepeatPurchase->expects($this->once())
+            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('save'));
+            $this->ConsumableRequest->expects($this->once())
                                      ->method('save')
                                      ->with($this->equalTo($expectedData));
 
@@ -403,7 +403,7 @@
                 ),
             );
 
-            $this->ConsumableRepeatPurchase->add($validData);
+            $this->ConsumableRequest->add($validData);
         }
 
         public function test_Add_CalledWithAllValidDataButNoAreaId_CallsSaveWithSameData()
@@ -420,8 +420,8 @@
                 ),
             );
 
-            $this->ConsumableRepeatPurchase = $this->getMockForModel('ConsumableRequest', array('save'));
-            $this->ConsumableRepeatPurchase->expects($this->once())
+            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('save'));
+            $this->ConsumableRequest->expects($this->once())
                                      ->method('save')
                                      ->with($this->equalTo($expectedData));
 
@@ -436,7 +436,7 @@
                 ),
             );
 
-            $this->ConsumableRepeatPurchase->add($validData);
+            $this->ConsumableRequest->add($validData);
         }
 
         public function test_Add_CalledWithAllValidDataButNoRepeatPurchaseId_CallsSaveWithSameData()
@@ -453,8 +453,8 @@
                 ),
             );
 
-            $this->ConsumableRepeatPurchase = $this->getMockForModel('ConsumableRequest', array('save'));
-            $this->ConsumableRepeatPurchase->expects($this->once())
+            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('save'));
+            $this->ConsumableRequest->expects($this->once())
                                      ->method('save')
                                      ->with($this->equalTo($expectedData));
 
@@ -469,7 +469,7 @@
                 ),
             );
 
-            $this->ConsumableRepeatPurchase->add($validData);
+            $this->ConsumableRequest->add($validData);
         }
 
         public function test_Add_CalledWithAllValidDataButNoMemberId_CallsSaveWithSameData()
@@ -485,8 +485,8 @@
                 ),
             );
 
-            $this->ConsumableRepeatPurchase = $this->getMockForModel('ConsumableRequest', array('save'));
-            $this->ConsumableRepeatPurchase->expects($this->once())
+            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('save'));
+            $this->ConsumableRequest->expects($this->once())
                                      ->method('save')
                                      ->with($this->equalTo($expectedData));
 
@@ -500,7 +500,7 @@
                 ),
             );
 
-            $this->ConsumableRepeatPurchase->add($validData);
+            $this->ConsumableRequest->add($validData);
         }
 
         public function test_Add_CalledWithStatusId_CallsSaveWithStatusIdSetToPending()
@@ -518,8 +518,8 @@
                 ),
             );
 
-            $this->ConsumableRepeatPurchase = $this->getMockForModel('ConsumableRequest', array('save'));
-            $this->ConsumableRepeatPurchase->expects($this->once())
+            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('save'));
+            $this->ConsumableRequest->expects($this->once())
                                      ->method('save')
                                      ->with($this->equalTo($expectedData));
 
@@ -536,7 +536,100 @@
                 ),
             );
 
-            $this->ConsumableRepeatPurchase->add($inputData);
+            $this->ConsumableRequest->add($inputData);
+        }
+
+        public function test_Add_CalledWithValidData_ReturnsTrue()
+        {
+            $validData  = array(
+                'ConsumableRequest' => array(
+                    'title' => 'a',
+                    'detail' => 'a',
+                    'url' => 'a',
+                    'supplier_id' => 1,
+                    'area_id' => 1,
+                    'repeat_purchase_id' => 1,
+                    'member_id' => null,
+                ),
+            );
+
+            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('save'));
+
+            $this->ConsumableRequest->expects($this->once())
+                                     ->method('save')
+                                     ->will($this->returnValue(true));
+
+            $this->assertTrue($this->ConsumableRequest->add($validData));
+        }
+
+        public function test_Add_WithSaveFailing_ReturnsFalse()
+        {
+            $validData  = array(
+                'ConsumableRequest' => array(
+                    'title' => 'a',
+                    'detail' => 'a',
+                    'url' => 'a',
+                    'supplier_id' => 1,
+                    'area_id' => 1,
+                    'repeat_purchase_id' => 1,
+                    'member_id' => null,
+                ),
+            );
+
+            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('save'));
+
+            $this->ConsumableRequest->expects($this->once())
+                                     ->method('save')
+                                     ->will($this->returnValue(false));
+
+            $this->assertFalse($this->ConsumableRequest->add($validData));
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_AddFromRepeatPurchase_WithNullPurchaseId_ThrowsException()
+        {
+            $this->ConsumableRequest->addFromRepeatPurchase(null);
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_AddFromRepeatPurchase_WithNegativePurchaseId_ThrowsException()
+        {
+            $this->ConsumableRequest->addFromRepeatPurchase(-1);
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_AddFromRepeatPurchase_WithZeroPurchaseId_ThrowsException()
+        {
+            $this->ConsumableRequest->addFromRepeatPurchase(0);
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_AddFromRepeatPurchase_WithNonNumericPurchaseId_ThrowsException()
+        {
+            $this->ConsumableRequest->addFromRepeatPurchase(0);
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_AddFromRepeatPurchase_WithPurchaseIdOfNonExistantPurchase_ThrowsException()
+        {
+            $this->ConsumableRequest->ConsumableRepeatPurchase = $this->getMockForModel('ConsumableRepeatPurchase', array('find'));
+
+            // Force the find not to return any results
+            $this->ConsumableRequest->ConsumableRepeatPurchase->expects($this->once())
+                                                             ->method('find')
+                                                             ->will($this->returnValue(array()));
+
+            $this->ConsumableRequest->addFromRepeatPurchase(1);
         }
     }
 ?>
