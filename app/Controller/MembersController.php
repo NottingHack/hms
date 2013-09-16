@@ -890,7 +890,7 @@
 			    	$mailingLists = $this->MailingList->getListsAndSubscribeStatus($memberEmail);
 					$this->set('mailingLists', $mailingLists);
 
-		    		$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined, true, true, $showPersonalDetails);
+		    		$sanitisedMemberInfo = $this->Member->sanitiseMemberInfo($rawMemberInfo, $showAdminFeatures, $showFinances, $hasJoined, $showAdminFeatures, true, $showPersonalDetails);
 		    		$formattedMemberInfo = $this->Member->formatMemberInfo($sanitisedMemberInfo, true);
 			    	if($formattedMemberInfo)
 			    	{
