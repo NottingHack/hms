@@ -65,6 +65,58 @@ class AppController extends Controller {
         'AuthUtil',
     );
 
+    private $mainNav = array();
+
+    public function __construct($request = null, $response = null) {
+    	parent::__construct($request, $response);
+
+    	// Add the main nav
+    	$this->AddMainNav('Members', array( 'plugin' => null, 'controller' => 'members', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN));
+    	$this->AddMainNav('Groups', array( 'plugin' => null, 'controller' => 'groups', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN));
+    	$this->AddMainNav('Mailing Lists', array( 'plugin' => null, 'controller' => 'mailinglists', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN));
+    	$this->AddMainNav('MemberVoice', array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ), '');
+
+    }
+
+    public function AddMainNav($title, $link, $access) {
+    	$this->mainNav[] = array(
+    							'title'		=>	$title,
+    							'link'		=>	$link,
+    							'access'	=>	$access,
+    							);
+    }
+
+    public function getMainNav($userId) {
+		Controller::loadModel('Member');
+
+		$navLinks = array();
+
+		foreach ($this->mainNav as $nav) {
+			$allowed = false;
+			if ($nav['access'] == '') {
+				$allowed = true;
+			}
+			elseif (is_array($nav['access'])) {
+				foreach ($nav['access'] as $access) {
+					if ($this->Member->GroupsMember->isMemberInGroup($userId, $access)) {
+						$allowed = true;
+						break;
+					}
+				}
+			}
+			else {
+				if ($this->Member->GroupsMember->isMemberInGroup($userId, $nav['access'])) {
+					$allowed = true;
+				}
+			}
+			if ($allowed) {
+				$navLinks[$nav['title']] = $nav['link'];
+			}
+		}
+
+		return $navLinks;
+    }
+
     public function beforeFilter() {
         $this->Auth->authenticate = array('Hms');
     	$this->Auth->authorize = array('Hms');
@@ -79,17 +131,7 @@ class AppController extends Controller {
         $loggedInMemberId = $this->Member->getIdForMember($this->Auth->user());
         if($loggedInMemberId)
         {
-            $adminLinks = array();
-            if( $this->Member->GroupsMember->isMemberInGroup( $loggedInMemberId, Group::FULL_ACCESS ) || 
-                $this->Member->GroupsMember->isMemberInGroup( $loggedInMemberId, Group::MEMBERSHIP_ADMIN ) )
-            {
-                $adminLinks = array(
-                    'Members' => array( 'plugin' => null, 'controller' => 'members', 'action' => 'index' ),
-                    'Groups' => array( 'plugin' => null, 'controller' => 'groups', 'action' => 'index' ),
-                    'Mailing Lists' => array( 'plugin' => null, 'controller' => 'mailinglists', 'action' => 'index' ),
-                    'MemberVoice' => array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ),
-                );
-            }
+            $adminLinks = $this->getMainNav($loggedInMemberId);
 
             $userMessage = array();
             if( $this->Member->getStatusForMember($loggedInMemberId) == Status::PRE_MEMBER_1 )
