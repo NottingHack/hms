@@ -257,21 +257,97 @@
                     'member_id' => null,
                     'username' => null,
                 ),
-                'ConsumableRequest' => array(
-                    'request_id' => 1,
-                    'title' => 'a',
-                    'detail' => 'a',
-                    'url' => 'a',
-                    'request_status_id' => 1,
-                    'supplier_id' => null,
-                    'area_id' => null,
-                    'repeat_purchase_id' => null,
-                    'member_id' => null,
-                    'timestamp' => '2013-08-31 09:00:00',
-                ),
             );
 
             $this->assertEquals($expectedData, $record);
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_GetAllForRequest_WithNullId_ThrowsException()
+        {
+            $this->ConsumableRequestComment->getAllForRequest(null);
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_GetAllForRequest_WithStringId_ThrowsException()
+        {
+            $this->ConsumableRequestComment->getAllForRequest('invalidId');
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_GetAllForRequest_WithNegativeId_ThrowsException()
+        {
+            $this->ConsumableRequestComment->getAllForRequest(-4);
+        }
+
+        public function test_GetAllForRequest_WithPositiveNumericId_CallsFindWithSameId()
+        {
+            $validId = 1;
+
+
+            $this->ConsumableRequestComment = $this->getMockForModel('ConsumableRequestComment', array('find'));
+
+            $this->ConsumableRequestComment->expects($this->once())
+                                     ->method('find')
+                                     ->with($this->anything(),
+                                            $this->contains(array('ConsumableRequestComment.comment_request_id' => $validId)));
+
+            $this->ConsumableRequestComment->getAllForRequest($validId);
+        }
+
+        public function test_GetAllForRequest_WhenFindReturnsNull_ReturnsEmptyArray()
+        {
+            $validId = 1;
+
+            $this->ConsumableRequestComment = $this->getMockForModel('ConsumableRequestComment', array('find'));
+
+            $this->ConsumableRequestComment->expects($this->once())
+                                     ->method('find')
+                                     ->will($this->returnValue(null));
+
+            $this->assertIdentical(array(), $this->ConsumableRequestComment->getAllForRequest($validId));
+        }
+
+        public function test_GetAllForRequest_WhenFindReturnsRecord_WillReturnFormattedRecord()
+        {
+            $recordFindReturns = array(
+                'ConsumableRequestComment' => array(
+                    'request_comment_id' => 1,
+                    'text' => 'a',
+                    'member_id' => 1,
+                    'timestamp' => '2013-08-31 09:00:00',
+                    'request_id' => 1,
+                ),
+                'Member' => array(
+                    'member_id' => 1,
+                    'username' => 'a',
+                ),
+            );
+
+            $this->ConsumableRequestComment = $this->getMockForModel('ConsumableRequestComment', array('find'));
+            $this->ConsumableRequestComment->expects($this->once())
+                                     ->method('find')
+                                     ->will($this->returnValue($recordFindReturns));
+
+            $expectedResult = array(
+                'request_comment_id' => 1,
+                'text' => 'a',
+                'member_id' => 1,
+                'timestamp' => '2013-08-31 09:00:00',
+                'request_id' => 1,
+                'member' => array(
+                    'member_id' => 1,
+                    'username' => 'a',
+                ),
+            );
+
+            $this->assertEqual($expectedResult, $this->ConsumableRequestComment->getAllForRequest(1));
         }
     }
 ?>

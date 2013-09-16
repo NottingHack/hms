@@ -14,10 +14,6 @@
 		public $primaryKey = 'request_comment_id';			//!< Specify the promary key to use.
 
 		public $belongsTo = array(
-			'ConsumableRequest' => array(
-				'className' => 'ConsumableRequest',
-            	'foreignKey' => 'request_id'
-			),
 			'Member' => array(
 				'className' => 'Member',
             	'foreignKey' => 'member_id',
@@ -75,6 +71,40 @@
 			}
 
 			return (bool)$this->save($data);
+		}
+
+		//! Get all comments for a request
+		/*
+			@param int $requestId The id of the request to retrieve all the comments for.
+			@retval array An array of comment data
+		*/
+		public function getAllForRequest($requestId)
+		{
+			if(!is_numeric($requestId) || 
+				$requestId <= 0)
+			{
+				throw new InvalidArgumentException('$requestId must be numeric and greater than zero');
+			}
+
+			$record = $this->findByCommentRequestId($requestId);
+			if(!is_array($record) || count($record) == 0)
+			{
+				return array();
+			}
+
+			return $this->_formatRecord($record);
+		}
+
+		//! Format a record for use outside of this class
+		/*!
+			@param array $record The data to be formatted.
+			@retval array The formatted data.
+		*/
+		private function _formatRecord($record)
+		{
+			$formattedData = $record['ConsumableRequestComment'];
+			$formattedData['member'] = $record['Member'];
+			return $formattedData;
 		}
 	}
 ?>
