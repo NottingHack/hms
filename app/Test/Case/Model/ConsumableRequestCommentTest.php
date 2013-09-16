@@ -2,7 +2,7 @@
 
     App::uses('ConsumableRequestComment', 'Model');
 
-    class ConsumableRequestCommentUnitTest extends CakeTestCase 
+    class ConsumableRequestCommentTest extends CakeTestCase 
     {
         public $fixtures = array( 'app.ConsumableRequestComment', 'app.ConsumableRepeatPurchase', 'app.ConsumableRequest', 'app.Member' );
 
