@@ -16,10 +16,6 @@
 
 
 		public $belongsTo = array(
-			'ConsumableRequestStatus' => array(
-				'className' => 'ConsumableRequestStatus',
-            	'foreignKey' => 'request_status_id'
-			),
 			'ConsumableSupplier' => array(
 				'className' => 'ConsumableSupplier',
             	'foreignKey' => 'supplier_id'
@@ -32,17 +28,17 @@
 				'className' => 'ConsumableRepeatPurchase',
             	'foreignKey' => 'repeat_purchase_id'
 			),
-			'Member' => array(
-				'className' => 'Member',
-				'foreignKey' => 'member_id',
-				'fields' => array( 'member_id', 'username' ),
-			),
 		);
 
 		public $hasMany = array(
 			'ConsumableRequestComment' => array(
 				'className' => 'ConsumableRequestComment',
             	'foreignKey' => 'request_id'
+			),
+			'ConsumableRequestStatusUpdate' => array(
+				'className' => 'ConsumableRequestStatusUpdate',
+            	'foreignKey' => 'request_id',
+            	'order' => 'ConsumableRequestStatusUpdate.timestamp DESC',
 			),
 		);
 

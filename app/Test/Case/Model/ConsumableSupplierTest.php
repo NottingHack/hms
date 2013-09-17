@@ -2,7 +2,7 @@
 
     App::uses('ConsumableSupplier', 'Model');
 
-    class ConsumableSupplierUnitTest extends CakeTestCase 
+    class ConsumableSupplierTest extends CakeTestCase 
     {
         public $fixtures = array( 'app.ConsumableSupplier' );
 
