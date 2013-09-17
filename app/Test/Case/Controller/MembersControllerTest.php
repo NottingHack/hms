@@ -2443,7 +2443,6 @@
 				'unlockText' => 'Welcome Annabelle',
 				'balance' => '0',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSNOTTSK2R62GQW6',
 				'address' => array(
 					'part1' => '1 Saint Paul\'s Church Yard',
 					'part2' => 'The City',
@@ -2487,7 +2486,6 @@
 				'unlockText' => 'Welcome Annabelle',
 				'balance' => '0',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSNOTTSK2R62GQW6',
 				'address' => array(
 					'part1' => '1 Saint Paul\'s Church Yard',
 					'part2' => 'The City',
@@ -2635,7 +2633,6 @@
 				'unlockText' => 'Welcome Annabelle',
 				'balance' => '0',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSNOTTSK2R62GQW6',
 				'address' => array(
 					'part1' => '1 Saint Paul\'s Church Yard',
 					'part2' => 'The City',
