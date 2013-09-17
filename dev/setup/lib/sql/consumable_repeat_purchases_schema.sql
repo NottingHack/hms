@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS `consumable_repeat_purchases` (
   `max` text NOT NULL,
   `area_id` int(11) NOT NULL,
   PRIMARY KEY (`repeat_purchase_id`)
-) ENGINE=InnoDB DEFAULT ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
