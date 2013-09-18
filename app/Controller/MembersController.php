@@ -839,7 +839,7 @@
 	    						{
 	    							$formattedInfo['lastEmail'] = $lastEmailRecord;
 
-	    							$this->Nav->add('View Email History', 'emailrecords', 'view', array($id));
+	    							$this->Nav->add('View Email History', 'emailRecords', 'view', array($id));
 	    						}
 	    					}
 
