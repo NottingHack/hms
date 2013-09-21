@@ -207,6 +207,32 @@
 			return $formattedRecords;
 		}
 
+		//! Get all the request infomation for requests that are currently set to a certain status
+		/*!
+			@param int $status The id of the status to look for.
+			@retval array An array or request data.
+		*/
+		public function getAllWithStatus($status)
+		{
+			if(!is_numeric($status) || 
+				$status <= 0)
+			{
+				throw new InvalidArgumentException('$id must be numeric and greater than zero');
+			}
+
+			$matchingRecords = array();
+			foreach ($this->getAll() as $record) 
+			{
+				$recordStatus = Hash::get($record, 'currentStatus.request_status_id');
+				if($recordStatus == $status)
+				{
+					array_push($matchingRecords, $record);
+				}
+			}
+			
+			return $matchingRecords;
+		}
+
 		//! Format a record for use outside of this class
 		/*!
 			@param array $record The data to be formatted.
@@ -285,7 +311,7 @@
 			// Get the most recent fulfilled request for the repeat purchase
 			// Have to use this rather beastly join to override the default joins
 			// made with the hasOne/belongsTo associations
-			$request = $this->find('first',
+			$records = $this->find('first',
 				array(
 					'fields' => array(
 						'ConsumableRequest.*',
@@ -309,13 +335,13 @@
 				)
 			);
 
-			if(!$request)
+			if(!$records)
 			{
 				// No results found
 				return null;
 			}
 
-			return $request['ConsumableRequest']['supplier_id'];
+			return $records['ConsumableRequest']['supplier_id'];
 		}
 	}
 ?>

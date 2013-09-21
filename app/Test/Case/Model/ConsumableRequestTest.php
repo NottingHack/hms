@@ -874,7 +874,7 @@
          */
         public function test_Get_WithNegativeId_ThrowsException()
         {
-            $this->ConsumableRequest->get(-4);
+            $this->ConsumableRequest->get(-1);
         }
 
         public function test_Get_WithPositiveNumericId_CallsFindWithSameId()
@@ -1119,6 +1119,135 @@
             );
 
             $this->assertEquals($expectedResult, $this->ConsumableRequest->getAll()[0]);
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_GetAllWithStatus_WithNullId_ThrowsException()
+        {
+            $this->ConsumableRequest->getAllWithStatus(null);
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_GetAllWithStatus_WithStringId_ThrowsException()
+        {
+            $this->ConsumableRequest->getAllWithStatus('invalidId');
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_GetAllWithStatus_WithNegativeId_ThrowsException()
+        {
+            $this->ConsumableRequest->getAllWithStatus(-1);
+        }
+
+        public function test_GetAllWithStatus_WithStatsThatDoesNotMatchRecord_ReturnsEmpotyArray()
+        {
+            $this->assertEquals(array(), $this->ConsumableRequest->getAllWithStatus(1));
+        }
+
+        public function test_GetAllWithStatus_WithStatsThatMatchesRecord_ReturnsFormattedRecordsFromFixture()
+        {
+            $expectedResult = array(
+                'request_id' => 1,
+                'title' => 'a',
+                'detail' => 'a',
+                'url' => 'a',
+                'supplier_id' => null,
+                'area_id' => null,
+                'repeat_purchase_id' => null,
+                'supplier' => array(
+                    'supplier_id' => null,
+                    'name' => null,
+                    'description' => null,
+                    'address' => null,
+                    'url' => null,
+                ),
+                'area' => array(
+                    'area_id' => null,
+                    'name' => null,
+                    'description' => null,
+                ),
+                'repeatPurchase' => array(
+                    'repeat_purchase_id' => null,
+                    'name' => null,
+                    'description' => null,
+                    'min' => null,
+                    'max' => null,
+                    'area_id' => null,
+                ),
+                'comments' => array(
+                    array(
+                        'request_comment_id' => 1,
+                        'text' => 'a',
+                        'member_id' => null,
+                        'timestamp' => '2013-08-31 09:00:00',
+                        'request_id' => 1,
+                        'member_username' => null,
+                    ),
+                    array(
+                        'request_comment_id' => 2,
+                        'text' => 'b',
+                        'member_id' => 1,
+                        'timestamp' => '2013-08-31 10:00:00',
+                        'request_id' => 1,
+                        'member_username' => 'strippingdemonic',
+                    ),
+                ),
+                'firstStatus' => array(
+                    'request_status_update_id' => 1,
+                    'request_id' => 1,
+                    'request_status_id' => 1,
+                    'member_id' => 1,
+                    'timestamp' => '2013-08-31 09:00:00',
+                    'request_status_name' => 'Pending',
+                    'member_username' => 'strippingdemonic',
+                ),
+                'currentStatus' => array(
+                    'request_status_update_id' => 3,
+                    'request_id' => 1,
+                    'request_status_id' => 3,
+                    'member_id' => 2,
+                    'timestamp' => '2013-08-31 11:00:00',
+                    'request_status_name' => 'Rejected',
+                    'member_username' => 'pecanpaella',
+                ),
+                'statuses' => array(
+                    array(
+                        'request_status_update_id' => 3,
+                        'request_id' => 1,
+                        'request_status_id' => 3,
+                        'member_id' => 2,
+                        'timestamp' => '2013-08-31 11:00:00',
+                        'request_status_name' => 'Rejected',
+                        'member_username' => 'pecanpaella',
+                    ),
+                    array(
+                        'request_status_update_id' => 2,
+                        'request_id' => 1,
+                        'request_status_id' => 2,
+                        'member_id' => 2,
+                        'timestamp' => '2013-08-31 10:00:00',
+                        'request_status_name' => 'Approved',
+                        'member_username' => 'pecanpaella',
+                    ),
+                    array(
+                        'request_status_update_id' => 1,
+                        'request_id' => 1,
+                        'request_status_id' => 1,
+                        'member_id' => 1,
+                        'timestamp' => '2013-08-31 09:00:00',
+                        'request_status_name' => 'Pending',
+                        'member_username' => 'strippingdemonic',
+                    ),
+                ),
+            );
+
+            $this->assertEquals($expectedResult, $this->ConsumableRequest->getAllWithStatus(3)[0]);
         }
     }
 ?>
