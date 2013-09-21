@@ -60,14 +60,6 @@
 	            	'allowEmpty' => false,
 	            )
 	        ),
-	        'request_status_id' => array(
-	            'number' => array(
-	            	'rule' => array('naturalNumber', false),
-	        		'message' => 'Request must have a valid status',
-	            	'required' => true,
-	            	'allowEmpty' => false,
-	            )
-	        ),
 	        'request_id' => array(
 	        	'number' => array(
 	        		'rule' => array('naturalNumber', false),
@@ -92,31 +84,24 @@
 	        		'allowEmpty' => true,
 	        	),
 	        ),
-	        'member_id' => array(
-	        	'number' => array(
-	        		'rule' => array('naturalNumber', false),
-	        		'message' => 'Member must be valid',
-	        		'required' => false,
-	        		'allowEmpty' => true,
-	        	),
-	        ),
 	    );
 
 		//! Add a new request
 		/*!
 			@param array $data An array of data to create the request.
-			@param mixed $memberId Either the id of the adding the request, or null if annon request.
+			@param mixed $memberId Either the id of the adding the request, or null if anon request.
 			@retval bool True if record was created successfully, false otherwise.
 		*/
 		public function add($data, $memberId)
 		{
-			// The status of a request being added must be 'Pending'
-			if(	is_array($data) && 
-				array_key_exists('ConsumableRequest', $data) &&
-				is_array($data['ConsumableRequest']) )
+			// If memberId is not null, it must be a positive integer
+			if(!is_null($memberId))
 			{
-				$data['ConsumableRequest']['request_status_id'] = ConsumableRequestStatus::PENDING;
-				$data['ConsumableRequest']['member_id'] = $memberId;
+				$memberIdIsValid = is_integer($memberId) && $memberId > 0;
+				if(!$memberIdIsValid)
+				{
+					throw new InvalidArgumentException('$memberId must be a greater-than-zero integer');
+				}
 			}
 			
 			$this->create($data);
@@ -125,7 +110,24 @@
 				throw new InvalidArgumentException('Information in $data did not correspond with validation rules');
 			}
 
-			return (bool)$this->save($data);
+			// Start a transaction, so we can roll all this back
+			// if we can't create the status update (for some reason)
+			$dataSource = $this->getDataSource();
+			$dataSource->begin();
+
+			if($this->save($data))
+			{
+				$requestId = $this->id;
+				// The status of a request being added must be 'Pending'
+				if($this->ConsumableRequestStatusUpdate->add($requestId, ConsumableRequestStatus::PENDING, $memberId))
+				{					
+					$dataSource->commit();
+					return true;
+				}
+			}
+
+			$dataSource->rollback();
+			return false;
 		}
 
 		//! Add a new request from a repeat purchase
@@ -153,7 +155,7 @@
 					'title' => $repeatPurchaseRecord['ConsumableRepeatPurchase']['name'],
 					'detail' => $this->_getRequestDetailFromRepeatPurchaseData($repeatPurchaseRecord),
 					'url' => null,
-					'supplier_id' => $this->_getLsatSupplierForRepeatPurchase($repeatPurchaseId),
+					'supplier_id' => $this->_getLastSupplierForRepeatPurchase($repeatPurchaseId),
 					'area_id' => $repeatPurchaseRecord['ConsumableRepeatPurchase']['area_id'],
 					'repeat_purchase_id' => $repeatPurchaseId,
 				),
@@ -175,7 +177,14 @@
 				throw new InvalidArgumentException('$id must be numeric and greater than zero');
 			}
 
-			$record = $this->findByRequestId($id);
+			$record = $this->find('first',
+				array(
+					'conditions' => array(
+						'ConsumableRequest.request_id' => $id
+					),
+					'recursive' => 2,
+				)
+			);
 			if(!is_array($record) || count($record) == 0)
 			{
 				return array();
@@ -191,7 +200,7 @@
 		public function getAll()
 		{
 			$formattedRecords = array();
-			foreach ($this->find('all') as $index => $record) 
+			foreach ($this->find('all', array('recursive' => 2)) as $index => $record) 
 			{
 				array_push($formattedRecords, $this->_formatRecord($record));
 			}
@@ -206,13 +215,49 @@
 		private function _formatRecord($record)
 		{
 			$formattedData = $record['ConsumableRequest'];
-
-			$formattedData['status'] = $record['ConsumableRequestStatus'];
 			$formattedData['supplier'] = $record['ConsumableSupplier'];
 			$formattedData['area'] = $record['ConsumableArea'];
 			$formattedData['repeatPurchase'] = $record['ConsumableRepeatPurchase'];
-			$formattedData['member'] = $record['Member'];
-			$formattedData['comments'] = $record['ConsumableRequestComment'];
+
+			$formattedComments = array();
+			foreach ($record['ConsumableRequestComment'] as $comment)
+			{
+				$comment['member_username'] = Hash::get($comment, 'Member.username');
+				unset($comment['Member']);
+				array_push($formattedComments, $comment);
+			}
+			$formattedData['comments'] = $formattedComments;
+			
+			$formattedStatuses = array();
+			$firstStatus = array();
+			$currentStatus = array();
+
+			$statusUpdates = $record['ConsumableRequestStatusUpdate'];
+			$numStatuses = count($statusUpdates);
+			for($i = 0; $i < $numStatuses; $i++)
+			{
+				$rawStatus = $statusUpdates[$i];
+				$formattedStatus = $rawStatus;
+				$formattedStatus['request_status_name'] = Hash::get($rawStatus, 'ConsumableRequestStatus.name');
+				$formattedStatus['member_username'] = Hash::get($rawStatus, 'Member.username');
+				unset($formattedStatus['ConsumableRequestStatus']);
+				unset($formattedStatus['Member']);
+
+				array_push($formattedStatuses, $formattedStatus);
+				if($i == 0)
+				{
+					$currentStatus = $formattedStatus;
+				}
+
+				if($i == $numStatuses - 1)
+				{
+					$firstStatus = $formattedStatus;
+				}
+			}
+			$formattedData['statuses'] = $formattedStatuses;
+			$formattedData['firstStatus'] = $firstStatus;
+			$formattedData['currentStatus'] = $currentStatus;
+
 			return $formattedData;
 		}
 
@@ -235,18 +280,35 @@
 			@oaram int $id The id of the repeat purchase.
 			@retval mixed Either the id of a request, or null of none found.
 		*/
-		private function _getLsatSupplierForRepeatPurchase($id)
+		private function _getLastSupplierForRepeatPurchase($id)
 		{			
 			// Get the most recent fulfilled request for the repeat purchase
+			// Have to use this rather beastly join to override the default joins
+			// made with the hasOne/belongsTo associations
 			$request = $this->find('first',
 				array(
+					'fields' => array(
+						'ConsumableRequest.*',
+						'CurrentStatus.*',
+					),
+					'joins' => array(
+						array(
+							'table' => 'consumable_request_status_updates',
+							'alias' => 'CurrentStatus',
+							'type' => 'INNER',
+							'conditions'=> array(
+								'CurrentStatus.request_id = ConsumableRequest.request_id',
+							),
+						),
+					),
 					'conditions' => array( 
 						'ConsumableRequest.repeat_purchase_id' => $id,
-						'ConsumableRequest.request_status_id' => ConsumableRequestStatus::FULFILLED,
+						'CurrentStatus.request_status_id' => ConsumableRequestStatus::FULFILLED,
 					),
-					'order' => array( 'ConsumableRequest.timestamp' => 'desc' ),
+					'order' => 'CurrentStatus.timestamp DESC',
 				)
 			);
+
 			if(!$request)
 			{
 				// No results found

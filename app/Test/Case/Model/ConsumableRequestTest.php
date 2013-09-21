@@ -11,6 +11,7 @@
             'app.ConsumableArea',
             'app.ConsumableRepeatPurchase',
             'app.ConsumableRequestComment',
+            'app.ConsumableRequestStatusUpdate',
             'app.Member',
         );
 
@@ -319,11 +320,9 @@
                     'title' => 'a',
                     'detail' => 'a',
                     'url' => 'a',
-                    'request_status_id' => 1,
                     'request_id' => 1,
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
@@ -352,11 +351,9 @@
                 'ConsumableRequest' => array(
                     'title' => 'a',
                     'detail' => 'a',
-                    'request_status_id' => 1,
                     'request_id' => 1,
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'member_id' => null,
                 ),
             );
             
@@ -386,10 +383,8 @@
                     'title' => 'a',
                     'detail' => 'a',
                     'url' => 'a',
-                    'request_status_id' => 1,
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
@@ -419,10 +414,8 @@
                     'title' => 'a',
                     'detail' => 'a',
                     'url' => 'a',
-                    'request_status_id' => 1,
                     'request_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
@@ -451,10 +444,8 @@
                     'title' => 'a',
                     'detail' => 'a',
                     'url' => 'a',
-                    'request_status_id' => 1,
                     'request_id' => 1,
                     'area_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
@@ -483,10 +474,8 @@
                     'title' => 'a',
                     'detail' => 'a',
                     'url' => 'a',
-                    'request_status_id' => 1,
                     'request_id' => 1,
                     'area_id' => 1,
-                    'member_id' => 1,
                 ),
             );
 
@@ -515,11 +504,9 @@
                     'title' => 'a',
                     'detail' => 'a',
                     'url' => 'a',
-                    'request_status_id' => 1,
                     'request_id' => 1,
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'member_id' => null,
                 ),
             );
 
@@ -533,7 +520,6 @@
                     'title' => 'a',
                     'detail' => 'a',
                     'url' => 'a',
-                    'request_status_id' => 2,
                     'request_id' => 1,
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
@@ -587,6 +573,30 @@
             $this->assertFalse($this->ConsumableRequest->add($validData, null));
         }
 
+        public function test_Add_WithRequestStatusUpdateSaveFailing_ReturnsFalse()
+        {
+            $validData  = array(
+                'ConsumableRequest' => array(
+                    'title' => 'a',
+                    'detail' => 'a',
+                    'url' => 'a',
+                    'request_id' => 1,
+                    'area_id' => 1,
+                    'repeat_purchase_id' => 1,
+                ),
+            );
+
+            $statusUpdateMock = $this->getMockForModel('ConsumableRequestStatusUpdate', array('save'));
+
+            $statusUpdateMock->expects($this->once())
+                             ->method('save')
+                             ->will($this->returnValue(false));
+
+            $this->ConsumableRequest->ConsumableRequestStatusUpdate = $statusUpdateMock;
+
+            $this->assertFalse($this->ConsumableRequest->add($validData, null));
+        }
+
         public function test_Add_WithValidData_CorrectlyCreatesRecord()
         {
             $inputData = array(
@@ -615,13 +625,6 @@
                     'supplier_id' => 1,
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'request_status_id' => 1,
-                    'member_id' => null,
-                    'timestamp' => '0000-00-00 00:00:00',
-                ),
-                'ConsumableRequestStatus' => array(
-                    'request_status_id' => 1,
-                    'name' => 'Pending',
                 ),
                 'ConsumableSupplier' => array(
                     'supplier_id' => 1,
@@ -645,13 +648,108 @@
                 ),
                 'ConsumableRequestComment' => array(
                 ),
-                'Member' => array(
-                    'member_id' => null,
-                    'username' => null,
+                'ConsumableRequestStatusUpdate' => array(
+                    array(
+                        'request_status_update_id' => 5,
+                        'request_id' => $this->ConsumableRequest->id,
+                        'request_status_id' => 1,
+                        'member_id' => null,
+                        'timestamp' => '0000-00-00 00:00:00',
+                    ),
                 ),
             );
 
             $this->assertEquals($expectedData, $record);
+        }
+
+        public function test_Add_WithValidDataAndNonNullMemberId_CorrectlyCreatesRecord()
+        {
+            $inputData = array(
+                'ConsumableRequest' => array(
+                    'title' => 'a',
+                    'detail' => 'a',
+                    'url' => 'a',
+                    'supplier_id' => 1,
+                    'area_id' => 1,
+                    'repeat_purchase_id' => 1,
+                ),
+            );
+
+            $prevCount = $this->ConsumableRequest->find('count');
+            $this->ConsumableRequest->add($inputData, 1);
+            $this->assertGreaterThan($prevCount, $this->ConsumableRequest->find('count'));
+
+            $record = $this->ConsumableRequest->findByRequestId($this->ConsumableRequest->id);
+
+            $expectedData = array(
+                'ConsumableRequest' => array(
+                    'request_id' => $this->ConsumableRequest->id,
+                    'title' => 'a',
+                    'detail' => 'a',
+                    'url' => 'a',
+                    'supplier_id' => 1,
+                    'area_id' => 1,
+                    'repeat_purchase_id' => 1,
+                ),
+                'ConsumableSupplier' => array(
+                    'supplier_id' => 1,
+                    'name' => 'a',
+                    'description' => 'a',
+                    'address' => 'a',
+                    'url' => 'a',
+                ),
+                'ConsumableArea' => array(
+                    'area_id' => 1,
+                    'name' => 'a',
+                    'description' => 'a',
+                ),
+                'ConsumableRepeatPurchase' => array(
+                    'repeat_purchase_id' => 1,
+                    'name' => 'a',
+                    'description' => 'a',
+                    'min' => '1',
+                    'max' => '10',
+                    'area_id' => '1',
+                ),
+                'ConsumableRequestComment' => array(
+                ),
+                'ConsumableRequestStatusUpdate' => array(
+                    array(
+                        'request_status_update_id' => 5,
+                        'request_id' => $this->ConsumableRequest->id,
+                        'request_status_id' => 1,
+                        'member_id' => 1,
+                        'timestamp' => '0000-00-00 00:00:00',
+                    ),
+                ),
+            );
+
+            $this->assertEquals($expectedData, $record);
+        }
+
+        public function test_Add_WithRequestStatusUpdateSaveFailing_DoesNotCreateRecord()
+        {
+            $inputData = array(
+                'ConsumableRequest' => array(
+                    'title' => 'a',
+                    'detail' => 'a',
+                    'url' => 'a',
+                    'supplier_id' => 1,
+                    'area_id' => 1,
+                    'repeat_purchase_id' => 1,
+                ),
+            );
+
+            $statusUpdateMock = $this->getMockForModel('ConsumableRequestStatusUpdate', array('save'));
+
+            $statusUpdateMock->expects($this->once())
+                             ->method('save')
+                             ->will($this->returnValue(false));
+
+            $this->ConsumableRequest->ConsumableRequestStatusUpdate = $statusUpdateMock;
+            $numRecords = $this->ConsumableRequest->find('count');
+            $this->ConsumableRequest->add($inputData, null);
+            $this->assertEquals($numRecords, $this->ConsumableRequest->find('count'));
         }
 
         /**
@@ -718,13 +816,6 @@
                     'supplier_id' => 1,
                     'area_id' => 1,
                     'repeat_purchase_id' => 1,
-                    'request_status_id' => 1,
-                    'member_id' => null,
-                    'timestamp' => '0000-00-00 00:00:00',
-                ),
-                'ConsumableRequestStatus' => array(
-                    'request_status_id' => 1,
-                    'name' => 'Pending',
                 ),
                 'ConsumableSupplier' => array(
                     'supplier_id' => 1,
@@ -748,9 +839,14 @@
                 ),
                 'ConsumableRequestComment' => array(
                 ),
-                'Member' => array(
-                    'member_id' => null,
-                    'username' => null,
+                'ConsumableRequestStatusUpdate' => array(
+                    array(
+                        'request_status_update_id' => 5,
+                        'request_id' => $this->ConsumableRequest->id,
+                        'request_status_id' => 1,
+                        'member_id' => null,
+                        'timestamp' => '0000-00-00 00:00:00',
+                    ),
                 ),
             );
 
@@ -809,132 +905,6 @@
             $this->assertIdentical(array(), $this->ConsumableRequest->get($validId));
         }
 
-        public function test_Get_WhenFindReturnsRecord_WillReturnFormattedRecord()
-        {
-            $recordFindReturns = array(
-                'ConsumableRequest' => array(
-                    'request_id' => 1,
-                    'title' => 'a',
-                    'detail' => 'a',
-                    'url' => null,
-                    'supplier_id' => 1,
-                    'area_id' => 1,
-                    'repeat_purchase_id' => 1,
-                    'request_status_id' => 1,
-                    'member_id' => null,
-                    'timestamp' => '0000-00-00 00:00:00',
-                ),
-                'ConsumableRequestStatus' => array(
-                    'request_status_id' => 1,
-                    'name' => 'Pending',
-                ),
-                'ConsumableSupplier' => array(
-                    'supplier_id' => 1,
-                    'name' => 'a',
-                    'description' => 'a',
-                    'address' => 'a',
-                    'url' => 'a',
-                ),
-                'ConsumableArea' => array(
-                    'area_id' => 1,
-                    'name' => 'a',
-                    'description' => 'a',
-                ),
-                'ConsumableRepeatPurchase' => array(
-                    'repeat_purchase_id' => 1,
-                    'name' => 'a',
-                    'description' => 'a',
-                    'min' => '1',
-                    'max' => '10',
-                    'area_id' => '1',
-                ),
-                'ConsumableRequestComment' => array(
-                    array(
-                        'request_comment_id' => 1,
-                        'text' => 'a',
-                        'member_id' => 1,
-                        'timestamp' => '0000-00-00 00:00:00',
-                        'request_id' => 1,
-                    ),
-                    array(
-                        'request_comment_id' => 2,
-                        'text' => 'b',
-                        'member_id' => 2,
-                        'timestamp' => '0000-00-00 00:00:00',
-                        'request_id' => 1,
-                    ),
-                ),
-                'Member' => array(
-                    'member_id' => 1,
-                    'username' => 'a',
-                ),
-            );
-
-            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('find'));
-            $this->ConsumableRequest->expects($this->once())
-                                     ->method('find')
-                                     ->will($this->returnValue($recordFindReturns));
-
-            $expectedResult = array(
-                'request_id' => 1,
-                'title' => 'a',
-                'detail' => 'a',
-                'url' => null,
-                'supplier_id' => 1,
-                'area_id' => 1,
-                'repeat_purchase_id' => 1,
-                'request_status_id' => 1,
-                'member_id' => null,
-                'timestamp' => '0000-00-00 00:00:00',
-                'status' => array(
-                    'request_status_id' => 1,
-                    'name' => 'Pending',
-                ),
-                'supplier' => array(
-                    'supplier_id' => 1,
-                    'name' => 'a',
-                    'description' => 'a',
-                    'address' => 'a',
-                    'url' => 'a',
-                ),
-                'area' => array(
-                    'area_id' => 1,
-                    'name' => 'a',
-                    'description' => 'a',
-                ),
-                'repeatPurchase' => array(
-                    'repeat_purchase_id' => 1,
-                    'name' => 'a',
-                    'description' => 'a',
-                    'min' => '1',
-                    'max' => '10',
-                    'area_id' => '1',
-                ),
-                'comments' => array(
-                    array(
-                        'request_comment_id' => 1,
-                        'text' => 'a',
-                        'member_id' => 1,
-                        'timestamp' => '0000-00-00 00:00:00',
-                        'request_id' => 1,
-                    ),
-                    array(
-                        'request_comment_id' => 2,
-                        'text' => 'b',
-                        'member_id' => 2,
-                        'timestamp' => '0000-00-00 00:00:00',
-                        'request_id' => 1,
-                    ),
-                ),
-                'member' => array(
-                    'member_id' => 1,
-                    'username' => 'a',
-                ),
-            );
-
-            $this->assertEqual($expectedResult, $this->ConsumableRequest->get(1));
-        }
-
         public function test_Get_WithIdOfExistingRecord_CorrectlyRetrievesRecordFromFixture()
         {
             $expectedResult = array(
@@ -945,13 +915,6 @@
                 'supplier_id' => null,
                 'area_id' => null,
                 'repeat_purchase_id' => null,
-                'request_status_id' => 1,
-                'member_id' => null,
-                'timestamp' => '2013-08-31 09:00:00',
-                'status' => array(
-                    'request_status_id' => 1,
-                    'name' => 'Pending',
-                ),
                 'supplier' => array(
                     'supplier_id' => null,
                     'name' => null,
@@ -979,6 +942,7 @@
                         'member_id' => null,
                         'timestamp' => '2013-08-31 09:00:00',
                         'request_id' => 1,
+                        'member_username' => null,
                     ),
                     array(
                         'request_comment_id' => 2,
@@ -986,11 +950,55 @@
                         'member_id' => 1,
                         'timestamp' => '2013-08-31 10:00:00',
                         'request_id' => 1,
+                        'member_username' => 'strippingdemonic',
                     ),
                 ),
-                'member' => array(
-                    'member_id' => null,
-                    'username' => null,
+                'firstStatus' => array(
+                    'request_status_update_id' => 1,
+                    'request_id' => 1,
+                    'request_status_id' => 1,
+                    'member_id' => 1,
+                    'timestamp' => '2013-08-31 09:00:00',
+                    'request_status_name' => 'Pending',
+                    'member_username' => 'strippingdemonic',
+                ),
+                'currentStatus' => array(
+                    'request_status_update_id' => 3,
+                    'request_id' => 1,
+                    'request_status_id' => 3,
+                    'member_id' => 2,
+                    'timestamp' => '2013-08-31 11:00:00',
+                    'request_status_name' => 'Rejected',
+                    'member_username' => 'pecanpaella',
+                ),
+                'statuses' => array(
+                    array(
+                        'request_status_update_id' => 3,
+                        'request_id' => 1,
+                        'request_status_id' => 3,
+                        'member_id' => 2,
+                        'timestamp' => '2013-08-31 11:00:00',
+                        'request_status_name' => 'Rejected',
+                        'member_username' => 'pecanpaella',
+                    ),
+                    array(
+                        'request_status_update_id' => 2,
+                        'request_id' => 1,
+                        'request_status_id' => 2,
+                        'member_id' => 2,
+                        'timestamp' => '2013-08-31 10:00:00',
+                        'request_status_name' => 'Approved',
+                        'member_username' => 'pecanpaella',
+                    ),
+                    array(
+                        'request_status_update_id' => 1,
+                        'request_id' => 1,
+                        'request_status_id' => 1,
+                        'member_id' => 1,
+                        'timestamp' => '2013-08-31 09:00:00',
+                        'request_status_name' => 'Pending',
+                        'member_username' => 'strippingdemonic',
+                    ),
                 ),
             );
 
@@ -1013,380 +1021,6 @@
             $this->assertEqual(array(), $this->ConsumableRequest->getAll());
         }
 
-        public function test_GetAll_WhenFindReturnsSingleRecord_WillReturnSingleFormattedRecord()
-        {
-            $recordFindReturns = array(
-                array(
-                    'ConsumableRequest' => array(
-                        'request_id' => 1,
-                        'title' => 'a',
-                        'detail' => 'a',
-                        'url' => null,
-                        'supplier_id' => 1,
-                        'area_id' => 1,
-                        'repeat_purchase_id' => 1,
-                        'request_status_id' => 1,
-                        'member_id' => null,
-                        'timestamp' => '0000-00-00 00:00:00',
-                    ),
-                    'ConsumableRequestStatus' => array(
-                        'request_status_id' => 1,
-                        'name' => 'Pending',
-                    ),
-                    'ConsumableSupplier' => array(
-                        'supplier_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'address' => 'a',
-                        'url' => 'a',
-                    ),
-                    'ConsumableArea' => array(
-                        'area_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                    ),
-                    'ConsumableRepeatPurchase' => array(
-                        'repeat_purchase_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'min' => '1',
-                        'max' => '10',
-                        'area_id' => '1',
-                    ),
-                    'ConsumableRequestComment' => array(
-                        array(
-                            'request_comment_id' => 1,
-                            'text' => 'a',
-                            'member_id' => 1,
-                            'timestamp' => '0000-00-00 00:00:00',
-                            'request_id' => 1,
-                        ),
-                        array(
-                            'request_comment_id' => 2,
-                            'text' => 'b',
-                            'member_id' => 2,
-                            'timestamp' => '0000-00-00 00:00:00',
-                            'request_id' => 1,
-                        ),
-                    ),
-                    'Member' => array(
-                        'member_id' => 1,
-                        'username' => 'a',
-                    ),
-                )
-            );
-
-            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('find'));
-            $this->ConsumableRequest->expects($this->once())
-                                     ->method('find')
-                                     ->will($this->returnValue($recordFindReturns));
-
-            $expectedResult = array(
-                array(
-                    'request_id' => 1,
-                    'title' => 'a',
-                    'detail' => 'a',
-                    'url' => null,
-                    'supplier_id' => 1,
-                    'area_id' => 1,
-                    'repeat_purchase_id' => 1,
-                    'request_status_id' => 1,
-                    'member_id' => null,
-                    'timestamp' => '0000-00-00 00:00:00',
-                    'status' => array(
-                        'request_status_id' => 1,
-                        'name' => 'Pending',
-                    ),
-                    'supplier' => array(
-                        'supplier_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'address' => 'a',
-                        'url' => 'a',
-                    ),
-                    'area' => array(
-                        'area_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                    ),
-                    'repeatPurchase' => array(
-                        'repeat_purchase_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'min' => '1',
-                        'max' => '10',
-                        'area_id' => '1',
-                    ),
-                    'comments' => array(
-                        array(
-                            'request_comment_id' => 1,
-                            'text' => 'a',
-                            'member_id' => 1,
-                            'timestamp' => '0000-00-00 00:00:00',
-                            'request_id' => 1,
-                        ),
-                        array(
-                            'request_comment_id' => 2,
-                            'text' => 'b',
-                            'member_id' => 2,
-                            'timestamp' => '0000-00-00 00:00:00',
-                            'request_id' => 1,
-                        ),
-                    ),
-                    'member' => array(
-                        'member_id' => 1,
-                        'username' => 'a',
-                    ),
-                )
-            );
-
-            $this->assertEqual($expectedResult, $this->ConsumableRequest->getAll());
-        }
-
-        public function test_GetAll_WhenFindReturnsMultipleRecords_WillReturnMultipleFormattedRecords()
-        {
-            $recordFindReturns = array(
-                array(
-                    'ConsumableRequest' => array(
-                        'request_id' => 1,
-                        'title' => 'a',
-                        'detail' => 'a',
-                        'url' => null,
-                        'supplier_id' => 1,
-                        'area_id' => 1,
-                        'repeat_purchase_id' => 1,
-                        'request_status_id' => 1,
-                        'member_id' => null,
-                        'timestamp' => '0000-00-00 00:00:00',
-                    ),
-                    'ConsumableRequestStatus' => array(
-                        'request_status_id' => 1,
-                        'name' => 'Pending',
-                    ),
-                    'ConsumableSupplier' => array(
-                        'supplier_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'address' => 'a',
-                        'url' => 'a',
-                    ),
-                    'ConsumableArea' => array(
-                        'area_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                    ),
-                    'ConsumableRepeatPurchase' => array(
-                        'repeat_purchase_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'min' => '1',
-                        'max' => '10',
-                        'area_id' => '1',
-                    ),
-                    'ConsumableRequestComment' => array(
-                        array(
-                            'request_comment_id' => 1,
-                            'text' => 'a',
-                            'member_id' => 1,
-                            'timestamp' => '0000-00-00 00:00:00',
-                            'request_id' => 1,
-                        ),
-                        array(
-                            'request_comment_id' => 2,
-                            'text' => 'b',
-                            'member_id' => 2,
-                            'timestamp' => '0000-00-00 00:00:00',
-                            'request_id' => 1,
-                        ),
-                    ),
-                    'Member' => array(
-                        'member_id' => 1,
-                        'username' => 'a',
-                    ),
-                ),
-                array(
-                    'ConsumableRequest' => array(
-                        'request_id' => 2,
-                        'title' => 'b',
-                        'detail' => 'b',
-                        'url' => null,
-                        'supplier_id' => 1,
-                        'area_id' => 1,
-                        'repeat_purchase_id' => 1,
-                        'request_status_id' => 1,
-                        'member_id' => null,
-                        'timestamp' => '0000-00-00 00:00:00',
-                    ),
-                    'ConsumableRequestStatus' => array(
-                        'request_status_id' => 1,
-                        'name' => 'Pending',
-                    ),
-                    'ConsumableSupplier' => array(
-                        'supplier_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'address' => 'a',
-                        'url' => 'a',
-                    ),
-                    'ConsumableArea' => array(
-                        'area_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                    ),
-                    'ConsumableRepeatPurchase' => array(
-                        'repeat_purchase_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'min' => '1',
-                        'max' => '10',
-                        'area_id' => '1',
-                    ),
-                    'ConsumableRequestComment' => array(
-                        array(
-                            'request_comment_id' => 1,
-                            'text' => 'a',
-                            'member_id' => 1,
-                            'timestamp' => '0000-00-00 00:00:00',
-                            'request_id' => 2,
-                        ),
-                        array(
-                            'request_comment_id' => 2,
-                            'text' => 'b',
-                            'member_id' => 2,
-                            'timestamp' => '0000-00-00 00:00:00',
-                            'request_id' => 2,
-                        ),
-                    ),
-                    'Member' => array(
-                        'member_id' => 1,
-                        'username' => 'a',
-                    ),
-                ),
-            );
-
-            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('find'));
-            $this->ConsumableRequest->expects($this->once())
-                                     ->method('find')
-                                     ->will($this->returnValue($recordFindReturns));
-
-            $expectedResult = array(
-                array(
-                    'request_id' => 1,
-                    'title' => 'a',
-                    'detail' => 'a',
-                    'url' => null,
-                    'supplier_id' => 1,
-                    'area_id' => 1,
-                    'repeat_purchase_id' => 1,
-                    'request_status_id' => 1,
-                    'member_id' => null,
-                    'timestamp' => '0000-00-00 00:00:00',
-                    'status' => array(
-                        'request_status_id' => 1,
-                        'name' => 'Pending',
-                    ),
-                    'supplier' => array(
-                        'supplier_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'address' => 'a',
-                        'url' => 'a',
-                    ),
-                    'area' => array(
-                        'area_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                    ),
-                    'repeatPurchase' => array(
-                        'repeat_purchase_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'min' => '1',
-                        'max' => '10',
-                        'area_id' => '1',
-                    ),
-                    'comments' => array(
-                        array(
-                            'request_comment_id' => 1,
-                            'text' => 'a',
-                            'member_id' => 1,
-                            'timestamp' => '0000-00-00 00:00:00',
-                            'request_id' => 1,
-                        ),
-                        array(
-                            'request_comment_id' => 2,
-                            'text' => 'b',
-                            'member_id' => 2,
-                            'timestamp' => '0000-00-00 00:00:00',
-                            'request_id' => 1,
-                        ),
-                    ),
-                    'member' => array(
-                        'member_id' => 1,
-                        'username' => 'a',
-                    ),
-                ),
-                array(
-                    'request_id' => 2,
-                    'title' => 'b',
-                    'detail' => 'b',
-                    'url' => null,
-                    'supplier_id' => 1,
-                    'area_id' => 1,
-                    'repeat_purchase_id' => 1,
-                    'request_status_id' => 1,
-                    'member_id' => null,
-                    'timestamp' => '0000-00-00 00:00:00',
-                    'status' => array(
-                        'request_status_id' => 1,
-                        'name' => 'Pending',
-                    ),
-                    'supplier' => array(
-                        'supplier_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'address' => 'a',
-                        'url' => 'a',
-                    ),
-                    'area' => array(
-                        'area_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                    ),
-                    'repeatPurchase' => array(
-                        'repeat_purchase_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'min' => '1',
-                        'max' => '10',
-                        'area_id' => '1',
-                    ),
-                    'comments' => array(
-                        array(
-                            'request_comment_id' => 1,
-                            'text' => 'a',
-                            'member_id' => 1,
-                            'timestamp' => '0000-00-00 00:00:00',
-                            'request_id' => 2,
-                        ),
-                        array(
-                            'request_comment_id' => 2,
-                            'text' => 'b',
-                            'member_id' => 2,
-                            'timestamp' => '0000-00-00 00:00:00',
-                            'request_id' => 2,
-                        ),
-                    ),
-                    'member' => array(
-                        'member_id' => 1,
-                        'username' => 'a',
-                    ),
-                )
-            );
-
-            $this->assertEqual($expectedResult, $this->ConsumableRequest->getAll());
-        }
-
         public function test_GetAll_WhenCalled_ReturnsFormattedRecordsFromFixture()
         {
             $expectedResult = array(
@@ -1397,13 +1031,6 @@
                 'supplier_id' => null,
                 'area_id' => null,
                 'repeat_purchase_id' => null,
-                'request_status_id' => 1,
-                'member_id' => null,
-                'timestamp' => '2013-08-31 09:00:00',
-                'status' => array(
-                    'request_status_id' => 1,
-                    'name' => 'Pending',
-                ),
                 'supplier' => array(
                     'supplier_id' => null,
                     'name' => null,
@@ -1431,6 +1058,7 @@
                         'member_id' => null,
                         'timestamp' => '2013-08-31 09:00:00',
                         'request_id' => 1,
+                        'member_username' => null,
                     ),
                     array(
                         'request_comment_id' => 2,
@@ -1438,11 +1066,55 @@
                         'member_id' => 1,
                         'timestamp' => '2013-08-31 10:00:00',
                         'request_id' => 1,
+                        'member_username' => 'strippingdemonic',
                     ),
                 ),
-                'member' => array(
-                    'member_id' => null,
-                    'username' => null,
+                'firstStatus' => array(
+                    'request_status_update_id' => 1,
+                    'request_id' => 1,
+                    'request_status_id' => 1,
+                    'member_id' => 1,
+                    'timestamp' => '2013-08-31 09:00:00',
+                    'request_status_name' => 'Pending',
+                    'member_username' => 'strippingdemonic',
+                ),
+                'currentStatus' => array(
+                    'request_status_update_id' => 3,
+                    'request_id' => 1,
+                    'request_status_id' => 3,
+                    'member_id' => 2,
+                    'timestamp' => '2013-08-31 11:00:00',
+                    'request_status_name' => 'Rejected',
+                    'member_username' => 'pecanpaella',
+                ),
+                'statuses' => array(
+                    array(
+                        'request_status_update_id' => 3,
+                        'request_id' => 1,
+                        'request_status_id' => 3,
+                        'member_id' => 2,
+                        'timestamp' => '2013-08-31 11:00:00',
+                        'request_status_name' => 'Rejected',
+                        'member_username' => 'pecanpaella',
+                    ),
+                    array(
+                        'request_status_update_id' => 2,
+                        'request_id' => 1,
+                        'request_status_id' => 2,
+                        'member_id' => 2,
+                        'timestamp' => '2013-08-31 10:00:00',
+                        'request_status_name' => 'Approved',
+                        'member_username' => 'pecanpaella',
+                    ),
+                    array(
+                        'request_status_update_id' => 1,
+                        'request_id' => 1,
+                        'request_status_id' => 1,
+                        'member_id' => 1,
+                        'timestamp' => '2013-08-31 09:00:00',
+                        'request_status_name' => 'Pending',
+                        'member_username' => 'strippingdemonic',
+                    ),
                 ),
             );
 
