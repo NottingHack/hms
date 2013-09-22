@@ -233,6 +233,40 @@
 			return $matchingRecords;
 		}
 
+		//! Get an overview of consumable request data
+		/*
+			@retval attay An overview of how many requests exist in the system and what status they are currently at.
+		*/
+		public function getOverviewData()
+		{
+			// First grab all the status information and map that to a friendlier array which includes
+			// a count element.
+			$statuses = $this->ConsumableRequestStatusUpdate->ConsumableRequestStatus->find('all');
+			$statusAndCounts = Hash::map($statuses, '{n}.ConsumableRequestStatus', function ($record)
+			{
+				return array(
+						'id' => $record['request_status_id'],
+						'name' => $record['name'],
+						'count' => 0,
+				);
+			});
+
+			// Now grab all the records and map them to the status that they're currently at
+			$allRequests = $this->getAll();
+			Hash::map($allRequests, '{n}.currentStatus.request_status_id', function($status) use(&$statusAndCounts)
+			{
+				for($i = 0; $i < count($statusAndCounts); $i++)
+				{
+					if($statusAndCounts[$i]['id'] == $status)
+					{
+						$statusAndCounts[$i]['count']++;
+					}
+				}
+			});
+
+			return $statusAndCounts;			
+		}
+
 		//! Format a record for use outside of this class
 		/*!
 			@param array $record The data to be formatted.

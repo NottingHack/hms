@@ -1249,5 +1249,33 @@
 
             $this->assertEquals($expectedResult, $this->ConsumableRequest->getAllWithStatus(3)[0]);
         }
+
+        public function test_GetOverviewData_ReturnsCorrectResults()
+        {
+            $expectedResult = array(
+                array(
+                    'id' => 1,
+                    'name' => 'Pending',
+                    'count' => 0,
+                ),
+                array(
+                    'id' => 2,
+                    'name' => 'Approved',
+                    'count' => 0,
+                ),
+                array(
+                    'id' => 3,
+                    'name' => 'Rejected',
+                    'count' => 1,
+                ),
+                array(
+                    'id' => 4,
+                    'name' => 'Fulfilled',
+                    'count' => 1,
+                ),
+            );
+
+            $this->assertEquals($expectedResult, $this->ConsumableRequest->getOverviewData());
+        }
     }
 ?>
