@@ -166,7 +166,7 @@
 
 		//! Get the request information for a record.
 		/*!
-			@param int $id The if od the request to get the information from.
+			@param int $id The if of the request to get the information from.
 			@retval array An array of request data.
 		*/
 		public function get($id)
@@ -265,6 +265,44 @@
 			});
 
 			return $statusAndCounts;			
+		}
+
+		//! Get the request information for all records that involve a certain member.
+		/*!
+			@param int $id The id of member to look for.
+			@retval array An array of request data for any requests opened by or commented on by the member.
+		*/
+		public function getRequestsInvolvingMember($memberId)
+		{
+			if(!is_numeric($memberId) || 
+				$memberId <= 0)
+			{
+				throw new InvalidArgumentException('$memberId must be numeric and greater than zero');
+			}
+
+			$requestsOpenedByMember = array();
+			$requestsCommentedOnByMember = array();
+			foreach ($this->getAll() as $record) 
+			{
+				$openedByMember = Hash::check($record, "firstStatus[member_id=$memberId]");
+				if($openedByMember)
+				{
+					array_push($requestsOpenedByMember, $record);
+				}
+				else
+				{
+					$commentedOnByMember = Hash::check($record, "comments.{n}[member_id=$memberId]");
+					if($commentedOnByMember)
+					{
+						array_push($requestsCommentedOnByMember, $record);
+					}
+				}
+			}
+			
+			return array(
+				'openedBy' => $requestsOpenedByMember,
+				'commentedOn' => $requestsCommentedOnByMember,
+			);
 		}
 
 		//! Format a record for use outside of this class

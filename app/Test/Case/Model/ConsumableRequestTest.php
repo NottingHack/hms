@@ -1250,32 +1250,204 @@
             $this->assertEquals($expectedResult, $this->ConsumableRequest->getAllWithStatus(3)[0]);
         }
 
-        public function test_GetOverviewData_ReturnsCorrectResults()
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_GetRequestsInvolvingMember_WithNullId_ThrowsException()
+        {
+            $this->ConsumableRequest->getRequestsInvolvingMember(null);
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_GetRequestsInvolvingMember_WithStringId_ThrowsException()
+        {
+            $this->ConsumableRequest->getRequestsInvolvingMember('invalidId');
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_GetRequestsInvolvingMember_WithNegativeId_ThrowsException()
+        {
+            $this->ConsumableRequest->getRequestsInvolvingMember(-1);
+        }
+
+        public function test_GetRequestsInvolvingMember_WhenFindReturnsEmpty_ReturnsEmptyResults()
+        {
+            $validId = 1;
+
+            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('find'));
+
+            $this->ConsumableRequest->expects($this->once())
+                                     ->method('find')
+                                     ->will($this->returnValue(array()));
+
+            $expectedResult = array(
+                'openedBy' => array(),
+                'commentedOn' => array(),
+            );
+            $this->assertIdentical($expectedResult, $this->ConsumableRequest->getRequestsInvolvingMember($validId));
+        }
+
+        public function test_GetRequestsInvolvingMember_WithIdOfExistingRecord_CorrectlyRetrievesRecordFromFixture()
         {
             $expectedResult = array(
-                array(
-                    'id' => 1,
-                    'name' => 'Pending',
-                    'count' => 0,
+                'openedBy' => array(
+                    array(
+                        'request_id' => 1,
+                        'title' => 'a',
+                        'detail' => 'a',
+                        'url' => 'a',
+                        'supplier_id' => null,
+                        'area_id' => null,
+                        'repeat_purchase_id' => null,
+                        'supplier' => array(
+                            'supplier_id' => null,
+                            'name' => null,
+                            'description' => null,
+                            'address' => null,
+                            'url' => null,
+                        ),
+                        'area' => array(
+                            'area_id' => null,
+                            'name' => null,
+                            'description' => null,
+                        ),
+                        'repeatPurchase' => array(
+                            'repeat_purchase_id' => null,
+                            'name' => null,
+                            'description' => null,
+                            'min' => null,
+                            'max' => null,
+                            'area_id' => null,
+                        ),
+                        'comments' => array(
+                            array(
+                                'request_comment_id' => 1,
+                                'text' => 'a',
+                                'member_id' => null,
+                                'timestamp' => '2013-08-31 09:00:00',
+                                'request_id' => 1,
+                                'member_username' => null,
+                            ),
+                            array(
+                                'request_comment_id' => 2,
+                                'text' => 'b',
+                                'member_id' => 1,
+                                'timestamp' => '2013-08-31 10:00:00',
+                                'request_id' => 1,
+                                'member_username' => 'strippingdemonic',
+                            ),
+                        ),
+                        'firstStatus' => array(
+                            'request_status_update_id' => 1,
+                            'request_id' => 1,
+                            'request_status_id' => 1,
+                            'member_id' => 1,
+                            'timestamp' => '2013-08-31 09:00:00',
+                            'request_status_name' => 'Pending',
+                            'member_username' => 'strippingdemonic',
+                        ),
+                        'currentStatus' => array(
+                            'request_status_update_id' => 3,
+                            'request_id' => 1,
+                            'request_status_id' => 3,
+                            'member_id' => 2,
+                            'timestamp' => '2013-08-31 11:00:00',
+                            'request_status_name' => 'Rejected',
+                            'member_username' => 'pecanpaella',
+                        ),
+                        'statuses' => array(
+                            array(
+                                'request_status_update_id' => 3,
+                                'request_id' => 1,
+                                'request_status_id' => 3,
+                                'member_id' => 2,
+                                'timestamp' => '2013-08-31 11:00:00',
+                                'request_status_name' => 'Rejected',
+                                'member_username' => 'pecanpaella',
+                            ),
+                            array(
+                                'request_status_update_id' => 2,
+                                'request_id' => 1,
+                                'request_status_id' => 2,
+                                'member_id' => 2,
+                                'timestamp' => '2013-08-31 10:00:00',
+                                'request_status_name' => 'Approved',
+                                'member_username' => 'pecanpaella',
+                            ),
+                            array(
+                                'request_status_update_id' => 1,
+                                'request_id' => 1,
+                                'request_status_id' => 1,
+                                'member_id' => 1,
+                                'timestamp' => '2013-08-31 09:00:00',
+                                'request_status_name' => 'Pending',
+                                'member_username' => 'strippingdemonic',
+                            ),
+                        ),
+                    ),
                 ),
-                array(
-                    'id' => 2,
-                    'name' => 'Approved',
-                    'count' => 0,
-                ),
-                array(
-                    'id' => 3,
-                    'name' => 'Rejected',
-                    'count' => 1,
-                ),
-                array(
-                    'id' => 4,
-                    'name' => 'Fulfilled',
-                    'count' => 1,
+                'commentedOn' => array(
+                    array(
+                        'request_id' => 2,
+                        'title' => 'b',
+                        'detail' => 'b',
+                        'url' => 'b',
+                        'supplier_id' => 1,
+                        'area_id' => null,
+                        'repeat_purchase_id' => null,
+                        'supplier' => array(
+                            'supplier_id' => 1,
+                            'name' => 'a',
+                            'description' => 'a',
+                            'address' => 'a',
+                            'url' => 'a',
+                        ),
+                        'area' => array(
+                            'area_id' => null,
+                            'name' => null,
+                            'description' => null,
+                        ),
+                        'repeatPurchase' => array(
+                            'repeat_purchase_id' => null,
+                            'name' => null,
+                            'description' => null,
+                            'min' => null,
+                            'max' => null,
+                            'area_id' => null,
+                        ),
+                        'comments' => array(
+                            array(
+                                'request_comment_id' => 3,
+                                'text' => 'c',
+                                'member_id' => 1,
+                                'timestamp' => '2013-08-31 11:00:00',
+                                'request_id' => 2,
+                                'member_username' => 'strippingdemonic',
+                            ),
+                            array(
+                                'request_comment_id' => 4,
+                                'text' => 'c',
+                                'member_id' => 2,
+                                'timestamp' => '2013-08-31 13:00:00',
+                                'request_id' => 2,
+                                'member_username' => 'pecanpaella',
+                            ),
+                        ),
+                        'firstStatus' => array(
+                        ),
+                        'currentStatus' => array(
+                        ),
+                        'statuses' => array(
+                        ),
+                    ),
                 ),
             );
 
-            $this->assertEquals($expectedResult, $this->ConsumableRequest->getOverviewData());
+            $this->assertEquals($expectedResult, $this->ConsumableRequest->getRequestsInvolvingMember(1));
         }
     }
 ?>
