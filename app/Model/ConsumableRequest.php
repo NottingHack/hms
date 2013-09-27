@@ -233,38 +233,96 @@
 			return $matchingRecords;
 		}
 
-		//! Get an overview of consumable request data
+		//! Get the number of requests for various filters
 		/*
-			@retval attay An overview of how many requests exist in the system and what status they are currently at.
+			@param int $id The id of member to look for for the requests involving member filter.
+			@retval array An overview of how many requests exist in the system and what filter they are currently belong to.
 		*/
-		public function getOverviewData()
+		public function getRequestCounts($memberId)
 		{
-			// First grab all the status information and map that to a friendlier array which includes
-			// a count element.
-			$statuses = $this->ConsumableRequestStatusUpdate->ConsumableRequestStatus->find('all');
-			$statusAndCounts = Hash::map($statuses, '{n}.ConsumableRequestStatus', function ($record)
+			if(!is_numeric($memberId) || 
+				$memberId <= 0)
 			{
-				return array(
-						'id' => $record['request_status_id'],
-						'name' => $record['name'],
+				throw new InvalidArgumentException('$memberId must be numeric and greater than zero');
+			}
+
+			// Create a list of filters with a unique id, a name and a count
+			// starting with the 'involved' filter
+			$filters = array(
+				array(
+					'id' => 0,
+					'name' => 'memberInvolved',
+					'count' => 0,
+				),
+			);
+
+			$statuses = $this->ConsumableRequestStatusUpdate->ConsumableRequestStatus->find('all');
+			foreach ($statuses as $status) 
+			{
+				$statusFilter = array(
+						'id' => Hash::get($status, 'ConsumableRequestStatus.request_status_id'),
+						'name' => Hash::get($status, 'ConsumableRequestStatus.name'),
 						'count' => 0,
 				);
-			});
+				array_push($filters, $statusFilter);
+			}
 
-			// Now grab all the records and map them to the status that they're currently at
+			// Now grab all the requests and map them to the filter they belong to
 			$allRequests = $this->getAll();
-			Hash::map($allRequests, '{n}.currentStatus.request_status_id', function($status) use(&$statusAndCounts)
+			foreach ($allRequests as $request) 
 			{
-				for($i = 0; $i < count($statusAndCounts); $i++)
+				// Is this in the 'memberInvolved' filter?
+				if($this->_isMemberInvolvedInRequst($memberId, $request))
 				{
-					if($statusAndCounts[$i]['id'] == $status)
+					$filters[0]['count']++;
+				}
+
+				// Is it in one of the status filters?
+				$status = Hash::get($request, 'currentStatus.request_status_id');
+				for($i = 1; $i < count($filters); $i++)
+				{
+					if($filters[$i]['id'] == $status)
 					{
-						$statusAndCounts[$i]['count']++;
+						$filters[$i]['count']++;
 					}
 				}
-			});
+			}
 
-			return $statusAndCounts;			
+			return $filters;			
+		}
+
+		//! Given the id of a member and some record data, return if the member commented on the request
+		/*
+			@param int $memberId The id of the member to look for.
+			@param array $request And array of formatted request data.
+			@retval bool True if the member commented on the request, false otherwise.
+		*/
+		private function _hasMemberCommentedOnRequest($memberId, $request)
+		{
+			return Hash::check($request, "comments.{n}[member_id=$memberId]");
+		}
+
+		//! Given the id of a member and some record data, return if the member created the request
+		/*
+			@param int $memberId The id of the member to look for.
+			@param array $request And array of formatted request data.
+			@retval bool True if the member created the request, false otherwise.
+		*/
+		private function _didMemberCreateRequest($memberId, $request)
+		{
+			return Hash::check($request, "firstStatus[member_id=$memberId]");
+		}
+
+		//! Given the id of a member and some record data, return if the member is involved in that record
+		/*
+			@param int $memberId The id of the member to look for.
+			@param array $request And array of formatted request data.
+			@retval bool True if the member is involved in the request, false otherwise.
+		*/
+		private function _isMemberInvolvedInRequst($memberId, $request)
+		{
+			return $this->_didMemberCreateRequest($memberId, $request) ||
+					$this->_hasMemberCommentedOnRequest($memberId, $request);
 		}
 
 		//! Get the request information for all records that involve a certain member.
@@ -284,15 +342,13 @@
 			$requestsCommentedOnByMember = array();
 			foreach ($this->getAll() as $record) 
 			{
-				$openedByMember = Hash::check($record, "firstStatus[member_id=$memberId]");
-				if($openedByMember)
+				if($this->_didMemberCreateRequest($memberId, $record))
 				{
 					array_push($requestsOpenedByMember, $record);
 				}
 				else
 				{
-					$commentedOnByMember = Hash::check($record, "comments.{n}[member_id=$memberId]");
-					if($commentedOnByMember)
+					if($this->_hasMemberCommentedOnRequest($memberId, $record))
 					{
 						array_push($requestsCommentedOnByMember, $record);
 					}

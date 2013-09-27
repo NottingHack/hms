@@ -36,9 +36,22 @@
 	    	));
 	    }
 
-	    public function index()
+	    public function index($filterId = null)
 	    {
-	    	$this->set('requests', $this->ConsumableRequest->getOverviewData());
+	    	$memberId = $this->_getLoggedInMemberId();
+	    	$filtersAndCounts = $this->ConsumableRequest->getRequestCounts($memberId);
+
+	    	if( !(is_numeric($filterId) && Hash::check($filtersAndCounts, "{n}[id=$filterId]")) )
+	    	{
+	    		return $this->redirect('consumableRequest/index/0');
+	    	}
+
+	    	$requestData = $filterId == 0 ? 
+	    		$this->ConsumableRequest->getRequestsInvolvingMember($memberId) :
+	    		$this->ConsumableRequest->getAllWithStatus($filtersAndCounts[$filterId]['id']);
+
+	    	$this->set('counts', $filtersAndCounts);
+	    	$this->set('requests', $requestData);
 	    }
 
 	    public function view($id)

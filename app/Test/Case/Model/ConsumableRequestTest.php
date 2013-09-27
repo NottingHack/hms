@@ -1253,6 +1253,104 @@
         /**
          * @expectedException InvalidArgumentException
          */
+        public function test_GetRequestCounts_WithNullId_ThrowsException()
+        {
+            $this->ConsumableRequest->getRequestCounts(null);
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_GetRequestCounts_WithStringId_ThrowsException()
+        {
+            $this->ConsumableRequest->getRequestCounts('invalidId');
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
+        public function test_GetRequestCounts_WithNegativeId_ThrowsException()
+        {
+            $this->ConsumableRequest->getRequestCounts(-1);
+        }
+
+        public function test_GetRequestCounts_WhenFindReturnsEmpty_ReturnsEmptyResults()
+        {
+            $validId = 1;
+
+            $this->ConsumableRequest = $this->getMockForModel('ConsumableRequest', array('find'));
+
+            $this->ConsumableRequest->expects($this->once())
+                                     ->method('find')
+                                     ->will($this->returnValue(array()));
+
+            $expectedResult = array(
+                array(
+                    'id' => 0,
+                    'name' => 'memberInvolved',
+                    'count' => 0,
+                ),
+                array(
+                    'id' => 1,
+                    'name' => 'Pending',
+                    'count' => 0,
+                ),
+                array(
+                    'id' => 2,
+                    'name' => 'Approved',
+                    'count' => 0,
+                ),
+                array(
+                    'id' => 3,
+                    'name' => 'Rejected',
+                    'count' => 0,
+                ),
+                array(
+                    'id' => 4,
+                    'name' => 'Fulfilled',
+                    'count' => 0,
+                ),
+            );
+
+            $this->assertEquals($expectedResult, $this->ConsumableRequest->getRequestCounts($validId));
+        }
+
+        public function test_GetRequestCounts_WithIdOfExistingRecord_CorrectlyRetrievesRecordFromFixture()
+        {
+            $expectedResult = array(
+                 array(
+                    'id' => 0,
+                    'name' => 'memberInvolved',
+                    'count' => 2,
+                ),
+                array(
+                    'id' => 1,
+                    'name' => 'Pending',
+                    'count' => 0,
+                ),
+                array(
+                    'id' => 2,
+                    'name' => 'Approved',
+                    'count' => 0,
+                ),
+                array(
+                    'id' => 3,
+                    'name' => 'Rejected',
+                    'count' => 1,
+                ),
+                array(
+                    'id' => 4,
+                    'name' => 'Fulfilled',
+                    'count' => 1,
+                ),
+            );
+
+            $this->assertEquals($expectedResult, $this->ConsumableRequest->getRequestCounts(1));
+        }
+
+        /**
+         * @expectedException InvalidArgumentException
+         */
         public function test_GetRequestsInvolvingMember_WithNullId_ThrowsException()
         {
             $this->ConsumableRequest->getRequestsInvolvingMember(null);
