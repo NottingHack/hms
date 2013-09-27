@@ -82,8 +82,8 @@ class AuthUtilComponent extends Component {
 				$controllers = App::objects('controller');
 				foreach($controllers as $controllerClassName)
 				{
-					$controllerName = strtolower(str_replace('Controller', '', $controllerClassName));
-					if($controllerName == $name)
+					$controllerName = str_replace('Controller', '', $controllerClassName);
+					if(strtolower($controllerName) == strtolower($name))
 					{
 						App::import('Controller', $controllerName);
 						$controllerToUse = new $controllerClassName;

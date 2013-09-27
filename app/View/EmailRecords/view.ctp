@@ -4,8 +4,8 @@
 	
 	$name = $memberNames[$id];
 
-    $this->Html->addCrumb('EmailRecords', '/emailrecords');
-    $this->Html->addCrumb($name, '/emailrecords/view/' . $id);
+    $this->Html->addCrumb('EmailRecords', '/emailRecords');
+    $this->Html->addCrumb($name, '/emailRecords/view/' . $id);
 ?>
 
 <h3>All E-mail Records for <?php echo $name; ?></h3>

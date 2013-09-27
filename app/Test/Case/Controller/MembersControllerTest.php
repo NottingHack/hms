@@ -1889,7 +1889,7 @@
 			$this->_constructMailingList();
 
 			$this->controller->Nav->expects($this->exactly(4))->method('add');
-			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailrecords', 'view', array(4));
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
@@ -1979,7 +1979,7 @@
 			$this->_constructMailingList();
 
 			$this->controller->Nav->expects($this->exactly(4))->method('add');
-			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailrecords', 'view', array(3));
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(3));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(3));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(3));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(3));
@@ -2058,7 +2058,7 @@
 			$this->_constructMailingList();
 
 			$this->controller->Nav->expects($this->exactly(4))->method('add');
-			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailrecords', 'view', array(4));
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
@@ -2337,7 +2337,7 @@
 			$this->_constructMailingList();
 
 			$this->controller->Nav->expects($this->exactly(4))->method('add');
-			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailrecords', 'view', array(4));
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
