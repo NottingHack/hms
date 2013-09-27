@@ -38,7 +38,7 @@
 
 	    public function index()
 	    {
-	    	return $this->redirect('consumableRequest/listRequests/0');
+	    	return $this->redirect(array('controller' => 'ConsumableRequest', 'action' => 'listRequests', 0));
 	    }
 
 	    public function listRequests($filterId = null)
@@ -48,7 +48,7 @@
 
 	    	if( !(is_numeric($filterId) && Hash::check($filtersAndCounts, "{n}[id=$filterId]")) )
 	    	{
-	    		return $this->redirect('consumableRequest/listRequests/0');
+	    		return $this->redirect(array('controller' => 'ConsumableRequest', 'action' => 'listRequests', 0));
 	    	}
 
 	    	$requestData = $filterId == 0 ? 

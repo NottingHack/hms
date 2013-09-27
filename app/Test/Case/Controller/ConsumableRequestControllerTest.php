@@ -30,7 +30,7 @@
         public function test_Index_RedirectsToList()
         {
             $this->testAction('/consumableRequest/index');
-            $this->assertContains('/consumableRequest/listRequests/0', $this->headers['Location']);
+            $this->assertContains('/ConsumableRequest/listRequests/0', $this->headers['Location']);
         }
 
 		private function _assert_ListRequests_WithFilterId_SetsCounts($filterId)
