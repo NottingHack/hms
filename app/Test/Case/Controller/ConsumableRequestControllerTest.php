@@ -27,7 +27,13 @@
         	$this->ConsumableRequestController->constructClasses();
         }
 
-		private function _assert_Index_WithFilterId_SetsCounts($filterId)
+        public function test_Index_RedirectsToList()
+        {
+            $this->testAction('/consumableRequest/index');
+            $this->assertContains('/consumableRequest/listRequests/0', $this->headers['Location']);
+        }
+
+		private function _assert_ListRequests_WithFilterId_SetsCounts($filterId)
         {
             $this->ConsumableRequestController = $this->generate('ConsumableRequest', array(
                 'components' => array(
@@ -42,7 +48,7 @@
                                               ->method('user')
                                               ->will($this->returnValue(array('Member' => array('member_id' => 1))));
 
-            $this->testAction('/consumableRequest/index/' . $filterId);
+            $this->testAction('/consumableRequest/listRequests/' . $filterId);
 
             $expectedResult = array(
                 array(
@@ -75,32 +81,32 @@
             $this->assertEquals( $expectedResult, $this->vars['counts'] );
         }
 
-        public function test_Index_WithFilterIdZero_SetsCounts()
+        public function test_ListRequests_WithFilterIdZero_SetsCounts()
         {
-            $this->_assert_Index_WithFilterId_SetsCounts(0);
+            $this->_assert_ListRequests_WithFilterId_SetsCounts(0);
         }
 
-        public function test_Index_WithFilterIdOne_SetsCounts()
+        public function test_ListRequests_WithFilterIdOne_SetsCounts()
         {
-            $this->_assert_Index_WithFilterId_SetsCounts(1);
+            $this->_assert_ListRequests_WithFilterId_SetsCounts(1);
         }
 
-        public function test_Index_WithFilterIdTwo_SetsCounts()
+        public function test_ListRequests_WithFilterIdTwo_SetsCounts()
         {
-            $this->_assert_Index_WithFilterId_SetsCounts(2);
+            $this->_assert_ListRequests_WithFilterId_SetsCounts(2);
         }
 
-        public function test_Index_WithFilterIdThree_SetsCounts()
+        public function test_ListRequests_WithFilterIdThree_SetsCounts()
         {
-            $this->_assert_Index_WithFilterId_SetsCounts(3);
+            $this->_assert_ListRequests_WithFilterId_SetsCounts(3);
         }
 
-        public function test_Index_WithFilterIdFour_SetsCounts()
+        public function test_ListRequests_WithFilterIdFour_SetsCounts()
         {
-            $this->_assert_Index_WithFilterId_SetsCounts(4);
+            $this->_assert_ListRequests_WithFilterId_SetsCounts(4);
         }
 
-        public function test_Index_WithFilterIdZero_SetsRequests()
+        public function test_ListRequests_WithFilterIdZero_SetsRequests()
         {
             $expectedResult = array(
                 'openedBy' => array(
@@ -269,26 +275,26 @@
                                               ->method('user')
                                               ->will($this->returnValue(array('Member' => array('member_id' => 1))));
 
-            $this->testAction('/consumableRequest/index/0');
+            $this->testAction('/consumableRequest/listRequests/0');
             $this->assertEquals( $expectedResult, $this->vars['requests'] );
         }
 
-        public function test_Index_WithFilterIdOne_SetsRequests()
+        public function test_ListRequests_WithFilterIdOne_SetsRequests()
         {
             $expectedResult = array();
 
-            $this->testAction('/consumableRequest/index/1');
+            $this->testAction('/consumableRequest/listRequests/1');
             $this->assertEquals( $expectedResult, $this->vars['requests'] );
         }
 
-        public function test_Index_WithFilterIdTwo_SetsRequests()
+        public function test_ListRequests_WithFilterIdTwo_SetsRequests()
         {
             $expectedResult = array();
-            $this->testAction('/consumableRequest/index/2');
+            $this->testAction('/consumableRequest/listRequests/2');
             $this->assertEquals( $expectedResult, $this->vars['requests'] );
         }
 
-        public function test_Index_WithFilterIdThree_SetsRequests()
+        public function test_ListRequests_WithFilterIdThree_SetsRequests()
         {
             $expectedResult = array(
                 array(
@@ -387,11 +393,11 @@
                 ),
             );
 
-            $this->testAction('/consumableRequest/index/3');
+            $this->testAction('/consumableRequest/listRequests/3');
             $this->assertEquals( $expectedResult, $this->vars['requests'] );
         }
 
-        public function test_Index_WithFilterIdFour_SetsRequests()
+        public function test_ListRequests_WithFilterIdFour_SetsRequests()
         {
             $expectedResult = array(
                 array(
@@ -479,7 +485,7 @@
                 ),
             );
 
-            $this->testAction('/consumableRequest/index/4');
+            $this->testAction('/consumableRequest/listRequests/4');
             $this->assertEquals( $expectedResult, $this->vars['requests'] );
         }
 

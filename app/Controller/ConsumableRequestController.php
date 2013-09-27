@@ -36,14 +36,19 @@
 	    	));
 	    }
 
-	    public function index($filterId = null)
+	    public function index()
+	    {
+	    	return $this->redirect('consumableRequest/listRequests/0');
+	    }
+
+	    public function listRequests($filterId = null)
 	    {
 	    	$memberId = $this->_getLoggedInMemberId();
 	    	$filtersAndCounts = $this->ConsumableRequest->getRequestCounts($memberId);
 
 	    	if( !(is_numeric($filterId) && Hash::check($filtersAndCounts, "{n}[id=$filterId]")) )
 	    	{
-	    		return $this->redirect('consumableRequest/index/0');
+	    		return $this->redirect('consumableRequest/listRequests/0');
 	    	}
 
 	    	$requestData = $filterId == 0 ? 
