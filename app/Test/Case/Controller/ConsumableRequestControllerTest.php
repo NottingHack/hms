@@ -275,26 +275,212 @@
 
         public function test_Index_WithFilterIdOne_SetsRequests()
         {
+            $expectedResult = array();
+
             $this->testAction('/consumableRequest/index/1');
-            $this->assertTrue(false);
+            $this->assertEquals( $expectedResult, $this->vars['requests'] );
         }
 
         public function test_Index_WithFilterIdTwo_SetsRequests()
         {
+            $expectedResult = array();
             $this->testAction('/consumableRequest/index/2');
-            $this->assertTrue(false);
+            $this->assertEquals( $expectedResult, $this->vars['requests'] );
         }
 
         public function test_Index_WithFilterIdThree_SetsRequests()
         {
+            $expectedResult = array(
+                array(
+                    'request_id' => 1,
+                    'title' => 'a',
+                    'detail' => 'a',
+                    'url' => 'a',
+                    'supplier_id' => null,
+                    'area_id' => null,
+                    'repeat_purchase_id' => null,
+                    'supplier' => array(
+                        'supplier_id' => null,
+                        'name' => null,
+                        'description' => null,
+                        'address' => null,
+                        'url' => null,
+                    ),
+                    'area' => array(
+                        'area_id' => null,
+                        'name' => null,
+                        'description' => null,
+                    ),
+                    'repeatPurchase' => array(
+                        'repeat_purchase_id' => null,
+                        'name' => null,
+                        'description' => null,
+                        'min' => null,
+                        'max' => null,
+                        'area_id' => null,
+                    ),
+                    'comments' => array(
+                        array(
+                            'request_comment_id' => 1,
+                            'text' => 'a',
+                            'member_id' => null,
+                            'timestamp' => '2013-08-31 09:00:00',
+                            'request_id' => 1,
+                            'member_username' => null,
+                        ),
+                        array(
+                            'request_comment_id' => 2,
+                            'text' => 'b',
+                            'member_id' => 1,
+                            'timestamp' => '2013-08-31 10:00:00',
+                            'request_id' => 1,
+                            'member_username' => 'strippingdemonic',
+                        ),
+                    ),
+                    'firstStatus' => array(
+                        'request_status_update_id' => 1,
+                        'request_id' => 1,
+                        'request_status_id' => 1,
+                        'member_id' => 1,
+                        'timestamp' => '2013-08-31 09:00:00',
+                        'request_status_name' => 'Pending',
+                        'member_username' => 'strippingdemonic',
+                    ),
+                    'currentStatus' => array(
+                        'request_status_update_id' => 3,
+                        'request_id' => 1,
+                        'request_status_id' => 3,
+                        'member_id' => 2,
+                        'timestamp' => '2013-08-31 11:00:00',
+                        'request_status_name' => 'Rejected',
+                        'member_username' => 'pecanpaella',
+                    ),
+                    'statuses' => array(
+                        array(
+                            'request_status_update_id' => 3,
+                            'request_id' => 1,
+                            'request_status_id' => 3,
+                            'member_id' => 2,
+                            'timestamp' => '2013-08-31 11:00:00',
+                            'request_status_name' => 'Rejected',
+                            'member_username' => 'pecanpaella',
+                        ),
+                        array(
+                            'request_status_update_id' => 2,
+                            'request_id' => 1,
+                            'request_status_id' => 2,
+                            'member_id' => 2,
+                            'timestamp' => '2013-08-31 10:00:00',
+                            'request_status_name' => 'Approved',
+                            'member_username' => 'pecanpaella',
+                        ),
+                        array(
+                            'request_status_update_id' => 1,
+                            'request_id' => 1,
+                            'request_status_id' => 1,
+                            'member_id' => 1,
+                            'timestamp' => '2013-08-31 09:00:00',
+                            'request_status_name' => 'Pending',
+                            'member_username' => 'strippingdemonic',
+                        ),
+                    ),
+                ),
+            );
+
             $this->testAction('/consumableRequest/index/3');
-            $this->assertTrue(false);
+            $this->assertEquals( $expectedResult, $this->vars['requests'] );
         }
 
         public function test_Index_WithFilterIdFour_SetsRequests()
         {
+            $expectedResult = array(
+                array(
+                    'request_id' => 4,
+                    'title' => 'd',
+                    'detail' => 'd',
+                    'url' => 'd',
+                    'supplier_id' => 1,
+                    'area_id' => 1,
+                    'repeat_purchase_id' => 1,
+                    'supplier' => array(
+                        'supplier_id' => 1,
+                        'name' => 'a',
+                        'description' => 'a',
+                        'address' => 'a',
+                        'url' => 'a',
+                    ),
+                    'area' => array(
+                        'area_id' => 1,
+                        'name' => 'a',
+                        'description' => 'a',
+                        'ConsumableRepeatPurchase' => array(
+                            array(
+                                'repeat_purchase_id' => 1,
+                                'name' => 'a',
+                                'description' => 'a',
+                                'min' => '1',
+                                'max' => '10',
+                                'area_id' => 1,
+                            ),
+                            array(
+                                'repeat_purchase_id' => 2,
+                                'name' => 'b',
+                                'description' => 'b',
+                                'min' => '1',
+                                'max' => '10',
+                                'area_id' => 1,
+                            ),
+                        ),
+                    ),
+                    'repeatPurchase' => array(
+                        'repeat_purchase_id' => 1,
+                        'name' => 'a',
+                        'description' => 'a',
+                        'min' => '1',
+                        'max' => '10',
+                        'area_id' => 1,
+                        'ConsumableArea' => array(
+                            'area_id' => 1,
+                            'name' => 'a',
+                            'description' => 'a',
+                        ),
+                    ),
+                    'comments' => array(
+                    ),
+                    'firstStatus' => array(
+                        'request_status_update_id' => 4,
+                        'request_id' => 4,
+                        'request_status_id' => 4,
+                        'member_id' => 3,
+                        'timestamp' => '2013-08-31 12:00:00',
+                        'request_status_name' => 'Fulfilled',
+                        'member_username' => 'buntweyr',
+                    ),
+                    'currentStatus' => array(
+                        'request_status_update_id' => 4,
+                        'request_id' => 4,
+                        'request_status_id' => 4,
+                        'member_id' => 3,
+                        'timestamp' => '2013-08-31 12:00:00',
+                        'request_status_name' => 'Fulfilled',
+                        'member_username' => 'buntweyr',
+                    ),
+                    'statuses' => array(
+                        array(
+                            'request_status_update_id' => 4,
+                            'request_id' => 4,
+                            'request_status_id' => 4,
+                            'member_id' => 3,
+                            'timestamp' => '2013-08-31 12:00:00',
+                            'request_status_name' => 'Fulfilled',
+                            'member_username' => 'buntweyr',
+                        ),
+                    ),
+                ),
+            );
+
             $this->testAction('/consumableRequest/index/4');
-            $this->assertTrue(false);
+            $this->assertEquals( $expectedResult, $this->vars['requests'] );
         }
 
 		public function test_View_WithNonNumericId_Redirects()
