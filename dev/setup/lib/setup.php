@@ -148,8 +148,11 @@
 					if(!file_exists($templateFilePath))
 					{
 						$fullFilePath = makeAbsolutePath("$configPath$settingName.php");
-						$this->_logMessage("Deleting settings file at $fullFilePath because we couldn't find a matching template");
-						unlink($fullFilePath);
+						if(file_exists($fullFilePath))
+						{
+							$this->_logMessage("Deleting settings file at $fullFilePath because we couldn't find a matching template");
+							unlink($fullFilePath);
+						}
 						continue;
 					}
 				}

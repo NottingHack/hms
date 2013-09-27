@@ -64,4 +64,8 @@
 			  PRIMARY KEY (`hms_email_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 	$this->_runQuery($conn, $query);
+
+	$this->_logMessage('Adding \'Membership Team\' group');
+	$query = "INSERT INTO  `instrumentation`.`grp` ( `grp_id`, `grp_description`) VALUES (NULL ,  'Membership Team');";
+	$this->_runQuery($conn, $query);
 ?>
