@@ -220,7 +220,16 @@
 				{
 					if($result = $databaseObj->store_result())
 					{
-						array_push($results, $result->fetch_all(MYSQLI_ASSOC));	
+						$rows = array();
+						do
+						{
+							$row = $result->fetch_assoc();
+							if($row != null)
+							{
+								array_push($rows, $row);
+							}
+						} while($row != null);
+						array_push($results, $rows);
 						$result->free();
 					}
 
