@@ -33,7 +33,7 @@
             $this->assertContains('/ConsumableRequest/listRequests/0', $this->headers['Location']);
         }
 
-		private function _assert_ListRequests_WithFilterId_SetsCounts($filterId)
+        public function test_ListRequests_WithFilterIdZero_SetsCounts()
         {
             $this->ConsumableRequestController = $this->generate('ConsumableRequest', array(
                 'components' => array(
@@ -48,68 +48,260 @@
                                               ->method('user')
                                               ->will($this->returnValue(array('Member' => array('member_id' => 1))));
 
-            $this->testAction('/consumableRequest/listRequests/' . $filterId);
+            $this->testAction('/consumableRequest/listRequests/0');
 
             $expectedResult = array(
                 array(
                     'id' => 0,
-                    'name' => 'memberInvolved',
+                    'name' => 'Requests Involving You',
                     'count' => 2,
+                    'current' => true,
                 ),
                 array(
                     'id' => 1,
                     'name' => 'Pending',
                     'count' => 0,
+                    'current' => false,
                 ),
                 array(
                     'id' => 2,
                     'name' => 'Approved',
                     'count' => 0,
+                    'current' => false,
                 ),
                 array(
                     'id' => 3,
                     'name' => 'Rejected',
                     'count' => 1,
+                    'current' => false,
                 ),
                 array(
                     'id' => 4,
                     'name' => 'Fulfilled',
                     'count' => 1,
+                    'current' => false,
                 ),
             );
 
             $this->assertEquals( $expectedResult, $this->vars['counts'] );
         }
 
-        public function test_ListRequests_WithFilterIdZero_SetsCounts()
-        {
-            $this->_assert_ListRequests_WithFilterId_SetsCounts(0);
-        }
-
         public function test_ListRequests_WithFilterIdOne_SetsCounts()
         {
-            $this->_assert_ListRequests_WithFilterId_SetsCounts(1);
+            $this->ConsumableRequestController = $this->generate('ConsumableRequest', array(
+                'components' => array(
+                    'Auth' => array(
+                        'user',
+                    )
+                )
+            ));
+
+            // Now we need to mock the check for logged in member
+            $this->ConsumableRequestController->Auth->staticExpects($this->any())
+                                              ->method('user')
+                                              ->will($this->returnValue(array('Member' => array('member_id' => 1))));
+
+            $this->testAction('/consumableRequest/listRequests/1');
+
+            $expectedResult = array(
+                array(
+                    'id' => 0,
+                    'name' => 'Requests Involving You',
+                    'count' => 2,
+                    'current' => false,
+                ),
+                array(
+                    'id' => 1,
+                    'name' => 'Pending',
+                    'count' => 0,
+                    'current' => true,
+                ),
+                array(
+                    'id' => 2,
+                    'name' => 'Approved',
+                    'count' => 0,
+                    'current' => false,
+                ),
+                array(
+                    'id' => 3,
+                    'name' => 'Rejected',
+                    'count' => 1,
+                    'current' => false,
+                ),
+                array(
+                    'id' => 4,
+                    'name' => 'Fulfilled',
+                    'count' => 1,
+                    'current' => false,
+                ),
+            );
+
+            $this->assertEquals( $expectedResult, $this->vars['counts'] );
         }
 
         public function test_ListRequests_WithFilterIdTwo_SetsCounts()
         {
-            $this->_assert_ListRequests_WithFilterId_SetsCounts(2);
+            $this->ConsumableRequestController = $this->generate('ConsumableRequest', array(
+                'components' => array(
+                    'Auth' => array(
+                        'user',
+                    )
+                )
+            ));
+
+            // Now we need to mock the check for logged in member
+            $this->ConsumableRequestController->Auth->staticExpects($this->any())
+                                              ->method('user')
+                                              ->will($this->returnValue(array('Member' => array('member_id' => 1))));
+
+            $this->testAction('/consumableRequest/listRequests/2');
+
+            $expectedResult = array(
+                array(
+                    'id' => 0,
+                    'name' => 'Requests Involving You',
+                    'count' => 2,
+                    'current' => false,
+                ),
+                array(
+                    'id' => 1,
+                    'name' => 'Pending',
+                    'count' => 0,
+                    'current' => false,
+                ),
+                array(
+                    'id' => 2,
+                    'name' => 'Approved',
+                    'count' => 0,
+                    'current' => true,
+                ),
+                array(
+                    'id' => 3,
+                    'name' => 'Rejected',
+                    'count' => 1,
+                    'current' => false,
+                ),
+                array(
+                    'id' => 4,
+                    'name' => 'Fulfilled',
+                    'count' => 1,
+                    'current' => false,
+                ),
+            );
+
+            $this->assertEquals( $expectedResult, $this->vars['counts'] );
         }
 
         public function test_ListRequests_WithFilterIdThree_SetsCounts()
         {
-            $this->_assert_ListRequests_WithFilterId_SetsCounts(3);
+            $this->ConsumableRequestController = $this->generate('ConsumableRequest', array(
+                'components' => array(
+                    'Auth' => array(
+                        'user',
+                    )
+                )
+            ));
+
+            // Now we need to mock the check for logged in member
+            $this->ConsumableRequestController->Auth->staticExpects($this->any())
+                                              ->method('user')
+                                              ->will($this->returnValue(array('Member' => array('member_id' => 1))));
+
+            $this->testAction('/consumableRequest/listRequests/3');
+
+            $expectedResult = array(
+                array(
+                    'id' => 0,
+                    'name' => 'Requests Involving You',
+                    'count' => 2,
+                    'current' => false,
+                ),
+                array(
+                    'id' => 1,
+                    'name' => 'Pending',
+                    'count' => 0,
+                    'current' => false,
+                ),
+                array(
+                    'id' => 2,
+                    'name' => 'Approved',
+                    'count' => 0,
+                    'current' => false,
+                ),
+                array(
+                    'id' => 3,
+                    'name' => 'Rejected',
+                    'count' => 1,
+                    'current' => true,
+                ),
+                array(
+                    'id' => 4,
+                    'name' => 'Fulfilled',
+                    'count' => 1,
+                    'current' => false,
+                ),
+            );
+
+            $this->assertEquals( $expectedResult, $this->vars['counts'] );
         }
 
         public function test_ListRequests_WithFilterIdFour_SetsCounts()
         {
-            $this->_assert_ListRequests_WithFilterId_SetsCounts(4);
+            $this->ConsumableRequestController = $this->generate('ConsumableRequest', array(
+                'components' => array(
+                    'Auth' => array(
+                        'user',
+                    )
+                )
+            ));
+
+            // Now we need to mock the check for logged in member
+            $this->ConsumableRequestController->Auth->staticExpects($this->any())
+                                              ->method('user')
+                                              ->will($this->returnValue(array('Member' => array('member_id' => 1))));
+
+            $this->testAction('/consumableRequest/listRequests/4');
+
+            $expectedResult = array(
+                array(
+                    'id' => 0,
+                    'name' => 'Requests Involving You',
+                    'count' => 2,
+                    'current' => false,
+                ),
+                array(
+                    'id' => 1,
+                    'name' => 'Pending',
+                    'count' => 0,
+                    'current' => false,
+                ),
+                array(
+                    'id' => 2,
+                    'name' => 'Approved',
+                    'count' => 0,
+                    'current' => false,
+                ),
+                array(
+                    'id' => 3,
+                    'name' => 'Rejected',
+                    'count' => 1,
+                    'current' => false,
+                ),
+                array(
+                    'id' => 4,
+                    'name' => 'Fulfilled',
+                    'count' => 1,
+                    'current' => true,
+                ),
+            );
+
+            $this->assertEquals( $expectedResult, $this->vars['counts'] );
         }
 
         public function test_ListRequests_WithFilterIdZero_SetsRequests()
         {
             $expectedResult = array(
-                'openedBy' => array(
+                'Your Requests' => array(
                     array(
                         'request_id' => 1,
                         'title' => 'a',
@@ -205,7 +397,7 @@
                         ),
                     ),
                 ),
-                'commentedOn' => array(
+                'Requests You Commented On' => array(
                     array(
                         'request_id' => 2,
                         'title' => 'b',
@@ -281,7 +473,7 @@
 
         public function test_ListRequests_WithFilterIdOne_SetsRequests()
         {
-            $expectedResult = array();
+            $expectedResult = array('Pending Requests' => array());
 
             $this->testAction('/consumableRequest/listRequests/1');
             $this->assertEquals( $expectedResult, $this->vars['requests'] );
@@ -289,7 +481,7 @@
 
         public function test_ListRequests_WithFilterIdTwo_SetsRequests()
         {
-            $expectedResult = array();
+            $expectedResult = array('Approved Requests' => array());
             $this->testAction('/consumableRequest/listRequests/2');
             $this->assertEquals( $expectedResult, $this->vars['requests'] );
         }
@@ -297,72 +489,63 @@
         public function test_ListRequests_WithFilterIdThree_SetsRequests()
         {
             $expectedResult = array(
-                array(
-                    'request_id' => 1,
-                    'title' => 'a',
-                    'detail' => 'a',
-                    'url' => 'a',
-                    'supplier_id' => null,
-                    'area_id' => null,
-                    'repeat_purchase_id' => null,
-                    'supplier' => array(
+                'Rejected Requests' => array(
+                    array(
+                        'request_id' => 1,
+                        'title' => 'a',
+                        'detail' => 'a',
+                        'url' => 'a',
                         'supplier_id' => null,
-                        'name' => null,
-                        'description' => null,
-                        'address' => null,
-                        'url' => null,
-                    ),
-                    'area' => array(
                         'area_id' => null,
-                        'name' => null,
-                        'description' => null,
-                    ),
-                    'repeatPurchase' => array(
                         'repeat_purchase_id' => null,
-                        'name' => null,
-                        'description' => null,
-                        'min' => null,
-                        'max' => null,
-                        'area_id' => null,
-                    ),
-                    'comments' => array(
-                        array(
-                            'request_comment_id' => 1,
-                            'text' => 'a',
-                            'member_id' => null,
-                            'timestamp' => '2013-08-31 09:00:00',
-                            'request_id' => 1,
-                            'member_username' => null,
+                        'supplier' => array(
+                            'supplier_id' => null,
+                            'name' => null,
+                            'description' => null,
+                            'address' => null,
+                            'url' => null,
                         ),
-                        array(
-                            'request_comment_id' => 2,
-                            'text' => 'b',
-                            'member_id' => 1,
-                            'timestamp' => '2013-08-31 10:00:00',
+                        'area' => array(
+                            'area_id' => null,
+                            'name' => null,
+                            'description' => null,
+                        ),
+                        'repeatPurchase' => array(
+                            'repeat_purchase_id' => null,
+                            'name' => null,
+                            'description' => null,
+                            'min' => null,
+                            'max' => null,
+                            'area_id' => null,
+                        ),
+                        'comments' => array(
+                            array(
+                                'request_comment_id' => 1,
+                                'text' => 'a',
+                                'member_id' => null,
+                                'timestamp' => '2013-08-31 09:00:00',
+                                'request_id' => 1,
+                                'member_username' => null,
+                            ),
+                            array(
+                                'request_comment_id' => 2,
+                                'text' => 'b',
+                                'member_id' => 1,
+                                'timestamp' => '2013-08-31 10:00:00',
+                                'request_id' => 1,
+                                'member_username' => 'strippingdemonic',
+                            ),
+                        ),
+                        'firstStatus' => array(
+                            'request_status_update_id' => 1,
                             'request_id' => 1,
+                            'request_status_id' => 1,
+                            'member_id' => 1,
+                            'timestamp' => '2013-08-31 09:00:00',
+                            'request_status_name' => 'Pending',
                             'member_username' => 'strippingdemonic',
                         ),
-                    ),
-                    'firstStatus' => array(
-                        'request_status_update_id' => 1,
-                        'request_id' => 1,
-                        'request_status_id' => 1,
-                        'member_id' => 1,
-                        'timestamp' => '2013-08-31 09:00:00',
-                        'request_status_name' => 'Pending',
-                        'member_username' => 'strippingdemonic',
-                    ),
-                    'currentStatus' => array(
-                        'request_status_update_id' => 3,
-                        'request_id' => 1,
-                        'request_status_id' => 3,
-                        'member_id' => 2,
-                        'timestamp' => '2013-08-31 11:00:00',
-                        'request_status_name' => 'Rejected',
-                        'member_username' => 'pecanpaella',
-                    ),
-                    'statuses' => array(
-                        array(
+                        'currentStatus' => array(
                             'request_status_update_id' => 3,
                             'request_id' => 1,
                             'request_status_id' => 3,
@@ -371,23 +554,34 @@
                             'request_status_name' => 'Rejected',
                             'member_username' => 'pecanpaella',
                         ),
-                        array(
-                            'request_status_update_id' => 2,
-                            'request_id' => 1,
-                            'request_status_id' => 2,
-                            'member_id' => 2,
-                            'timestamp' => '2013-08-31 10:00:00',
-                            'request_status_name' => 'Approved',
-                            'member_username' => 'pecanpaella',
-                        ),
-                        array(
-                            'request_status_update_id' => 1,
-                            'request_id' => 1,
-                            'request_status_id' => 1,
-                            'member_id' => 1,
-                            'timestamp' => '2013-08-31 09:00:00',
-                            'request_status_name' => 'Pending',
-                            'member_username' => 'strippingdemonic',
+                        'statuses' => array(
+                            array(
+                                'request_status_update_id' => 3,
+                                'request_id' => 1,
+                                'request_status_id' => 3,
+                                'member_id' => 2,
+                                'timestamp' => '2013-08-31 11:00:00',
+                                'request_status_name' => 'Rejected',
+                                'member_username' => 'pecanpaella',
+                            ),
+                            array(
+                                'request_status_update_id' => 2,
+                                'request_id' => 1,
+                                'request_status_id' => 2,
+                                'member_id' => 2,
+                                'timestamp' => '2013-08-31 10:00:00',
+                                'request_status_name' => 'Approved',
+                                'member_username' => 'pecanpaella',
+                            ),
+                            array(
+                                'request_status_update_id' => 1,
+                                'request_id' => 1,
+                                'request_status_id' => 1,
+                                'member_id' => 1,
+                                'timestamp' => '2013-08-31 09:00:00',
+                                'request_status_name' => 'Pending',
+                                'member_username' => 'strippingdemonic',
+                            ),
                         ),
                     ),
                 ),
@@ -400,79 +594,61 @@
         public function test_ListRequests_WithFilterIdFour_SetsRequests()
         {
             $expectedResult = array(
-                array(
-                    'request_id' => 4,
-                    'title' => 'd',
-                    'detail' => 'd',
-                    'url' => 'd',
-                    'supplier_id' => 1,
-                    'area_id' => 1,
-                    'repeat_purchase_id' => 1,
-                    'supplier' => array(
+                'Fulfilled Requests' => array(
+                    array(
+                        'request_id' => 4,
+                        'title' => 'd',
+                        'detail' => 'd',
+                        'url' => 'd',
                         'supplier_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'address' => 'a',
-                        'url' => 'a',
-                    ),
-                    'area' => array(
                         'area_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'ConsumableRepeatPurchase' => array(
-                            array(
-                                'repeat_purchase_id' => 1,
-                                'name' => 'a',
-                                'description' => 'a',
-                                'min' => '1',
-                                'max' => '10',
-                                'area_id' => 1,
-                            ),
-                            array(
-                                'repeat_purchase_id' => 2,
-                                'name' => 'b',
-                                'description' => 'b',
-                                'min' => '1',
-                                'max' => '10',
-                                'area_id' => 1,
-                            ),
-                        ),
-                    ),
-                    'repeatPurchase' => array(
                         'repeat_purchase_id' => 1,
-                        'name' => 'a',
-                        'description' => 'a',
-                        'min' => '1',
-                        'max' => '10',
-                        'area_id' => 1,
-                        'ConsumableArea' => array(
+                        'supplier' => array(
+                            'supplier_id' => 1,
+                            'name' => 'a',
+                            'description' => 'a',
+                            'address' => 'a',
+                            'url' => 'a',
+                        ),
+                        'area' => array(
                             'area_id' => 1,
                             'name' => 'a',
                             'description' => 'a',
+                            'ConsumableRepeatPurchase' => array(
+                                array(
+                                    'repeat_purchase_id' => 1,
+                                    'name' => 'a',
+                                    'description' => 'a',
+                                    'min' => '1',
+                                    'max' => '10',
+                                    'area_id' => 1,
+                                ),
+                                array(
+                                    'repeat_purchase_id' => 2,
+                                    'name' => 'b',
+                                    'description' => 'b',
+                                    'min' => '1',
+                                    'max' => '10',
+                                    'area_id' => 1,
+                                ),
+                            ),
                         ),
-                    ),
-                    'comments' => array(
-                    ),
-                    'firstStatus' => array(
-                        'request_status_update_id' => 4,
-                        'request_id' => 4,
-                        'request_status_id' => 4,
-                        'member_id' => 3,
-                        'timestamp' => '2013-08-31 12:00:00',
-                        'request_status_name' => 'Fulfilled',
-                        'member_username' => 'buntweyr',
-                    ),
-                    'currentStatus' => array(
-                        'request_status_update_id' => 4,
-                        'request_id' => 4,
-                        'request_status_id' => 4,
-                        'member_id' => 3,
-                        'timestamp' => '2013-08-31 12:00:00',
-                        'request_status_name' => 'Fulfilled',
-                        'member_username' => 'buntweyr',
-                    ),
-                    'statuses' => array(
-                        array(
+                        'repeatPurchase' => array(
+                            'repeat_purchase_id' => 1,
+                            'name' => 'a',
+                            'description' => 'a',
+                            'min' => '1',
+                            'max' => '10',
+                            'area_id' => 1,
+                            'ConsumableArea' => array(
+                                'area_id' => 1,
+                                'name' => 'a',
+                                'description' => 'a',
+                            ),
+                        ),
+                        'comments' => array(
+                        ),
+                        'firstStatus' => array(
                             'request_status_update_id' => 4,
                             'request_id' => 4,
                             'request_status_id' => 4,
@@ -480,6 +656,26 @@
                             'timestamp' => '2013-08-31 12:00:00',
                             'request_status_name' => 'Fulfilled',
                             'member_username' => 'buntweyr',
+                        ),
+                        'currentStatus' => array(
+                            'request_status_update_id' => 4,
+                            'request_id' => 4,
+                            'request_status_id' => 4,
+                            'member_id' => 3,
+                            'timestamp' => '2013-08-31 12:00:00',
+                            'request_status_name' => 'Fulfilled',
+                            'member_username' => 'buntweyr',
+                        ),
+                        'statuses' => array(
+                            array(
+                                'request_status_update_id' => 4,
+                                'request_id' => 4,
+                                'request_status_id' => 4,
+                                'member_id' => 3,
+                                'timestamp' => '2013-08-31 12:00:00',
+                                'request_status_name' => 'Fulfilled',
+                                'member_username' => 'buntweyr',
+                            ),
                         ),
                     ),
                 ),

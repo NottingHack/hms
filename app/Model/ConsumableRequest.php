@@ -241,7 +241,7 @@
 		public function getRequestCounts($memberId)
 		{
 			if(!is_numeric($memberId) || 
-				$memberId <= 0)
+				$memberId < 0)
 			{
 				throw new InvalidArgumentException('$memberId must be numeric and greater than zero');
 			}
@@ -272,7 +272,8 @@
 			foreach ($allRequests as $request) 
 			{
 				// Is this in the 'memberInvolved' filter?
-				if($this->_isMemberInvolvedInRequst($memberId, $request))
+				if(	$memberId != 0 &&
+					$this->_isMemberInvolvedInRequst($memberId, $request))
 				{
 					$filters[0]['count']++;
 				}

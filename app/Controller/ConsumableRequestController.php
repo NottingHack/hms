@@ -51,12 +51,32 @@
 	    		return $this->redirect(array('controller' => 'ConsumableRequest', 'action' => 'listRequests', 0));
 	    	}
 
-	    	$requestData = $filterId == 0 ? 
-	    		$this->ConsumableRequest->getRequestsInvolvingMember($memberId) :
-	    		$this->ConsumableRequest->getAllWithStatus($filtersAndCounts[$filterId]['id']);
+	    	// Add the 'current' status to the filters and counts
+	    	for($i = 0; $i < count($filtersAndCounts); $i++)
+	    	{
+	    		$filtersAndCounts[$i]['current'] = $filtersAndCounts[$i]['id'] == $filterId;
+	    	}
+
+	    	// Need to change the name of the first count
+	    	$filtersAndCounts[0]['name'] = 'Requests Involving You';
+
+	    	// Build up the list of requests and headers
+	    	$requestsAndHeaders = array();
+	    	if($filterId == 0)
+	    	{
+	    		$requestData = $this->ConsumableRequest->getRequestsInvolvingMember($memberId);
+	    		$requestsAndHeaders['Your Requests'] = $requestData['openedBy'];
+	    		$requestsAndHeaders['Requests You Commented On'] = $requestData['commentedOn'];
+	    	}
+	    	else
+	    	{
+	    		$header = $filtersAndCounts[$filterId]['name'] . ' Requests';
+	    		$statusId = $filtersAndCounts[$filterId]['id'];
+	    		$requestsAndHeaders[$header] = $this->ConsumableRequest->getAllWithStatus($statusId);
+	    	}
 
 	    	$this->set('counts', $filtersAndCounts);
-	    	$this->set('requests', $requestData);
+	    	$this->set('requests', $requestsAndHeaders);
 	    }
 
 	    public function view($id)

@@ -1021,3 +1021,33 @@ input[type=file] {
 .emailRecordDay ul li {
 	margin: 5px 12px;
 }
+
+.clear {
+	clear: both;
+}
+
+.consumableRequestNav {
+	border: 1px solid #ddd;
+	list-style: none;
+	display: inline-block;
+}
+
+.consumableRequestNav li {
+	float: left;
+	margin: 0px;
+	font-size: 90%;
+}
+
+.consumableRequestNav li div {
+	padding: 5px 20px;
+	margin: 2px 0px;
+	border-right: 1px solid #ddd;
+}
+
+.consumableRequestNav li div.last {
+	border: none;
+}
+
+.consumableRequestNav li.current {
+	background-color: #f9f9f9;
+}

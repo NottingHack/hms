@@ -1315,12 +1315,45 @@
             $this->assertEquals($expectedResult, $this->ConsumableRequest->getRequestCounts($validId));
         }
 
-        public function test_GetRequestCounts_WithIdOfExistingRecord_CorrectlyRetrievesRecordFromFixture()
+        public function test_GetRequestCounts_WithZeroId_ReturnsCorrectResults()
         {
             $expectedResult = array(
                  array(
                     'id' => 0,
                     'name' => 'memberInvolved',
+                    'count' => 0,
+                ),
+                array(
+                    'id' => 1,
+                    'name' => 'Pending',
+                    'count' => 0,
+                ),
+                array(
+                    'id' => 2,
+                    'name' => 'Approved',
+                    'count' => 0,
+                ),
+                array(
+                    'id' => 3,
+                    'name' => 'Rejected',
+                    'count' => 1,
+                ),
+                array(
+                    'id' => 4,
+                    'name' => 'Fulfilled',
+                    'count' => 1,
+                ),
+            );
+
+            $this->assertEquals($expectedResult, $this->ConsumableRequest->getRequestCounts(0));
+        }
+
+        public function test_GetRequestCounts_WithIdOfExistingRecord_CorrectlyRetrievesRecordFromFixture()
+        {
+            $expectedResult = array(
+                 array(
+                    'id' => 0,
+                    'name' => 'Requests',
                     'count' => 2,
                 ),
                 array(
