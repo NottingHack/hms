@@ -1180,8 +1180,12 @@
 
 			if( is_array($this->_saveMemberData($dataToSave, $fieldsToSave, $adminId)) )
 			{
-				$dataSource->commit();
-				return $this->getApproveDetails($memberId);
+				$approveDetails = $this->getApproveDetails($memberId);
+				if($approveDetails)
+				{
+					$dataSource->commit();
+					return $approveDetails;
+				}
 			}
 
 			return null;
