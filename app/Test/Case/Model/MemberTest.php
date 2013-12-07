@@ -1485,7 +1485,7 @@
             $this->assertEqual( $record['Member']['join_date'], date('Y-m-d'), 'Record has incorrect join date.' );
             $this->assertEqual( $record['Member']['unlock_text'], 'Welcome Evan', 'Record has incorrect unlock text.' );
             $this->assertEqual( $record['Member']['balance'], 0, 'Record has incorrect balance.' );
-            $this->assertEqual( $record['Member']['credit_limit'], 5000, 'Record has incorrect credit limit.' );
+            $this->assertEqual( $record['Member']['credit_limit'], 2000, 'Record has incorrect credit limit.' );
             $this->assertEqual( $record['Member']['member_status'], Status::CURRENT_MEMBER, 'Record has incorrect status.' );
             $this->assertEqual( $record['Member']['username'], 'Sookinium', 'Record has incorrect status.' );
             $this->assertEqual( $record['Member']['account_id'], 8, 'Record has incorrect account id.' );
