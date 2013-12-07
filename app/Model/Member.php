@@ -15,6 +15,7 @@
 	class Member extends AppModel 
 	{
 		const MIN_PASSWORD_LENGTH = 6; //!< The minimum length passwords must be.
+		const INITAL_CREDIT_LIMIT = 2000; //!< Initial credit limit, in pence.
 
 		public $primaryKey = 'member_id'; //!< Specify the primary key, since we don't use the default.
 
@@ -1154,7 +1155,7 @@
 			$hardcodedMemberData = array(
 				'member_status' => Status::CURRENT_MEMBER,
 				'unlock_text' => 'Welcome ' . $memberInfo['Member']['firstname'],
-				'credit_limit' => 5000,
+				'credit_limit' => Member::INITAL_CREDIT_LIMIT,
 				'join_date' => date( 'Y-m-d' ),
 			);
 			$dataToSave = array('Member' => Hash::merge($memberInfo['Member'], $hardcodedMemberData));
@@ -1180,8 +1181,12 @@
 
 			if( is_array($this->_saveMemberData($dataToSave, $fieldsToSave, $adminId)) )
 			{
-				$dataSource->commit();
-				return $this->getApproveDetails($memberId);
+				$approveDetails = $this->getApproveDetails($memberId);
+				if($approveDetails)
+				{
+					$dataSource->commit();
+					return $approveDetails;
+				}
 			}
 
 			return null;

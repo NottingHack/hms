@@ -103,6 +103,7 @@
 						'pin' => $this->generateUniquePin(),
 						'state' => Pin::STATE_ENROLL,
 						'member_id' => $memberId,
+						'date_added' => null,
 					)
 				);
 

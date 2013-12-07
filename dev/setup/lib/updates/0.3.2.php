@@ -40,17 +40,26 @@
 		$massQuery .= "UPDATE `members` SET ";
 		if($member['firstname'] == null)
 		{
-			$massQuery .= "`firstname`=NULL `surname`=NULL";
+			$massQuery .= "`firstname`=NULL, `surname`=NULL";
 		}
 		else
 		{
 			$nameParts = explode(' ', $member['firstname']);
-			$firstname = $conn->real_escape_string(array_shift($nameParts));
-			$surname = $conn->real_escape_string(implode(' ', $nameParts));
+
+			$firstname = trim($conn->real_escape_string(array_shift($nameParts)));
+
+			if(count($nameParts) > 0)
+			{
+				$surname = trim($conn->real_escape_string(implode(' ', $nameParts)));
+			}
+			else
+			{
+				$surname = '?';
+			}
 
 			$massQuery .= "`firstname`='$firstname',`surname`='$surname'";
 		}
-		$massQuery .= "WHERE `member_id` = {$member['member_id']}" . ';';
+		$massQuery .= " WHERE `member_id` = {$member['member_id']}" . ';';
 	}
 
 	$this->_runQuery($conn, $massQuery);
