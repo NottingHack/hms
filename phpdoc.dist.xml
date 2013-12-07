@@ -19,6 +19,7 @@
     </logging>
     <transformations>
         <template name="responsive" />
+        <template name="checkstyle"/>
     </transformations>
     <files>
         <directory>./app</directory>
