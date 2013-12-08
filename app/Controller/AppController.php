@@ -2,21 +2,17 @@
 /**
  * Application level Controller
  *
- * This file is application-wide controller file. You can put all
- * application-wide controller-related methods here.
+ * Application-wide logic.
  *
  * PHP 5
  *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (C) HMS Team
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     HMS Team
  * @package       app.Controller
- * @since         CakePHP(tm) v 0.2.9
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
@@ -31,80 +27,110 @@ App::uses('AuthComponent', 'Controller/Auth');
  * Add your application-wide methods in the class below, your controllers
  * will inherit them.
  *
- * @package       app.Controller
- * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
+ * @package     app.Controller
+ * @link 		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
 
-    const VERSION_MAJOR = 0;
-    const VERSION_MINOR = 3;
-    const VERSION_BUILD = 3;
+	const VERSION_MAJOR = 0;
+	const VERSION_MINOR = 3;
+	const VERSION_BUILD = 3;
 
+/**
+ * List of helpers views rendered from this controller will have access to.
+ * @var array
+ */
 	public $helpers = array('Html', 'Form', 'Nav');
 
-    //! Email object, for easy mocking.
-    public $email = null;
+/**
+ * Email object, used for easy mocking.
+ * @var class
+ */
+	public $email = null;
 
+/**
+ * List of components this controller uses.
+ * @var array
+ */
 	public $components = array(
-        'Session',
-        'Auth' => array(
-        	'loginAction' => array(
-                'plugin' => null,
-	            'controller' => 'members',
-	            'action' => 'login',
-	        ),
-            'loginRedirect' => array('plugin' => null, 'controller' => 'pages', 'action' => 'index'),
-            'logoutRedirect' => array('plugin' => null, 'controller' => 'pages', 'action' => 'display', 'home'),
-            'Hms' => array(
-                'fields' => array('username' => 'email'),
-                'userModel' => 'Member',
-            ),
-            'authorize' => array('Hms'),
-        ),
-        'Nav',
-        'AuthUtil',
-    );
+		'Session',
+		'Auth' => array(
+			'loginAction' => array(
+				'plugin' => null,
+				'controller' => 'members',
+				'action' => 'login',
+			),
+			'loginRedirect' => array('plugin' => null, 'controller' => 'pages', 'action' => 'index'),
+			'logoutRedirect' => array('plugin' => null, 'controller' => 'pages', 'action' => 'display', 'home'),
+			'Hms' => array(
+				'fields' => array('username' => 'email'),
+				'userModel' => 'Member',
+			),
+			'authorize' => array('Hms'),
+		),
+		'Nav',
+		'AuthUtil',
+	);
 
-    private $mainNav = array();
+/**
+ * List of link information that will be used to render the main navigation element.
+ * @var array
+ */
+	private $__mainNav = array();
 
-    public function __construct($request = null, $response = null) {
-    	parent::__construct($request, $response);
+/**
+ * Constructor.
+ *
+ * @param CakeRequest $request Request object for this controller. Can be null for testing,
+ *  but expect that features that use the request parameters will not work.
+ * @param CakeResponse $response Response object for this controller.
+ */
+	public function __construct($request = null, $response = null) {
+		parent::__construct($request, $response);
 
-    	// Add the main nav
-    	$this->AddMainNav('Members', array( 'plugin' => null, 'controller' => 'members', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN));
-    	$this->AddMainNav('Groups', array( 'plugin' => null, 'controller' => 'groups', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN));
-    	$this->AddMainNav('Mailing Lists', array( 'plugin' => null, 'controller' => 'mailinglists', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN));
-    	$this->AddMainNav('MemberVoice', array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ), '');
+		// Add the main nav
+		$this->__addMainNav('Members', array( 'plugin' => null, 'controller' => 'members', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN));
+		$this->__addMainNav('Groups', array( 'plugin' => null, 'controller' => 'groups', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN));
+		$this->__addMainNav('Mailing Lists', array( 'plugin' => null, 'controller' => 'mailinglists', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN));
+		$this->__addMainNav('MemberVoice', array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ), null);
+	}
 
-    }
+/**
+ * Add an item to the main nav list.
+ * @param  string $title Text to display with the link.
+ * @param  string[] $link Array to pass to the HtmlHelper to construct the link when rendering.
+ * @param  int[]|null $access Array of group ids that have access to this link, if null, all groups have access to link.
+ */
+	private function __addMainNav($title, $link, $access) {
+		$this->__mainNav[] = array(
+								'title'		=>	$title,
+								'link'		=>	$link,
+								'access'	=>	$access,
+								);
+	}
 
-    public function AddMainNav($title, $link, $access) {
-    	$this->mainNav[] = array(
-    							'title'		=>	$title,
-    							'link'		=>	$link,
-    							'access'	=>	$access,
-    							);
-    }
-
-    public function getMainNav($userId) {
+/**
+ * Return a list of navigation elements that a user is allowed to access.
+ * @param  int $userId Only navigation elements accessible by this user will be returned.
+ * @return array A list of link information.
+ */
+	public function getMainNav($userId) {
 		Controller::loadModel('Member');
 
 		$navLinks = array();
 
-		foreach ($this->mainNav as $nav) {
+		foreach ($this->__mainNav as $nav) {
 			$allowed = false;
 			if ($nav['access'] == '') {
 				$allowed = true;
-			}
-			elseif (is_array($nav['access'])) {
+			} elseif (is_array($nav['access'])) {
 				foreach ($nav['access'] as $access) {
 					if ($this->Member->GroupsMember->isMemberInGroup($userId, $access)) {
 						$allowed = true;
 						break;
 					}
 				}
-			}
-			else {
+			} else {
 				if ($this->Member->GroupsMember->isMemberInGroup($userId, $nav['access'])) {
 					$allowed = true;
 				}
@@ -115,105 +141,118 @@ class AppController extends Controller {
 		}
 
 		return $navLinks;
-    }
+	}
 
-    public function beforeFilter() {
-        $this->Auth->authenticate = array('Hms');
-    	$this->Auth->authorize = array('Hms');
-    }
+/**
+ * Called before the controller action. Sets up the authentication.
+ *
+ * @link http://book.cakephp.org/2.0/en/controllers.html#request-life-cycle-callbacks
+ */
+	public function beforeFilter() {
+		$this->Auth->authenticate = array('Hms');
+		$this->Auth->authorize = array('Hms');
+	}
 
-    public function beforeRender() {
-        // Send any links added to the NavComponent to the view
-        $this->set('navLinks', $this->Nav->get_allowed_actions());
+/**
+ * Called after the controller action is run, but before the view is rendered.
+ * Set up the common view variables, navigation links, memberId, etc.
+ *
+ * @link http://book.cakephp.org/2.0/en/controllers.html#request-life-cycle-callbacks
+ */
+	public function beforeRender() {
+		// Send any links added to the NavComponent to the view
+		$this->set('navLinks', $this->Nav->get_allowed_actions());
 
-        Controller::loadModel('Member');
+		Controller::loadModel('Member');
 
-        $loggedInMemberId = $this->Member->getIdForMember($this->Auth->user());
-        if($loggedInMemberId)
-        {
-            $adminLinks = $this->getMainNav($loggedInMemberId);
+		$loggedInMemberId = $this->Member->getIdForMember($this->Auth->user());
+		if ($loggedInMemberId) {
+			$adminLinks = $this->getMainNav($loggedInMemberId);
 
-            $userMessage = array();
-            if( $this->Member->getStatusForMember($loggedInMemberId) == Status::PRE_MEMBER_1 )
-            {
-                $userMessage = array('Click here to enter your contact details!' => array( 'controller' => 'members', 'action' => 'setupDetails', $loggedInMemberId ) );
-            }
+			$userMessage = array();
+			if ($this->Member->getStatusForMember($loggedInMemberId) == Status::PRE_MEMBER_1) {
+				$userMessage = array('Click here to enter your contact details!' => array( 'controller' => 'members', 'action' => 'setupDetails', $loggedInMemberId ) );
+			}
 
-            $this->set('adminNav', $adminLinks);
-            $this->set('userMessage', $userMessage);
-            $this->set('memberId', $loggedInMemberId);
-            $this->set('username', $this->Member->getUsernameForMember($this->Auth->user()));
-        }
+			$this->set('adminNav', $adminLinks);
+			$this->set('userMessage', $userMessage);
+			$this->set('memberId', $loggedInMemberId);
+			$this->set('username', $this->Member->getUsernameForMember($this->Auth->user()));
+		}
 
-        $jsonData = json_decode(file_get_contents('http://lspace.nottinghack.org.uk/status/status.php'));
+		$jsonData = json_decode(file_get_contents('http://lspace.nottinghack.org.uk/status/status.php'));
 
-        $this->set('jsonData', $jsonData);
-        $this->set('navLinks', $this->Nav->get_allowed_actions());
+		$this->set('jsonData', $jsonData);
+		$this->set('navLinks', $this->Nav->get_allowed_actions());
 
-        $this->set('version', $this->getVersionString());
-    }
+		$this->set('version', $this->getVersionString());
+	}
 
-    public function isAuthorized($user, $request)
-    {
-        Controller::loadModel('Member');
+/**
+ * Check if a user is allowed to complete a request.
+ * @param  array $user An array of data describing the user attempting to make the request.
+ * @param  CakeRequest $request The request the user is trying to make.
+ * @return boolean True if user is able to complete request, false otherwise.
+ */
+	public function isAuthorized($user, $request) {
+		Controller::loadModel('Member');
 
-        if($this->Member->GroupsMember->isMemberInGroup( $this->Member->getIdForMember($user), Group::FULL_ACCESS ))
-        {
-            return true;
-        }
-        
-        return false;
-    }
+		if ($this->Member->GroupsMember->isMemberInGroup( $this->Member->getIdForMember($user), Group::FULL_ACCESS )) {
+			return true;
+		}
+		return false;
+	}
 
-    public function getVersionString()
-    {
-        return sprintf('%d.%d.%d', self::VERSION_MAJOR, self::VERSION_MINOR, self::VERSION_BUILD);
-    }
+/**
+ * Get a string detailing the current HMS version.
+ * @return string A string of the current HMS version.
+ */
+	public function getVersionString() {
+		return sprintf('%d.%d.%d', self::VERSION_MAJOR, self::VERSION_MINOR, self::VERSION_BUILD);
+	}
 
-    //! Send an e-mail to one or more email addresses.
-    /*
-        @param mixed $to Either an array of email address strings, or a string containing a singular e-mail address.
-        @param string $subject The subject of the email.
-        @param string $template Which email view template to use.
-        @param array $viewVars Array containing all the variables to pass to the view, Defaults to empty array.
-        @param bool $record If true then the sending of this e-mail we be recorded. Defaults to true.
-        @retval bool True if e-mail was sent, false otherwise.
-    */
-    protected function _sendEmail($to, $subject, $template, $viewVars = array(), $record = true)
-    {
-        if($this->email == null)
-        {
-            $this->email = new CakeEmail();
-        }
+/**
+ * Send an e-mail to one or more email addresses.
+ *
+ * @param string[]|string $to Either an array of email address strings, or a string containing a singular e-mail address.
+ * @param string $subject The subject of the email.
+ * @param string $template Which email view template to use.
+ * @param array $viewVars Array containing all the variables to pass to the view, Defaults to empty array.
+ * @param bool $record If true then the sending of this e-mail we be recorded. Defaults to true.
+ * @return bool True if e-mail was sent, false otherwise.
+ */
+	protected function _sendEmail($to, $subject, $template, $viewVars = array(), $record = true) {
+		if ($this->email == null) {
+			$this->email = new CakeEmail();
+		}
 
-        if($record)
-        {
-            Controller::loadModel('Member');
-            Controller::loadModel('EmailRecord');
+		if ($record) {
+			Controller::loadModel('Member');
+			Controller::loadModel('EmailRecord');
 
-            $memberIdList = $this->Member->emailToMemberId($to);
-            $this->EmailRecord->createNewRecord($memberIdList, $subject);
-        }
+			$memberIdList = $this->Member->emailToMemberId($to);
+			$this->EmailRecord->createNewRecord($memberIdList, $subject);
+		}
 
-        $email = $this->email;
-        $email->config('smtp');
-        $email->from(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
-        $email->sender(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
-        $email->emailFormat('html');
-        $email->to($to);
-        $email->subject($subject);
-        $email->template($template);
-        $email->viewVars($viewVars);
-        return $email->send();
-    }
+		$email = $this->email;
+		$email->config('smtp');
+		$email->from(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+		$email->sender(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
+		$email->emailFormat('html');
+		$email->to($to);
+		$email->subject($subject);
+		$email->template($template);
+		$email->viewVars($viewVars);
+		return $email->send();
+	}
 
-    //! Get the id of the currently logged in Member.
-    /*!
-        @retval int The id of the currently logged in Member, or 0 if not found.
-    */
-    protected function _getLoggedInMemberId()
-    {
-        Controller::loadModel('Member');
-        return $this->Member->getIdForMember($this->Auth->user());
-    }
+/**
+ * Get the id of the currently logged in Member.
+ *
+ * @return int The id of the currently logged in Member, or 0 if not found.
+ */
+	protected function _getLoggedInMemberId() {
+		Controller::loadModel('Member');
+		return $this->Member->getIdForMember($this->Auth->user());
+	}
 }
