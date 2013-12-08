@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>HMS - The Hackspace Management System</title>
+    <parser>
+        <target>docs/parsed</target>
+        <extensions>
+            <extension>php</extension>
+        </extensions>
+    </parser>
+    <transformer>
+        <target>docs/generated</target>
+    </transformer>
+    <logging>
+        <level>warn</level>
+        <paths>
+            <default>docs/generated/warnings.log</default>
+            <errors>docs/generated/errors.log</errors>
+        </paths>
+    </logging>
+    <transformations>
+        <template name="checkstyle" />
+    </transformations>
+    <files>
+        <directory>./app</directory>
+        <directory>./plugins</directory>
+        <ignore>Test/*</ignore>
+        <ignore>tmp/*</ignore>
+        <ignore>webroot/*</ignore>
+        <ignore>Config/*</ignore>
+    </files>
+</phpdoc>

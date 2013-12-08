@@ -2,7 +2,7 @@
 <phpdoc>
     <title>HMS - The Hackspace Management System</title>
     <parser>
-        <target>docs/generated</target>
+        <target>docs/parsed</target>
         <extensions>
             <extension>php</extension>
         </extensions>
@@ -19,7 +19,6 @@
     </logging>
     <transformations>
         <template name="responsive" />
-        <template name="checkstyle"/>
     </transformations>
     <files>
         <directory>./app</directory>
