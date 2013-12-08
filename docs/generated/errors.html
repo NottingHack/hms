@@ -1,0 +1,4117 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>HMS - The Hackspace Management System</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="css/template.css" rel="stylesheet" media="all">
+<script src="js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="js/bootstrap.js" type="text/javascript"></script><script src="js/template.js" type="text/javascript"></script><script src="js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="img/favicon.ico">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="index.html">HMS - The Hackspace Management System</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
+<li><a href="packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
+<li><a href="packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
+<li><a href="packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
+<li><a href="packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
+<li><a href="packages/plugin.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Model</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">665</span></a></li>
+<li><a href="markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul></ul></a></li>
+<li><a href="deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4"><ul class="side-nav nav nav-list">
+<li class="nav-header">Filter type</li>
+<li><div class="btn-group type-filter" data-toggle="buttons-checkbox">
+<button class="btn critical">Critical</button><button class="btn error">Error</button><button class="btn notice">Notice</button>
+</div></li>
+<li class="nav-header">Navigation</li>
+<li><a href="#app%5CController%5CComponent%5CAuth%5CHmsAuthenticate.php"><i class="icon-file"></i>app\Controller\Component\Auth\HmsAuthenticate.php</a></li>
+<li><a href="#app%5CController%5CComponent%5CAuth%5CHmsAuthorize.php"><i class="icon-file"></i>app\Controller\Component\Auth\HmsAuthorize.php</a></li>
+<li><a href="#app%5CController%5CComponent%5CAuthUtilComponent.php"><i class="icon-file"></i>app\Controller\Component\AuthUtilComponent.php</a></li>
+<li><a href="#app%5CController%5CComponent%5CBankStatementComponent.php"><i class="icon-file"></i>app\Controller\Component\BankStatementComponent.php</a></li>
+<li><a href="#app%5CController%5CComponent%5CCsvComponent.php"><i class="icon-file"></i>app\Controller\Component\CsvComponent.php</a></li>
+<li><a href="#app%5CController%5CComponent%5CNavComponent.php"><i class="icon-file"></i>app\Controller\Component\NavComponent.php</a></li>
+<li><a href="#app%5CController%5CEmailRecordsController.php"><i class="icon-file"></i>app\Controller\EmailRecordsController.php</a></li>
+<li><a href="#app%5CController%5CGroupsController.php"><i class="icon-file"></i>app\Controller\GroupsController.php</a></li>
+<li><a href="#app%5CController%5CMailinglistsController.php"><i class="icon-file"></i>app\Controller\MailinglistsController.php</a></li>
+<li><a href="#app%5CController%5CMembersController.php"><i class="icon-file"></i>app\Controller\MembersController.php</a></li>
+<li><a href="#app%5CController%5CStatusController.php"><i class="icon-file"></i>app\Controller\StatusController.php</a></li>
+<li><a href="#app%5CLib%5CAutomationDriver%5CAutomationDriver.php"><i class="icon-file"></i>app\Lib\AutomationDriver\AutomationDriver.php</a></li>
+<li><a href="#app%5CLib%5CAutomationDriver%5CAutomationDriverTest.php"><i class="icon-file"></i>app\Lib\AutomationDriver\AutomationDriverTest.php</a></li>
+<li><a href="#app%5CLib%5CAutomationDriver%5CHmsAutomationDriverTest.php"><i class="icon-file"></i>app\Lib\AutomationDriver\HmsAutomationDriverTest.php</a></li>
+<li><a href="#app%5CLib%5CCsvReader%5CCsvReader.php"><i class="icon-file"></i>app\Lib\CsvReader\CsvReader.php</a></li>
+<li><a href="#app%5CLib%5CError%5CException%5CInvalidStatusException.php"><i class="icon-file"></i>app\Lib\Error\Exception\InvalidStatusException.php</a></li>
+<li><a href="#app%5CLib%5CError%5CException%5CNotAuthorizedException.php"><i class="icon-file"></i>app\Lib\Error\Exception\NotAuthorizedException.php</a></li>
+<li><a href="#app%5CLib%5CKrb%5Ckrb5_auth.php"><i class="icon-file"></i>app\Lib\Krb\krb5_auth.php</a></li>
+<li><a href="#app%5CLib%5CMailChimp%5CMCAPI.php"><i class="icon-file"></i>app\Lib\MailChimp\MCAPI.php</a></li>
+<li><a href="#app%5CModel%5CAccount.php"><i class="icon-file"></i>app\Model\Account.php</a></li>
+<li><a href="#app%5CModel%5CBehavior%5CKrbAuthBehavior.php"><i class="icon-file"></i>app\Model\Behavior\KrbAuthBehavior.php</a></li>
+<li><a href="#app%5CModel%5CChangePassword.php"><i class="icon-file"></i>app\Model\ChangePassword.php</a></li>
+<li><a href="#app%5CModel%5CEmailRecord.php"><i class="icon-file"></i>app\Model\EmailRecord.php</a></li>
+<li><a href="#app%5CModel%5CFileUpload.php"><i class="icon-file"></i>app\Model\FileUpload.php</a></li>
+<li><a href="#app%5CModel%5CForgotPassword.php"><i class="icon-file"></i>app\Model\ForgotPassword.php</a></li>
+<li><a href="#app%5CModel%5CGroup.php"><i class="icon-file"></i>app\Model\Group.php</a></li>
+<li><a href="#app%5CModel%5CGroupsMember.php"><i class="icon-file"></i>app\Model\GroupsMember.php</a></li>
+<li><a href="#app%5CModel%5CMailingList.php"><i class="icon-file"></i>app\Model\MailingList.php</a></li>
+<li><a href="#app%5CModel%5CMember.php"><i class="icon-file"></i>app\Model\Member.php</a></li>
+<li><a href="#app%5CModel%5CMemberEmail.php"><i class="icon-file"></i>app\Model\MemberEmail.php</a></li>
+<li><a href="#app%5CModel%5CPermission.php"><i class="icon-file"></i>app\Model\Permission.php</a></li>
+<li><a href="#app%5CModel%5CPin.php"><i class="icon-file"></i>app\Model\Pin.php</a></li>
+<li><a href="#app%5CModel%5CStatus.php"><i class="icon-file"></i>app\Model\Status.php</a></li>
+<li><a href="#app%5CModel%5CStatusUpdate.php"><i class="icon-file"></i>app\Model\StatusUpdate.php</a></li>
+<li><a href="#app%5CView%5CHelper%5CCurrencyHelper.php"><i class="icon-file"></i>app\View\Helper\CurrencyHelper.php</a></li>
+<li><a href="#app%5CView%5CHelper%5CMailinglistHelper.php"><i class="icon-file"></i>app\View\Helper\MailinglistHelper.php</a></li>
+<li><a href="#app%5CView%5CHelper%5CNavHelper.php"><i class="icon-file"></i>app\View\Helper\NavHelper.php</a></li>
+<li><a href="#app%5CView%5CHelper%5CTinymceHelper.php"><i class="icon-file"></i>app\View\Helper\TinymceHelper.php</a></li>
+<li><a href="#plugins%5CMemberVoice%5CController%5CMemberVoiceAppController.php"><i class="icon-file"></i>plugins\MemberVoice\Controller\MemberVoiceAppController.php</a></li>
+<li><a href="#plugins%5CMemberVoice%5CController%5CMemberVoiceCommentsController.php"><i class="icon-file"></i>plugins\MemberVoice\Controller\MemberVoiceCommentsController.php</a></li>
+<li><a href="#plugins%5CMemberVoice%5CController%5CMemberVoiceIdeasController.php"><i class="icon-file"></i>plugins\MemberVoice\Controller\MemberVoiceIdeasController.php</a></li>
+<li><a href="#plugins%5CMemberVoice%5CModel%5CMemberVoiceAppModel.php"><i class="icon-file"></i>plugins\MemberVoice\Model\MemberVoiceAppModel.php</a></li>
+<li><a href="#plugins%5CMemberVoice%5CModel%5CMemberVoiceCategory.php"><i class="icon-file"></i>plugins\MemberVoice\Model\MemberVoiceCategory.php</a></li>
+<li><a href="#plugins%5CMemberVoice%5CModel%5CMemberVoiceComment.php"><i class="icon-file"></i>plugins\MemberVoice\Model\MemberVoiceComment.php</a></li>
+<li><a href="#plugins%5CMemberVoice%5CModel%5CMemberVoiceIdea.php"><i class="icon-file"></i>plugins\MemberVoice\Model\MemberVoiceIdea.php</a></li>
+<li><a href="#plugins%5CMemberVoice%5CModel%5CMemberVoiceStatus.php"><i class="icon-file"></i>plugins\MemberVoice\Model\MemberVoiceStatus.php</a></li>
+<li><a href="#plugins%5CMemberVoice%5CModel%5CMemberVoiceVote.php"><i class="icon-file"></i>plugins\MemberVoice\Model\MemberVoiceVote.php</a></li>
+</ul></div>
+<div class="span8">
+<ul class="breadcrumb">
+<li>
+<a href=""><i class="icon-remove-sign"></i></a><span class="divider">\</span>
+</li>
+<li>Compilation Errors</li>
+</ul>
+<div class="package-contents"></div>
+<div class="package-contents"></div>
+<div class="package-contents"></div>
+<div class="package-contents">
+<a name="app%5CController%5CComponent%5CAuth%5CHmsAuthenticate.php" id="app\Controller\Component\Auth\HmsAuthenticate.php"></a><h3>
+<i class="icon-file"></i>app\Controller\Component\Auth\HmsAuthenticate.php<small style="float: right;padding-right: 10px;">7</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>5</td>
+<td>No summary for class \HmsAuthenticate</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>8</td>
+<td>No summary for method authenticate()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>36</td>
+<td>Argument $salt is missing from the Docblock of make_hash()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>36</td>
+<td>Argument $pass is missing from the Docblock of make_hash()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>36</td>
+<td>No summary for method make_hash()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>43</td>
+<td>No summary for method make_salt()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CController%5CComponent%5CAuth%5CHmsAuthorize.php" id="app\Controller\Component\Auth\HmsAuthorize.php"></a><h3>
+<i class="icon-file"></i>app\Controller\Component\Auth\HmsAuthorize.php<small style="float: right;padding-right: 10px;">5</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>8</td>
+<td>No summary for class \HmsAuthorize</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>No summary for method controller()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>19</td>
+<td>Argument $user is missing from the Docblock of authorize()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>19</td>
+<td>No summary for method authorize()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CController%5CComponent%5CAuthUtilComponent.php" id="app\Controller\Component\AuthUtilComponent.php"></a><h3>
+<i class="icon-file"></i>app\Controller\Component\AuthUtilComponent.php<small style="float: right;padding-right: 10px;">12</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No summary for class \AuthUtilComponent</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>No summary for property $components</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>11</td>
+<td>No summary for property $controllers</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>12</td>
+<td>No summary for property $currentController</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>14</td>
+<td>No summary for method initialize()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>19</td>
+<td>Argument $controller is missing from the Docblock of is_authorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>19</td>
+<td>Argument $action is missing from the Docblock of is_authorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>19</td>
+<td>Argument $params is missing from the Docblock of is_authorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>19</td>
+<td>No summary for method is_authorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>58</td>
+<td>Argument $name is missing from the Docblock of get_controller()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>58</td>
+<td>No summary for method get_controller()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CController%5CComponent%5CBankStatementComponent.php" id="app\Controller\Component\BankStatementComponent.php"></a><h3>
+<i class="icon-file"></i>app\Controller\Component\BankStatementComponent.php<small style="float: right;padding-right: 10px;">15</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>6</td>
+<td>No summary for class \BankStatementComponent</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>8</td>
+<td>No summary for property $components</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>15</td>
+<td>Argument $filePath is missing from the Docblock of readFile()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>15</td>
+<td>No summary for method readFile()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>42</td>
+<td>Argument $callback is missing from the Docblock of iterate()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>42</td>
+<td>No summary for method iterate()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>61</td>
+<td>Argument $index is missing from the Docblock of getLine()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>61</td>
+<td>No summary for method getLine()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>117</td>
+<td>Argument $desc is missing from the Docblock of _parseDesc()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>117</td>
+<td>No summary for method _parseDesc()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>170</td>
+<td>Argument $field is missing from the Docblock of _parseFp()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>170</td>
+<td>No summary for method _parseFp()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>193</td>
+<td>Argument $date is missing from the Docblock of _parseDate()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>193</td>
+<td>No summary for method _parseDate()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CController%5CComponent%5CCsvComponent.php" id="app\Controller\Component\CsvComponent.php"></a><h3>
+<i class="icon-file"></i>app\Controller\Component\CsvComponent.php<small style="float: right;padding-right: 10px;">10</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No summary for class \CsvComponent</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>No summary for property $csvReader</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>16</td>
+<td>Argument $settings is missing from the Docblock of __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>16</td>
+<td>No summary for method __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>28</td>
+<td>Argument $filePath is missing from the Docblock of readFile()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>28</td>
+<td>No summary for method readFile()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>37</td>
+<td>No summary for method getNumLines()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>47</td>
+<td>Argument $index is missing from the Docblock of getLine()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>47</td>
+<td>No summary for method getLine()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CController%5CComponent%5CNavComponent.php" id="app\Controller\Component\NavComponent.php"></a><h3>
+<i class="icon-file"></i>app\Controller\Component\NavComponent.php<small style="float: right;padding-right: 10px;">15</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>8</td>
+<td>No summary for class \NavComponent</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>No summary for property $components</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>12</td>
+<td>No summary for property $allowedActions</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>15</td>
+<td>Argument $text is missing from the Docblock of addExternal()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>15</td>
+<td>Argument $url is missing from the Docblock of addExternal()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>15</td>
+<td>Argument $class is missing from the Docblock of addExternal()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>15</td>
+<td>No summary for method addExternal()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>21</td>
+<td>Argument $text is missing from the Docblock of add()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>21</td>
+<td>Argument $controller is missing from the Docblock of add()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>21</td>
+<td>Argument $action is missing from the Docblock of add()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>21</td>
+<td>Argument $params is missing from the Docblock of add()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>21</td>
+<td>Argument $class is missing from the Docblock of add()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>21</td>
+<td>No summary for method add()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>29</td>
+<td>No summary for method get_allowed_actions()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CController%5CEmailRecordsController.php" id="app\Controller\EmailRecordsController.php"></a><h3>
+<i class="icon-file"></i>app\Controller\EmailRecordsController.php<small style="float: right;padding-right: 10px;">11</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>5</td>
+<td>No summary for class \EmailRecordsController</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No summary for property $helpers</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>16</td>
+<td>Argument $user is missing from the Docblock of isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>16</td>
+<td>Argument $request is missing from the Docblock of isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>16</td>
+<td>No summary for method isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>45</td>
+<td>Argument $emails is missing from the Docblock of _setupEmailListView()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>45</td>
+<td>No summary for method _setupEmailListView()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>52</td>
+<td>No summary for method index()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>57</td>
+<td>Argument $id is missing from the Docblock of view()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>57</td>
+<td>No summary for method view()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CController%5CGroupsController.php" id="app\Controller\GroupsController.php"></a><h3>
+<i class="icon-file"></i>app\Controller\GroupsController.php<small style="float: right;padding-right: 10px;">12</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>3</td>
+<td>No summary for class \GroupsController</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>5</td>
+<td>No summary for property $helpers</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>Argument $user is missing from the Docblock of isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>Argument $request is missing from the Docblock of isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No summary for method isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>13</td>
+<td>No summary for method index()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>21</td>
+<td>No summary for method add()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>34</td>
+<td>Argument $id is missing from the Docblock of edit()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>34</td>
+<td>No summary for method edit()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>50</td>
+<td>Argument $id is missing from the Docblock of view()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>50</td>
+<td>No summary for method view()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CController%5CMailinglistsController.php" id="app\Controller\MailinglistsController.php"></a><h3>
+<i class="icon-file"></i>app\Controller\MailinglistsController.php<small style="float: right;padding-right: 10px;">13</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>3</td>
+<td>No summary for class \MailingListsController</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>6</td>
+<td>No summary for property $helpers</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>8</td>
+<td>Argument $user is missing from the Docblock of isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>8</td>
+<td>Argument $request is missing from the Docblock of isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>8</td>
+<td>No summary for method isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>13</td>
+<td>No summary for method index()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>29</td>
+<td>Argument $id is missing from the Docblock of view()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>29</td>
+<td>No summary for method view()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>60</td>
+<td>Argument $list is missing from the Docblock of _getListStats()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>60</td>
+<td>Argument $memberEmails is missing from the Docblock of _getListStats()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>60</td>
+<td>No summary for method _getListStats()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>72</td>
+<td>No summary for method _getMemberEmails()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CController%5CMembersController.php" id="app\Controller\MembersController.php"></a><h3>
+<i class="icon-file"></i>app\Controller\MembersController.php<small style="float: right;padding-right: 10px;">72</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>30</td>
+<td>No summary for property $helpers</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>36</td>
+<td>No summary for property $components</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>45</td>
+<td>Argument $user is missing from the Docblock of isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>45</td>
+<td>Argument $request is missing from the Docblock of isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>45</td>
+<td>No summary for method isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>99</td>
+<td>No summary for method beforeFilter()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>129</td>
+<td>No summary for method index()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>140</td>
+<td>No summary for method listMembers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>159</td>
+<td>Argument $statusId is missing from the Docblock of listMembersWithStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>159</td>
+<td>No summary for method listMembersWithStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>175</td>
+<td>No summary for method search()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>195</td>
+<td>Argument $queryResult is missing from the Docblock of _paginateMemberList()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>195</td>
+<td>No summary for method _paginateMemberList()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>208</td>
+<td>No summary for method getMailingList()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>215</td>
+<td>No summary for method register()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>272</td>
+<td>Argument $initialMessage is missing from the Docblock of _setFlashFromMailingListInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>272</td>
+<td>Argument $results is missing from the Docblock of _setFlashFromMailingListInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>272</td>
+<td>No summary for method _setFlashFromMailingListInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>314</td>
+<td>Argument $id is missing from the Docblock of setupLogin()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>314</td>
+<td>No summary for method setupLogin()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>358</td>
+<td>Argument $id is missing from the Docblock of setupDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>358</td>
+<td>No summary for method setupDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>411</td>
+<td>Argument $id is missing from the Docblock of rejectDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>411</td>
+<td>No summary for method rejectDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>459</td>
+<td>Argument $id is missing from the Docblock of acceptDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>459</td>
+<td>No summary for method acceptDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>511</td>
+<td>Argument $id is missing from the Docblock of approveMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>511</td>
+<td>No summary for method approveMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>536</td>
+<td>Argument $id is missing from the Docblock of _approveMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>536</td>
+<td>No summary for method _approveMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>583</td>
+<td>Argument $id is missing from the Docblock of changePassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>583</td>
+<td>No summary for method changePassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>625</td>
+<td>Argument $guid is missing from the Docblock of forgotPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>625</td>
+<td>No summary for method forgotPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>687</td>
+<td>Argument $id is missing from the Docblock of sendMembershipReminder()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>687</td>
+<td>No summary for method sendMembershipReminder()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>709</td>
+<td>Argument $memberId is missing from the Docblock of _sendProspectiveMemberEmail()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>709</td>
+<td>No summary for method _sendProspectiveMemberEmail()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>730</td>
+<td>Argument $id is missing from the Docblock of sendContactDetailsReminder()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>730</td>
+<td>No summary for method sendContactDetailsReminder()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>763</td>
+<td>Argument $id is missing from the Docblock of sendSoDetailsReminder()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>763</td>
+<td>No summary for method sendSoDetailsReminder()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>781</td>
+<td>Argument $memberId is missing from the Docblock of _sendSoDetailsToMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>781</td>
+<td>No summary for method _sendSoDetailsToMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>807</td>
+<td>Argument $id is missing from the Docblock of view()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>807</td>
+<td>No summary for method view()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>875</td>
+<td>Argument $id is missing from the Docblock of edit()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>875</td>
+<td>No summary for method edit()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>935</td>
+<td>Argument $id is missing from the Docblock of revokeMembership()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>935</td>
+<td>No summary for method revokeMembership()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>964</td>
+<td>Argument $id is missing from the Docblock of reinstateMembership()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>964</td>
+<td>No summary for method reinstateMembership()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>997</td>
+<td>Argument $memberId is missing from the Docblock of _getViewPermissions()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>997</td>
+<td>Argument $showAdminFeatures is missing from the Docblock of _getViewPermissions()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>997</td>
+<td>Argument $showFinances is missing from the Docblock of _getViewPermissions()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>997</td>
+<td>Argument $hasJoined is missing from the Docblock of _getViewPermissions()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>997</td>
+<td>Argument $showPersonalDetails is missing from the Docblock of _getViewPermissions()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>997</td>
+<td>No summary for method _getViewPermissions()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1031</td>
+<td>Argument $statusId is missing from the Docblock of emailMembersWithStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1031</td>
+<td>No summary for method emailMembersWithStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1097</td>
+<td>No summary for method login()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1113</td>
+<td>No summary for method logout()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1123</td>
+<td>Argument $memberList is missing from the Docblock of _addMemberActions()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1123</td>
+<td>No summary for method _addMemberActions()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1140</td>
+<td>Argument $memberId is missing from the Docblock of _getActionsForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1140</td>
+<td>No summary for method _getActionsForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1260</td>
+<td>No summary for method isRequestLocal()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1269</td>
+<td>No summary for method getRequestIpAddress()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1297</td>
+<td>Argument $guid is missing from the Docblock of uploadCsv()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1297</td>
+<td>No summary for method uploadCsv()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1429</td>
+<td>No summary for method getMemberIdSessionKey()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents"></div>
+<div class="package-contents">
+<a name="app%5CController%5CStatusController.php" id="app\Controller\StatusController.php"></a><h3>
+<i class="icon-file"></i>app\Controller\StatusController.php<small style="float: right;padding-right: 10px;">7</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>3</td>
+<td>No summary for class \StatusController</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>5</td>
+<td>No summary for property $helpers</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>Argument $user is missing from the Docblock of isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>Argument $request is missing from the Docblock of isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No summary for method isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>13</td>
+<td>No summary for method index()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents"></div>
+<div class="package-contents">
+<a name="app%5CLib%5CAutomationDriver%5CAutomationDriver.php" id="app\Lib\AutomationDriver\AutomationDriver.php"></a><h3>
+<i class="icon-file"></i>app\Lib\AutomationDriver\AutomationDriver.php<small style="float: right;padding-right: 10px;">21</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>No summary for class \AutomationDriver</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>13</td>
+<td>No summary for property $rootUrl</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>14</td>
+<td>No summary for property $webDriver</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>15</td>
+<td>No summary for property $session</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>17</td>
+<td>No summary for method __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>48</td>
+<td>No summary for method connect()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>53</td>
+<td>No summary for method disconnect()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>58</td>
+<td>Argument $url is missing from the Docblock of navigateToUrl()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>58</td>
+<td>No summary for method navigateToUrl()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>64</td>
+<td>No summary for method navigateToHomePage()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>69</td>
+<td>No summary for method navigateToMemberRegister()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>74</td>
+<td>No summary for method pageHasNoErrors()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>80</td>
+<td>Argument $id is missing from the Docblock of getElementById()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>80</td>
+<td>No summary for method getElementById()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>85</td>
+<td>Argument $className is missing from the Docblock of getElementByClassName()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>85</td>
+<td>No summary for method getElementByClassName()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>90</td>
+<td>Argument $controller is missing from the Docblock of _navigteToControllerAction()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>90</td>
+<td>Argument $action is missing from the Docblock of _navigteToControllerAction()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>90</td>
+<td>Argument $params is missing from the Docblock of _navigteToControllerAction()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>90</td>
+<td>No summary for method _navigteToControllerAction()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CLib%5CAutomationDriver%5CAutomationDriverTest.php" id="app\Lib\AutomationDriver\AutomationDriverTest.php"></a><h3>
+<i class="icon-file"></i>app\Lib\AutomationDriver\AutomationDriverTest.php<small style="float: right;padding-right: 10px;">4</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>5</td>
+<td>No summary for class \AutomationDriverTest</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No summary for property $automationDriver</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>No summary for method setUp()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CLib%5CAutomationDriver%5CHmsAutomationDriverTest.php" id="app\Lib\AutomationDriver\HmsAutomationDriverTest.php"></a><h3>
+<i class="icon-file"></i>app\Lib\AutomationDriver\HmsAutomationDriverTest.php<small style="float: right;padding-right: 10px;">4</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>5</td>
+<td>No summary for class \HmsAutomationDriverTest</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>Argument $email is missing from the Docblock of reigsterNewMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No summary for method reigsterNewMember()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CLib%5CCsvReader%5CCsvReader.php" id="app\Lib\CsvReader\CsvReader.php"></a><h3>
+<i class="icon-file"></i>app\Lib\CsvReader\CsvReader.php<small style="float: right;padding-right: 10px;">8</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>4</td>
+<td>No summary for class \CsvReader</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No summary for property $lines</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>14</td>
+<td>Argument $filePath is missing from the Docblock of readFile()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>14</td>
+<td>No summary for method readFile()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>53</td>
+<td>No summary for method getNumLines()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>63</td>
+<td>Argument $index is missing from the Docblock of getLine()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>63</td>
+<td>No summary for method getLine()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CLib%5CError%5CException%5CInvalidStatusException.php" id="app\Lib\Error\Exception\InvalidStatusException.php"></a><h3>
+<i class="icon-file"></i>app\Lib\Error\Exception\InvalidStatusException.php<small style="float: right;padding-right: 10px;">4</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No summary for class \InvalidStatusException</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>Argument $message is missing from the Docblock of __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>No summary for method __construct()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CLib%5CError%5CException%5CNotAuthorizedException.php" id="app\Lib\Error\Exception\NotAuthorizedException.php"></a><h3>
+<i class="icon-file"></i>app\Lib\Error\Exception\NotAuthorizedException.php<small style="float: right;padding-right: 10px;">4</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No summary for class \NotAuthorizedException</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>Argument $message is missing from the Docblock of __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>No summary for method __construct()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CLib%5CKrb%5Ckrb5_auth.php" id="app\Lib\Krb\krb5_auth.php"></a><h3>
+<i class="icon-file"></i>app\Lib\Krb\krb5_auth.php<small style="float: right;padding-right: 10px;">19</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>3</td>
+<td>No summary for class \krb5_auth</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>5</td>
+<td>Argument $krb_username is missing from the Docblock of __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>5</td>
+<td>Argument $keytab is missing from the Docblock of __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>5</td>
+<td>Argument $realm is missing from the Docblock of __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>5</td>
+<td>No summary for method __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>Argument $username is missing from the Docblock of add_user()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>Argument $password is missing from the Docblock of add_user()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>No summary for method add_user()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>14</td>
+<td>Argument $username is missing from the Docblock of delete_user()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>14</td>
+<td>No summary for method delete_user()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>19</td>
+<td>Argument $username is missing from the Docblock of check_password()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>19</td>
+<td>Argument $password is missing from the Docblock of check_password()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>19</td>
+<td>No summary for method check_password()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>24</td>
+<td>Argument $username is missing from the Docblock of change_password()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>24</td>
+<td>Argument $newpassword is missing from the Docblock of change_password()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>24</td>
+<td>No summary for method change_password()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>29</td>
+<td>Argument $username is missing from the Docblock of user_exists()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>29</td>
+<td>No summary for method user_exists()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CLib%5CMailChimp%5CMCAPI.php" id="app\Lib\MailChimp\MCAPI.php"></a><h3>
+<i class="icon-file"></i>app\Lib\MailChimp\MCAPI.php<small style="float: right;padding-right: 10px;">39</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>5</td>
+<td>No summary for class \MCAPI</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No summary for property $useDbConfig</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>8</td>
+<td>No summary for property $errorMessage</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>No summary for property $errorCode</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>11</td>
+<td>No summary for property $dbSource</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>18</td>
+<td>Argument $apikey is missing from the Docblock of MCAPI()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>18</td>
+<td>Argument $secure is missing from the Docblock of MCAPI()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>18</td>
+<td>No summary for method MCAPI()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>27</td>
+<td>Argument $configName is missing from the Docblock of setConfig()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>27</td>
+<td>No summary for method setConfig()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>39</td>
+<td>Argument $filters is missing from the Docblock of lists()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>39</td>
+<td>Argument $start is missing from the Docblock of lists()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>39</td>
+<td>Argument $limit is missing from the Docblock of lists()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>39</td>
+<td>No summary for method lists()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>97</td>
+<td>Argument $id is missing from the Docblock of listSubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>97</td>
+<td>Argument $email_address is missing from the Docblock of listSubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>97</td>
+<td>Argument $merge_vars is missing from the Docblock of listSubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>97</td>
+<td>Argument $email_type is missing from the Docblock of listSubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>97</td>
+<td>Argument $double_optin is missing from the Docblock of listSubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>97</td>
+<td>Argument $update_existing is missing from the Docblock of listSubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>97</td>
+<td>Argument $replace_interests is missing from the Docblock of listSubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>97</td>
+<td>Argument $send_welcome is missing from the Docblock of listSubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>97</td>
+<td>No summary for method listSubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>113</td>
+<td>Argument $id is missing from the Docblock of listUnsubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>113</td>
+<td>Argument $email_address is missing from the Docblock of listUnsubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>113</td>
+<td>Argument $delete_member is missing from the Docblock of listUnsubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>113</td>
+<td>Argument $send_goodbye is missing from the Docblock of listUnsubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>113</td>
+<td>Argument $send_notify is missing from the Docblock of listUnsubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>113</td>
+<td>No summary for method listUnsubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>127</td>
+<td>Argument $id is missing from the Docblock of listMembers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>127</td>
+<td>Argument $status is missing from the Docblock of listMembers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>127</td>
+<td>Argument $since is missing from the Docblock of listMembers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>127</td>
+<td>Argument $start is missing from the Docblock of listMembers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>127</td>
+<td>Argument $limit is missing from the Docblock of listMembers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>127</td>
+<td>No summary for method listMembers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>134</td>
+<td>No summary for method _initDbSource()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>143</td>
+<td>Argument $query is missing from the Docblock of _runQuery()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>143</td>
+<td>No summary for method _runQuery()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CAccount.php" id="app\Model\Account.php"></a><h3>
+<i class="icon-file"></i>app\Model\Account.php<small style="float: right;padding-right: 10px;">11</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>13</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>15</td>
+<td>No summary for property $primaryKey</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>18</td>
+<td>No summary for property $hasMany</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>29</td>
+<td>No summary for property $validate</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>53</td>
+<td>No summary for method generatePaymentRef()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>79</td>
+<td>No summary for method generateUniquePaymentRef()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>96</td>
+<td>Argument $accountId is missing from the Docblock of setupAccountIfNeeded()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>96</td>
+<td>No summary for method setupAccountIfNeeded()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>138</td>
+<td>Argument $paymentRefs is missing from the Docblock of getAccountIdsForRefs()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>138</td>
+<td>No summary for method getAccountIdsForRefs()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents"></div>
+<div class="package-contents">
+<a name="app%5CModel%5CBehavior%5CKrbAuthBehavior.php" id="app\Model\Behavior\KrbAuthBehavior.php"></a><h3>
+<i class="icon-file"></i>app\Model\Behavior\KrbAuthBehavior.php<small style="float: right;padding-right: 10px;">18</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>No summary for class \KrbAuthBehavior</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>12</td>
+<td>No summary for property $krbObj</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>20</td>
+<td>Argument $settings is missing from the Docblock of setup()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>20</td>
+<td>No summary for method setup()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>35</td>
+<td>Argument $username is missing from the Docblock of krbCheckPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>35</td>
+<td>Argument $password is missing from the Docblock of krbCheckPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>35</td>
+<td>No summary for method krbCheckPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>47</td>
+<td>Argument $username is missing from the Docblock of krbAddUser()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>47</td>
+<td>Argument $password is missing from the Docblock of krbAddUser()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>47</td>
+<td>No summary for method krbAddUser()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>58</td>
+<td>Argument $username is missing from the Docblock of krbDeleteUser()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>58</td>
+<td>No summary for method krbDeleteUser()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>70</td>
+<td>Argument $username is missing from the Docblock of krbChangePassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>70</td>
+<td>Argument $newPass is missing from the Docblock of krbChangePassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>70</td>
+<td>No summary for method krbChangePassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>81</td>
+<td>Argument $username is missing from the Docblock of krbUserExists()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>81</td>
+<td>No summary for method krbUserExists()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CChangePassword.php" id="app\Model\ChangePassword.php"></a><h3>
+<i class="icon-file"></i>app\Model\ChangePassword.php<small style="float: right;padding-right: 10px;">5</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>13</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>21</td>
+<td>No summary for property $validate</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>57</td>
+<td>Argument $check is missing from the Docblock of newPasswordConfirmMatchesNewPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>57</td>
+<td>No summary for method newPasswordConfirmMatchesNewPassword()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CEmailRecord.php" id="app\Model\EmailRecord.php"></a><h3>
+<i class="icon-file"></i>app\Model\EmailRecord.php<small style="float: right;padding-right: 10px;">19</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>13</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>14</td>
+<td>No summary for property $primaryKey</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>17</td>
+<td>No summary for property $validate</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>38</td>
+<td>No summary for method getAllEmails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>49</td>
+<td>Argument $memberId is missing from the Docblock of getAllEmailsForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>49</td>
+<td>No summary for method getAllEmailsForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>65</td>
+<td>Argument $memberId is missing from the Docblock of getMostRecentEmailForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>65</td>
+<td>No summary for method getMostRecentEmailForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>85</td>
+<td>Argument $recordList is missing from the Docblock of _formatEmilRecords()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>85</td>
+<td>No summary for method _formatEmilRecords()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>105</td>
+<td>Argument $data is missing from the Docblock of _formatEmailRecord()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>105</td>
+<td>No summary for method _formatEmailRecord()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>121</td>
+<td>Argument $to is missing from the Docblock of createNewRecord()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>121</td>
+<td>Argument $subject is missing from the Docblock of createNewRecord()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>121</td>
+<td>No summary for method createNewRecord()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>163</td>
+<td>Argument $to is missing from the Docblock of _createNewRecordImpl()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>163</td>
+<td>Argument $subject is missing from the Docblock of _createNewRecordImpl()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>163</td>
+<td>No summary for method _createNewRecordImpl()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CFileUpload.php" id="app\Model\FileUpload.php"></a><h3>
+<i class="icon-file"></i>app\Model\FileUpload.php<small style="float: right;padding-right: 10px;">5</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>13</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>19</td>
+<td>No summary for property $validate</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>30</td>
+<td>Argument $data is missing from the Docblock of getTmpName()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>30</td>
+<td>No summary for method getTmpName()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CForgotPassword.php" id="app\Model\ForgotPassword.php"></a><h3>
+<i class="icon-file"></i>app\Model\ForgotPassword.php<small style="float: right;padding-right: 10px;">17</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>15</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>17</td>
+<td>No summary for property $primaryKey</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>25</td>
+<td>No summary for property $validate</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>67</td>
+<td>Argument $check is missing from the Docblock of newPasswordConfirmMatchesNewPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>67</td>
+<td>No summary for method newPasswordConfirmMatchesNewPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>77</td>
+<td>Argument $check is missing from the Docblock of findMemberWithEmail()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>77</td>
+<td>No summary for method findMemberWithEmail()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>88</td>
+<td>Argument $memberId is missing from the Docblock of createNewEntry()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>88</td>
+<td>No summary for method createNewEntry()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>107</td>
+<td>Argument $guid is missing from the Docblock of isEntryValid()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>107</td>
+<td>Argument $memberId is missing from the Docblock of isEntryValid()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>107</td>
+<td>No summary for method isEntryValid()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>134</td>
+<td>Argument $guid is missing from the Docblock of expireEntry()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>134</td>
+<td>No summary for method expireEntry()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>151</td>
+<td>Argument $guid is missing from the Docblock of isValidGuid()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>151</td>
+<td>No summary for method isValidGuid()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CGroup.php" id="app\Model\Group.php"></a><h3>
+<i class="icon-file"></i>app\Model\Group.php<small style="float: right;padding-right: 10px;">13</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>21</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>23</td>
+<td>No summary for property $primaryKey</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>31</td>
+<td>No summary for property $hasAndBelongsToMany</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>55</td>
+<td>No summary for property $validate</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>70</td>
+<td>Argument $groupId is missing from the Docblock of getDescription()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>70</td>
+<td>No summary for method getDescription()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>80</td>
+<td>No summary for method getGroupSummaryAll()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>89</td>
+<td>No summary for method getGroupList()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>98</td>
+<td>Argument $conditions is missing from the Docblock of _getGroupSummary()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>98</td>
+<td>No summary for method _getGroupSummary()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>111</td>
+<td>Argument $info is missing from the Docblock of _formatGroupInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>111</td>
+<td>No summary for method _formatGroupInfo()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CGroupsMember.php" id="app\Model\GroupsMember.php"></a><h3>
+<i class="icon-file"></i>app\Model\GroupsMember.php<small style="float: right;padding-right: 10px;">10</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>13</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>16</td>
+<td>No summary for property $belongsTo</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>33</td>
+<td>Argument $memberId is missing from the Docblock of isMemberInGroup()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>33</td>
+<td>Argument $groupId is missing from the Docblock of isMemberInGroup()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>33</td>
+<td>No summary for method isMemberInGroup()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>52</td>
+<td>Argument $memberId is missing from the Docblock of getGroupIdsForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>52</td>
+<td>No summary for method getGroupIdsForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>63</td>
+<td>Argument $groupId is missing from the Docblock of getMemberIdsForGroup()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>63</td>
+<td>No summary for method getMemberIdsForGroup()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CMailingList.php" id="app\Model\MailingList.php"></a><h3>
+<i class="icon-file"></i>app\Model\MailingList.php<small style="float: right;padding-right: 10px;">44</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>15</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>17</td>
+<td>No summary for property $apiKey</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>18</td>
+<td>No summary for property $api</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>27</td>
+<td>Argument $id is missing from the Docblock of __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>27</td>
+<td>Argument $table is missing from the Docblock of __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>27</td>
+<td>Argument $ds is missing from the Docblock of __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>27</td>
+<td>No summary for method __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>53</td>
+<td>Argument $useCache is missing from the Docblock of listMailinglists()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>53</td>
+<td>No summary for method listMailinglists()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>76</td>
+<td>Argument $id is missing from the Docblock of getMailinglist()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>76</td>
+<td>Argument $useCache is missing from the Docblock of getMailinglist()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>76</td>
+<td>No summary for method getMailinglist()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>98</td>
+<td>Argument $listId is missing from the Docblock of listSubscribers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>98</td>
+<td>Argument $useCache is missing from the Docblock of listSubscribers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>98</td>
+<td>No summary for method listSubscribers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>120</td>
+<td>Argument $listId is missing from the Docblock of subscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>120</td>
+<td>Argument $email is missing from the Docblock of subscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>120</td>
+<td>No summary for method subscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>134</td>
+<td>Argument $listId is missing from the Docblock of unsubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>134</td>
+<td>Argument $email is missing from the Docblock of unsubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>134</td>
+<td>No summary for method unsubscribe()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>146</td>
+<td>No summary for method errorCode()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>155</td>
+<td>No summary for method errorMsg()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>167</td>
+<td>Argument $email is missing from the Docblock of isEmailAddressSubscriber()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>167</td>
+<td>Argument $listId is missing from the Docblock of isEmailAddressSubscriber()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>167</td>
+<td>Argument $useCache is missing from the Docblock of isEmailAddressSubscriber()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>167</td>
+<td>No summary for method isEmailAddressSubscriber()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>189</td>
+<td>Argument $email is missing from the Docblock of getListsAndSubscribeStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>189</td>
+<td>Argument $useCache is missing from the Docblock of getListsAndSubscribeStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>189</td>
+<td>No summary for method getListsAndSubscribeStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>207</td>
+<td>Argument $email is missing from the Docblock of updateSubscriptions()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>207</td>
+<td>Argument $subscriptions is missing from the Docblock of updateSubscriptions()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>207</td>
+<td>No summary for method updateSubscriptions()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>248</td>
+<td>Argument $functionName is missing from the Docblock of _getCacheName()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>248</td>
+<td>Argument $params is missing from the Docblock of _getCacheName()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>248</td>
+<td>No summary for method _getCacheName()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>262</td>
+<td>Argument $key is missing from the Docblock of _cacheResult()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>262</td>
+<td>Argument $data is missing from the Docblock of _cacheResult()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>262</td>
+<td>No summary for method _cacheResult()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>272</td>
+<td>Argument $key is missing from the Docblock of _getCachedResult()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>272</td>
+<td>No summary for method _getCachedResult()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>281</td>
+<td>Argument $key is missing from the Docblock of _clearMailchimpCache()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>281</td>
+<td>No summary for method _clearMailchimpCache()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CMember.php" id="app\Model\Member.php"></a><h3>
+<i class="icon-file"></i>app\Model\Member.php<small style="float: right;padding-right: 10px;">133</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>20</td>
+<td>No summary for property $primaryKey</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>27</td>
+<td>No summary for property $belongsTo</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>43</td>
+<td>No summary for property $hasMany</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>58</td>
+<td>No summary for property $hasAndBelongsToMany</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>71</td>
+<td>No summary for property $validate</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>202</td>
+<td>No summary for property $actsAs</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>205</td>
+<td>No summary for property $mailingList</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>212</td>
+<td>Argument $check is missing from the Docblock of passwordConfirmMatchesPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>212</td>
+<td>No summary for method passwordConfirmMatchesPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>222</td>
+<td>Argument $check is missing from the Docblock of checkUniqueUsername()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>222</td>
+<td>No summary for method checkUniqueUsername()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>251</td>
+<td>Argument $check is missing from the Docblock of checkEmailMatch()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>251</td>
+<td>No summary for method checkEmailMatch()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>262</td>
+<td>Argument $options is missing from the Docblock of beforeSave()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>262</td>
+<td>No summary for method beforeSave()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>275</td>
+<td>No summary for method addEmailMustMatch()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>285</td>
+<td>No summary for method removeEmailMustMatch()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>295</td>
+<td>Argument $status_id is missing from the Docblock of getCountForStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>295</td>
+<td>No summary for method getCountForStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>304</td>
+<td>No summary for method getCount()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>314</td>
+<td>Argument $email is missing from the Docblock of doesMemberExistWithEmail()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>314</td>
+<td>No summary for method doesMemberExistWithEmail()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>326</td>
+<td>Argument $memberId is missing from the Docblock of getMemberSummaryForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>326</td>
+<td>Argument $format is missing from the Docblock of getMemberSummaryForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>326</td>
+<td>No summary for method getMemberSummaryForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>343</td>
+<td>Argument $memberIds is missing from the Docblock of getMemberSummaryForMembers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>343</td>
+<td>Argument $format is missing from the Docblock of getMemberSummaryForMembers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>343</td>
+<td>No summary for method getMemberSummaryForMembers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>353</td>
+<td>Argument $paginate is missing from the Docblock of getMemberSummaryAll()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>353</td>
+<td>No summary for method getMemberSummaryAll()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>364</td>
+<td>Argument $paginate is missing from the Docblock of getMemberSummaryForAccountIds()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>364</td>
+<td>Argument $accountIds is missing from the Docblock of getMemberSummaryForAccountIds()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>364</td>
+<td>No summary for method getMemberSummaryForAccountIds()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>375</td>
+<td>Argument $paginate is missing from the Docblock of getMemberSummaryForStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>375</td>
+<td>Argument $statusId is missing from the Docblock of getMemberSummaryForStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>375</td>
+<td>No summary for method getMemberSummaryForStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>386</td>
+<td>Argument $paginate is missing from the Docblock of getMemberSummaryForSearchQuery()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>386</td>
+<td>Argument $keyword is missing from the Docblock of getMemberSummaryForSearchQuery()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>386</td>
+<td>No summary for method getMemberSummaryForSearchQuery()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>406</td>
+<td>Argument $memberInfoList is missing from the Docblock of formatMemberInfoList()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>406</td>
+<td>Argument $removeNullEntries is missing from the Docblock of formatMemberInfoList()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>406</td>
+<td>No summary for method formatMemberInfoList()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>424</td>
+<td>Argument $memberInfo is missing from the Docblock of formatMemberInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>424</td>
+<td>Argument $removeNullEntries is missing from the Docblock of formatMemberInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>424</td>
+<td>No summary for method formatMemberInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>579</td>
+<td>Argument $email is missing from the Docblock of createNewMemberInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>579</td>
+<td>No summary for method createNewMemberInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>594</td>
+<td>Argument $memberData is missing from the Docblock of getIdForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>594</td>
+<td>No summary for method getIdForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>614</td>
+<td>Argument $memberData is missing from the Docblock of getUsernameForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>614</td>
+<td>No summary for method getUsernameForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>648</td>
+<td>Argument $memberData is missing from the Docblock of getStatusForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>648</td>
+<td>No summary for method getStatusForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>686</td>
+<td>Argument $memberData is missing from the Docblock of getEmailForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>686</td>
+<td>No summary for method getEmailForMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>724</td>
+<td>Argument $groupId is missing from the Docblock of getEmailsForMembersInGroup()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>724</td>
+<td>No summary for method getEmailsForMembersInGroup()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>739</td>
+<td>No summary for method getEmailsForAllMembers()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>750</td>
+<td>Argument $data is missing from the Docblock of registerMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>750</td>
+<td>No summary for method registerMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>852</td>
+<td>Argument $memberId is missing from the Docblock of setupLogin()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>852</td>
+<td>Argument $data is missing from the Docblock of setupLogin()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>852</td>
+<td>No summary for method setupLogin()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>919</td>
+<td>Argument $memberId is missing from the Docblock of setupDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>919</td>
+<td>Argument $data is missing from the Docblock of setupDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>919</td>
+<td>No summary for method setupDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>994</td>
+<td>Argument $memberId is missing from the Docblock of rejectDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>994</td>
+<td>Argument $data is missing from the Docblock of rejectDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>994</td>
+<td>Argument $adminId is missing from the Docblock of rejectDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>994</td>
+<td>No summary for method rejectDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1057</td>
+<td>Argument $memberId is missing from the Docblock of acceptDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1057</td>
+<td>Argument $data is missing from the Docblock of acceptDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1057</td>
+<td>Argument $adminId is missing from the Docblock of acceptDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1057</td>
+<td>No summary for method acceptDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1121</td>
+<td>Argument $memberId is missing from the Docblock of approveMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1121</td>
+<td>Argument $adminId is missing from the Docblock of approveMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1121</td>
+<td>No summary for method approveMember()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1201</td>
+<td>Argument $memberId is missing from the Docblock of changePassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1201</td>
+<td>Argument $adminId is missing from the Docblock of changePassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1201</td>
+<td>Argument $data is missing from the Docblock of changePassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1201</td>
+<td>No summary for method changePassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1278</td>
+<td>Argument $data is missing from the Docblock of createForgotPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1278</td>
+<td>No summary for method createForgotPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1332</td>
+<td>Argument $guid is missing from the Docblock of completeForgotPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1332</td>
+<td>Argument $data is missing from the Docblock of completeForgotPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1332</td>
+<td>No summary for method completeForgotPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1398</td>
+<td>Argument $memberId is missing from the Docblock of updateDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1398</td>
+<td>Argument $data is missing from the Docblock of updateDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1398</td>
+<td>Argument $adminId is missing from the Docblock of updateDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1398</td>
+<td>No summary for method updateDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1442</td>
+<td>Argument $memberId is missing from the Docblock of getSoDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1442</td>
+<td>No summary for method getSoDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1473</td>
+<td>Argument $memberId is missing from the Docblock of getApproveDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1473</td>
+<td>No summary for method getApproveDetails()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1504</td>
+<td>No summary for method getReadableAccountList()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1540</td>
+<td>Argument $memberId is missing from the Docblock of revokeMembership()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1540</td>
+<td>Argument $adminId is missing from the Docblock of revokeMembership()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1540</td>
+<td>No summary for method revokeMembership()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1552</td>
+<td>Argument $memberId is missing from the Docblock of reinstateMembership()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1552</td>
+<td>Argument $adminId is missing from the Docblock of reinstateMembership()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1552</td>
+<td>No summary for method reinstateMembership()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1565</td>
+<td>Argument $memberId is missing from the Docblock of _setMemberStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1565</td>
+<td>Argument $adminId is missing from the Docblock of _setMemberStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1565</td>
+<td>Argument $newStatus is missing from the Docblock of _setMemberStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1565</td>
+<td>Argument $requiredCurrentStatus is missing from the Docblock of _setMemberStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1565</td>
+<td>No summary for method _setMemberStatus()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1608</td>
+<td>Argument $data is missing from the Docblock of validateEmail()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1608</td>
+<td>No summary for method validateEmail()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1636</td>
+<td>Argument $memberInfo is missing from the Docblock of sanitiseMemberInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1636</td>
+<td>Argument $showAdminFeatures is missing from the Docblock of sanitiseMemberInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1636</td>
+<td>Argument $showFinances is missing from the Docblock of sanitiseMemberInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1636</td>
+<td>Argument $hasJoined is missing from the Docblock of sanitiseMemberInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1636</td>
+<td>Argument $showAccount is missing from the Docblock of sanitiseMemberInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1636</td>
+<td>Argument $showStatus is missing from the Docblock of sanitiseMemberInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1636</td>
+<td>Argument $showPersonalDetails is missing from the Docblock of sanitiseMemberInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1636</td>
+<td>No summary for method sanitiseMemberInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1704</td>
+<td>Argument $memberInfo is missing from the Docblock of _saveMemberData()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1704</td>
+<td>Argument $fields is missing from the Docblock of _saveMemberData()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1704</td>
+<td>Argument $adminId is missing from the Docblock of _saveMemberData()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1704</td>
+<td>No summary for method _saveMemberData()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1922</td>
+<td>No summary for method getMailingList()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1938</td>
+<td>Argument $email is missing from the Docblock of emailToMemberId()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1938</td>
+<td>No summary for method emailToMemberId()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1962</td>
+<td>No summary for method getBestMemberNames()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1995</td>
+<td>Argument $username is missing from the Docblock of setPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1995</td>
+<td>Argument $password is missing from the Docblock of setPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1995</td>
+<td>Argument $allowCreate is missing from the Docblock of setPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>1995</td>
+<td>No summary for method setPassword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>2019</td>
+<td>Argument $paginate is missing from the Docblock of _getMemberSummary()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>2019</td>
+<td>Argument $conditions is missing from the Docblock of _getMemberSummary()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>2019</td>
+<td>Argument $format is missing from the Docblock of _getMemberSummary()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>2019</td>
+<td>No summary for method _getMemberSummary()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CMemberEmail.php" id="app\Model\MemberEmail.php"></a><h3>
+<i class="icon-file"></i>app\Model\MemberEmail.php<small style="float: right;padding-right: 10px;">5</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>13</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>20</td>
+<td>No summary for property $validate</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>34</td>
+<td>Argument $data is missing from the Docblock of getMessage()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>34</td>
+<td>No summary for method getMessage()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CPermission.php" id="app\Model\Permission.php"></a><h3>
+<i class="icon-file"></i>app\Model\Permission.php<small style="float: right;padding-right: 10px;">3</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>13</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>14</td>
+<td>No summary for property $primaryKey</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CPin.php" id="app\Model\Pin.php"></a><h3>
+<i class="icon-file"></i>app\Model\Pin.php<small style="float: right;padding-right: 10px;">9</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>18</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>19</td>
+<td>No summary for property $primaryKey</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>25</td>
+<td>No summary for property $belongsTo</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>34</td>
+<td>No summary for property $validate</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>67</td>
+<td>No summary for method generatePin()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>78</td>
+<td>No summary for method generateUniquePin()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>95</td>
+<td>Argument $memberId is missing from the Docblock of createNewRecord()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>95</td>
+<td>No summary for method createNewRecord()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CStatus.php" id="app\Model\Status.php"></a><h3>
+<i class="icon-file"></i>app\Model\Status.php<small style="float: right;padding-right: 10px;">11</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>20</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>21</td>
+<td>No summary for property $primaryKey</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>24</td>
+<td>No summary for property $hasMany</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>35</td>
+<td>No summary for method getStatusSummaryAll()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>46</td>
+<td>Argument $id is missing from the Docblock of getStatusSummaryForId()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>46</td>
+<td>No summary for method getStatusSummaryForId()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>61</td>
+<td>Argument $conditions is missing from the Docblock of _getStatusSummary()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>61</td>
+<td>No summary for method _getStatusSummary()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>74</td>
+<td>Argument $info is missing from the Docblock of _formatStatusInfo()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>74</td>
+<td>No summary for method _formatStatusInfo()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CModel%5CStatusUpdate.php" id="app\Model\StatusUpdate.php"></a><h3>
+<i class="icon-file"></i>app\Model\StatusUpdate.php<small style="float: right;padding-right: 10px;">11</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>13</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>14</td>
+<td>No summary for property $primaryKey</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>23</td>
+<td>No summary for property $belongsTo</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>50</td>
+<td>Argument $memberId is missing from the Docblock of createNewRecord()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>50</td>
+<td>Argument $adminId is missing from the Docblock of createNewRecord()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>50</td>
+<td>Argument $oldStatus is missing from the Docblock of createNewRecord()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>50</td>
+<td>Argument $newStatus is missing from the Docblock of createNewRecord()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>50</td>
+<td>No summary for method createNewRecord()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>78</td>
+<td>Argument $updateId is missing from the Docblock of formatStatusUpdate()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>78</td>
+<td>No summary for method formatStatusUpdate()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents"></div>
+<div class="package-contents">
+<a name="app%5CView%5CHelper%5CCurrencyHelper.php" id="app\View\Helper\CurrencyHelper.php"></a><h3>
+<i class="icon-file"></i>app\View\Helper\CurrencyHelper.php<small style="float: right;padding-right: 10px;">5</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>6</td>
+<td>No summary for class \CurrencyHelper</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>8</td>
+<td>No summary for property $helpers</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>Argument $pennys is missing from the Docblock of output()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>No summary for method output()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CView%5CHelper%5CMailinglistHelper.php" id="app\View\Helper\MailinglistHelper.php"></a><h3>
+<i class="icon-file"></i>app\View\Helper\MailinglistHelper.php<small style="float: right;padding-right: 10px;">7</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>6</td>
+<td>No summary for class \MailinglistHelper</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>8</td>
+<td>No summary for property $helpers</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>Argument $mailingListDetails is missing from the Docblock of output()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>No summary for method output()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>36</td>
+<td>Argument $mailingListDetails is missing from the Docblock of outputList()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>36</td>
+<td>No summary for method outputList()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CView%5CHelper%5CNavHelper.php" id="app\View\Helper\NavHelper.php"></a><h3>
+<i class="icon-file"></i>app\View\Helper\NavHelper.php<small style="float: right;padding-right: 10px;">5</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>6</td>
+<td>No summary for class \NavHelper</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>8</td>
+<td>No summary for property $helpers</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>Argument $links is missing from the Docblock of output()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>No summary for method output()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="app%5CView%5CHelper%5CTinymceHelper.php" id="app\View\Helper\TinymceHelper.php"></a><h3>
+<i class="icon-file"></i>app\View\Helper\TinymceHelper.php<small style="float: right;padding-right: 10px;">5</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>4</td>
+<td>No summary for class \TinymceHelper</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No summary for property $helpers</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>No summary for property $_script</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>85</td>
+<td>Argument $preset is missing from the Docblock of input()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="plugins%5CMemberVoice%5CController%5CMemberVoiceAppController.php" id="plugins\MemberVoice\Controller\MemberVoiceAppController.php"></a><h3>
+<i class="icon-file"></i>plugins\MemberVoice\Controller\MemberVoiceAppController.php<small style="float: right;padding-right: 10px;">7</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>14</td>
+<td>No summary for property $mvFirstName</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>15</td>
+<td>No summary for property $mvLastName</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>22</td>
+<td>No summary for method _getUserID()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>26</td>
+<td>Argument $user is missing from the Docblock of isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>26</td>
+<td>Argument $request is missing from the Docblock of isAuthorized()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>26</td>
+<td>No summary for method isAuthorized()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="plugins%5CMemberVoice%5CController%5CMemberVoiceCommentsController.php" id="plugins\MemberVoice\Controller\MemberVoiceCommentsController.php"></a><h3>
+<i class="icon-file"></i>plugins\MemberVoice\Controller\MemberVoiceCommentsController.php<small style="float: right;padding-right: 10px;">2</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>14</td>
+<td>No summary for method add()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="plugins%5CMemberVoice%5CController%5CMemberVoiceIdeasController.php" id="plugins\MemberVoice\Controller\MemberVoiceIdeasController.php"></a><h3>
+<i class="icon-file"></i>plugins\MemberVoice\Controller\MemberVoiceIdeasController.php<small style="float: right;padding-right: 10px;">11</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>No summary for property $helpers</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>12</td>
+<td>No summary for property $components</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>14</td>
+<td>No summary for property $paginate</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>25</td>
+<td>Argument $categoryId is missing from the Docblock of index()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>25</td>
+<td>No summary for method index()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>70</td>
+<td>Argument $id is missing from the Docblock of idea()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>70</td>
+<td>No summary for method idea()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>104</td>
+<td>Argument $id is missing from the Docblock of vote()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>104</td>
+<td>No summary for method vote()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>181</td>
+<td>No summary for method _getVoteUrl()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="plugins%5CMemberVoice%5CModel%5CMemberVoiceAppModel.php" id="plugins\MemberVoice\Model\MemberVoiceAppModel.php"></a><h3>
+<i class="icon-file"></i>plugins\MemberVoice\Model\MemberVoiceAppModel.php<small style="float: right;padding-right: 10px;">4</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>2</td>
+<td>No summary for class \MemberVoiceAppModel</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>4</td>
+<td>No summary for property $tablePrefix</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No summary for property $mvUserModel</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="plugins%5CMemberVoice%5CModel%5CMemberVoiceCategory.php" id="plugins\MemberVoice\Model\MemberVoiceCategory.php"></a><h3>
+<i class="icon-file"></i>plugins\MemberVoice\Model\MemberVoiceCategory.php<small style="float: right;padding-right: 10px;">4</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>No summary for property $alias</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>12</td>
+<td>No summary for property $hasAndBelongsToMany</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="plugins%5CMemberVoice%5CModel%5CMemberVoiceComment.php" id="plugins\MemberVoice\Model\MemberVoiceComment.php"></a><h3>
+<i class="icon-file"></i>plugins\MemberVoice\Model\MemberVoiceComment.php<small style="float: right;padding-right: 10px;">5</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>No summary for property $alias</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>11</td>
+<td>No summary for property $belongsTo</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>17</td>
+<td>No summary for method __construct()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="plugins%5CMemberVoice%5CModel%5CMemberVoiceIdea.php" id="plugins\MemberVoice\Model\MemberVoiceIdea.php"></a><h3>
+<i class="icon-file"></i>plugins\MemberVoice\Model\MemberVoiceIdea.php<small style="float: right;padding-right: 10px;">10</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>No summary for property $useTable</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>10</td>
+<td>No summary for property $alias</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>12</td>
+<td>No summary for property $hasAndBelongsToMany</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>18</td>
+<td>No summary for property $hasMany</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>26</td>
+<td>No summary for property $belongsTo</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>39</td>
+<td>Argument $ideaID is missing from the Docblock of saveVote()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>39</td>
+<td>Argument $userID is missing from the Docblock of saveVote()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>39</td>
+<td>Argument $votes is missing from the Docblock of saveVote()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>39</td>
+<td>No summary for method saveVote()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="plugins%5CMemberVoice%5CModel%5CMemberVoiceStatus.php" id="plugins\MemberVoice\Model\MemberVoiceStatus.php"></a><h3>
+<i class="icon-file"></i>plugins\MemberVoice\Model\MemberVoiceStatus.php<small style="float: right;padding-right: 10px;">2</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>No summary for property $useTable</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="plugins%5CMemberVoice%5CModel%5CMemberVoiceVote.php" id="plugins\MemberVoice\Model\MemberVoiceVote.php"></a><h3>
+<i class="icon-file"></i>plugins\MemberVoice\Model\MemberVoiceVote.php<small style="float: right;padding-right: 10px;">2</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No summary was found for this file</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>No summary for property $useTable</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
+</a> and<br>
+            generated on 2013-12-08T01:56:29Z.<br></footer></div>
+</div>
+</body>
+</html>

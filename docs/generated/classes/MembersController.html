@@ -1,0 +1,581 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>HMS - The Hackspace Management System » \MembersController</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">HMS - The Hackspace Management System</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
+<li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
+<li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
+<li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
+<li><a href="../packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
+<li><a href="../packages/plugin.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Model</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">665</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<div class="btn-toolbar">
+<div class="btn-group visibility" data-toggle="buttons-checkbox">
+<button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button>
+</div>
+<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i title="Methods" class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_acceptDetails" title="acceptDetails() :: "><span class="description">acceptDetails()
+        </span><pre>acceptDetails()</pre></a></li>
+<li class="method public "><a href="#method_approveMember" title="approveMember() :: "><span class="description">approveMember()
+        </span><pre>approveMember()</pre></a></li>
+<li class="method public "><a href="#method_beforeFilter" title="beforeFilter() :: "><span class="description">beforeFilter()
+        </span><pre>beforeFilter()</pre></a></li>
+<li class="method public "><a href="#method_changePassword" title="changePassword() :: "><span class="description">changePassword()
+        </span><pre>changePassword()</pre></a></li>
+<li class="method public "><a href="#method_edit" title="edit() :: "><span class="description">edit()
+        </span><pre>edit()</pre></a></li>
+<li class="method public "><a href="#method_emailMembersWithStatus" title="emailMembersWithStatus() :: "><span class="description">emailMembersWithStatus()
+        </span><pre>emailMembersWithStatus()</pre></a></li>
+<li class="method public "><a href="#method_forgotPassword" title="forgotPassword() :: "><span class="description">forgotPassword()
+        </span><pre>forgotPassword()</pre></a></li>
+<li class="method public "><a href="#method_getMailingList" title="getMailingList() :: "><span class="description">getMailingList()
+        </span><pre>getMailingList()</pre></a></li>
+<li class="method public "><a href="#method_getMemberIdSessionKey" title="getMemberIdSessionKey() :: "><span class="description">getMemberIdSessionKey()
+        </span><pre>getMemberIdSessionKey()</pre></a></li>
+<li class="method public "><a href="#method_getRequestIpAddress" title="getRequestIpAddress() :: "><span class="description">getRequestIpAddress()
+        </span><pre>getRequestIpAddress()</pre></a></li>
+<li class="method public "><a href="#method_index" title="index() :: "><span class="description">index()
+        </span><pre>index()</pre></a></li>
+<li class="method public "><a href="#method_isAuthorized" title="isAuthorized() :: "><span class="description">isAuthorized()
+        </span><pre>isAuthorized()</pre></a></li>
+<li class="method public "><a href="#method_isRequestLocal" title="isRequestLocal() :: "><span class="description">isRequestLocal()
+        </span><pre>isRequestLocal()</pre></a></li>
+<li class="method public "><a href="#method_listMembers" title="listMembers() :: "><span class="description">listMembers()
+        </span><pre>listMembers()</pre></a></li>
+<li class="method public "><a href="#method_listMembersWithStatus" title="listMembersWithStatus() :: "><span class="description">listMembersWithStatus()
+        </span><pre>listMembersWithStatus()</pre></a></li>
+<li class="method public "><a href="#method_login" title="login() :: "><span class="description">login()
+        </span><pre>login()</pre></a></li>
+<li class="method public "><a href="#method_logout" title="logout() :: "><span class="description">logout()
+        </span><pre>logout()</pre></a></li>
+<li class="method public "><a href="#method_register" title="register() :: "><span class="description">register()
+        </span><pre>register()</pre></a></li>
+<li class="method public "><a href="#method_reinstateMembership" title="reinstateMembership() :: "><span class="description">reinstateMembership()
+        </span><pre>reinstateMembership()</pre></a></li>
+<li class="method public "><a href="#method_rejectDetails" title="rejectDetails() :: "><span class="description">rejectDetails()
+        </span><pre>rejectDetails()</pre></a></li>
+<li class="method public "><a href="#method_revokeMembership" title="revokeMembership() :: "><span class="description">revokeMembership()
+        </span><pre>revokeMembership()</pre></a></li>
+<li class="method public "><a href="#method_search" title="search() :: "><span class="description">search()
+        </span><pre>search()</pre></a></li>
+<li class="method public "><a href="#method_sendContactDetailsReminder" title="sendContactDetailsReminder() :: "><span class="description">sendContactDetailsReminder()
+        </span><pre>sendContactDetailsReminder()</pre></a></li>
+<li class="method public "><a href="#method_sendMembershipReminder" title="sendMembershipReminder() :: "><span class="description">sendMembershipReminder()
+        </span><pre>sendMembershipReminder()</pre></a></li>
+<li class="method public "><a href="#method_sendSoDetailsReminder" title="sendSoDetailsReminder() :: "><span class="description">sendSoDetailsReminder()
+        </span><pre>sendSoDetailsReminder()</pre></a></li>
+<li class="method public "><a href="#method_setupDetails" title="setupDetails() :: "><span class="description">setupDetails()
+        </span><pre>setupDetails()</pre></a></li>
+<li class="method public "><a href="#method_setupLogin" title="setupLogin() :: "><span class="description">setupLogin()
+        </span><pre>setupLogin()</pre></a></li>
+<li class="method public "><a href="#method_uploadCsv" title="uploadCsv() :: "><span class="description">uploadCsv()
+        </span><pre>uploadCsv()</pre></a></li>
+<li class="method public "><a href="#method_view" title="view() :: "><span class="description">view()
+        </span><pre>view()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="method private "><a href="#method__addMemberActions" title="_addMemberActions() :: "><span class="description">_addMemberActions()
+        </span><pre>_addMemberActions()</pre></a></li>
+<li class="method private "><a href="#method__approveMember" title="_approveMember() :: "><span class="description">_approveMember()
+        </span><pre>_approveMember()</pre></a></li>
+<li class="method private "><a href="#method__getActionsForMember" title="_getActionsForMember() :: "><span class="description">_getActionsForMember()
+        </span><pre>_getActionsForMember()</pre></a></li>
+<li class="method private "><a href="#method__getViewPermissions" title="_getViewPermissions() :: "><span class="description">_getViewPermissions()
+        </span><pre>_getViewPermissions()</pre></a></li>
+<li class="method private "><a href="#method__paginateMemberList" title="_paginateMemberList() :: "><span class="description">_paginateMemberList()
+        </span><pre>_paginateMemberList()</pre></a></li>
+<li class="method private "><a href="#method__sendProspectiveMemberEmail" title="_sendProspectiveMemberEmail() :: "><span class="description">_sendProspectiveMemberEmail()
+        </span><pre>_sendProspectiveMemberEmail()</pre></a></li>
+<li class="method private "><a href="#method__sendSoDetailsToMember" title="_sendSoDetailsToMember() :: "><span class="description">_sendSoDetailsToMember()
+        </span><pre>_sendSoDetailsToMember()</pre></a></li>
+<li class="method private "><a href="#method__setFlashFromMailingListInfo" title="_setFlashFromMailingListInfo() :: "><span class="description">_setFlashFromMailingListInfo()
+        </span><pre>_setFlashFromMailingListInfo()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i title="Properties" class="icon-custom icon-property"></i> Properties
+                    <ul>
+<li class="property public "><a href="#property_components" title="$components() :: "><span class="description"></span><pre>$components</pre></a></li>
+<li class="property public "><a href="#property_helpers" title="$helpers() :: "><span class="description"></span><pre>$helpers</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\MembersController"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/MembersController.html">MembersController</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">Controller for Member functions.</p>
+<div class="details">
+<div class="long_description">Add your application-wide methods in the class below, your controllers
+will inherit them.</div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/app.Controller.html">app.Controller</a></td>
+</tr></table>
+<h3>
+<i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_acceptDetails"></a><div class="element clickable method public method_acceptDetails" data-toggle="collapse" data-target=".method_acceptDetails .collapse" title="public">
+<h2>acceptDetails()
+        </h2>
+<pre>acceptDetails($id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method_approveMember"></a><div class="element clickable method public method_approveMember" data-toggle="collapse" data-target=".method_approveMember .collapse" title="public">
+<h2>approveMember()
+        </h2>
+<pre>approveMember($id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method_beforeFilter"></a><div class="element clickable method public method_beforeFilter" data-toggle="collapse" data-target=".method_beforeFilter .collapse" title="public">
+<h2>beforeFilter()
+        </h2>
+<pre>beforeFilter() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_changePassword"></a><div class="element clickable method public method_changePassword" data-toggle="collapse" data-target=".method_changePassword .collapse" title="public">
+<h2>changePassword()
+        </h2>
+<pre>changePassword($id) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method_edit"></a><div class="element clickable method public method_edit" data-toggle="collapse" data-target=".method_edit .collapse" title="public">
+<h2>edit()
+        </h2>
+<pre>edit($id) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method_emailMembersWithStatus"></a><div class="element clickable method public method_emailMembersWithStatus" data-toggle="collapse" data-target=".method_emailMembersWithStatus .collapse" title="public">
+<h2>emailMembersWithStatus()
+        </h2>
+<pre>emailMembersWithStatus($statusId) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$statusId</h4></div>
+</div></div>
+</div>
+<a id="method_forgotPassword"></a><div class="element clickable method public method_forgotPassword" data-toggle="collapse" data-target=".method_forgotPassword .collapse" title="public">
+<h2>forgotPassword()
+        </h2>
+<pre>forgotPassword($guid<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$guid</h4></div>
+</div></div>
+</div>
+<a id="method_getMailingList"></a><div class="element clickable method public method_getMailingList" data-toggle="collapse" data-target=".method_getMailingList .collapse" title="public">
+<h2>getMailingList()
+        </h2>
+<pre>getMailingList() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_getMemberIdSessionKey"></a><div class="element clickable method public method_getMemberIdSessionKey" data-toggle="collapse" data-target=".method_getMemberIdSessionKey .collapse" title="public">
+<h2>getMemberIdSessionKey()
+        </h2>
+<pre>getMemberIdSessionKey() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_getRequestIpAddress"></a><div class="element clickable method public method_getRequestIpAddress" data-toggle="collapse" data-target=".method_getRequestIpAddress .collapse" title="public">
+<h2>getRequestIpAddress()
+        </h2>
+<pre>getRequestIpAddress() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_index"></a><div class="element clickable method public method_index" data-toggle="collapse" data-target=".method_index .collapse" title="public">
+<h2>index()
+        </h2>
+<pre>index() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_isAuthorized"></a><div class="element clickable method public method_isAuthorized" data-toggle="collapse" data-target=".method_isAuthorized .collapse" title="public">
+<h2>isAuthorized()
+        </h2>
+<pre>isAuthorized($user, $request) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$user</h4></div>
+<div class="subelement argument"><h4>$request</h4></div>
+</div></div>
+</div>
+<a id="method_isRequestLocal"></a><div class="element clickable method public method_isRequestLocal" data-toggle="collapse" data-target=".method_isRequestLocal .collapse" title="public">
+<h2>isRequestLocal()
+        </h2>
+<pre>isRequestLocal() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_listMembers"></a><div class="element clickable method public method_listMembers" data-toggle="collapse" data-target=".method_listMembers .collapse" title="public">
+<h2>listMembers()
+        </h2>
+<pre>listMembers() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_listMembersWithStatus"></a><div class="element clickable method public method_listMembersWithStatus" data-toggle="collapse" data-target=".method_listMembersWithStatus .collapse" title="public">
+<h2>listMembersWithStatus()
+        </h2>
+<pre>listMembersWithStatus($statusId) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$statusId</h4></div>
+</div></div>
+</div>
+<a id="method_login"></a><div class="element clickable method public method_login" data-toggle="collapse" data-target=".method_login .collapse" title="public">
+<h2>login()
+        </h2>
+<pre>login() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_logout"></a><div class="element clickable method public method_logout" data-toggle="collapse" data-target=".method_logout .collapse" title="public">
+<h2>logout()
+        </h2>
+<pre>logout() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_register"></a><div class="element clickable method public method_register" data-toggle="collapse" data-target=".method_register .collapse" title="public">
+<h2>register()
+        </h2>
+<pre>register() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_reinstateMembership"></a><div class="element clickable method public method_reinstateMembership" data-toggle="collapse" data-target=".method_reinstateMembership .collapse" title="public">
+<h2>reinstateMembership()
+        </h2>
+<pre>reinstateMembership($id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method_rejectDetails"></a><div class="element clickable method public method_rejectDetails" data-toggle="collapse" data-target=".method_rejectDetails .collapse" title="public">
+<h2>rejectDetails()
+        </h2>
+<pre>rejectDetails($id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method_revokeMembership"></a><div class="element clickable method public method_revokeMembership" data-toggle="collapse" data-target=".method_revokeMembership .collapse" title="public">
+<h2>revokeMembership()
+        </h2>
+<pre>revokeMembership($id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method_search"></a><div class="element clickable method public method_search" data-toggle="collapse" data-target=".method_search .collapse" title="public">
+<h2>search()
+        </h2>
+<pre>search() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_sendContactDetailsReminder"></a><div class="element clickable method public method_sendContactDetailsReminder" data-toggle="collapse" data-target=".method_sendContactDetailsReminder .collapse" title="public">
+<h2>sendContactDetailsReminder()
+        </h2>
+<pre>sendContactDetailsReminder($id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method_sendMembershipReminder"></a><div class="element clickable method public method_sendMembershipReminder" data-toggle="collapse" data-target=".method_sendMembershipReminder .collapse" title="public">
+<h2>sendMembershipReminder()
+        </h2>
+<pre>sendMembershipReminder($id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method_sendSoDetailsReminder"></a><div class="element clickable method public method_sendSoDetailsReminder" data-toggle="collapse" data-target=".method_sendSoDetailsReminder .collapse" title="public">
+<h2>sendSoDetailsReminder()
+        </h2>
+<pre>sendSoDetailsReminder($id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method_setupDetails"></a><div class="element clickable method public method_setupDetails" data-toggle="collapse" data-target=".method_setupDetails .collapse" title="public">
+<h2>setupDetails()
+        </h2>
+<pre>setupDetails($id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method_setupLogin"></a><div class="element clickable method public method_setupLogin" data-toggle="collapse" data-target=".method_setupLogin .collapse" title="public">
+<h2>setupLogin()
+        </h2>
+<pre>setupLogin($id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method_uploadCsv"></a><div class="element clickable method public method_uploadCsv" data-toggle="collapse" data-target=".method_uploadCsv .collapse" title="public">
+<h2>uploadCsv()
+        </h2>
+<pre>uploadCsv($guid<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$guid</h4></div>
+</div></div>
+</div>
+<a id="method_view"></a><div class="element clickable method public method_view" data-toggle="collapse" data-target=".method_view .collapse" title="public">
+<h2>view()
+        </h2>
+<pre>view($id) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method__addMemberActions"></a><div class="element clickable method private method__addMemberActions" data-toggle="collapse" data-target=".method__addMemberActions .collapse" title="private">
+<h2>_addMemberActions()
+        </h2>
+<pre>_addMemberActions($memberList) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$memberList</h4></div>
+</div></div>
+</div>
+<a id="method__approveMember"></a><div class="element clickable method private method__approveMember" data-toggle="collapse" data-target=".method__approveMember .collapse" title="private">
+<h2>_approveMember()
+        </h2>
+<pre>_approveMember($id) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method__getActionsForMember"></a><div class="element clickable method private method__getActionsForMember" data-toggle="collapse" data-target=".method__getActionsForMember .collapse" title="private">
+<h2>_getActionsForMember()
+        </h2>
+<pre>_getActionsForMember($memberId) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$memberId</h4></div>
+</div></div>
+</div>
+<a id="method__getViewPermissions"></a><div class="element clickable method private method__getViewPermissions" data-toggle="collapse" data-target=".method__getViewPermissions .collapse" title="private">
+<h2>_getViewPermissions()
+        </h2>
+<pre>_getViewPermissions($memberId, $showAdminFeatures, $showFinances, $hasJoined, $showPersonalDetails) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$memberId</h4></div>
+<div class="subelement argument"><h4>$showAdminFeatures</h4></div>
+<div class="subelement argument"><h4>$showFinances</h4></div>
+<div class="subelement argument"><h4>$hasJoined</h4></div>
+<div class="subelement argument"><h4>$showPersonalDetails</h4></div>
+</div></div>
+</div>
+<a id="method__paginateMemberList"></a><div class="element clickable method private method__paginateMemberList" data-toggle="collapse" data-target=".method__paginateMemberList .collapse" title="private">
+<h2>_paginateMemberList()
+        </h2>
+<pre>_paginateMemberList($queryResult) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$queryResult</h4></div>
+</div></div>
+</div>
+<a id="method__sendProspectiveMemberEmail"></a><div class="element clickable method private method__sendProspectiveMemberEmail" data-toggle="collapse" data-target=".method__sendProspectiveMemberEmail .collapse" title="private">
+<h2>_sendProspectiveMemberEmail()
+        </h2>
+<pre>_sendProspectiveMemberEmail($memberId) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$memberId</h4></div>
+</div></div>
+</div>
+<a id="method__sendSoDetailsToMember"></a><div class="element clickable method private method__sendSoDetailsToMember" data-toggle="collapse" data-target=".method__sendSoDetailsToMember .collapse" title="private">
+<h2>_sendSoDetailsToMember()
+        </h2>
+<pre>_sendSoDetailsToMember($memberId) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$memberId</h4></div>
+</div></div>
+</div>
+<a id="method__setFlashFromMailingListInfo"></a><div class="element clickable method private method__setFlashFromMailingListInfo" data-toggle="collapse" data-target=".method__setFlashFromMailingListInfo .collapse" title="private">
+<h2>_setFlashFromMailingListInfo()
+        </h2>
+<pre>_setFlashFromMailingListInfo($initialMessage, $results) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$initialMessage</h4></div>
+<div class="subelement argument"><h4>$results</h4></div>
+</div></div>
+</div>
+<h3>
+<i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_components"> </a><div class="element clickable property public property_components" data-toggle="collapse" data-target=".property_components .collapse" title="public">
+<h2>$components</h2>
+<pre>$components </pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"><code>array('BankStatement')</code></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_helpers"> </a><div class="element clickable property public property_helpers" data-toggle="collapse" data-target=".property_helpers .collapse" title="public">
+<h2>$helpers</h2>
+<pre>$helpers </pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"><code>array('Html', 'Form', 'Paginator', 'Tinymce', 'Currency', 'Mailinglist')</code></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
+</a> and<br>
+            generated on 2013-12-08T01:56:29Z.<br></footer></div>
+</div>
+</body>
+</html>
