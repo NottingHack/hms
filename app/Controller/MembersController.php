@@ -1120,7 +1120,7 @@ class MembersController extends AppController {
 		// We might have a debug config here to force requests to be local
 		App::uses('PhpReader', 'Configure');
 		Configure::config('default', new PhpReader());
-		
+
 		try {
 			Configure::load('debug', 'default');
 			$configIp = Configure::read('forceRequestIp');
