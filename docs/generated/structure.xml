@@ -1,95 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project title="HMS - The Hackspace Management System" version="2.2.0&#10;">
   <partials/>
-  <file path="app\Controller\EmailRecordsController.php" generated-path="app.Controller.EmailRecordsController.html" hash="d8d06cf26d5eeb2e242355d318618393" package="Default">
+  <file path="app\Controller\EmailRecordsController.php" generated-path="app.Controller.EmailRecordsController.html" hash="1c1bc5ad51ff96f75c6d63bc6ded8e52" package="app.Controller">
     <docblock line="0">
-      <description></description>
-      <long-description></long-description>
+      <description>PHP 5</description>
+      <long-description>Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</long-description>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Controller"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="5" package="Default">
+    <class final="false" abstract="false" namespace="" line="22" package="app.Controller">
       <extends>\AppController</extends>
       <name>EmailRecordsController</name>
       <full_name>\EmailRecordsController</full_name>
-      <docblock line="5">
-        <description>Application Controller</description>
+      <docblock line="22">
+        <description>Controller for the EmailRecords functionality, allows authorized users
+to view the emails that have been sent to a member.</description>
         <long-description>Add your application-wide methods in the class below, your controllers
 will inherit them.</long-description>
       </docblock>
-      <property static="false" visibility="public" line="7" namespace="" package="Default">
+      <property static="false" visibility="public" line="28" namespace="" package="app.Controller">
         <name>$helpers</name>
         <default>array('Html', 'Form')</default>
-        <docblock line="7">
-          <description></description>
+        <docblock line="28">
+          <description>Views rendered from this controller will have access to the following helpers.</description>
           <long-description></long-description>
+          <tag name="var" line="28" description="" type="array" variable="">
+            <type>array</type>
+          </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="16" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="38" package="app.Controller">
         <name>isAuthorized</name>
         <full_name>\EmailRecordsController::isAuthorized()</full_name>
-        <docblock line="16">
-          <description></description>
+        <docblock line="38">
+          <description>Test to see if a user is authorized to make a request.</description>
           <long-description></long-description>
+          <tag name="param" line="38" description="&lt;p&gt;Member record for the user.&lt;/p&gt;" type="array" variable="$user">
+            <type>array</type>
+          </tag>
+          <tag name="param" line="38" description="&lt;p&gt;The request the user is attempting to make.&lt;/p&gt;" type="\CakeRequest" variable="$request">
+            <type link="CakeRequest.html">\CakeRequest</type>
+          </tag>
+          <tag name="return" line="38" description="True if the user is authorized to make the request, otherwise false." type="bool">
+            <type>bool</type>
+          </tag>
+          <tag name="link" line="38" description="http://api20.cakephp.org/class/cake-request" link="http://api20.cakephp.org/class/cake-request"/>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$user</name>
           <default></default>
-          <type/>
+          <type>array</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$request</name>
           <default></default>
-          <type/>
+          <type>\CakeRequest</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="45" package="Default">
-        <name>_setupEmailListView</name>
-        <full_name>\EmailRecordsController::_setupEmailListView()</full_name>
-        <docblock line="45">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="69" package="app.Controller">
+        <name>__setupEmailListView</name>
+        <full_name>\EmailRecordsController::__setupEmailListView()</full_name>
+        <docblock line="69">
+          <description>Given a list of e-mails, set the memberNames and emails vars
+on the view.</description>
           <long-description></long-description>
+          <tag name="param" line="69" description="&lt;p&gt;Array of e-mail record data.&lt;/p&gt;" type="array" variable="$emails">
+            <type>array</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$emails</name>
           <default></default>
-          <type/>
+          <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="52" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="78" package="app.Controller">
         <name>index</name>
         <full_name>\EmailRecordsController::index()</full_name>
-        <docblock line="52">
-          <description></description>
+        <docblock line="78">
+          <description>Display a list of all e-mails for all members.</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="57" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="86" package="app.Controller">
         <name>view</name>
         <full_name>\EmailRecordsController::view()</full_name>
-        <docblock line="57">
-          <description></description>
+        <docblock line="86">
+          <description>Display a list of all e-mails for a specific member.</description>
           <long-description></long-description>
+          <tag name="param" line="86" description="&lt;p&gt;Show all e-mails sent to this member.&lt;/p&gt;" type="int|null" variable="$id">
+            <type>int</type>
+            <type>null</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int|null</type>
         </argument>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="5" code="PPC:ERR-50005">No summary for class \EmailRecordsController</error>
-      <error line="7" code="PPC:ERR-50007">No summary for property $helpers</error>
-      <error line="16" code="PPC:ERR-50015">Argument $user is missing from the Docblock of isAuthorized()</error>
-      <error line="16" code="PPC:ERR-50015">Argument $request is missing from the Docblock of isAuthorized()</error>
-      <error line="16" code="PPC:ERR-50008">No summary for method isAuthorized()</error>
-      <error line="45" code="PPC:ERR-50015">Argument $emails is missing from the Docblock of _setupEmailListView()</error>
-      <error line="45" code="PPC:ERR-50008">No summary for method _setupEmailListView()</error>
-      <error line="52" code="PPC:ERR-50008">No summary for method index()</error>
-      <error line="57" code="PPC:ERR-50015">Argument $id is missing from the Docblock of view()</error>
-      <error line="57" code="PPC:ERR-50008">No summary for method view()</error>
-    </parse_markers>
-    <source>eJytVltv0zAUfi4S/+EgVSRB7TrxmLFCGR2rtALaCi8IVV5y2lokcbCdbtz+O8fOzb1NAlapqu3j833n7r54ma/yx48eP+qM8jwMC4XK92h5JjItRZKg9HrgObvgxN6OEqYUjFPGkyuMhIxVewfwTmMWK9jAAdL6SV+gT17cJDyC7gqTHKWCU2BSsu++d6HTxBCeC5nWVEZhMHgCM1QatACFCHwBDMhYCVwBK/RKSP4DYyNO2VckocRvBSkc1QDPnlSrzqucSZaWjNC1IFNMb+hHWk9gISToFVr8oy2tM0K/KqGhW3HAjC7X61rRGqY1prnm2bI2rIWTqNcsgRshEpjJwrq0obvrlG5peiBoJ2+5QliwRDnAisFK6zwcDFjOnx8fRaRKOT4ScjmwWRuYk34FVKk9G2xmZlFkkeYiI0tGjSG+DVav8TuodOqsdtpkh2EiWDwVMSa+V0bXTWeHL3yKJ2Y6DO9lqCmayul0KHCFzEBTzE7qw98tcje1bJOYiqqrV1z1hyV/f7hEPYmpssp9yRWcbCuqUqxWPB/FKc92cd5KUeSq3vFqNcnsuQ+NBT2wJ2E4HU9fj6+uLyYf5qM308k72MP6Pmt5Z0iV9qC0s/Fo6rIym90Lpj6YqjYNyJVC7TeR7w/zUhLA06eVcFv22cupnLwv9kokimyPfn2HcIZwvON2PFHXqC39PCtSlDzyG5lbMN0Fl0pba+sM2RQT47YvZMwWvDk5YNfn4y9wetoqgEuqbrmOVuA4XnIFsFuWEaNW9HgW450XNqd1tfoHq+vXLzhYA64tFcGa4+2D4VvhvsAG+zqrorLjppa34lzyNdPYTo45lUyR2xfikiv9iQz3u2i26h8GR1UFZUeYYvRKp96xFBW9GLut/poSNm3v+MF+mNIig1DZtse17ZlokuzvOFGh7vW7FDnPpTVxlCT2yDXuMO3aInFT9VmRJE0RtgaYG5ujb04sl2K5xHiS1cn1N/qqDCN1zzlhjqIIlfrb0dPwNpPn/OPl5Xx0dja+vraOdR5suu5ybQ/XbcL/Haz3Mpq5uhHOiGUm40TS9Kg72nhshmUjaqb2Zvzdnv3rfjYFQi42teCYZz708tZGBs7xT2f9P5XsPK/ka1PVO23HY9NyPN648dtZI02ZQ/ZVk6jCkxhz+uem/Wa/QEkGBHuxzS99Xw7/AGdCTRc=</source>
+    <source>eJytVltvGjkUfia/4jygMlRcopX6QjbZUpo0SNCNArsvVYXMjAErnrHX9kCzm/z3Pb7MLSTVRhvEw/h2vu9c/B3/+pvcyZPh+/cnYP9wc30DH8L3RMh7xbY7A9GkC9fzBSwpScPijMU00zSBPEuoguWOwny6LKbtjluaMG0UW+eGiUyD2MCGcaohzbUBRQ1hGRg8R9ZiTyEu0TJh0MogAH2sFuyvRgM+ShLfkS0F/yNSDiYiM0pwTpXbwD2dsKFGEKKdMXI0HB4Oh4GQOCVyhaBCbYfhkB6mzPTDYIBh6qLJ4cnJWMrRKMf1qIOfFWCnB53aqHt2EuIK1SxshHI+X6aE8VsaC5Vo2ORZbGNEODP3PSCci4MGkpudUOxvG2NNlbaWjIA9owdngloTGj+JgR3BCK4pzUDTzNhtBFKarqkaONIxJ1o3QGuc6A9DM6TR8Ab+Ken/iYgaE2YTjWQ2SqSIyjSmrNx9YJx7FiSOKWIhBUtyI6wzLNvCjnKJXgxcXvZEAVGK3Dt2LZmvMc7QDnvg3C9GnWuTchvXK6HSIqJgLSypdm5qSoFt0FsbImCNqOFySu6QEXL/K8cDZUlJokjqMaDtTs5dsHCjDU6ZJbs0qJ2YoLlbbwvawagr/eK7OOSYGENTaazvgYk3hZWfqwzWQnBYqtzxb5w79sBUED0QOFIHhjW8IVwHo5xldxBKmkj2y+kgxoNYtK6iXfqHdqYfzDTiXtQfoo9L8MgFplf62cWKaLWqAhmNuCDJXCSURx0fPpehVgv9iTBeWIij0U8tepOtEBCDsTjD8aO10fbVO02wFtq22PoXHqN/saVmmmBB+LE32j2rndF+Re+YHCcpisyRiS9K5FIXIxa+ppmbj6AE74GbGY3ml/NPl7eL6+nNavx5Pv0KTcDfswrSitPbIi4vx/MASFyerom+sfVoLwrTmpqojGn/QvqVLrx7Fxafrn3rSCyHzne3JRZ59sz5Yg/auYDTurPJVC+occirLE+pYnFUrvkCaG+Y0sZRLJLhEokwTx1ABk8M25kXyHw7/Q7n59UB8HD6wEy8g5qfHiWUV0zwqnQYqtePzshOFAUXvVgwDw/wYm49ZrBqxfgtjLrF56LWLW9EsO/uPE4+lvL8he1R9wlw7La2ydK+aww91EYvSB70K0mx95IsKRoHarDrKcJ3YetKXesKeQy7x25Umi+UMiGGDIKYKLYnhlZqslohg1y6rjNDcraPRMHef1QTrCV/j2wdd2qOYFM4loVPmPx5tSfqHlnw4PZwoNGI5GemJUcvq1hiKy7i6ZqCHXsWevCChNo6i7x7Afn5OPi1Wkt2Low5d1OB/Ku4gZY0ZhtkU7X+MpssMw9ZjkfaLIHFThwa54tXg2vr9YfDkX97R57Z62zNBUftbFOtV+jMTGy3NJlmRTFHQR48AIrAFVoY+/fCKxWzRCwF8+qP2Ww1nkwuF4s37QbHSE+bwdv2gp/i2VYQghiTzBYSnFv1qWsxS6yw29myrzRDXReiV4uUzTx6VCa8avkFoyC7/6f4a90dvXHxbVxjltgrzII6AkVJbDwlwl58rTLUKROV4w2+YFXQhUd7vR7/BUKaQtA=</source>
   </file>
   <file path="app\Model\ForgotPassword.php" generated-path="app.Model.ForgotPassword.html" hash="06f653e03092712d5e7dbd82571de278" package="Default">
     <docblock line="0">
@@ -244,569 +259,633 @@ will inherit them.</long-description>
     </parse_markers>
     <source>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</source>
   </file>
-  <file path="app\Controller\MembersController.php" generated-path="app.Controller.MembersController.html" hash="b29c8445bdcba2995797d2cb6332c257" package="Default">
+  <file path="app\Controller\MembersController.php" generated-path="app.Controller.MembersController.html" hash="174be346d12fe9c1a09d87ce90078600" package="app.Controller">
     <docblock line="0">
-      <description></description>
-      <long-description></long-description>
+      <description>PHP 5</description>
+      <long-description>Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</long-description>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Controller"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="19" package="app.Controller">
+    <class final="false" abstract="false" namespace="" line="29" package="app.Controller">
       <extends>\AppController</extends>
       <name>MembersController</name>
       <full_name>\MembersController</full_name>
-      <docblock line="19">
-        <description>Controller for Member functions.</description>
+      <docblock line="29">
+        <description>Controller to handle Member functionality, allows members to be viewed,
+edited, and registered.</description>
         <long-description>Add your application-wide methods in the class below, your controllers
 will inherit them.</long-description>
-        <tag name="package" line="19" description="app.Controller"/>
       </docblock>
-      <property static="false" visibility="public" line="30" namespace="" package="app.Controller">
+      <property static="false" visibility="public" line="35" namespace="" package="app.Controller">
         <name>$helpers</name>
         <default>array('Html', 'Form', 'Paginator', 'Tinymce', 'Currency', 'Mailinglist')</default>
-        <docblock line="30">
-          <description></description>
+        <docblock line="35">
+          <description>Views rendered from this controller will have access to the following helpers.</description>
           <long-description></long-description>
+          <tag name="var" line="35" description="" type="array" variable="">
+            <type>array</type>
+          </tag>
         </docblock>
       </property>
-      <property static="false" visibility="public" line="36" namespace="" package="app.Controller">
+      <property static="false" visibility="public" line="41" namespace="" package="app.Controller">
         <name>$components</name>
         <default>array('BankStatement')</default>
-        <docblock line="36">
-          <description></description>
+        <docblock line="41">
+          <description>The list of components this Controller relies on.</description>
           <long-description></long-description>
+          <tag name="var" line="41" description="" type="array" variable="">
+            <type>array</type>
+          </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="45" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="51" package="app.Controller">
         <name>isAuthorized</name>
         <full_name>\MembersController::isAuthorized()</full_name>
-        <docblock line="45">
-          <description></description>
+        <docblock line="51">
+          <description>Test to see if a user is authorized to make a request.</description>
           <long-description></long-description>
+          <tag name="param" line="51" description="&lt;p&gt;Member record for the user.&lt;/p&gt;" type="array" variable="$user">
+            <type>array</type>
+          </tag>
+          <tag name="param" line="51" description="&lt;p&gt;The request the user is attempting to make.&lt;/p&gt;" type="\CakeRequest" variable="$request">
+            <type link="CakeRequest.html">\CakeRequest</type>
+          </tag>
+          <tag name="return" line="51" description="True if the user is authorized to make the request, otherwise false." type="bool">
+            <type>bool</type>
+          </tag>
+          <tag name="link" line="51" description="http://api20.cakephp.org/class/cake-request" link="http://api20.cakephp.org/class/cake-request"/>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$user</name>
           <default></default>
-          <type/>
+          <type>array</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$request</name>
           <default></default>
-          <type/>
+          <type>\CakeRequest</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="99" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="103" package="app.Controller">
         <name>beforeFilter</name>
         <full_name>\MembersController::beforeFilter()</full_name>
-        <docblock line="99">
-          <description></description>
+        <docblock line="103">
+          <description>Perform any actions that should be performed before any controller action.</description>
           <long-description></long-description>
+          <tag name="link" line="103" description="http://api20.cakephp.org/class/controller#method-ControllerbeforeFilter" link="http://api20.cakephp.org/class/controller#method-ControllerbeforeFilter"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="129" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="132" package="app.Controller">
         <name>index</name>
         <full_name>\MembersController::index()</full_name>
-        <docblock line="129">
-          <description></description>
+        <docblock line="132">
+          <description>Show a list of all Status and a count of how many members are in each status.</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="140" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="143" package="app.Controller">
         <name>listMembers</name>
         <full_name>\MembersController::listMembers()</full_name>
-        <docblock line="140">
-          <description></description>
+        <docblock line="143">
+          <description>Show a list of all members, their e-mail address, status and the groups they're in.</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="159" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="161" package="app.Controller">
         <name>listMembersWithStatus</name>
         <full_name>\MembersController::listMembersWithStatus()</full_name>
-        <docblock line="159">
-          <description></description>
+        <docblock line="161">
+          <description>List all members with a particular status.</description>
           <long-description></long-description>
+          <tag name="param" line="161" description="&lt;p&gt;The status to list all members for.&lt;/p&gt;" type="int" variable="$statusId">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$statusId</name>
           <default></default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="175" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="176" package="app.Controller">
         <name>search</name>
         <full_name>\MembersController::search()</full_name>
-        <docblock line="175">
-          <description></description>
+        <docblock line="176">
+          <description>List all members who's name, email, username or handle is similar to the search term.</description>
           <long-description></long-description>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="private" namespace="" line="195" package="app.Controller">
-        <name>_paginateMemberList</name>
-        <full_name>\MembersController::_paginateMemberList()</full_name>
+        <name>__paginateMemberList</name>
+        <full_name>\MembersController::__paginateMemberList()</full_name>
         <docblock line="195">
-          <description></description>
+          <description>Perform all the actions needed to get a paginated member list with actions applied.</description>
           <long-description></long-description>
+          <tag name="param" line="195" description="&lt;p&gt;The query to pass to paginate(), usually obtained from a Member::getMemberSummary&lt;em&gt;**&lt;/em&gt; method.&lt;/p&gt;" type="array" variable="$queryResult">
+            <type>array</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$queryResult</name>
           <default></default>
-          <type/>
+          <type>array</type>
         </argument>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="" line="208" package="app.Controller">
         <name>getMailingList</name>
         <full_name>\MembersController::getMailingList()</full_name>
         <docblock line="208">
-          <description></description>
+          <description>Get a MailingList model.</description>
           <long-description></long-description>
+          <tag name="return" line="208" description="The MailingListModel." type="\MailingListModel">
+            <type link="MailingListModel.html">\MailingListModel</type>
+          </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="215" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="216" package="app.Controller">
         <name>register</name>
         <full_name>\MembersController::register()</full_name>
-        <docblock line="215">
-          <description></description>
+        <docblock line="216">
+          <description>Grab a users e-mail address and start the membership procedure.</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="272" package="app.Controller">
-        <name>_setFlashFromMailingListInfo</name>
-        <full_name>\MembersController::_setFlashFromMailingListInfo()</full_name>
-        <docblock line="272">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="267" package="app.Controller">
+        <name>__setFlashFromMailingListInfo</name>
+        <full_name>\MembersController::__setFlashFromMailingListInfo()</full_name>
+        <docblock line="267">
+          <description>Set the session flash message based on the data returned from a function that updates the mailing list settings.</description>
           <long-description></long-description>
+          <tag name="param" line="267" description="&lt;p&gt;The message to show at the start of the flash, before any mailing list messages.&lt;/p&gt;" type="string" variable="$initialMessage">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="267" description="&lt;p&gt;The results from the function that updated the mailing list settings.&lt;/p&gt;" type="array" variable="$results">
+            <type>array</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$initialMessage</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$results</name>
           <default></default>
-          <type/>
+          <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="314" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="300" package="app.Controller">
         <name>setupLogin</name>
         <full_name>\MembersController::setupLogin()</full_name>
-        <docblock line="314">
-          <description></description>
+        <docblock line="300">
+          <description>Allow a member to set-up their initial login details.</description>
           <long-description></long-description>
+          <tag name="param" line="300" description="&lt;p&gt;The id of the member whose details we want to set-up.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="358" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="334" package="app.Controller">
         <name>setupDetails</name>
         <full_name>\MembersController::setupDetails()</full_name>
-        <docblock line="358">
-          <description></description>
+        <docblock line="334">
+          <description>Allow a member who is logged in to set-up their contact details.</description>
           <long-description></long-description>
+          <tag name="param" line="334" description="&lt;p&gt;The id of the member whose contact details we want to set-up.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="411" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="378" package="app.Controller">
         <name>rejectDetails</name>
         <full_name>\MembersController::rejectDetails()</full_name>
-        <docblock line="411">
-          <description></description>
+        <docblock line="378">
+          <description>Reject the contact details a member has supplied, with a message to say why.</description>
           <long-description></long-description>
+          <tag name="param" line="378" description="&lt;p&gt;The id of the member whose contact details we're rejecting.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="459" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="418" package="app.Controller">
         <name>acceptDetails</name>
         <full_name>\MembersController::acceptDetails()</full_name>
-        <docblock line="459">
-          <description></description>
+        <docblock line="418">
+          <description>Accept the contact details a member has supplied.</description>
           <long-description></long-description>
+          <tag name="param" line="418" description="&lt;p&gt;The id of the member whose contact details we're accepting.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="511" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="462" package="app.Controller">
         <name>approveMember</name>
         <full_name>\MembersController::approveMember()</full_name>
-        <docblock line="511">
-          <description></description>
+        <docblock line="462">
+          <description>Approve a membership and report back to the user.</description>
           <long-description></long-description>
+          <tag name="param" line="462" description="&lt;p&gt;The id of the member who we are approving.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="536" package="app.Controller">
-        <name>_approveMember</name>
-        <full_name>\MembersController::_approveMember()</full_name>
-        <docblock line="536">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="481" package="app.Controller">
+        <name>__approveMember</name>
+        <full_name>\MembersController::__approveMember()</full_name>
+        <docblock line="481">
+          <description>Approve a membership.</description>
           <long-description></long-description>
+          <tag name="param" line="481" description="&lt;p&gt;The id of the member who we are approving.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default></default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="583" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="525" package="app.Controller">
         <name>changePassword</name>
         <full_name>\MembersController::changePassword()</full_name>
-        <docblock line="583">
-          <description></description>
+        <docblock line="525">
+          <description>Change a members password.</description>
           <long-description></long-description>
+          <tag name="param" line="525" description="&lt;p&gt;The id of the member whose password we are changing.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default></default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="625" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="557" package="app.Controller">
         <name>forgotPassword</name>
         <full_name>\MembersController::forgotPassword()</full_name>
-        <docblock line="625">
-          <description></description>
+        <docblock line="557">
+          <description>Generate or complete a forgot password request.</description>
           <long-description></long-description>
+          <tag name="param" line="557" description="&lt;p&gt;The id of the request, may be null.&lt;/p&gt;" type="string" variable="$guid">
+            <type>string</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$guid</name>
           <default>null</default>
-          <type/>
+          <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="687" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="604" package="app.Controller">
         <name>sendMembershipReminder</name>
         <full_name>\MembersController::sendMembershipReminder()</full_name>
-        <docblock line="687">
-          <description></description>
+        <docblock line="604">
+          <description>Send the 'prospective member' email to a member.</description>
           <long-description></long-description>
+          <tag name="param" line="604" description="&lt;p&gt;The id of the member to send the message to.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="709" package="app.Controller">
-        <name>_sendProspectiveMemberEmail</name>
-        <full_name>\MembersController::_sendProspectiveMemberEmail()</full_name>
-        <docblock line="709">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="622" package="app.Controller">
+        <name>__sendProspectiveMemberEmail</name>
+        <full_name>\MembersController::__sendProspectiveMemberEmail()</full_name>
+        <docblock line="622">
+          <description>Send the 'prospective member' email to a member.</description>
           <long-description></long-description>
+          <tag name="param" line="622" description="&lt;p&gt;The id of the member to send the message to.&lt;/p&gt;" type="int" variable="$memberId">
+            <type>int</type>
+          </tag>
+          <tag name="return" line="622" description="True if e-mail was sent." type="bool">
+            <type>bool</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$memberId</name>
           <default></default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="730" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="642" package="app.Controller">
         <name>sendContactDetailsReminder</name>
         <full_name>\MembersController::sendContactDetailsReminder()</full_name>
-        <docblock line="730">
-          <description></description>
+        <docblock line="642">
+          <description>Send the 'contact details reminder' email to a member.</description>
           <long-description></long-description>
+          <tag name="param" line="642" description="&lt;p&gt;The id of the member to contact.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="763" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="671" package="app.Controller">
         <name>sendSoDetailsReminder</name>
         <full_name>\MembersController::sendSoDetailsReminder()</full_name>
-        <docblock line="763">
-          <description></description>
+        <docblock line="671">
+          <description>Send the 'so details reminder' email to a member.</description>
           <long-description></long-description>
+          <tag name="param" line="671" description="&lt;p&gt;The id of the member to contact.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="781" package="app.Controller">
-        <name>_sendSoDetailsToMember</name>
-        <full_name>\MembersController::_sendSoDetailsToMember()</full_name>
-        <docblock line="781">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="686" package="app.Controller">
+        <name>__sendSoDetailsToMember</name>
+        <full_name>\MembersController::__sendSoDetailsToMember()</full_name>
+        <docblock line="686">
+          <description>Send the e-mail containing standing order info to a member.</description>
           <long-description></long-description>
+          <tag name="param" line="686" description="&lt;p&gt;The id of the member to send the reminder to.&lt;/p&gt;" type="int" variable="$memberId">
+            <type>int</type>
+          </tag>
+          <tag name="return" line="686" description="True if mail was sent, false otherwise." type="bool">
+            <type>bool</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$memberId</name>
           <default></default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="807" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="711" package="app.Controller">
         <name>view</name>
         <full_name>\MembersController::view()</full_name>
-        <docblock line="807">
-          <description></description>
+        <docblock line="711">
+          <description>View the full member profile.</description>
           <long-description></long-description>
+          <tag name="param" line="711" description="&lt;p&gt;The id of the member to view.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default></default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="875" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="771" package="app.Controller">
         <name>edit</name>
         <full_name>\MembersController::edit()</full_name>
-        <docblock line="875">
-          <description></description>
+        <docblock line="771">
+          <description>Allow editing of a member profile.</description>
           <long-description></long-description>
+          <tag name="param" line="771" description="&lt;p&gt;The id of the member to view.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default></default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="935" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="821" package="app.Controller">
         <name>revokeMembership</name>
         <full_name>\MembersController::revokeMembership()</full_name>
-        <docblock line="935">
-          <description></description>
+        <docblock line="821">
+          <description>Revoke a members membership.</description>
           <long-description></long-description>
+          <tag name="param" line="821" description="&lt;p&gt;The id of the member to revoke.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="964" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="842" package="app.Controller">
         <name>reinstateMembership</name>
         <full_name>\MembersController::reinstateMembership()</full_name>
-        <docblock line="964">
-          <description></description>
+        <docblock line="842">
+          <description>Reinstate an ex-members membership.</description>
           <long-description></long-description>
+          <tag name="param" line="842" description="&lt;p&gt;The id of the member to reinstate.&lt;/p&gt;" type="int" variable="$id">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="997" package="app.Controller">
-        <name>_getViewPermissions</name>
-        <full_name>\MembersController::_getViewPermissions()</full_name>
-        <docblock line="997">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="867" package="app.Controller">
+        <name>__getViewPermissions</name>
+        <full_name>\MembersController::__getViewPermissions()</full_name>
+        <docblock line="867">
+          <description>Check to see if certain view/edit params should be shown to the logged in member.</description>
           <long-description></long-description>
+          <tag name="param" line="867" description="&lt;p&gt;The id of the member being viewed.&lt;/p&gt;" type="int" variable="$memberId">
+            <type>int</type>
+          </tag>
+          <tag name="param" line="867" description="&lt;p&gt;(out) If this is set to true then admin features should be shown.&lt;/p&gt;" type="bool" variable="$showAdminFeatures">
+            <type>bool</type>
+          </tag>
+          <tag name="param" line="867" description="&lt;p&gt;(out) If this is set to true then financial information should be shown.&lt;/p&gt;" type="bool" variable="$showFinances">
+            <type>bool</type>
+          </tag>
+          <tag name="param" line="867" description="&lt;p&gt;(out) If this is set to true then the member has joined.&lt;/p&gt;" type="bool" variable="$hasJoined">
+            <type>bool</type>
+          </tag>
+          <tag name="param" line="867" description="&lt;p&gt;(out) If this is set to true then show personal information about the member.&lt;/p&gt;" type="bool" variable="$showPersonalDetails">
+            <type>bool</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$memberId</name>
           <default></default>
-          <type/>
+          <type>int</type>
         </argument>
         <argument line="0" by_reference="true">
           <name>$showAdminFeatures</name>
           <default></default>
-          <type/>
+          <type>bool</type>
         </argument>
         <argument line="0" by_reference="true">
           <name>$showFinances</name>
           <default></default>
-          <type/>
+          <type>bool</type>
         </argument>
         <argument line="0" by_reference="true">
           <name>$hasJoined</name>
           <default></default>
-          <type/>
+          <type>bool</type>
         </argument>
         <argument line="0" by_reference="true">
           <name>$showPersonalDetails</name>
           <default></default>
-          <type/>
+          <type>bool</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1031" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="899" package="app.Controller">
         <name>emailMembersWithStatus</name>
         <full_name>\MembersController::emailMembersWithStatus()</full_name>
-        <docblock line="1031">
-          <description></description>
+        <docblock line="899">
+          <description>Send an e-mail to every member with a certain status.</description>
           <long-description></long-description>
+          <tag name="param" line="899" description="&lt;p&gt;Attempt to e-mail members with this status.&lt;/p&gt;" type="int" variable="$statusId">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$statusId</name>
           <default></default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1097" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="951" package="app.Controller">
         <name>login</name>
         <full_name>\MembersController::login()</full_name>
-        <docblock line="1097">
-          <description></description>
+        <docblock line="951">
+          <description>Attempt to login as a member.</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1113" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="964" package="app.Controller">
         <name>logout</name>
         <full_name>\MembersController::logout()</full_name>
-        <docblock line="1113">
-          <description></description>
+        <docblock line="964">
+          <description>Logout.</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="1123" package="app.Controller">
-        <name>_addMemberActions</name>
-        <full_name>\MembersController::_addMemberActions()</full_name>
-        <docblock line="1123">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="974" package="app.Controller">
+        <name>__addMemberActions</name>
+        <full_name>\MembersController::__addMemberActions()</full_name>
+        <docblock line="974">
+          <description>Adds the appropriate actions to each member in the member list.</description>
           <long-description></long-description>
+          <tag name="param" line="974" description="&lt;p&gt;A list of member summaries to add the actions to.&lt;/p&gt;" type="array" variable="$memberList">
+            <type>array</type>
+          </tag>
+          <tag name="return" line="974" description="The original memberList, with the actions added for each member." type="array">
+            <type>array</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$memberList</name>
           <default></default>
-          <type/>
+          <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="1140" package="app.Controller">
-        <name>_getActionsForMember</name>
-        <full_name>\MembersController::_getActionsForMember()</full_name>
-        <docblock line="1140">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="991" package="app.Controller">
+        <name>__getActionsForMember</name>
+        <full_name>\MembersController::__getActionsForMember()</full_name>
+        <docblock line="991">
+          <description>Get an array of possible actions for a member</description>
           <long-description></long-description>
+          <tag name="param" line="991" description="&lt;p&gt;The id of the member to work with.&lt;/p&gt;" type="int" variable="$memberId">
+            <type>int</type>
+          </tag>
+          <tag name="return" line="991" description="An array of actions." type="array">
+            <type>array</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$memberId</name>
           <default></default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1260" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1110" package="app.Controller">
         <name>isRequestLocal</name>
         <full_name>\MembersController::isRequestLocal()</full_name>
-        <docblock line="1260">
-          <description></description>
+        <docblock line="1110">
+          <description>Test to see if a request is coming from within the hackspace.</description>
           <long-description></long-description>
+          <tag name="return" line="1110" description="True if the request is coming from with in the hackspace, false otherwise." type="bool">
+            <type>bool</type>
+          </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1269" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1119" package="app.Controller">
         <name>getRequestIpAddress</name>
         <full_name>\MembersController::getRequestIpAddress()</full_name>
-        <docblock line="1269">
-          <description></description>
+        <docblock line="1119">
+          <description>Get the ip address of the request.</description>
           <long-description></long-description>
+          <tag name="return" line="1119" description="The IP address of the request." type="string">
+            <type>string</type>
+          </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1297" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1144" package="app.Controller">
         <name>uploadCsv</name>
         <full_name>\MembersController::uploadCsv()</full_name>
-        <docblock line="1297">
-          <description></description>
+        <docblock line="1144">
+          <description>Upload a .csv file of bank transactions and look for members to approve.</description>
           <long-description></long-description>
+          <tag name="param" line="1144" description="&lt;p&gt;If set then look here in the session for a list of account id's to approve.&lt;/p&gt;" type="string" variable="$guid">
+            <type>string</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$guid</name>
           <default>null</default>
-          <type/>
+          <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1429" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1250" package="app.Controller">
         <name>getMemberIdSessionKey</name>
         <full_name>\MembersController::getMemberIdSessionKey()</full_name>
-        <docblock line="1429">
-          <description></description>
+        <docblock line="1250">
+          <description>Get the key used to store members ids in the session after uploading a csv.</description>
           <long-description></long-description>
+          <tag name="return" line="1250" description="The key to be used in the session." type="string">
+            <type>string</type>
+          </tag>
+          <tag name="link" line="1250" description="MemberController::uploadCsv" link="MemberController::uploadCsv"/>
         </docblock>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="30" code="PPC:ERR-50007">No summary for property $helpers</error>
-      <error line="36" code="PPC:ERR-50007">No summary for property $components</error>
-      <error line="45" code="PPC:ERR-50015">Argument $user is missing from the Docblock of isAuthorized()</error>
-      <error line="45" code="PPC:ERR-50015">Argument $request is missing from the Docblock of isAuthorized()</error>
-      <error line="45" code="PPC:ERR-50008">No summary for method isAuthorized()</error>
-      <error line="99" code="PPC:ERR-50008">No summary for method beforeFilter()</error>
-      <error line="129" code="PPC:ERR-50008">No summary for method index()</error>
-      <error line="140" code="PPC:ERR-50008">No summary for method listMembers()</error>
-      <error line="159" code="PPC:ERR-50015">Argument $statusId is missing from the Docblock of listMembersWithStatus()</error>
-      <error line="159" code="PPC:ERR-50008">No summary for method listMembersWithStatus()</error>
-      <error line="175" code="PPC:ERR-50008">No summary for method search()</error>
-      <error line="195" code="PPC:ERR-50015">Argument $queryResult is missing from the Docblock of _paginateMemberList()</error>
-      <error line="195" code="PPC:ERR-50008">No summary for method _paginateMemberList()</error>
-      <error line="208" code="PPC:ERR-50008">No summary for method getMailingList()</error>
-      <error line="215" code="PPC:ERR-50008">No summary for method register()</error>
-      <error line="272" code="PPC:ERR-50015">Argument $initialMessage is missing from the Docblock of _setFlashFromMailingListInfo()</error>
-      <error line="272" code="PPC:ERR-50015">Argument $results is missing from the Docblock of _setFlashFromMailingListInfo()</error>
-      <error line="272" code="PPC:ERR-50008">No summary for method _setFlashFromMailingListInfo()</error>
-      <error line="314" code="PPC:ERR-50015">Argument $id is missing from the Docblock of setupLogin()</error>
-      <error line="314" code="PPC:ERR-50008">No summary for method setupLogin()</error>
-      <error line="358" code="PPC:ERR-50015">Argument $id is missing from the Docblock of setupDetails()</error>
-      <error line="358" code="PPC:ERR-50008">No summary for method setupDetails()</error>
-      <error line="411" code="PPC:ERR-50015">Argument $id is missing from the Docblock of rejectDetails()</error>
-      <error line="411" code="PPC:ERR-50008">No summary for method rejectDetails()</error>
-      <error line="459" code="PPC:ERR-50015">Argument $id is missing from the Docblock of acceptDetails()</error>
-      <error line="459" code="PPC:ERR-50008">No summary for method acceptDetails()</error>
-      <error line="511" code="PPC:ERR-50015">Argument $id is missing from the Docblock of approveMember()</error>
-      <error line="511" code="PPC:ERR-50008">No summary for method approveMember()</error>
-      <error line="536" code="PPC:ERR-50015">Argument $id is missing from the Docblock of _approveMember()</error>
-      <error line="536" code="PPC:ERR-50008">No summary for method _approveMember()</error>
-      <error line="583" code="PPC:ERR-50015">Argument $id is missing from the Docblock of changePassword()</error>
-      <error line="583" code="PPC:ERR-50008">No summary for method changePassword()</error>
-      <error line="625" code="PPC:ERR-50015">Argument $guid is missing from the Docblock of forgotPassword()</error>
-      <error line="625" code="PPC:ERR-50008">No summary for method forgotPassword()</error>
-      <error line="687" code="PPC:ERR-50015">Argument $id is missing from the Docblock of sendMembershipReminder()</error>
-      <error line="687" code="PPC:ERR-50008">No summary for method sendMembershipReminder()</error>
-      <error line="709" code="PPC:ERR-50015">Argument $memberId is missing from the Docblock of _sendProspectiveMemberEmail()</error>
-      <error line="709" code="PPC:ERR-50008">No summary for method _sendProspectiveMemberEmail()</error>
-      <error line="730" code="PPC:ERR-50015">Argument $id is missing from the Docblock of sendContactDetailsReminder()</error>
-      <error line="730" code="PPC:ERR-50008">No summary for method sendContactDetailsReminder()</error>
-      <error line="763" code="PPC:ERR-50015">Argument $id is missing from the Docblock of sendSoDetailsReminder()</error>
-      <error line="763" code="PPC:ERR-50008">No summary for method sendSoDetailsReminder()</error>
-      <error line="781" code="PPC:ERR-50015">Argument $memberId is missing from the Docblock of _sendSoDetailsToMember()</error>
-      <error line="781" code="PPC:ERR-50008">No summary for method _sendSoDetailsToMember()</error>
-      <error line="807" code="PPC:ERR-50015">Argument $id is missing from the Docblock of view()</error>
-      <error line="807" code="PPC:ERR-50008">No summary for method view()</error>
-      <error line="875" code="PPC:ERR-50015">Argument $id is missing from the Docblock of edit()</error>
-      <error line="875" code="PPC:ERR-50008">No summary for method edit()</error>
-      <error line="935" code="PPC:ERR-50015">Argument $id is missing from the Docblock of revokeMembership()</error>
-      <error line="935" code="PPC:ERR-50008">No summary for method revokeMembership()</error>
-      <error line="964" code="PPC:ERR-50015">Argument $id is missing from the Docblock of reinstateMembership()</error>
-      <error line="964" code="PPC:ERR-50008">No summary for method reinstateMembership()</error>
-      <error line="997" code="PPC:ERR-50015">Argument $memberId is missing from the Docblock of _getViewPermissions()</error>
-      <error line="997" code="PPC:ERR-50015">Argument $showAdminFeatures is missing from the Docblock of _getViewPermissions()</error>
-      <error line="997" code="PPC:ERR-50015">Argument $showFinances is missing from the Docblock of _getViewPermissions()</error>
-      <error line="997" code="PPC:ERR-50015">Argument $hasJoined is missing from the Docblock of _getViewPermissions()</error>
-      <error line="997" code="PPC:ERR-50015">Argument $showPersonalDetails is missing from the Docblock of _getViewPermissions()</error>
-      <error line="997" code="PPC:ERR-50008">No summary for method _getViewPermissions()</error>
-      <error line="1031" code="PPC:ERR-50015">Argument $statusId is missing from the Docblock of emailMembersWithStatus()</error>
-      <error line="1031" code="PPC:ERR-50008">No summary for method emailMembersWithStatus()</error>
-      <error line="1097" code="PPC:ERR-50008">No summary for method login()</error>
-      <error line="1113" code="PPC:ERR-50008">No summary for method logout()</error>
-      <error line="1123" code="PPC:ERR-50015">Argument $memberList is missing from the Docblock of _addMemberActions()</error>
-      <error line="1123" code="PPC:ERR-50008">No summary for method _addMemberActions()</error>
-      <error line="1140" code="PPC:ERR-50015">Argument $memberId is missing from the Docblock of _getActionsForMember()</error>
-      <error line="1140" code="PPC:ERR-50008">No summary for method _getActionsForMember()</error>
-      <error line="1260" code="PPC:ERR-50008">No summary for method isRequestLocal()</error>
-      <error line="1269" code="PPC:ERR-50008">No summary for method getRequestIpAddress()</error>
-      <error line="1297" code="PPC:ERR-50015">Argument $guid is missing from the Docblock of uploadCsv()</error>
-      <error line="1297" code="PPC:ERR-50008">No summary for method uploadCsv()</error>
-      <error line="1429" code="PPC:ERR-50008">No summary for method getMemberIdSessionKey()</error>
-    </parse_markers>
-    <source>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</source>
+    <source>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</source>
   </file>
   <file path="plugins\MemberVoice\Controller\MemberVoiceAppController.php" generated-path="plugins.MemberVoice.Controller.MemberVoiceAppController.html" hash="da7ee770176d8d79cfa854c7226b4b76" package="Default">
     <docblock line="0">
@@ -1062,65 +1141,75 @@ will inherit them.</long-description>
     </parse_markers>
     <source>eJyl0MEKwjAMBuB7oe+Qww4bePWk6KOUro1urOtGmzJF9u62E4dID0N7CDkkX356PI/NyBlnykjvoXP1XshADXD24AxgDLVpFVyCVdQOFoRQg/XkgqKyiNMieHRW9riDosM7yTo2DqXpK0j7CzKnktOk1gtQFh/MGINMg9PVug/gkIKzEO/iYRVfL+dqNEj4Rf/hqQZVJ97Bfkubd6W9Yh62OG20c3KCBN5aT37zD8yQrPPpCb55oHg=</source>
   </file>
-  <file path="app\Controller\StatusController.php" generated-path="app.Controller.StatusController.html" hash="3c63d746eaa2704a1ed7fc079b0ac269" package="Default">
+  <file path="app\Controller\StatusController.php" generated-path="app.Controller.StatusController.html" hash="971fa691b917fa57e2b3f3560c8e5245" package="app.Controller">
     <docblock line="0">
-      <description></description>
-      <long-description></long-description>
+      <description>PHP 5</description>
+      <long-description>Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</long-description>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Controller"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="3" package="Default">
+    <class final="false" abstract="false" namespace="" line="19" package="app.Controller">
       <extends>\AppController</extends>
       <name>StatusController</name>
       <full_name>\StatusController</full_name>
-      <docblock line="3">
-        <description>Application Controller</description>
+      <docblock line="19">
+        <description>Controller to handle Status functionality, currently just shows a list of statuses.</description>
         <long-description>Add your application-wide methods in the class below, your controllers
 will inherit them.</long-description>
       </docblock>
-      <property static="false" visibility="public" line="5" namespace="" package="Default">
+      <property static="false" visibility="public" line="25" namespace="" package="app.Controller">
         <name>$helpers</name>
         <default>array('Html', 'Form')</default>
-        <docblock line="5">
-          <description></description>
+        <docblock line="25">
+          <description>Views rendered from this controller will have access to the following helpers.</description>
           <long-description></long-description>
+          <tag name="var" line="25" description="" type="array" variable="">
+            <type>array</type>
+          </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="7" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="35" package="app.Controller">
         <name>isAuthorized</name>
         <full_name>\StatusController::isAuthorized()</full_name>
-        <docblock line="7">
-          <description></description>
+        <docblock line="35">
+          <description>Test to see if a user is authorized to make a request.</description>
           <long-description></long-description>
+          <tag name="param" line="35" description="&lt;p&gt;Member record for the user.&lt;/p&gt;" type="array" variable="$user">
+            <type>array</type>
+          </tag>
+          <tag name="param" line="35" description="&lt;p&gt;The request the user is attempting to make.&lt;/p&gt;" type="\CakeRequest" variable="$request">
+            <type link="CakeRequest.html">\CakeRequest</type>
+          </tag>
+          <tag name="return" line="35" description="True if the user is authorized to make the request, otherwise false." type="bool">
+            <type>bool</type>
+          </tag>
+          <tag name="link" line="35" description="http://api20.cakephp.org/class/cake-request" link="http://api20.cakephp.org/class/cake-request"/>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$user</name>
           <default></default>
-          <type/>
+          <type>array</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$request</name>
           <default></default>
-          <type/>
+          <type>\CakeRequest</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="13" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="42" package="app.Controller">
         <name>index</name>
         <full_name>\StatusController::index()</full_name>
-        <docblock line="13">
-          <description></description>
+        <docblock line="42">
+          <description>Show a list of the different statuses</description>
           <long-description></long-description>
         </docblock>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="3" code="PPC:ERR-50005">No summary for class \StatusController</error>
-      <error line="5" code="PPC:ERR-50007">No summary for property $helpers</error>
-      <error line="7" code="PPC:ERR-50015">Argument $user is missing from the Docblock of isAuthorized()</error>
-      <error line="7" code="PPC:ERR-50015">Argument $request is missing from the Docblock of isAuthorized()</error>
-      <error line="7" code="PPC:ERR-50008">No summary for method isAuthorized()</error>
-      <error line="13" code="PPC:ERR-50008">No summary for method index()</error>
-    </parse_markers>
-    <source>eJx1kNFqQjEMhq8VfIeAB9qCPoHbERmM3fsE9ZyUFmpbk5S5jb27RY+bu1guEvjhy/8nT9viy2K+mM+GaJlhL1Yqv+QklGNEAjwLppFhV8qD+tUAaDWNUg8xDNB5jAWJ4Rkskf3Q6k2OUa1AvWY6KrO5Gj0ArqZBQk4QeFfFZwqfOOquMtIKOsJTRRYzMXfPGaFUSiBUcTNp3z+bl7D3+R0sxMAC2YF4hDE4h4RJgK/3If+XI4141ubXqxMfeN0zilZ3th00ybdvrXvXOK1sjMqYv5Fa3/YXwYpnvw==</source>
+    <source>eJx1Ut9r2zAQfk7+insI2CmJPQZ7WbeuJTAyWKE0Ye+Kc461yJJ2kutmo//7TrLipoyZQGydvh939336Yhs7La+uphB+8LB+gA/pfWXsieSh8ZCv5rC+38AWRZuK32WF2uEeOr1Hgm2DcP9tez4ONx5xL50nueu8NNqBqaGWCh20nfNA6IXU4BknduYJoRrVtPHMUiSh29dCeC5swK0V1VEcEIZHWFusjPZklEKKF9RgJ124MAh54739WJZ93xfG8pHpiEUNHcoEcmUr/TJ9FDymOVOW0zQseFUCb6AReq8QNl74zkHd6So0LZT0pwVUHRFqr07wM7TuGtM7EKB4PGEqLoLQFZG/UsK5RHShgc8e9d7BnbUXp39GOz8kMinL8DZ4KzWZlocrHc91vN1LpdgpD1tUFbIKGw8LqLlseqkP0KCySNEJ3D4JAkEkTtHXxHY7HgbM0h34PBTzbO1blS0g+2qozebX0RIEhi1yg6zhEEHW3DF3ScCeROcbQ/I3G+VyK47siL3/6hgw7t0KEu2gAbOIvMd2x3+ElSFu0VB0H0rFBWLFdI8DF8wSaczn+f0Mik68x9b60HtyMlBxPDvSsDNGwZa66P8N7t8O/KvEAgx/US85aLVQLpEqqY+QciesfP+uqBjIyYqxi4svw8ky0byZ+zlTrH43iudxMIuxzzknYjJJ5j37vp5OXsaMbDh4F7kLhveyrjGEc0zhf0Q5V8/5QD8LuVreOPR5dkbx/tPxkNzlTc2QPBNKZfP54OLlL/SEdLc=</source>
   </file>
   <file path="app\Model\GroupsMember.php" generated-path="app.Model.GroupsMember.html" hash="df8034b92be42d7f935c3f007b4e04d6" package="Default">
     <docblock line="0">
@@ -1212,7 +1301,7 @@ will inherit them.</long-description>
     </parse_markers>
     <source>eJytlN1r2zAQwJ9d2P9whYDjkCV7TvqxDra2jO5lgT0OJT7boo5kJHldKP3fdzrJjtsm22ALia3oPnR3vzudXTZV8+Ykoe9V0ywWrUU7Tml5p3Os0ymkYZEt35yQznwyoSdMgHeh0AZcheDEuqZnJRzkWEiFlrdvrj6s7sBgLZzUylaygTW6B0QF10a3DQiVwx1u12jY6/4B7xuxuRclQviIppnxkSyd03NTC2uDGxtcAP50qHILXfRAao/0S5p2XcsNjCi5FUd6DumWbb6X3kG6TObz0zP42uBGFrt9SlMQFh4Qcq1SB2TOIkpRtLWbcUW8JXxDSqzWqgSnYa1dFbPiBDnG2TCOoGtXmgIRxojd2EuTNBilcH4x3E5SzvWL2CKLOrVplBIElKX6jLsgjpnJPGpk4ZVyHH90HrSO+S5N89Jx7Ayuwwqt8yWwiCALEF0ZpAWp6O++FPPJKfsgzkZsSepgFAK/zWFFRW6M3Aqzg3vcgS647tGZwY02+eyVOaM8bh067pmxQfdD1ARM17AyLcc8OChE3dtOoRA1tQDhRfMgLbIXbsaObNGqjW91Mg0+bhWbjvvcpn2cmbfj9kxGqt1+VM5ImptzGLlK2rcXNEb5ON3oVjkaw8AjgKNNlUseKaYSZMmQaoc7hjHb94Q3GERzWD1iZt0YblTMwju8OvQJFbI1CoZ5XMC7pZc97bvjGh1XU+aeiVC7yITvjee98l97JGLm+sCVigsyCMfL3IYQBvZxQqmXfwO5RHcdimM/aRMs96SHfGMNX9EVtb9iI9VCYp3bwYAeZJLRlfyC/yHtI8CzLFsOid0IWy0WdHEasXHjHralQx7V0+xgU2THuaaWydY1hAPp8qz04GoUUHY3gL/VA2C/OjrIoVe89zL0ivZl543uCF3Mei9HUW9jc+W2U2amfnEAaxxe5hoHeDC13uixO7Iv7T/B3eP6S74HJjSy5aiO4O1jPcR30DK9I6LsSV9e/ALyXWpd</source>
   </file>
-  <file path="app\Controller\Component\CsvComponent.php" generated-path="app.Controller.Component.CsvComponent.html" hash="5af0d15cf79d7b0f02622d570cd4f7be" package="app.Controller.Component">
+  <file path="app\Controller\Component\CsvComponent.php" generated-path="app.Controller.Component.CsvComponent.html" hash="2c15228e1b71a7876bff3b7107658d8c" package="app.Controller.Component">
     <docblock line="0">
       <description>PHP 5</description>
       <long-description>Copyright (C) HMS Team
@@ -1223,37 +1312,37 @@ Redistributions of files must retain the above copyright notice.</long-descripti
       <tag name="package" line="0" description="app.Controller.Component"/>
       <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="27" package="app.Controller.Component">
+    <class final="false" abstract="false" namespace="" line="26" package="app.Controller.Component">
       <extends>\Component</extends>
       <name>CsvComponent</name>
       <full_name>\CsvComponent</full_name>
-      <docblock line="27">
+      <docblock line="26">
         <description>A wrapper around a CsvReader to make it a Component that can be
 used by Controllers or other Components.</description>
         <long-description></long-description>
-        <tag name="package" line="27" description="app.Controller.Component"/>
+        <tag name="package" line="26" description="app.Controller.Component"/>
       </docblock>
-      <property static="false" visibility="private" line="33" namespace="" package="app.Controller.Component">
+      <property static="false" visibility="private" line="32" namespace="" package="app.Controller.Component">
         <name>$__csvReader</name>
         <default></default>
-        <docblock line="33">
+        <docblock line="32">
           <description>Internal CsvReader that actually does all the work.</description>
           <long-description></long-description>
-          <tag name="var" line="33" description="" type="\CsvReader" variable="">
+          <tag name="var" line="32" description="" type="\CsvReader" variable="">
             <type link="CsvReader.html">\CsvReader</type>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="41" package="app.Controller.Component">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="40" package="app.Controller.Component">
         <name>__construct</name>
         <full_name>\CsvComponent::__construct()</full_name>
-        <docblock line="41">
+        <docblock line="40">
           <description>Constructor</description>
           <long-description></long-description>
-          <tag name="param" line="41" description="&lt;p&gt;A ComponentCollection this component can use to lazy load its components.&lt;/p&gt;" type="\ComponentCollection" variable="$collection">
+          <tag name="param" line="40" description="&lt;p&gt;A ComponentCollection this component can use to lazy load its components.&lt;/p&gt;" type="\ComponentCollection" variable="$collection">
             <type link="ComponentCollection.html">\ComponentCollection</type>
           </tag>
-          <tag name="param" line="41" description="&lt;p&gt;Array of configuration settings.&lt;/p&gt;" type="array" variable="$settings">
+          <tag name="param" line="40" description="&lt;p&gt;Array of configuration settings.&lt;/p&gt;" type="array" variable="$settings">
             <type>array</type>
           </tag>
         </docblock>
@@ -1268,16 +1357,16 @@ used by Controllers or other Components.</description>
           <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="53" package="app.Controller.Component">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="52" package="app.Controller.Component">
         <name>readFile</name>
         <full_name>\CsvComponent::readFile()</full_name>
-        <docblock line="53">
+        <docblock line="52">
           <description>Attempt to read a .csv file</description>
           <long-description></long-description>
-          <tag name="param" line="53" description="&lt;p&gt;The path to look for the file.&lt;/p&gt;" type="string" variable="$filePath">
+          <tag name="param" line="52" description="&lt;p&gt;The path to look for the file.&lt;/p&gt;" type="string" variable="$filePath">
             <type>string</type>
           </tag>
-          <tag name="return" line="53" description="True if file was opened successfully, false otherwise." type="bool">
+          <tag name="return" line="52" description="True if file was opened successfully, false otherwise." type="bool">
             <type>bool</type>
           </tag>
         </docblock>
@@ -1287,27 +1376,27 @@ used by Controllers or other Components.</description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="62" package="app.Controller.Component">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="61" package="app.Controller.Component">
         <name>getNumLines</name>
         <full_name>\CsvComponent::getNumLines()</full_name>
-        <docblock line="62">
+        <docblock line="61">
           <description>Get the number of lines available.</description>
           <long-description></long-description>
-          <tag name="return" line="62" description="The number of lines available." type="int">
+          <tag name="return" line="61" description="The number of lines available." type="int">
             <type>int</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="72" package="app.Controller.Component">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="71" package="app.Controller.Component">
         <name>getLine</name>
         <full_name>\CsvComponent::getLine()</full_name>
-        <docblock line="72">
+        <docblock line="71">
           <description>Get the line at index.</description>
           <long-description></long-description>
-          <tag name="param" line="72" description="&lt;p&gt;The index of the line to retrieve.&lt;/p&gt;" type="int" variable="$index">
+          <tag name="param" line="71" description="&lt;p&gt;The index of the line to retrieve.&lt;/p&gt;" type="int" variable="$index">
             <type>int</type>
           </tag>
-          <tag name="return" line="72" description="An array of line data if index is valid, otherwise null." type="mixed">
+          <tag name="return" line="71" description="An array of line data if index is valid, otherwise null." type="mixed">
             <type>mixed</type>
           </tag>
         </docblock>
@@ -1318,7 +1407,7 @@ used by Controllers or other Components.</description>
         </argument>
       </method>
     </class>
-    <source>eJyNVMFu2zAMPSdfwUOAOEVqn3bJtq5BgK0F2qHYci9oR0mEyJIhUUmzof8+SnZsB0vXGT7IJik+vvekT1+qbTUcZldXQwgvPN09wYdmvTDV0crNliBZTODu8ScsBZZN8EEWQjuxAq9XwsJyK+Dxfnn6HTJ+iJV0ZGXuSRrtwKxhLZVwUHpHYAWh1EBch7nZCyjabtoQ75I2jW67QHh6MOC2wmKHGwH1g1WVLowma5QSlpdlZbTQFFNVDaxJ7UGFZEtUzbLscDikpuJfxltub+wma4pcVkq6bj5SZmzCW2bD4XBeVbOZ54Rk3HYbT2HcoRhPPtZZksOWkvGDzLOF2/8QyLTF3PaDUxslYA4Hy+MwsWgNMwwIbR6QgRJ3AiSF36e+TCUSFKghj/T7IE5+hA4LS2DBMOO2q3ItzScu/8FiNiwUOhegdG3FCwm9cj0gv9sx7jUJq1H1wQeUWJBHpY6wMuwHXkUfHIzdpRHLHm1XEhsPKiv3SAJGz8/FKdLxxYDZar4gY7t5LJYdqkUYpwhOhFHRrecXM2grHRvyNFAglekMxCv8dQRlcMXs91Jc2uuJ1uIRRk4QSb1xMI/fbP/C6LXceIuxySmeNgP6nB0Ga69rDDznaajknSmmvWaf6/bJZMI6DAaMiMtms/5ulyuD+waDURj9+qZHMu+oxaGTI+HEwWvnVCJRVhS4sRxnR6ZcGk/6uRLhKtAbGIXIE9I2XhlVWARajdnB2tjog5BR88mXhLdsaGMULK1ny9d3CByQzcxnlS3ufFEI59ae/TSFNSoWKpr8IJ14g9uA9Cvvk7Roaraafn+TcH1zoeSMh2+CInjty5xJY7WV1MHce5QKc9XdZ00TycZavldwAftG0HdfPoTc5F3UZ8kX8YamwEdS8jX+kp5LFiCOYiAirVcMtK2LorOuYn8uWClfWJm5bo5CMxuskDBIWG/ER2yPSq6mnVxMhlJvzx3mSGpA/zN5Pz3O/voHidFIYA==</source>
+    <source>eJyNVMFu2zAMPSdfwUOAOEVqn3bJtq5BgK0F2qHYci9oR0mEyJIhUUmzof8+SnZsB0vXGT7IJik+vvekT1+qbTXMrq6GEF54unuCD816YaqjlZstQbKYwN3jT1gKLJvggyyEdmIFXq+EheVWwOP98vQ7ZPwQK+nIytyTNNqBWcNaKuGg9I7ACkKpgbgOc7MXULTdtCHeJW0a3XaB8PRgwG2FxQ43AuoHqypdGE3WKCUsL8vKaKEppqoaWJPagwrJlqiaZdnhcEhNxb+Mt9ze2E3WFLmslHTdfKRM2IS3zIbD4byqZjPPCcm47TaewrhDMZ58rLMkhy0l4weZZwu3/yGQaYu57QenNkrAHA6Wx2Fi0RpmGBDaPCADJe4ESAq/T32ZSiQoUEMe6fdBnPwIHRaWwIJhxm1X5VqaT1z+g8VsWCh0LkDp2ooXEnrlekB+t2PcaxJWo+qDDyixII9KHWFl2A+8ij44GLtLI5Y92q4kNh5UVu6RBIyen4tTpOOLAbPVfEHGdvNYLDtUizBOEZwIo6Jbzy9m0FY6NuRpoEAq0xmIV/jrCMrgitnvpbi01xOtxSOMnCCSeuNgHr/Z/oXRa7nxFmOTUzxtBvQ5OwzWXtcYeM7TUMk7U0x7zT7X7ZPJhHUYDBgRl81m/d0uVwb3DQajMPr1TY9k3lGLQydHwomD186pRKKsKHBjOc6OTLk0nvRzJcJVoDcwCpEnpG28MqqwCLQas4O1sdEHIaPmky8Jb9nQxihYWs+Wr+8QOCCbmc8qW9z5ohDOrT37aQprVCxUNPlBOvEGtwHpV94nadHUbDX9/ibh+uZCyRkP3wRF8NqXOZPGaiupg7n3KBXmqrvPmiaSjbV8r+AC9o2g7758CLnJu6jPki/iDU2Bj6Tka/wlPZcsQBzFQERarxhoWxdFZ13F/lywUr6wMnPdHIVmNlghYZCw3oiP2B6VXE07uZgMpd6eO8yR1ID+Z/J+epz99Q9C6UhW</source>
   </file>
   <file path="plugins\MemberVoice\Model\MemberVoiceCategory.php" generated-path="plugins.MemberVoice.Model.MemberVoiceCategory.html" hash="16a0177b564f87d5c746779f302aa08c" package="Default">
     <docblock line="0">
@@ -3543,198 +3632,189 @@ will inherit them.</long-description>
     </parse_markers>
     <source>eJy9lMuK2zAUhtcO5B3OIiAbnKZrZ8ZDoZQUOu2i0E0IQbaVsRjZErq0E4a8e3Vz4mRMuynNIrGk71z8nz+6exCtmM/ms+SDEEVhFFEpso8bwgSRKAf0g5Jfq7jM1h5drSBsQM2wUqA5NFQJho/QYcpo/wSMKq0sGoDHsOs2YyB50aRvFJxLwatPnQhTMVrDovW7Cu4BS4mPKfrEZef62eiODY0M9MH0taa8B260MDpdxDa+2IIfibYLlTn81X0l49NvwsVdyrjEDlGEkVqT5vGCXkMeO3BJcN3CVMEtarDGaAdYwfg4Ax8aWkkWTpPPjU09ZraINmi3jsjbdrcxbPcmrscdOUfSQ7rBqi2KJ3KtiZVRmUrVklakQVkW8NhS4l9yL4xq00kdcojlo1jJyf+coiiSaCN7WOiWqmXpxrYsae/GgsZZ3o0XKA+Zgr7+GeIHMVwRhuC+hP0+RYByLQ3J8mtIHwXxDAodo5vzzjBNBYtM3ZL6ueIvtxQP8npoQvYbetAm4JNKnQOCxNnaD//0J/O6wL8ZOJC3pv0vbvwHngrd54ND3B96Wdo0z+mUl/PhAqh5ryVnzN5DfoijS0W5iwF7FcPZT3tpoYtPs2mn2nepuen10FIGJbzPxoJEL3/X0lYqCs3DdCK+nvI9+sp7gtZxzuH0oZzPfgOcX49A</source>
   </file>
-  <file path="app\Controller\PagesController.php" generated-path="app.Controller.PagesController.html" hash="0d07d1970d474cdb942007e354f7f517" package="app.Controller">
+  <file path="app\Controller\PagesController.php" generated-path="app.Controller.PagesController.html" hash="ddaf3a68f1f61b2bf58786359c7e90db" package="app.Controller">
     <docblock line="0">
-      <description>Static content controller.</description>
-      <long-description>This file will render views from views/pages/
-
-PHP 5
-
-CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
-Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+      <description>PHP 5</description>
+      <long-description>Copyright (C) HMS Team
 
 Licensed under The MIT License
 Redistributions of files must retain the above copyright notice.</long-description>
-      <tag name="copyright" line="0" description="Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)"/>
-      <tag name="link" line="0" description="CakePHP(tm) Project" link="http://cakephp.org"/>
+      <tag name="copyright" line="0" description="HMS Team"/>
       <tag name="package" line="0" description="app.Controller"/>
-      <tag name="since" line="0" description="CakePHP(tm) v 0.2.9"/>
       <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="33" package="app.Controller">
+    <class final="false" abstract="false" namespace="" line="28" package="app.Controller">
       <extends>\AppController</extends>
       <name>PagesController</name>
       <full_name>\PagesController</full_name>
-      <docblock line="33">
+      <docblock line="28">
         <description>Static content controller</description>
         <long-description>Override this controller by placing a copy in controllers directory of an application</long-description>
-        <tag name="package" line="33" description="app.Controller"/>
-        <tag name="link" line="33" description="http://book.cakephp.org/2.0/en/controllers/pages-controller.html" link="http://book.cakephp.org/2.0/en/controllers/pages-controller.html"/>
+        <tag name="package" line="28" description="app.Controller"/>
+        <tag name="link" line="28" description="http://book.cakephp.org/2.0/en/controllers/pages-controller.html" link="http://book.cakephp.org/2.0/en/controllers/pages-controller.html"/>
       </docblock>
-      <property static="false" visibility="public" line="36" namespace="" package="app.Controller">
-        <name>$component</name>
+      <property static="false" visibility="public" line="34" namespace="" package="app.Controller">
+        <name>$components</name>
         <default>array('Auth')</default>
-        <docblock line="36">
-          <description></description>
+        <docblock line="34">
+          <description>The list of components this Controller relies on.</description>
           <long-description></long-description>
-        </docblock>
-      </property>
-      <property static="false" visibility="public" line="42" namespace="" package="app.Controller">
-        <name>$name</name>
-        <default>'Pages'</default>
-        <docblock line="42">
-          <description>Controller name</description>
-          <long-description></long-description>
-          <tag name="var" line="42" description="" type="string" variable="">
-            <type>string</type>
-          </tag>
-        </docblock>
-      </property>
-      <property static="false" visibility="public" line="49" namespace="" package="app.Controller">
-        <name>$uses</name>
-        <default>array()</default>
-        <docblock line="49">
-          <description>This controller does not use a model</description>
-          <long-description></long-description>
-          <tag name="var" line="49" description="" type="array" variable="">
+          <tag name="var" line="34" description="" type="array" variable="">
             <type>array</type>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="57" package="app.Controller">
+      <property static="false" visibility="public" line="41" namespace="" package="app.Controller">
+        <name>$name</name>
+        <default>'Pages'</default>
+        <docblock line="41">
+          <description>Controller name.</description>
+          <long-description></long-description>
+          <tag name="var" line="41" description="" type="string" variable="">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="47" package="app.Controller">
         <name>display</name>
         <full_name>\PagesController::display()</full_name>
-        <docblock line="57">
-          <description>Displays a view</description>
+        <docblock line="47">
+          <description>Displays a view.</description>
           <long-description></long-description>
-          <tag name="param" line="57" description="&lt;p&gt;What page to display&lt;/p&gt;" type="mixed" variable="">
-            <type>mixed</type>
-          </tag>
-          <tag name="return" line="57" description="" type="void">
-            <type>void</type>
-          </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="86" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="80" package="app.Controller">
         <name>beforeFilter</name>
         <full_name>\PagesController::beforeFilter()</full_name>
-        <docblock line="86">
-          <description></description>
+        <docblock line="80">
+          <description>Perform any actions that should be performed before any controller action.</description>
           <long-description></long-description>
+          <tag name="link" line="80" description="http://api20.cakephp.org/class/controller#method-ControllerbeforeFilter" link="http://api20.cakephp.org/class/controller#method-ControllerbeforeFilter"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="91" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="88" package="app.Controller">
         <name>home</name>
         <full_name>\PagesController::home()</full_name>
-        <docblock line="91">
-          <description></description>
+        <docblock line="88">
+          <description>Display the home page.</description>
           <long-description></long-description>
         </docblock>
       </method>
     </class>
-    <markers>
-      <todo line="110">Cache this</todo>
-    </markers>
-    <source>eJy1Vm1v2zYQ/uwA+Q9XIICkIraSAP0wdUm7NQ0aYGkDN8MGDINBS7TFhRIFkrLjFf3vuyOpFzvFXj7MMCCK98rnuTvq+zdN2RwfpS9fHh/BS/hsmRU55Kq2vLbuqZWUXM9I7FQeSmFgJSSHrZASNK8LrmEj+Ba3tar8Mm3Ympu0t7r/cA+v+rd37JHjTmyrBDKYs0YUcM03XKqmorg3mlV8q/QjxKW1TZamOVpgpjOl14l3oZqdFuvSwsXZ2avpxdn5xanzC5/Vym6Z5nCj2rrA86j6FG7rfLbnbNULe5/O708i57XhBbTuXA8lh7vbh27bqcx5IYzVYtmSuQG1cngYqFpjERDLRA0WDdlSbTiC2GVaKwSXD1C+HUT0+x+OBG+lqB+h/z1Hc4+Le63+4Ln1lg3LH5HEYMmaZvauLwevYUSd89732NEGzmYXs++6FBx2QW2EZp/9drudqQa3VKsRIEwrDUYmrYSdhpcZ5uyOhXV1fPRD02RZiypxhMsht+gUotFb8npP9ddKksLPVkhhd076L8q/p+zThmstCo78YhsMCrDcQSNZLuo1MEc5YBEMcgOF0Ait0juqF1YToHgsR9dQEP+MueMzwLZU6nE24jK9mJ2lvE5HYX0fTkeNXNpKBgxzyYyBe9IYwgB/wsMXBvZAheOjL4TUZMM0nOSqalRNEF0C05rtkILWlogmDGCOjGts5+GQ5IL6p16HPCZNu0Qs4IT00GXkUor2qHk4wLtQ2HDYUIC0IuKVKrjcD+ESO4xARdAnvU/+tTDI4M6gNxphY1JwHEElnnAq/FIyC4QpWIWUOguvhX3f6ho2ShQHQVdtnRPNnX6cAGI5mZw0zJaYDMkXa24XTK9NSAqlObYzAeyesVMm2WQiVhC/8OLgaXJC5Ti90txXWRylkdf9GgKtCdcT0y67pRVW8sVK6QVmpFoKVLdShuAuBK8au/OBfzv7PeljdS6CYIjzzOp8ZDWKHWR/YxgOP4Wxh2+kfFuvpOuqLCvbitXiT/4ND10geqQpXO+wzkZtjswwiIzr/ciR+wZ53lF1zXx2MVTclqpY8Cec/CZ2cJ+CQyKBhJR8jjmTcoE1phdEahzq7EB9nE4gznAbU1Mx4o7UaEYFxGh5ePQo8V563umyikXVSOwDYv/Uo+zVfKy+DJd4U2h+I6RFG0QXyBMWOWKRZftCtO7GewhFfT69wmOqbRyFgvZ9T0ouEi0OS79UFY8TL/viH5NhQGSZVKy4ox6OozteLcPcHkWXar3mxW3tpbeFq2GXkd+ZXmEH3RY3Svv3eC9foiROBpfE6TOXIb1Jl59T6gBece3QuryEORJAObdaxmH6DYMpgssriCrn0hB1zAHgtzGiqKPkFKxuedLFc7XjV1id89DDgE1BHxGUOmxZbQ2NnCUHLg3flphOb2W2wuZl/BwPus9aM8Lk2ZGT3smQBFYxzlRvm2X38/eLu/d3P76fL86zQWcS5t3h5PlvgGDdt801fTFJkn0jv9d9yK/dql+4snYrxO3h0/WnDD9C8tJfzp0I+0Dj99ziqZJYM3j9Y423QhZxFG5RbHOLd1GJVy9dorP2MX2z4ry41MZchDE67tMI96+ZZb7HOt+jcUsEDSMhWH5kG2ybAsPO+RqHCJL6UW1fECAjbHSQ4TpcUbi5FOsFfmtaBK2PEpoN/38B9017OA==</source>
+    <source>eJyVVm1v2zYQ/mz/iisWQHIRW2mAfVHnpFuSogHqLnAzbMAwGLRES0QoUiCpuN6Q/747krbkxvsww7Ap3vFenrvnqJ+u27odZ2/fjoG+8PDpAX6M6xvd7oyoagfpzQQ+Lb7CI2dNFH4WBVeWl9Cpkht4rDks7h/326Sx5KWwzoh154RWFvQGNkJyC01nHRjumFDg8Bxb62cOxcGb0g6tzKKjD72APoMw4EPLiidWcQgf1razG62c0VJy4xVkCCcqDAKEtHauzbNsu93OdItbujPoVJsqi4ds1gg3jQ8zhGmCJrPxePxz2+Z5hwppgsveY3IOyeBp8n6o+UcjSf6bE1K4HQkj6vDVMcwX81eOK+f/DxmQ/NdnbowoOWIl7EAM6x20khVCVcA8fICA9nILpTC8cNrsCHumCCBMh1E59uDuETyJnXqCiNJa66dZwZ44wuAxupxdZFxlA29Zi3bstN+Z1a6RHrJCMmvhgeS9D+DfMN/SwhGG8M8BF2opiR1EwRe6abVCeGxAYXDAcCmwqbSa+aifmQFmDNt5z6O2W2PKcDYwMA9yLF7n6mEhBkYVa/oGJJPUyKo6tklKaC3xiSW9nVthsS47i1V5Fnwb7fQHN50qqAZYH6+YTjDr0eisZa5GeyReVdytmKlsSvGhrNAd9sYc/H/qVVEyGokNpG+CNFgZnRFA0yvDQ/XTJEu85ktwUVHIZ7Zb75dOOMlXG21WGIruyInqpPRuvXXetG4XXP558ddk72Z/Pu7vXbw68q4/MvAaRf95KiY8hcHxE5Heq430LZ7nddcwJf7mJwwEL/iTZXC7w7IN6IZlYJBYz8EEKLxr+L3e0RCaxcCg4a7W5Yp/w260qQf4HDwA+9gKJuUKiW5WVL00dtiRJvRhxBJZ7lLqS0ZVIh0aEBEjWn6fbzLxJg4FpsGbiqaVuuRU5vMAq9d6OXTjAzdookH+74AVYRS7mjmwte5kCWsObVDh9IAL7nUHgyYcO/BhOBhYKy4vjiaDJ/tgMPwQ0Jv27ApOPgrp/KQ5QYyhRmRHyzBhl+fHogEexObpFdZBb9MkMis5hiIS0186tUbyEtKz0yGQPLruI89zqVm5QLxlmix4sw5jnoKQuqp4ea/C7n3pqeUDCzvTK6T0fflRm/CcHoVNrZNOJgfSvTIX+8zL9vXfcOPhmc9hie1B4XVGpnG69RVIYH4FSeMtWWqsUM+wjY6ESibn4Ex3aGciyjIOEECfBBiFCFvmR7CmruHS8m2NMfgTditcUR+iGyRN91tnB4m/ym3vFWmEN3PQz/OH5d1qcbf45W65epcH+QjfGjqj4PsZ9/9SRt517S29f0iSnYjnvXdHgykQlqadwZcdvMSxrviLfdgJWaZJpAFOC4f3Q423KZFg1j1l1xvOy7mx9jLM3yHrE9y+ZY4FykbLYT54WI8m+Rf2jH1dorMlr3ACYRm+6O0bymqQoIkyXAc0sKTJWlQrfP1ymPn+DngZv4z/BScHH6E=</source>
   </file>
-  <file path="app\Controller\GroupsController.php" generated-path="app.Controller.GroupsController.html" hash="b0f11d2d87caeff0854533245d91bb8d" package="Default">
+  <file path="app\Controller\GroupsController.php" generated-path="app.Controller.GroupsController.html" hash="e29790afaa8cfbe3d2bf311a1bd49fc3" package="app.Controller">
     <docblock line="0">
-      <description></description>
-      <long-description></long-description>
+      <description>PHP 5</description>
+      <long-description>Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</long-description>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Controller"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="3" package="Default">
+    <class final="false" abstract="false" namespace="" line="20" package="app.Controller">
       <extends>\AppController</extends>
       <name>GroupsController</name>
       <full_name>\GroupsController</full_name>
-      <docblock line="3">
-        <description>Application Controller</description>
+      <docblock line="20">
+        <description>Controller for the Groups functionality, allows users to
+view all the groups, and modify which users belong in which groups.</description>
         <long-description>Add your application-wide methods in the class below, your controllers
 will inherit them.</long-description>
       </docblock>
-      <property static="false" visibility="public" line="5" namespace="" package="Default">
+      <property static="false" visibility="public" line="26" namespace="" package="app.Controller">
         <name>$helpers</name>
         <default>array('Html', 'Form')</default>
-        <docblock line="5">
-          <description></description>
+        <docblock line="26">
+          <description>Views rendered from this controller will have access to the following helpers.</description>
           <long-description></long-description>
+          <tag name="var" line="26" description="" type="array" variable="">
+            <type>array</type>
+          </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="7" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="36" package="app.Controller">
         <name>isAuthorized</name>
         <full_name>\GroupsController::isAuthorized()</full_name>
-        <docblock line="7">
-          <description></description>
+        <docblock line="36">
+          <description>Test to see if a user is authorized to make a request.</description>
           <long-description></long-description>
+          <tag name="param" line="36" description="&lt;p&gt;Member record for the user.&lt;/p&gt;" type="array" variable="$user">
+            <type>array</type>
+          </tag>
+          <tag name="param" line="36" description="&lt;p&gt;The request the user is attempting to make.&lt;/p&gt;" type="\CakeRequest" variable="$request">
+            <type link="CakeRequest.html">\CakeRequest</type>
+          </tag>
+          <tag name="return" line="36" description="True if the user is authorized to make the request, otherwise false." type="bool">
+            <type>bool</type>
+          </tag>
+          <tag name="link" line="36" description="http://api20.cakephp.org/class/cake-request" link="http://api20.cakephp.org/class/cake-request"/>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$user</name>
           <default></default>
-          <type/>
+          <type>array</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$request</name>
           <default></default>
-          <type/>
+          <type>\CakeRequest</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="13" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="43" package="app.Controller">
         <name>index</name>
         <full_name>\GroupsController::index()</full_name>
-        <docblock line="13">
-          <description></description>
+        <docblock line="43">
+          <description>Show a list of all groups and their associated permissions.</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="21" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="53" package="app.Controller">
         <name>add</name>
         <full_name>\GroupsController::add()</full_name>
-        <docblock line="21">
-          <description></description>
+        <docblock line="53">
+          <description>Add a new group.</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="34" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="70" package="app.Controller">
         <name>edit</name>
         <full_name>\GroupsController::edit()</full_name>
-        <docblock line="34">
-          <description></description>
+        <docblock line="70">
+          <description>Edit an existing group.</description>
           <long-description></long-description>
+          <tag name="param" line="70" description="&lt;p&gt;The id of the group to edit.&lt;/p&gt;" type="int|null" variable="$id">
+            <type>int</type>
+            <type>null</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int|null</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="50" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="90" package="app.Controller">
         <name>view</name>
         <full_name>\GroupsController::view()</full_name>
-        <docblock line="50">
-          <description></description>
+        <docblock line="90">
+          <description>View details about a group</description>
           <long-description></long-description>
+          <tag name="param" line="90" description="&lt;p&gt;The id of the group to look at.&lt;/p&gt;" type="int|null" variable="$id">
+            <type>int</type>
+            <type>null</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int|null</type>
         </argument>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="3" code="PPC:ERR-50005">No summary for class \GroupsController</error>
-      <error line="5" code="PPC:ERR-50007">No summary for property $helpers</error>
-      <error line="7" code="PPC:ERR-50015">Argument $user is missing from the Docblock of isAuthorized()</error>
-      <error line="7" code="PPC:ERR-50015">Argument $request is missing from the Docblock of isAuthorized()</error>
-      <error line="7" code="PPC:ERR-50008">No summary for method isAuthorized()</error>
-      <error line="13" code="PPC:ERR-50008">No summary for method index()</error>
-      <error line="21" code="PPC:ERR-50008">No summary for method add()</error>
-      <error line="34" code="PPC:ERR-50015">Argument $id is missing from the Docblock of edit()</error>
-      <error line="34" code="PPC:ERR-50008">No summary for method edit()</error>
-      <error line="50" code="PPC:ERR-50015">Argument $id is missing from the Docblock of view()</error>
-      <error line="50" code="PPC:ERR-50008">No summary for method view()</error>
-    </parse_markers>
-    <source>eJzNVMGK2zAQPWdh/2GgAdmQ9AfSeAlltz0thaXnoliTtUCxvJKcbFvy7x3bsi3HDpvcKjDGsubNmzdP8+WhyIr7u/u7Waq4tfDN6LKwX3XujFYKDeC7w1xY2BRFsPuXAoCWfxXlVskU5hmqAo2FNXBj+O+IfXd7xRbAnrTZs3hVJwoCdmWeOqlzkHZTukwb+QdFNC8tmgXMDb6VaF3sY9qcM4OuNDk4U+LK75065E/wkukjcFDSOtA7cBnCa13Vpdy5wPco7vHnLpN2mVh0EWsiqQS/WeuzTHYUFDGuFIvj1VQcybCX1hL+OPhH928EdAb1zA/LhAs6sRGi6U2lZkeK0T8WT4lQneeQ47Gp/ULpFfSFwm8roBKbLXzTdxKVsGyd+O8e6leqBbJFuCPQplT7oHq5g8hn9B5YJtISkKYscU+4XcF5z9DyA44gBHd8Irpa/ugL+qpIgie6D1nEnlsJK7FQfO7lnog3KKTB1EW+cl7LzGCdAKttFtilXSdAZfFGVj9zvlUITlesGn4TzE7B92lkknMzEHcXzaWg25uXSv1Hvhiw8LlqnsT2Ctu8Yuea2Zm0A29UgIMcBjndj1UbF3Sqw7ndeoMOXe5wjQYZt7BFzKEsCKKz3xTGtd7rHTFRzrWua+gMjDdwWmu1Dyx3kHictFzAY9zv8xP9oB45sulgMFuCsH64PpLzp6ZrdSPo3QhaJYcYwmk7o+ch+QfCRAjg</source>
+    <source>eJzNVlFv2zYQfrZ/xT0YkFzE8jBgL2vjNgjaZcBSBI2714GWKIsIJaokFTfd8t/3HUXLyhyvKDAMNRLYJu/u++7uu5NfvW6rdrp88WJK/Ec3Vzf0U/x8adoHq7aVp/RyTlfXt7SWoo6Xv6lcNk4W1DWFtLSuJF3/ut4fs8UHWSjnrdp0XpnGkSmpVFo6qjvnyUovVEMefmJj7iXlA1pjPKJkEejN4YJfIxr0phX5ndhK6l+ibbNL03hrtJY2GOieTjQYEaS08r79ebnc7XaZaXFkOgtQY7fL6OSWtfKL+CVDmeYIuZzGYtEBiUpjQyK/WNO1jsquyTlloZV/OCOhtdk56py0jrxh33sld3wevLbBC3ZNQbUpVPlAu0rlVfTYSG2aLaFW/WlvngUuuRbORdgRH/nZy6ZwdNG2o9M/B+q/A96hA9w5dLC0pgYT5dCDwXqnQK8SaIzIc+mYeWBbGk5HgVEldQuCWSj0vbAkrBUPgdek7TYoHM2iDZ33l2ly5WudnFHyztg6mb8MlIgjrCVEAQwnJamSRMiewEl0vjJWfQFRXNfiDozA/VMHh0EjrbCi7jFoFjyvZb3Bm5W5scXQIb7KRh6XCPehj0WzGDRoef957xSYeC/r1nPukUkfClLubEMbYzStbRf4P/E7zsAfIM7I4JvdKYiyFNrFoFo1dxQ1Klr14w9ZDkeoMEg0NH7JJ4sY5knd9woE+sUAnobCnA15zqGIySSS9+D9cjp5HDRyWxlIlDRGmCeXxdorL+gUjBUa7pzJlfBIDF2ulXM86NkJKlDb57QHnbHaFisnfZr0UaGJeBjUvFiVsE8TwCZzyOSpywjsyO9muPtnjEOQ9+J+sRIF7i6Koh8f1uTAJMEdi3NUDjYU1GBsg9WJHDnmcYbfRpcrDrM4L6WSunAJna/2J4dof+SmkEx3dFRIlyPbmC+EmEa82PTFSjnEMMCY90zHRpGUw9gf+RXCi73LPr1bGakjz3eQZJUm7/cl4mLIIgt1PHhg3yjMpE9jNiIULuSXBIXEdk8eSWIWvgr3sREbLXmuABd7EyEfp+H/0MO3hfJQL9YjSsxTPLRyvw4gUv9X00HrM1WEPYA3Ux7WNAMhA3+i/3yVsus5cZTvRgoDiQgVGILnv4pkKw8aeU4MHOJJVCsF5M9o4+b9t/IKIfBc4ueibKhrC14//5/KesCvCI2fr1TwDxzt+NdNB9n1Lt+qNW3MHZ47J+TGPyNOye2o089s3SMJ9h08sSvD+DyzLFn0g0pDMnPql+fj3474TOI=</source>
   </file>
   <file path="plugins\MemberVoice\Model\MemberVoiceVote.php" generated-path="plugins.MemberVoice.Model.MemberVoiceVote.html" hash="6e50352f9f446dc9708b0aa7e170917b" package="Default">
     <docblock line="0">
@@ -3820,110 +3900,133 @@ will inherit them.</long-description>
     </parse_markers>
     <source>eJx9kV1LwzAUhq8t9D8cQRjsYsXPm03nwCkF28Jae1vS5rgFYxKatBuI/92kc7BNu0Ag5Jzn4T3JZKpWyveC4dD3YAiRpMjhXdZAOIeQItHABET4WWKdS1aha9tteFSk+iBLhO1SvFkyMdrrHnVC1xv4XsWJ1vuuXBoE3BgU9OB+ptQ2yJfvnamm5KyCi0ZjRkqOcA+D1oJ6MPY9W6+k0AbyJJsX+ew1fLL1yzEEwfkEFmiaWkBLeIPdUPbEKDj6EIyTogOv/gPXKxQgJFhS1bJlFOkxnRXPyVvsDNe9BssRYNqajM3SiCNJFKZpGL9Yxc2pEC57T4ww3s1/22vo8N8Qa2ZW9m9xo7AySKEmYvnnXbIineVzJ707LaUStRgY0KS1km/3NdOHH71pvFY=</source>
   </file>
-  <file path="app\Controller\MailinglistsController.php" generated-path="app.Controller.MailinglistsController.html" hash="35eb81faa48af64330f5eb61465ce78d" package="Default">
+  <file path="app\Controller\MailinglistsController.php" generated-path="app.Controller.MailinglistsController.html" hash="c2d6d913ddbb2a308fae0a1c6430ea19" package="app.Controller">
     <docblock line="0">
-      <description></description>
-      <long-description></long-description>
+      <description>PHP 5</description>
+      <long-description>Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</long-description>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Controller"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="3" package="Default">
+    <class final="false" abstract="false" namespace="" line="20" package="app.Controller">
       <extends>\AppController</extends>
       <name>MailingListsController</name>
       <full_name>\MailingListsController</full_name>
-      <docblock line="3">
-        <description>Application Controller</description>
+      <docblock line="20">
+        <description>Controller to handle MailingList functionality, allows a user
+to see a list of mailing lists, and subscribe/un-subscribe e-mail addresses.</description>
         <long-description>Add your application-wide methods in the class below, your controllers
 will inherit them.</long-description>
       </docblock>
-      <property static="false" visibility="public" line="6" namespace="" package="Default">
+      <property static="false" visibility="public" line="26" namespace="" package="app.Controller">
         <name>$helpers</name>
         <default>array('Html', 'Form')</default>
-        <docblock line="6">
-          <description></description>
+        <docblock line="26">
+          <description>Views rendered from this controller will have access to the following helpers.</description>
           <long-description></long-description>
+          <tag name="var" line="26" description="" type="array" variable="">
+            <type>array</type>
+          </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="8" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="36" package="app.Controller">
         <name>isAuthorized</name>
         <full_name>\MailingListsController::isAuthorized()</full_name>
-        <docblock line="8">
-          <description></description>
+        <docblock line="36">
+          <description>Test to see if a user is authorized to make a request.</description>
           <long-description></long-description>
+          <tag name="param" line="36" description="&lt;p&gt;Member record for the user.&lt;/p&gt;" type="array" variable="$user">
+            <type>array</type>
+          </tag>
+          <tag name="param" line="36" description="&lt;p&gt;The request the user is attempting to make.&lt;/p&gt;" type="\CakeRequest" variable="$request">
+            <type link="CakeRequest.html">\CakeRequest</type>
+          </tag>
+          <tag name="return" line="36" description="True if the user is authorized to make the request, otherwise false." type="bool">
+            <type>bool</type>
+          </tag>
+          <tag name="link" line="36" description="http://api20.cakephp.org/class/cake-request" link="http://api20.cakephp.org/class/cake-request"/>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$user</name>
           <default></default>
-          <type/>
+          <type>array</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$request</name>
           <default></default>
-          <type/>
+          <type>\CakeRequest</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="13" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="43" package="app.Controller">
         <name>index</name>
         <full_name>\MailingListsController::index()</full_name>
-        <docblock line="13">
-          <description></description>
+        <docblock line="43">
+          <description>Show a list of all mailing list and some basic stats for each of them.</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="29" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="62" package="app.Controller">
         <name>view</name>
         <full_name>\MailingListsController::view()</full_name>
-        <docblock line="29">
-          <description></description>
+        <docblock line="62">
+          <description>View details about a mailing list</description>
           <long-description></long-description>
+          <tag name="param" line="62" description="&lt;p&gt;The id of the mailing list to look at.&lt;/p&gt;" type="int|null" variable="$id">
+            <type>int</type>
+            <type>null</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default>null</default>
-          <type/>
+          <type>int|null</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="60" package="Default">
-        <name>_getListStats</name>
-        <full_name>\MailingListsController::_getListStats()</full_name>
-        <docblock line="60">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="96" package="app.Controller">
+        <name>__getListStats</name>
+        <full_name>\MailingListsController::__getListStats()</full_name>
+        <docblock line="96">
+          <description>Given information about a mailing list and a list of member e-mail, return
+the array of mailing list data with information about the number of subscribed
+members etc.</description>
           <long-description></long-description>
+          <tag name="param" line="96" description="&lt;p&gt;The array of mailing list data.&lt;/p&gt;" type="array" variable="$list">
+            <type>array</type>
+          </tag>
+          <tag name="param" line="96" description="&lt;p&gt;The list of member e-mail addresses.&lt;/p&gt;" type="array" variable="$memberEmails">
+            <type>array</type>
+          </tag>
+          <tag name="return" line="96" description="The array of mailing list data, with extra infomration added." type="array">
+            <type>array</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$list</name>
           <default></default>
-          <type/>
+          <type>array</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$memberEmails</name>
           <default></default>
-          <type/>
+          <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="72" package="Default">
-        <name>_getMemberEmails</name>
-        <full_name>\MailingListsController::_getMemberEmails()</full_name>
-        <docblock line="72">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="111" package="app.Controller">
+        <name>__getMemberEmails</name>
+        <full_name>\MailingListsController::__getMemberEmails()</full_name>
+        <docblock line="111">
+          <description>Get a list of all member e-mail addresses.</description>
           <long-description></long-description>
+          <tag name="return" line="111" description="A list of all member e-mail addresses." type="string[]">
+            <type>string[]</type>
+          </tag>
         </docblock>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="3" code="PPC:ERR-50005">No summary for class \MailingListsController</error>
-      <error line="6" code="PPC:ERR-50007">No summary for property $helpers</error>
-      <error line="8" code="PPC:ERR-50015">Argument $user is missing from the Docblock of isAuthorized()</error>
-      <error line="8" code="PPC:ERR-50015">Argument $request is missing from the Docblock of isAuthorized()</error>
-      <error line="8" code="PPC:ERR-50008">No summary for method isAuthorized()</error>
-      <error line="13" code="PPC:ERR-50008">No summary for method index()</error>
-      <error line="29" code="PPC:ERR-50015">Argument $id is missing from the Docblock of view()</error>
-      <error line="29" code="PPC:ERR-50008">No summary for method view()</error>
-      <error line="60" code="PPC:ERR-50015">Argument $list is missing from the Docblock of _getListStats()</error>
-      <error line="60" code="PPC:ERR-50015">Argument $memberEmails is missing from the Docblock of _getListStats()</error>
-      <error line="60" code="PPC:ERR-50008">No summary for method _getListStats()</error>
-      <error line="72" code="PPC:ERR-50008">No summary for method _getMemberEmails()</error>
-    </parse_markers>
-    <source>eJylVktvGjEQPhMp/8EHJHsVCDmHhAhVqVKpyaEcEUJmbbKWvN6tx06TRvnvtdkH3geBtkiwq/HMNzPfPMzNXZ7k52fnZ4NYUgD0SIUU6vm7AANfMmV0JiXXiL8arhigeZ4HUmf17r7IfcpHbjdSxGiYcJlzDegWUa3pG8EPJpV4hPDXTKc4mu48BgZbq2IjMoUEzK1JMi1+c0aGFrgeoaHmPy0HE5U2lc+B5sZqhYy2fFrKPg4jK8ZfSYTaIA4drDQu1KFJBIxnAQXjmXS/pcC/AommtWEacOXNC6AlZtRQvNrn6DR5uuH63hvA3tH6mZvH4IQEvAy2mSZD4ZSvpsg9b1CcWWVIw2nkjy4uKl7qYgyasS2HYtX06sULQ106HUVHdxjtPt2PIJ8CCbghOLTH3rgRX8viib6MZ5Sxe9dOWlFJ8D0TBlXGODEmh+vJhLJUqEsPFScizS/jLJ3s6J9gFB0v9Yvgvxx5zCWtrJQ9Nf+LgvxTlzjnI7SlEnh/vxwsR7OHlld99WhlAQu7gViLDWf1vIVeC6WnzBzQa9VIZpQ9Zoy74hRc4ACMSlkIA9YKwXhWk7ewaUr121xK0qIgaG5O44SEeBSqTL+pbdbT02JLhFoXcQeaS8w9M3jVbL4lBs+o4xAnKaxLFvAqqpED6MEOdZ1bSEiX1VEjsDoZPxHlG3dZngjbqMNR5OND15q5zsgV+u2UcO05EH5q24g7MG/Ie9rpk5H/n4nX4oUavh/51hh50/bkdJYAVHFr+HFsuhd73QJ9iQXzPVd3eLl496D1dnmgkFxfuytU09ht8I7batodHe/q47Jo5wAyLaeqA1y0l1COWeAeOszXpd+OpShPiSoPDcl6d9Ngf2VUd05vAEGEB7FgB3MAIIimvMl3QCdWu7moO8U9YZn1XwLBOiuO3F+Web2mgs1axRzCBLH72b2b/QEnxM1c</source>
+    <source>eJydV9tu2zgQfXa+Yh4MSG59KRbYl6TNJgiymwJ1UcTGvhiGQUu0RUQStSRlN+3m33eGpGXKl7RdI4AtinPmzMyZIfP+jyqrLkZv3lwA/cGXhy/wu/99J6tnJdaZgfiuBw/jCUw5K/zLTyLhpeYp1GXKFUwzDuOP090y7XjkqdBGiWVthCw1yBWsRM41FLU2oLhhogSDdmwpNxySxlspDaIMvaOb/Qv6BDTgpmLJE1tzcB9WVcM7WRol85wruyF3dPyGgCDEmTHV5Wi03W6HssIlWSt0KtV65I30qBBm4B+GmKYeQo4ufLJg7wmMhIyVaY4pYCIX5foTBg6rukwocpYL89wHludyq4FBrR05tNIco4ecdmN2CmdsnzUalCnoeqkTTCEf1eWgeQA+oL3A0lRxjUyHllmSM61DCjrgyL8aXqYabqsqWP3ehPO34MhOcaomVnWlZIHFERrr0uzeijzHSLFYLEnQMYVABVxJio2oZzyvuLJ84GbDFDCl2LNl16nqJSYTun4PfHAv4+jBFHnUh+hPqYqod2UpASFMOSbGp0msfOoAObHaZFKJb0gUXxfsidKo+D81GjS6qZhihfMBXWs55sUSvxRPpMIQpbLs6dUwsLhDuEeHBV0PavW9+70zskyM4UVlKHbPxEGhvGtVwlLKHKaqtvxbdscRmL2LPkh8UluBQl2xXHtQrOsTeN2ySvz2bpigISrTytaWf0QrAw/TyvtOjuj9tnEe28T0mzh7qIhOx5M3yPvqovPSaGSSyW2gV1R0S7NOsbLgsGQaPWrDjLZp5izJyAKDKoZnWKHwvsbOP7LRdW5QIV2S4OA60PTgmlz5BdspMUoGbYpA92TpMGZRygyL5qgq2mMFcE9b9R59sVhzMw5eESJtL+ti3EZNZF2auOXLeqcg467AHe+uAL/fw6ExLb996+Jrk511xfyADK1PKHvx0U6sVRiF9f5i2Tp7zU0chUYRWRzy9Zs/s83gGqfIPQ4HhYMqju5TYWBnF5HWNIktLUQ5JJQkE0U1TGQxsrkfRdBrSYTGCKQ02zHDONhrVEVLJEGjYc3Nv2WNKuqK1HYYfjmVtHWFHZJL+YTNdkY8G/QaE8gHIDyvol+o9i9rDp31XWseqe98LduSnL07Ucw9bz3Zjfu0GZXel3v/WZrTW/b1zSVLxzLlWFgXceQQsHPdc5AXtzC4brIzqYuCqefbPI93gTql226OQxCmd4F8LFfSixwnXizKhaMVvJ5FnKKN5m1hziI7LzAvUVbohQ8ymvc8XMcCLapaZ/FxivotAhRk5wU4sj5v3MrfKfsfdNZBY4V95bYecowaJ8HiObMWu8Cytd4q9ivN/P96+S+x4TSYseQFs312qqHt1A8uMe6MdTeUPrijxF536KZnD+ODqw5QO+DdwmQnfJEVTlKCRLPmBpQSos8IcJOE5/fuyLfY01e9njJrTQ0yPxlZ++7VnPcO43WnfRcrXsgUsxEXykecpjzdTTglNszw/Yg7nCUEdzg+3NhrkqT0449m2mS/10HOIpFSZwajbY/XjNIHprPLSxtBgsfhkcfdiEPZfS9fhq7fw+E1OcZ0HYpHAqJwQg1Dw0gPaXjt5+dGx8Ke1dE8OLVPuna0zsJoi3DG1lLwpbcQ7f7h5vC29BMSon+ZyvVsDrc/a3pWLu1Tzqnj9YPh9JEZHA3uFd7Ub5vp706lXRZCBJuNl/8A8pDHCQ==</source>
   </file>
   <file path="app\Console\cake.php" generated-path="app.Console.cake.html" hash="33313e0d408da944e1332f27d093707a" package="app.Console">
     <docblock line="0">
@@ -4180,7 +4283,7 @@ in the fastest method possible.</description>
     </class>
     <source>eJyNV9tu20YQfba+YoIYJWnIomugD1EaJ6qBXIAkDVLnKTCMFbmSNqK47HJpRW38752ZXZJLSQ5qxIG8l7mcOXN29PvLalWN0rOzEZwB/X56+wl+ww/0+VpXO6OWKwvxdQJvP/wFN1Js/OZ7lcmyljk0ZS4N3KwkfHh30y7Tic8yV7U1at5Ypcsa9AIWqpA1bJragpFWqBIs3hNzfS8h67yV2qKViXf0qt+gnyAMeFWJbC2WEtyPqKrJtS6t0UUhDX7cVLqUpeWjhQvMHw1ChXhlbTVN0+12O9EVLunGoHttlqm/VKcbZc/9HxNELEGT6Wg0q6rptMH9OOqcRWOI+iCi5PmohXfW2NUXqwrM1J8FURR6i8iUEqyGbCWzNX2opQS1AFGCyAg7UDUZEGhAG/UPgo5rotyhpS5beGfxGNRoELdyUO5PkRO8jUWgVU2QQux2a8jFrgZhJJTNZi6NzJOWBP8f13SUFaKuu9y6PZDfrSzzGvqVfzsk3iMviA4dEDU0RKX5jsPs1zngV/fCYJxG7NjhSdXMsRRwGtx+4fZjiCiQCALUrwXCmkPRujRSWPy7R64ew0askZboulwSgsi1wu5goxGbupIy3x2Pw6h7tAWnd3eBtS6WIAZqjqwxhlDoj+7lSuUS1rpwre5dfrW7St4e+nQG+8Kg57IpijB1XEZU5YIyoU7rD0+nbvm1Kqw0cdJ1WyWM2AQHCefuc7C8VXYVFhBpq0pllSiQoL7jyjX43pprvZ5kCDM2D3fW5eQilWUaAJf2xiYruymedsyZTgeWewosmtL3R7cfH488QfadnGBue+bi8MxzPHJKRTm/Og5vcBjPPvRA7zWu7etd7KDQyyWWAcUOSW64zH0j46VKGqwEC1rf8dTgkEnDIhlUIHa4+w0uVp1MgsoBSW65HJSN+FeKjaQG4NhCDkoX1lb4KmIA6P2oSR8bmfMfD6/7bAb3uSHg1EULMxQu/igt9Quedq8AW3T38HFoTAnImgJuTMOg/hS8wMIYFqJAWde4ZLaq5ofkGGfqWWcppMG4zXPcRdy1tKNRmsIfjSpyl70pWG+vkdyf5d+NrC3RiJZfQJRGMBmUYtKuOR/YrCcnmFyc6aa0sXeYwBVcOF/O0qQ19U2rsj01pjUm7QNZOTXOO8mA3IbxxGTDw+JI7o+eX4k8/8TGYpcheYyqolmqMoIXVywoY17sc+CNEDDed/m4PY+fM4bPg1v1UeNqknDeiOMbI+Z7lBw7XdwgY1bi3j2MLNr0pE0pwsD3n/Nv1Jdt0y5l0LAHvY3+3rYWURohVEDXvfa8qRyVkBpQGRwHTLE7cHl+NRTPNpvXyiD+W2w26djpXnSvCExgnn3mMhAFPJZrl7PDjdzxYCDzWeZGp4H0cADEXSzf4BiXFmntFvESl/PAVsvm6CxK4McPeAqzG/h6+Sy9eJZeXvx6eQtsgYYTH1H9kgyp8s5d7PqD/7zbiCqOUCKsJj8mogYauEwSqnlH9T5ET3Hf7RYbvWczo/WCB4vgIaDVmIvpLx3HZdjbdAmD8qRPBtL9Rt1LJ2OtQIoBF70bQW9MbUWZ8ZlaqHCEIEN+ll2I2lIToritdA6Vrms1L+RROWWPj2vzQAp7Wv+gnoRZKOJdaAgvsi/DaBcKNQmV1bcOwjfmZj6URT9RdLp40EUUXSd8juL7kyo65V5F7Nz8QjO7y4hHnA4oxwDHm7Xc3cnvOJfVzse47+NgLEiGJDl25Ctfv2XugCTt5xsY7QznHoytaLL1DmSpm+WKosb+4wyoCiFVwL1o/nIA8FZGJnzSgzmNWyNg4Y3+ggG0o9hw7yPVGaU84g3uhcfHjSfOBvzyCx3+yWByfsX8wb5mHOi0x4wh2MpaE7hcCvyH364wbM3fFJzlw+Afd/Z8/4rPiV3zJrevS+7AsEspiO4jKuyYSkTfQwq5sKyaqBkoBpndH1bonZX30ux4VHeR7A/f/J1Mz7/JDHkVvlqJC510G2uH0Q1vijrUkmv6VvOxI/7RlDHGOyOrQmQyDr/y4btMGnjMmAuBwekFM94znRBO4TY3YBfICWeoUBKN3fO7b8i7O0pPHBGOhcgq7e/ghpMEP1G0Mnzd7cShi3YR5Rfn64PqPxqNE23vZKD3cWA16SKbYwHX3tjDqPv/J7x7MuTdcQ0ZYnc7fHPZjvN5+PD0mw8j9+vPeA14GD2M/gM5T6jM</source>
   </file>
-  <file path="app\Controller\Component\NavComponent.php" generated-path="app.Controller.Component.NavComponent.html" hash="84816681e17c203177d5b7cef2c2cd7e" package="app.Controller.Component">
+  <file path="app\Controller\Component\NavComponent.php" generated-path="app.Controller.Component.NavComponent.html" hash="388c1b6d889fa0bbad11379feed89262" package="app.Controller.Component">
     <docblock line="0">
       <description>PHP 5</description>
       <long-description>Copyright (C) HMS Team
@@ -4316,7 +4419,7 @@ to perform the action the URL is pointing at.</description>
         </docblock>
       </method>
     </class>
-    <source>eJy1VctuGjEUXcNX3AXSDNEwrLpJmzQoqppKSRW1ZI3MjGGseGzL9kBplX/v9WMepJBFqyIWfhzfxznHng8fVaXG84uLMbg/PN49wrs4vpXqoNm2spDeTuHu4TssKanj5j0rqDC0hEaUVMOyovDwZdkuO8Q3WjJjNVs3lklhQG5gwzg1UDfGgqaWMAEWz5G13FEoumxCWoySx0Q3/Yb7DcqAG0WKZ7KlEH5EqfxWCqsl51TjsFZSUGE9lIfCInRQKqSVtepyPt/v97lUuCQbjeml3s7jITOvmZ3FSY6ETTHkfDxeKHV52eB+mnTJkgySvohk+n48jvTCV7LrYEB/IDkGrISiosUzsA0QEGTHtsTRBZwJXDTuHOFc7pHpdH0IYCa2Du+4KxqtXTisQiMcSGMrqdlPhGNoRfVG6hqYnWYwDOWiI1gj+WUZsAQXUZd9xYoKCuKlEbCmqJRTGEFRrh2j+9wTUHBizOu2LMIN9Cu/uv6dR3wOdELR7iMFFdbdzTEdZ2gSKXKv245orFOTg884Us0adYDJ4PxV2E8hWWDzT5bxBBztMet9zNi2Tgpvx9PRNdsRS2GyWkX4IqC7JIPAi7L0pKFOjj7he9eCcDDM0uhPTWpwlwAVm1gEeBLwXihODjO/gAJ5Wl2g/MSpRnN/6OnbvWvjLWjQw4HDqMWCqWTDyyMx98xW+RGnm0b4Zp0lPsVWUl905qvI2gRXkCRT1HU08pysVGMqBKKMs+vXxGWdOC5QAlfXEEMmGDLMfezExw4LIc3UqTh66fm2ltbKerI76jNshHN0Cz+49oKb49348064MINr4R+f0LONDCNcSSas45PYUyT/nYpF9yT4s4LUtFVzsNUJpumGavc6nIoVS14eV3/+nFcAYOJnwR9xiFys3cSY8Ab0hPxfe3W26nvP2r6yrtDuzp1wHkrcWq699bNrZla91umbwachzL85uE8QfTtImISEYaNNnoTkYTGMzzsfrT9w/2dqI+EnnzMvF35TGy2i3svz4M6tw6/HGbW21C6O+EgDczHXGdLCxX35DcrnvIY=</source>
+    <source>eJy1Vclu2zAUPMdf8Q4GJAeyfOolbdIYQdEUSIqgdc4BLdEWEYokSMquW+Tf+7iIllM7hxY1fOAyfMvMkPrwUTVqNDs/H4H7w8PtA7yL4xupdpqtGwv5zQRu77/DgpI2bt6xigpDa+hETTUsGgr3Xxb9skN8ozUzVrNlZ5kUBuQKVoxTA21nLGhqCRNg8RxZyg2FKmUT0mKUMia63m+436AMuFakeiZrCuFHlCpvpLBack41DlslBRXWQ3koLEIHpULeWKsuZrPtdltKhUuy05he6vUsHjKzltlpnJRI2ARDzkajuVIXFx3u51lKlhWQ7YvIJu9Ho0gvfCWbBAP6A8kxYCVUDa2ega2AgCAbtiaOLuBM4KJx5wjncotM58tdADOxdnjHXdVp7cJhFRrhQDrbSM1+IhxDK6pXUrfA7KSAYSgXHcEaya/rgCW4iLpsG1Y1UBEvjYAlRaWcwgiKcm0Y3ZaegIoTY163ZRFuYL/yK/XvPOJzoBOqfh8paLDuNMd0nKFJpCi9bhuisU5Ndj7jmeqWqAOMB+cvw34O2Rybf7SMZ+Boj1nvYsa+dVJ5Ox6PrtmGWArjp6cInwd0SjIIPK9rTxrq5OgTvnctCAfDLI3+1KQFdwlQsbFFgCcB74XiZDf1CyiQp9UFKo+c6jT3hx6/3bk23oIGPRw4jHosmEZ2vD4Qc8tsUx5wuuqEb9ZZ4lNsJfdFF76Kok9wCVk2QV3PzjwnT6ozDQJRxunVa+KKJI4LlMHlFcSQGYYMcx8787HDQkgzcSqevez5tpa2ynqyE/UFNsI5uoXvXHvBzfFu/HknXJjBtfCPT+jZRoYRriQT1vFJ7DGS/07FKj0J/qwgLe3VHGwlwTRdUe1eh2OxYsmLw+pPn/MKAIz9LPgjDpGLpZsYE96APSH/117JVvvei76vIhWa7twR56HEveX6Wz+9YmaepM7fjD0JUf7NwPsE0baDhFlIGDb65FlIHhbD+LTx0fkD83+mNvJ99DXzauEntdMiyr04DU5mHX48Toi1pnZ+wEcemIu5TpAW7u3Lb8tlvAc=</source>
   </file>
   <file path="app\Model\Behavior\KrbAuthBehavior.php" generated-path="app.Model.Behavior.KrbAuthBehavior.html" hash="654f83b9cb5dcf06933ec9673581e629" package="Default">
     <docblock line="0">

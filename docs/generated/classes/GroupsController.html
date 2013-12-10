@@ -39,7 +39,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">601</span></a></li>
+                <span class="label label-info">486</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -69,21 +69,16 @@
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_add" title="add() :: "><span class="description">add()
-        </span><pre>add()</pre></a></li>
-<li class="method public "><a href="#method_edit" title="edit() :: "><span class="description">edit()
-        </span><pre>edit()</pre></a></li>
-<li class="method public "><a href="#method_index" title="index() :: "><span class="description">index()
-        </span><pre>index()</pre></a></li>
-<li class="method public "><a href="#method_isAuthorized" title="isAuthorized() :: "><span class="description">isAuthorized()
-        </span><pre>isAuthorized()</pre></a></li>
-<li class="method public "><a href="#method_view" title="view() :: "><span class="description">view()
-        </span><pre>view()</pre></a></li>
+<li class="method public "><a href="#method_add" title="add() :: Add a new group."><span class="description">Add a new group.</span><pre>add()</pre></a></li>
+<li class="method public "><a href="#method_edit" title="edit() :: Edit an existing group."><span class="description">Edit an existing group.</span><pre>edit()</pre></a></li>
+<li class="method public "><a href="#method_index" title="index() :: Show a list of all groups and their associated permissions."><span class="description">Show a list of all groups and their associated permissions.</span><pre>index()</pre></a></li>
+<li class="method public "><a href="#method_isAuthorized" title="isAuthorized() :: Test to see if a user is authorized to make a request."><span class="description">Test to see if a user is authorized to make a request.</span><pre>isAuthorized()</pre></a></li>
+<li class="method public "><a href="#method_view" title="view() :: View details about a group"><span class="description">View details about a group</span><pre>view()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
 <i title="Properties" class="icon-custom icon-property"></i> Properties
-                    <ul><li class="property public "><a href="#property_helpers" title="$helpers() :: "><span class="description"></span><pre>$helpers</pre></a></li></ul>
+                    <ul><li class="property public "><a href="#property_helpers" title="$helpers() :: Views rendered from this controller will have access to the following helpers."><span class="description"></span><pre>$helpers</pre></a></li></ul>
 </li>
 </ul>
 </div>
@@ -97,65 +92,76 @@
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">Application Controller</p>
+<p class="short_description">Controller for the Groups functionality, allows users to
+view all the groups, and modify which users belong in which groups.</p>
 <div class="details">
 <div class="long_description">Add your application-wide methods in the class below, your controllers
 will inherit them.</div>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_add"></a><div class="element clickable method public method_add" data-toggle="collapse" data-target=".method_add .collapse" title="public">
-<h2>add()
-        </h2>
+<h2>Add a new group.</h2>
 <pre>add() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_edit"></a><div class="element clickable method public method_edit" data-toggle="collapse" data-target=".method_edit .collapse" title="public">
-<h2>edit()
-        </h2>
-<pre>edit($id<code> = null</code>) </pre>
+<h2>Edit an existing group.</h2>
+<pre>edit(int|null $id<code> = null</code>) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$id</h4></div>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><code>null</code><p>The id of the group to edit.</p></div>
 </div></div>
 </div>
 <a id="method_index"></a><div class="element clickable method public method_index" data-toggle="collapse" data-target=".method_index .collapse" title="public">
-<h2>index()
-        </h2>
+<h2>Show a list of all groups and their associated permissions.</h2>
 <pre>index() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_isAuthorized"></a><div class="element clickable method public method_isAuthorized" data-toggle="collapse" data-target=".method_isAuthorized .collapse" title="public">
-<h2>isAuthorized()
-        </h2>
-<pre>isAuthorized($user, $request) </pre>
+<h2>Test to see if a user is authorized to make a request.</h2>
+<pre>isAuthorized(array $user, \CakeRequest $request) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>link</th>
+<td><a href="http://api20.cakephp.org/class/cake-request">http://api20.cakephp.org/class/cake-request</a></td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$user</h4></div>
-<div class="subelement argument"><h4>$request</h4></div>
+<div class="subelement argument">
+<h4>$user</h4>
+<code>array</code><p>Member record for the user.</p></div>
+<div class="subelement argument">
+<h4>$request</h4>
+<code><a href="CakeRequest.html">\CakeRequest</a></code><p>The request the user is attempting to make.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if the user is authorized to make the request, otherwise false.</div>
 </div></div>
 </div>
 <a id="method_view"></a><div class="element clickable method public method_view" data-toggle="collapse" data-target=".method_view .collapse" title="public">
-<h2>view()
-        </h2>
-<pre>view($id<code> = null</code>) </pre>
+<h2>View details about a group</h2>
+<pre>view(int|null $id<code> = null</code>) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$id</h4></div>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><code>null</code><p>The id of the group to look at.</p></div>
 </div></div>
 </div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
 <a id="property_helpers"> </a><div class="element clickable property public property_helpers" data-toggle="collapse" data-target=".property_helpers .collapse" title="public">
-<h2>$helpers</h2>
-<pre>$helpers </pre>
+<h2>Views rendered from this controller will have access to the following helpers.</h2>
+<pre>$helpers : array</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>array('Html', 'Form')</code></div>
@@ -171,7 +177,7 @@ will inherit them.</div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-10T20:38:34Z.<br></footer></div>
+            generated on 2013-12-10T23:17:13Z.<br></footer></div>
 </div>
 </body>
 </html>

@@ -1,201 +1,41 @@
 <?xml version="1.0"?>
 <checkstyle version="1.3.0">
-  <file name="app\Console\cake.php"/>
-  <file name="app\Console\Command\AppShell.php"/>
-  <file name="app\Controller\AppController.php"/>
-  <file name="app\Controller\Component\Auth\HmsAuthenticate.php"/>
-  <file name="app\Controller\Component\Auth\HmsAuthorize.php"/>
-  <file name="app\Controller\Component\AuthUtilComponent.php"/>
-  <file name="app\Controller\Component\BankStatementComponent.php"/>
-  <file name="app\Controller\Component\CsvComponent.php"/>
-  <file name="app\Controller\Component\NavComponent.php"/>
-  <file name="app\Controller\EmailRecordsController.php">
+  <file name="app\Controller\EmailRecordsController.php"/>
+  <file name="app\Model\ForgotPassword.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="5" severity="error" message="No summary for class \EmailRecordsController" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="7" severity="error" message="No summary for property $helpers" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="16" severity="error" message="Argument $user is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="16" severity="error" message="Argument $request is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="16" severity="error" message="No summary for method isAuthorized()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="45" severity="error" message="Argument $emails is missing from the Docblock of _setupEmailListView()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="45" severity="error" message="No summary for method _setupEmailListView()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="52" severity="error" message="No summary for method index()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="57" severity="error" message="Argument $id is missing from the Docblock of view()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="57" severity="error" message="No summary for method view()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="15" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="17" severity="error" message="No summary for property $primaryKey" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="25" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="67" severity="error" message="Argument $check is missing from the Docblock of newPasswordConfirmMatchesNewPassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="67" severity="error" message="No summary for method newPasswordConfirmMatchesNewPassword()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="77" severity="error" message="Argument $check is missing from the Docblock of findMemberWithEmail()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="77" severity="error" message="No summary for method findMemberWithEmail()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="88" severity="error" message="Argument $memberId is missing from the Docblock of createNewEntry()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="88" severity="error" message="No summary for method createNewEntry()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="107" severity="error" message="Argument $guid is missing from the Docblock of isEntryValid()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="107" severity="error" message="Argument $memberId is missing from the Docblock of isEntryValid()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="107" severity="error" message="No summary for method isEntryValid()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="134" severity="error" message="Argument $guid is missing from the Docblock of expireEntry()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="134" severity="error" message="No summary for method expireEntry()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="151" severity="error" message="Argument $guid is missing from the Docblock of isValidGuid()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="151" severity="error" message="No summary for method isValidGuid()" source="phpDocumentor.file.PPC:ERR-50008"/>
   </file>
-  <file name="app\Controller\GroupsController.php">
+  <file name="app\Controller\MembersController.php"/>
+  <file name="plugins\MemberVoice\Controller\MemberVoiceAppController.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="3" severity="error" message="No summary for class \GroupsController" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="5" severity="error" message="No summary for property $helpers" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="7" severity="error" message="Argument $user is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="7" severity="error" message="Argument $request is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="7" severity="error" message="No summary for method isAuthorized()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="13" severity="error" message="No summary for method index()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="21" severity="error" message="No summary for method add()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="34" severity="error" message="Argument $id is missing from the Docblock of edit()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="34" severity="error" message="No summary for method edit()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="50" severity="error" message="Argument $id is missing from the Docblock of view()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="50" severity="error" message="No summary for method view()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="14" severity="error" message="No summary for property $mvFirstName" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="15" severity="error" message="No summary for property $mvLastName" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="22" severity="error" message="No summary for method _getUserID()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="26" severity="error" message="Argument $user is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="26" severity="error" message="Argument $request is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="26" severity="error" message="No summary for method isAuthorized()" source="phpDocumentor.file.PPC:ERR-50008"/>
   </file>
-  <file name="app\Controller\MailinglistsController.php">
+  <file name="app\View\Helper\NavHelper.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="3" severity="error" message="No summary for class \MailingListsController" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="6" severity="error" message="No summary for property $helpers" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="8" severity="error" message="Argument $user is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="8" severity="error" message="Argument $request is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="8" severity="error" message="No summary for method isAuthorized()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="13" severity="error" message="No summary for method index()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="29" severity="error" message="Argument $id is missing from the Docblock of view()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="29" severity="error" message="No summary for method view()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="60" severity="error" message="Argument $list is missing from the Docblock of _getListStats()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="60" severity="error" message="Argument $memberEmails is missing from the Docblock of _getListStats()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="60" severity="error" message="No summary for method _getListStats()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="72" severity="error" message="No summary for method _getMemberEmails()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Controller\MembersController.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="30" severity="error" message="No summary for property $helpers" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="36" severity="error" message="No summary for property $components" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="45" severity="error" message="Argument $user is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="45" severity="error" message="Argument $request is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="45" severity="error" message="No summary for method isAuthorized()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="99" severity="error" message="No summary for method beforeFilter()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="129" severity="error" message="No summary for method index()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="140" severity="error" message="No summary for method listMembers()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="159" severity="error" message="Argument $statusId is missing from the Docblock of listMembersWithStatus()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="159" severity="error" message="No summary for method listMembersWithStatus()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="175" severity="error" message="No summary for method search()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="195" severity="error" message="Argument $queryResult is missing from the Docblock of _paginateMemberList()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="195" severity="error" message="No summary for method _paginateMemberList()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="208" severity="error" message="No summary for method getMailingList()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="215" severity="error" message="No summary for method register()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="272" severity="error" message="Argument $initialMessage is missing from the Docblock of _setFlashFromMailingListInfo()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="272" severity="error" message="Argument $results is missing from the Docblock of _setFlashFromMailingListInfo()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="272" severity="error" message="No summary for method _setFlashFromMailingListInfo()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="314" severity="error" message="Argument $id is missing from the Docblock of setupLogin()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="314" severity="error" message="No summary for method setupLogin()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="358" severity="error" message="Argument $id is missing from the Docblock of setupDetails()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="358" severity="error" message="No summary for method setupDetails()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="411" severity="error" message="Argument $id is missing from the Docblock of rejectDetails()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="411" severity="error" message="No summary for method rejectDetails()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="459" severity="error" message="Argument $id is missing from the Docblock of acceptDetails()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="459" severity="error" message="No summary for method acceptDetails()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="511" severity="error" message="Argument $id is missing from the Docblock of approveMember()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="511" severity="error" message="No summary for method approveMember()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="536" severity="error" message="Argument $id is missing from the Docblock of _approveMember()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="536" severity="error" message="No summary for method _approveMember()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="583" severity="error" message="Argument $id is missing from the Docblock of changePassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="583" severity="error" message="No summary for method changePassword()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="625" severity="error" message="Argument $guid is missing from the Docblock of forgotPassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="625" severity="error" message="No summary for method forgotPassword()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="687" severity="error" message="Argument $id is missing from the Docblock of sendMembershipReminder()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="687" severity="error" message="No summary for method sendMembershipReminder()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="709" severity="error" message="Argument $memberId is missing from the Docblock of _sendProspectiveMemberEmail()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="709" severity="error" message="No summary for method _sendProspectiveMemberEmail()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="730" severity="error" message="Argument $id is missing from the Docblock of sendContactDetailsReminder()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="730" severity="error" message="No summary for method sendContactDetailsReminder()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="763" severity="error" message="Argument $id is missing from the Docblock of sendSoDetailsReminder()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="763" severity="error" message="No summary for method sendSoDetailsReminder()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="781" severity="error" message="Argument $memberId is missing from the Docblock of _sendSoDetailsToMember()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="781" severity="error" message="No summary for method _sendSoDetailsToMember()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="807" severity="error" message="Argument $id is missing from the Docblock of view()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="807" severity="error" message="No summary for method view()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="875" severity="error" message="Argument $id is missing from the Docblock of edit()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="875" severity="error" message="No summary for method edit()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="935" severity="error" message="Argument $id is missing from the Docblock of revokeMembership()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="935" severity="error" message="No summary for method revokeMembership()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="964" severity="error" message="Argument $id is missing from the Docblock of reinstateMembership()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="964" severity="error" message="No summary for method reinstateMembership()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="997" severity="error" message="Argument $memberId is missing from the Docblock of _getViewPermissions()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="997" severity="error" message="Argument $showAdminFeatures is missing from the Docblock of _getViewPermissions()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="997" severity="error" message="Argument $showFinances is missing from the Docblock of _getViewPermissions()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="997" severity="error" message="Argument $hasJoined is missing from the Docblock of _getViewPermissions()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="997" severity="error" message="Argument $showPersonalDetails is missing from the Docblock of _getViewPermissions()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="997" severity="error" message="No summary for method _getViewPermissions()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="1031" severity="error" message="Argument $statusId is missing from the Docblock of emailMembersWithStatus()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="1031" severity="error" message="No summary for method emailMembersWithStatus()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="1097" severity="error" message="No summary for method login()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="1113" severity="error" message="No summary for method logout()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="1123" severity="error" message="Argument $memberList is missing from the Docblock of _addMemberActions()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="1123" severity="error" message="No summary for method _addMemberActions()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="1140" severity="error" message="Argument $memberId is missing from the Docblock of _getActionsForMember()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="1140" severity="error" message="No summary for method _getActionsForMember()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="1260" severity="error" message="No summary for method isRequestLocal()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="1269" severity="error" message="No summary for method getRequestIpAddress()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="1297" severity="error" message="Argument $guid is missing from the Docblock of uploadCsv()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="1297" severity="error" message="No summary for method uploadCsv()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="1429" severity="error" message="No summary for method getMemberIdSessionKey()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Controller\PagesController.php">
-    <error line="36" severity="error" message="No summary for property $component" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="86" severity="error" message="No summary for method beforeFilter()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="91" severity="error" message="No summary for method home()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Controller\StatusController.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="3" severity="error" message="No summary for class \StatusController" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="5" severity="error" message="No summary for property $helpers" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="7" severity="error" message="Argument $user is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="7" severity="error" message="Argument $request is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="7" severity="error" message="No summary for method isAuthorized()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="13" severity="error" message="No summary for method index()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\index.php"/>
-  <file name="app\Lib\AutomationDriver\AutomationDriver.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="10" severity="error" message="No summary for class \AutomationDriver" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="13" severity="error" message="No summary for property $rootUrl" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="14" severity="error" message="No summary for property $webDriver" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="15" severity="error" message="No summary for property $session" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="17" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="48" severity="error" message="No summary for method connect()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="53" severity="error" message="No summary for method disconnect()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="58" severity="error" message="Argument $url is missing from the Docblock of navigateToUrl()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="58" severity="error" message="No summary for method navigateToUrl()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="64" severity="error" message="No summary for method navigateToHomePage()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="69" severity="error" message="No summary for method navigateToMemberRegister()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="74" severity="error" message="No summary for method pageHasNoErrors()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="80" severity="error" message="Argument $id is missing from the Docblock of getElementById()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="80" severity="error" message="No summary for method getElementById()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="85" severity="error" message="Argument $className is missing from the Docblock of getElementByClassName()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="85" severity="error" message="No summary for method getElementByClassName()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="90" severity="error" message="Argument $controller is missing from the Docblock of _navigteToControllerAction()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="90" severity="error" message="Argument $action is missing from the Docblock of _navigteToControllerAction()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="90" severity="error" message="Argument $params is missing from the Docblock of _navigteToControllerAction()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="90" severity="error" message="No summary for method _navigteToControllerAction()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Lib\AutomationDriver\AutomationDriverTest.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="5" severity="error" message="No summary for class \AutomationDriverTest" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="7" severity="error" message="No summary for property $automationDriver" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="9" severity="error" message="No summary for method setUp()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Lib\AutomationDriver\HmsAutomationDriverTest.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="5" severity="error" message="No summary for class \HmsAutomationDriverTest" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="7" severity="error" message="Argument $email is missing from the Docblock of reigsterNewMember()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="7" severity="error" message="No summary for method reigsterNewMember()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Lib\CsvReader\CsvReader.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="4" severity="error" message="No summary for class \CsvReader" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="7" severity="error" message="No summary for property $lines" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="14" severity="error" message="Argument $filePath is missing from the Docblock of readFile()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="14" severity="error" message="No summary for method readFile()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="53" severity="error" message="No summary for method getNumLines()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="63" severity="error" message="Argument $index is missing from the Docblock of getLine()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="63" severity="error" message="No summary for method getLine()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Lib\Error\Exception\InvalidStatusException.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="7" severity="error" message="No summary for class \InvalidStatusException" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="9" severity="error" message="Argument $message is missing from the Docblock of __construct()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="9" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Lib\Error\Exception\NotAuthorizedException.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="7" severity="error" message="No summary for class \NotAuthorizedException" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="9" severity="error" message="Argument $message is missing from the Docblock of __construct()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="9" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="6" severity="error" message="No summary for class \NavHelper" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="8" severity="error" message="No summary for property $helpers" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="10" severity="error" message="Argument $links is missing from the Docblock of output()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="10" severity="error" message="No summary for method output()" source="phpDocumentor.file.PPC:ERR-50008"/>
   </file>
   <file name="app\Lib\Krb\krb5_auth.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
@@ -218,150 +58,7 @@
     <error line="29" severity="error" message="Argument $username is missing from the Docblock of user_exists()" source="phpDocumentor.file.PPC:ERR-50015"/>
     <error line="29" severity="error" message="No summary for method user_exists()" source="phpDocumentor.file.PPC:ERR-50008"/>
   </file>
-  <file name="app\Lib\MailChimp\MCAPI.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="5" severity="error" message="No summary for class \MCAPI" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="7" severity="error" message="No summary for property $useDbConfig" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="8" severity="error" message="No summary for property $errorMessage" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="9" severity="error" message="No summary for property $errorCode" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="11" severity="error" message="No summary for property $dbSource" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="18" severity="error" message="Argument $apikey is missing from the Docblock of MCAPI()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="18" severity="error" message="Argument $secure is missing from the Docblock of MCAPI()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="18" severity="error" message="No summary for method MCAPI()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="27" severity="error" message="Argument $configName is missing from the Docblock of setConfig()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="27" severity="error" message="No summary for method setConfig()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="39" severity="error" message="Argument $filters is missing from the Docblock of lists()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="39" severity="error" message="Argument $start is missing from the Docblock of lists()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="39" severity="error" message="Argument $limit is missing from the Docblock of lists()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="39" severity="error" message="No summary for method lists()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="97" severity="error" message="Argument $id is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="97" severity="error" message="Argument $email_address is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="97" severity="error" message="Argument $merge_vars is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="97" severity="error" message="Argument $email_type is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="97" severity="error" message="Argument $double_optin is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="97" severity="error" message="Argument $update_existing is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="97" severity="error" message="Argument $replace_interests is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="97" severity="error" message="Argument $send_welcome is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="97" severity="error" message="No summary for method listSubscribe()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="113" severity="error" message="Argument $id is missing from the Docblock of listUnsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="113" severity="error" message="Argument $email_address is missing from the Docblock of listUnsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="113" severity="error" message="Argument $delete_member is missing from the Docblock of listUnsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="113" severity="error" message="Argument $send_goodbye is missing from the Docblock of listUnsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="113" severity="error" message="Argument $send_notify is missing from the Docblock of listUnsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="113" severity="error" message="No summary for method listUnsubscribe()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="127" severity="error" message="Argument $id is missing from the Docblock of listMembers()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="127" severity="error" message="Argument $status is missing from the Docblock of listMembers()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="127" severity="error" message="Argument $since is missing from the Docblock of listMembers()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="127" severity="error" message="Argument $start is missing from the Docblock of listMembers()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="127" severity="error" message="Argument $limit is missing from the Docblock of listMembers()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="127" severity="error" message="No summary for method listMembers()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="134" severity="error" message="No summary for method _initDbSource()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="143" severity="error" message="Argument $query is missing from the Docblock of _runQuery()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="143" severity="error" message="No summary for method _runQuery()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Model\Account.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="13" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="15" severity="error" message="No summary for property $primaryKey" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="18" severity="error" message="No summary for property $hasMany" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="29" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="53" severity="error" message="No summary for method generatePaymentRef()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="79" severity="error" message="No summary for method generateUniquePaymentRef()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="96" severity="error" message="Argument $accountId is missing from the Docblock of setupAccountIfNeeded()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="96" severity="error" message="No summary for method setupAccountIfNeeded()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="138" severity="error" message="Argument $paymentRefs is missing from the Docblock of getAccountIdsForRefs()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="138" severity="error" message="No summary for method getAccountIdsForRefs()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Model\AppModel.php"/>
-  <file name="app\Model\Behavior\KrbAuthBehavior.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="10" severity="error" message="No summary for class \KrbAuthBehavior" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="12" severity="error" message="No summary for property $krbObj" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="20" severity="error" message="Argument $settings is missing from the Docblock of setup()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="20" severity="error" message="No summary for method setup()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="35" severity="error" message="Argument $username is missing from the Docblock of krbCheckPassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="35" severity="error" message="Argument $password is missing from the Docblock of krbCheckPassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="35" severity="error" message="No summary for method krbCheckPassword()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="47" severity="error" message="Argument $username is missing from the Docblock of krbAddUser()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="47" severity="error" message="Argument $password is missing from the Docblock of krbAddUser()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="47" severity="error" message="No summary for method krbAddUser()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="58" severity="error" message="Argument $username is missing from the Docblock of krbDeleteUser()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="58" severity="error" message="No summary for method krbDeleteUser()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="70" severity="error" message="Argument $username is missing from the Docblock of krbChangePassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="70" severity="error" message="Argument $newPass is missing from the Docblock of krbChangePassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="70" severity="error" message="No summary for method krbChangePassword()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="81" severity="error" message="Argument $username is missing from the Docblock of krbUserExists()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="81" severity="error" message="No summary for method krbUserExists()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Model\ChangePassword.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="13" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="21" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="57" severity="error" message="Argument $check is missing from the Docblock of newPasswordConfirmMatchesNewPassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="57" severity="error" message="No summary for method newPasswordConfirmMatchesNewPassword()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Model\EmailRecord.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="13" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="14" severity="error" message="No summary for property $primaryKey" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="17" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="38" severity="error" message="No summary for method getAllEmails()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="49" severity="error" message="Argument $memberId is missing from the Docblock of getAllEmailsForMember()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="49" severity="error" message="No summary for method getAllEmailsForMember()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="65" severity="error" message="Argument $memberId is missing from the Docblock of getMostRecentEmailForMember()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="65" severity="error" message="No summary for method getMostRecentEmailForMember()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="85" severity="error" message="Argument $recordList is missing from the Docblock of _formatEmilRecords()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="85" severity="error" message="No summary for method _formatEmilRecords()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="105" severity="error" message="Argument $data is missing from the Docblock of _formatEmailRecord()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="105" severity="error" message="No summary for method _formatEmailRecord()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="121" severity="error" message="Argument $to is missing from the Docblock of createNewRecord()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="121" severity="error" message="Argument $subject is missing from the Docblock of createNewRecord()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="121" severity="error" message="No summary for method createNewRecord()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="163" severity="error" message="Argument $to is missing from the Docblock of _createNewRecordImpl()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="163" severity="error" message="Argument $subject is missing from the Docblock of _createNewRecordImpl()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="163" severity="error" message="No summary for method _createNewRecordImpl()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Model\FileUpload.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="13" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="19" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="30" severity="error" message="Argument $data is missing from the Docblock of getTmpName()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="30" severity="error" message="No summary for method getTmpName()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Model\ForgotPassword.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="15" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="17" severity="error" message="No summary for property $primaryKey" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="25" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="67" severity="error" message="Argument $check is missing from the Docblock of newPasswordConfirmMatchesNewPassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="67" severity="error" message="No summary for method newPasswordConfirmMatchesNewPassword()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="77" severity="error" message="Argument $check is missing from the Docblock of findMemberWithEmail()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="77" severity="error" message="No summary for method findMemberWithEmail()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="88" severity="error" message="Argument $memberId is missing from the Docblock of createNewEntry()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="88" severity="error" message="No summary for method createNewEntry()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="107" severity="error" message="Argument $guid is missing from the Docblock of isEntryValid()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="107" severity="error" message="Argument $memberId is missing from the Docblock of isEntryValid()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="107" severity="error" message="No summary for method isEntryValid()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="134" severity="error" message="Argument $guid is missing from the Docblock of expireEntry()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="134" severity="error" message="No summary for method expireEntry()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="151" severity="error" message="Argument $guid is missing from the Docblock of isValidGuid()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="151" severity="error" message="No summary for method isValidGuid()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Model\Group.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="21" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="23" severity="error" message="No summary for property $primaryKey" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="31" severity="error" message="No summary for property $hasAndBelongsToMany" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="55" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="70" severity="error" message="Argument $groupId is missing from the Docblock of getDescription()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="70" severity="error" message="No summary for method getDescription()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="80" severity="error" message="No summary for method getGroupSummaryAll()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="89" severity="error" message="No summary for method getGroupList()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="98" severity="error" message="Argument $conditions is missing from the Docblock of _getGroupSummary()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="98" severity="error" message="No summary for method _getGroupSummary()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="111" severity="error" message="Argument $info is missing from the Docblock of _formatGroupInfo()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="111" severity="error" message="No summary for method _formatGroupInfo()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
+  <file name="app\Controller\StatusController.php"/>
   <file name="app\Model\GroupsMember.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
     <error line="13" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
@@ -374,52 +71,31 @@
     <error line="63" severity="error" message="Argument $groupId is missing from the Docblock of getMemberIdsForGroup()" source="phpDocumentor.file.PPC:ERR-50015"/>
     <error line="63" severity="error" message="No summary for method getMemberIdsForGroup()" source="phpDocumentor.file.PPC:ERR-50008"/>
   </file>
-  <file name="app\Model\MailingList.php">
+  <file name="app\Controller\Component\CsvComponent.php"/>
+  <file name="plugins\MemberVoice\Model\MemberVoiceCategory.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="15" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="17" severity="error" message="No summary for property $apiKey" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="18" severity="error" message="No summary for property $api" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="27" severity="error" message="Argument $id is missing from the Docblock of __construct()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="27" severity="error" message="Argument $table is missing from the Docblock of __construct()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="27" severity="error" message="Argument $ds is missing from the Docblock of __construct()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="27" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="53" severity="error" message="Argument $useCache is missing from the Docblock of listMailinglists()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="53" severity="error" message="No summary for method listMailinglists()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="76" severity="error" message="Argument $id is missing from the Docblock of getMailinglist()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="76" severity="error" message="Argument $useCache is missing from the Docblock of getMailinglist()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="76" severity="error" message="No summary for method getMailinglist()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="98" severity="error" message="Argument $listId is missing from the Docblock of listSubscribers()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="98" severity="error" message="Argument $useCache is missing from the Docblock of listSubscribers()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="98" severity="error" message="No summary for method listSubscribers()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="120" severity="error" message="Argument $listId is missing from the Docblock of subscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="120" severity="error" message="Argument $email is missing from the Docblock of subscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="120" severity="error" message="No summary for method subscribe()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="134" severity="error" message="Argument $listId is missing from the Docblock of unsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="134" severity="error" message="Argument $email is missing from the Docblock of unsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="134" severity="error" message="No summary for method unsubscribe()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="146" severity="error" message="No summary for method errorCode()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="155" severity="error" message="No summary for method errorMsg()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="167" severity="error" message="Argument $email is missing from the Docblock of isEmailAddressSubscriber()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="167" severity="error" message="Argument $listId is missing from the Docblock of isEmailAddressSubscriber()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="167" severity="error" message="Argument $useCache is missing from the Docblock of isEmailAddressSubscriber()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="167" severity="error" message="No summary for method isEmailAddressSubscriber()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="189" severity="error" message="Argument $email is missing from the Docblock of getListsAndSubscribeStatus()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="189" severity="error" message="Argument $useCache is missing from the Docblock of getListsAndSubscribeStatus()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="189" severity="error" message="No summary for method getListsAndSubscribeStatus()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="207" severity="error" message="Argument $email is missing from the Docblock of updateSubscriptions()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="207" severity="error" message="Argument $subscriptions is missing from the Docblock of updateSubscriptions()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="207" severity="error" message="No summary for method updateSubscriptions()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="248" severity="error" message="Argument $functionName is missing from the Docblock of _getCacheName()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="248" severity="error" message="Argument $params is missing from the Docblock of _getCacheName()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="248" severity="error" message="No summary for method _getCacheName()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="262" severity="error" message="Argument $key is missing from the Docblock of _cacheResult()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="262" severity="error" message="Argument $data is missing from the Docblock of _cacheResult()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="262" severity="error" message="No summary for method _cacheResult()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="272" severity="error" message="Argument $key is missing from the Docblock of _getCachedResult()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="272" severity="error" message="No summary for method _getCachedResult()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="281" severity="error" message="Argument $key is missing from the Docblock of _clearMailchimpCache()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="281" severity="error" message="No summary for method _clearMailchimpCache()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="9" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="10" severity="error" message="No summary for property $alias" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="12" severity="error" message="No summary for property $hasAndBelongsToMany" source="phpDocumentor.file.PPC:ERR-50007"/>
   </file>
+  <file name="app\Model\Pin.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="18" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="19" severity="error" message="No summary for property $primaryKey" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="25" severity="error" message="No summary for property $belongsTo" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="34" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="67" severity="error" message="No summary for method generatePin()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="78" severity="error" message="No summary for method generateUniquePin()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="95" severity="error" message="Argument $memberId is missing from the Docblock of createNewRecord()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="95" severity="error" message="No summary for method createNewRecord()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\Lib\AutomationDriver\HmsAutomationDriverTest.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="5" severity="error" message="No summary for class \HmsAutomationDriverTest" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="7" severity="error" message="Argument $email is missing from the Docblock of reigsterNewMember()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="7" severity="error" message="No summary for method reigsterNewMember()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\Console\Command\AppShell.php"/>
   <file name="app\Model\Member.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
     <error line="20" severity="error" message="No summary for property $primaryKey" source="phpDocumentor.file.PPC:ERR-50007"/>
@@ -555,29 +231,6 @@
     <error line="2019" severity="error" message="Argument $format is missing from the Docblock of _getMemberSummary()" source="phpDocumentor.file.PPC:ERR-50015"/>
     <error line="2019" severity="error" message="No summary for method _getMemberSummary()" source="phpDocumentor.file.PPC:ERR-50008"/>
   </file>
-  <file name="app\Model\MemberEmail.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="13" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="20" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="34" severity="error" message="Argument $data is missing from the Docblock of getMessage()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="34" severity="error" message="No summary for method getMessage()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Model\Permission.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="13" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="14" severity="error" message="No summary for property $primaryKey" source="phpDocumentor.file.PPC:ERR-50007"/>
-  </file>
-  <file name="app\Model\Pin.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="18" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="19" severity="error" message="No summary for property $primaryKey" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="25" severity="error" message="No summary for property $belongsTo" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="34" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="67" severity="error" message="No summary for method generatePin()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="78" severity="error" message="No summary for method generateUniquePin()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="95" severity="error" message="Argument $memberId is missing from the Docblock of createNewRecord()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="95" severity="error" message="No summary for method createNewRecord()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
   <file name="app\Model\Status.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
     <error line="20" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
@@ -604,14 +257,77 @@
     <error line="78" severity="error" message="Argument $updateId is missing from the Docblock of formatStatusUpdate()" source="phpDocumentor.file.PPC:ERR-50015"/>
     <error line="78" severity="error" message="No summary for method formatStatusUpdate()" source="phpDocumentor.file.PPC:ERR-50008"/>
   </file>
-  <file name="app\View\Helper\AppHelper.php"/>
-  <file name="app\View\Helper\CurrencyHelper.php">
+  <file name="app\Model\Permission.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="6" severity="error" message="No summary for class \CurrencyHelper" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="8" severity="error" message="No summary for property $helpers" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="10" severity="error" message="Argument $pennys is missing from the Docblock of output()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="10" severity="error" message="No summary for method output()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="13" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="14" severity="error" message="No summary for property $primaryKey" source="phpDocumentor.file.PPC:ERR-50007"/>
   </file>
+  <file name="app\Model\MemberEmail.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="13" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="20" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="34" severity="error" message="Argument $data is missing from the Docblock of getMessage()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="34" severity="error" message="No summary for method getMessage()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\Model\EmailRecord.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="13" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="14" severity="error" message="No summary for property $primaryKey" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="17" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="38" severity="error" message="No summary for method getAllEmails()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="49" severity="error" message="Argument $memberId is missing from the Docblock of getAllEmailsForMember()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="49" severity="error" message="No summary for method getAllEmailsForMember()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="65" severity="error" message="Argument $memberId is missing from the Docblock of getMostRecentEmailForMember()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="65" severity="error" message="No summary for method getMostRecentEmailForMember()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="85" severity="error" message="Argument $recordList is missing from the Docblock of _formatEmilRecords()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="85" severity="error" message="No summary for method _formatEmilRecords()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="105" severity="error" message="Argument $data is missing from the Docblock of _formatEmailRecord()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="105" severity="error" message="No summary for method _formatEmailRecord()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="121" severity="error" message="Argument $to is missing from the Docblock of createNewRecord()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="121" severity="error" message="Argument $subject is missing from the Docblock of createNewRecord()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="121" severity="error" message="No summary for method createNewRecord()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="163" severity="error" message="Argument $to is missing from the Docblock of _createNewRecordImpl()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="163" severity="error" message="Argument $subject is missing from the Docblock of _createNewRecordImpl()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="163" severity="error" message="No summary for method _createNewRecordImpl()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\Model\ChangePassword.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="13" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="21" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="57" severity="error" message="Argument $check is missing from the Docblock of newPasswordConfirmMatchesNewPassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="57" severity="error" message="No summary for method newPasswordConfirmMatchesNewPassword()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\View\Helper\AppHelper.php"/>
+  <file name="app\Model\FileUpload.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="13" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="19" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="30" severity="error" message="Argument $data is missing from the Docblock of getTmpName()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="30" severity="error" message="No summary for method getTmpName()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="plugins\MemberVoice\Model\MemberVoiceAppModel.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="2" severity="error" message="No summary for class \MemberVoiceAppModel" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="4" severity="error" message="No summary for property $tablePrefix" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="7" severity="error" message="No summary for property $mvUserModel" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="app\Lib\Error\Exception\NotAuthorizedException.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="7" severity="error" message="No summary for class \NotAuthorizedException" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="9" severity="error" message="Argument $message is missing from the Docblock of __construct()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="9" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\Lib\CsvReader\CsvReader.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="4" severity="error" message="No summary for class \CsvReader" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="7" severity="error" message="No summary for property $lines" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="14" severity="error" message="Argument $filePath is missing from the Docblock of readFile()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="14" severity="error" message="No summary for method readFile()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="53" severity="error" message="No summary for method getNumLines()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="63" severity="error" message="Argument $index is missing from the Docblock of getLine()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="63" severity="error" message="No summary for method getLine()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\Controller\Component\BankStatementComponent.php"/>
   <file name="app\View\Helper\MailinglistHelper.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
     <error line="6" severity="error" message="No summary for class \MailinglistHelper" source="phpDocumentor.file.PPC:ERR-50005"/>
@@ -621,13 +337,56 @@
     <error line="36" severity="error" message="Argument $mailingListDetails is missing from the Docblock of outputList()" source="phpDocumentor.file.PPC:ERR-50015"/>
     <error line="36" severity="error" message="No summary for method outputList()" source="phpDocumentor.file.PPC:ERR-50008"/>
   </file>
-  <file name="app\View\Helper\NavHelper.php">
+  <file name="app\Controller\PagesController.php"/>
+  <file name="app\Controller\GroupsController.php"/>
+  <file name="plugins\MemberVoice\Model\MemberVoiceVote.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="6" severity="error" message="No summary for class \NavHelper" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="8" severity="error" message="No summary for property $helpers" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="10" severity="error" message="Argument $links is missing from the Docblock of output()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="10" severity="error" message="No summary for method output()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="9" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
   </file>
+  <file name="app\Controller\MailinglistsController.php"/>
+  <file name="app\Console\cake.php"/>
+  <file name="app\Model\Account.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="13" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="15" severity="error" message="No summary for property $primaryKey" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="18" severity="error" message="No summary for property $hasMany" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="29" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="53" severity="error" message="No summary for method generatePaymentRef()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="79" severity="error" message="No summary for method generateUniquePaymentRef()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="96" severity="error" message="Argument $accountId is missing from the Docblock of setupAccountIfNeeded()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="96" severity="error" message="No summary for method setupAccountIfNeeded()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="138" severity="error" message="Argument $paymentRefs is missing from the Docblock of getAccountIdsForRefs()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="138" severity="error" message="No summary for method getAccountIdsForRefs()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\Controller\Component\AuthUtilComponent.php"/>
+  <file name="app\Controller\Component\NavComponent.php"/>
+  <file name="app\Model\Behavior\KrbAuthBehavior.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="10" severity="error" message="No summary for class \KrbAuthBehavior" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="12" severity="error" message="No summary for property $krbObj" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="20" severity="error" message="Argument $settings is missing from the Docblock of setup()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="20" severity="error" message="No summary for method setup()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="35" severity="error" message="Argument $username is missing from the Docblock of krbCheckPassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="35" severity="error" message="Argument $password is missing from the Docblock of krbCheckPassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="35" severity="error" message="No summary for method krbCheckPassword()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="47" severity="error" message="Argument $username is missing from the Docblock of krbAddUser()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="47" severity="error" message="Argument $password is missing from the Docblock of krbAddUser()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="47" severity="error" message="No summary for method krbAddUser()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="58" severity="error" message="Argument $username is missing from the Docblock of krbDeleteUser()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="58" severity="error" message="No summary for method krbDeleteUser()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="70" severity="error" message="Argument $username is missing from the Docblock of krbChangePassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="70" severity="error" message="Argument $newPass is missing from the Docblock of krbChangePassword()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="70" severity="error" message="No summary for method krbChangePassword()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="81" severity="error" message="Argument $username is missing from the Docblock of krbUserExists()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="81" severity="error" message="No summary for method krbUserExists()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\Controller\AppController.php"/>
+  <file name="plugins\MemberVoice\Model\MemberVoiceStatus.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="9" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="app\index.php"/>
+  <file name="app\Model\AppModel.php"/>
   <file name="app\View\Helper\TinymceHelper.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
     <error line="4" severity="error" message="No summary for class \TinymceHelper" source="phpDocumentor.file.PPC:ERR-50005"/>
@@ -635,18 +394,124 @@
     <error line="10" severity="error" message="No summary for property $_script" source="phpDocumentor.file.PPC:ERR-50007"/>
     <error line="85" severity="error" message="Argument $preset is missing from the Docblock of input()" source="phpDocumentor.file.PPC:ERR-50015"/>
   </file>
-  <file name="plugins\MemberVoice\Controller\MemberVoiceAppController.php">
+  <file name="app\Model\MailingList.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="14" severity="error" message="No summary for property $mvFirstName" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="15" severity="error" message="No summary for property $mvLastName" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="22" severity="error" message="No summary for method _getUserID()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="26" severity="error" message="Argument $user is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="26" severity="error" message="Argument $request is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="26" severity="error" message="No summary for method isAuthorized()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="15" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="17" severity="error" message="No summary for property $apiKey" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="18" severity="error" message="No summary for property $api" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="27" severity="error" message="Argument $id is missing from the Docblock of __construct()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="27" severity="error" message="Argument $table is missing from the Docblock of __construct()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="27" severity="error" message="Argument $ds is missing from the Docblock of __construct()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="27" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="53" severity="error" message="Argument $useCache is missing from the Docblock of listMailinglists()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="53" severity="error" message="No summary for method listMailinglists()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="76" severity="error" message="Argument $id is missing from the Docblock of getMailinglist()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="76" severity="error" message="Argument $useCache is missing from the Docblock of getMailinglist()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="76" severity="error" message="No summary for method getMailinglist()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="98" severity="error" message="Argument $listId is missing from the Docblock of listSubscribers()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="98" severity="error" message="Argument $useCache is missing from the Docblock of listSubscribers()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="98" severity="error" message="No summary for method listSubscribers()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="120" severity="error" message="Argument $listId is missing from the Docblock of subscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="120" severity="error" message="Argument $email is missing from the Docblock of subscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="120" severity="error" message="No summary for method subscribe()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="134" severity="error" message="Argument $listId is missing from the Docblock of unsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="134" severity="error" message="Argument $email is missing from the Docblock of unsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="134" severity="error" message="No summary for method unsubscribe()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="146" severity="error" message="No summary for method errorCode()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="155" severity="error" message="No summary for method errorMsg()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="167" severity="error" message="Argument $email is missing from the Docblock of isEmailAddressSubscriber()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="167" severity="error" message="Argument $listId is missing from the Docblock of isEmailAddressSubscriber()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="167" severity="error" message="Argument $useCache is missing from the Docblock of isEmailAddressSubscriber()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="167" severity="error" message="No summary for method isEmailAddressSubscriber()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="189" severity="error" message="Argument $email is missing from the Docblock of getListsAndSubscribeStatus()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="189" severity="error" message="Argument $useCache is missing from the Docblock of getListsAndSubscribeStatus()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="189" severity="error" message="No summary for method getListsAndSubscribeStatus()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="207" severity="error" message="Argument $email is missing from the Docblock of updateSubscriptions()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="207" severity="error" message="Argument $subscriptions is missing from the Docblock of updateSubscriptions()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="207" severity="error" message="No summary for method updateSubscriptions()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="248" severity="error" message="Argument $functionName is missing from the Docblock of _getCacheName()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="248" severity="error" message="Argument $params is missing from the Docblock of _getCacheName()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="248" severity="error" message="No summary for method _getCacheName()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="262" severity="error" message="Argument $key is missing from the Docblock of _cacheResult()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="262" severity="error" message="Argument $data is missing from the Docblock of _cacheResult()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="262" severity="error" message="No summary for method _cacheResult()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="272" severity="error" message="Argument $key is missing from the Docblock of _getCachedResult()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="272" severity="error" message="No summary for method _getCachedResult()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="281" severity="error" message="Argument $key is missing from the Docblock of _clearMailchimpCache()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="281" severity="error" message="No summary for method _clearMailchimpCache()" source="phpDocumentor.file.PPC:ERR-50008"/>
   </file>
-  <file name="plugins\MemberVoice\Controller\MemberVoiceCommentsController.php">
+  <file name="app\Controller\Component\Auth\HmsAuthorize.php"/>
+  <file name="app\View\Helper\CurrencyHelper.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="14" severity="error" message="No summary for method add()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="6" severity="error" message="No summary for class \CurrencyHelper" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="8" severity="error" message="No summary for property $helpers" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="10" severity="error" message="Argument $pennys is missing from the Docblock of output()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="10" severity="error" message="No summary for method output()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\Controller\Component\Auth\HmsAuthenticate.php"/>
+  <file name="app\Lib\MailChimp\MCAPI.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="5" severity="error" message="No summary for class \MCAPI" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="7" severity="error" message="No summary for property $useDbConfig" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="8" severity="error" message="No summary for property $errorMessage" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="9" severity="error" message="No summary for property $errorCode" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="11" severity="error" message="No summary for property $dbSource" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="18" severity="error" message="Argument $apikey is missing from the Docblock of MCAPI()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="18" severity="error" message="Argument $secure is missing from the Docblock of MCAPI()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="18" severity="error" message="No summary for method MCAPI()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="27" severity="error" message="Argument $configName is missing from the Docblock of setConfig()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="27" severity="error" message="No summary for method setConfig()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="39" severity="error" message="Argument $filters is missing from the Docblock of lists()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="39" severity="error" message="Argument $start is missing from the Docblock of lists()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="39" severity="error" message="Argument $limit is missing from the Docblock of lists()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="39" severity="error" message="No summary for method lists()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="97" severity="error" message="Argument $id is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="97" severity="error" message="Argument $email_address is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="97" severity="error" message="Argument $merge_vars is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="97" severity="error" message="Argument $email_type is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="97" severity="error" message="Argument $double_optin is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="97" severity="error" message="Argument $update_existing is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="97" severity="error" message="Argument $replace_interests is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="97" severity="error" message="Argument $send_welcome is missing from the Docblock of listSubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="97" severity="error" message="No summary for method listSubscribe()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="113" severity="error" message="Argument $id is missing from the Docblock of listUnsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="113" severity="error" message="Argument $email_address is missing from the Docblock of listUnsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="113" severity="error" message="Argument $delete_member is missing from the Docblock of listUnsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="113" severity="error" message="Argument $send_goodbye is missing from the Docblock of listUnsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="113" severity="error" message="Argument $send_notify is missing from the Docblock of listUnsubscribe()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="113" severity="error" message="No summary for method listUnsubscribe()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="127" severity="error" message="Argument $id is missing from the Docblock of listMembers()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="127" severity="error" message="Argument $status is missing from the Docblock of listMembers()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="127" severity="error" message="Argument $since is missing from the Docblock of listMembers()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="127" severity="error" message="Argument $start is missing from the Docblock of listMembers()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="127" severity="error" message="Argument $limit is missing from the Docblock of listMembers()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="127" severity="error" message="No summary for method listMembers()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="134" severity="error" message="No summary for method _initDbSource()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="143" severity="error" message="Argument $query is missing from the Docblock of _runQuery()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="143" severity="error" message="No summary for method _runQuery()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\Lib\AutomationDriver\AutomationDriver.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="10" severity="error" message="No summary for class \AutomationDriver" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="13" severity="error" message="No summary for property $rootUrl" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="14" severity="error" message="No summary for property $webDriver" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="15" severity="error" message="No summary for property $session" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="17" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="48" severity="error" message="No summary for method connect()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="53" severity="error" message="No summary for method disconnect()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="58" severity="error" message="Argument $url is missing from the Docblock of navigateToUrl()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="58" severity="error" message="No summary for method navigateToUrl()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="64" severity="error" message="No summary for method navigateToHomePage()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="69" severity="error" message="No summary for method navigateToMemberRegister()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="74" severity="error" message="No summary for method pageHasNoErrors()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="80" severity="error" message="Argument $id is missing from the Docblock of getElementById()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="80" severity="error" message="No summary for method getElementById()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="85" severity="error" message="Argument $className is missing from the Docblock of getElementByClassName()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="85" severity="error" message="No summary for method getElementByClassName()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="90" severity="error" message="Argument $controller is missing from the Docblock of _navigteToControllerAction()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="90" severity="error" message="Argument $action is missing from the Docblock of _navigteToControllerAction()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="90" severity="error" message="Argument $params is missing from the Docblock of _navigteToControllerAction()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="90" severity="error" message="No summary for method _navigteToControllerAction()" source="phpDocumentor.file.PPC:ERR-50008"/>
   </file>
   <file name="plugins\MemberVoice\Controller\MemberVoiceIdeasController.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
@@ -661,24 +526,43 @@
     <error line="104" severity="error" message="No summary for method vote()" source="phpDocumentor.file.PPC:ERR-50008"/>
     <error line="181" severity="error" message="No summary for method _getVoteUrl()" source="phpDocumentor.file.PPC:ERR-50008"/>
   </file>
-  <file name="plugins\MemberVoice\Model\MemberVoiceAppModel.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="2" severity="error" message="No summary for class \MemberVoiceAppModel" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="4" severity="error" message="No summary for property $tablePrefix" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="7" severity="error" message="No summary for property $mvUserModel" source="phpDocumentor.file.PPC:ERR-50007"/>
-  </file>
-  <file name="plugins\MemberVoice\Model\MemberVoiceCategory.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="9" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="10" severity="error" message="No summary for property $alias" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="12" severity="error" message="No summary for property $hasAndBelongsToMany" source="phpDocumentor.file.PPC:ERR-50007"/>
-  </file>
   <file name="plugins\MemberVoice\Model\MemberVoiceComment.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
     <error line="9" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
     <error line="10" severity="error" message="No summary for property $alias" source="phpDocumentor.file.PPC:ERR-50007"/>
     <error line="11" severity="error" message="No summary for property $belongsTo" source="phpDocumentor.file.PPC:ERR-50007"/>
     <error line="17" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\Lib\Error\Exception\InvalidStatusException.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="7" severity="error" message="No summary for class \InvalidStatusException" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="9" severity="error" message="Argument $message is missing from the Docblock of __construct()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="9" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\Lib\AutomationDriver\AutomationDriverTest.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="5" severity="error" message="No summary for class \AutomationDriverTest" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="7" severity="error" message="No summary for property $automationDriver" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="9" severity="error" message="No summary for method setUp()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="app\Model\Group.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="21" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="23" severity="error" message="No summary for property $primaryKey" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="31" severity="error" message="No summary for property $hasAndBelongsToMany" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="55" severity="error" message="No summary for property $validate" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="70" severity="error" message="Argument $groupId is missing from the Docblock of getDescription()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="70" severity="error" message="No summary for method getDescription()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="80" severity="error" message="No summary for method getGroupSummaryAll()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="89" severity="error" message="No summary for method getGroupList()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="98" severity="error" message="Argument $conditions is missing from the Docblock of _getGroupSummary()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="98" severity="error" message="No summary for method _getGroupSummary()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="111" severity="error" message="Argument $info is missing from the Docblock of _formatGroupInfo()" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="111" severity="error" message="No summary for method _formatGroupInfo()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="plugins\MemberVoice\Controller\MemberVoiceCommentsController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="14" severity="error" message="No summary for method add()" source="phpDocumentor.file.PPC:ERR-50008"/>
   </file>
   <file name="plugins\MemberVoice\Model\MemberVoiceIdea.php">
     <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
@@ -691,13 +575,5 @@
     <error line="39" severity="error" message="Argument $userID is missing from the Docblock of saveVote()" source="phpDocumentor.file.PPC:ERR-50015"/>
     <error line="39" severity="error" message="Argument $votes is missing from the Docblock of saveVote()" source="phpDocumentor.file.PPC:ERR-50015"/>
     <error line="39" severity="error" message="No summary for method saveVote()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="plugins\MemberVoice\Model\MemberVoiceStatus.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="9" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-  </file>
-  <file name="plugins\MemberVoice\Model\MemberVoiceVote.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="9" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
   </file>
 </checkstyle>

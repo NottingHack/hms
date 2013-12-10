@@ -1,23 +1,18 @@
 <?php
 /**
- * Static content controller.
- *
- * This file will render views from views/pages/
  *
  * PHP 5
  *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (C) HMS Team
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     HMS Team
  * @package       app.Controller
- * @since         CakePHP(tm) v 0.2.9
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+
 
 App::uses('AppController', 'Controller');
 App::uses('Xml', 'Utility');
@@ -27,32 +22,27 @@ App::uses('Xml', 'Utility');
  *
  * Override this controller by placing a copy in controllers directory of an application
  *
- * @package       app.Controller
+ * @package app.Controller
  * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
  */
-class PagesController extends AppController 
-{
+class PagesController extends AppController {
 
-	var $component = array('Auth'); 
 /**
- * Controller name
+ * The list of components this Controller relies on.
+ * @var array
+ */
+	public $components = array('Auth');
+
+/**
+ * Controller name.
  *
  * @var string
  */
 	public $name = 'Pages';
 
 /**
- * This controller does not use a model
+ * Displays a view.
  *
- * @var array
- */
-	public $uses = array();
-
-/**
- * Displays a view
- *
- * @param mixed What page to display
- * @return void
  */
 	public function display() {
 		$path = func_get_args();
@@ -74,8 +64,7 @@ class PagesController extends AppController
 		}
 
 		// Dynamic content on a 'static' page? Why not.
-		if( method_exists($this, $page) )
-		{
+		if ( method_exists($this, $page)) {
 			call_user_func( array($this, $page) );
 		}
 
@@ -83,37 +72,37 @@ class PagesController extends AppController
 		$this->render(implode('/', $path));
 	}
 
-	function beforeFilter() { 
+/**
+ * Perform any actions that should be performed before any controller action.
+ *
+ * @link http://api20.cakephp.org/class/controller#method-ControllerbeforeFilter
+ */
+	public function beforeFilter() {
 		parent::beforeFilter();
-        $this->Auth->allow('display'); 
-    }
+		$this->Auth->allow('display');
+	}
 
-    public function home()
-    {
-    	Controller::loadModel('Member');
+/**
+ * Display the home page.
+ */
+	public function home() {
+		Controller::loadModel('Member');
 
-        $loggedInMemberId = $this->Member->getIdForMember($this->Auth->user());
+		$loggedInMemberId = $this->Member->getIdForMember($this->Auth->user());
 
-    	if($loggedInMemberId)
-    	{
-    		if($this->referer() == Router::url(array('controller' => 'members', 'action' => 'login'), true))
-    		{
-	    		// Redirect if the user wants to be elsewhere
-	    		switch($this->Member->getStatusForMember($loggedInMemberId))
-	    		{
-	    			case Status::PRE_MEMBER_1:
-	    				return $this->redirect(array('controller' => 'members', 'action' => 'setupDetails', $loggedInMemberId));
-	    		}
-	    	}
-	    	
+		if ($loggedInMemberId) {
+			if ($this->referer() == Router::url(array('controller' => 'members', 'action' => 'login'), true)) {
+				// Redirect if the user wants to be elsewhere
+				switch ($this->Member->getStatusForMember($loggedInMemberId)) {
+					case Status::PRE_MEMBER_1:
+						return $this->redirect(array('controller' => 'members', 'action' => 'setupDetails', $loggedInMemberId));
+				}
+			}
 
-	    	// TODO: Cache this
-	    	$parsed_xml = Xml::build('http://nottinghack.org.uk/?feed=rss2');
-			$this->set('rssData', $parsed_xml);
-		}
-		else
-		{
+			$parsedXml = Xml::build('http://nottinghack.org.uk/?feed=rss2');
+			$this->set('rssData', $parsedXml);
+		} else {
 			$this->Nav->add('Register Now!', 'members', 'register', array(), 'big_button');
 		}
-    }
+	}
 }
