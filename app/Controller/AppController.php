@@ -161,7 +161,7 @@ class AppController extends Controller {
  */
 	public function beforeRender() {
 		// Send any links added to the NavComponent to the view
-		$this->set('navLinks', $this->Nav->get_allowed_actions());
+		$this->set('navLinks', $this->Nav->getAllowedActions());
 
 		Controller::loadModel('Member');
 
@@ -183,7 +183,7 @@ class AppController extends Controller {
 		$jsonData = json_decode(file_get_contents('http://lspace.nottinghack.org.uk/status/status.php'));
 
 		$this->set('jsonData', $jsonData);
-		$this->set('navLinks', $this->Nav->get_allowed_actions());
+		$this->set('navLinks', $this->Nav->getAllowedActions());
 
 		$this->set('version', $this->getVersionString());
 	}

@@ -23,6 +23,8 @@
 <li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
 <li><a href="../packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
+<li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
+<li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
 <li><a href="../packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
@@ -37,7 +39,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">665</span></a></li>
+                <span class="label label-info">601</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -66,10 +68,8 @@
 <ul class="side-nav nav nav-list"><li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_authorize" title="authorize() :: "><span class="description">authorize()
-        </span><pre>authorize()</pre></a></li>
-<li class="method public "><a href="#method_controller" title="controller() :: "><span class="description">controller()
-        </span><pre>controller()</pre></a></li>
+<li class="method public "><a href="#method_authorize" title="authorize() :: Check if the user is authorized to access the URL specified in the request."><span class="description">Check if the user is authorized to access the URL specified in the request.</span><pre>authorize()</pre></a></li>
+<li class="method public "><a href="#method_controller" title="controller() :: Accessor to the controller object."><span class="description">Accessor to the controller object.</span><pre>controller()</pre></a></li>
 </ul>
 </li></ul>
 </div>
@@ -83,32 +83,53 @@
 </li>
 </ul>
 <div class="element class">
-<p class="short_description"></p>
+<p class="short_description">HmsAuthorize is basically the same as the CakPHP ControllerAuthorize
+in that it calls the 'isAuthorized' method of the controller. However
+HmsAuthorize doesn't discard the CakeRequest object, as it is used in the
+controller instead of $this->request.</p>
 <div class="details">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/app.Controller.Component.Auth.html">app.Controller.Component.Auth</a></td>
+</tr></table>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_authorize"></a><div class="element clickable method public method_authorize" data-toggle="collapse" data-target=".method_authorize .collapse" title="public">
-<h2>authorize()
-        </h2>
-<pre>authorize($user, \CakeRequest $request) </pre>
+<h2>Check if the user is authorized to access the URL specified in the request.</h2>
+<pre>authorize(array $user, \CakeRequest $request) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$user</h4></div>
-<div class="subelement argument"><h4>$request</h4></div>
+<div class="subelement argument">
+<h4>$user</h4>
+<code>array</code><p>Array of user data.</p></div>
+<div class="subelement argument">
+<h4>$request</h4>
+<code><a href="CakeRequest.html">\CakeRequest</a></code><p>The request the user is attempting to make.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if user is authorized to perform the request, false otherwise.</div>
 </div></div>
 </div>
 <a id="method_controller"></a><div class="element clickable method public method_controller" data-toggle="collapse" data-target=".method_controller .collapse" title="public">
-<h2>controller()
-        </h2>
-<pre>controller(\Controller $controller<code> = null</code>) </pre>
+<h2>Accessor to the controller object.</h2>
+<pre>controller(\Controller $controller<code> = null</code>) : mixed</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$controller</h4></div>
+<div class="subelement argument">
+<h4>$controller</h4>
+<code><a href="Controller.html">\Controller</a></code><p>null to get, a controller to set.</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="CakeException.html">\CakeException</a></code></th>
+<td>if controller is non-null but does not have a function called 'isAuthorized'.</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
 </div></div>
 </div>
 </div>
@@ -119,7 +140,7 @@
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-08T10:58:59Z.<br></footer></div>
+            generated on 2013-12-10T20:38:34Z.<br></footer></div>
 </div>
 </body>
 </html>

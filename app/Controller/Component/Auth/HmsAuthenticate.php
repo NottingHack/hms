@@ -1,60 +1,57 @@
 <?php
+/**
+ *
+ * PHP 5
+ *
+ * Copyright (C) HMS Team
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     HMS Team
+ * @package       app.Controller.Component.Auth
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
 
-    App::uses('FormAuthenticate', 'Controller/Component/Auth');
+App::uses('FormAuthenticate', 'Controller/Component/Auth');
 
-    class HmsAuthenticate extends FormAuthenticate 
-    {
+/**
+ * HMS Authenticate.
+ *
+ * A specialisation of CakePHP's FormAuthienticate conponent
+ * that allows users to login with either a username or an e-mail
+ * and checking those auth details against records on a KRB server.
+ *
+ * @package app.Controller.Component.Auth
+ * 
+ */
+class HmsAuthenticate extends FormAuthenticate {
 
-        public function authenticate(CakeRequest $request, CakeResponse $response) {
+/**
+ * Check if the details provided by a user are valid
+ * @param  CakeRequest  $request The information the user is submitting
+ * @param  CakeResponse $response Not-used
+ * @return bool True if user-supplied values are valid, false otherwise.
+ */
+	public function authenticate(CakeRequest $request, CakeResponse $response) {
+		// Need to use the members model
+		$memberModel = ClassRegistry::init("Member");
 
-            # Need to use the members model
-            $memberModel = ClassRegistry::init("Member");
+		// Find the member
+		// Try username first
+		$memberInfo = $memberModel->find('first', array( 'conditions' => array( 'Member.username' => $request->data['User']['usernameOrEmail'] ) ) );
 
-            # Find the member
-            # Try username first
-            $memberInfo = $memberModel->find('first', array( 'conditions' => array( 'Member.username' => $request->data['User']['usernameOrEmail'] ) ) );
+		if (isset($memberInfo) && $memberInfo != null) {
+			return $memberModel->krbCheckPassword($request->data['User']['usernameOrEmail'], $request->data['User']['password']) ? $memberInfo : false;
+		}
 
-            if( isset($memberInfo) &&
-                $memberInfo != null)
-            {
-                return $memberModel->krbCheckPassword($request->data['User']['usernameOrEmail'], $request->data['User']['password']) ? $memberInfo : false;
-            }
+		// Fall-back to the e-mail
+		$memberInfo = $memberModel->find('first', array( 'conditions' => array( 'Member.email' => $request->data['User']['usernameOrEmail'] ) ) );
+		if (isset($memberInfo) && $memberInfo != null) {
+			return $memberModel->krbCheckPassword($memberInfo['Member']['username'], $request->data['User']['password']) ? $memberInfo : false;
+		}
 
-            # See if they used their email address instead
-            $memberInfo = $memberModel->find('first', array( 'conditions' => array( 'Member.email' => $request->data['User']['usernameOrEmail'] ) ) );
-            if( isset($memberInfo) &&
-                $memberInfo != null)
-            {
-                return $memberModel->krbCheckPassword($memberInfo['Member']['username'], $request->data['User']['password']) ? $memberInfo : false;
-            }
-
-        	# Login failed
-            return false;
-        }
-
-
-        public static function make_hash($salt, $pass)
-        {
-        	# Hash is the sha-1 of th salt + pass
-        	# Pass is plaintext atm...
-        	return sha1($salt . $pass);
-        }
-
-        public static function make_salt()
-        {
-        	# Return a random 16 char salt (adapted from nh_instrumentation code)
-
-        	$chars = str_split('0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz');
-        
-    		$newSalt = '';
-    		for ($i = 0; $i < 16; $i++) 
-    		{
-    			$newSalt .= $chars[rand(0, count($chars) - 1)];
-    		}
-
-    		return $newSalt;
-        }
-
-    }
-
-?>
+		// Couldn't find either the username or password
+		return false;
+	}
+}

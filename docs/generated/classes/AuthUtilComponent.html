@@ -23,6 +23,8 @@
 <li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
 <li><a href="../packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
+<li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
+<li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
 <li><a href="../packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
@@ -37,7 +39,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">665</span></a></li>
+                <span class="label label-info">601</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -67,22 +69,25 @@
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_initialize" title="initialize() :: "><span class="description">initialize()
-        </span><pre>initialize()</pre></a></li>
-<li class="method public "><a href="#method_is_authorized" title="is_authorized() :: "><span class="description">is_authorized()
-        </span><pre>is_authorized()</pre></a></li>
+<li class="method public "><a href="#method_initialize" title="initialize() :: Called before the Controller::beforeFilter()."><span class="description">Called before the Controller::beforeFilter().</span><pre>initialize()</pre></a></li>
+<li class="method public "><a href="#method_isAuthorized" title="isAuthorized() :: Check to see if the currently logged in user is authorized to perform
+an action on a certain controller (with certain params)."><span class="description">Check to see if the currently logged in user is authorized to perform
+an action on a certain controller (with certain params).</span><pre>isAuthorized()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header private">» Private
-                    <ul><li class="method private "><a href="#method_get_controller" title="get_controller() :: "><span class="description">get_controller()
-        </span><pre>get_controller()</pre></a></li></ul>
+                    <ul><li class="method private "><a href="#method___getController" title="__getController() :: Given the name of a controller, return an instance of said controller
+in the fastest method possible."><span class="description">Given the name of a controller, return an instance of said controller
+in the fastest method possible.</span><pre>__getController()</pre></a></li></ul>
 </li>
 <li class="nav-header">
 <i title="Properties" class="icon-custom icon-property"></i> Properties
+                    <ul><li class="property public "><a href="#property_components" title="$components() :: List of components used by this component."><span class="description"></span><pre>$components</pre></a></li></ul>
+</li>
+<li class="nav-header private">» Private
                     <ul>
-<li class="property public "><a href="#property_components" title="$components() :: "><span class="description"></span><pre>$components</pre></a></li>
-<li class="property public "><a href="#property_controllers" title="$controllers() :: "><span class="description"></span><pre>$controllers</pre></a></li>
-<li class="property public "><a href="#property_currentController" title="$currentController() :: "><span class="description"></span><pre>$currentController</pre></a></li>
+<li class="property private "><a href="#property___controllers" title="$__controllers() :: Cached list of created controllers, makes things slighlty more speedy."><span class="description"></span><pre>$__controllers</pre></a></li>
+<li class="property private "><a href="#property___currentController" title="$__currentController() :: The current controller this component is attached to."><span class="description"></span><pre>$__currentController</pre></a></li>
 </ul>
 </li>
 </ul>
@@ -97,51 +102,75 @@
 </li>
 </ul>
 <div class="element class">
-<p class="short_description"></p>
+<p class="short_description">AuthUtil component allows one to check to see if an action is
+authorized on any controller. It is slow and it is sad about this.</p>
 <div class="details">
-<div class="long_description"></div>
+<div class="long_description">(and its days are numbered)</div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/app.Controller.Component.html">app.Controller.Component</a></td>
+</tr></table>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_initialize"></a><div class="element clickable method public method_initialize" data-toggle="collapse" data-target=".method_initialize .collapse" title="public">
-<h2>initialize()
-        </h2>
+<h2>Called before the Controller::beforeFilter().</h2>
 <pre>initialize(\Controller $controller) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>link</th>
+<td><a href="http://book.cakephp.org/2.0/en/controllers/components.html#Component::initialize">http://book.cakephp.org/2.0/en/controllers/components.html#Component::initialize</a></td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$controller</h4></div>
+<div class="subelement argument">
+<h4>$controller</h4>
+<code><a href="Controller.html">\Controller</a></code><p>Controller with components to initialize</p></div>
 </div></div>
 </div>
-<a id="method_is_authorized"></a><div class="element clickable method public method_is_authorized" data-toggle="collapse" data-target=".method_is_authorized .collapse" title="public">
-<h2>is_authorized()
-        </h2>
-<pre>is_authorized($controller, $action, $params<code> = array()</code>) </pre>
+<a id="method_isAuthorized"></a><div class="element clickable method public method_isAuthorized" data-toggle="collapse" data-target=".method_isAuthorized .collapse" title="public">
+<h2>Check to see if the currently logged in user is authorized to perform
+an action on a certain controller (with certain params).</h2>
+<pre>isAuthorized(string $controller, string $action, array $params<code> = array()</code>) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$controller</h4></div>
-<div class="subelement argument"><h4>$action</h4></div>
-<div class="subelement argument"><h4>$params</h4></div>
+<div class="subelement argument">
+<h4>$controller</h4>
+<code>string</code><p>The name of the controller the user wants to act on.</p></div>
+<div class="subelement argument">
+<h4>$action</h4>
+<code>string</code><p>The action the user wants to perform.</p></div>
+<div class="subelement argument">
+<h4>$params</h4>
+<code>array</code><p>Any parameters for the action.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if user is authorized to perform the action, false otherwise.</div>
 </div></div>
 </div>
-<a id="method_get_controller"></a><div class="element clickable method private method_get_controller" data-toggle="collapse" data-target=".method_get_controller .collapse" title="private">
-<h2>get_controller()
-        </h2>
-<pre>get_controller($name) </pre>
+<a id="method___getController"></a><div class="element clickable method private method___getController" data-toggle="collapse" data-target=".method___getController .collapse" title="private">
+<h2>Given the name of a controller, return an instance of said controller
+in the fastest method possible.</h2>
+<pre>__getController(string $name) : <a href="Controller.html">\Controller</a> | null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the controller.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="Controller.html">\Controller</a></code><code>null</code>A controller instance if we can find or create one, null otherwise.</div>
 </div></div>
 </div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
 <a id="property_components"> </a><div class="element clickable property public property_components" data-toggle="collapse" data-target=".property_components .collapse" title="public">
-<h2>$components</h2>
-<pre>$components </pre>
+<h2>List of components used by this component.</h2>
+<pre>$components : array</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>array('Auth')</code></div>
@@ -149,9 +178,9 @@
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a id="property_controllers"> </a><div class="element clickable property public property_controllers" data-toggle="collapse" data-target=".property_controllers .collapse" title="public">
-<h2>$controllers</h2>
-<pre>$controllers </pre>
+<a id="property___controllers"> </a><div class="element clickable property private property___controllers" data-toggle="collapse" data-target=".property___controllers .collapse" title="private">
+<h2>Cached list of created controllers, makes things slighlty more speedy.</h2>
+<pre>$__controllers : array</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>array()</code></div>
@@ -159,9 +188,9 @@
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a id="property_currentController"> </a><div class="element clickable property public property_currentController" data-toggle="collapse" data-target=".property_currentController .collapse" title="public">
-<h2>$currentController</h2>
-<pre>$currentController </pre>
+<a id="property___currentController"> </a><div class="element clickable property private property___currentController" data-toggle="collapse" data-target=".property___currentController .collapse" title="private">
+<h2>The current controller this component is attached to.</h2>
+<pre>$__currentController : <a href="%5Btype%5D.html">\[type]</a></pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>null</code></div>
@@ -177,7 +206,7 @@
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-08T10:58:59Z.<br></footer></div>
+            generated on 2013-12-10T20:38:34Z.<br></footer></div>
 </div>
 </body>
 </html>

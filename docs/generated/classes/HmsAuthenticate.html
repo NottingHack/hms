@@ -23,6 +23,8 @@
 <li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
 <li><a href="../packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
+<li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
+<li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
 <li><a href="../packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
@@ -37,7 +39,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">665</span></a></li>
+                <span class="label label-info">601</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -65,14 +67,7 @@
 </div>
 <ul class="side-nav nav nav-list"><li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
-                    <ul>
-<li class="method public "><a href="#method_authenticate" title="authenticate() :: "><span class="description">authenticate()
-        </span><pre>authenticate()</pre></a></li>
-<li class="method public "><a href="#method_make_hash" title="make_hash() :: "><span class="description">make_hash()
-        </span><pre>make_hash()</pre></a></li>
-<li class="method public "><a href="#method_make_salt" title="make_salt() :: "><span class="description">make_salt()
-        </span><pre>make_salt()</pre></a></li>
-</ul>
+                    <ul><li class="method public "><a href="#method_authenticate" title="authenticate() :: Check if the details provided by a user are valid"><span class="description">Check if the details provided by a user are valid</span><pre>authenticate()</pre></a></li></ul>
 </li></ul>
 </div>
 <div class="span8">
@@ -85,41 +80,34 @@
 </li>
 </ul>
 <div class="element class">
-<p class="short_description"></p>
+<p class="short_description">HMS Authenticate.</p>
 <div class="details">
-<div class="long_description"></div>
+<div class="long_description">A specialisation of CakePHP's FormAuthienticate conponent
+that allows users to login with either a username or an e-mail
+and checking those auth details against records on a KRB server.</div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/app.Controller.Component.Auth.html">app.Controller.Component.Auth</a></td>
+</tr></table>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_authenticate"></a><div class="element clickable method public method_authenticate" data-toggle="collapse" data-target=".method_authenticate .collapse" title="public">
-<h2>authenticate()
-        </h2>
-<pre>authenticate(\CakeRequest $request, \CakeResponse $response) </pre>
+<h2>Check if the details provided by a user are valid</h2>
+<pre>authenticate(\CakeRequest $request, \CakeResponse $response) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$request</h4></div>
-<div class="subelement argument"><h4>$response</h4></div>
+<div class="subelement argument">
+<h4>$request</h4>
+<code><a href="CakeRequest.html">\CakeRequest</a></code><p>The information the user is submitting</p></div>
+<div class="subelement argument">
+<h4>$response</h4>
+<code><a href="CakeResponse.html">\CakeResponse</a></code><p>Not-used</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if user-supplied values are valid, false otherwise.</div>
 </div></div>
-</div>
-<a id="method_make_hash"></a><div class="element clickable method public method_make_hash" data-toggle="collapse" data-target=".method_make_hash .collapse" title="public">
-<h2>make_hash()
-        </h2>
-<pre>make_hash($salt, $pass) </pre>
-<div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$salt</h4></div>
-<div class="subelement argument"><h4>$pass</h4></div>
-</div></div>
-</div>
-<a id="method_make_salt"></a><div class="element clickable method public method_make_salt" data-toggle="collapse" data-target=".method_make_salt .collapse" title="public">
-<h2>make_salt()
-        </h2>
-<pre>make_salt() </pre>
-<div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 </div>
 </div>
@@ -129,7 +117,7 @@
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-08T10:58:59Z.<br></footer></div>
+            generated on 2013-12-10T20:38:34Z.<br></footer></div>
 </div>
 </body>
 </html>
