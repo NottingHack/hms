@@ -25,6 +25,12 @@
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
 <li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
+<li><a href="../packages/app.Lib.Automation.html"><i class="icon-folder-open"></i> app.Lib.Automation</a></li>
+<li><a href="../packages/app.Lib.AutomationDriver.html"><i class="icon-folder-open"></i> app.Lib.AutomationDriver</a></li>
+<li><a href="../packages/app.Lib.CsvReader.html"><i class="icon-folder-open"></i> app.Lib.CsvReader</a></li>
+<li><a href="../packages/app.Lib.Error.Exception.html"><i class="icon-folder-open"></i> app.Lib.Error.Exception</a></li>
+<li><a href="../packages/app.Lib.Krb.html"><i class="icon-folder-open"></i> app.Lib.Krb</a></li>
+<li><a href="../packages/app.Lib.MailChimp.html"><i class="icon-folder-open"></i> app.Lib.MailChimp</a></li>
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
 <li><a href="../packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
@@ -39,7 +45,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">486</span></a></li>
+                <span class="label label-info">383</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -75,14 +81,13 @@ to view the emails that have been sent to a member.">EmailRecordsController</a><
 edited, and registered.">MembersController</a></li>
 <li><a href="#MemberVoiceAppController" title="Functions and properties for all controllers in the plugin">MemberVoiceAppController</a></li>
 <li><a href="#NavHelper" title="Application helper">NavHelper</a></li>
-<li><a href="#krb5_auth" title="">krb5_auth</a></li>
 <li><a href="#StatusController" title="Controller to handle Status functionality, currently just shows a list of statuses.">StatusController</a></li>
 <li><a href="#GroupsMember" title="Model for the table that defines the HABTM relationship between Group and Member">GroupsMember</a></li>
 <li><a href="#CsvComponent" title="A wrapper around a CsvReader to make it a Component that can be
 used by Controllers or other Components.">CsvComponent</a></li>
 <li><a href="#MemberVoiceCategory" title="Model for all Ideas in MemberVoice">MemberVoiceCategory</a></li>
 <li><a href="#Pin" title="Model for all pin data">Pin</a></li>
-<li><a href="#HmsAutomationDriverTest" title="">HmsAutomationDriverTest</a></li>
+<li><a href="#HmsAutomationDriverTest" title="Utility functions for acceptance tests.">HmsAutomationDriverTest</a></li>
 <li><a href="#AppShell" title="Application Shell">AppShell</a></li>
 <li><a href="#Member" title="Model for all member data">Member</a></li>
 <li><a href="#Status" title="Model for all member status data">Status</a></li>
@@ -94,8 +99,8 @@ used by Controllers or other Components.">CsvComponent</a></li>
 <li><a href="#AppHelper" title="Application helper">AppHelper</a></li>
 <li><a href="#FileUpload" title="Model to provide validation for a file upload form/view.">FileUpload</a></li>
 <li><a href="#MemberVoiceAppModel" title="Application model for Cake.">MemberVoiceAppModel</a></li>
-<li><a href="#NotAuthorizedException" title="">NotAuthorizedException</a></li>
-<li><a href="#CsvReader" title="">CsvReader</a></li>
+<li><a href="#NotAuthorizedException" title="An exception thrown by certain Member methods if they are called on a with data that is invalid from an auth point of view.">NotAuthorizedException</a></li>
+<li><a href="#CsvReader" title="Class to handle reading CSV files. Warning, reads entire file in to memory.">CsvReader</a></li>
 <li><a href="#BankStatementComponent" title="BankStatementComponent is a component to handle parsing of bank statement .csv files.">BankStatementComponent</a></li>
 <li><a href="#MailinglistHelper" title="Application helper">MailinglistHelper</a></li>
 <li><a href="#PagesController" title="Static content controller">PagesController</a></li>
@@ -122,15 +127,17 @@ HmsAuthorize doesn't discard the CakeRequest object, as it is used in the
 controller instead of $this-&gt;request.">HmsAuthorize</a></li>
 <li><a href="#CurrencyHelper" title="Application helper">CurrencyHelper</a></li>
 <li><a href="#HmsAuthenticate" title="HMS Authenticate.">HmsAuthenticate</a></li>
-<li><a href="#MCAPI" title="">MCAPI</a></li>
-<li><a href="#AutomationDriver" title="">AutomationDriver</a></li>
+<li><a href="#MCAPI" title="Dummy class that pretends to access the MailChimp API
+but actually accesses a local table.">MCAPI</a></li>
+<li><a href="#AutomationDriver" title="A wrapper around Selenium to communicate with HMS.">AutomationDriver</a></li>
 <li><a href="#MemberVoiceIdeasController" title="Controller for Ideas in MemberVoice">MemberVoiceIdeasController</a></li>
 <li><a href="#MemberVoiceComment" title="Model for all Comments in MemberVoice">MemberVoiceComment</a></li>
-<li><a href="#InvalidStatusException" title="">InvalidStatusException</a></li>
-<li><a href="#AutomationDriverTest" title="">AutomationDriverTest</a></li>
+<li><a href="#InvalidStatusException" title="An exception thrown by certain Member methods if they are called on a member id who has the wrong status.">InvalidStatusException</a></li>
+<li><a href="#AutomationDriverTest" title="A base class for CakePHP tests that use AutomationDriver.">AutomationDriverTest</a></li>
 <li><a href="#Group" title="Model for all group data">Group</a></li>
 <li><a href="#MemberVoiceCommentsController" title="Controller for Comments.">MemberVoiceCommentsController</a></li>
 <li><a href="#MemberVoiceIdea" title="Model for all Ideas in MemberVoice">MemberVoiceIdea</a></li>
+<li><a href="#Krb5Auth" title="Dummy KrbAuth implementation for development.">Krb5Auth</a></li>
 </ul>
 </div>
 <div class="span8 namespace-contents"></div>
@@ -139,7 +146,7 @@ controller instead of $this-&gt;request.">HmsAuthorize</a></li>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-10T23:17:13Z.<br></footer></div>
+            generated on 2013-12-11T22:28:41Z.<br></footer></div>
 </div>
 </body>
 </html>

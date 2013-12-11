@@ -22,7 +22,7 @@
 /dev/setup/lib/sql/mailinglists_data.development.sql
 /dev/setup/lib/sql/mailinglist_subscriptions_data.development.sql
 /dev/setup/lib/sql/hms_emails_data.development.sql
-app/Lib/Krb/krb5_auth.php
+app/Lib/Krb/krb5Auth.php
 app/Lib/MailChimp/MCAPI.php
 docs/parsed
 CodeSnifferReport.txt

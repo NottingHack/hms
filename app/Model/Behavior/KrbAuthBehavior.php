@@ -4,7 +4,7 @@
 
 	App::uses('PhpReader', 'Configure');
 	App::uses('Component', 'Controller');
-	App::uses('krb5_auth', 'Lib/Krb');
+	App::uses('krb5Auth', 'Lib/Krb');
 
 	//! Behaviour that allows a model access to the KrbAuth interface.
 	class KrbAuthBehavior extends ModelBehavior
@@ -22,7 +22,7 @@
 			Configure::config('default', new PhpReader());
 			Configure::load('krb', 'default');
 
-			$this->krbObj = new krb5_auth(Configure::read('krb_username'), Configure::read('krb_tab'), Configure::read('krb_relm'));
+			$this->krbObj = new krb5Auth(Configure::read('krb_username'), Configure::read('krb_tab'), Configure::read('krb_relm'));
 		}
 
 		//! Check to see if the password is correct.
@@ -34,7 +34,7 @@
 		*/
 		public function krbCheckPassword(Model $model, $username, $password)
 		{
-			return $this->krbObj->check_password($username, $password);
+			return $this->krbObj->checkPassword($username, $password);
 		}
 
 		//! Add a new user to the KrbAuth system.
@@ -46,7 +46,7 @@
 		*/
 		public function krbAddUser(Model $model, $username, $password)
 		{
-			return $this->krbObj->add_user($username, $password);
+			return $this->krbObj->addUser($username, $password);
 		}
 
 		//! Delete an existing user from the KrbAuth system.
@@ -57,7 +57,7 @@
 		*/
 		public function krbDeleteUser(Model $model, $username)
 		{
-			return $this->krbObj->delete_user($username);
+			return $this->krbObj->deleteUser($username);
 		}
 
 		//! Update the users password.
@@ -69,7 +69,7 @@
 		*/
 		public function krbChangePassword(Model $model, $username, $newPass)
 		{
-			return $this->krbObj->change_password($username, $newPass);
+			return $this->krbObj->changePassword($username, $newPass);
 		}
 
 		//! Detect if a user exists.
@@ -80,7 +80,7 @@
 		*/
 		public function krbUserExists(Model $model, $username)
 		{
-			return $this->krbObj->user_exists($username);
+			return $this->krbObj->userExists($username);
 		}
 	}
 

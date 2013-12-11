@@ -25,6 +25,12 @@
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
 <li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
+<li><a href="../packages/app.Lib.Automation.html"><i class="icon-folder-open"></i> app.Lib.Automation</a></li>
+<li><a href="../packages/app.Lib.AutomationDriver.html"><i class="icon-folder-open"></i> app.Lib.AutomationDriver</a></li>
+<li><a href="../packages/app.Lib.CsvReader.html"><i class="icon-folder-open"></i> app.Lib.CsvReader</a></li>
+<li><a href="../packages/app.Lib.Error.Exception.html"><i class="icon-folder-open"></i> app.Lib.Error.Exception</a></li>
+<li><a href="../packages/app.Lib.Krb.html"><i class="icon-folder-open"></i> app.Lib.Krb</a></li>
+<li><a href="../packages/app.Lib.MailChimp.html"><i class="icon-folder-open"></i> app.Lib.MailChimp</a></li>
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
 <li><a href="../packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
@@ -39,7 +45,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">486</span></a></li>
+                <span class="label label-info">383</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -69,17 +75,17 @@
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_getLine" title="getLine() :: "><span class="description">getLine()
-        </span><pre>getLine()</pre></a></li>
-<li class="method public "><a href="#method_getNumLines" title="getNumLines() :: "><span class="description">getNumLines()
-        </span><pre>getNumLines()</pre></a></li>
-<li class="method public "><a href="#method_readFile" title="readFile() :: "><span class="description">readFile()
-        </span><pre>readFile()</pre></a></li>
+<li class="method public "><a href="#method_getLine" title="getLine() :: Get the line at index."><span class="description">Get the line at index.</span><pre>getLine()</pre></a></li>
+<li class="method public "><a href="#method_getNumLines" title="getNumLines() :: Get the number of __lines available."><span class="description">Get the number of __lines available.</span><pre>getNumLines()</pre></a></li>
+<li class="method public "><a href="#method_readFile" title="readFile() :: Attempt to read a .csv file"><span class="description">Attempt to read a .csv file</span><pre>readFile()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
 <i title="Properties" class="icon-custom icon-property"></i> Properties
-                    <ul><li class="property public "><a href="#property_lines" title="$lines() :: "><span class="description"></span><pre>$lines</pre></a></li></ul>
+                    <ul></ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul><li class="property private "><a href="#property___lines" title="$__lines() :: Array of lines found in the file."><span class="description"></span><pre>$__lines</pre></a></li></ul>
 </li>
 </ul>
 </div>
@@ -93,45 +99,57 @@
 </li>
 </ul>
 <div class="element class">
-<p class="short_description"></p>
+<p class="short_description">Class to handle reading CSV files. Warning, reads entire file in to memory.</p>
 <div class="details">
 <div class="long_description"></div>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_getLine"></a><div class="element clickable method public method_getLine" data-toggle="collapse" data-target=".method_getLine .collapse" title="public">
-<h2>getLine()
-        </h2>
-<pre>getLine($index) </pre>
+<h2>Get the line at index.</h2>
+<pre>getLine(int $index) : mixed</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$index</h4></div>
+<div class="subelement argument">
+<h4>$index</h4>
+<code>int</code><p>The index of the line to retrieve.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed</code>An array of line data if index is valid, otherwise null.</div>
 </div></div>
 </div>
 <a id="method_getNumLines"></a><div class="element clickable method public method_getNumLines" data-toggle="collapse" data-target=".method_getNumLines .collapse" title="public">
-<h2>getNumLines()
-        </h2>
-<pre>getNumLines() </pre>
+<h2>Get the number of __lines available.</h2>
+<pre>getNumLines() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>The number of __lines available.</div>
+</div></div>
 </div>
 <a id="method_readFile"></a><div class="element clickable method public method_readFile" data-toggle="collapse" data-target=".method_readFile .collapse" title="public">
-<h2>readFile()
-        </h2>
-<pre>readFile($filePath) </pre>
+<h2>Attempt to read a .csv file</h2>
+<pre>readFile(string $filePath) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$filePath</h4></div>
+<div class="subelement argument">
+<h4>$filePath</h4>
+<code>string</code><p>The path to look for the file.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if file was opened successfully, false otherwise.</div>
 </div></div>
 </div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
-<a id="property_lines"> </a><div class="element clickable property public property_lines" data-toggle="collapse" data-target=".property_lines .collapse" title="public">
-<h2>$lines</h2>
-<pre>$lines </pre>
+<a id="property___lines"> </a><div class="element clickable property private property___lines" data-toggle="collapse" data-target=".property___lines .collapse" title="private">
+<h2>Array of lines found in the file.</h2>
+<pre>$__lines : array</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>array()</code></div>
@@ -147,7 +165,7 @@
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-10T23:17:13Z.<br></footer></div>
+            generated on 2013-12-11T22:28:41Z.<br></footer></div>
 </div>
 </body>
 </html>

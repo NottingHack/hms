@@ -259,7 +259,7 @@ will inherit them.</long-description>
     </parse_markers>
     <source>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</source>
   </file>
-  <file path="app\Controller\MembersController.php" generated-path="app.Controller.MembersController.html" hash="174be346d12fe9c1a09d87ce90078600" package="app.Controller">
+  <file path="app\Controller\MembersController.php" generated-path="app.Controller.MembersController.html" hash="44f81f5392b44082cf218a972166799d" package="app.Controller">
     <docblock line="0">
       <description>PHP 5</description>
       <long-description>Copyright (C) HMS Team
@@ -856,13 +856,13 @@ will inherit them.</long-description>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1144" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1142" package="app.Controller">
         <name>uploadCsv</name>
         <full_name>\MembersController::uploadCsv()</full_name>
-        <docblock line="1144">
+        <docblock line="1142">
           <description>Upload a .csv file of bank transactions and look for members to approve.</description>
           <long-description></long-description>
-          <tag name="param" line="1144" description="&lt;p&gt;If set then look here in the session for a list of account id's to approve.&lt;/p&gt;" type="string" variable="$guid">
+          <tag name="param" line="1142" description="&lt;p&gt;If set then look here in the session for a list of account id's to approve.&lt;/p&gt;" type="string" variable="$guid">
             <type>string</type>
           </tag>
         </docblock>
@@ -872,20 +872,20 @@ will inherit them.</long-description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1250" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="1248" package="app.Controller">
         <name>getMemberIdSessionKey</name>
         <full_name>\MembersController::getMemberIdSessionKey()</full_name>
-        <docblock line="1250">
+        <docblock line="1248">
           <description>Get the key used to store members ids in the session after uploading a csv.</description>
           <long-description></long-description>
-          <tag name="return" line="1250" description="The key to be used in the session." type="string">
+          <tag name="return" line="1248" description="The key to be used in the session." type="string">
             <type>string</type>
           </tag>
-          <tag name="link" line="1250" description="MemberController::uploadCsv" link="MemberController::uploadCsv"/>
+          <tag name="link" line="1248" description="MemberController::uploadCsv" link="MemberController::uploadCsv"/>
         </docblock>
       </method>
     </class>
-    <source>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</source>
+    <source>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</source>
   </file>
   <file path="plugins\MemberVoice\Controller\MemberVoiceAppController.php" generated-path="plugins.MemberVoice.Controller.MemberVoiceAppController.html" hash="da7ee770176d8d79cfa854c7226b4b76" package="Default">
     <docblock line="0">
@@ -1000,146 +1000,6 @@ will inherit them.</long-description>
       <error line="10" code="PPC:ERR-50008">No summary for method output()</error>
     </parse_markers>
     <source>eJx1Us1r2zAcPTuQ/+GtDZUNLU57KLSpXbJTTzuNXkoYmqPMYool9JGujP3vkyzZdQI5GNvv997v8z09q1bNZ/PZWqnHR2eYyYn/fGFCMU2uQV45ey/Tb7EKzEusv+Pt9r5cPpR3y9u7Db7RQ2SA/eHGGlgJzbqtByiERyB3/t39NuCdhzreMLzTj/msEdSYI731OoOxBfwNJTPlfgreYNH2oEEFqjX9yMmL3YvU10Daua6xXHaQzipn80VfufAEnyvL+C5vpOtGHDWWIRijGWtaCfK05Qf0zVUXtM9mLmqymjKcGAgdPcRgH95JzWjTIuUHNei/CsQCg17wT012ia+Oiy1syyBVXy9OGMOLAatAUhdhDm4MS3O8EacF2RRFDKZSU+GUllL8Sw0Jw87K4p5BGtlZLYXwNkBVD9km6MabJa5qSkjIBsXqTO4fe6Z/sXyArweloprujR/puNm0kNbffW3txArFmb30R/JpcHWFYwhfwjpPNzZm/uRVJ8KT9YV7LmzLzU0d7HhTB/JQ3npLh91M5hsrFOP9kyfKZIqYfOq20okT/5XeogkKjfinlzzX89l/weAL9Q==</source>
-  </file>
-  <file path="app\Lib\Krb\krb5_auth.php" generated-path="app.Lib.Krb.krb5_auth.html" hash="d40704a9750c5884a99a37cf9a389a5e" package="Default">
-    <docblock line="0">
-      <description></description>
-      <long-description></long-description>
-    </docblock>
-    <class final="false" abstract="false" namespace="" line="3" package="Default">
-      <extends/>
-      <name>krb5_auth</name>
-      <full_name>\krb5_auth</full_name>
-      <docblock line="3">
-        <description></description>
-        <long-description></long-description>
-      </docblock>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="5" package="Default">
-        <name>__construct</name>
-        <full_name>\krb5_auth::__construct()</full_name>
-        <docblock line="5">
-          <description></description>
-          <long-description></long-description>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$krb_username</name>
-          <default></default>
-          <type/>
-        </argument>
-        <argument line="0" by_reference="false">
-          <name>$keytab</name>
-          <default></default>
-          <type/>
-        </argument>
-        <argument line="0" by_reference="false">
-          <name>$realm</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="9" package="Default">
-        <name>add_user</name>
-        <full_name>\krb5_auth::add_user()</full_name>
-        <docblock line="9">
-          <description></description>
-          <long-description></long-description>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$username</name>
-          <default></default>
-          <type/>
-        </argument>
-        <argument line="0" by_reference="false">
-          <name>$password</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="14" package="Default">
-        <name>delete_user</name>
-        <full_name>\krb5_auth::delete_user()</full_name>
-        <docblock line="14">
-          <description></description>
-          <long-description></long-description>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$username</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="19" package="Default">
-        <name>check_password</name>
-        <full_name>\krb5_auth::check_password()</full_name>
-        <docblock line="19">
-          <description></description>
-          <long-description></long-description>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$username</name>
-          <default></default>
-          <type/>
-        </argument>
-        <argument line="0" by_reference="false">
-          <name>$password</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="24" package="Default">
-        <name>change_password</name>
-        <full_name>\krb5_auth::change_password()</full_name>
-        <docblock line="24">
-          <description></description>
-          <long-description></long-description>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$username</name>
-          <default></default>
-          <type/>
-        </argument>
-        <argument line="0" by_reference="false">
-          <name>$newpassword</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="29" package="Default">
-        <name>user_exists</name>
-        <full_name>\krb5_auth::user_exists()</full_name>
-        <docblock line="29">
-          <description></description>
-          <long-description></long-description>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$username</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-    </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="3" code="PPC:ERR-50005">No summary for class \krb5_auth</error>
-      <error line="5" code="PPC:ERR-50015">Argument $krb_username is missing from the Docblock of __construct()</error>
-      <error line="5" code="PPC:ERR-50015">Argument $keytab is missing from the Docblock of __construct()</error>
-      <error line="5" code="PPC:ERR-50015">Argument $realm is missing from the Docblock of __construct()</error>
-      <error line="5" code="PPC:ERR-50008">No summary for method __construct()</error>
-      <error line="9" code="PPC:ERR-50015">Argument $username is missing from the Docblock of add_user()</error>
-      <error line="9" code="PPC:ERR-50015">Argument $password is missing from the Docblock of add_user()</error>
-      <error line="9" code="PPC:ERR-50008">No summary for method add_user()</error>
-      <error line="14" code="PPC:ERR-50015">Argument $username is missing from the Docblock of delete_user()</error>
-      <error line="14" code="PPC:ERR-50008">No summary for method delete_user()</error>
-      <error line="19" code="PPC:ERR-50015">Argument $username is missing from the Docblock of check_password()</error>
-      <error line="19" code="PPC:ERR-50015">Argument $password is missing from the Docblock of check_password()</error>
-      <error line="19" code="PPC:ERR-50008">No summary for method check_password()</error>
-      <error line="24" code="PPC:ERR-50015">Argument $username is missing from the Docblock of change_password()</error>
-      <error line="24" code="PPC:ERR-50015">Argument $newpassword is missing from the Docblock of change_password()</error>
-      <error line="24" code="PPC:ERR-50008">No summary for method change_password()</error>
-      <error line="29" code="PPC:ERR-50015">Argument $username is missing from the Docblock of user_exists()</error>
-      <error line="29" code="PPC:ERR-50008">No summary for method user_exists()</error>
-    </parse_markers>
-    <source>eJyl0MEKwjAMBuB7oe+Qww4bePWk6KOUro1urOtGmzJF9u62E4dID0N7CDkkX356PI/NyBlnykjvoXP1XshADXD24AxgDLVpFVyCVdQOFoRQg/XkgqKyiNMieHRW9riDosM7yTo2DqXpK0j7CzKnktOk1gtQFh/MGINMg9PVug/gkIKzEO/iYRVfL+dqNEj4Rf/hqQZVJ97Bfkubd6W9Yh62OG20c3KCBN5aT37zD8yQrPPpCb55oHg=</source>
   </file>
   <file path="app\Controller\StatusController.php" generated-path="app.Controller.StatusController.html" hash="971fa691b917fa57e2b3f3560c8e5245" package="app.Controller">
     <docblock line="0">
@@ -1583,40 +1443,47 @@ will inherit them.</long-description>
     </parse_markers>
     <source>eJzFVt9P40YQfjYS/8OgorOD0pDQeykccBFHK1SOIkjv+oY29iTeYq/d3TW56HT/e2dnbceB0IOHqoY4sWd25vvm1+670zItt7e2t4JxWR4eVgZNFNLPj0WCWdiH0P/oHbHO/t4e3WEP+C3MCg0iy6CUChJhBctWN3hfivhezBH8JcpywAtZuk/3OBPGwDUtxy8WVWKgcQ0k/RrQLYgLZSzcTsaT87vx2eTi0zkcw2h45Czu7++8g0kqDUOIhYIpAnFIGBoqq5cQVSVUysoMbIrkp5T0ktBir+9WqMK2i2wBGufSWCReJNTJwEGlqwvi/M/ri5vzD4TigFEwCMchFcbbJ1NCJYxHFZAVak4GnyDbZPtsfHV2fnnJ1n8i608IduG2lvrszrnP5D1mS9JA1VISsZUPxJeU4OaXiw/PE7u6+f3ykjy/3RTdXCy7gUKli+yxSZevsppmMoZdUpyIaYZkL6T1JjwK2OBtibGcLTkblhXIGikPuotLLXOhl7/hsl5+J5NNBkpdOD24J8XWjDNEmvAZCbCLPkcBPmI+Rc1u9vd23FfgX8FfBfGzyxKBuEqlXPrphyXO92hcDg0qw0BT8UCB5IDYVFgOOsk7trmwXfgaLh6DmRRERWgtllGtEIR+WQjHJysJXSH3xZXIkUWNWr+WUt5RzhUFx4tzFrsINRqOi5cxm5Bf97a32Gvdy3WG4ZPIJLWDLBToKkMzeAT/wcvxMXp3ucyso4fOFWao5jbdrEAonbuOMJyiXVDh0tQZ0f9Br7+unqMxNEw8L9dveWW4Gep1MOI2GB1AnApNVY/acPOFa4bWzK49hMYSz/+Kz+hf+dw6188xGr2CERVPoWiW2u/DDFWVo5Zx+HJgAmhNU4svCemqNjfDeXVQc/Hl0q/4bkzr7pZJC586Nafmca2r/t+wPsX2mtA+auFfkZqcJzxoKpgid/Op6WM/69jYe42W2plGnIXxBlUeXc0Mds1AX7NKxTwc5rUT6ryo5/S+8lT5Ac4qrSkwtO0IuL64cjNUwFtI5JwmqOe0KujhcMg1/TNdvJ4gVVoxmMhJ+yxyBIPgm2PZTPMOyUrJvyuEiOYv7yIydyklvy3YBY3lmI4mmPQagu3Qfy4KfqAveKBb4GfkY81U0Ox/ia/V/G+C+CR6fzD0JzEcU/0VJaTSSrdddRyfwud06RANBmw+2HVQj2HIEQqSgr+8nUZG5g8P1/Lllb/BIpW04Uaw6yj8eDKTFHWg0qYDEvWTL2v3rBLpYJtOtfPMHTQDnz31+O8Ehk1Btul04lUKfQLPNPr0KVxwvDXGhU7WUlNSP+acmV0/OS4SOoGg65NixnHxr91WHHt7fAwga7QrDtbyOy3ogDLRVChy5pWbbJkqjqkZZ1XWh5nIKLsFWdELWZ9CNqfQ+7vCxQ3jjlqEnUzKWSTNXT0AOhrw5k2HEUWst5Y2nw0foKiNZbDriqDddzkBHHwvDbpHBpovbWq8tQ0V1291Vzsd10r3/LdSWp/dLfyVgjsW3IkkQa+hqixrhJ5fsOJSF0ZUozN0joqYXw92jn0WmirtFhILmkpyn9OTfwAO3Gg2</source>
   </file>
-  <file path="app\Lib\AutomationDriver\HmsAutomationDriverTest.php" generated-path="app.Lib.AutomationDriver.HmsAutomationDriverTest.html" hash="ab3c249600c04ac26bf28fe7a7154214" package="Default">
+  <file path="app\Lib\AutomationDriver\HmsAutomationDriverTest.php" generated-path="app.Lib.AutomationDriver.HmsAutomationDriverTest.html" hash="aa820782ef498c18cd3a52b22e0e69be" package="app.Lib.Automation">
     <docblock line="0">
-      <description></description>
-      <long-description></long-description>
+      <description>Application level Controller</description>
+      <long-description>Application-wide logic.
+
+PHP 5
+
+Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</long-description>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Lib.Automation"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="5" package="Default">
+    <class final="false" abstract="false" namespace="" line="25" package="app.Lib.Automation">
       <extends>\AutomationDriverTest</extends>
       <name>HmsAutomationDriverTest</name>
       <full_name>\HmsAutomationDriverTest</full_name>
-      <docblock line="5">
-        <description></description>
+      <docblock line="25">
+        <description>Utility functions for acceptance tests.</description>
         <long-description></long-description>
       </docblock>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="7" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="31" package="app.Lib.Automation">
         <name>reigsterNewMember</name>
         <full_name>\HmsAutomationDriverTest::reigsterNewMember()</full_name>
-        <docblock line="7">
-          <description></description>
+        <docblock line="31">
+          <description>Register a new member.</description>
           <long-description></long-description>
+          <tag name="param" line="31" description="&lt;p&gt;E-mail address to register with.&lt;/p&gt;" type="string" variable="$email">
+            <type>string</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$email</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="5" code="PPC:ERR-50005">No summary for class \HmsAutomationDriverTest</error>
-      <error line="7" code="PPC:ERR-50015">Argument $email is missing from the Docblock of reigsterNewMember()</error>
-      <error line="7" code="PPC:ERR-50008">No summary for method reigsterNewMember()</error>
-    </parse_markers>
-    <source>eJyVktFKwzAUhq832Duci0E7sNsDqB2Kw4lsF1KvJe3O2kCT1JPT6ZC9u0nWis55YUkhJN/J9/ekV/OmakbDgRuEr60kfDG6wDi6adkowdLoO5I7pAwtTx0bTS5HQ0cXtbAWlsqeAwHfGfXGwrlNV/zh3kHT5rUsYNvqwgNAKEvLSGt8W6HKkeIxKiHriYdDxWA2g3sD7EaFoALkykppmYIEGlFiIMdcSZukLiMSZ9RiDP3SSaQk1WInS8GYmaP3KZzo/JMLiJ61yGv0zh7z8x9uN/HeaQS+N/+U+8qlsGuzIDJkg3N15nSohAUMTCf66giJPDQEE98u2EqsN8ccx5iLsHz9d4YSeVGjQs23+4dN3PlDWdR9kvNk+wbBtPzN9cuSpNbd+yPubX95fdATqs2V5NjvQvccHHYIf+I8/QRoGNTn</source>
+    <source>eJyVkstu2zAQRdfWV8wigGWjllbd9OEmdY06aBwEqbIuKGksEaVIlhxZNYr8e0hKclzDXVQb05w798yDHz7pWkfpfB7BHG60FrxgxJUEgXsUsFKSjBICjYufSRYdLxGEqniRDNGHzQO8Hc4rpQ+GVzVBvJrBZvsdMmTNELzjBUqLJbSyRANZjbC9zcZrr3jEklsyPG89y4LawY4LtNC0lsAgMS6BXB7L1R6hONKkIucyVnT9GvDfSRlwrVnxk1UI/ce0Tu54nty0pJrQYBCJvqRBdFIkxDWRfpemXdclSrsr1RoHVqZKhySbNpwWw5/EDXrmLNMoigz+arnBH0oWzmf6ivxi+B5Nhpa8fDp7H427eSIuOB1g18qin8hOGWBFgZqYtyGXZJMAKASzFjaNvWQM+JtQlhYuBv8cgY9YuQW45TCQ2EGDTY4mGQZnWAPg1yMruMKGcQHrRfhhZWnQ0Um5JQ0OHae6r2yi29zN49iF0/DKa+6x2wZC3NvNXCWTSZrCV+Wt/KL7CgZX079S7fbndFdUc7tYuq7RUGZajGG8OmtysZRszytGmKkeOPYZz97A9EmyXKAnjjJ//ovsDp6aTMFt5//QPm/D7L1aG6OMDcTtBW+omQUMmh4zjMKwPEwC+1HvOIrSl9DXtw6XH/+Nr5DWAhuU9PlwW8YDOqRNQy+OkR00gmrphHNGWCytez7f8GDHVYX6ziRt7p5+7F2fo+cXnHRy5A==</source>
   </file>
   <file path="app\Console\Command\AppShell.php" generated-path="app.Console.Command.AppShell.html" hash="fb2289c8c0a440566f741aa6c8c3322e" package="Default">
     <docblock line="0">
@@ -3327,108 +3194,114 @@ will inherit them.</long-description>
     </parse_markers>
     <source>eJxNjs0KgkAYRdcNzDtcJHDpA5SJ6xDa1DZG/URpfj5mRhOid88Uou3hcO49FtyzFI1WIaAiU5O/uaGhkrlyLWnQHMm2AT/wkmKXZSi1hhs9oqo1BShPeBBHBGLyKtJi8VjrocF+VS6eumFGjsRM9+QgxZY5W/cMiD3BrHWrDMF1K/lOe6s0FPNfzkzXQH47kyPdTqdL8S1FcfoAeM1DjQ==</source>
   </file>
-  <file path="app\Lib\Error\Exception\NotAuthorizedException.php" generated-path="app.Lib.Error.Exception.NotAuthorizedException.html" hash="cf1288f0b4275b4cabcf464e0d971c03" package="Default">
+  <file path="app\Lib\Error\Exception\NotAuthorizedException.php" generated-path="app.Lib.Error.Exception.NotAuthorizedException.html" hash="cc7689e413666e288008a235a62a0494" package="app.Lib.Error.Exception">
     <docblock line="0">
-      <description></description>
-      <long-description></long-description>
+      <description>PHP 5</description>
+      <long-description>Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</long-description>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Lib.Error.Exception"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="7" package="Default">
+    <class final="false" abstract="false" namespace="" line="22" package="app.Lib.Error.Exception">
       <extends>\CakeException</extends>
       <name>NotAuthorizedException</name>
       <full_name>\NotAuthorizedException</full_name>
-      <docblock line="7">
-        <description></description>
-        <long-description></long-description>
+      <docblock line="22">
+        <description>An exception thrown by certain Member methods if they are called on a with data that is invalid from an auth point of view.</description>
+        <long-description>This is it's own exception as such results are usually handled differently from the calling code, for example the
+displaying a flash message if the Member method returned true or false but redirecting if this exception is thrown.</long-description>
       </docblock>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="9" package="Default">
-        <name>__construct</name>
-        <full_name>\NotAuthorizedException::__construct()</full_name>
-        <docblock line="9">
-          <description></description>
-          <long-description></long-description>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$message</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
     </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="7" code="PPC:ERR-50005">No summary for class \NotAuthorizedException</error>
-      <error line="9" code="PPC:ERR-50015">Argument $message is missing from the Docblock of __construct()</error>
-      <error line="9" code="PPC:ERR-50008">No summary for method __construct()</error>
-    </parse_markers>
-    <source>eJxtkEFLAzEQhc8t9D+MIKhF7L0WSxGPevJeZpNJE8wmIZm0XcX/7mQtLYKwG0jmm3nvzWqdbJpNJ4vFFWwC0FFRYhcDsM3xEKAbQFFmdAFeqe8oQ09soy7gjDA0AGYChd6TBmlDODi2oJFRysjghAx79E6DybEHFKYKkaILDNHA3tHhoTmYyzF5t61BPr4p0AxcHGGBUpWFTKV6LqNwLVWkB7AYdHOgnTGUKbC8jXJicXTnwg5U1HQPJmYZin3y1KpNVLuSPA6NQTAei5WUpeCOTin/ZhcHXHMQOc6VQOYZ9IWgqywl7TIpbrPGXslyiSCX3722wPOFHErUCrxF3shSYnafpF/OOB2Zgqz6GT/o/CpNX810qp13CkwNaoS3WxVDEUeKb69P9u8aONKThG0ty+W/2GNDvuWQfzZdP/0AiFq0+Q==</source>
+    <source>eJxVUsFu2zAMvecreFtbbPZpl2HAWgQFOqAZii0/QFt0RFSWBImK5w3791GO06SCDhb5yMf36K/foo2b9u5uA/XCy9MLfF6/tyHOiQ9W4GZ7C0+7X7AnHNfkM/fkMxko3lCCvSXYfd+fwxXxkwxnSdwV4eAzhAEGdpRhLFkgkSB7EK3DLhwJ+jc2H0S7NCvR/SVRz9UYcB+xf8UDwelgjM0zd81jSiE1j797ipV5QbrTXCvyalK4sSLxS9tO09SEqKFQkrKHdGjXotyOLJ/WR6N+3WrLdrO6Bg8e6MylelKYPHQz9JQWhTsaOzVoJLHBZOChap4Bk0pG59RBLUOYWCwYFNQ0CrAi/REdGxhSGAEVUxQRA3upVh6ZprNFe1vheuWD2jxdz4MZcumt2p2Lk7zQllyUeAaL3lR+w8NAibxobCGrS6mzsT/oWgx9hCEkbYpjdFSzlVSXGx3OFYMwOMxWNeZc13HS+F55XXhJXukkFQLtN6BT+/Xv0JThRL3UXkutarlI0MfJ1WaxvVeqDD+CPKgfIfEfMm+r1iohry5v8ZUu0b+bzb//cun5+w==</source>
   </file>
-  <file path="app\Lib\CsvReader\CsvReader.php" generated-path="app.Lib.CsvReader.CsvReader.html" hash="da804d767d6ac477d417410f8da7aa18" package="Default">
+  <file path="app\Lib\CsvReader\CsvReader.php" generated-path="app.Lib.CsvReader.CsvReader.html" hash="d7366cb3beef01f565b428be856bdfa2" package="app.Lib.CsvReader">
     <docblock line="0">
-      <description></description>
-      <long-description></long-description>
+      <description>Application level Controller</description>
+      <long-description>Application-wide logic.
+
+PHP 5
+
+Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</long-description>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Lib.CsvReader"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="4" package="Default">
+    <class final="false" abstract="false" namespace="" line="22" package="app.Lib.CsvReader">
       <extends/>
       <name>CsvReader</name>
       <full_name>\CsvReader</full_name>
-      <docblock line="4">
-        <description></description>
+      <docblock line="22">
+        <description>Class to handle reading CSV files. Warning, reads entire file in to memory.</description>
         <long-description></long-description>
       </docblock>
-      <property static="false" visibility="public" line="7" namespace="" package="Default">
-        <name>$lines</name>
+      <property static="false" visibility="private" line="28" namespace="" package="app.Lib.CsvReader">
+        <name>$__lines</name>
         <default>array()</default>
-        <docblock line="7">
-          <description></description>
+        <docblock line="28">
+          <description>Array of lines found in the file.</description>
           <long-description></long-description>
+          <tag name="var" line="28" description="" type="array" variable="">
+            <type>array</type>
+          </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="14" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="36" package="app.Lib.CsvReader">
         <name>readFile</name>
         <full_name>\CsvReader::readFile()</full_name>
-        <docblock line="14">
-          <description></description>
+        <docblock line="36">
+          <description>Attempt to read a .csv file</description>
           <long-description></long-description>
+          <tag name="param" line="36" description="&lt;p&gt;The path to look for the file.&lt;/p&gt;" type="string" variable="$filePath">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="36" description="True if file was opened successfully, false otherwise." type="bool">
+            <type>bool</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$filePath</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="53" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="70" package="app.Lib.CsvReader">
         <name>getNumLines</name>
         <full_name>\CsvReader::getNumLines()</full_name>
-        <docblock line="53">
-          <description></description>
+        <docblock line="70">
+          <description>Get the number of __lines available.</description>
           <long-description></long-description>
+          <tag name="return" line="70" description="The number of __lines available." type="int">
+            <type>int</type>
+          </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="63" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="80" package="app.Lib.CsvReader">
         <name>getLine</name>
         <full_name>\CsvReader::getLine()</full_name>
-        <docblock line="63">
-          <description></description>
+        <docblock line="80">
+          <description>Get the line at index.</description>
           <long-description></long-description>
+          <tag name="param" line="80" description="&lt;p&gt;The index of the line to retrieve.&lt;/p&gt;" type="int" variable="$index">
+            <type>int</type>
+          </tag>
+          <tag name="return" line="80" description="An array of line data if index is valid, otherwise null." type="mixed">
+            <type>mixed</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$index</name>
           <default></default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="4" code="PPC:ERR-50005">No summary for class \CsvReader</error>
-      <error line="7" code="PPC:ERR-50007">No summary for property $lines</error>
-      <error line="14" code="PPC:ERR-50015">Argument $filePath is missing from the Docblock of readFile()</error>
-      <error line="14" code="PPC:ERR-50008">No summary for method readFile()</error>
-      <error line="53" code="PPC:ERR-50008">No summary for method getNumLines()</error>
-      <error line="63" code="PPC:ERR-50015">Argument $index is missing from the Docblock of getLine()</error>
-      <error line="63" code="PPC:ERR-50008">No summary for method getLine()</error>
-    </parse_markers>
-    <source>eJyNU9tq20AQfVYg/zACk0hBtfvuS2pM0xZCKU1oH0oJa2llLVntit2VHBPy75292JaCG/JgW9bMmXNm5szsuqma87Pzs2gyiWHFidZgJFREFJyCoqRgYgOru19QMk71GH4TJfBV5mIaqDBMURcEJiy0prVUuzFWzF21le5+YipV+ObZMUUdUTDiTFANcyBKkV2STq2AGSztP5Al+HApW1G4wpUn8QWs1qUxtG6MpbRSgMA4111IwpSr2P5EnxqiSA3aKNvIyIZ/EFPBPRZs7APiuZSPSKUOLGMPVdR0hMNaSg73qsUOS9/plmiQDRW0AN3mOdW6bDnfZVASrilIrKO2TPs6VxP73bRrznIoW5EbJoXTfIO1koOk1KY9O2ZWJjHTD150L8OlhJwI1bVKeMqpe/XipxM5wFe/wjk2hkqPRTK4VJfpNKQi0yB7Dh/fS2Iqpj8sXq8xRLeVnVOSjApiiBWxoQbX0ydLU4iR72Z5e/c5hT7pZALfNkKir9aciEfvBR+yel3JeA4CZ+7F7oGRU/HQtLpK+voycKDUd2Bb6DWCJXO0mRkgUpi9fxRlzqWmg972cwggg+5xmJejgb9Q4wwn2npN1dHzpCOMk3Vw4cHHwYxMGOfdt1GnPYc7+N7WtzY/6bktaDwxhP9JtlEgBsUU9Gko05+bVTlyUSfWP6HWA9hdLdqbdq+OrWZPeFVL4Q217w/czvH8fCWmAXNZkR1Pzbnh7d5t44lXNby1KEhd4Mrh4sKvO7ybQZjIYHinjNGf3B+P/jv0SUi0SveTtZ/rxT+uXYtl</source>
+    <source>eJyFVE1P20AQPSe/YpAi6qBg99JLIRQUqQUJKgRRe6gqNLY38Yr1rrW7dogq/ntnP+IkKC0+RM7OzJv33sz6/EtTNcPs5GQIJ3DVNIIXaLmSIFjHBMyUtFoJwTTF36ScrnjJQKglL9IYvb++h0/xfaaatebLykIyG8P13SPMGdYxeMsLJg0roZUl0zCvGNzdzDfHLuOBldxYzfPW9TKgFrDgghmoW2NBM4tcgqU6zFXHoOi7SWUJZcPochtwzw4NuGyweMYlg/Bg06S3PE9npntgWHrFcCkCo5izwxGSytrmc5atVqtUNXSkWk19lV5mschkNben8U9KPo8JMhtu3J4JNAasggplKRhpwpLLJcwefwSpKfxELelo4mMGmLRcMx8Ep15BzWql16nHLTxeTx/+9J2utMa1c1BwSQ4uFLkO0T4HlnqpHWpAl+nRBo3mHVoGo6enUDYN0WR8tgW2ltWNdUwcQ0BIC9N5TBeOLmuswY2StI1c6B5t5UfeuBeqFUo9Eyv9hhANudUScqUEzHVLmsMOwAppH8hy2h/TFgUzZtEKsZ7AAgVNRhGMXnHD0qikzWkIsGhl4VfbUf1KOEnPZkxmDQYEnxxx8xS47kRDeBD5+CZndPA6pB+fdR0mOCURRGtbOYEP+oPzK4Dv5U7h439xbcXN6cUh8weDVeVsSJJRiRZd2yWzZPxuAyJ9RD08aOyTZXCzlIo2KBconyFiu5Bn58GOpiDJzFgy8F2fmtZUyT6jCfj8sSNMjCNrh1PQetk32WM4f0fvohDKsD0FXmpMtjR/yn3tV+8bs35dZFvntOy03BursEMuMI9btLtJXFq/d+/UHFgZ8vd7W9+63CSoiJAHxR4k6kKAlkiU7KX/PIXb4YiNfMDzC29Er6/zF4zWkj7Ke3ej5i90Ca5k2I7NFQc/SZpFAOIGOhS8nGxvhp/xv7U6oUkgtL0akeAFDRKOjzd8zyGK37Nof9L79vwKlb/70ccsR8k79/oXJqQJ7A==</source>
   </file>
   <file path="app\Controller\Component\BankStatementComponent.php" generated-path="app.Controller.Component.BankStatementComponent.html" hash="eb250fcdc1061feea7dce44ca09d2619" package="app.Controller.Component">
     <docblock line="0">
@@ -4421,7 +4294,7 @@ to perform the action the URL is pointing at.</description>
     </class>
     <source>eJy1Vclu2zAUPMdf8Q4GJAeyfOolbdIYQdEUSIqgdc4BLdEWEYokSMquW+Tf+7iIllM7hxY1fOAyfMvMkPrwUTVqNDs/H4H7w8PtA7yL4xupdpqtGwv5zQRu77/DgpI2bt6xigpDa+hETTUsGgr3Xxb9skN8ozUzVrNlZ5kUBuQKVoxTA21nLGhqCRNg8RxZyg2FKmUT0mKUMia63m+436AMuFakeiZrCuFHlCpvpLBack41DlslBRXWQ3koLEIHpULeWKsuZrPtdltKhUuy05he6vUsHjKzltlpnJRI2ARDzkajuVIXFx3u51lKlhWQ7YvIJu9Ho0gvfCWbBAP6A8kxYCVUDa2ega2AgCAbtiaOLuBM4KJx5wjncotM58tdADOxdnjHXdVp7cJhFRrhQDrbSM1+IhxDK6pXUrfA7KSAYSgXHcEaya/rgCW4iLpsG1Y1UBEvjYAlRaWcwgiKcm0Y3ZaegIoTY163ZRFuYL/yK/XvPOJzoBOqfh8paLDuNMd0nKFJpCi9bhuisU5Ndj7jmeqWqAOMB+cvw34O2Rybf7SMZ+Boj1nvYsa+dVJ5Ox6PrtmGWArjp6cInwd0SjIIPK9rTxrq5OgTvnctCAfDLI3+1KQFdwlQsbFFgCcB74XiZDf1CyiQp9UFKo+c6jT3hx6/3bk23oIGPRw4jHosmEZ2vD4Qc8tsUx5wuuqEb9ZZ4lNsJfdFF76Kok9wCVk2QV3PzjwnT6ozDQJRxunVa+KKJI4LlMHlFcSQGYYMcx8787HDQkgzcSqevez5tpa2ynqyE/UFNsI5uoXvXHvBzfFu/HknXJjBtfCPT+jZRoYRriQT1vFJ7DGS/07FKj0J/qwgLe3VHGwlwTRdUe1eh2OxYsmLw+pPn/MKAIz9LPgjDpGLpZsYE96APSH/117JVvvei76vIhWa7twR56HEveX6Wz+9YmaepM7fjD0JUf7NwPsE0baDhFlIGDb65FlIHhbD+LTx0fkD83+mNvJ99DXzauEntdMiyr04DU5mHX48Toi1pnZ+wEcemIu5TpAW7u3Lb8tlvAc=</source>
   </file>
-  <file path="app\Model\Behavior\KrbAuthBehavior.php" generated-path="app.Model.Behavior.KrbAuthBehavior.html" hash="654f83b9cb5dcf06933ec9673581e629" package="Default">
+  <file path="app\Model\Behavior\KrbAuthBehavior.php" generated-path="app.Model.Behavior.KrbAuthBehavior.html" hash="25b389a49b1404dae9f74b0d9ac90405" package="Default">
     <docblock line="0">
       <description></description>
       <long-description></long-description>
@@ -4586,7 +4459,7 @@ to perform the action the URL is pointing at.</description>
       <error line="81" code="PPC:ERR-50015">Argument $username is missing from the Docblock of krbUserExists()</error>
       <error line="81" code="PPC:ERR-50008">No summary for method krbUserExists()</error>
     </parse_markers>
-    <source>eJzFVU1v2zAMPadA/wOLBUhaJPEwYJf0a1m60zasGNpzIMtM7MaWDEluFgz776Mk23Vdt2uHoD0EcaxH6pHvkTk5z+N8f29/rzfL8+m00KiHg+8ywvQzxuw2kWowAv9icHjcBl7G+U9kETrQXIplsioUOmATNpdZLgUKU8KMkmlKQW3cWoUfF6wwscV9S8LgqwqrW4PgAEpKhQITMwMsTeVGA4PM0gPGOWoNRtIpAoXOKBMkwqBaMo4TSsJTRojyqCoQ8JdBEWm4Vzahf9Onl6vklhmEPpH7Ed7AKYgiTY8hCE4O6ktkeIPcTBxRx/SS7pQqo9sTk7AUNJoin7jTowP71fuUM8Uyfyf0fQVXxNs/bXCgEEJMxAqYMYzHGFFlk2YoU4ptoU+pDcE0zMQW6h85FUohSyUz1w6XtgzXDGJj8mkQhFKuJ5ytkUwwkWoVfJi8D1AEDq2DsOyFnsQmS99xhcxmH7NxdTLmJELI+NpmPgpcw4owTTgsC8FNIoUvfdisc9QgferLGB4e2ljX8V5tpOmUu8fhIMIlK1LrH4EbqG1HYcftkFSyyFnJmqiKK03U6/VNnOjx2Z2YlK623bCRhmr1aRbkTSVYRrYeQSfAsPDRM4VpNihZ/rnzxzxGvrZW1YiQLJ1EVrKNVBEkGrhUyjvqZY55zCvaKGulflWLC6x/EA9uCXWG1LSumhxbIQrNLdmc/EScVOFq6qgHhjRudO1FkWVb+94Qllq3ZKlGkNQFtUm0G9VH3EQ9db27LJO3jVXVNLoj3nAW0SyUgHsmGJ+5QhYVfNiZoy3gLIpo8Vj3WHR76eitNpi9onp2MvGF8jVjuvTz424nuKDNihHx2oV81Llror4L4VgUuel8nmQXmCItciZo4Sfarh+vXb0j30q9yBF7QgkH2L0SviFPifFPBTz1lggPOn+dR/Yv1JR169qHr9fjwlHojKEhttvEhdiBbg5JoZ/SpUb67DuWZx4zscJnLLqygGfsOZuwe9FVOR4OjbF7m4plflrc7Oi3+WPq0qBBaiddt+PwxaX776GwwIWn1DEUvrvnZ38BILml+w==</source>
+    <source>eJzFVU1v2kAQPROp/2GiIkEisKtKvZCvUtJTWzWqknO1Xg/Ywd619iMUVf3vnV0bYxwnTSqUHBDGO/P2zbw3w+lFkRRvDt4c9KZFMZlYjXo4+CZjzD5hwu5SqQYjKF8Mjk7agVdJ8QNZjD5oJsU8XViFPrAZNpN5IQUKU4UZJbOMktpxSxV9mFqTuLCvaRR+UdHm0jA8hIqRVWASZoBlmVxpYJA7dsA4R63BSDpFoFSHBKkwqOaMY0AgPGMUUR1t6gP8ZVDEGnaqpujf9OkVKr1jBqFP3L5Ht3AGwmbZCYTh6WF9iYxukZvAE/VMr+hOqXK6PTUpy0CjsUXgT48P3VfvY8EUy8s7oV9WcE28y6cVDhRChKlYADOG8QRjqixopjKl2Br6BG0oTMNUrKH+UVChlDJXMvft8LBVumaQGFNMwjCSchlwtkTyQCDVInwfvAtRhD5ah1HVCx0kJs/ecoXMoY/ZeHMy5iRCxPjSIR+HvmE2ylIOcyu4SaUoSx826xw1SJ+VZQyPjlyu73iv9tFkwv3jcBDjnNnM2UfgCmrXUdpJOyWTLPZOciba5FUm6vX6Jkn1+HwrJsFtXDdsoFCpJcpPcqYSLCdTj6AzwLDowTOFWT6oSP7Z2mOWIF86p2pESOdeIafYSqoYUg1cKlUa6nmGecgq2ijnpP6mFp9Y/yAe3BHqTKlpXTc5tlIUmjtyOdmJOCnra+qoB4Y0bXTtpc3ztXtvKJZaN2eZRpDUBbVKtZ/UB8xEPfW9u6rA277a1DTaEm8Yi2haJWDHA+NzvgPYCdHWbxrHtHacd1x0e+XotTaYv6B4bi7xmeo1c7rkK4fdza+lvYox8dqHetS5G6K+D91YBfUkxS4xQ9riTNC2T7XbPaV09YJ8LfFiT+wRIXzA/oUoG/KYFv8UIN5CbJPajb8pYvf3aaqyde3Cl2ux9RQ6c2iE3eT7FDfOzRGx+jFZ6sgSfc/qzBImFviELVcV8IQltwPYBXF/ZIzb2VQrK2fFT45+nT+lLgkapPbSdOfkzx7uv0fCbiHuj0TZ3Ivzv1J3ooI=</source>
   </file>
   <file path="app\Controller\AppController.php" generated-path="app.Controller.AppController.html" hash="fe6cc8eac0f3deefc1ee96a87f3efa69" package="app.Controller">
     <docblock line="0">
@@ -5637,456 +5510,544 @@ and checking those auth details against records on a KRB server.</long-descripti
     </class>
     <source>eJy1VF1v2jAUfSa/4q6qllABedoLXb+GVrXa6CrGnqo+OIlDLBzbsx0Ymvrfd+3EkGqqNk0dIJT449xzzzn2+wtVqSg9OYnA/eD+5h7edc8zqXaarSoLyWwIN/OvsKSk7iY/s5wKQwtoREE1LCsK89tlGHYrFrRgxmqWNZZJYUCWUDJODdSNsaCpJUyAxX0kkxsK+b6akBZRJl2hy8OE+/RowKUi+ZqsKLQfotRkJoXVknOq8bFWUlBhJ1eNrfx63rLr1vf4QlJZq6Zput1uJ1LhkGw0cpB6lXabTFozO+5eJqjaECHTKLpSajptcD6Jr6WuXS2syXJiaTyC+EAo3RNK3aJ4eBp1wvum+htD71dgFM0Z4cwQJ6LTcEbWFF2KDYRyLGxDDUVbwW22FbFAOJdbA8hPG7ASuFyh6ltmK6D4h84RPylITUHimwA6rgnjDoGIAvKK5msmVggnUSeC9aBw3nEDZIUWei9zqQt0WCDap8UHQMANOhAcDDb90SCvaM6JMXBTm74iQH9YKopD0/uJn3sVZ44qsNKHKnBUWm5YgTnNdl2rQDSFDWpadOQ0qcHLuqDfG4r9wLHunlysmSixZqu/Q/YYzIBpMkyERW1+xzHYGKqFON3TnbRj3NiWxOw3WkAmJYelbqjj7FDHplGKMySL9LD+gekISsIRRjrLtsz4hKTRQDUZJhLKRuSeH+kpk/RbCh2NXiA4RB0HgzSFO4rlMSjIx3db0zpz2allQTkuOW4H5u4VzmDmzFrQlTvpu+mUCWaTo7lfcuQC7jGvGQbpANYOLvXukLySaWMP6LcoOYL3a43PS0RJYr8SDxbRmuwSiDHyBfMXTAxn5/vhlsIkFPBzQYPxeUEseYi/4WT8+BCHRV/0R5f8+BGG7uvZozMJM4bapEdtCG/fQp/qmzMQDeetiIPO3ufs1zrz+bxHvbZ4WpK/ZjN6kbjqsOLHIVw8IzRt83KKdJ6CCXgVjDM8ic5dZ0Z3zl9fdOp5/5Pi/1Xww/6Hjmqfy6sJPZMNL0RswWkXbtlwcYR7NiBGe/YB5yl6+gXbX4Cl</source>
   </file>
-  <file path="app\Lib\MailChimp\MCAPI.php" generated-path="app.Lib.MailChimp.MCAPI.html" hash="370b900e29d6d95232e8df43ebb58cd5" package="Default">
+  <file path="app\Lib\MailChimp\MCAPI.php" generated-path="app.Lib.MailChimp.MCAPI.html" hash="e753f4c36c5e86e7f850b9bc17ebd630" package="app.Lib.MailChimp">
     <docblock line="0">
-      <description></description>
-      <long-description></long-description>
+      <description>PHP 5</description>
+      <long-description>Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</long-description>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Lib.MailChimp"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="5" package="Default">
+    <class final="false" abstract="false" namespace="" line="22" package="app.Lib.MailChimp">
       <extends/>
       <name>MCAPI</name>
       <full_name>\MCAPI</full_name>
-      <docblock line="5">
-        <description></description>
+      <docblock line="22">
+        <description>Dummy class that pretends to access the MailChimp API
+but actually accesses a local table.</description>
         <long-description></long-description>
       </docblock>
-      <property static="false" visibility="public" line="7" namespace="" package="Default">
-        <name>$useDbConfig</name>
+      <property static="false" visibility="private" line="28" namespace="" package="app.Lib.MailChimp">
+        <name>$__useDbConfig</name>
         <default>'default'</default>
-        <docblock line="7">
-          <description></description>
+        <docblock line="28">
+          <description>Which database config to use.</description>
           <long-description></long-description>
+          <tag name="var" line="28" description="" type="string" variable="">
+            <type>string</type>
+          </tag>
         </docblock>
       </property>
-      <property static="false" visibility="public" line="8" namespace="" package="Default">
-        <name>$errorMessage</name>
+      <property static="false" visibility="private" line="34" namespace="" package="app.Lib.MailChimp">
+        <name>$__errorMessage</name>
         <default>''</default>
-        <docblock line="8">
-          <description></description>
+        <docblock line="34">
+          <description>The last error message.</description>
           <long-description></long-description>
+          <tag name="var" line="34" description="" type="string" variable="">
+            <type>string</type>
+          </tag>
         </docblock>
       </property>
-      <property static="false" visibility="public" line="9" namespace="" package="Default">
-        <name>$errorCode</name>
+      <property static="false" visibility="private" line="40" namespace="" package="app.Lib.MailChimp">
+        <name>$__errorCode</name>
         <default>0</default>
-        <docblock line="9">
-          <description></description>
+        <docblock line="40">
+          <description>The last error code.</description>
           <long-description></long-description>
+          <tag name="var" line="40" description="" type="integer" variable="">
+            <type>integer</type>
+          </tag>
         </docblock>
       </property>
-      <property static="false" visibility="private" line="11" namespace="" package="Default">
-        <name>$dbSource</name>
+      <property static="false" visibility="private" line="46" namespace="" package="app.Lib.MailChimp">
+        <name>$__dbSource</name>
         <default>null</default>
-        <docblock line="11">
-          <description></description>
+        <docblock line="46">
+          <description>The datasource to query.</description>
           <long-description></long-description>
+          <tag name="var" line="46" description="" type="\DataSource" variable="">
+            <type link="DataSource.html">\DataSource</type>
+          </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="18" package="Default">
-        <name>MCAPI</name>
-        <full_name>\MCAPI::MCAPI()</full_name>
-        <docblock line="18">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="54" package="app.Lib.MailChimp">
+        <name>__construct</name>
+        <full_name>\MCAPI::__construct()</full_name>
+        <docblock line="54">
+          <description>Constructor</description>
           <long-description></long-description>
+          <tag name="param" line="54" description="&lt;p&gt;Not used.&lt;/p&gt;" type="string" variable="$apiKey">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="54" description="&lt;p&gt;Not used.&lt;/p&gt;" type="bool" variable="$secure">
+            <type>bool</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
-          <name>$apikey</name>
+          <name>$apiKey</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$secure</name>
           <default>false</default>
-          <type/>
+          <type>bool</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="27" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="63" package="app.Lib.MailChimp">
         <name>setConfig</name>
         <full_name>\MCAPI::setConfig()</full_name>
-        <docblock line="27">
-          <description></description>
+        <docblock line="63">
+          <description>Set which database config we should use.</description>
           <long-description></long-description>
+          <tag name="param" line="63" description="&lt;p&gt;The name of the config to use.&lt;/p&gt;" type="string" variable="$configName">
+            <type>string</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$configName</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="39" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="75" package="app.Lib.MailChimp">
         <name>lists</name>
         <full_name>\MCAPI::lists()</full_name>
-        <docblock line="39">
-          <description></description>
+        <docblock line="75">
+          <description>Get data about one or more lists.</description>
           <long-description></long-description>
+          <tag name="param" line="75" description="&lt;p&gt;Only return lists that match these filters.&lt;/p&gt;" type="" variable="$filters"/>
+          <tag name="param" line="75" description="&lt;p&gt;Not used.&lt;/p&gt;" type="int" variable="$start">
+            <type>int</type>
+          </tag>
+          <tag name="param" line="75" description="&lt;p&gt;Not used.&lt;/p&gt;" type="int" variable="$limit">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$filters</name>
           <default>array()</default>
-          <type/>
+          <type>mixed</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$start</name>
           <default>0</default>
-          <type/>
+          <type>int</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$limit</name>
           <default>25</default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="97" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="130" package="app.Lib.MailChimp">
         <name>listSubscribe</name>
         <full_name>\MCAPI::listSubscribe()</full_name>
-        <docblock line="97">
-          <description></description>
+        <docblock line="130">
+          <description>Subscribe an e-mail address to a list.</description>
           <long-description></long-description>
+          <tag name="param" line="130" description="&lt;p&gt;The id of the list to subscribe to.&lt;/p&gt;" type="string" variable="$id">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="130" description="&lt;p&gt;The e-mail address to subscribe.&lt;/p&gt;" type="string" variable="$emailAddress">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="130" description="&lt;p&gt;Not used.&lt;/p&gt;" type="string" variable="$mergeVars">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="130" description="&lt;p&gt;Not used.&lt;/p&gt;" type="string" variable="$emailType">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="130" description="&lt;p&gt;Not used.&lt;/p&gt;" type="bool" variable="$doubleOption">
+            <type>bool</type>
+          </tag>
+          <tag name="param" line="130" description="&lt;p&gt;Not used.&lt;/p&gt;" type="bool" variable="$updateExisting">
+            <type>bool</type>
+          </tag>
+          <tag name="param" line="130" description="&lt;p&gt;Not used.&lt;/p&gt;" type="bool" variable="$replaceInterests">
+            <type>bool</type>
+          </tag>
+          <tag name="param" line="130" description="&lt;p&gt;Not used.&lt;/p&gt;" type="bool" variable="$sendWelcome">
+            <type>bool</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
         <argument line="0" by_reference="false">
-          <name>$email_address</name>
+          <name>$emailAddress</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
         <argument line="0" by_reference="false">
-          <name>$merge_vars</name>
-          <default>NULL</default>
-          <type/>
+          <name>$mergeVars</name>
+          <default>null</default>
+          <type>string</type>
         </argument>
         <argument line="0" by_reference="false">
-          <name>$email_type</name>
+          <name>$emailType</name>
           <default>'html'</default>
-          <type/>
+          <type>string</type>
         </argument>
         <argument line="0" by_reference="false">
-          <name>$double_optin</name>
+          <name>$doubleOption</name>
           <default>true</default>
-          <type/>
+          <type>bool</type>
         </argument>
         <argument line="0" by_reference="false">
-          <name>$update_existing</name>
+          <name>$updateExisting</name>
           <default>false</default>
-          <type/>
+          <type>bool</type>
         </argument>
         <argument line="0" by_reference="false">
-          <name>$replace_interests</name>
+          <name>$replaceInterests</name>
           <default>true</default>
-          <type/>
+          <type>bool</type>
         </argument>
         <argument line="0" by_reference="false">
-          <name>$send_welcome</name>
+          <name>$sendWelcome</name>
           <default>false</default>
-          <type/>
+          <type>bool</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="113" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="146" package="app.Lib.MailChimp">
         <name>listUnsubscribe</name>
         <full_name>\MCAPI::listUnsubscribe()</full_name>
-        <docblock line="113">
-          <description></description>
+        <docblock line="146">
+          <description>Unsubscribe an e-mail address from a list.</description>
           <long-description></long-description>
+          <tag name="param" line="146" description="&lt;p&gt;The id of the list to unsubscrbe from.&lt;/p&gt;" type="string" variable="$id">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="146" description="&lt;p&gt;The e-mail address to unsubscribe.&lt;/p&gt;" type="string" variable="$emailAddress">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="146" description="&lt;p&gt;Not used.&lt;/p&gt;" type="bool" variable="$deleteMember">
+            <type>bool</type>
+          </tag>
+          <tag name="param" line="146" description="&lt;p&gt;Not used.&lt;/p&gt;" type="bool" variable="$sendGoodbye">
+            <type>bool</type>
+          </tag>
+          <tag name="param" line="146" description="&lt;p&gt;Not used.&lt;/p&gt;" type="bool" variable="$sendNotify">
+            <type>bool</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
         <argument line="0" by_reference="false">
-          <name>$email_address</name>
+          <name>$emailAddress</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
         <argument line="0" by_reference="false">
-          <name>$delete_member</name>
+          <name>$deleteMember</name>
           <default>false</default>
-          <type/>
+          <type>bool</type>
         </argument>
         <argument line="0" by_reference="false">
-          <name>$send_goodbye</name>
+          <name>$sendGoodbye</name>
           <default>true</default>
-          <type/>
+          <type>bool</type>
         </argument>
         <argument line="0" by_reference="false">
-          <name>$send_notify</name>
+          <name>$sendNotify</name>
           <default>true</default>
-          <type/>
+          <type>bool</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="127" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="161" package="app.Lib.MailChimp">
         <name>listMembers</name>
         <full_name>\MCAPI::listMembers()</full_name>
-        <docblock line="127">
-          <description></description>
+        <docblock line="161">
+          <description>List details about e-mail addresses subscribed to a list.</description>
           <long-description></long-description>
+          <tag name="param" line="161" description="&lt;p&gt;The list to get subscribers from.&lt;/p&gt;" type="string" variable="$id">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="161" description="&lt;p&gt;Not used.&lt;/p&gt;" type="string" variable="$status">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="161" description="&lt;p&gt;Not used.&lt;/p&gt;" type="string" variable="$since">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="161" description="&lt;p&gt;Not used.&lt;/p&gt;" type="int" variable="$start">
+            <type>int</type>
+          </tag>
+          <tag name="param" line="161" description="&lt;p&gt;Not used.&lt;/p&gt;" type="int" variable="$limit">
+            <type>int</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$status</name>
           <default>'subscribed'</default>
-          <type/>
+          <type>string</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$since</name>
-          <default>NULL</default>
-          <type/>
+          <default>null</default>
+          <type>string</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$start</name>
           <default>0</default>
-          <type/>
+          <type>int</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$limit</name>
           <default>100</default>
-          <type/>
+          <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="134" package="Default">
-        <name>_initDbSource</name>
-        <full_name>\MCAPI::_initDbSource()</full_name>
-        <docblock line="134">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="169" package="app.Lib.MailChimp">
+        <name>__initDbSource</name>
+        <full_name>\MCAPI::__initDbSource()</full_name>
+        <docblock line="169">
+          <description>Create the DatabaseSource object.</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="143" package="Default">
-        <name>_runQuery</name>
-        <full_name>\MCAPI::_runQuery()</full_name>
-        <docblock line="143">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="178" package="app.Lib.MailChimp">
+        <name>__runQuery</name>
+        <full_name>\MCAPI::__runQuery()</full_name>
+        <docblock line="178">
+          <description>Run an SQL query, return the results in a manner consistent with the real API.</description>
           <long-description></long-description>
+          <tag name="param" line="178" description="&lt;p&gt;The query to run.&lt;/p&gt;" type="string" variable="$query">
+            <type>string</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$query</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="5" code="PPC:ERR-50005">No summary for class \MCAPI</error>
-      <error line="7" code="PPC:ERR-50007">No summary for property $useDbConfig</error>
-      <error line="8" code="PPC:ERR-50007">No summary for property $errorMessage</error>
-      <error line="9" code="PPC:ERR-50007">No summary for property $errorCode</error>
-      <error line="11" code="PPC:ERR-50007">No summary for property $dbSource</error>
-      <error line="18" code="PPC:ERR-50015">Argument $apikey is missing from the Docblock of MCAPI()</error>
-      <error line="18" code="PPC:ERR-50015">Argument $secure is missing from the Docblock of MCAPI()</error>
-      <error line="18" code="PPC:ERR-50008">No summary for method MCAPI()</error>
-      <error line="27" code="PPC:ERR-50015">Argument $configName is missing from the Docblock of setConfig()</error>
-      <error line="27" code="PPC:ERR-50008">No summary for method setConfig()</error>
-      <error line="39" code="PPC:ERR-50015">Argument $filters is missing from the Docblock of lists()</error>
-      <error line="39" code="PPC:ERR-50015">Argument $start is missing from the Docblock of lists()</error>
-      <error line="39" code="PPC:ERR-50015">Argument $limit is missing from the Docblock of lists()</error>
-      <error line="39" code="PPC:ERR-50008">No summary for method lists()</error>
-      <error line="97" code="PPC:ERR-50015">Argument $id is missing from the Docblock of listSubscribe()</error>
-      <error line="97" code="PPC:ERR-50015">Argument $email_address is missing from the Docblock of listSubscribe()</error>
-      <error line="97" code="PPC:ERR-50015">Argument $merge_vars is missing from the Docblock of listSubscribe()</error>
-      <error line="97" code="PPC:ERR-50015">Argument $email_type is missing from the Docblock of listSubscribe()</error>
-      <error line="97" code="PPC:ERR-50015">Argument $double_optin is missing from the Docblock of listSubscribe()</error>
-      <error line="97" code="PPC:ERR-50015">Argument $update_existing is missing from the Docblock of listSubscribe()</error>
-      <error line="97" code="PPC:ERR-50015">Argument $replace_interests is missing from the Docblock of listSubscribe()</error>
-      <error line="97" code="PPC:ERR-50015">Argument $send_welcome is missing from the Docblock of listSubscribe()</error>
-      <error line="97" code="PPC:ERR-50008">No summary for method listSubscribe()</error>
-      <error line="113" code="PPC:ERR-50015">Argument $id is missing from the Docblock of listUnsubscribe()</error>
-      <error line="113" code="PPC:ERR-50015">Argument $email_address is missing from the Docblock of listUnsubscribe()</error>
-      <error line="113" code="PPC:ERR-50015">Argument $delete_member is missing from the Docblock of listUnsubscribe()</error>
-      <error line="113" code="PPC:ERR-50015">Argument $send_goodbye is missing from the Docblock of listUnsubscribe()</error>
-      <error line="113" code="PPC:ERR-50015">Argument $send_notify is missing from the Docblock of listUnsubscribe()</error>
-      <error line="113" code="PPC:ERR-50008">No summary for method listUnsubscribe()</error>
-      <error line="127" code="PPC:ERR-50015">Argument $id is missing from the Docblock of listMembers()</error>
-      <error line="127" code="PPC:ERR-50015">Argument $status is missing from the Docblock of listMembers()</error>
-      <error line="127" code="PPC:ERR-50015">Argument $since is missing from the Docblock of listMembers()</error>
-      <error line="127" code="PPC:ERR-50015">Argument $start is missing from the Docblock of listMembers()</error>
-      <error line="127" code="PPC:ERR-50015">Argument $limit is missing from the Docblock of listMembers()</error>
-      <error line="127" code="PPC:ERR-50008">No summary for method listMembers()</error>
-      <error line="134" code="PPC:ERR-50008">No summary for method _initDbSource()</error>
-      <error line="143" code="PPC:ERR-50015">Argument $query is missing from the Docblock of _runQuery()</error>
-      <error line="143" code="PPC:ERR-50008">No summary for method _runQuery()</error>
-    </parse_markers>
-    <source>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</source>
+    <source>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</source>
   </file>
-  <file path="app\Lib\AutomationDriver\AutomationDriver.php" generated-path="app.Lib.AutomationDriver.AutomationDriver.html" hash="dcd149fc1f42cd18cf16b748ce83d9c7" package="Default">
+  <file path="app\Lib\AutomationDriver\AutomationDriver.php" generated-path="app.Lib.AutomationDriver.AutomationDriver.html" hash="abd80cb87f4b5f06782af184732c83d1" package="app.Lib.AutomationDriver">
     <docblock line="0">
-      <description></description>
-      <long-description></long-description>
+      <description>Application level Controller</description>
+      <long-description>Application-wide logic.
+
+PHP 5
+
+Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</long-description>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Lib.AutomationDriver"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="10" package="Default">
+    <class final="false" abstract="false" namespace="" line="28" package="app.Lib.AutomationDriver">
       <extends/>
       <name>AutomationDriver</name>
       <full_name>\AutomationDriver</full_name>
-      <docblock line="10">
-        <description></description>
+      <docblock line="28">
+        <description>A wrapper around Selenium to communicate with HMS.</description>
         <long-description></long-description>
       </docblock>
-      <property static="false" visibility="private" line="13" namespace="" package="Default">
-        <name>$rootUrl</name>
+      <property static="false" visibility="private" line="34" namespace="" package="app.Lib.AutomationDriver">
+        <name>$__rootUrl</name>
         <default></default>
-        <docblock line="13">
-          <description></description>
+        <docblock line="34">
+          <description>URL to the root of HMS.</description>
           <long-description></long-description>
+          <tag name="var" line="34" description="" type="string" variable="">
+            <type>string</type>
+          </tag>
         </docblock>
       </property>
-      <property static="false" visibility="private" line="14" namespace="" package="Default">
-        <name>$webDriver</name>
+      <property static="false" visibility="private" line="40" namespace="" package="app.Lib.AutomationDriver">
+        <name>$__webDriver</name>
         <default></default>
-        <docblock line="14">
-          <description></description>
+        <docblock line="40">
+          <description>Selenium driver.</description>
           <long-description></long-description>
+          <tag name="var" line="40" description="" type="\PHPWebDriver_WebDriver" variable="">
+            <type link="PHPWebDriver_WebDriver.html">\PHPWebDriver_WebDriver</type>
+          </tag>
         </docblock>
       </property>
-      <property static="false" visibility="private" line="15" namespace="" package="Default">
-        <name>$session</name>
+      <property static="false" visibility="private" line="46" namespace="" package="app.Lib.AutomationDriver">
+        <name>$__session</name>
         <default></default>
-        <docblock line="15">
-          <description></description>
+        <docblock line="46">
+          <description>Selenium session.</description>
           <long-description></long-description>
+          <tag name="var" line="46" description="" type="\PHPWebDriver_WebDriverSession" variable="">
+            <type link="PHPWebDriver_WebDriverSession.html">\PHPWebDriver_WebDriverSession</type>
+          </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="17" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="51" package="app.Lib.AutomationDriver">
         <name>__construct</name>
         <full_name>\AutomationDriver::__construct()</full_name>
-        <docblock line="17">
-          <description></description>
+        <docblock line="51">
+          <description>Constructor.</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="48" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="80" package="app.Lib.AutomationDriver">
         <name>connect</name>
         <full_name>\AutomationDriver::connect()</full_name>
-        <docblock line="48">
-          <description></description>
+        <docblock line="80">
+          <description>Create a session and connect to it.</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="53" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="87" package="app.Lib.AutomationDriver">
         <name>disconnect</name>
         <full_name>\AutomationDriver::disconnect()</full_name>
-        <docblock line="53">
-          <description></description>
+        <docblock line="87">
+          <description>Disconnect and close a session.</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="58" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="96" package="app.Lib.AutomationDriver">
         <name>navigateToUrl</name>
         <full_name>\AutomationDriver::navigateToUrl()</full_name>
-        <docblock line="58">
-          <description></description>
+        <docblock line="96">
+          <description>Navigate to a URL.</description>
           <long-description></long-description>
+          <tag name="param" line="96" description="&lt;p&gt;The URL to navigate to.&lt;/p&gt;" type="string" variable="$url">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="96" description="True if navigation is sucessful, false otherwise." type="bool">
+            <type>bool</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$url</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="64" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="105" package="app.Lib.AutomationDriver">
         <name>navigateToHomePage</name>
         <full_name>\AutomationDriver::navigateToHomePage()</full_name>
-        <docblock line="64">
-          <description></description>
+        <docblock line="105">
+          <description>Navigate to the home page.</description>
           <long-description></long-description>
+          <tag name="return" line="105" description="True if navigation is sucessful, false otherwise." type="bool">
+            <type>bool</type>
+          </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="69" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="113" package="app.Lib.AutomationDriver">
         <name>navigateToMemberRegister</name>
         <full_name>\AutomationDriver::navigateToMemberRegister()</full_name>
-        <docblock line="69">
-          <description></description>
+        <docblock line="113">
+          <description>Navigate to the member register page.</description>
           <long-description></long-description>
+          <tag name="return" line="113" description="True if navigation is sucessful, false otherwise." type="bool">
+            <type>bool</type>
+          </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="74" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="121" package="app.Lib.AutomationDriver">
         <name>pageHasNoErrors</name>
         <full_name>\AutomationDriver::pageHasNoErrors()</full_name>
-        <docblock line="74">
-          <description></description>
+        <docblock line="121">
+          <description>Check to see if the currently loaded page has no errors.</description>
           <long-description></long-description>
+          <tag name="return" line="121" description="True if there are no errors, false otherwise." type="bool">
+            <type>bool</type>
+          </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="80" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="131" package="app.Lib.AutomationDriver">
         <name>getElementById</name>
         <full_name>\AutomationDriver::getElementById()</full_name>
-        <docblock line="80">
-          <description></description>
+        <docblock line="131">
+          <description>Get an element onthe currently loaded page by its ID.</description>
           <long-description></long-description>
+          <tag name="param" line="131" description="&lt;p&gt;The name of the ID to look for.&lt;/p&gt;" type="string" variable="$id">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="131" description="The element if it can be found, null otherwise." type="\PHPWebDriver_WebDriverElement|null">
+            <type link="PHPWebDriver_WebDriverElement.html">\PHPWebDriver_WebDriverElement</type>
+            <type>null</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$id</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="85" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="140" package="app.Lib.AutomationDriver">
         <name>getElementByClassName</name>
         <full_name>\AutomationDriver::getElementByClassName()</full_name>
-        <docblock line="85">
-          <description></description>
+        <docblock line="140">
+          <description>Get an element onthe currently loaded page by its class.</description>
           <long-description></long-description>
+          <tag name="param" line="140" description="&lt;p&gt;The name of the class to look for.&lt;/p&gt;" type="string" variable="$className">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="140" description="The element if it can be found, null otherwise." type="\PHPWebDriver_WebDriverElement|null">
+            <type link="PHPWebDriver_WebDriverElement.html">\PHPWebDriver_WebDriverElement</type>
+            <type>null</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$className</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="90" package="Default">
-        <name>_navigteToControllerAction</name>
-        <full_name>\AutomationDriver::_navigteToControllerAction()</full_name>
-        <docblock line="90">
-          <description></description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="151" package="app.Lib.AutomationDriver">
+        <name>__navigteToControllerAction</name>
+        <full_name>\AutomationDriver::__navigteToControllerAction()</full_name>
+        <docblock line="151">
+          <description>Navigate to a CakePHP controller action.</description>
           <long-description></long-description>
+          <tag name="param" line="151" description="&lt;p&gt;Name of the controller.&lt;/p&gt;" type="string" variable="$controller">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="151" description="&lt;p&gt;Name of the action.&lt;/p&gt;" type="string" variable="$action">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="151" description="&lt;p&gt;Parameters for the action.&lt;/p&gt;" type="array" variable="$params">
+            <type>array</type>
+          </tag>
+          <tag name="return" line="151" description="True if navigation was sucessful, false otherwise." type="bool">
+            <type>bool</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$controller</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$action</name>
           <default></default>
-          <type/>
+          <type>string</type>
         </argument>
         <argument line="0" by_reference="false">
           <name>$params</name>
           <default>array()</default>
-          <type/>
+          <type>array</type>
         </argument>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="10" code="PPC:ERR-50005">No summary for class \AutomationDriver</error>
-      <error line="13" code="PPC:ERR-50007">No summary for property $rootUrl</error>
-      <error line="14" code="PPC:ERR-50007">No summary for property $webDriver</error>
-      <error line="15" code="PPC:ERR-50007">No summary for property $session</error>
-      <error line="17" code="PPC:ERR-50008">No summary for method __construct()</error>
-      <error line="48" code="PPC:ERR-50008">No summary for method connect()</error>
-      <error line="53" code="PPC:ERR-50008">No summary for method disconnect()</error>
-      <error line="58" code="PPC:ERR-50015">Argument $url is missing from the Docblock of navigateToUrl()</error>
-      <error line="58" code="PPC:ERR-50008">No summary for method navigateToUrl()</error>
-      <error line="64" code="PPC:ERR-50008">No summary for method navigateToHomePage()</error>
-      <error line="69" code="PPC:ERR-50008">No summary for method navigateToMemberRegister()</error>
-      <error line="74" code="PPC:ERR-50008">No summary for method pageHasNoErrors()</error>
-      <error line="80" code="PPC:ERR-50015">Argument $id is missing from the Docblock of getElementById()</error>
-      <error line="80" code="PPC:ERR-50008">No summary for method getElementById()</error>
-      <error line="85" code="PPC:ERR-50015">Argument $className is missing from the Docblock of getElementByClassName()</error>
-      <error line="85" code="PPC:ERR-50008">No summary for method getElementByClassName()</error>
-      <error line="90" code="PPC:ERR-50015">Argument $controller is missing from the Docblock of _navigteToControllerAction()</error>
-      <error line="90" code="PPC:ERR-50015">Argument $action is missing from the Docblock of _navigteToControllerAction()</error>
-      <error line="90" code="PPC:ERR-50015">Argument $params is missing from the Docblock of _navigteToControllerAction()</error>
-      <error line="90" code="PPC:ERR-50008">No summary for method _navigteToControllerAction()</error>
-    </parse_markers>
-    <source>eJytVltrGzkUfnah/0EBU8m08fTZyaa4qYsDSTD2dvchhEGZOWOLzkhTjaZOKPnve3TxXBzXXUohBPmc73znLs35h3JTvn71+tVAw7daaIiVTIBRlG7hIdXiO+gojoUUJo7HKKWjMwefluVkUldQMbrYlEvgKWj6jtBLJTOxrjU4YBe2VLXxGHsScv0Cccm/whLDgMpY2C2YrdJfPQz/ouiETMlW87IETbhWtUzJCnKQoi6IUSRRRVFLkXADZCvMhsxvVmiX5LyqyLQ2quBGKPnJZYWKHy6TQYm/rclQK2W+6PyMoKdz8mV5bUnNBohVEJVZvnHPAmvk2YKNjcYG4wvXx2KKFXrfQwbpOIRSP+QiIVktExspieNEycroOjFsZAE/7L9BU+TJJHFHRlPIeJ3buknYkqYlbOSq1zPJFU8Z5U09bK135gEdRS/w2rav2sc69BDnAvPJyF9kGK9my39myzu6mC/wfP2Z3ntKzD/PFlybCmHwWOYqxTmLkHBnHnwPzUZUpxehGQimNChKtL6SKTyi8H2QZUJXxtKiDOsEXrzdiBwI6zi9a63vyQmS4hRR8uaNg/e4z3GOamlYazsaEQfzxR+IjB3hpSOPCmCLPmmjDMpGu5/tGBkiejYI6uddeN00M55XIc9D9odjC/hA2CrevvWa527tm7FGb26c5ot/d6K4ObHOjGjoz1TsNyCuwnrGtc7pqJkYS9rZduZb/2y1h9YAh1xCfwVCpGF97OTthd7oGMXiQaYeacfLSx+pqH7p5vQiyVUF7CiR5N/FGjf+b4UNYUNM/AifKkF6jG+DBlNr2U7yL33MVQELvoZu0IEk+Iod2GKxX0arPAc9dTR4zaOl2+kN0hyvT+vyBooH0EtYi8rYG+Z3HBeOw7nWgei4exvpnFe3aqa10lWvRzhjBUh3sezXd6di1L8CkmOe6DTB4TsFS0UPVD6KoCjNE2uYj4a2BjPzuI9PVykbivSnJdmPix3erI9Pk8nVJ7wZker/er60+d1iemyY7I5/Io7L6+lqFd9Ob2YYT8vcCys8ce2z9fPOD5NGgnzcCe0TwDUvbAO51vwJX61Oe93Lg98LU6uyPfbgswPaO9rS03uLbX8fxvsIPNafm1etdq+P/2zBTxRcZvdc2QkZkTHZv3l7yL6bd/7O7k9asD9wXexq6+v74eI/j/Tofg==</source>
+    <source>eJzNV11PGzkUfYZfcSuhzoRC0pd9SUsXGtglEiAU6O4DQiNn4iQWM+NZ28OAdvnve6/t+Ugyga4qVVup7WCf+3HOvb42n3/Nl/nuYH9/F/bhJM8TETMjZAYJf+QJjGRmlEwSrnB/DXJYihmHRC5E3Pe71+fX8Iv/Hsn8WYnF0kA46sH55Q3ccpb6zQsR80zzGRTZjCu4XXK4HN9Wy4SY8JnQRolpQbE0yDnMRcI1pIU2oLhhIgODdmwqHznEdbRMGvRSZXTcbNCfVhpwnLP4gS04uD8sz/sXYto/KYxMLcFTJR4tcThOXGIe2koVwqUx+XAwKMuyL3NckoXC8FItBt5ID1JhDv0PfZS7hy4Hu7uK/1UIxSOZxegmwI2ST2c25iCKRCZMFBE86H3a3UXdh8MCnYXB9TKfcIayBQcQYIHmYlEoTqgWaCIL4xD0JbLF2v6IPfAJJsC1IdAVN6VUDzZU1QxQKtQEq8OUxDLBDU94JooUjES507TIqBE4lMIsSdi+pRUnTGtYFxH+rv1+m1yQByqdktJQYb0xHD8yBVT0bGF97eRoTCH2ooiw31TS5Fen4yRrHGAT/smnLm5Uf204LKudDpcokcbc3/J542Abrr154xirhLSK2EjV9+hiih0B8yKL7XGLorjChD1Ua2enruxwGNvPMJjxOSsSKljGS6j7IOxh2VYMEslmYcDqIlCJK2OLHQw20Io6Rq8hEbqHLYjCzOEIqd2cTf44m9wFqAd+X/wW3JO3PY3710wZjSD+lCdyxsNggL4qYxt0zyyFPvxS1xLBQWA3crQd4yR4wqWPdmUulDbkEldQFW4XsyKtosTYkiZsAtsA5RInBLRW7xrP9/AOw2FDB/D+PbQifobarxN+R8xf9RF4mMW9azKtljd59tFqYJnu7LzYf1f4zVmiudvtMu1OxeKts2bxwwdafWlLXXc5xrFN09nIYasbFF/tncidL2xqdziiQiVBz/UGeWxNkpCq8NJ0PbrCA8Gq4wQMpwj2csZjQyNAmC2HwWP8Qai5VG5Qkg16rf0wQHH5XD4Fq+mcCl0Ft4kkUreS25LKrDbaks3hF+tojfoVexQLIo80GY28vr9xFEvBjzjYQyXt1edHYtYYOTjecoXKYCol4vAQAHacB1FuQoMuYkxjXiQHrotA4lxVpdB8C58qxq3E7gopg2206DJzAGoqn4o/it1EaaQvZcohx1v1JzA4x1jXGMpXxseqmVgg4ZpHzIl1gXctWtlRR+kG20tHjFKeTvH4KL7A9wh+/CRylzbsxEf97xRd2pZklfoa0dGSxw/EUnObOpGNC6V4ZpJnoEsB32fEFpZM47MKuFJS6e3ciRueKPxbg7+XN4U5Z/pKnlmz6qzhyEkxHd0+8nWDVpth4N4cGcNaIt0YB9KhDR+82rq/cxoE4N0AKrhVgOkzDisN49POYyxm9hRTfHrNkJvxKQmbSPkAc6lWJOuewGcui3+yInEzoUoLdRUGYkx0ytEXPsTw9ifQW5IuuPFOvz6PZyFm2d1D63qG3Ql+fR4Ox6cHxLb3gzLacnUqaXeuSMd1QV2J/0+ajqpcwybtH1Z4dHFycxNdnVyeHbTUeO1uoeuXfu2K6wkAzCbbLXCDumqrWy93WjmHKxYdMZhS7Bns04qlGq7pP45jR1O5NozeGJ4l+57p6Z/crVf09onY4n5QUTqosz1y6eNT2k0e+xpG8ieW1FGF+7Sxdxc0foN7QjY/d6FdYId03+6VXdj3sPu1DX9Jw8vZPqBpavWgD5sPwxXsahSvV3v6efuO69/21su/IoY4SA==</source>
   </file>
   <file path="plugins\MemberVoice\Controller\MemberVoiceIdeasController.php" generated-path="plugins.MemberVoice.Controller.MemberVoiceIdeasController.html" hash="626cd3b0c490843f57264ff3265d958f" package="Default">
     <docblock line="0">
@@ -6247,78 +6208,73 @@ will inherit them.</long-description>
     </parse_markers>
     <source>eJxdUtFOwjAUfd6S/cMlISksyt5RQOOjwSfUB0NI111GpWubthOJ4d9tB8PNJm2WnXPPPT239wu900mcpWkSQwpLVaCArTJAhYAnVVUonQUuYYlVjuZNcYaB2W540JTtaYlwXlrUJZeTDnvSaAZulsRMUGu7WpcWgN8OZdGDHrU+2/lJ4kjXueAMhrXFFc0FwgwIu9gjdx0CFZzagF6Ue2COQsnSrpQnUGPocTT2sCdk2QDeESRiAU5BXnPhP3YIfxUNHw7c7XwaAWJKWmdq5pQJCunAn1FHhDKG/rLaKI3GcWxiDIWamnBllX8ic13Ff828Xsisdb+tJXNcSdhsrq1H4yYd7x+WdI9ga4Nw8N7C+Dq9+l6j89/ptKcUgorCHnpD9nZ+dfNBXi0asr6GFkjtIs1IX2iFJIpm87a4+go1zfxuenT/tpCX8hmPJNCJH6jZ8IL0WI2XUxKfwnAW819x8MwO</source>
   </file>
-  <file path="app\Lib\Error\Exception\InvalidStatusException.php" generated-path="app.Lib.Error.Exception.InvalidStatusException.html" hash="4cc886d6285aefb7cfa31c4019fdb119" package="Default">
+  <file path="app\Lib\Error\Exception\InvalidStatusException.php" generated-path="app.Lib.Error.Exception.InvalidStatusException.html" hash="a0ded8c66c854b1f1ee3b4c66d4d1afb" package="app.Lib.Error.Exception">
     <docblock line="0">
-      <description></description>
-      <long-description></long-description>
+      <description>PHP 5</description>
+      <long-description>Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</long-description>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Lib.Error.Exception"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="7" package="Default">
+    <class final="false" abstract="false" namespace="" line="22" package="app.Lib.Error.Exception">
       <extends>\CakeException</extends>
       <name>InvalidStatusException</name>
       <full_name>\InvalidStatusException</full_name>
-      <docblock line="7">
-        <description></description>
-        <long-description></long-description>
+      <docblock line="22">
+        <description>An exception thrown by certain Member methods if they are called on a member id who has the wrong status.</description>
+        <long-description>This is it's own exception as such results are usually handled differently from the calling code, for example the
+displaying a flash message if the Member method returned true or false but redirecting if this exception is thrown.</long-description>
       </docblock>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="9" package="Default">
-        <name>__construct</name>
-        <full_name>\InvalidStatusException::__construct()</full_name>
-        <docblock line="9">
-          <description></description>
-          <long-description></long-description>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$message</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
     </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="7" code="PPC:ERR-50005">No summary for class \InvalidStatusException</error>
-      <error line="9" code="PPC:ERR-50015">Argument $message is missing from the Docblock of __construct()</error>
-      <error line="9" code="PPC:ERR-50008">No summary for method __construct()</error>
-    </parse_markers>
-    <source>eJxtkEFLAzEQhc8t9D+MIKhF7L2KRcSDB096L7PJpAlmkyUzsV3E/+5kKS2CsDuHzJv3vZmHzeCHxXy2Wl3AUwI6GBok5ATiS94n6EYwVARDgjfqOyrQk/hsGYJTDY2AhcBgjGRBx1D7kyxY2PsMHrnJYF9y2gELSuW7xltqmX34oEb6yRVDw535OsfVeCjENQpPmMpVQaOaJtt4NjhHhZLomyu5n0gtS1CWyZZuweWiptgPkVq3QW3gIeLYNAguInvNzIw7Ou70d1NNILUkxUmpBOrnMDJBV0VbNhQy0rymWd3lvELg4xXbwsuVFqM0htf0hTHY9+kYLyc5HYSSHvYZP+n0qkPfLfRQuxgMuJrMJN5uTU6siYxcXx7j3zThpJ4N2M6yXv8ru2+SHy36L+abx1+KNq6c</source>
+    <source>eJxVks9q3DAQxu9+irk1Ca196qUUmrIEEshCaPYFZGu8EpElMTOKa0rfvSOvN7s1Otjz7zffJ3//kV1uuru7BuqBl8cX+Lq971JeyB+dwM3uFh73r3BAM23JZz9gZLRQokWCg0PYPx3O4VrxC61nId8X8SkypBFGH5BhKixAKMZHEO0zfXpHGD5oMYlOaTfQ/SVRn6s14D6b4c0cEU6Pybl99n37QJSoffg9YK7ktTKc9toqrzaFGyeSv3XdPM9tyhpKhZSe6NhtTdxNXr5sH636dasju2ZzDX5GwDNL9VCaI/QLDEirwj1OvRo0obhkGfxYNS9gSCWbENRBbTOaX8u8hdklcIZXa2ZK8QgsRgqfDTk4r2P0yCc1db6maxeXwam5XILwCilcFLPoyGgrzfpxRMIoGhspTSunbuKVNCSLn2FMpEPNlAPWbIXqVeZgllpjYAyGnW7MXM0/KfpfZ73eQlFxQgVB540mqNn6L2jKesJB6qy1V7VcJHjePGxXkwdFMTzFdxO8fV19+LhY7RKM6unOvOEl+qdp/v4DKxLzng==</source>
   </file>
-  <file path="app\Lib\AutomationDriver\AutomationDriverTest.php" generated-path="app.Lib.AutomationDriver.AutomationDriverTest.html" hash="f4b03b8369c82c3562fa152ba614bfca" package="Default">
+  <file path="app\Lib\AutomationDriver\AutomationDriverTest.php" generated-path="app.Lib.AutomationDriver.AutomationDriverTest.html" hash="b0220f5c449c40ca6e32322cdc3d4c25" package="app.Lib.AutomationDriver">
     <docblock line="0">
-      <description></description>
-      <long-description></long-description>
+      <description>Application level Controller</description>
+      <long-description>Application-wide logic.
+
+PHP 5
+
+Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</long-description>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Lib.AutomationDriver"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
     </docblock>
-    <class final="false" abstract="false" namespace="" line="5" package="Default">
+    <class final="false" abstract="false" namespace="" line="24" package="app.Lib.AutomationDriver">
       <extends>\CakeTestCase</extends>
       <name>AutomationDriverTest</name>
       <full_name>\AutomationDriverTest</full_name>
-      <docblock line="5">
-        <description></description>
+      <docblock line="24">
+        <description>A base class for CakePHP tests that use AutomationDriver.</description>
         <long-description></long-description>
       </docblock>
-      <property static="false" visibility="protected" line="7" namespace="" package="Default">
-        <name>$automationDriver</name>
+      <property static="false" visibility="protected" line="30" namespace="" package="app.Lib.AutomationDriver">
+        <name>$_automationDriver</name>
         <default></default>
-        <docblock line="7">
-          <description></description>
+        <docblock line="30">
+          <description>The AutomationDriver for this test.</description>
           <long-description></long-description>
+          <tag name="var" line="30" description="" type="\AutomationDriver" variable="">
+            <type link="AutomationDriver.html">\AutomationDriver</type>
+          </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="9" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="35" package="app.Lib.AutomationDriver">
         <name>setUp</name>
         <full_name>\AutomationDriverTest::setUp()</full_name>
-        <docblock line="9">
-          <description></description>
+        <docblock line="35">
+          <description>Create the AutomationDriver.</description>
           <long-description></long-description>
         </docblock>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="5" code="PPC:ERR-50005">No summary for class \AutomationDriverTest</error>
-      <error line="7" code="PPC:ERR-50007">No summary for property $automationDriver</error>
-      <error line="9" code="PPC:ERR-50008">No summary for method setUp()</error>
-    </parse_markers>
-    <source>eJxljkEOgjAQRdcl4Q6zIEEWegBQiMEj6NrUMoZGbGs7VRPD3W2RFS5mFv/9/2e2jelNmqQJs/jw0uJZK4GrfO9J3zlJrQ5WPtFugi0vqskpBu4cLB1HdAT4JlSdg5bfMAotdxgSnzDMWE0oCDvI+CL762XGXwYp4OqViAwc0smsioimBma4RUVlOYNqEjPqpVvXy07YgcLX35tzagxrjFeb+gvaylFE</source>
+    <source>eJxtkk1PwzAMhs/rr/ABaR/S2hOXjY+hcgBpSAjGGaWpt0ZkSUicFYT230myMlBHT6392s9ruxfXpjFZMZlkMIEbY6TgjIRWIHGHEkqtyGop0YZ8TzJtRY0g9UbwvMs+3j3CefdeavNpxaYhGJVjuHt4hhWybZdcCo7KYQ1e1Whh1SA83K9+wlHxhLVwZEXlI8uBXsNaSHSw9Y7AIjGhgEIdq/QOgR9pSlPo8uNo8ZuIzx8bsDCMv7ENwuFhxuRLUeU3nvQ2DXhrxS4NDgt5MNZJ/1iFUUNkZkXRtm2uTQhpbwNe203RFbliK2jafeRh3ePQssgyi+9eWHzVioc2wz43KofjeXY8DlQs8LhkzsFaWyjZG8aFEzpyYRWMwAfBSZ9EO5T1c6tQCvhBqGqX+sVAGTFfR268Tb8u8akRLsHztKIdsye6hB4Yqwk5hWufvbKe4ne+0iIjTCf9f4SB8VXYIqy94ukXdUgvZjQOXgcDwywqms262DyEzqLB6dUJEi5BYXsCSUX7bP8NJ13/gA==</source>
   </file>
   <file path="app\Model\Group.php" generated-path="app.Model.Group.html" hash="19386721f5bb9e21819465bf755b854d" package="Default">
     <docblock line="0">
@@ -6617,6 +6573,179 @@ will inherit them.</long-description>
     </parse_markers>
     <source>eJydVU1v2zgQPStA/sMEMCArq8TtOWtns9vD9pDuoUUvQVAwIi2zlUiBpJIai/73nRlSshRnWyBG7Micr/dm3tC/X3e77vRkdX5+egLncGulamBrHYimgfdSCQ/awK1qH5T7bHWlyG14wx+dqL6JWkF8dU1fa3M58b7khOS7Oj2pGuH9NBflB/U9KCNn5zddF4H8e3qSdf1DoytY9F59Eg+NgjXkmoDlVxOraDRCRRPlZMvEuBP+xsg/VWNN7T/ZW2H26CqcE/slumX5XyKo2rp9nq032eEcLYz5g2gVm/IZtcPzGF+msK9WG0Ybw9rHL1V00cp/ieija0GfxdUc7DHAzzao14Lj2FStjHRt2yoTXs02hU9zzig8DJ2ek/gYROj9a6um6Gdtw/+r1Rl8FI/KwyMy9VG9BqjLZD0/I19UqhMtahmnoBwsyPr+HeCf3bIrBAses0DY6ZgJRC208WES3urvSrIU3Rhc9c5hN5o9NLau0Yz7Qg4vVY0AP/REimLjd6wsuq7Zl2CNouOLtyW8KeEtp3AqPIomlVY67DB0KxqPngYfdNM7hZEO0wT08317yEytYHLo6vuqUt5jTtrFYVbb3lRBkxm5k1KWqTXlQLNMsAvexozNONcF9elis9VGLvOtdh71kIadV9ZITVl9DuvNcEqbeaklH6UiRcG6yRZGPUXE62i6i3t8f5fzcX7PbvRereBv3HSeEgHEi8opIffMWF5zNn7EVNwmjsRGKFHtYJmy807cAyZiZ5YT08v0Fp3o7C6n9Lis6LdeD91gz+R6KJQCyPcqmWwjWUSjcUok+0GfP1i+xOifbyU87UQAv6N790mBtJHKMBbME1wfyYwQJQGLWhBGDvLCszcTQpg+uL02NemsapTAlkV9B6oorfImD3gNax/O4J2lLxIVafbYY1NzDtRg78ykn4xf4bcXsMxr42S5Wglfex9YZmyajXx8/i2RmBeZJXSqtbim2N/IgrX3k5QXMMwiXhfoF6VLbb3Y4M+MItUzh2JwGWlN2jlMHTE8oXC4ldTWZ+ywrWq4fLL5BIf+HSQw0hsl9eu2PBfPTRV6VM2eq/Nlt5AiiNndiy9Iv42HjUyGZETxZnT/Dvs/t0b1sn1ANfcoyrFOcVDpQD5dHhHZuH7rIyBwDC0b95Crp0tp5kCIR4dj+NmAnu1H2LOinAIoDtpjClEsROTGe1tp/B2XS+ZRTJSeNmRszv8J+MVNwjeP83rzHxzHm6w=</source>
   </file>
+  <file path="app\Lib\Krb\Krb5Auth.php" generated-path="app.Lib.Krb.Krb5Auth.html" hash="0f64c80a4b91d164d135024bc0ee368d" package="app.Lib.Krb">
+    <docblock line="0">
+      <description>PHP 5</description>
+      <long-description>Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</long-description>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Lib.Krb"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
+    </docblock>
+    <class final="false" abstract="false" namespace="" line="19" package="app.Lib.Krb">
+      <extends/>
+      <name>Krb5Auth</name>
+      <full_name>\Krb5Auth</full_name>
+      <docblock line="19">
+        <description>Dummy KrbAuth implementation for development.</description>
+        <long-description></long-description>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="27" package="app.Lib.Krb">
+        <name>__construct</name>
+        <full_name>\Krb5Auth::__construct()</full_name>
+        <docblock line="27">
+          <description>Constructor.</description>
+          <long-description></long-description>
+          <tag name="param" line="27" description="&lt;p&gt;Not used.&lt;/p&gt;" type="string" variable="$krbUsername">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="27" description="&lt;p&gt;Not used.&lt;/p&gt;" type="string" variable="$keytab">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="27" description="&lt;p&gt;Not used.&lt;/p&gt;" type="string" variable="$realm">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$krbUsername</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$keytab</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$realm</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="36" package="app.Lib.Krb">
+        <name>addUser</name>
+        <full_name>\Krb5Auth::addUser()</full_name>
+        <docblock line="36">
+          <description>Add a new user.</description>
+          <long-description></long-description>
+          <tag name="param" line="36" description="&lt;p&gt;The username of the new user.&lt;/p&gt;" type="string" variable="$username">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="36" description="&lt;p&gt;The password for the user.&lt;/p&gt;" type="string" variable="$password">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="36" description="True." type="bool">
+            <type>bool</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$username</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$password</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="45" package="app.Lib.Krb">
+        <name>deleteUser</name>
+        <full_name>\Krb5Auth::deleteUser()</full_name>
+        <docblock line="45">
+          <description>Remove a user.</description>
+          <long-description></long-description>
+          <tag name="param" line="45" description="&lt;p&gt;The username of the user to remove.&lt;/p&gt;" type="string" variable="$username">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="45" description="True." type="bool">
+            <type>bool</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$username</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="55" package="app.Lib.Krb">
+        <name>checkPassword</name>
+        <full_name>\Krb5Auth::checkPassword()</full_name>
+        <docblock line="55">
+          <description>Check if a username and password matches a known record.</description>
+          <long-description></long-description>
+          <tag name="param" line="55" description="&lt;p&gt;The username to check.&lt;/p&gt;" type="string" variable="$username">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="55" description="&lt;p&gt;The password to check.&lt;/p&gt;" type="\striing" variable="$password">
+            <type link="striing.html">\striing</type>
+          </tag>
+          <tag name="return" line="55" description="True." type="bool">
+            <type>bool</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$username</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$password</name>
+          <default></default>
+          <type>\striing</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="65" package="app.Lib.Krb">
+        <name>changePassword</name>
+        <full_name>\Krb5Auth::changePassword()</full_name>
+        <docblock line="65">
+          <description>Change the password for a user.</description>
+          <long-description></long-description>
+          <tag name="param" line="65" description="&lt;p&gt;The users username.&lt;/p&gt;" type="string" variable="$username">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="65" description="&lt;p&gt;The new password.&lt;/p&gt;" type="string" variable="$newpassword">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="65" description="True." type="bool">
+            <type>bool</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$username</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$newpassword</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="74" package="app.Lib.Krb">
+        <name>userExists</name>
+        <full_name>\Krb5Auth::userExists()</full_name>
+        <docblock line="74">
+          <description>Check if we know of a user with a certain username.</description>
+          <long-description></long-description>
+          <tag name="param" line="74" description="&lt;p&gt;The username to check.&lt;/p&gt;" type="string" variable="$username">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="74" description="True." type="bool">
+            <type>bool</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$username</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+    </class>
+    <source>eJydlU1v2kAQhs/wK+bQA0TUPuXSVmoiEilVkwql5Byt1wNe4f3QfsRFVf57Z81iTEMIicWB/Xhn3mdmMN++m8oM87OzIcQPzG5mcJ6+T7VZW7GsPIymY7i5+w1zZDId3gqOymEJQZVoYV4h3P2Yb7fjjXsshfNWFMELrRzoBSxEjQ5kcB4seiYUeNKxQj8h8C6b0p6iZCnRxe4gPj0bcGEYX7ElwuZhxmS3osh+2qI9rTde0mnPHYwq782XPG+aJtOGtnSwlFHbZZ5ELpfCf06LjGo0ppD5MFUKroKUa6BEl8FXIKSpUaLyLJLCQlso8QlrbeJm1ip5zZyLivNW8rcLNaXaeBu41zZLUJZJiJVTS/i0ssWDQ6uYRPilPQSq+cF7uPasOHrFIqvl3o18ODChIEpYBMVb84+PfGto1E8+2aaYpEBjYhg8dxiXZQkMFDYx+EGSsMWIs9ItaCriDBwTGqpco23ZCrtFrLJPkTYqGqlgFRRa1zC3AV8hZGUZoUadockuRQs1SIGoCPi1z3iPMk4q+xhiXIPXNPkxyrssl1ijx33Xx61OK+QrEItktvXBVLkrn2SeV/RjZLBSulHkitN2H+oNKiLhMckLyZGe7WtOhG8VsxTiA12bVkzRO8L/Pzwv2/g6seu4D96n6d0DjtO83Xgna/R6ELaX48TWN9j2Ns7fhhUaQa8eBhxt+/I9ynRK10+kiurrP/Rn4N4a3+d/FDMjwA==</source>
+  </file>
   <package name="Default" full_name="Default"/>
   <package name="app" full_name="app"/>
   <package name="app.Console" full_name="app.Console"/>
@@ -6624,6 +6753,12 @@ will inherit them.</long-description>
   <package name="app.Controller" full_name="app.Controller"/>
   <package name="app.Controller.Component" full_name="app.Controller.Component"/>
   <package name="app.Controller.Component.Auth" full_name="app.Controller.Component.Auth"/>
+  <package name="app.Lib.Automation" full_name="app.Lib.Automation"/>
+  <package name="app.Lib.AutomationDriver" full_name="app.Lib.AutomationDriver"/>
+  <package name="app.Lib.CsvReader" full_name="app.Lib.CsvReader"/>
+  <package name="app.Lib.Error.Exception" full_name="app.Lib.Error.Exception"/>
+  <package name="app.Lib.Krb" full_name="app.Lib.Krb"/>
+  <package name="app.Lib.MailChimp" full_name="app.Lib.MailChimp"/>
   <package name="app.Model" full_name="app.Model"/>
   <package name="app.View.Helper" full_name="app.View.Helper"/>
   <package name="plugin.MemberVoice.Controller" full_name="plugin.MemberVoice.Controller"/>

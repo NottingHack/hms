@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>HMS - The Hackspace Management System » \krb5_auth</title>
+<title>HMS - The Hackspace Management System » \Krb5Auth</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -25,6 +25,12 @@
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
 <li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
+<li><a href="../packages/app.Lib.Automation.html"><i class="icon-folder-open"></i> app.Lib.Automation</a></li>
+<li><a href="../packages/app.Lib.AutomationDriver.html"><i class="icon-folder-open"></i> app.Lib.AutomationDriver</a></li>
+<li><a href="../packages/app.Lib.CsvReader.html"><i class="icon-folder-open"></i> app.Lib.CsvReader</a></li>
+<li><a href="../packages/app.Lib.Error.Exception.html"><i class="icon-folder-open"></i> app.Lib.Error.Exception</a></li>
+<li><a href="../packages/app.Lib.Krb.html"><i class="icon-folder-open"></i> app.Lib.Krb</a></li>
+<li><a href="../packages/app.Lib.MailChimp.html"><i class="icon-folder-open"></i> app.Lib.MailChimp</a></li>
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
 <li><a href="../packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
@@ -39,7 +45,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">486</span></a></li>
+                <span class="label label-info">383</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -68,105 +74,130 @@
 <ul class="side-nav nav nav-list"><li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method___construct" title="__construct() :: "><span class="description">__construct()
-        </span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#method_add_user" title="add_user() :: "><span class="description">add_user()
-        </span><pre>add_user()</pre></a></li>
-<li class="method public "><a href="#method_change_password" title="change_password() :: "><span class="description">change_password()
-        </span><pre>change_password()</pre></a></li>
-<li class="method public "><a href="#method_check_password" title="check_password() :: "><span class="description">check_password()
-        </span><pre>check_password()</pre></a></li>
-<li class="method public "><a href="#method_delete_user" title="delete_user() :: "><span class="description">delete_user()
-        </span><pre>delete_user()</pre></a></li>
-<li class="method public "><a href="#method_user_exists" title="user_exists() :: "><span class="description">user_exists()
-        </span><pre>user_exists()</pre></a></li>
+<li class="method public "><a href="#method___construct" title="__construct() :: Constructor."><span class="description">Constructor.</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_addUser" title="addUser() :: Add a new user."><span class="description">Add a new user.</span><pre>addUser()</pre></a></li>
+<li class="method public "><a href="#method_changePassword" title="changePassword() :: Change the password for a user."><span class="description">Change the password for a user.</span><pre>changePassword()</pre></a></li>
+<li class="method public "><a href="#method_checkPassword" title="checkPassword() :: Check if a username and password matches a known record."><span class="description">Check if a username and password matches a known record.</span><pre>checkPassword()</pre></a></li>
+<li class="method public "><a href="#method_deleteUser" title="deleteUser() :: Remove a user."><span class="description">Remove a user.</span><pre>deleteUser()</pre></a></li>
+<li class="method public "><a href="#method_userExists" title="userExists() :: Check if we know of a user with a certain username."><span class="description">Check if we know of a user with a certain username.</span><pre>userExists()</pre></a></li>
 </ul>
 </li></ul>
 </div>
 <div class="span8">
-<a id="\krb5_auth"></a><ul class="breadcrumb">
+<a id="\Krb5Auth"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/krb5_auth.html">krb5_auth</a>
+<span class="divider">\</span><a href="../classes/Krb5Auth.html">Krb5Auth</a>
 </li>
 </ul>
 <div class="element class">
-<p class="short_description"></p>
+<p class="short_description">Dummy KrbAuth implementation for development.</p>
 <div class="details">
 <div class="long_description"></div>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse" title="public">
-<h2>__construct()
-        </h2>
-<pre>__construct($krb_username, $keytab, $realm) </pre>
+<h2>Constructor.</h2>
+<pre>__construct(string $krbUsername, string $keytab, string $realm) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$krb_username</h4></div>
-<div class="subelement argument"><h4>$keytab</h4></div>
-<div class="subelement argument"><h4>$realm</h4></div>
+<div class="subelement argument">
+<h4>$krbUsername</h4>
+<code>string</code><p>Not used.</p></div>
+<div class="subelement argument">
+<h4>$keytab</h4>
+<code>string</code><p>Not used.</p></div>
+<div class="subelement argument">
+<h4>$realm</h4>
+<code>string</code><p>Not used.</p></div>
 </div></div>
 </div>
-<a id="method_add_user"></a><div class="element clickable method public method_add_user" data-toggle="collapse" data-target=".method_add_user .collapse" title="public">
-<h2>add_user()
-        </h2>
-<pre>add_user($username, $password) </pre>
+<a id="method_addUser"></a><div class="element clickable method public method_addUser" data-toggle="collapse" data-target=".method_addUser .collapse" title="public">
+<h2>Add a new user.</h2>
+<pre>addUser(string $username, string $password) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$username</h4></div>
-<div class="subelement argument"><h4>$password</h4></div>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code><p>The username of the new user.</p></div>
+<div class="subelement argument">
+<h4>$password</h4>
+<code>string</code><p>The password for the user.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True.</div>
 </div></div>
 </div>
-<a id="method_change_password"></a><div class="element clickable method public method_change_password" data-toggle="collapse" data-target=".method_change_password .collapse" title="public">
-<h2>change_password()
-        </h2>
-<pre>change_password($username, $newpassword) </pre>
+<a id="method_changePassword"></a><div class="element clickable method public method_changePassword" data-toggle="collapse" data-target=".method_changePassword .collapse" title="public">
+<h2>Change the password for a user.</h2>
+<pre>changePassword(string $username, string $newpassword) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$username</h4></div>
-<div class="subelement argument"><h4>$newpassword</h4></div>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code><p>The users username.</p></div>
+<div class="subelement argument">
+<h4>$newpassword</h4>
+<code>string</code><p>The new password.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True.</div>
 </div></div>
 </div>
-<a id="method_check_password"></a><div class="element clickable method public method_check_password" data-toggle="collapse" data-target=".method_check_password .collapse" title="public">
-<h2>check_password()
-        </h2>
-<pre>check_password($username, $password) </pre>
+<a id="method_checkPassword"></a><div class="element clickable method public method_checkPassword" data-toggle="collapse" data-target=".method_checkPassword .collapse" title="public">
+<h2>Check if a username and password matches a known record.</h2>
+<pre>checkPassword(string $username, \striing $password) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$username</h4></div>
-<div class="subelement argument"><h4>$password</h4></div>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code><p>The username to check.</p></div>
+<div class="subelement argument">
+<h4>$password</h4>
+<code><a href="striing.html">\striing</a></code><p>The password to check.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True.</div>
 </div></div>
 </div>
-<a id="method_delete_user"></a><div class="element clickable method public method_delete_user" data-toggle="collapse" data-target=".method_delete_user .collapse" title="public">
-<h2>delete_user()
-        </h2>
-<pre>delete_user($username) </pre>
+<a id="method_deleteUser"></a><div class="element clickable method public method_deleteUser" data-toggle="collapse" data-target=".method_deleteUser .collapse" title="public">
+<h2>Remove a user.</h2>
+<pre>deleteUser(string $username) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$username</h4></div>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code><p>The username of the user to remove.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True.</div>
 </div></div>
 </div>
-<a id="method_user_exists"></a><div class="element clickable method public method_user_exists" data-toggle="collapse" data-target=".method_user_exists .collapse" title="public">
-<h2>user_exists()
-        </h2>
-<pre>user_exists($username) </pre>
+<a id="method_userExists"></a><div class="element clickable method public method_userExists" data-toggle="collapse" data-target=".method_userExists .collapse" title="public">
+<h2>Check if we know of a user with a certain username.</h2>
+<pre>userExists(string $username) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$username</h4></div>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code><p>The username to check.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True.</div>
 </div></div>
 </div>
 </div>
@@ -177,7 +208,7 @@
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-10T23:17:13Z.<br></footer></div>
+            generated on 2013-12-11T22:28:42Z.<br></footer></div>
 </div>
 </body>
 </html>
