@@ -1,8 +1,5 @@
 <?php
 /**
- * Application level Controller
- *
- * Application-wide logic.
  *
  * PHP 5
  *
@@ -12,10 +9,9 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @copyright     HMS Team
- * @package       app.Lib.Automation
+ * @package       app.Lib.AutomationDriver
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-
 
 require_once ('AutomationDriverTest.php');
 

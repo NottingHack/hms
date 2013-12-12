@@ -25,13 +25,13 @@
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
 <li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
-<li><a href="../packages/app.Lib.Automation.html"><i class="icon-folder-open"></i> app.Lib.Automation</a></li>
 <li><a href="../packages/app.Lib.AutomationDriver.html"><i class="icon-folder-open"></i> app.Lib.AutomationDriver</a></li>
 <li><a href="../packages/app.Lib.CsvReader.html"><i class="icon-folder-open"></i> app.Lib.CsvReader</a></li>
 <li><a href="../packages/app.Lib.Error.Exception.html"><i class="icon-folder-open"></i> app.Lib.Error.Exception</a></li>
 <li><a href="../packages/app.Lib.Krb.html"><i class="icon-folder-open"></i> app.Lib.Krb</a></li>
 <li><a href="../packages/app.Lib.MailChimp.html"><i class="icon-folder-open"></i> app.Lib.MailChimp</a></li>
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
+<li><a href="../packages/app.Model.Behavior.html"><i class="icon-folder-open"></i> app.Model.Behavior</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
 <li><a href="../packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
 <li><a href="../packages/plugin.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Model</a></li>
@@ -45,7 +45,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">383</span></a></li>
+                <span class="label label-info">69</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -75,18 +75,12 @@
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_krbAddUser" title="krbAddUser() :: "><span class="description">krbAddUser()
-        </span><pre>krbAddUser()</pre></a></li>
-<li class="method public "><a href="#method_krbChangePassword" title="krbChangePassword() :: "><span class="description">krbChangePassword()
-        </span><pre>krbChangePassword()</pre></a></li>
-<li class="method public "><a href="#method_krbCheckPassword" title="krbCheckPassword() :: "><span class="description">krbCheckPassword()
-        </span><pre>krbCheckPassword()</pre></a></li>
-<li class="method public "><a href="#method_krbDeleteUser" title="krbDeleteUser() :: "><span class="description">krbDeleteUser()
-        </span><pre>krbDeleteUser()</pre></a></li>
-<li class="method public "><a href="#method_krbUserExists" title="krbUserExists() :: "><span class="description">krbUserExists()
-        </span><pre>krbUserExists()</pre></a></li>
-<li class="method public "><a href="#method_setup" title="setup() :: "><span class="description">setup()
-        </span><pre>setup()</pre></a></li>
+<li class="method public "><a href="#method_krbAddUser" title="krbAddUser() :: Add a new user to the KrbAuth system."><span class="description">Add a new user to the KrbAuth system.</span><pre>krbAddUser()</pre></a></li>
+<li class="method public "><a href="#method_krbChangePassword" title="krbChangePassword() :: Update the users password."><span class="description">Update the users password.</span><pre>krbChangePassword()</pre></a></li>
+<li class="method public "><a href="#method_krbCheckPassword" title="krbCheckPassword() :: Check to see if the password is correct."><span class="description">Check to see if the password is correct.</span><pre>krbCheckPassword()</pre></a></li>
+<li class="method public "><a href="#method_krbDeleteUser" title="krbDeleteUser() :: Delete an existing user from the KrbAuth system."><span class="description">Delete an existing user from the KrbAuth system.</span><pre>krbDeleteUser()</pre></a></li>
+<li class="method public "><a href="#method_krbUserExists" title="krbUserExists() :: Detect if a user exists."><span class="description">Detect if a user exists.</span><pre>krbUserExists()</pre></a></li>
+<li class="method public "><a href="#method_setup" title="setup() :: Perform initial setup."><span class="description">Perform initial setup.</span><pre>setup()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -94,7 +88,7 @@
                     <ul></ul>
 </li>
 <li class="nav-header private">» Private
-                    <ul><li class="property private "><a href="#property_krbObj" title="$krbObj() :: "><span class="description"></span><pre>$krbObj</pre></a></li></ul>
+                    <ul><li class="property private "><a href="#property___krbObj" title="$__krbObj() :: KrbAuth object."><span class="description"></span><pre>$__krbObj</pre></a></li></ul>
 </li>
 </ul>
 </div>
@@ -108,91 +102,134 @@
 </li>
 </ul>
 <div class="element class">
-<p class="short_description"></p>
+<p class="short_description">Behaviour that allows a model access to the KrbAuth interface.</p>
 <div class="details">
 <div class="long_description"></div>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_krbAddUser"></a><div class="element clickable method public method_krbAddUser" data-toggle="collapse" data-target=".method_krbAddUser .collapse" title="public">
-<h2>krbAddUser()
-        </h2>
-<pre>krbAddUser(\Model $model, $username, $password) </pre>
+<h2>Add a new user to the KrbAuth system.</h2>
+<pre>krbAddUser(\Model $model, string $username, string $password) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$model</h4></div>
-<div class="subelement argument"><h4>$username</h4></div>
-<div class="subelement argument"><h4>$password</h4></div>
+<div class="subelement argument">
+<h4>$model</h4>
+<code><a href="Model.html">\Model</a></code><p>The model we're attached to.</p></div>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code><p>The username to create.</p></div>
+<div class="subelement argument">
+<h4>$password</h4>
+<code>string</code><p>The password to create.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if creation succeeded (or useDummy is true), false otherwise.</div>
 </div></div>
 </div>
 <a id="method_krbChangePassword"></a><div class="element clickable method public method_krbChangePassword" data-toggle="collapse" data-target=".method_krbChangePassword .collapse" title="public">
-<h2>krbChangePassword()
-        </h2>
-<pre>krbChangePassword(\Model $model, $username, $newPass) </pre>
+<h2>Update the users password.</h2>
+<pre>krbChangePassword(\Model $model, string $username, string $newPass) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$model</h4></div>
-<div class="subelement argument"><h4>$username</h4></div>
-<div class="subelement argument"><h4>$newPass</h4></div>
+<div class="subelement argument">
+<h4>$model</h4>
+<code><a href="Model.html">\Model</a></code><p>The model we're attached to.</p></div>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code><p>The username to update.</p></div>
+<div class="subelement argument">
+<h4>$newPass</h4>
+<code>string</code><p>The new password to use.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if password update succeeded (or useDummy is true), false otherwise.</div>
 </div></div>
 </div>
 <a id="method_krbCheckPassword"></a><div class="element clickable method public method_krbCheckPassword" data-toggle="collapse" data-target=".method_krbCheckPassword .collapse" title="public">
-<h2>krbCheckPassword()
-        </h2>
-<pre>krbCheckPassword(\Model $model, $username, $password) </pre>
+<h2>Check to see if the password is correct.</h2>
+<pre>krbCheckPassword(\Model $model, string $username, string $password) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$model</h4></div>
-<div class="subelement argument"><h4>$username</h4></div>
-<div class="subelement argument"><h4>$password</h4></div>
+<div class="subelement argument">
+<h4>$model</h4>
+<code><a href="Model.html">\Model</a></code><p>The model we're attached to.</p></div>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code><p>The username to check.</p></div>
+<div class="subelement argument">
+<h4>$password</h4>
+<code>string</code><p>The password to check.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if password is correct (or useDummy is true), false otherwise.</div>
 </div></div>
 </div>
 <a id="method_krbDeleteUser"></a><div class="element clickable method public method_krbDeleteUser" data-toggle="collapse" data-target=".method_krbDeleteUser .collapse" title="public">
-<h2>krbDeleteUser()
-        </h2>
-<pre>krbDeleteUser(\Model $model, $username) </pre>
+<h2>Delete an existing user from the KrbAuth system.</h2>
+<pre>krbDeleteUser(\Model $model, string $username) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$model</h4></div>
-<div class="subelement argument"><h4>$username</h4></div>
+<div class="subelement argument">
+<h4>$model</h4>
+<code><a href="Model.html">\Model</a></code><p>The model we're attached to.</p></div>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code><p>The username to delete.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if deletion succeeded (or useDummy is true), false otherwise.</div>
 </div></div>
 </div>
 <a id="method_krbUserExists"></a><div class="element clickable method public method_krbUserExists" data-toggle="collapse" data-target=".method_krbUserExists .collapse" title="public">
-<h2>krbUserExists()
-        </h2>
-<pre>krbUserExists(\Model $model, $username) </pre>
+<h2>Detect if a user exists.</h2>
+<pre>krbUserExists(\Model $model, string $username) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$model</h4></div>
-<div class="subelement argument"><h4>$username</h4></div>
+<div class="subelement argument">
+<h4>$model</h4>
+<code><a href="Model.html">\Model</a></code><p>The model we're attached to.</p></div>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code><p>The username to check.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if user exists (or useDummy is true), false otherwise.</div>
 </div></div>
 </div>
 <a id="method_setup"></a><div class="element clickable method public method_setup" data-toggle="collapse" data-target=".method_setup .collapse" title="public">
-<h2>setup()
-        </h2>
-<pre>setup(\Model $model, $settings<code> = array()</code>) </pre>
+<h2>Perform initial setup.</h2>
+<pre>setup(\Model $model, array $settings<code> = array()</code>) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>link</th>
+<td><a href="http://book.cakephp.org/2.0/en/models/behaviors.html#creating-a-behavior-callback">http://book.cakephp.org/2.0/en/models/behaviors.html#creating-a-behavior-callback</a></td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$model</h4></div>
-<div class="subelement argument"><h4>$settings</h4></div>
+<div class="subelement argument">
+<h4>$model</h4>
+<code><a href="Model.html">\Model</a></code><p>The model we're being attached to.</p></div>
+<div class="subelement argument">
+<h4>$settings</h4>
+<code>array</code><p>Any settings passed from the model.</p></div>
 </div></div>
 </div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
-<a id="property_krbObj"> </a><div class="element clickable property private property_krbObj" data-toggle="collapse" data-target=".property_krbObj .collapse" title="private">
-<h2>$krbObj</h2>
-<pre>$krbObj </pre>
+<a id="property___krbObj"> </a><div class="element clickable property private property___krbObj" data-toggle="collapse" data-target=".property___krbObj .collapse" title="private">
+<h2>KrbAuth object.</h2>
+<pre>$__krbObj : <a href="KrbAuth.html">\KrbAuth</a></pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>null</code></div>
@@ -208,7 +245,7 @@
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-11T22:28:41Z.<br></footer></div>
+            generated on 2013-12-12T22:02:05Z.<br></footer></div>
 </div>
 </body>
 </html>

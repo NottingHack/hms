@@ -1,8 +1,5 @@
 <?php
 /**
- * Application level Controller
- *
- * Application-wide logic.
  *
  * PHP 5
  *
@@ -15,6 +12,7 @@
  * @package       app.Lib.CsvReader
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+
 
 /**
  * Class to handle reading CSV files. Warning, reads entire file in to memory.

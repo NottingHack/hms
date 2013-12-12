@@ -1,8 +1,5 @@
 <?php
 /**
- * Application level Controller
- *
- * Application-wide logic.
  *
  * PHP 5
  *

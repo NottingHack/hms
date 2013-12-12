@@ -25,13 +25,13 @@
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
 <li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
-<li><a href="../packages/app.Lib.Automation.html"><i class="icon-folder-open"></i> app.Lib.Automation</a></li>
 <li><a href="../packages/app.Lib.AutomationDriver.html"><i class="icon-folder-open"></i> app.Lib.AutomationDriver</a></li>
 <li><a href="../packages/app.Lib.CsvReader.html"><i class="icon-folder-open"></i> app.Lib.CsvReader</a></li>
 <li><a href="../packages/app.Lib.Error.Exception.html"><i class="icon-folder-open"></i> app.Lib.Error.Exception</a></li>
 <li><a href="../packages/app.Lib.Krb.html"><i class="icon-folder-open"></i> app.Lib.Krb</a></li>
 <li><a href="../packages/app.Lib.MailChimp.html"><i class="icon-folder-open"></i> app.Lib.MailChimp</a></li>
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
+<li><a href="../packages/app.Model.Behavior.html"><i class="icon-folder-open"></i> app.Model.Behavior</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
 <li><a href="../packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
 <li><a href="../packages/plugin.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Model</a></li>
@@ -45,7 +45,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">383</span></a></li>
+                <span class="label label-info">69</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -75,19 +75,16 @@
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_getGroupIdsForMember" title="getGroupIdsForMember() :: "><span class="description">getGroupIdsForMember()
-        </span><pre>getGroupIdsForMember()</pre></a></li>
-<li class="method public "><a href="#method_getMemberIdsForGroup" title="getMemberIdsForGroup() :: "><span class="description">getMemberIdsForGroup()
-        </span><pre>getMemberIdsForGroup()</pre></a></li>
-<li class="method public "><a href="#method_isMemberInGroup" title="isMemberInGroup() :: "><span class="description">isMemberInGroup()
-        </span><pre>isMemberInGroup()</pre></a></li>
+<li class="method public "><a href="#method_getGroupIdsForMember" title="getGroupIdsForMember() :: Get the id of any Group that a Member is in."><span class="description">Get the id of any Group that a Member is in.</span><pre>getGroupIdsForMember()</pre></a></li>
+<li class="method public "><a href="#method_getMemberIdsForGroup" title="getMemberIdsForGroup() :: Get the id's of all members who belong to a group."><span class="description">Get the id's of all members who belong to a group.</span><pre>getMemberIdsForGroup()</pre></a></li>
+<li class="method public "><a href="#method_isMemberInGroup" title="isMemberInGroup() :: Test to see if a Member is in a Group."><span class="description">Test to see if a Member is in a Group.</span><pre>isMemberInGroup()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
 <i title="Properties" class="icon-custom icon-property"></i> Properties
                     <ul>
-<li class="property public "><a href="#property_belongsTo" title="$belongsTo() :: "><span class="description"></span><pre>$belongsTo</pre></a></li>
-<li class="property public "><a href="#property_useTable" title="$useTable() :: "><span class="description"></span><pre>$useTable</pre></a></li>
+<li class="property public "><a href="#property_belongsTo" title="$belongsTo() :: Specify our 'belongs to' associations"><span class="description"></span><pre>$belongsTo</pre></a></li>
+<li class="property public "><a href="#property_useTable" title="$useTable() :: Specify the table to use."><span class="description"></span><pre>$useTable</pre></a></li>
 </ul>
 </li>
 </ul>
@@ -104,53 +101,62 @@
 <div class="element class">
 <p class="short_description">Model for the table that defines the HABTM relationship between Group and Member</p>
 <div class="details">
-<div class="long_description">Add your application-wide methods in the class below, your models
-will inherit them.</div>
-<table class="table table-bordered"><tr>
-<th>package</th>
-<td><a href="../packages/app.Model.html">app.Model</a></td>
-</tr></table>
+<div class="long_description"></div>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_getGroupIdsForMember"></a><div class="element clickable method public method_getGroupIdsForMember" data-toggle="collapse" data-target=".method_getGroupIdsForMember .collapse" title="public">
-<h2>getGroupIdsForMember()
-        </h2>
-<pre>getGroupIdsForMember($memberId) </pre>
+<h2>Get the id of any Group that a Member is in.</h2>
+<pre>getGroupIdsForMember(int $memberId) : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$memberId</h4></div>
+<div class="subelement argument">
+<h4>$memberId</h4>
+<code>int</code><p>The primary key of the Member record.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>An array of Group ids that the Member belongs to.</div>
 </div></div>
 </div>
 <a id="method_getMemberIdsForGroup"></a><div class="element clickable method public method_getMemberIdsForGroup" data-toggle="collapse" data-target=".method_getMemberIdsForGroup .collapse" title="public">
-<h2>getMemberIdsForGroup()
-        </h2>
-<pre>getMemberIdsForGroup($groupId) </pre>
+<h2>Get the id's of all members who belong to a group.</h2>
+<pre>getMemberIdsForGroup(int $groupId) : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$groupId</h4></div>
+<div class="subelement argument">
+<h4>$groupId</h4>
+<code>int</code><p>The id of the group to get the members of.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>An array of member ids.</div>
 </div></div>
 </div>
 <a id="method_isMemberInGroup"></a><div class="element clickable method public method_isMemberInGroup" data-toggle="collapse" data-target=".method_isMemberInGroup .collapse" title="public">
-<h2>isMemberInGroup()
-        </h2>
-<pre>isMemberInGroup($memberId, $groupId) </pre>
+<h2>Test to see if a Member is in a Group.</h2>
+<pre>isMemberInGroup(int $memberId, int $groupId) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$memberId</h4></div>
-<div class="subelement argument"><h4>$groupId</h4></div>
+<div class="subelement argument">
+<h4>$memberId</h4>
+<code>int</code><p>The primary key of the Member record.</p></div>
+<div class="subelement argument">
+<h4>$groupId</h4>
+<code>int</code><p>The primary key of the Group record.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if the Member is in the Group, false otherwise.</div>
 </div></div>
 </div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
 <a id="property_belongsTo"> </a><div class="element clickable property public property_belongsTo" data-toggle="collapse" data-target=".property_belongsTo .collapse" title="public">
-<h2>$belongsTo</h2>
-<pre>$belongsTo </pre>
+<h2>Specify our 'belongs to' associations</h2>
+<pre>$belongsTo : array</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>array('Member' => array('className' => 'Member', 'foreignKey' => 'member_id'), 'Group' => array('className' => 'Group', 'foreignKey' => 'grp_id'))</code></div>
@@ -159,8 +165,8 @@ will inherit them.</div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_useTable"> </a><div class="element clickable property public property_useTable" data-toggle="collapse" data-target=".property_useTable .collapse" title="public">
-<h2>$useTable</h2>
-<pre>$useTable </pre>
+<h2>Specify the table to use.</h2>
+<pre>$useTable : string</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>'member_group'</code></div>
@@ -176,7 +182,7 @@ will inherit them.</div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-11T22:28:41Z.<br></footer></div>
+            generated on 2013-12-12T22:02:05Z.<br></footer></div>
 </div>
 </body>
 </html>

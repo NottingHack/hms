@@ -25,13 +25,13 @@
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
 <li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
-<li><a href="../packages/app.Lib.Automation.html"><i class="icon-folder-open"></i> app.Lib.Automation</a></li>
 <li><a href="../packages/app.Lib.AutomationDriver.html"><i class="icon-folder-open"></i> app.Lib.AutomationDriver</a></li>
 <li><a href="../packages/app.Lib.CsvReader.html"><i class="icon-folder-open"></i> app.Lib.CsvReader</a></li>
 <li><a href="../packages/app.Lib.Error.Exception.html"><i class="icon-folder-open"></i> app.Lib.Error.Exception</a></li>
 <li><a href="../packages/app.Lib.Krb.html"><i class="icon-folder-open"></i> app.Lib.Krb</a></li>
 <li><a href="../packages/app.Lib.MailChimp.html"><i class="icon-folder-open"></i> app.Lib.MailChimp</a></li>
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
+<li><a href="../packages/app.Model.Behavior.html"><i class="icon-folder-open"></i> app.Model.Behavior</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
 <li><a href="../packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
 <li><a href="../packages/plugin.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Model</a></li>
@@ -45,7 +45,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">383</span></a></li>
+                <span class="label label-info">69</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -94,11 +94,12 @@ used by Controllers or other Components.">CsvComponent</a></li>
 <li><a href="#StatusUpdate" title="Model for all status update data">StatusUpdate</a></li>
 <li><a href="#Permission" title="Model to handle data and queries for permissions.">Permission</a></li>
 <li><a href="#MemberEmail" title="Model to provide validation for the email members form/view.">MemberEmail</a></li>
-<li><a href="#EmailRecord" title="Model for all pin data">EmailRecord</a></li>
+<li><a href="#EmailRecord" title="Model for all email record data">EmailRecord</a></li>
 <li><a href="#ChangePassword" title="Model to provide validation for the change password form/view.">ChangePassword</a></li>
 <li><a href="#AppHelper" title="Application helper">AppHelper</a></li>
 <li><a href="#FileUpload" title="Model to provide validation for a file upload form/view.">FileUpload</a></li>
 <li><a href="#MemberVoiceAppModel" title="Application model for Cake.">MemberVoiceAppModel</a></li>
+<li><a href="#Krb5Auth" title="Dummy KrbAuth implementation for development.">Krb5Auth</a></li>
 <li><a href="#NotAuthorizedException" title="An exception thrown by certain Member methods if they are called on a with data that is invalid from an auth point of view.">NotAuthorizedException</a></li>
 <li><a href="#CsvReader" title="Class to handle reading CSV files. Warning, reads entire file in to memory.">CsvReader</a></li>
 <li><a href="#BankStatementComponent" title="BankStatementComponent is a component to handle parsing of bank statement .csv files.">BankStatementComponent</a></li>
@@ -109,18 +110,18 @@ view all the groups, and modify which users belong in which groups.">GroupsContr
 <li><a href="#MemberVoiceVote" title="Model for all Ideas in MemberVoice">MemberVoiceVote</a></li>
 <li><a href="#MailingListsController" title="Controller to handle MailingList functionality, allows a user
 to see a list of mailing lists, and subscribe/un-subscribe e-mail addresses.">MailingListsController</a></li>
-<li><a href="#Account" title="Model for all group data">Account</a></li>
+<li><a href="#Account" title="Model for all account data">Account</a></li>
 <li><a href="#AuthUtilComponent" title="AuthUtil component allows one to check to see if an action is
 authorized on any controller. It is slow and it is sad about this.">AuthUtilComponent</a></li>
 <li><a href="#NavComponent" title="NavComponent exists to check if a navigation link is
 allowed (by checking if the current user is authorized to perform it),
 allowed links are added to a list which can then be rendered in the view.">NavComponent</a></li>
-<li><a href="#KrbAuthBehavior" title="">KrbAuthBehavior</a></li>
+<li><a href="#KrbAuthBehavior" title="Behaviour that allows a model access to the KrbAuth interface.">KrbAuthBehavior</a></li>
 <li><a href="#AppController" title="Application Controller">AppController</a></li>
 <li><a href="#MemberVoiceStatus" title="Model for all idea statuses in MemberVoice">MemberVoiceStatus</a></li>
 <li><a href="#AppModel" title="Application model for Cake.">AppModel</a></li>
 <li><a href="#TinymceHelper" title="Application helper">TinymceHelper</a></li>
-<li><a href="#MailingList" title="Model for all mailing list">MailingList</a></li>
+<li><a href="#MailingList" title="Model for all mailing list data">MailingList</a></li>
 <li><a href="#HmsAuthorize" title="HmsAuthorize is basically the same as the CakPHP ControllerAuthorize
 in that it calls the 'isAuthorized' method of the controller. However
 HmsAuthorize doesn't discard the CakeRequest object, as it is used in the
@@ -137,7 +138,6 @@ but actually accesses a local table.">MCAPI</a></li>
 <li><a href="#Group" title="Model for all group data">Group</a></li>
 <li><a href="#MemberVoiceCommentsController" title="Controller for Comments.">MemberVoiceCommentsController</a></li>
 <li><a href="#MemberVoiceIdea" title="Model for all Ideas in MemberVoice">MemberVoiceIdea</a></li>
-<li><a href="#Krb5Auth" title="Dummy KrbAuth implementation for development.">Krb5Auth</a></li>
 </ul>
 </div>
 <div class="span8 namespace-contents"></div>
@@ -146,7 +146,7 @@ but actually accesses a local table.">MCAPI</a></li>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-11T22:28:41Z.<br></footer></div>
+            generated on 2013-12-12T22:02:04Z.<br></footer></div>
 </div>
 </body>
 </html>
