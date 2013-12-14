@@ -1,113 +1,57 @@
 <?xml version="1.0"?>
 <checkstyle version="1.3.0">
-  <file name="app\Controller\EmailRecordsController.php"/>
-  <file name="app\Model\ForgotPassword.php"/>
-  <file name="app\Controller\MembersController.php"/>
-  <file name="plugins\MemberVoice\Controller\MemberVoiceAppController.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="14" severity="error" message="No summary for property $mvFirstName" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="15" severity="error" message="No summary for property $mvLastName" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="22" severity="error" message="No summary for method _getUserID()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="26" severity="error" message="Argument $user is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="26" severity="error" message="Argument $request is missing from the Docblock of isAuthorized()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="26" severity="error" message="No summary for method isAuthorized()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\View\Helper\NavHelper.php"/>
-  <file name="app\Controller\StatusController.php"/>
-  <file name="app\Model\GroupsMember.php"/>
-  <file name="app\Controller\Component\CsvComponent.php"/>
-  <file name="plugins\MemberVoice\Model\MemberVoiceCategory.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="9" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="10" severity="error" message="No summary for property $alias" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="12" severity="error" message="No summary for property $hasAndBelongsToMany" source="phpDocumentor.file.PPC:ERR-50007"/>
-  </file>
-  <file name="app\Model\Pin.php"/>
-  <file name="app\Lib\AutomationDriver\HmsAutomationDriverTest.php"/>
+  <file name="app\Console\cake.php"/>
   <file name="app\Console\Command\AppShell.php"/>
+  <file name="app\Controller\AppController.php"/>
+  <file name="app\Controller\Component\Auth\HmsAuthenticate.php"/>
+  <file name="app\Controller\Component\Auth\HmsAuthorize.php"/>
+  <file name="app\Controller\Component\AuthUtilComponent.php"/>
+  <file name="app\Controller\Component\BankStatementComponent.php"/>
+  <file name="app\Controller\Component\CsvComponent.php"/>
+  <file name="app\Controller\Component\NavComponent.php"/>
+  <file name="app\Controller\EmailRecordsController.php"/>
+  <file name="app\Controller\GroupsController.php"/>
+  <file name="app\Controller\MailinglistsController.php"/>
+  <file name="app\Controller\MembersController.php"/>
+  <file name="app\Controller\PagesController.php"/>
+  <file name="app\Controller\StatusController.php"/>
+  <file name="app\index.php"/>
+  <file name="app\Lib\AutomationDriver\AutomationDriver.php"/>
+  <file name="app\Lib\AutomationDriver\AutomationDriverTest.php"/>
+  <file name="app\Lib\AutomationDriver\HmsAutomationDriverTest.php"/>
+  <file name="app\Lib\CsvReader\CsvReader.php"/>
+  <file name="app\Lib\Error\Exception\InvalidStatusException.php"/>
+  <file name="app\Lib\Error\Exception\NotAuthorizedException.php"/>
+  <file name="app\Lib\Krb\Krb5Auth.php"/>
+  <file name="app\Lib\MailChimp\MCAPI.php"/>
+  <file name="app\Model\Account.php"/>
+  <file name="app\Model\AppModel.php"/>
+  <file name="app\Model\Behavior\KrbAuthBehavior.php"/>
+  <file name="app\Model\ChangePassword.php"/>
+  <file name="app\Model\EmailRecord.php"/>
+  <file name="app\Model\FileUpload.php"/>
+  <file name="app\Model\ForgotPassword.php"/>
+  <file name="app\Model\Group.php"/>
+  <file name="app\Model\GroupsMember.php"/>
+  <file name="app\Model\MailingList.php"/>
   <file name="app\Model\Member.php"/>
+  <file name="app\Model\MemberEmail.php"/>
+  <file name="app\Model\Permission.php"/>
+  <file name="app\Model\Pin.php"/>
   <file name="app\Model\Status.php"/>
   <file name="app\Model\StatusUpdate.php"/>
-  <file name="app\Model\Permission.php"/>
-  <file name="app\Model\MemberEmail.php"/>
-  <file name="app\Model\EmailRecord.php"/>
-  <file name="app\Model\ChangePassword.php"/>
   <file name="app\View\Helper\AppHelper.php"/>
-  <file name="app\Model\FileUpload.php"/>
-  <file name="plugins\MemberVoice\Model\MemberVoiceAppModel.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="2" severity="error" message="No summary for class \MemberVoiceAppModel" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="4" severity="error" message="No summary for property $tablePrefix" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="7" severity="error" message="No summary for property $mvUserModel" source="phpDocumentor.file.PPC:ERR-50007"/>
-  </file>
-  <file name="app\Lib\Krb\Krb5Auth.php"/>
-  <file name="app\Lib\Error\Exception\NotAuthorizedException.php"/>
-  <file name="app\Lib\CsvReader\CsvReader.php"/>
-  <file name="app\Controller\Component\BankStatementComponent.php"/>
-  <file name="app\View\Helper\MailinglistHelper.php"/>
-  <file name="app\Controller\PagesController.php"/>
-  <file name="app\Controller\GroupsController.php"/>
-  <file name="plugins\MemberVoice\Model\MemberVoiceVote.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="9" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-  </file>
-  <file name="app\Controller\MailinglistsController.php"/>
-  <file name="app\Console\cake.php"/>
-  <file name="app\Model\Account.php"/>
-  <file name="app\Controller\Component\AuthUtilComponent.php"/>
-  <file name="app\Controller\Component\NavComponent.php"/>
-  <file name="app\Model\Behavior\KrbAuthBehavior.php"/>
-  <file name="app\Controller\AppController.php"/>
-  <file name="plugins\MemberVoice\Model\MemberVoiceStatus.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="9" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-  </file>
-  <file name="app\index.php"/>
-  <file name="app\Model\AppModel.php"/>
-  <file name="app\View\Helper\TinymceHelper.php"/>
-  <file name="app\Model\MailingList.php"/>
-  <file name="app\Controller\Component\Auth\HmsAuthorize.php"/>
   <file name="app\View\Helper\CurrencyHelper.php"/>
-  <file name="app\Controller\Component\Auth\HmsAuthenticate.php"/>
-  <file name="app\Lib\MailChimp\MCAPI.php"/>
-  <file name="app\Lib\AutomationDriver\AutomationDriver.php"/>
-  <file name="plugins\MemberVoice\Controller\MemberVoiceIdeasController.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="10" severity="error" message="No summary for property $helpers" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="12" severity="error" message="No summary for property $components" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="14" severity="error" message="No summary for property $paginate" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="25" severity="error" message="Argument $categoryId is missing from the Docblock of index()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="25" severity="error" message="No summary for method index()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="70" severity="error" message="Argument $id is missing from the Docblock of idea()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="70" severity="error" message="No summary for method idea()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="104" severity="error" message="Argument $id is missing from the Docblock of vote()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="104" severity="error" message="No summary for method vote()" source="phpDocumentor.file.PPC:ERR-50008"/>
-    <error line="181" severity="error" message="No summary for method _getVoteUrl()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="plugins\MemberVoice\Model\MemberVoiceComment.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="9" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="10" severity="error" message="No summary for property $alias" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="11" severity="error" message="No summary for property $belongsTo" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="17" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="app\Lib\Error\Exception\InvalidStatusException.php"/>
-  <file name="app\Lib\AutomationDriver\AutomationDriverTest.php"/>
-  <file name="app\Model\Group.php"/>
-  <file name="plugins\MemberVoice\Controller\MemberVoiceCommentsController.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="14" severity="error" message="No summary for method add()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
-  <file name="plugins\MemberVoice\Model\MemberVoiceIdea.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="9" severity="error" message="No summary for property $useTable" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="10" severity="error" message="No summary for property $alias" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="12" severity="error" message="No summary for property $hasAndBelongsToMany" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="18" severity="error" message="No summary for property $hasMany" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="26" severity="error" message="No summary for property $belongsTo" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="39" severity="error" message="Argument $ideaID is missing from the Docblock of saveVote()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="39" severity="error" message="Argument $userID is missing from the Docblock of saveVote()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="39" severity="error" message="Argument $votes is missing from the Docblock of saveVote()" source="phpDocumentor.file.PPC:ERR-50015"/>
-    <error line="39" severity="error" message="No summary for method saveVote()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
+  <file name="app\View\Helper\MailinglistHelper.php"/>
+  <file name="app\View\Helper\NavHelper.php"/>
+  <file name="app\View\Helper\TinymceHelper.php"/>
+  <file name="plugins\MemberVoice\Controller\MemberVoiceAppController.php"/>
+  <file name="plugins\MemberVoice\Controller\MemberVoiceCommentsController.php"/>
+  <file name="plugins\MemberVoice\Controller\MemberVoiceIdeasController.php"/>
+  <file name="plugins\MemberVoice\Model\MemberVoiceAppModel.php"/>
+  <file name="plugins\MemberVoice\Model\MemberVoiceCategory.php"/>
+  <file name="plugins\MemberVoice\Model\MemberVoiceComment.php"/>
+  <file name="plugins\MemberVoice\Model\MemberVoiceIdea.php"/>
+  <file name="plugins\MemberVoice\Model\MemberVoiceStatus.php"/>
+  <file name="plugins\MemberVoice\Model\MemberVoiceVote.php"/>
 </checkstyle>

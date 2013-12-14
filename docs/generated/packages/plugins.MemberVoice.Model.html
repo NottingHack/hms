@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>HMS - The Hackspace Management System » plugin.MemberVoice.Model</title>
+<title>HMS - The Hackspace Management System » plugins.MemberVoice.Model</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -20,7 +20,6 @@
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a>Packages</a></li>
-<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
 <li><a href="../packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
@@ -33,8 +32,8 @@
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
 <li><a href="../packages/app.Model.Behavior.html"><i class="icon-folder-open"></i> app.Model.Behavior</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
-<li><a href="../packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
-<li><a href="../packages/plugin.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Model</a></li>
+<li><a href="../packages/plugins.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Controller</a></li>
+<li><a href="../packages/plugins.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Model</a></li>
 </ul>
 </li>
 <li class="dropdown" id="charts-menu">
@@ -45,7 +44,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">47</span></a></li>
+                <span class="label label-info">0</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -70,64 +69,64 @@
 <li class="nav-header">
 <i class="icon-map-marker"></i> Packages</li>
 <li>
-<a href="../packages/plugin.MemberVoice.Model.html" title="plugin.MemberVoice.Model"><i class="icon-folder-open"></i>plugin.MemberVoice.Model</a><ul class="nav nav-list nav-packages"></ul>
+<a href="../packages/plugins.MemberVoice.Model.html" title="plugins.MemberVoice.Model"><i class="icon-folder-open"></i>plugins.MemberVoice.Model</a><ul class="nav nav-list nav-packages"></ul>
 </li>
 <li class="nav-header">
 <i title="Classes" class="icon-custom icon-class"></i> Classes</li>
-<li><a href="#MemberVoiceAppController" title="Functions and properties for all controllers in the plugin">MemberVoiceAppController</a></li>
-<li><a href="#MemberVoiceCategory" title="Model for all Ideas in MemberVoice">MemberVoiceCategory</a></li>
-<li><a href="#MemberVoiceComment" title="Model for all Comments in MemberVoice">MemberVoiceComment</a></li>
-<li><a href="#MemberVoiceIdea" title="Model for all Ideas in MemberVoice">MemberVoiceIdea</a></li>
-<li><a href="#MemberVoiceStatus" title="Model for all idea statuses in MemberVoice">MemberVoiceStatus</a></li>
-<li><a href="#MemberVoiceVote" title="Model for all Ideas in MemberVoice">MemberVoiceVote</a></li>
+<li><a href="#MemberVoiceCategory" title="Model for all category data.">MemberVoiceCategory</a></li>
+<li><a href="#MemberVoiceAppModel" title="Base model for all models in the MemberVoice plugin.">MemberVoiceAppModel</a></li>
+<li><a href="#MemberVoiceVote" title="Model for all vote data.">MemberVoiceVote</a></li>
+<li><a href="#MemberVoiceStatus" title="Model for all status data.">MemberVoiceStatus</a></li>
+<li><a href="#MemberVoiceComment" title="Model for all comments data.">MemberVoiceComment</a></li>
+<li><a href="#MemberVoiceIdea" title="Model for all idea data.">MemberVoiceIdea</a></li>
 </ul>
 </div>
 <div class="span8 package-contents">
 <ul class="breadcrumb"><li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li class="active"><a href="../packages/plugin.MemberVoice.Model.html">plugin.MemberVoice.Model</a></li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li class="active"><a href="../packages/plugins.MemberVoice.Model.html">plugins.MemberVoice.Model</a></li>
 </li></ul>
 <div class="package-indent">
 <h3>
 <i title="Classes" class="icon-custom icon-class"></i> Classes and interfaces</h3>
-<div id="MemberVoiceAppController" class="element ajax clickable class">
-<h1>MemberVoiceAppController<a href="../classes/MemberVoiceAppController.html">¶</a>
+<div id="MemberVoiceAppModel" class="element ajax clickable class">
+<h1>MemberVoiceAppModel<a href="../classes/MemberVoiceAppModel.html">¶</a>
 </h1>
-<p class="short_description">Functions and properties for all controllers in the plugin</p>
+<p class="short_description">Base model for all models in the MemberVoice plugin.</p>
 <div class="details collapse"></div>
-<a href="../classes/MemberVoiceAppController.html" class="more">« More »</a>
+<a href="../classes/MemberVoiceAppModel.html" class="more">« More »</a>
 </div>
 <div id="MemberVoiceCategory" class="element ajax clickable class">
 <h1>MemberVoiceCategory<a href="../classes/MemberVoiceCategory.html">¶</a>
 </h1>
-<p class="short_description">Model for all Ideas in MemberVoice</p>
+<p class="short_description">Model for all category data.</p>
 <div class="details collapse"></div>
 <a href="../classes/MemberVoiceCategory.html" class="more">« More »</a>
 </div>
 <div id="MemberVoiceComment" class="element ajax clickable class">
 <h1>MemberVoiceComment<a href="../classes/MemberVoiceComment.html">¶</a>
 </h1>
-<p class="short_description">Model for all Comments in MemberVoice</p>
+<p class="short_description">Model for all comments data.</p>
 <div class="details collapse"></div>
 <a href="../classes/MemberVoiceComment.html" class="more">« More »</a>
 </div>
 <div id="MemberVoiceIdea" class="element ajax clickable class">
 <h1>MemberVoiceIdea<a href="../classes/MemberVoiceIdea.html">¶</a>
 </h1>
-<p class="short_description">Model for all Ideas in MemberVoice</p>
+<p class="short_description">Model for all idea data.</p>
 <div class="details collapse"></div>
 <a href="../classes/MemberVoiceIdea.html" class="more">« More »</a>
 </div>
 <div id="MemberVoiceStatus" class="element ajax clickable class">
 <h1>MemberVoiceStatus<a href="../classes/MemberVoiceStatus.html">¶</a>
 </h1>
-<p class="short_description">Model for all idea statuses in MemberVoice</p>
+<p class="short_description">Model for all status data.</p>
 <div class="details collapse"></div>
 <a href="../classes/MemberVoiceStatus.html" class="more">« More »</a>
 </div>
 <div id="MemberVoiceVote" class="element ajax clickable class">
 <h1>MemberVoiceVote<a href="../classes/MemberVoiceVote.html">¶</a>
 </h1>
-<p class="short_description">Model for all Ideas in MemberVoice</p>
+<p class="short_description">Model for all vote data.</p>
 <div class="details collapse"></div>
 <a href="../classes/MemberVoiceVote.html" class="more">« More »</a>
 </div>
@@ -138,7 +137,7 @@
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-14T00:51:57Z.<br></footer></div>
+            generated on 2013-12-14T01:27:40Z.<br></footer></div>
 </div>
 </body>
 </html>

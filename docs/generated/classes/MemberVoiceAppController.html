@@ -20,7 +20,6 @@
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a>Packages</a></li>
-<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
 <li><a href="../packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
@@ -33,8 +32,8 @@
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
 <li><a href="../packages/app.Model.Behavior.html"><i class="icon-folder-open"></i> app.Model.Behavior</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
-<li><a href="../packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
-<li><a href="../packages/plugin.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Model</a></li>
+<li><a href="../packages/plugins.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Controller</a></li>
+<li><a href="../packages/plugins.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Model</a></li>
 </ul>
 </li>
 <li class="dropdown" id="charts-menu">
@@ -45,7 +44,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">47</span></a></li>
+                <span class="label label-info">0</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -74,18 +73,19 @@
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
-                    <ul><li class="method public "><a href="#method_isAuthorized" title="isAuthorized() :: "><span class="description">isAuthorized()
-        </span><pre>isAuthorized()</pre></a></li></ul>
+                    <ul><li class="method public "><a href="#method_isAuthorized" title="isAuthorized() :: Check to see if a user is authorized to perform an action."><span class="description">Check to see if a user is authorized to perform an action.</span><pre>isAuthorized()</pre></a></li></ul>
 </li>
 <li class="nav-header protected">» Protected
-                    <ul><li class="method protected "><a href="#method__getUserID" title="_getUserID() :: "><span class="description">_getUserID()
-        </span><pre>_getUserID()</pre></a></li></ul>
+                    <ul><li class="method protected "><a href="#method__getUserID" title="_getUserID() :: Returns the userID of the currently logged in user"><span class="description">Returns the userID of the currently logged in user</span><pre>_getUserID()</pre></a></li></ul>
 </li>
 <li class="nav-header">
 <i title="Properties" class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
                     <ul>
-<li class="property public "><a href="#property_mvFirstName" title="$mvFirstName() :: "><span class="description"></span><pre>$mvFirstName</pre></a></li>
-<li class="property public "><a href="#property_mvLastName" title="$mvLastName() :: "><span class="description"></span><pre>$mvLastName</pre></a></li>
+<li class="property protected "><a href="#property__mvFirstName" title="$_mvFirstName() :: The key in the user data that represents the firstname."><span class="description"></span><pre>$_mvFirstName</pre></a></li>
+<li class="property protected "><a href="#property__mvLastName" title="$_mvLastName() :: The key in the user data that represens the surname."><span class="description"></span><pre>$_mvLastName</pre></a></li>
 </ul>
 </li>
 </ul>
@@ -100,40 +100,46 @@
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">Functions and properties for all controllers in the plugin</p>
+<p class="short_description">Base controller for all controllers in the MemberVoice plugin.</p>
 <div class="details">
 <div class="long_description">Add your application-wide methods in the class below, your controllers
 will inherit them.</div>
-<table class="table table-bordered"><tr>
-<th>package</th>
-<td><a href="../packages/plugin.MemberVoice.Model.html">plugin.MemberVoice.Model</a></td>
-</tr></table>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_isAuthorized"></a><div class="element clickable method public method_isAuthorized" data-toggle="collapse" data-target=".method_isAuthorized .collapse" title="public">
-<h2>isAuthorized()
-        </h2>
-<pre>isAuthorized($user, $request) </pre>
+<h2>Check to see if a user is authorized to perform an action.</h2>
+<pre>isAuthorized(array $user, \CakeRequest $request) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$user</h4></div>
-<div class="subelement argument"><h4>$request</h4></div>
+<div class="subelement argument">
+<h4>$user</h4>
+<code>array</code><p>Array of user data</p></div>
+<div class="subelement argument">
+<h4>$request</h4>
+<code><a href="CakeRequest.html">\CakeRequest</a></code><p>The request the user is attempting to perform.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if the user is authorized to perform the action, false otherwise.</div>
 </div></div>
 </div>
 <a id="method__getUserID"></a><div class="element clickable method protected method__getUserID" data-toggle="collapse" data-target=".method__getUserID .collapse" title="protected">
-<h2>_getUserID()
-        </h2>
-<pre>_getUserID() </pre>
+<h2>Returns the userID of the currently logged in user</h2>
+<pre>_getUserID() : mixed</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed</code>The userID as defined by the containing application</div>
+</div></div>
 </div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
-<a id="property_mvFirstName"> </a><div class="element clickable property public property_mvFirstName" data-toggle="collapse" data-target=".property_mvFirstName .collapse" title="public">
-<h2>$mvFirstName</h2>
-<pre>$mvFirstName </pre>
+<a id="property__mvFirstName"> </a><div class="element clickable property protected property__mvFirstName" data-toggle="collapse" data-target=".property__mvFirstName .collapse" title="protected">
+<h2>The key in the user data that represents the firstname.</h2>
+<pre>$_mvFirstName : string</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>'firstname'</code></div>
@@ -141,9 +147,9 @@ will inherit them.</div>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a id="property_mvLastName"> </a><div class="element clickable property public property_mvLastName" data-toggle="collapse" data-target=".property_mvLastName .collapse" title="public">
-<h2>$mvLastName</h2>
-<pre>$mvLastName </pre>
+<a id="property__mvLastName"> </a><div class="element clickable property protected property__mvLastName" data-toggle="collapse" data-target=".property__mvLastName .collapse" title="protected">
+<h2>The key in the user data that represens the surname.</h2>
+<pre>$_mvLastName : string</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>'surname'</code></div>
@@ -159,7 +165,7 @@ will inherit them.</div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-14T00:51:57Z.<br></footer></div>
+            generated on 2013-12-14T01:27:40Z.<br></footer></div>
 </div>
 </body>
 </html>

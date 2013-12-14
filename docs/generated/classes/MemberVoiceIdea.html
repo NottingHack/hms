@@ -20,7 +20,6 @@
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a>Packages</a></li>
-<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
 <li><a href="../packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
@@ -33,8 +32,8 @@
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
 <li><a href="../packages/app.Model.Behavior.html"><i class="icon-folder-open"></i> app.Model.Behavior</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
-<li><a href="../packages/plugin.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Controller</a></li>
-<li><a href="../packages/plugin.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugin.MemberVoice.Model</a></li>
+<li><a href="../packages/plugins.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Controller</a></li>
+<li><a href="../packages/plugins.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Model</a></li>
 </ul>
 </li>
 <li class="dropdown" id="charts-menu">
@@ -45,7 +44,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">47</span></a></li>
+                <span class="label label-info">0</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -74,17 +73,16 @@
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
-                    <ul><li class="method public "><a href="#method_saveVote" title="saveVote() :: "><span class="description">saveVote()
-        </span><pre>saveVote()</pre></a></li></ul>
+                    <ul><li class="method public "><a href="#method_saveVote" title="saveVote() :: Saves votes for an idea"><span class="description">Saves votes for an idea</span><pre>saveVote()</pre></a></li></ul>
 </li>
 <li class="nav-header">
 <i title="Properties" class="icon-custom icon-property"></i> Properties
                     <ul>
-<li class="property public "><a href="#property_alias" title="$alias() :: "><span class="description"></span><pre>$alias</pre></a></li>
-<li class="property public "><a href="#property_belongsTo" title="$belongsTo() :: "><span class="description"></span><pre>$belongsTo</pre></a></li>
-<li class="property public "><a href="#property_hasAndBelongsToMany" title="$hasAndBelongsToMany() :: "><span class="description"></span><pre>$hasAndBelongsToMany</pre></a></li>
-<li class="property public "><a href="#property_hasMany" title="$hasMany() :: "><span class="description"></span><pre>$hasMany</pre></a></li>
-<li class="property public "><a href="#property_useTable" title="$useTable() :: "><span class="description"></span><pre>$useTable</pre></a></li>
+<li class="property public "><a href="#property_alias" title="$alias() :: Specify a nicer alias for this model."><span class="description"></span><pre>$alias</pre></a></li>
+<li class="property public "><a href="#property_belongsTo" title="$belongsTo() :: Specify 'belongs to' associations."><span class="description"></span><pre>$belongsTo</pre></a></li>
+<li class="property public "><a href="#property_hasAndBelongsToMany" title="$hasAndBelongsToMany() :: Specify 'has and belongs to many (HABTM)'' associations."><span class="description"></span><pre>$hasAndBelongsToMany</pre></a></li>
+<li class="property public "><a href="#property_hasMany" title="$hasMany() :: Specify 'has many associations."><span class="description"></span><pre>$hasMany</pre></a></li>
+<li class="property public "><a href="#property_useTable" title="$useTable() :: Specify the table to use."><span class="description"></span><pre>$useTable</pre></a></li>
 </ul>
 </li>
 </ul>
@@ -99,33 +97,37 @@
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">Model for all Ideas in MemberVoice</p>
+<p class="short_description">Model for all idea data.</p>
 <div class="details">
 <div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>package</th>
-<td><a href="../packages/plugin.MemberVoice.Model.html">plugin.MemberVoice.Model</a></td>
-</tr></table>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_saveVote"></a><div class="element clickable method public method_saveVote" data-toggle="collapse" data-target=".method_saveVote .collapse" title="public">
-<h2>saveVote()
-        </h2>
-<pre>saveVote($ideaID, $userID, $votes) </pre>
+<h2>Saves votes for an idea</h2>
+<pre>saveVote(integer $ideaID, mixed $userID, integer $votes) : mixed</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$ideaID</h4></div>
-<div class="subelement argument"><h4>$userID</h4></div>
-<div class="subelement argument"><h4>$votes</h4></div>
+<div class="subelement argument">
+<h4>$ideaID</h4>
+<code>integer</code><p>ID of idea to save this vote against</p></div>
+<div class="subelement argument">
+<h4>$userID</h4>
+<code>mixed</code><p>ID of currently logged in user</p></div>
+<div class="subelement argument">
+<h4>$votes</h4>
+<code>integer</code><p>Number of votes to apply, one of -1, 0, 1</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed</code>either false on failure, or total sum of votes for idea on success</div>
 </div></div>
 </div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
 <a id="property_alias"> </a><div class="element clickable property public property_alias" data-toggle="collapse" data-target=".property_alias .collapse" title="public">
-<h2>$alias</h2>
-<pre>$alias </pre>
+<h2>Specify a nicer alias for this model.</h2>
+<pre>$alias : string</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>'Idea'</code></div>
@@ -134,8 +136,8 @@
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_belongsTo"> </a><div class="element clickable property public property_belongsTo" data-toggle="collapse" data-target=".property_belongsTo .collapse" title="public">
-<h2>$belongsTo</h2>
-<pre>$belongsTo </pre>
+<h2>Specify 'belongs to' associations.</h2>
+<pre>$belongsTo : array</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>array('Status' => array('className' => 'MemberVoice.MemberVoiceStatus'))</code></div>
@@ -144,8 +146,8 @@
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_hasAndBelongsToMany"> </a><div class="element clickable property public property_hasAndBelongsToMany" data-toggle="collapse" data-target=".property_hasAndBelongsToMany .collapse" title="public">
-<h2>$hasAndBelongsToMany</h2>
-<pre>$hasAndBelongsToMany </pre>
+<h2>Specify 'has and belongs to many (HABTM)'' associations.</h2>
+<pre>$hasAndBelongsToMany : array</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>array('Category' => array('className' => 'MemberVoice.MemberVoiceCategory', 'joinTable' => 'mv_categories_ideas'))</code></div>
@@ -154,8 +156,8 @@
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_hasMany"> </a><div class="element clickable property public property_hasMany" data-toggle="collapse" data-target=".property_hasMany .collapse" title="public">
-<h2>$hasMany</h2>
-<pre>$hasMany </pre>
+<h2>Specify 'has many associations.</h2>
+<pre>$hasMany : array</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>array('Vote' => array('className' => 'MemberVoice.MemberVoiceVote'), 'Comment' => array('className' => 'MemberVoice.MemberVoiceComment'))</code></div>
@@ -164,8 +166,8 @@
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_useTable"> </a><div class="element clickable property public property_useTable" data-toggle="collapse" data-target=".property_useTable .collapse" title="public">
-<h2>$useTable</h2>
-<pre>$useTable </pre>
+<h2>Specify the table to use.</h2>
+<pre>$useTable : string</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>'ideas'</code></div>
@@ -181,7 +183,7 @@
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-14T00:51:57Z.<br></footer></div>
+            generated on 2013-12-14T01:27:41Z.<br></footer></div>
 </div>
 </body>
 </html>
