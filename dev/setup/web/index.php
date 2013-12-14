@@ -1,7 +1,21 @@
 <?php
-	require('./setup_header.php');
+/**
+ *
+ * PHP 5
+ *
+ * Copyright (C) HMS Team
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     HMS Team
+ * @package       dev.Setup.Web
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
+
+require ('./header.html');
 ?>
-		<form id="form_646271" class="appnitro"  method="post" action="setup_web.php">
+		<form id="form_646271" class="appnitro"  method="post" action="setup.php">
 			<ul >
 				<li id="li_1" >
 					<label class="description" for="firstname">First Name: </label>
@@ -41,12 +55,11 @@
 					</span>
 				</li>
 				<li class="buttons">
-				    <input type="hidden" name="form_id" value="646271" />
-			    	<input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+					<input type="hidden" name="form_id" value="646271" />
+					<input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
 				</li>
 			</ul>
 		</form>	
 
 <?php
-	require('./setup_footer.php');
-?>
+require ('./footer.html');

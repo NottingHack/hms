@@ -38,7 +38,7 @@ class Krb5Auth {
 
 /**
  * Constructor.
- * @param string $krb_username Username to construct the KADM5 object with.
+ * @param string $krbUsername Username to construct the KADM5 object with.
  * @param string $keytab Keytam to construct the KADM5 object with.
  * @param string $realm Relm we belong to.
  */

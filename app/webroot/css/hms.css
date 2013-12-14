@@ -663,6 +663,11 @@ input[type=submit]:active,
 	background: #5BA150;
 }
 
+.actions ul li a.attention {
+	font-size: 35px;
+	padding: 10px 20px;
+}
+
 .actions ul li a.negative {
 	background:#c43c35;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#ee5f5b), to(#c43c35));

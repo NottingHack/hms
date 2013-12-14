@@ -54,4 +54,15 @@
   <file name="plugins\MemberVoice\Model\MemberVoiceIdea.php"/>
   <file name="plugins\MemberVoice\Model\MemberVoiceStatus.php"/>
   <file name="plugins\MemberVoice\Model\MemberVoiceVote.php"/>
+  <file name="dev\Setup\Cmd\SetupCmd.php"/>
+  <file name="dev\Setup\Lib\DataGenerator.php"/>
+  <file name="dev\Setup\Lib\Krb5Auth.dummy.php"/>
+  <file name="dev\Setup\Lib\Krb5Auth.real.php"/>
+  <file name="dev\Setup\Lib\Setup.php"/>
+  <file name="dev\Setup\Lib\Updates\0.3.1.php"/>
+  <file name="dev\Setup\Lib\Updates\0.3.2.php"/>
+  <file name="dev\Setup\Lib\Updates\0.3.3.php"/>
+  <file name="dev\Setup\Lib\Utils.php"/>
+  <file name="dev\Setup\Web\index.php"/>
+  <file name="dev\Setup\Web\setup.php"/>
 </checkstyle>

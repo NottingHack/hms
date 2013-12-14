@@ -32,6 +32,10 @@
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
 <li><a href="../packages/app.Model.Behavior.html"><i class="icon-folder-open"></i> app.Model.Behavior</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
+<li><a href="../packages/dev.Setup.html"><i class="icon-folder-open"></i> dev.Setup</a></li>
+<li><a href="../packages/dev.Setup.Cmd.html"><i class="icon-folder-open"></i> dev.Setup.Cmd</a></li>
+<li><a href="../packages/dev.Setup.Lib.html"><i class="icon-folder-open"></i> dev.Setup.Lib</a></li>
+<li><a href="../packages/dev.Setup.Web.html"><i class="icon-folder-open"></i> dev.Setup.Web</a></li>
 <li><a href="../packages/plugins.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Controller</a></li>
 <li><a href="../packages/plugins.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Model</a></li>
 </ul>
@@ -71,6 +75,13 @@
 <li>
 <span class="empty-namespace"><i class="icon-stop"></i>global</span><ul class="nav nav-list nav-namespaces"></ul>
 </li>
+<li class="nav-header">
+<i title="Functions" class="icon-custom icon-function"></i> Functions</li>
+<li class="function  "><a href="#function_makeAbsolutePath" title="makeAbsolutePath() :: Given a relative path from this file, get an absolute path."><span class="description">Given a relative path from this file, get an absolute path.</span><pre>makeAbsolutePath</pre></a></li>
+<li class="function  "><a href="#function_parseBoolFromArray" title="parseBoolFromArray() :: Given an index and an array, return a bool version"><span class="description">Given an index and an array, return a bool version</span><pre>parseBoolFromArray</pre></a></li>
+<li class="function  "><a href="#function_parseBoolFromWebVar" title="parseBoolFromWebVar() :: Given an index in the POST var array, return a bool version"><span class="description">Given an index in the POST var array, return a bool version</span><pre>parseBoolFromWebVar</pre></a></li>
+<li class="function  "><a href="#function_parseStringFromArray" title="parseStringFromArray() :: Given an index and an array, return a string version"><span class="description">Given an index and an array, return a string version</span><pre>parseStringFromArray</pre></a></li>
+<li class="function  "><a href="#function_parseStringFromWebVar" title="parseStringFromWebVar() :: Given an index in the POST var array, return a string version"><span class="description">Given an index in the POST var array, return a string version</span><pre>parseStringFromWebVar</pre></a></li>
 <li class="nav-header">
 <i title="Classes" class="icon-custom icon-class"></i> Classes</li>
 <li><a href="#EmailRecordsController" title="Controller for the EmailRecords functionality, allows authorized users
@@ -117,10 +128,12 @@ allowed (by checking if the current user is authorized to perform it),
 allowed links are added to a list which can then be rendered in the view.">NavComponent</a></li>
 <li><a href="#KrbAuthBehavior" title="Behaviour that allows a model access to the KrbAuth interface.">KrbAuthBehavior</a></li>
 <li><a href="#AppController" title="Application Controller">AppController</a></li>
+<li><a href="#Krb5Auth" title="Dummy KrbAuth implementation for development.">Krb5Auth</a></li>
 <li><a href="#MemberVoiceStatus" title="Model for all status data.">MemberVoiceStatus</a></li>
 <li><a href="#AppModel" title="Application model for Cake.">AppModel</a></li>
 <li><a href="#TinymceHelper" title="Helper to output TinyMCE TextArea and Input fields.">TinymceHelper</a></li>
 <li><a href="#MailingList" title="Model for all mailing list data">MailingList</a></li>
+<li><a href="#Setup" title="Setup is a class that is responsible for parsing options and then performing certain steps based on those options.">Setup</a></li>
 <li><a href="#HmsAuthorize" title="HmsAuthorize is basically the same as the CakPHP ControllerAuthorize
 in that it calls the 'isAuthorized' method of the controller. However
 HmsAuthorize doesn't discard the CakeRequest object, as it is used in the
@@ -135,8 +148,14 @@ but actually accesses a local table.">MCAPI</a></li>
 <li><a href="#InvalidStatusException" title="An exception thrown by certain Member methods if they are called on a member id who has the wrong status.">InvalidStatusException</a></li>
 <li><a href="#AutomationDriverTest" title="A base class for CakePHP tests that use AutomationDriver.">AutomationDriverTest</a></li>
 <li><a href="#Group" title="Model for all group data">Group</a></li>
+<li><a href="#DataGenerator" title="This script is used to generate realistic(ish) data for use when manually testing HMS.">DataGenerator</a></li>
 <li><a href="#MemberVoiceCommentsController" title="Controller for comments, allows addid of comments">MemberVoiceCommentsController</a></li>
+<li><a href="#Krb5Auth" title="Real KrbAuth implementation for production.">Krb5Auth</a></li>
 <li><a href="#MemberVoiceIdea" title="Model for all idea data.">MemberVoiceIdea</a></li>
+<li class="nav-header">
+<i title="Constants" class="icon-custom icon-constant"></i> Constants</li>
+<li class="constant  "><a href="#constant_APP_PATH" title="APP_PATH() :: "><span class="description">APP_PATH</span><pre>APP_PATH</pre></a></li>
+<li class="constant  "><a href="#constant_CAKE_PATH" title="CAKE_PATH() :: "><span class="description">CAKE_PATH</span><pre>CAKE_PATH</pre></a></li>
 </ul>
 </div>
 <div class="span8 namespace-contents"></div>
@@ -145,7 +164,7 @@ but actually accesses a local table.">MCAPI</a></li>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-14T01:27:39Z.<br></footer></div>
+            generated on 2013-12-14T13:33:57Z.<br></footer></div>
 </div>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>HMS - The Hackspace Management System » app.Console</title>
+<title>HMS - The Hackspace Management System » dev.Setup.Cmd</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -73,11 +73,59 @@
 <li class="nav-header">
 <i class="icon-map-marker"></i> Packages</li>
 <li>
-<span class="empty-package"><i class="icon-folder-close"></i>app.Console</span><ul class="nav nav-list nav-packages"></ul>
+<a href="../packages/dev.Setup.Cmd.html" title="dev.Setup.Cmd"><i class="icon-folder-open"></i>dev.Setup.Cmd</a><ul class="nav nav-list nav-packages"></ul>
 </li>
+<li class="nav-header">
+<i title="Functions" class="icon-custom icon-function"></i> Functions</li>
+<li class="function  "><a href="#function_parseBoolFromArray" title="parseBoolFromArray() :: Given an index and an array, return a bool version"><span class="description">Given an index and an array, return a bool version</span><pre>parseBoolFromArray</pre></a></li>
+<li class="function  "><a href="#function_parseStringFromArray" title="parseStringFromArray() :: Given an index and an array, return a string version"><span class="description">Given an index and an array, return a string version</span><pre>parseStringFromArray</pre></a></li>
 </ul>
 </div>
-<div class="span8 package-contents"></div>
+<div class="span8 package-contents">
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li class="active"><a href="../packages/dev.Setup.Cmd.html">dev.Setup.Cmd</a></li>
+</li></ul>
+<div class="package-indent">
+<h3>
+<i title="Functions" class="icon-custom icon-function"></i> Functions</h3>
+<a id="function_parseBoolFromArray"></a><div class="element clickable function  function_parseBoolFromArray" data-toggle="collapse" data-target=".function_parseBoolFromArray .collapse" title="">
+<h2>Given an index and an array, return a bool version</h2>
+<pre>parseBoolFromArray(mixed $index, array $array) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$index</h4>
+<code>mixed</code><p>The index of the array to parse.</p></div>
+<div class="subelement argument">
+<h4>$array</h4>
+<code>array</code><p>The array to parse.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if value is set, false otherwise.</div>
+</div></div>
+</div>
+<a id="function_parseStringFromArray"></a><div class="element clickable function  function_parseStringFromArray" data-toggle="collapse" data-target=".function_parseStringFromArray .collapse" title="">
+<h2>Given an index and an array, return a string version</h2>
+<pre>parseStringFromArray(mixed $index, array $array) : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$index</h4>
+<code>mixed</code><p>The index of the array to parse.</p></div>
+<div class="subelement argument">
+<h4>$array</h4>
+<code>array</code><p>The array to parse.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed</code>String of value if value is set, null otherwise.</div>
+</div></div>
+</div>
+</div>
+</div>
 </div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
