@@ -28,5 +28,6 @@
         <ignore>tmp/*</ignore>
         <ignore>webroot/*</ignore>
         <ignore>Config/*</ignore>
+        <ignore>tests/*</ignore>
     </files>
 </phpdoc>

@@ -5,5 +5,6 @@
  	<exclude-pattern>*/Config/*</exclude-pattern>
  	<exclude-pattern>*/webroot/*</exclude-pattern>
  	<exclude-pattern>*/tmp/*</exclude-pattern>
+ 	<exclude-pattern>*/tests/*</exclude-pattern>
  	<rule ref="CakePHP"/>
 </ruleset>
