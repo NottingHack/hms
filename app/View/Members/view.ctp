@@ -118,7 +118,11 @@
 			Current Balance
 		</dt>
 		<dd>
-			<?php echo $this->Currency->output($member['balance']); ?>
+			<?php 
+			echo $this->Html->link($this->Currency->output($member['balance']), array('controller' => 'snackspace', 'action' => 'history', $member['id']), array('escape' => false));
+
+			
+			?>
 		</dd>
 	<?php endif; ?>
 

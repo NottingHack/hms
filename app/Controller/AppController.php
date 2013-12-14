@@ -20,6 +20,7 @@ App::uses('Controller', 'Controller');
 App::uses('Member', 'Model');
 App::uses('Group', 'Model');
 App::uses('AuthComponent', 'Controller/Auth');
+App::uses('Status', 'Model');
 
 /**
  * Application Controller
@@ -83,10 +84,12 @@ class AppController extends Controller {
 		parent::__construct($request, $response);
 
 		// Add the main nav
-		$this->__addMainNav('Members', array( 'plugin' => null, 'controller' => 'members', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN));
-		$this->__addMainNav('Groups', array( 'plugin' => null, 'controller' => 'groups', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN));
-		$this->__addMainNav('Mailing Lists', array( 'plugin' => null, 'controller' => 'mailinglists', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN));
-		$this->__addMainNav('MemberVoice', array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ), null);
+		$this->__addMainNav('Members', array( 'plugin' => null, 'controller' => 'members', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN), null);
+		$this->__addMainNav('Groups', array( 'plugin' => null, 'controller' => 'groups', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN), null);
+		$this->__addMainNav('Mailing Lists', array( 'plugin' => null, 'controller' => 'mailinglists', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN), null);
+		$this->__addMainNav('Snackspace',  array( 'plugin' => null,  'controller' => 'snackspace', 'action' => 'history' ), null, array(Status::CURRENT_MEMBER, Status::EX_MEMBER));
+		$this->__addMainNav('MemberVoice', array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ), null, null);
+
 	}
 
 /**
@@ -95,11 +98,12 @@ class AppController extends Controller {
  * @param  string[] $link Array to pass to the HtmlHelper to construct the link when rendering.
  * @param  int[]|null $access Array of group ids that have access to this link, if null, all groups have access to link.
  */
-	private function __addMainNav($title, $link, $access) {
+	private function __addMainNav($title, $link, $access, $statii) {
 		$this->__mainNav[] = array(
 								'title'		=>	$title,
 								'link'		=>	$link,
 								'access'	=>	$access,
+								'statii'	=>	$statii
 								);
 	}
 
@@ -129,9 +133,22 @@ class AppController extends Controller {
 					$allowed = true;
 				}
 			}
+
+			// Apply restrictions based on member status, if applicable
+			if ($allowed)	{
+				if ($nav['statii'] != '')	{
+					$allowed = false;
+					foreach ($nav['statii'] as $status)	{
+						if ($this->Member->getStatusForMember($userId) == $status)
+							$allowed = true;
+					}
+				}
+			}
+
 			if ($allowed) {
 				$navLinks[$nav['title']] = $nav['link'];
 			}
+
 		}
 
 		return $navLinks;
@@ -160,6 +177,7 @@ class AppController extends Controller {
 		Controller::loadModel('Member');
 
 		$loggedInMemberId = $this->Member->getIdForMember($this->Auth->user());
+
 		if ($loggedInMemberId) {
 			$adminLinks = $this->getMainNav($loggedInMemberId);
 

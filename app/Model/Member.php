@@ -1819,6 +1819,45 @@ class Member extends AppModel {
 		}
 		return null;
 	}
+	
+/**
+ *  Get the balance for a member, may hit the database.
+ * 
+ *  @param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
+ *  @return int The balance for the member, or null if balaance could not be found.
+ */
+		public function getBalanceForMember($memberData)
+		{
+			if(!isset($memberData))
+			{
+				return null;
+			}
+
+			if(is_array($memberData))
+			{
+				$balance = Hash::get($memberData, 'Member.balance');
+				if(isset($balance))
+				{
+					return $balance;
+				}
+				else
+				{
+					$memberData = Hash::get($memberData, 'Member.member_id');
+				}
+			}
+
+			$memberInfo = $this->find('first', array('fields' => array('Member.balance'), 'conditions' => array('Member.member_id' => $memberData) ));
+			if(is_array($memberInfo))
+			{
+				$balance = Hash::get($memberInfo, 'Member.balance');
+				if(isset($balance))
+				{
+					return $balance;
+				}
+			}
+			return null;
+		}
+
 
 /**
  * Get a list of member names or e-mails (if we don't have their name) for all members.

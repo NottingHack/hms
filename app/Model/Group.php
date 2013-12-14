@@ -31,14 +31,14 @@ class Group extends AppModel {
 	const CURRENT_MEMBERS = 2;
 
 /**
- * The id of the gatekeeper admin group.
- */
-	const GATEKEEPER_ADMIN = 3;
-
-/**
  * The id of the snackspace admin group.
  */
-	const SNACKSPACE_ADMIN = 4;
+	const SNACKSPACE_ADMIN = 3;
+
+/**
+ * The id of the gatekeeper admin group.
+ */
+	const GATEKEEPER_ADMIN = 4;
 
 /**
  * The id of the membership admin group.
