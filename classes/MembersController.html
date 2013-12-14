@@ -1,0 +1,627 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>HMS - The Hackspace Management System » \MembersController</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">HMS - The Hackspace Management System</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
+<li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
+<li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
+<li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
+<li><a href="../packages/app.Lib.AutomationDriver.html"><i class="icon-folder-open"></i> app.Lib.AutomationDriver</a></li>
+<li><a href="../packages/app.Lib.CsvReader.html"><i class="icon-folder-open"></i> app.Lib.CsvReader</a></li>
+<li><a href="../packages/app.Lib.Error.Exception.html"><i class="icon-folder-open"></i> app.Lib.Error.Exception</a></li>
+<li><a href="../packages/app.Lib.Krb.html"><i class="icon-folder-open"></i> app.Lib.Krb</a></li>
+<li><a href="../packages/app.Lib.MailChimp.html"><i class="icon-folder-open"></i> app.Lib.MailChimp</a></li>
+<li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
+<li><a href="../packages/app.Model.Behavior.html"><i class="icon-folder-open"></i> app.Model.Behavior</a></li>
+<li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
+<li><a href="../packages/dev.Setup.html"><i class="icon-folder-open"></i> dev.Setup</a></li>
+<li><a href="../packages/dev.Setup.Cmd.html"><i class="icon-folder-open"></i> dev.Setup.Cmd</a></li>
+<li><a href="../packages/dev.Setup.Lib.html"><i class="icon-folder-open"></i> dev.Setup.Lib</a></li>
+<li><a href="../packages/dev.Setup.Web.html"><i class="icon-folder-open"></i> dev.Setup.Web</a></li>
+<li><a href="../packages/plugins.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Controller</a></li>
+<li><a href="../packages/plugins.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Model</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">0</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<div class="btn-toolbar">
+<div class="btn-group visibility" data-toggle="buttons-checkbox">
+<button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button>
+</div>
+<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i title="Methods" class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_acceptDetails" title="acceptDetails() :: Accept the contact details a member has supplied."><span class="description">Accept the contact details a member has supplied.</span><pre>acceptDetails()</pre></a></li>
+<li class="method public "><a href="#method_approveMember" title="approveMember() :: Approve a membership and report back to the user."><span class="description">Approve a membership and report back to the user.</span><pre>approveMember()</pre></a></li>
+<li class="method public "><a href="#method_beforeFilter" title="beforeFilter() :: Perform any actions that should be performed before any controller action."><span class="description">Perform any actions that should be performed before any controller action.</span><pre>beforeFilter()</pre></a></li>
+<li class="method public "><a href="#method_changePassword" title="changePassword() :: Change a members password."><span class="description">Change a members password.</span><pre>changePassword()</pre></a></li>
+<li class="method public "><a href="#method_edit" title="edit() :: Allow editing of a member profile."><span class="description">Allow editing of a member profile.</span><pre>edit()</pre></a></li>
+<li class="method public "><a href="#method_emailMembersWithStatus" title="emailMembersWithStatus() :: Send an e-mail to every member with a certain status."><span class="description">Send an e-mail to every member with a certain status.</span><pre>emailMembersWithStatus()</pre></a></li>
+<li class="method public "><a href="#method_forgotPassword" title="forgotPassword() :: Generate or complete a forgot password request."><span class="description">Generate or complete a forgot password request.</span><pre>forgotPassword()</pre></a></li>
+<li class="method public "><a href="#method_getMailingList" title="getMailingList() :: Get a MailingList model."><span class="description">Get a MailingList model.</span><pre>getMailingList()</pre></a></li>
+<li class="method public "><a href="#method_getMemberIdSessionKey" title="getMemberIdSessionKey() :: Get the key used to store members ids in the session after uploading a csv."><span class="description">Get the key used to store members ids in the session after uploading a csv.</span><pre>getMemberIdSessionKey()</pre></a></li>
+<li class="method public "><a href="#method_getRequestIpAddress" title="getRequestIpAddress() :: Get the ip address of the request."><span class="description">Get the ip address of the request.</span><pre>getRequestIpAddress()</pre></a></li>
+<li class="method public "><a href="#method_index" title="index() :: Show a list of all Status and a count of how many members are in each status."><span class="description">Show a list of all Status and a count of how many members are in each status.</span><pre>index()</pre></a></li>
+<li class="method public "><a href="#method_isAuthorized" title="isAuthorized() :: Test to see if a user is authorized to make a request."><span class="description">Test to see if a user is authorized to make a request.</span><pre>isAuthorized()</pre></a></li>
+<li class="method public "><a href="#method_isRequestLocal" title="isRequestLocal() :: Test to see if a request is coming from within the hackspace."><span class="description">Test to see if a request is coming from within the hackspace.</span><pre>isRequestLocal()</pre></a></li>
+<li class="method public "><a href="#method_listMembers" title="listMembers() :: Show a list of all members, their e-mail address, status and the groups they're in."><span class="description">Show a list of all members, their e-mail address, status and the groups they're in.</span><pre>listMembers()</pre></a></li>
+<li class="method public "><a href="#method_listMembersWithStatus" title="listMembersWithStatus() :: List all members with a particular status."><span class="description">List all members with a particular status.</span><pre>listMembersWithStatus()</pre></a></li>
+<li class="method public "><a href="#method_login" title="login() :: Attempt to login as a member."><span class="description">Attempt to login as a member.</span><pre>login()</pre></a></li>
+<li class="method public "><a href="#method_logout" title="logout() :: Logout."><span class="description">Logout.</span><pre>logout()</pre></a></li>
+<li class="method public "><a href="#method_register" title="register() :: Grab a users e-mail address and start the membership procedure."><span class="description">Grab a users e-mail address and start the membership procedure.</span><pre>register()</pre></a></li>
+<li class="method public "><a href="#method_reinstateMembership" title="reinstateMembership() :: Reinstate an ex-members membership."><span class="description">Reinstate an ex-members membership.</span><pre>reinstateMembership()</pre></a></li>
+<li class="method public "><a href="#method_rejectDetails" title="rejectDetails() :: Reject the contact details a member has supplied, with a message to say why."><span class="description">Reject the contact details a member has supplied, with a message to say why.</span><pre>rejectDetails()</pre></a></li>
+<li class="method public "><a href="#method_revokeMembership" title="revokeMembership() :: Revoke a members membership."><span class="description">Revoke a members membership.</span><pre>revokeMembership()</pre></a></li>
+<li class="method public "><a href="#method_search" title="search() :: List all members who's name, email, username or handle is similar to the search term."><span class="description">List all members who's name, email, username or handle is similar to the search term.</span><pre>search()</pre></a></li>
+<li class="method public "><a href="#method_sendContactDetailsReminder" title="sendContactDetailsReminder() :: Send the 'contact details reminder' email to a member."><span class="description">Send the 'contact details reminder' email to a member.</span><pre>sendContactDetailsReminder()</pre></a></li>
+<li class="method public "><a href="#method_sendMembershipReminder" title="sendMembershipReminder() :: Send the 'prospective member' email to a member."><span class="description">Send the 'prospective member' email to a member.</span><pre>sendMembershipReminder()</pre></a></li>
+<li class="method public "><a href="#method_sendSoDetailsReminder" title="sendSoDetailsReminder() :: Send the 'so details reminder' email to a member."><span class="description">Send the 'so details reminder' email to a member.</span><pre>sendSoDetailsReminder()</pre></a></li>
+<li class="method public "><a href="#method_setupDetails" title="setupDetails() :: Allow a member who is logged in to set-up their contact details."><span class="description">Allow a member who is logged in to set-up their contact details.</span><pre>setupDetails()</pre></a></li>
+<li class="method public "><a href="#method_setupLogin" title="setupLogin() :: Allow a member to set-up their initial login details."><span class="description">Allow a member to set-up their initial login details.</span><pre>setupLogin()</pre></a></li>
+<li class="method public "><a href="#method_uploadCsv" title="uploadCsv() :: Upload a .csv file of bank transactions and look for members to approve."><span class="description">Upload a .csv file of bank transactions and look for members to approve.</span><pre>uploadCsv()</pre></a></li>
+<li class="method public "><a href="#method_view" title="view() :: View the full member profile."><span class="description">View the full member profile.</span><pre>view()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="method private "><a href="#method___addMemberActions" title="__addMemberActions() :: Adds the appropriate actions to each member in the member list."><span class="description">Adds the appropriate actions to each member in the member list.</span><pre>__addMemberActions()</pre></a></li>
+<li class="method private "><a href="#method___approveMember" title="__approveMember() :: Approve a membership."><span class="description">Approve a membership.</span><pre>__approveMember()</pre></a></li>
+<li class="method private "><a href="#method___getActionsForMember" title="__getActionsForMember() :: Get an array of possible actions for a member"><span class="description">Get an array of possible actions for a member</span><pre>__getActionsForMember()</pre></a></li>
+<li class="method private "><a href="#method___getViewPermissions" title="__getViewPermissions() :: Check to see if certain view/edit params should be shown to the logged in member."><span class="description">Check to see if certain view/edit params should be shown to the logged in member.</span><pre>__getViewPermissions()</pre></a></li>
+<li class="method private "><a href="#method___paginateMemberList" title="__paginateMemberList() :: Perform all the actions needed to get a paginated member list with actions applied."><span class="description">Perform all the actions needed to get a paginated member list with actions applied.</span><pre>__paginateMemberList()</pre></a></li>
+<li class="method private "><a href="#method___sendProspectiveMemberEmail" title="__sendProspectiveMemberEmail() :: Send the 'prospective member' email to a member."><span class="description">Send the 'prospective member' email to a member.</span><pre>__sendProspectiveMemberEmail()</pre></a></li>
+<li class="method private "><a href="#method___sendSoDetailsToMember" title="__sendSoDetailsToMember() :: Send the e-mail containing standing order info to a member."><span class="description">Send the e-mail containing standing order info to a member.</span><pre>__sendSoDetailsToMember()</pre></a></li>
+<li class="method private "><a href="#method___setFlashFromMailingListInfo" title="__setFlashFromMailingListInfo() :: Set the session flash message based on the data returned from a function that updates the mailing list settings."><span class="description">Set the session flash message based on the data returned from a function that updates the mailing list settings.</span><pre>__setFlashFromMailingListInfo()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i title="Properties" class="icon-custom icon-property"></i> Properties
+                    <ul>
+<li class="property public "><a href="#property_components" title="$components() :: The list of components this Controller relies on."><span class="description"></span><pre>$components</pre></a></li>
+<li class="property public "><a href="#property_helpers" title="$helpers() :: Views rendered from this controller will have access to the following helpers."><span class="description"></span><pre>$helpers</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\MembersController"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/MembersController.html">MembersController</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">Controller to handle Member functionality, allows members to be viewed,
+edited, and registered.</p>
+<div class="details">
+<div class="long_description"></div>
+<h3>
+<i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_acceptDetails"></a><div class="element clickable method public method_acceptDetails" data-toggle="collapse" data-target=".method_acceptDetails .collapse" title="public">
+<h2>Accept the contact details a member has supplied.</h2>
+<pre>acceptDetails(int $id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member whose contact details we're accepting.</p></div>
+</div></div>
+</div>
+<a id="method_approveMember"></a><div class="element clickable method public method_approveMember" data-toggle="collapse" data-target=".method_approveMember .collapse" title="public">
+<h2>Approve a membership and report back to the user.</h2>
+<pre>approveMember(int $id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member who we are approving.</p></div>
+</div></div>
+</div>
+<a id="method_beforeFilter"></a><div class="element clickable method public method_beforeFilter" data-toggle="collapse" data-target=".method_beforeFilter .collapse" title="public">
+<h2>Perform any actions that should be performed before any controller action.</h2>
+<pre>beforeFilter() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>link</th>
+<td><a href="http://api20.cakephp.org/class/controller#method-ControllerbeforeFilter">http://api20.cakephp.org/class/controller#method-ControllerbeforeFilter</a></td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_changePassword"></a><div class="element clickable method public method_changePassword" data-toggle="collapse" data-target=".method_changePassword .collapse" title="public">
+<h2>Change a members password.</h2>
+<pre>changePassword(int $id) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member whose password we are changing.</p></div>
+</div></div>
+</div>
+<a id="method_edit"></a><div class="element clickable method public method_edit" data-toggle="collapse" data-target=".method_edit .collapse" title="public">
+<h2>Allow editing of a member profile.</h2>
+<pre>edit(int $id) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member to view.</p></div>
+</div></div>
+</div>
+<a id="method_emailMembersWithStatus"></a><div class="element clickable method public method_emailMembersWithStatus" data-toggle="collapse" data-target=".method_emailMembersWithStatus .collapse" title="public">
+<h2>Send an e-mail to every member with a certain status.</h2>
+<pre>emailMembersWithStatus(int $statusId) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$statusId</h4>
+<code>int</code><p>Attempt to e-mail members with this status.</p></div>
+</div></div>
+</div>
+<a id="method_forgotPassword"></a><div class="element clickable method public method_forgotPassword" data-toggle="collapse" data-target=".method_forgotPassword .collapse" title="public">
+<h2>Generate or complete a forgot password request.</h2>
+<pre>forgotPassword(string $guid<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$guid</h4>
+<code>string</code><p>The id of the request, may be null.</p></div>
+</div></div>
+</div>
+<a id="method_getMailingList"></a><div class="element clickable method public method_getMailingList" data-toggle="collapse" data-target=".method_getMailingList .collapse" title="public">
+<h2>Get a MailingList model.</h2>
+<pre>getMailingList() : <a href="MailingListModel.html">\MailingListModel</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="MailingListModel.html">\MailingListModel</a></code>The MailingListModel.</div>
+</div></div>
+</div>
+<a id="method_getMemberIdSessionKey"></a><div class="element clickable method public method_getMemberIdSessionKey" data-toggle="collapse" data-target=".method_getMemberIdSessionKey .collapse" title="public">
+<h2>Get the key used to store members ids in the session after uploading a csv.</h2>
+<pre>getMemberIdSessionKey() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>link</th>
+<td><a href="MemberController::uploadCsv">MemberController::uploadCsv</a></td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The key to be used in the session.</div>
+</div></div>
+</div>
+<a id="method_getRequestIpAddress"></a><div class="element clickable method public method_getRequestIpAddress" data-toggle="collapse" data-target=".method_getRequestIpAddress .collapse" title="public">
+<h2>Get the ip address of the request.</h2>
+<pre>getRequestIpAddress() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The IP address of the request.</div>
+</div></div>
+</div>
+<a id="method_index"></a><div class="element clickable method public method_index" data-toggle="collapse" data-target=".method_index .collapse" title="public">
+<h2>Show a list of all Status and a count of how many members are in each status.</h2>
+<pre>index() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_isAuthorized"></a><div class="element clickable method public method_isAuthorized" data-toggle="collapse" data-target=".method_isAuthorized .collapse" title="public">
+<h2>Test to see if a user is authorized to make a request.</h2>
+<pre>isAuthorized(array $user, \CakeRequest $request) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>link</th>
+<td><a href="http://api20.cakephp.org/class/cake-request">http://api20.cakephp.org/class/cake-request</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$user</h4>
+<code>array</code><p>Member record for the user.</p></div>
+<div class="subelement argument">
+<h4>$request</h4>
+<code><a href="CakeRequest.html">\CakeRequest</a></code><p>The request the user is attempting to make.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if the user is authorized to make the request, otherwise false.</div>
+</div></div>
+</div>
+<a id="method_isRequestLocal"></a><div class="element clickable method public method_isRequestLocal" data-toggle="collapse" data-target=".method_isRequestLocal .collapse" title="public">
+<h2>Test to see if a request is coming from within the hackspace.</h2>
+<pre>isRequestLocal() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if the request is coming from with in the hackspace, false otherwise.</div>
+</div></div>
+</div>
+<a id="method_listMembers"></a><div class="element clickable method public method_listMembers" data-toggle="collapse" data-target=".method_listMembers .collapse" title="public">
+<h2>Show a list of all members, their e-mail address, status and the groups they're in.</h2>
+<pre>listMembers() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_listMembersWithStatus"></a><div class="element clickable method public method_listMembersWithStatus" data-toggle="collapse" data-target=".method_listMembersWithStatus .collapse" title="public">
+<h2>List all members with a particular status.</h2>
+<pre>listMembersWithStatus(int $statusId) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$statusId</h4>
+<code>int</code><p>The status to list all members for.</p></div>
+</div></div>
+</div>
+<a id="method_login"></a><div class="element clickable method public method_login" data-toggle="collapse" data-target=".method_login .collapse" title="public">
+<h2>Attempt to login as a member.</h2>
+<pre>login() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_logout"></a><div class="element clickable method public method_logout" data-toggle="collapse" data-target=".method_logout .collapse" title="public">
+<h2>Logout.</h2>
+<pre>logout() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_register"></a><div class="element clickable method public method_register" data-toggle="collapse" data-target=".method_register .collapse" title="public">
+<h2>Grab a users e-mail address and start the membership procedure.</h2>
+<pre>register() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_reinstateMembership"></a><div class="element clickable method public method_reinstateMembership" data-toggle="collapse" data-target=".method_reinstateMembership .collapse" title="public">
+<h2>Reinstate an ex-members membership.</h2>
+<pre>reinstateMembership(int $id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member to reinstate.</p></div>
+</div></div>
+</div>
+<a id="method_rejectDetails"></a><div class="element clickable method public method_rejectDetails" data-toggle="collapse" data-target=".method_rejectDetails .collapse" title="public">
+<h2>Reject the contact details a member has supplied, with a message to say why.</h2>
+<pre>rejectDetails(int $id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member whose contact details we're rejecting.</p></div>
+</div></div>
+</div>
+<a id="method_revokeMembership"></a><div class="element clickable method public method_revokeMembership" data-toggle="collapse" data-target=".method_revokeMembership .collapse" title="public">
+<h2>Revoke a members membership.</h2>
+<pre>revokeMembership(int $id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member to revoke.</p></div>
+</div></div>
+</div>
+<a id="method_search"></a><div class="element clickable method public method_search" data-toggle="collapse" data-target=".method_search .collapse" title="public">
+<h2>List all members who's name, email, username or handle is similar to the search term.</h2>
+<pre>search() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_sendContactDetailsReminder"></a><div class="element clickable method public method_sendContactDetailsReminder" data-toggle="collapse" data-target=".method_sendContactDetailsReminder .collapse" title="public">
+<h2>Send the 'contact details reminder' email to a member.</h2>
+<pre>sendContactDetailsReminder(int $id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member to contact.</p></div>
+</div></div>
+</div>
+<a id="method_sendMembershipReminder"></a><div class="element clickable method public method_sendMembershipReminder" data-toggle="collapse" data-target=".method_sendMembershipReminder .collapse" title="public">
+<h2>Send the 'prospective member' email to a member.</h2>
+<pre>sendMembershipReminder(int $id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member to send the message to.</p></div>
+</div></div>
+</div>
+<a id="method_sendSoDetailsReminder"></a><div class="element clickable method public method_sendSoDetailsReminder" data-toggle="collapse" data-target=".method_sendSoDetailsReminder .collapse" title="public">
+<h2>Send the 'so details reminder' email to a member.</h2>
+<pre>sendSoDetailsReminder(int $id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member to contact.</p></div>
+</div></div>
+</div>
+<a id="method_setupDetails"></a><div class="element clickable method public method_setupDetails" data-toggle="collapse" data-target=".method_setupDetails .collapse" title="public">
+<h2>Allow a member who is logged in to set-up their contact details.</h2>
+<pre>setupDetails(int $id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member whose contact details we want to set-up.</p></div>
+</div></div>
+</div>
+<a id="method_setupLogin"></a><div class="element clickable method public method_setupLogin" data-toggle="collapse" data-target=".method_setupLogin .collapse" title="public">
+<h2>Allow a member to set-up their initial login details.</h2>
+<pre>setupLogin(int $id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member whose details we want to set-up.</p></div>
+</div></div>
+</div>
+<a id="method_uploadCsv"></a><div class="element clickable method public method_uploadCsv" data-toggle="collapse" data-target=".method_uploadCsv .collapse" title="public">
+<h2>Upload a .csv file of bank transactions and look for members to approve.</h2>
+<pre>uploadCsv(string $guid<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$guid</h4>
+<code>string</code><p>If set then look here in the session for a list of account id's to approve.</p></div>
+</div></div>
+</div>
+<a id="method_view"></a><div class="element clickable method public method_view" data-toggle="collapse" data-target=".method_view .collapse" title="public">
+<h2>View the full member profile.</h2>
+<pre>view(int $id) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member to view.</p></div>
+</div></div>
+</div>
+<a id="method___addMemberActions"></a><div class="element clickable method private method___addMemberActions" data-toggle="collapse" data-target=".method___addMemberActions .collapse" title="private">
+<h2>Adds the appropriate actions to each member in the member list.</h2>
+<pre>__addMemberActions(array $memberList) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$memberList</h4>
+<code>array</code><p>A list of member summaries to add the actions to.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>The original memberList, with the actions added for each member.</div>
+</div></div>
+</div>
+<a id="method___approveMember"></a><div class="element clickable method private method___approveMember" data-toggle="collapse" data-target=".method___approveMember .collapse" title="private">
+<h2>Approve a membership.</h2>
+<pre>__approveMember(int $id) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code><p>The id of the member who we are approving.</p></div>
+</div></div>
+</div>
+<a id="method___getActionsForMember"></a><div class="element clickable method private method___getActionsForMember" data-toggle="collapse" data-target=".method___getActionsForMember .collapse" title="private">
+<h2>Get an array of possible actions for a member</h2>
+<pre>__getActionsForMember(int $memberId) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$memberId</h4>
+<code>int</code><p>The id of the member to work with.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>An array of actions.</div>
+</div></div>
+</div>
+<a id="method___getViewPermissions"></a><div class="element clickable method private method___getViewPermissions" data-toggle="collapse" data-target=".method___getViewPermissions .collapse" title="private">
+<h2>Check to see if certain view/edit params should be shown to the logged in member.</h2>
+<pre>__getViewPermissions(int $memberId, bool $showAdminFeatures, bool $showFinances, bool $hasJoined, bool $showPersonalDetails) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$memberId</h4>
+<code>int</code><p>The id of the member being viewed.</p></div>
+<div class="subelement argument">
+<h4>$showAdminFeatures</h4>
+<code>bool</code><p>(out) If this is set to true then admin features should be shown.</p></div>
+<div class="subelement argument">
+<h4>$showFinances</h4>
+<code>bool</code><p>(out) If this is set to true then financial information should be shown.</p></div>
+<div class="subelement argument">
+<h4>$hasJoined</h4>
+<code>bool</code><p>(out) If this is set to true then the member has joined.</p></div>
+<div class="subelement argument">
+<h4>$showPersonalDetails</h4>
+<code>bool</code><p>(out) If this is set to true then show personal information about the member.</p></div>
+</div></div>
+</div>
+<a id="method___paginateMemberList"></a><div class="element clickable method private method___paginateMemberList" data-toggle="collapse" data-target=".method___paginateMemberList .collapse" title="private">
+<h2>Perform all the actions needed to get a paginated member list with actions applied.</h2>
+<pre>__paginateMemberList(array $queryResult) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$queryResult</h4>
+<code>array</code><p>The query to pass to paginate(), usually obtained from a Member::getMemberSummary<em>**</em> method.</p></div>
+</div></div>
+</div>
+<a id="method___sendProspectiveMemberEmail"></a><div class="element clickable method private method___sendProspectiveMemberEmail" data-toggle="collapse" data-target=".method___sendProspectiveMemberEmail .collapse" title="private">
+<h2>Send the 'prospective member' email to a member.</h2>
+<pre>__sendProspectiveMemberEmail(int $memberId) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$memberId</h4>
+<code>int</code><p>The id of the member to send the message to.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if e-mail was sent.</div>
+</div></div>
+</div>
+<a id="method___sendSoDetailsToMember"></a><div class="element clickable method private method___sendSoDetailsToMember" data-toggle="collapse" data-target=".method___sendSoDetailsToMember .collapse" title="private">
+<h2>Send the e-mail containing standing order info to a member.</h2>
+<pre>__sendSoDetailsToMember(int $memberId) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$memberId</h4>
+<code>int</code><p>The id of the member to send the reminder to.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if mail was sent, false otherwise.</div>
+</div></div>
+</div>
+<a id="method___setFlashFromMailingListInfo"></a><div class="element clickable method private method___setFlashFromMailingListInfo" data-toggle="collapse" data-target=".method___setFlashFromMailingListInfo .collapse" title="private">
+<h2>Set the session flash message based on the data returned from a function that updates the mailing list settings.</h2>
+<pre>__setFlashFromMailingListInfo(string $initialMessage, array $results) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$initialMessage</h4>
+<code>string</code><p>The message to show at the start of the flash, before any mailing list messages.</p></div>
+<div class="subelement argument">
+<h4>$results</h4>
+<code>array</code><p>The results from the function that updated the mailing list settings.</p></div>
+</div></div>
+</div>
+<h3>
+<i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_components"> </a><div class="element clickable property public property_components" data-toggle="collapse" data-target=".property_components .collapse" title="public">
+<h2>The list of components this Controller relies on.</h2>
+<pre>$components : array</pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"><code>array('BankStatement')</code></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_helpers"> </a><div class="element clickable property public property_helpers" data-toggle="collapse" data-target=".property_helpers .collapse" title="public">
+<h2>Views rendered from this controller will have access to the following helpers.</h2>
+<pre>$helpers : array</pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"><code>array('Html', 'Form', 'Paginator', 'Tinymce', 'Currency', 'Mailinglist')</code></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
+</a> and<br>
+            generated on 2013-12-14T13:33:57Z.<br></footer></div>
+</div>
+</body>
+</html>
