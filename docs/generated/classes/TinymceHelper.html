@@ -45,7 +45,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">69</span></a></li>
+                <span class="label label-info">47</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -75,20 +75,22 @@
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method__build" title="_build() :: Adds the tiny_mce.js file and constructs the options"><span class="description">Adds the tiny_mce.js file and constructs the options</span><pre>_build()</pre></a></li>
-<li class="method public "><a href="#method_input" title="input() :: Creates a TinyMCE textarea."><span class="description">Creates a TinyMCE textarea.</span><pre>input()</pre></a></li>
+<li class="method public "><a href="#method_input" title="input() :: Creates a TinyMCE input."><span class="description">Creates a TinyMCE input.</span><pre>input()</pre></a></li>
 <li class="method public "><a href="#method_textarea" title="textarea() :: Creates a TinyMCE textarea."><span class="description">Creates a TinyMCE textarea.</span><pre>textarea()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header private">» Private
-                    <ul><li class="method private "><a href="#method_preset" title="preset() :: Creates a preset for TinyOptions"><span class="description">Creates a preset for TinyOptions</span><pre>preset()</pre></a></li></ul>
+                    <ul>
+<li class="method private "><a href="#method___build" title="__build() :: Adds the tiny_mce.js file and constructs the options"><span class="description">Adds the tiny_mce.js file and constructs the options</span><pre>__build()</pre></a></li>
+<li class="method private "><a href="#method___preset" title="__preset() :: Creates a preset for TinyOptions"><span class="description">Creates a preset for TinyOptions</span><pre>__preset()</pre></a></li>
+</ul>
 </li>
 <li class="nav-header">
 <i title="Properties" class="icon-custom icon-property"></i> Properties
-                    <ul>
-<li class="property public "><a href="#property__script" title="$_script() :: "><span class="description"></span><pre>$_script</pre></a></li>
-<li class="property public "><a href="#property_helpers" title="$helpers() :: "><span class="description"></span><pre>$helpers</pre></a></li>
-</ul>
+                    <ul><li class="property public "><a href="#property_helpers" title="$helpers() :: List of helpers this helper uses."><span class="description"></span><pre>$helpers</pre></a></li></ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul><li class="property private "><a href="#property___script" title="$__script() :: If this is true, then the script has been loaded and we don't need to load it again."><span class="description"></span><pre>$__script</pre></a></li></ul>
 </li>
 </ul>
 </div>
@@ -102,33 +104,15 @@
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">Application helper</p>
+<p class="short_description">Helper to output TinyMCE TextArea and Input fields.</p>
 <div class="details">
 <div class="long_description">Add your application-wide methods in the class below, your helpers
 will inherit them.</div>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
-<a id="method__build"></a><div class="element clickable method public method__build" data-toggle="collapse" data-target=".method__build .collapse" title="public">
-<h2>Adds the tiny_mce.js file and constructs the options</h2>
-<pre>_build(string $fieldName, array $tinyoptions<code> = array()</code>) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$fieldName</h4>
-<code>string</code><p>Name of a field, like this "Modelname.fieldname"</p></div>
-<div class="subelement argument">
-<h4>$tinyoptions</h4>
-<code>array</code><p>Array of TinyMCE attributes for this textarea</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>JavaScript code to initialise the TinyMCE area</div>
-</div></div>
-</div>
 <a id="method_input"></a><div class="element clickable method public method_input" data-toggle="collapse" data-target=".method_input .collapse" title="public">
-<h2>Creates a TinyMCE textarea.</h2>
-<pre>input(string $fieldName, array $options<code> = array()</code>, array $tinyoptions<code> = array()</code>, $preset<code> = null</code>) : string</pre>
+<h2>Creates a TinyMCE input.</h2>
+<pre>input(string $fieldName, array $options<code> = array()</code>, array $tinyoptions<code> = array()</code>, string $preset<code> = null</code>) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -141,11 +125,13 @@ will inherit them.</div>
 <code>array</code><p>Array of HTML attributes.</p></div>
 <div class="subelement argument">
 <h4>$tinyoptions</h4>
-<code>array</code><p>Array of TinyMCE attributes for this textarea</p></div>
-<div class="subelement argument"><h4>$preset</h4></div>
+<code>array</code><p>Array of TinyMCE attributes for this input.</p></div>
+<div class="subelement argument">
+<h4>$preset</h4>
+<code>string</code><p>The preset of options to user.</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>string</code>An HTML textarea element with TinyMCE</div>
+<code>string</code>An HTML input element with TinyMCE</div>
 </div></div>
 </div>
 <a id="method_textarea"></a><div class="element clickable method public method_textarea" data-toggle="collapse" data-target=".method_textarea .collapse" title="public">
@@ -163,49 +149,66 @@ will inherit them.</div>
 <code>array</code><p>Array of HTML attributes.</p></div>
 <div class="subelement argument">
 <h4>$tinyoptions</h4>
-<code>array</code><p>Array of TinyMCE attributes for this textarea</p></div>
+<code>array</code><p>Array of TinyMCE attributes for this textarea.</p></div>
 <div class="subelement argument">
 <h4>$preset</h4>
-<code>string</code>
-</div>
+<code>string</code><p>The preset options to use.</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>string</code>An HTML textarea element with TinyMCE</div>
 </div></div>
 </div>
-<a id="method_preset"></a><div class="element clickable method private method_preset" data-toggle="collapse" data-target=".method_preset .collapse" title="private">
+<a id="method___build"></a><div class="element clickable method private method___build" data-toggle="collapse" data-target=".method___build .collapse" title="private">
+<h2>Adds the tiny_mce.js file and constructs the options</h2>
+<pre>__build(string $fieldName, array $tinyoptions<code> = array()</code>) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$fieldName</h4>
+<code>string</code><p>Name of a field, like this "Modelname.fieldname"</p></div>
+<div class="subelement argument">
+<h4>$tinyoptions</h4>
+<code>array</code><p>Array of TinyMCE attributes for this textarea</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>JavaScript code to initialise the TinyMCE area</div>
+</div></div>
+</div>
+<a id="method___preset"></a><div class="element clickable method private method___preset" data-toggle="collapse" data-target=".method___preset .collapse" title="private">
 <h2>Creates a preset for TinyOptions</h2>
-<pre>preset(string $name) : array</pre>
+<pre>__preset(string $name) : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$name</h4>
-<code>string</code>
-</div>
+<code>string</code><p>Name of the preset to use.</p></div>
 <h3>Returns</h3>
-<div class="subelement response"><code>array</code></div>
+<div class="subelement response">
+<code>array</code>Array of preset data.</div>
 </div></div>
 </div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
-<a id="property__script"> </a><div class="element clickable property public property__script" data-toggle="collapse" data-target=".property__script .collapse" title="public">
-<h2>$_script</h2>
-<pre>$_script </pre>
+<a id="property_helpers"> </a><div class="element clickable property public property_helpers" data-toggle="collapse" data-target=".property_helpers .collapse" title="public">
+<h2>List of helpers this helper uses.</h2>
+<pre>$helpers : array</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
-<div class="subelement argument"><code>false</code></div>
+<div class="subelement argument"><code>array('Js', 'Html', 'Form')</code></div>
 </div></div>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a id="property_helpers"> </a><div class="element clickable property public property_helpers" data-toggle="collapse" data-target=".property_helpers .collapse" title="public">
-<h2>$helpers</h2>
-<pre>$helpers </pre>
+<a id="property___script"> </a><div class="element clickable property private property___script" data-toggle="collapse" data-target=".property___script .collapse" title="private">
+<h2>If this is true, then the script has been loaded and we don't need to load it again.</h2>
+<pre>$__script : boolean</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
-<div class="subelement argument"><code>array('Js', 'Html', 'Form')</code></div>
+<div class="subelement argument"><code>false</code></div>
 </div></div>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
@@ -218,7 +221,7 @@ will inherit them.</div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-12T22:02:05Z.<br></footer></div>
+            generated on 2013-12-14T00:51:57Z.<br></footer></div>
 </div>
 </body>
 </html>

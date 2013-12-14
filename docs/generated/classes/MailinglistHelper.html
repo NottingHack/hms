@@ -45,7 +45,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">69</span></a></li>
+                <span class="label label-info">47</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -75,15 +75,15 @@
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_output" title="output() :: "><span class="description">output()
-        </span><pre>output()</pre></a></li>
-<li class="method public "><a href="#method_outputList" title="outputList() :: "><span class="description">outputList()
-        </span><pre>outputList()</pre></a></li>
+<li class="method public "><a href="#method_output" title="output() :: Given a list of mailing list data, output a list of selection boxes showing subscription status."><span class="description">Given a list of mailing list data, output a list of selection boxes showing subscription status.</span><pre>output()</pre></a></li>
+<li class="method public "><a href="#method_outputList" title="outputList() :: Given a list of mailing list data, output an englishised list of the names
+of the mailing lists that are subscribed to."><span class="description">Given a list of mailing list data, output an englishised list of the names
+of the mailing lists that are subscribed to.</span><pre>outputList()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
 <i title="Properties" class="icon-custom icon-property"></i> Properties
-                    <ul><li class="property public "><a href="#property_helpers" title="$helpers() :: "><span class="description"></span><pre>$helpers</pre></a></li></ul>
+                    <ul><li class="property public "><a href="#property_helpers" title="$helpers() :: Helpers this helper requires."><span class="description"></span><pre>$helpers</pre></a></li></ul>
 </li>
 </ul>
 </div>
@@ -97,39 +97,48 @@
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">Application helper</p>
+<p class="short_description">Helper to display a list of mailing lists.</p>
 <div class="details">
 <div class="long_description">Add your application-wide methods in the class below, your helpers
 will inherit them.</div>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_output"></a><div class="element clickable method public method_output" data-toggle="collapse" data-target=".method_output .collapse" title="public">
-<h2>output()
-        </h2>
-<pre>output($mailingListDetails) </pre>
+<h2>Given a list of mailing list data, output a list of selection boxes showing subscription status.</h2>
+<pre>output(array $mailingListDetails) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$mailingListDetails</h4></div>
+<div class="subelement argument">
+<h4>$mailingListDetails</h4>
+<code>array</code><p>Array of mailing list data.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>HTML required to render the selection boxes.</div>
 </div></div>
 </div>
 <a id="method_outputList"></a><div class="element clickable method public method_outputList" data-toggle="collapse" data-target=".method_outputList .collapse" title="public">
-<h2>outputList()
-        </h2>
-<pre>outputList($mailingListDetails) </pre>
+<h2>Given a list of mailing list data, output an englishised list of the names
+of the mailing lists that are subscribed to.</h2>
+<pre>outputList(array $mailingListDetails) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$mailingListDetails</h4></div>
+<div class="subelement argument">
+<h4>$mailingListDetails</h4>
+<code>array</code><p>Array of mailing list data.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>HTML to render the lists.</div>
 </div></div>
 </div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
 <a id="property_helpers"> </a><div class="element clickable property public property_helpers" data-toggle="collapse" data-target=".property_helpers .collapse" title="public">
-<h2>$helpers</h2>
-<pre>$helpers </pre>
+<h2>Helpers this helper requires.</h2>
+<pre>$helpers : array</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>array('Form', 'Html')</code></div>
@@ -145,7 +154,7 @@ will inherit them.</div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-12T22:02:05Z.<br></footer></div>
+            generated on 2013-12-14T00:51:57Z.<br></footer></div>
 </div>
 </body>
 </html>
