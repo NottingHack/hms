@@ -22,11 +22,10 @@
 	 *
 	 * @package       app.Model
 	 */
-	class Transactions extends AppModel 
-	{
-		
-		const TYPE_VEND = "VEND";     // Transaction relates to either vending machine purchace, or a payment received by note acceptor
-		const TYPE_MANUAL = "MANUAL"; // Transaction is a manually entered (via web interface) record of a payment or purchase
+	class Transactions extends AppModel {
+
+		const TYPE_VEND = "VEND";			// Transaction relates to either vending machine purchace, or a payment received by note acceptor
+		const TYPE_MANUAL = "MANUAL";	// Transaction is a manually entered (via web interface) record of a payment or purchase
 
 /**
  * Specify the table to use.
@@ -59,16 +58,13 @@
  * @param array $conditions An array of conditions to decide which member records to access.
  * @return array A list of transactions or query to reports a list of transactions
  */
-		public function getTransactionList($paginate, $conditions = array())
-		{
-			
+		public function getTransactionList($paginate, $conditions = array()) {
 			$findOptions = array(
 				'conditions' => $conditions,
 				'order' => 'Transactions.transaction_datetime DESC'
 			);
 
-			if($paginate)
-			{
+			if ($paginate) {
 				return $findOptions;
 			}
 
@@ -78,4 +74,3 @@
 		}
 
 	}
-?>

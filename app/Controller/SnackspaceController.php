@@ -13,9 +13,9 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-class SnackspaceController extends AppController
-{
-		public $uses = array('Transactions');
+class SnackspaceController extends AppController {
+
+	public $uses = array('Transactions');
 
 /** 
  * Test to see if a user is authorized to make a request.
@@ -29,27 +29,29 @@ class SnackspaceController extends AppController
 			if (parent::isAuthorized($user, $request)) {
 				return true;
 			}
-			
+
 			$authGranted = false;
-			
+
 			// Only history page implemented so far
-			if ($request->params['action'] != 'history')
+			if ($request->params['action'] != 'history') {
 				return false;
-			
+			}
+
 			// Get the member_id details have been requested for & the logged in users member_id
 			$logMemberId = $this->_getLoggedInMemberId();
-			if (isset($request->params['pass'][0]))
+			if (isset($request->params['pass'][0])) {
 				$reqMemberId = $request->params['pass'][0];
-			else
+			} else {
 				$reqMemberId = $logMemberId;
-			
+			}
+
 			// Allow everyone to view their own transaction history
-			if ($reqMemberId == $logMemberId)
+			if ($reqMemberId == $logMemberId) {
 				$authGranted = true;
-			
-			// Only allow 'Full Access' (via parent::isAuthorized) and 'Snackspace Admins' to view the transaction history of others
-			else if ($this->Member->GroupsMember->isMemberInGroup( $logMemberId, Group::SNACKSPACE_ADMIN ))
+			} elseif ($this->Member->GroupsMember->isMemberInGroup( $logMemberId, Group::SNACKSPACE_ADMIN )) {
+				// Only allow 'Full Access' (via parent::isAuthorized) and 'Snackspace Admins' to view the transaction history of others
 				$authGranted = true;
+			}
 
 			return $authGranted;
 		}
@@ -57,15 +59,15 @@ class SnackspaceController extends AppController
 /**
  * Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set
  */
-		public function history($memberId=null)
-		{
+		public function history($memberId = null) {
 			$this->loadModel('Transactions');
-			
-			if ($memberId == null)
+
+			if ($memberId == null) {
 				$memberId = $this->_getLoggedInMemberId();
-			
-			$this->_transactionList($memberId);
-			
+			}
+
+			$this->__transactionList($memberId);
+
 			$this->loadModel('Member');
 			$balance = $this->Member->getBalanceForMember($memberId);
 			$this->set('balance', $balance);
@@ -76,12 +78,10 @@ class SnackspaceController extends AppController
  *
  * @param int $memberId The members id to list all transactions for
  */
-		private function _transactionList($memberId)
-		{
+		private function __transactionList($memberId) {
 			$this->paginate = $this->Transactions->getTransactionList(true, array('Member.member_id' => $memberId));
 			$transactionsList = $this->paginate('Transactions');
 			$this->set('transactionsList', $transactionsList);
 		}
 
 }
-?>

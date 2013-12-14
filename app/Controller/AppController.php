@@ -87,9 +87,8 @@ class AppController extends Controller {
 		$this->__addMainNav('Members', array( 'plugin' => null, 'controller' => 'members', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN), null);
 		$this->__addMainNav('Groups', array( 'plugin' => null, 'controller' => 'groups', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN), null);
 		$this->__addMainNav('Mailing Lists', array( 'plugin' => null, 'controller' => 'mailinglists', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN), null);
-		$this->__addMainNav('Snackspace',  array( 'plugin' => null,  'controller' => 'snackspace', 'action' => 'history' ), null, array(Status::CURRENT_MEMBER, Status::EX_MEMBER));
+		$this->__addMainNav('Snackspace', array( 'plugin' => null, 'controller' => 'snackspace', 'action' => 'history' ), null, array(Status::CURRENT_MEMBER, Status::EX_MEMBER));
 		$this->__addMainNav('MemberVoice', array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ), null, null);
-
 	}
 
 /**
@@ -135,12 +134,13 @@ class AppController extends Controller {
 			}
 
 			// Apply restrictions based on member status, if applicable
-			if ($allowed)	{
-				if ($nav['statii'] != '')	{
+			if ($allowed) {
+				if ($nav['statii'] != '') {
 					$allowed = false;
-					foreach ($nav['statii'] as $status)	{
-						if ($this->Member->getStatusForMember($userId) == $status)
+					foreach ($nav['statii'] as $status) {
+						if ($this->Member->getStatusForMember($userId) == $status) {
 							$allowed = true;
+						}
 					}
 				}
 			}
