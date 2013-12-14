@@ -23,6 +23,7 @@
     <files>
         <directory>./app</directory>
         <directory>./plugins</directory>
+        <directory>./dev</directory>
         <ignore>Test/*</ignore>
         <ignore>tmp/*</ignore>
         <ignore>webroot/*</ignore>
