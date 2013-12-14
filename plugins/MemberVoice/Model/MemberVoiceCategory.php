@@ -31,7 +31,7 @@ class MemberVoiceCategory extends MemberVoiceAppModel {
 	public $alias = 'Category';
 
 /**
- * Specify 'has and belongs to many (HABTM) accossations.
+ * Specify 'has and belongs to many (HABTM) associations.
  * @var array
  */
 	public $hasAndBelongsToMany = array(
