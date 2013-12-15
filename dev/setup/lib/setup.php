@@ -420,10 +420,10 @@ class Setup {
 
 		// Finally generate the dev user
 		$details = array(
-			'__firstname' => $this->__firstname,
-			'__surname' => $this->__surname,
-			'__email' => $this->__email,
-			'__username' => $this->__username,
+			'firstname' => $this->__firstname,
+			'surname' => $this->__surname,
+			'email' => $this->__email,
+			'username' => $this->__username,
 			'groups' => array(
 				Group::CURRENT_MEMBERS, Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN,
 			),
