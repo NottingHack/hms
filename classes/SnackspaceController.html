@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>HMS - The Hackspace Management System » app.Console</title>
+<title>HMS - The Hackspace Management System » \SnackspaceController</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -67,24 +67,128 @@
                         </div></noscript>
 <div class="row">
 <div class="span4">
+<div class="btn-toolbar">
+<div class="btn-group visibility" data-toggle="buttons-checkbox">
+<button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button>
+</div>
 <div class="btn-group view pull-right" data-toggle="buttons-radio">
 <button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
 </div>
+</div>
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
-<i class="icon-map-marker"></i> Packages</li>
-<li>
-<span class="empty-package"><i class="icon-folder-close"></i>app.Console</span><ul class="nav nav-list nav-packages"></ul>
+<i title="Methods" class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_history" title="history() :: Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set"><span class="description">Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set</span><pre>history()</pre></a></li>
+<li class="method public "><a href="#method_isAuthorized" title="isAuthorized() :: Test to see if a user is authorized to make a request."><span class="description">Test to see if a user is authorized to make a request.</span><pre>isAuthorized()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul><li class="method private "><a href="#method___transactionList" title="__transactionList() :: List all transactions for a given member"><span class="description">List all transactions for a given member</span><pre>__transactionList()</pre></a></li></ul>
+</li>
+<li class="nav-header">
+<i title="Properties" class="icon-custom icon-property"></i> Properties
+                    <ul><li class="property public "><a href="#property_uses" title="$uses() :: "><span class="description"></span><pre>$uses</pre></a></li></ul>
 </li>
 </ul>
 </div>
-<div class="span8 package-contents"></div>
+<div class="span8">
+<a id="\SnackspaceController"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/SnackspaceController.html">SnackspaceController</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">PHP 5</p>
+<div class="details">
+<div class="long_description">Copyright (C) HMS Team
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.</div>
+<table class="table table-bordered">
+<tr>
+<th>copyright</th>
+<td>HMS Team</td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/app.Controller.html">app.Controller</a></td>
+</tr>
+<tr>
+<th>license</th>
+<td><a href="">MIT License (http://www.opensource.org/licenses/mit-license.php)</a></td>
+</tr>
+</table>
+<h3>
+<i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_history"></a><div class="element clickable method public method_history" data-toggle="collapse" data-target=".method_history .collapse" title="public">
+<h2>Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set</h2>
+<pre>history($memberId<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$memberId</h4></div>
+</div></div>
+</div>
+<a id="method_isAuthorized"></a><div class="element clickable method public method_isAuthorized" data-toggle="collapse" data-target=".method_isAuthorized .collapse" title="public">
+<h2>Test to see if a user is authorized to make a request.</h2>
+<pre>isAuthorized(array $user, \CakeRequest $request) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>link</th>
+<td><a href="http://api20.cakephp.org/class/cake-request">http://api20.cakephp.org/class/cake-request</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$user</h4>
+<code>array</code><p>Member record for the user.</p></div>
+<div class="subelement argument">
+<h4>$request</h4>
+<code><a href="CakeRequest.html">\CakeRequest</a></code><p>The request the user is attempting to make.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if the user is authorized to make the request, otherwise false.</div>
+</div></div>
+</div>
+<a id="method___transactionList"></a><div class="element clickable method private method___transactionList" data-toggle="collapse" data-target=".method___transactionList .collapse" title="private">
+<h2>List all transactions for a given member</h2>
+<pre>__transactionList(int $memberId) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$memberId</h4>
+<code>int</code><p>The members id to list all transactions for</p></div>
+</div></div>
+</div>
+<h3>
+<i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_uses"> </a><div class="element clickable property public property_uses" data-toggle="collapse" data-target=".property_uses .collapse" title="public">
+<h2>$uses</h2>
+<pre>$uses </pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"><code>array('Transactions')</code></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-22T12:47:50Z.<br></footer></div>
+            generated on 2013-12-22T12:47:51Z.<br></footer></div>
 </div>
 </body>
 </html>

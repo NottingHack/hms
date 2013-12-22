@@ -20,6 +20,7 @@
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a>Packages</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
 <li><a href="../packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
@@ -48,7 +49,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">0</span></a></li>
+                <span class="label label-info">6</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -93,6 +94,7 @@
 <li class="method public "><a href="#method_formatMemberInfo" title="formatMemberInfo() :: Format member information into a nicer arrangement."><span class="description">Format member information into a nicer arrangement.</span><pre>formatMemberInfo()</pre></a></li>
 <li class="method public "><a href="#method_formatMemberInfoList" title="formatMemberInfoList() :: Format an array of member infos."><span class="description">Format an array of member infos.</span><pre>formatMemberInfoList()</pre></a></li>
 <li class="method public "><a href="#method_getApproveDetails" title="getApproveDetails() :: Get a members name, email and pin."><span class="description">Get a members name, email and pin.</span><pre>getApproveDetails()</pre></a></li>
+<li class="method public "><a href="#method_getBalanceForMember" title="getBalanceForMember() :: Get the balance for a member, may hit the database."><span class="description">Get the balance for a member, may hit the database.</span><pre>getBalanceForMember()</pre></a></li>
 <li class="method public "><a href="#method_getBestMemberNames" title="getBestMemberNames() :: Get a list of member names or e-mails (if we don't have their name) for all members."><span class="description">Get a list of member names or e-mails (if we don't have their name) for all members.</span><pre>getBestMemberNames()</pre></a></li>
 <li class="method public "><a href="#method_getCount" title="getCount() :: Find out how many member records exist in the database."><span class="description">Find out how many member records exist in the database.</span><pre>getCount()</pre></a></li>
 <li class="method public "><a href="#method_getCountForStatus" title="getCountForStatus() :: Find how many members have a certain Status."><span class="description">Find how many members have a certain Status.</span><pre>getCountForStatus()</pre></a></li>
@@ -464,6 +466,21 @@
 <h3>Returns</h3>
 <div class="subelement response">
 <code>mixed</code>Array of info on success, null on failure.</div>
+</div></div>
+</div>
+<a id="method_getBalanceForMember"></a><div class="element clickable method public method_getBalanceForMember" data-toggle="collapse" data-target=".method_getBalanceForMember .collapse" title="public">
+<h2>Get the balance for a member, may hit the database.</h2>
+<pre>getBalanceForMember(mixed $memberData) : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$memberData</h4>
+<code>mixed</code><p>If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>The balance for the member, or null if balaance could not be found.</div>
 </div></div>
 </div>
 <a id="method_getBestMemberNames"></a><div class="element clickable method public method_getBestMemberNames" data-toggle="collapse" data-target=".method_getBestMemberNames .collapse" title="public">
@@ -1166,7 +1183,7 @@
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-14T13:33:57Z.<br></footer></div>
+            generated on 2013-12-22T12:47:51Z.<br></footer></div>
 </div>
 </body>
 </html>
