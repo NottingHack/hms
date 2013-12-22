@@ -29,5 +29,6 @@
         <ignore>webroot/*</ignore>
         <ignore>Config/*</ignore>
         <ignore>Tests/*</ignore>
+        <ignore>tests/*</ignore>
     </files>
 </phpdoc>
