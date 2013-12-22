@@ -51,11 +51,6 @@
   <file name="app\Controller\AppController.php">
     <error line="100" severity="error" message="Argument $statii is missing from the Docblock of __addMainNav()" source="phpDocumentor.file.PPC:ERR-50015"/>
   </file>
-  <file name="dev\tests\AllTests.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="3" severity="error" message="No summary for class \AllTests" source="phpDocumentor.file.PPC:ERR-50005"/>
-    <error line="5" severity="error" message="No summary for method suite()" source="phpDocumentor.file.PPC:ERR-50008"/>
-  </file>
   <file name="plugins\MemberVoice\Model\MemberVoiceStatus.php"/>
   <file name="app\index.php"/>
   <file name="app\Model\AppModel.php"/>
