@@ -17,7 +17,7 @@ App::uses('ModelBehavior', 'Model');
 
 App::uses('PhpReader', 'Configure');
 App::uses('Component', 'Controller');
-App::uses('krb5Auth', 'Lib/Krb');
+App::uses('Krb5Auth', 'Lib/Krb');
 
 /**
  * Behaviour that allows a model access to the KrbAuth interface.
@@ -41,7 +41,7 @@ class KrbAuthBehavior extends ModelBehavior {
 		Configure::config('default', new PhpReader());
 		Configure::load('krb', 'default');
 
-		$this->__krbObj = new krb5Auth(Configure::read('krb_username'), Configure::read('krb_tab'), Configure::read('krb_relm'));
+		$this->__krbObj = new Krb5Auth(Configure::read('krb_username'), Configure::read('krb_tab'), Configure::read('krb_relm'));
 	}
 
 /**

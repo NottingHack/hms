@@ -1131,7 +1131,7 @@ class MembersController extends AppController {
 			// We don't care.
 		}
 
-		return $_SERVER["SERVER_ADDR"];
+		return $_SERVER["REMOTE_ADDR"];
 	}
 
 /**
