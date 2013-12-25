@@ -49,7 +49,7 @@ will inherit them.</long-description>
     </class>
     <source>eJytU8lu2zAQvesr5uYFjhQUyMUtUAdujBhICyPOD9DkyGLNDSRlJQj67x1KtOKg1/IicebNe7Px23fXuKKazwuYw71z+waVgloqJEOy7R53cJf/1+yEdJ9GPYMlPDMnBfzAMyrrNJoIG880dtafYNrE6JZVxSmCBErrj7Oewbo3L49NhCmf9Xywt3XsmEfY2NYIFqU1C9gaXn4iqUfnhSvRPUmOJqAAcqKHlwbh5/blYk6IjfVQt1QSH5WZEaAGBEhTW6+zqFPIyBYQIRLT03b98Gv/UMbXmJieUcgQvTy0CR3A1n2bAug2RPAYmTR9HDvYM17pGRtJrcwprz4c6fzHhsBKSXOC8fw7gk8D3Hn7G3lf2ipIw3EMvEad4Ut5m8mHlg3nqs1jWl3XldaRybaeCibBKgeFSst4ky8lZZPyrYqCFm65bMk/nfSLN1nAZE3NtQons6/F1V5SbF8s9Ljcy3sh4I3EgH0AbjopEDTGxooAeSRcsRDgQIvaLYaIkGhCIukkbYc0DXoZE1iPk3KMn9jxUjFplDk3+mpNa9QXMXCPTwdfIxpSHm7vRfGn+As8oBYp</source>
   </file>
-  <file path="app\Controller\AppController.php" generated-path="app.Controller.AppController.html" hash="0d0a3725cfd0d563dd4cf2ba4f5ad6a9" package="app.Controller">
+  <file path="app\Controller\AppController.php" generated-path="app.Controller.AppController.html" hash="c1d88dfa6d32deb16588ae63be77aba4" package="app.Controller">
     <docblock line="0">
       <description>Application level Controller</description>
       <long-description>Application-wide logic.
@@ -167,19 +167,23 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>\CakeResponse</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="100" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="101" package="app.Controller">
         <name>__addMainNav</name>
         <full_name>\AppController::__addMainNav()</full_name>
-        <docblock line="100">
+        <docblock line="101">
           <description>Add an item to the main nav list.</description>
           <long-description></long-description>
-          <tag name="param" line="100" description="&lt;p&gt;Text to display with the link.&lt;/p&gt;" type="string" variable="$title">
+          <tag name="param" line="101" description="&lt;p&gt;Text to display with the link.&lt;/p&gt;" type="string" variable="$title">
             <type>string</type>
           </tag>
-          <tag name="param" line="100" description="&lt;p&gt;Array to pass to the HtmlHelper to construct the link when rendering.&lt;/p&gt;" type="string[]" variable="$link">
+          <tag name="param" line="101" description="&lt;p&gt;Array to pass to the HtmlHelper to construct the link when rendering.&lt;/p&gt;" type="string[]" variable="$link">
             <type>string[]</type>
           </tag>
-          <tag name="param" line="100" description="&lt;p&gt;Array of group ids that have access to this link, if null, all groups have access to link.&lt;/p&gt;" type="int[]|null" variable="$access">
+          <tag name="param" line="101" description="&lt;p&gt;Array of group ids that have access to this link, if null, all groups have access to link.&lt;/p&gt;" type="int[]|null" variable="$access">
+            <type>int[]</type>
+            <type>null</type>
+          </tag>
+          <tag name="param" line="101" description="&lt;p&gt;A list of status ids, a member must be in one of these statuses for this link to be visible.&lt;/p&gt;" type="int[]|null" variable="$statuses">
             <type>int[]</type>
             <type>null</type>
           </tag>
@@ -200,21 +204,21 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>int[]|null</type>
         </argument>
         <argument line="0" by_reference="false">
-          <name>$statii</name>
+          <name>$statuses</name>
           <default></default>
-          <type/>
+          <type>int[]|null</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="114" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="115" package="app.Controller">
         <name>getMainNav</name>
         <full_name>\AppController::getMainNav()</full_name>
-        <docblock line="114">
+        <docblock line="115">
           <description>Return a list of navigation elements that a user is allowed to access.</description>
           <long-description></long-description>
-          <tag name="param" line="114" description="&lt;p&gt;Only navigation elements accessible by this user will be returned.&lt;/p&gt;" type="int" variable="$userId">
+          <tag name="param" line="115" description="&lt;p&gt;Only navigation elements accessible by this user will be returned.&lt;/p&gt;" type="int" variable="$userId">
             <type>int</type>
           </tag>
-          <tag name="return" line="114" description="A list of link information." type="array">
+          <tag name="return" line="115" description="A list of link information." type="array">
             <type>array</type>
           </tag>
         </docblock>
@@ -224,37 +228,37 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>int</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="162" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="163" package="app.Controller">
         <name>beforeFilter</name>
         <full_name>\AppController::beforeFilter()</full_name>
-        <docblock line="162">
+        <docblock line="163">
           <description>Called before the controller action. Sets up the authentication.</description>
           <long-description></long-description>
-          <tag name="link" line="162" description="http://book.cakephp.org/2.0/en/controllers.html#request-life-cycle-callbacks" link="http://book.cakephp.org/2.0/en/controllers.html#request-life-cycle-callbacks"/>
+          <tag name="link" line="163" description="http://book.cakephp.org/2.0/en/controllers.html#request-life-cycle-callbacks" link="http://book.cakephp.org/2.0/en/controllers.html#request-life-cycle-callbacks"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="173" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="174" package="app.Controller">
         <name>beforeRender</name>
         <full_name>\AppController::beforeRender()</full_name>
-        <docblock line="173">
+        <docblock line="174">
           <description>Called after the controller action is run, but before the view is rendered.</description>
           <long-description>Set up the common view variables, navigation links, memberId, etc.</long-description>
-          <tag name="link" line="173" description="http://book.cakephp.org/2.0/en/controllers.html#request-life-cycle-callbacks" link="http://book.cakephp.org/2.0/en/controllers.html#request-life-cycle-callbacks"/>
+          <tag name="link" line="174" description="http://book.cakephp.org/2.0/en/controllers.html#request-life-cycle-callbacks" link="http://book.cakephp.org/2.0/en/controllers.html#request-life-cycle-callbacks"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="209" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="210" package="app.Controller">
         <name>isAuthorized</name>
         <full_name>\AppController::isAuthorized()</full_name>
-        <docblock line="209">
+        <docblock line="210">
           <description>Check if a user is allowed to complete a request.</description>
           <long-description></long-description>
-          <tag name="param" line="209" description="&lt;p&gt;An array of data describing the user attempting to make the request.&lt;/p&gt;" type="array" variable="$user">
+          <tag name="param" line="210" description="&lt;p&gt;An array of data describing the user attempting to make the request.&lt;/p&gt;" type="array" variable="$user">
             <type>array</type>
           </tag>
-          <tag name="param" line="209" description="&lt;p&gt;The request the user is trying to make.&lt;/p&gt;" type="\CakeRequest" variable="$request">
+          <tag name="param" line="210" description="&lt;p&gt;The request the user is trying to make.&lt;/p&gt;" type="\CakeRequest" variable="$request">
             <type link="CakeRequest.html">\CakeRequest</type>
           </tag>
-          <tag name="return" line="209" description="True if user is able to complete request, false otherwise." type="boolean">
+          <tag name="return" line="210" description="True if user is able to complete request, false otherwise." type="boolean">
             <type>boolean</type>
           </tag>
         </docblock>
@@ -269,40 +273,40 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>\CakeRequest</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="222" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="223" package="app.Controller">
         <name>getVersionString</name>
         <full_name>\AppController::getVersionString()</full_name>
-        <docblock line="222">
+        <docblock line="223">
           <description>Get a string detailing the current HMS version.</description>
           <long-description></long-description>
-          <tag name="return" line="222" description="A string of the current HMS version." type="string">
+          <tag name="return" line="223" description="A string of the current HMS version." type="string">
             <type>string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="" line="236" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="" line="237" package="app.Controller">
         <name>_sendEmail</name>
         <full_name>\AppController::_sendEmail()</full_name>
-        <docblock line="236">
+        <docblock line="237">
           <description>Send an e-mail to one or more email addresses.</description>
           <long-description></long-description>
-          <tag name="param" line="236" description="&lt;p&gt;Either an array of email address strings, or a string containing a singular e-mail address.&lt;/p&gt;" type="string[]|string" variable="$to">
+          <tag name="param" line="237" description="&lt;p&gt;Either an array of email address strings, or a string containing a singular e-mail address.&lt;/p&gt;" type="string[]|string" variable="$to">
             <type>string[]</type>
             <type>string</type>
           </tag>
-          <tag name="param" line="236" description="&lt;p&gt;The subject of the email.&lt;/p&gt;" type="string" variable="$subject">
+          <tag name="param" line="237" description="&lt;p&gt;The subject of the email.&lt;/p&gt;" type="string" variable="$subject">
             <type>string</type>
           </tag>
-          <tag name="param" line="236" description="&lt;p&gt;Which email view template to use.&lt;/p&gt;" type="string" variable="$template">
+          <tag name="param" line="237" description="&lt;p&gt;Which email view template to use.&lt;/p&gt;" type="string" variable="$template">
             <type>string</type>
           </tag>
-          <tag name="param" line="236" description="&lt;p&gt;Array containing all the variables to pass to the view, Defaults to empty array.&lt;/p&gt;" type="array" variable="$viewVars">
+          <tag name="param" line="237" description="&lt;p&gt;Array containing all the variables to pass to the view, Defaults to empty array.&lt;/p&gt;" type="array" variable="$viewVars">
             <type>array</type>
           </tag>
-          <tag name="param" line="236" description="&lt;p&gt;If true then the sending of this e-mail we be recorded. Defaults to true.&lt;/p&gt;" type="bool" variable="$record">
+          <tag name="param" line="237" description="&lt;p&gt;If true then the sending of this e-mail we be recorded. Defaults to true.&lt;/p&gt;" type="bool" variable="$record">
             <type>bool</type>
           </tag>
-          <tag name="return" line="236" description="True if e-mail was sent, false otherwise." type="bool">
+          <tag name="return" line="237" description="True if e-mail was sent, false otherwise." type="bool">
             <type>bool</type>
           </tag>
         </docblock>
@@ -332,19 +336,19 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>bool</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="" line="266" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="" line="267" package="app.Controller">
         <name>_getLoggedInMemberId</name>
         <full_name>\AppController::_getLoggedInMemberId()</full_name>
-        <docblock line="266">
+        <docblock line="267">
           <description>Get the id of the currently logged in Member.</description>
           <long-description></long-description>
-          <tag name="return" line="266" description="The id of the currently logged in Member, or 0 if not found." type="int">
+          <tag name="return" line="267" description="The id of the currently logged in Member, or 0 if not found." type="int">
             <type>int</type>
           </tag>
         </docblock>
       </method>
     </class>
-    <source>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</source>
+    <source>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</source>
   </file>
   <file path="app\Controller\Component\Auth\HmsAuthenticate.php" generated-path="app.Controller.Component.Auth.HmsAuthenticate.html" hash="48b4077a995ce21d2038c698bb24828e" package="app.Controller.Component.Auth">
     <docblock line="0">
@@ -2033,49 +2037,52 @@ Redistributions of files must retain the above copyright notice.</long-descripti
     </class>
     <source>eJyVVm1v2zYQ/mz/iisWQHIRW2mAfVHnpFuSogHqLnAzbMAwGLRES0QoUiCpuN6Q/747krbkxvsww7Ap3vFenrvnqJ+u27odZ2/fjoG+8PDpAX6M6xvd7oyoagfpzQQ+Lb7CI2dNFH4WBVeWl9Cpkht4rDks7h/326Sx5KWwzoh154RWFvQGNkJyC01nHRjumFDg8Bxb62cOxcGb0g6tzKKjD72APoMw4EPLiidWcQgf1razG62c0VJy4xVkCCcqDAKEtHauzbNsu93OdItbujPoVJsqi4ds1gg3jQ8zhGmCJrPxePxz2+Z5hwppgsveY3IOyeBp8n6o+UcjSf6bE1K4HQkj6vDVMcwX81eOK+f/DxmQ/NdnbowoOWIl7EAM6x20khVCVcA8fICA9nILpTC8cNrsCHumCCBMh1E59uDuETyJnXqCiNJa66dZwZ44wuAxupxdZFxlA29Zi3bstN+Z1a6RHrJCMmvhgeS9D+DfMN/SwhGG8M8BF2opiR1EwRe6abVCeGxAYXDAcCmwqbSa+aifmQFmDNt5z6O2W2PKcDYwMA9yLF7n6mEhBkYVa/oGJJPUyKo6tklKaC3xiSW9nVthsS47i1V5Fnwb7fQHN50qqAZYH6+YTjDr0eisZa5GeyReVdytmKlsSvGhrNAd9sYc/H/qVVEyGokNpG+CNFgZnRFA0yvDQ/XTJEu85ktwUVHIZ7Zb75dOOMlXG21WGIruyInqpPRuvXXetG4XXP558ddk72Z/Pu7vXbw68q4/MvAaRf95KiY8hcHxE5Heq430LZ7nddcwJf7mJwwEL/iTZXC7w7IN6IZlYJBYz8EEKLxr+L3e0RCaxcCg4a7W5Yp/w260qQf4HDwA+9gKJuUKiW5WVL00dtiRJvRhxBJZ7lLqS0ZVIh0aEBEjWn6fbzLxJg4FpsGbiqaVuuRU5vMAq9d6OXTjAzdookH+74AVYRS7mjmwte5kCWsObVDh9IAL7nUHgyYcO/BhOBhYKy4vjiaDJ/tgMPwQ0Jv27ApOPgrp/KQ5QYyhRmRHyzBhl+fHogEexObpFdZBb9MkMis5hiIS0186tUbyEtKz0yGQPLruI89zqVm5QLxlmix4sw5jnoKQuqp4ea/C7n3pqeUDCzvTK6T0fflRm/CcHoVNrZNOJgfSvTIX+8zL9vXfcOPhmc9hie1B4XVGpnG69RVIYH4FSeMtWWqsUM+wjY6ESibn4Ex3aGciyjIOEECfBBiFCFvmR7CmruHS8m2NMfgTditcUR+iGyRN91tnB4m/ym3vFWmEN3PQz/OH5d1qcbf45W65epcH+QjfGjqj4PsZ9/9SRt517S29f0iSnYjnvXdHgykQlqadwZcdvMSxrviLfdgJWaZJpAFOC4f3Q423KZFg1j1l1xvOy7mx9jLM3yHrE9y+ZY4FykbLYT54WI8m+Rf2jH1dorMlr3ACYRm+6O0bymqQoIkyXAc0sKTJWlQrfP1ymPn+DngZv4z/BScHH6E=</source>
   </file>
-  <file path="app\Controller\SnackspaceController.php" generated-path="app.Controller.SnackspaceController.html" hash="34a58bcc8b2a7efb7c43e97665adbb85" package="Default">
+  <file path="app\Controller\SnackspaceController.php" generated-path="app.Controller.SnackspaceController.html" hash="54a84ecc648d718f2a15f445c9569b92" package="app.Controller">
     <docblock line="0">
-      <description></description>
-      <long-description></long-description>
-    </docblock>
-    <class final="false" abstract="false" namespace="" line="16" package="app.Controller">
-      <extends>\AppController</extends>
-      <name>SnackspaceController</name>
-      <full_name>\SnackspaceController</full_name>
-      <docblock line="16">
-        <description>PHP 5</description>
-        <long-description>Copyright (C) HMS Team
+      <description>PHP 5</description>
+      <long-description>Copyright (C) HMS Team
 
 Licensed under The MIT License
 Redistributions of files must retain the above copyright notice.</long-description>
-        <tag name="copyright" line="16" description="HMS Team"/>
-        <tag name="package" line="16" description="app.Controller"/>
-        <tag name="license" line="16" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
+      <tag name="copyright" line="0" description="HMS Team"/>
+      <tag name="package" line="0" description="app.Controller"/>
+      <tag name="license" line="0" description="MIT License (http://www.opensource.org/licenses/mit-license.php)"/>
+    </docblock>
+    <class final="false" abstract="false" namespace="" line="19" package="app.Controller">
+      <extends>\AppController</extends>
+      <name>SnackspaceController</name>
+      <full_name>\SnackspaceController</full_name>
+      <docblock line="19">
+        <description>Controller to handle Snackspace functionality, allows a member to see their transaction history.</description>
+        <long-description></long-description>
       </docblock>
-      <property static="false" visibility="public" line="18" namespace="" package="app.Controller">
+      <property static="false" visibility="public" line="25" namespace="" package="app.Controller">
         <name>$uses</name>
         <default>array('Transactions')</default>
-        <docblock line="18">
-          <description></description>
+        <docblock line="25">
+          <description>List of models this controller uses.</description>
           <long-description></long-description>
-        </docblock>
-      </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="28" package="app.Controller">
-        <name>isAuthorized</name>
-        <full_name>\SnackspaceController::isAuthorized()</full_name>
-        <docblock line="28">
-          <description>Test to see if a user is authorized to make a request.</description>
-          <long-description></long-description>
-          <tag name="param" line="28" description="&lt;p&gt;Member record for the user.&lt;/p&gt;" type="array" variable="$user">
+          <tag name="var" line="25" description="" type="array" variable="">
             <type>array</type>
           </tag>
-          <tag name="param" line="28" description="&lt;p&gt;The request the user is attempting to make.&lt;/p&gt;" type="\CakeRequest" variable="$request">
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="35" package="app.Controller">
+        <name>isAuthorized</name>
+        <full_name>\SnackspaceController::isAuthorized()</full_name>
+        <docblock line="35">
+          <description>Test to see if a user is authorized to make a request.</description>
+          <long-description></long-description>
+          <tag name="param" line="35" description="&lt;p&gt;Member record for the user.&lt;/p&gt;" type="array" variable="$user">
+            <type>array</type>
+          </tag>
+          <tag name="param" line="35" description="&lt;p&gt;The request the user is attempting to make.&lt;/p&gt;" type="\CakeRequest" variable="$request">
             <type link="CakeRequest.html">\CakeRequest</type>
           </tag>
-          <tag name="return" line="28" description="True if the user is authorized to make the request, otherwise false." type="bool">
+          <tag name="return" line="35" description="True if the user is authorized to make the request, otherwise false." type="bool">
             <type>bool</type>
           </tag>
-          <tag name="link" line="28" description="http://api20.cakephp.org/class/cake-request" link="http://api20.cakephp.org/class/cake-request"/>
+          <tag name="link" line="35" description="http://api20.cakephp.org/class/cake-request" link="http://api20.cakephp.org/class/cake-request"/>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$user</name>
@@ -2088,26 +2095,30 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>\CakeRequest</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="62" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="70" package="app.Controller">
         <name>history</name>
         <full_name>\SnackspaceController::history()</full_name>
-        <docblock line="62">
-          <description>Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set</description>
+        <docblock line="70">
+          <description>Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set.</description>
           <long-description></long-description>
+          <tag name="param" line="70" description="&lt;p&gt;The members id to list all transactions for&lt;/p&gt;" type="int|null" variable="$memberId">
+            <type>int</type>
+            <type>null</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$memberId</name>
           <default>null</default>
-          <type/>
+          <type>int|null</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="81" package="app.Controller">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="89" package="app.Controller">
         <name>__transactionList</name>
         <full_name>\SnackspaceController::__transactionList()</full_name>
-        <docblock line="81">
+        <docblock line="89">
           <description>List all transactions for a given member</description>
           <long-description></long-description>
-          <tag name="param" line="81" description="&lt;p&gt;The members id to list all transactions for&lt;/p&gt;" type="int" variable="$memberId">
+          <tag name="param" line="89" description="&lt;p&gt;The members id to list all transactions for&lt;/p&gt;" type="int" variable="$memberId">
             <type>int</type>
           </tag>
         </docblock>
@@ -2118,12 +2129,7 @@ Redistributions of files must retain the above copyright notice.</long-descripti
         </argument>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="PPC:ERR-50000">No summary was found for this file</error>
-      <error line="18" code="PPC:ERR-50007">No summary for property $uses</error>
-      <error line="62" code="PPC:ERR-50015">Argument $memberId is missing from the Docblock of history()</error>
-    </parse_markers>
-    <source>eJyFVW1vIjcQ/sz+iqmEunAKcDqpX0hJj9JeDjVco4NvpygyrAErXntre6HcKf+947d9ISSNomTXM/PMzPOMZ3/9rdgXyejduwTsL9x/vodfwvNMFifFdnsDvVkfPi+WsKIkD8Y7tqFC0wxKkVEFqz2FxXwVj63HV5oxbRRbl4ZJoUFuYcs41ZCX2oCihjABBuPIWh4obKpsQhpEGYZEH2uD/WmUAR8LsnkiOwr+hxTFcCaFUZJzqpwD9+UEh0aB0NsbU4xHo+PxOJQFHslSYVKpdqMQpEc5M4PwMkSa+gg5SpINJ1rDUmBujQXQOiXQfw0VmYZpUTROfyRJpyjXiATdEnFhAkQpcuqlK0WEJhvHT9q/TqwQYAtfUaTISNCUAtsCAYxTwDSQ0uylYt+ReDTn5AnpQy7/KTGgYqwgiuQ+h8uoYEHzNf5TdCNVBlupHPHWNGxEzBDuq8eCbgB1ysbnGOQqMYbmhWFiFyvxUChsqQSspeSwUqWrvxX3sgNTp7gCiW/qyFCiLeE6gHImniAoRgr24f1wg4GoiRPMKTKyJ4MA45TqRNa3pXAcY/pplb3nmLmqGu2jTp1OB6vtIRtUmPH4Tffg3wn9Gmz12h48J/Zv17Z5i/Ia7HPiW7l2ltEI/hb8BHu8HFKdoLADzPKC05w6by3RXcVaYr7BjdNIf0v9vKQP8NME0oCSnlUT8lXlYNJb6vXL3Sg8sgwyewW5hj3B67emVEQRqB+Rn50/l7sdHuBdtQToOt61iVY/W3PbZtdgPYObxx01dy5sLqK117+OLTGtqbnQWIEqpg/f3j9U3FqfJvzrIb5XoNj2K7GNStvETDmXR6AHqk5SUDuUB0aPtnemQB6ttNUtjao11amTtLNUTbRHoR4UV61D8bT5wMHNrZJloeMbC09z4c57rRxX4A7H4+WX6eyv5f109ufj9I/F/AtUHMZ5I67N9FPJOUw3G4rEQe/ACFya9j4QkUFaLzmYZjnDJdWk5xIxdsu7G6zf7t2RH4a16WStz0n4IMFyjyUT4IhtgbGFZk7tprSbV1zgW1xt9dR6s91ClSfuAZEaXK6v7YnQTK+OmIBA4gKnQS8uSbaQGeUXFnmcj7wxHA2EThP5/29N2CnB77HBwR1WWmcJmV/W5/FSj9ZdE04EalqljrOGFfzubZ+k8oct8Brb3uA04KS4FcNjv62fre6yagR27ECjOu0PFxOmodWq2lkamPtm8NdQo5qKHYihtZxvMdZSFHcxEza0YqYprONndYZkR/oqfs89ZcNqRaYwualb6UcGG5iOoSpbzP9yoM6YP4ewEpyfRS2ek/8AQcwwCA==</source>
+    <source>eJylVm2PGjcQ/gy/Yiqh7hLxEkXqF65cQ2lzQT3SU+BbdDoZ1oB1Xntre6Ekvf/e8cvueu/I9UMRQmt7Zp6ZZx7P8vMvxaHojt+86YL9wt3HO/gpPM9lcVZsfzCQzvvwcbmCNSV5OLxlWyo0zaAUGVWwPlBYLtbVtrX4TDOmjWKb0jApNMgd7BinGvJSG1DUECbAoB/ZyCOFbY0mpMEoowD0vjmwnygNeF+Q7SPZU/AfUhSjuRRGSc6pcgbcpxMMogQhPRhTTMbj0+k0kgVuyVIhqFT7cXDS45yZYViMkKY+hhx3A1nQIIGRcCAi4xRWAjPSmBaFXSm2tnDCmTkPgHAuTxoI5DTfeB9Nqa2f4UIRoYkzhwOSJtV55MC2nGgdRY1A6d+GikzDrCii3W91frcYx3Key4xyjUBMI8e1YYkFjhxHR6KAKEXODrFTlBusGXrWAKb+JE3WTYY66V85FLDua4owoRi2w/rQTwFikdIcpGJfUSJ4nJNHbDR2/a8SHereFkSR3GM4RAVLT4+iW6ky2EnlJGKPRpHHHMN99rGgF4I6DVbPlZPLxBiaF4aJfZWJD4USLJWAjZQc1qp0+bf8XlZgGogBSFypE0Mx7QjXIShn4hGCtkjB3r0dbdER1eOk5fo5tjvDEKZFeqUZRJ/V4KkjZlDX2ccmdzqYa4pcUGEmk1etvXknFGuwzitcP3Xxp2crvMHOGixx6qu4sgfjMfwp+LnSIhT2krG84DSnzlhLtFYhjQpqeO2ao78kXijJPfwwhSQESdqJBLCQCQLeUN81fz8eWAaZHREo3QPB8bChVFTUUy+MH509l/s9buAssYXrxt8WiIdeUAtbYM9eguH1w56aW+e1ENVp2r8K1TCtqblQU4GdS+6/vL2vGLUmcfDve7gyAW8hvewZZRkzMrMjA+iRqrMU1GrwyOgpjAx5EpfGRtSSBqENUaXfbn4tDJeni+HZ8m7D6xsly0JXKxaeFsLtpy2EAbjNyWT1aTb/Y3U3m//+MPttufgEFXeVwNxUhORDyTnMtluKhEF6ZAQuSbsPOGQhiWbsLMsZzqOYmkuk2DHoLqt+rXDLehBnbIJnT/VQXR0wXQI8zFZMP8bTTpa9vKYBV9UEa2QaXgBIcW2J910kBmeoiYccE+YfYZlp7Nb1BdHA3FhyqVzK4/JgCYykTcgpWAzfl9ByLkm2tK+NC3M/6CuPxNX4d+Kw/3nb/AwKVg9R/vbV1UB41Jep+WCJC9XbEE4EKqKGrYSK6L/6sw9S+c1W6DqyvfVJCJPg/AyP/Vb/b7/HNopiz4606m77/YaN/F89VOxITPOPAl4jK+4jjm0mrGfNStxOx836WSB7GwbVS9/TNaonagLT66aQfmAvCunoqcEq+JcqapP+PIJl//leaMNT91+ERoGj</source>
   </file>
   <file path="app\Controller\StatusController.php" generated-path="app.Controller.StatusController.html" hash="971fa691b917fa57e2b3f3560c8e5245" package="app.Controller">
     <docblock line="0">
@@ -6558,7 +6564,7 @@ Redistributions of files must retain the above copyright notice.</long-descripti
     </class>
     <source>eJylVk1v2zgQPcu/YgoEkRTI9mkv7jrbIMBuit10i8Y99GTQEmUTkUiBpOwai/z3HX5IpJ00DVADNuT5eDMcvkfq9z+6XTeZX11N4ArM9/PdZ/gNH8zzreiOkm13GrLbHO7uH2BFSeud/7CSckUr6HlFJax2FO4/rgazifhCK6a0ZJteM8EViBpq1lAFba80SKoJ46Axj2zEnkI5VuNCI8rMF/oQHOYTtQEfOlI+ki0F9yFdN7sXFW2sr3GdeF/UG2Q7rbvFfH44HGaiQ5PoJdYTcjv3SWreMj31f2Y4ohwh55PJTdctFj36sxQfba20gNQ95O8nwyStAWohgTQNKE10r6DvKqIp4A+xaGVDlIIH6/zqfPS7prxSMIDDfyPkQ0dLVh/twDTZNPgrAFuZ2cXuiQQza7610EnXb7B7uMCAlQ1eQuraWLs2VPr+RehOspbIIzzS4+vIPvBvejTYrPoBXrqhjeBbhd2mgOsVJSOWDgGdSEmOp+A+aSUQ27qzSZKk97TdUJnC8joYk9SO8RNpqXUMQYX14Q5QtuXYpHO21rnGbtGdFwH0pmoZ/xVkYgAMcDEi/9tUbnN/guuDXsYVTbVWIcAhf6KHX0fm9HCOHDH4VlJDSAIYdkZgSUshq9lwYqAIJWmBcQ0Xbr4fK3scsMpI3pDAmeGwE6mCHdkjmYydyVNkhxnj2am+AgdMQSU8nEPBP89gxLATFsilK6Q63TOBRtfEsyw+TPkkK8zDJeA51ksOGyEaWMke+6yhNMNDksOBIHpfllSpum8KqEmD54/AZuWBOe0G1tc9L22WTae4yV/spLNxrMU4kSJaVBG1muOJkSTYQsaUojqk5nB5Cd7mMWLTCBYbI9TLS8Mhpta8b6lk5TPg4DhFD/bzEsET6rj2kwu9Y2p67TiYGVYaozk44/MAOR0fnmdaQG9Qu3GFKXr3KFnrHQbrnZHurDtM2wdE8rEB4yKGAM1aigFtZ/2mwyz9Nm2nFdwt2EKluQvMza9foudS5tevyJ5mdtk5vFs68mBkkjyZaB9srWh8GqX7F9X22jGSsDPD+7VH06nYCnM9tUSj7EAJDCYaSkwzYirx7kFdUcVTvI0pRuBd88jFwUPhfYkxTd/6Y/xcOa7CM926g8NgudInAmrZd6xzY/bPvimMzdklIKN9di3whaMIGnID+IGSHErMkmxsznHtwsMuwQ+9ZrzK0ppJpfFqd3xKS8ErZq+tiGUn7JsNPBrhc7tVRoq+xkDu4VBbwh1Ru8Via7TmQgo4BR0parGGLY8V4Mv+FClowfMu3RxfID5a1/jOIPlwh/ipuLtveo0Vvnr3n0I6a5C8x6ilaN/WVaSyIdm8J7wlNdLfkEr021KDMl3mK5p6+h/PNnDz</source>
   </file>
-  <file path="app\Model\Transactions.php" generated-path="app.Model.Transactions.html" hash="d4db6de1e7f022cdd576399e1550a679" package="app.Model">
+  <file path="app\Model\Transactions.php" generated-path="app.Model.Transactions.html" hash="e62533fdea6ecec9af07391b7b298798" package="app.Model">
     <docblock line="0">
       <description>PHP 5</description>
       <long-description>Copyright (C) HMS Team
@@ -6655,7 +6661,7 @@ Redistributions of files must retain the above copyright notice.</long-descripti
         </argument>
       </method>
     </class>
-    <source>eJyFVN9v0zAQfk7/ihOqlHYa7RMvG4NVYwLEOiZWkHia3OSSWCS2sZ2WCPG/c+c4azpAVOrq3c/v7vvsl69NZSbLk5MJnAB/797dwQs68PlKm87KsvIwu5rDu/U9bFA00XkjM1QOc2hVjhY2FcL6/WYwc8QnzKXzVm5bL7VyoAsoZI0OmtZ5sOiFVOApT2z1DiF77Ka0pyqL2Ojy4ODPCAZcGpF9EyVC/xHGLNY6xzr46h5J9I2wwazy3pwtl/v9fqENmXRrqZ+25TImuWUj/fP4z4JWNKeSy8kkWRlzdtZSwCylY2iWnkLaH+bnRwH3XvjWHbknCa86IXjBBIW2IOoavBXKiYz3BLnwgkOG77+nTBhTktXCOdgcKjjAHx5V7mCACD+pc5KRy8Pm6931w5fr2zdwAc/499l5kiTL5bgCkVMLT0x5DSiJIgs7KihVCY3IKqkQDK2sEhmeAo8ARnQNKmY1Q7kjVWw7ppG4zTI0Xtvj/uvV7efVDSPoT4ThCQLpqGojVEvr6YBKo6Wqs50UsMctSDYU1H/OLbXNWV0HGISpB0hKHNR9bzCTRRcU58W2Rp6OmFoEteyEBRarKgPTSWLaLfEPU4rYhOgLSEc0ufT8r5WNlY2wHXzD7j+FY+QH7J6UfpD5X4qnW6y1KpmTFIhxnUkRgBzaCGtF96RLzNpoahL8M3ImSbrGZos2hYtXR+YgplvRYPAMUae9k9SKslSEuPc2wctwY4DvTEyUSlFesM757/ww0Fv0xFRNTwNz1s/dyzbcBuirDu8Rid+KhrYlSqlIk/Cec1rSHT0grVWU8L1FWjiRSRYrkZ4SFgLdFy5PlPCFIpmyjPeSrn9MHFyLUZuwCpiSUnPZY1qpaKRiIzN1y4mXHGFfyayKoKMWg5uF7yI5A9RQaPVk9nhnafbRIEZb7/5YUx96zHDRqv7GlOhHF+iGEmePWzs9mmlQwnxODwORMy2kyj+aY2fUw2NW4HVUJVJO40YZpeMnaDHWM20ZvWwQ3lzfX6WDHOhHFnDAGMEkcVljUOfs+BVSplIVrOWpr6R7/oqDZpDSI0Hv7NEcscVQjdO4DFf5NfkN6EAqnA==</source>
+    <source>eJyFVO9v0zAQ/Zz8FSdUKe00mk982RisGhMg1jGxgsSnyU0uiUViG9tpiRD/O+cfWdOBoNI698737vnes1++Vo1K85OTFE7A/d29u4MXtHDrK6kGzevGwvxqAe/W97BB1sXkDS9QGCyhFyVq2DQI6/ebMex2fMKSG6v5trdcCgOygoq3aKDrjQWNlnEBlurYVu4QisduQlpCWcZGl4eE+0xowKVixTdWI4QPU2q5liW2PtcGJjE34Qbzxlp1luf7/X4pFYVkr6mf1HUei0zecfs8/ljSiBYEmafpSqmzs57y84yWvld2CllYLM6n+XvLbG+OsuOcfQAqqYG1LVjNhGGFmxGUzLJw7P8cL0+LlhkDm0OxAfxhUZQGRmrwM02TgjIWNl/vrh++XN++gQt45v4/O0+SJM+nACRJyyzpYyUgJ2E07AiPixo6VjRcICgaVMMKPAVHHhQbOhROywL5jrywHZx4pGhRoLJSH7Vfr24/r24cgbAiCk8IcEOgHRM9zWUAQkZNoPMdZ7DHLXAXqKj9wnWUunSWOrAgSoEf2W8c9b3CgleDt5ll2xbd4UigpZ/vjmlwDhW1H2mi+i1pDjPasPGbLyCbyGOy878CK807pgf4hsO/cePGDzg8QX7g5V+wsy22UtROkAxIbVlw5nkcujCt2XDcJBZtJPXw6XlKUmdr7LaoM7h4NY16F92yDn1i3HTqc2RQ5LUgtiHZ+aSjGvJ2ULGMC0FVLrigr4nT36IlgVp6BpxU4cDBq979ECDHt4f8rllHY2I1F+REeO9qenIbPRa9FlTwvUcaNGlIEc2Rng2nP10RB09SuAtE5nTm3XO66rFwTC0nbfwUYEYGLXngtBIxSGCTMHUrSZASYd/woomkowV92tndRFVGqh5o9eTs8aLS2ScHUVJb88eYwtYjaatehHtSo51cmxuqmz8O7fToSKMFFgt6DJJkVnFRflTHuWCExxov6QQjiE1Hje7Jpm/OcmpimjBa3iG8ub6/yqITkoRXcKAXeCRxSlM+5xT/5fbPuKiceWe24eb5K7dlDhk9CfSYHh0gwI9QroowCOJX+hv4VSl8</source>
   </file>
   <file path="app\View\Helper\AppHelper.php" generated-path="app.View.Helper.AppHelper.html" hash="4f04fda52142e9411fa5281621096a14" package="app.View.Helper">
     <docblock line="0">

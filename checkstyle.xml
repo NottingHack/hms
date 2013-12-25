@@ -38,19 +38,13 @@
   <file name="plugins\MemberVoice\Model\MemberVoiceVote.php"/>
   <file name="app\Controller\MailinglistsController.php"/>
   <file name="app\Console\cake.php"/>
-  <file name="app\Controller\SnackspaceController.php">
-    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
-    <error line="18" severity="error" message="No summary for property $uses" source="phpDocumentor.file.PPC:ERR-50007"/>
-    <error line="62" severity="error" message="Argument $memberId is missing from the Docblock of history()" source="phpDocumentor.file.PPC:ERR-50015"/>
-  </file>
+  <file name="app\Controller\SnackspaceController.php"/>
   <file name="app\Model\Account.php"/>
   <file name="app\Controller\Component\AuthUtilComponent.php"/>
   <file name="app\Controller\Component\NavComponent.php"/>
   <file name="dev\setup\web\index.php"/>
   <file name="app\Model\Behavior\KrbAuthBehavior.php"/>
-  <file name="app\Controller\AppController.php">
-    <error line="100" severity="error" message="Argument $statii is missing from the Docblock of __addMainNav()" source="phpDocumentor.file.PPC:ERR-50015"/>
-  </file>
+  <file name="app\Controller\AppController.php"/>
   <file name="plugins\MemberVoice\Model\MemberVoiceStatus.php"/>
   <file name="app\index.php"/>
   <file name="app\Model\AppModel.php"/>

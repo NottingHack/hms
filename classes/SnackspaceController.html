@@ -48,7 +48,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">3</span></a></li>
+                <span class="label label-info">0</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -78,7 +78,7 @@
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_history" title="history() :: Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set"><span class="description">Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set</span><pre>history()</pre></a></li>
+<li class="method public "><a href="#method_history" title="history() :: Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set."><span class="description">Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set.</span><pre>history()</pre></a></li>
 <li class="method public "><a href="#method_isAuthorized" title="isAuthorized() :: Test to see if a user is authorized to make a request."><span class="description">Test to see if a user is authorized to make a request.</span><pre>isAuthorized()</pre></a></li>
 </ul>
 </li>
@@ -87,7 +87,7 @@
 </li>
 <li class="nav-header">
 <i title="Properties" class="icon-custom icon-property"></i> Properties
-                    <ul><li class="property public "><a href="#property_uses" title="$uses() :: "><span class="description"></span><pre>$uses</pre></a></li></ul>
+                    <ul><li class="property public "><a href="#property_uses" title="$uses() :: List of models this controller uses."><span class="description"></span><pre>$uses</pre></a></li></ul>
 </li>
 </ul>
 </div>
@@ -101,36 +101,21 @@
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">PHP 5</p>
+<p class="short_description">Controller to handle Snackspace functionality, allows a member to see their transaction history.</p>
 <div class="details">
-<div class="long_description">Copyright (C) HMS Team
-
-Licensed under The MIT License
-Redistributions of files must retain the above copyright notice.</div>
-<table class="table table-bordered">
-<tr>
-<th>copyright</th>
-<td>HMS Team</td>
-</tr>
-<tr>
-<th>package</th>
-<td><a href="../packages/app.Controller.html">app.Controller</a></td>
-</tr>
-<tr>
-<th>license</th>
-<td><a href="">MIT License (http://www.opensource.org/licenses/mit-license.php)</a></td>
-</tr>
-</table>
+<div class="long_description"></div>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_history"></a><div class="element clickable method public method_history" data-toggle="collapse" data-target=".method_history .collapse" title="public">
-<h2>Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set</h2>
-<pre>history($memberId<code> = null</code>) </pre>
+<h2>Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set.</h2>
+<pre>history(int|null $memberId<code> = null</code>) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$memberId</h4></div>
+<div class="subelement argument">
+<h4>$memberId</h4>
+<code>int</code><code>null</code><p>The members id to list all transactions for</p></div>
 </div></div>
 </div>
 <a id="method_isAuthorized"></a><div class="element clickable method public method_isAuthorized" data-toggle="collapse" data-target=".method_isAuthorized .collapse" title="public">
@@ -170,8 +155,8 @@ Redistributions of files must retain the above copyright notice.</div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
 <a id="property_uses"> </a><div class="element clickable property public property_uses" data-toggle="collapse" data-target=".property_uses .collapse" title="public">
-<h2>$uses</h2>
-<pre>$uses </pre>
+<h2>List of models this controller uses.</h2>
+<pre>$uses : array</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>array('Transactions')</code></div>
@@ -187,7 +172,7 @@ Redistributions of files must retain the above copyright notice.</div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-24T18:45:09Z.<br></footer></div>
+            generated on 2013-12-25T00:48:50Z.<br></footer></div>
 </div>
 </body>
 </html>
