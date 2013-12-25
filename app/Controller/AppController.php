@@ -96,13 +96,14 @@ class AppController extends Controller {
  * @param  string $title Text to display with the link.
  * @param  string[] $link Array to pass to the HtmlHelper to construct the link when rendering.
  * @param  int[]|null $access Array of group ids that have access to this link, if null, all groups have access to link.
+ * @param  int[]|null $statuses A list of status ids, a member must be in one of these statuses for this link to be visible.
  */
-	private function __addMainNav($title, $link, $access, $statii) {
+	private function __addMainNav($title, $link, $access, $statuses) {
 		$this->__mainNav[] = array(
 								'title'		=>	$title,
 								'link'		=>	$link,
 								'access'	=>	$access,
-								'statii'	=>	$statii
+								'statuses'	=>	$statuses
 								);
 	}
 
@@ -135,9 +136,9 @@ class AppController extends Controller {
 
 			// Apply restrictions based on member status, if applicable
 			if ($allowed) {
-				if ($nav['statii'] != '') {
+				if ($nav['statuses'] != '') {
 					$allowed = false;
-					foreach ($nav['statii'] as $status) {
+					foreach ($nav['statuses'] as $status) {
 						if ($this->Member->getStatusForMember($userId) == $status) {
 							$allowed = true;
 						}
