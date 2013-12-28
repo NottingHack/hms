@@ -13,7 +13,7 @@
 
 	<filter>
 	  <whitelist processUncoveredFilesFromWhitelist="false">
-	    <directory suffix=".php">./utils</directory>
+	    <directory suffix=".php">./Setup</directory>
 	  </whitelist>
 	</filter>
 
