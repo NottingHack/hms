@@ -14,6 +14,9 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
+/**
+ * Class that handles writing runtime data to SQL format.
+ */
 class SqlWriter {
 
 /**
