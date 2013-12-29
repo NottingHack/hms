@@ -27,6 +27,7 @@
   <file name="app\Model\FileUpload.php"/>
   <file name="plugins\MemberVoice\Model\MemberVoiceAppModel.php"/>
   <file name="app\Lib\Error\Exception\NotAuthorizedException.php"/>
+  <file name="dev\setup\lib\SqlWriter.php"/>
   <file name="app\Lib\CsvReader\CsvReader.php"/>
   <file name="app\Controller\Component\BankStatementComponent.php"/>
   <file name="app\View\Helper\MailinglistHelper.php"/>
