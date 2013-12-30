@@ -32,7 +32,6 @@
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
 <li><a href="../packages/app.Model.Behavior.html"><i class="icon-folder-open"></i> app.Model.Behavior</a></li>
 <li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
-<li><a href="../packages/dev.Setup.html"><i class="icon-folder-open"></i> dev.Setup</a></li>
 <li><a href="../packages/dev.Setup.Cmd.html"><i class="icon-folder-open"></i> dev.Setup.Cmd</a></li>
 <li><a href="../packages/dev.Setup.Lib.html"><i class="icon-folder-open"></i> dev.Setup.Lib</a></li>
 <li><a href="../packages/dev.Setup.Web.html"><i class="icon-folder-open"></i> dev.Setup.Web</a></li>
@@ -80,15 +79,15 @@
                     <ul>
 <li class="method public "><a href="#method___construct" title="__construct() :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
 <li class="method public "><a href="#method_generateMember" title="generateMember() :: Generate a new member record"><span class="description">Generate a new member record</span><pre>generateMember()</pre></a></li>
-<li class="method public "><a href="#method_getAccountsSql" title="getAccountsSql() :: Get an SQL string of the accounts data."><span class="description">Get an SQL string of the accounts data.</span><pre>getAccountsSql()</pre></a></li>
-<li class="method public "><a href="#method_getEmailRecordSql" title="getEmailRecordSql() :: Get an SQL string of the email record data."><span class="description">Get an SQL string of the email record data.</span><pre>getEmailRecordSql()</pre></a></li>
-<li class="method public "><a href="#method_getMailingListSubscriptionsSql" title="getMailingListSubscriptionsSql() :: Get an SQL string of the mailing list subscriptions data."><span class="description">Get an SQL string of the mailing list subscriptions data.</span><pre>getMailingListSubscriptionsSql()</pre></a></li>
-<li class="method public "><a href="#method_getMailingListsSql" title="getMailingListsSql() :: Get an SQL string of the mailing lists data."><span class="description">Get an SQL string of the mailing lists data.</span><pre>getMailingListsSql()</pre></a></li>
-<li class="method public "><a href="#method_getMembersGroupSql" title="getMembersGroupSql() :: Get an SQL string of the membersGroup data."><span class="description">Get an SQL string of the membersGroup data.</span><pre>getMembersGroupSql()</pre></a></li>
-<li class="method public "><a href="#method_getMembersSql" title="getMembersSql() :: Get an SQL string of the members data."><span class="description">Get an SQL string of the members data.</span><pre>getMembersSql()</pre></a></li>
-<li class="method public "><a href="#method_getPinsSql" title="getPinsSql() :: Get an SQL string of the pins data."><span class="description">Get an SQL string of the pins data.</span><pre>getPinsSql()</pre></a></li>
-<li class="method public "><a href="#method_getRfidTagsSql" title="getRfidTagsSql() :: Get an SQL string of the RFID tags data."><span class="description">Get an SQL string of the RFID tags data.</span><pre>getRfidTagsSql()</pre></a></li>
-<li class="method public "><a href="#method_getStatusUpdatesSql" title="getStatusUpdatesSql() :: Get an SQL string of the status updates data."><span class="description">Get an SQL string of the status updates data.</span><pre>getStatusUpdatesSql()</pre></a></li>
+<li class="method public "><a href="#method_getAccountsData" title="getAccountsData() :: Get the array of accounts data."><span class="description">Get the array of accounts data.</span><pre>getAccountsData()</pre></a></li>
+<li class="method public "><a href="#method_getEmailRecordData" title="getEmailRecordData() :: Get the array of email record data."><span class="description">Get the array of email record data.</span><pre>getEmailRecordData()</pre></a></li>
+<li class="method public "><a href="#method_getMailingListSubscriptionsData" title="getMailingListSubscriptionsData() :: Get the array of mailing list subscriptions data."><span class="description">Get the array of mailing list subscriptions data.</span><pre>getMailingListSubscriptionsData()</pre></a></li>
+<li class="method public "><a href="#method_getMailingListsData" title="getMailingListsData() :: Get the array of mailing lists data."><span class="description">Get the array of mailing lists data.</span><pre>getMailingListsData()</pre></a></li>
+<li class="method public "><a href="#method_getMembersData" title="getMembersData() :: Get the array of member data."><span class="description">Get the array of member data.</span><pre>getMembersData()</pre></a></li>
+<li class="method public "><a href="#method_getMembersGroupData" title="getMembersGroupData() :: Get the array of membersGroup data."><span class="description">Get the array of membersGroup data.</span><pre>getMembersGroupData()</pre></a></li>
+<li class="method public "><a href="#method_getPinsData" title="getPinsData() :: Get the array of pins data."><span class="description">Get the array of pins data.</span><pre>getPinsData()</pre></a></li>
+<li class="method public "><a href="#method_getRfidTagsData" title="getRfidTagsData() :: Get the array of RFID tags data."><span class="description">Get the array of RFID tags data.</span><pre>getRfidTagsData()</pre></a></li>
+<li class="method public "><a href="#method_getStatusUpdatesData" title="getStatusUpdatesData() :: Get the array of status updates data."><span class="description">Get the array of status updates data.</span><pre>getStatusUpdatesData()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header private">» Private
@@ -98,13 +97,11 @@
 <li class="method private "><a href="#method___generatePin" title="__generatePin() :: Generate a new pin record"><span class="description">Generate a new pin record</span><pre>__generatePin()</pre></a></li>
 <li class="method private "><a href="#method___generateStatusUpdate" title="__generateStatusUpdate() :: Generate a status update record"><span class="description">Generate a status update record</span><pre>__generateStatusUpdate()</pre></a></li>
 <li class="method private "><a href="#method___generateUniqueEntry" title="__generateUniqueEntry() :: Given an array of array data, a key to the inner array, and a function to generate data, keep generating until the data is unique."><span class="description">Given an array of array data, a key to the inner array, and a function to generate data, keep generating until the data is unique.</span><pre>__generateUniqueEntry()</pre></a></li>
-<li class="method private "><a href="#method___getSql" title="__getSql() :: Get the MYSql of an array"><span class="description">Get the MYSql of an array</span><pre>__getSql()</pre></a></li>
 <li class="method private "><a href="#method___getStockData" title="__getStockData() :: Pop a single element of the stock data and return it."><span class="description">Pop a single element of the stock data and return it.</span><pre>__getStockData()</pre></a></li>
 <li class="method private "><a href="#method___parseCsv" title="__parseCsv() :: Parse a CSV file, adding the data to the stockData array."><span class="description">Parse a CSV file, adding the data to the stockData array.</span><pre>__parseCsv()</pre></a></li>
 <li class="method private "><a href="#method___populateMailingLists" title="__populateMailingLists() :: Populate the mailing lists array."><span class="description">Populate the mailing lists array.</span><pre>__populateMailingLists()</pre></a></li>
 <li class="method private "><a href="#method___registerCard" title="__registerCard() :: Register an rfid card using the members pin."><span class="description">Register an rfid card using the members pin.</span><pre>__registerCard()</pre></a></li>
 <li class="method private "><a href="#method___setMemberGroups" title="__setMemberGroups() :: Set the groups which a member will belong to."><span class="description">Set the groups which a member will belong to.</span><pre>__setMemberGroups()</pre></a></li>
-<li class="method private "><a href="#method___sqlize" title="__sqlize() :: Get the SQL version of a value."><span class="description">Get the SQL version of a value.</span><pre>__sqlize()</pre></a></li>
 <li class="method private "><a href="#method___subscribeEmailToList" title="__subscribeEmailToList() :: Subscribe an e-mail to a mailing list."><span class="description">Subscribe an e-mail to a mailing list.</span><pre>__subscribeEmailToList()</pre></a></li>
 <li class="method private "><a href="#method___useValOrDefault" title="__useValOrDefault() :: Return $array[$key] if it is set, otherwise return $default."><span class="description">Return $array[$key] if it is set, otherwise return $default.</span><pre>__useValOrDefault()</pre></a></li>
 </ul>
@@ -168,103 +165,103 @@ Creative Commons Attribution-Share Alike 3.0 United States license.</div>
 <code>array</code><p>Optional array of details that will be forced on the member being generated.</p></div>
 </div></div>
 </div>
-<a id="method_getAccountsSql"></a><div class="element clickable method public method_getAccountsSql" data-toggle="collapse" data-target=".method_getAccountsSql .collapse" title="public">
-<h2>Get an SQL string of the accounts data.</h2>
-<pre>getAccountsSql() : string</pre>
+<a id="method_getAccountsData"></a><div class="element clickable method public method_getAccountsData" data-toggle="collapse" data-target=".method_getAccountsData .collapse" title="public">
+<h2>Get the array of accounts data.</h2>
+<pre>getAccountsData() : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>string</code>SQL string for the accounts data.</div>
+<code>array</code>The array of accounts data.</div>
 </div></div>
 </div>
-<a id="method_getEmailRecordSql"></a><div class="element clickable method public method_getEmailRecordSql" data-toggle="collapse" data-target=".method_getEmailRecordSql .collapse" title="public">
-<h2>Get an SQL string of the email record data.</h2>
-<pre>getEmailRecordSql() : string</pre>
+<a id="method_getEmailRecordData"></a><div class="element clickable method public method_getEmailRecordData" data-toggle="collapse" data-target=".method_getEmailRecordData .collapse" title="public">
+<h2>Get the array of email record data.</h2>
+<pre>getEmailRecordData() : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>string</code>SQL string for the email record data.</div>
+<code>array</code>The array of email record data.</div>
 </div></div>
 </div>
-<a id="method_getMailingListSubscriptionsSql"></a><div class="element clickable method public method_getMailingListSubscriptionsSql" data-toggle="collapse" data-target=".method_getMailingListSubscriptionsSql .collapse" title="public">
-<h2>Get an SQL string of the mailing list subscriptions data.</h2>
-<pre>getMailingListSubscriptionsSql() : string</pre>
+<a id="method_getMailingListSubscriptionsData"></a><div class="element clickable method public method_getMailingListSubscriptionsData" data-toggle="collapse" data-target=".method_getMailingListSubscriptionsData .collapse" title="public">
+<h2>Get the array of mailing list subscriptions data.</h2>
+<pre>getMailingListSubscriptionsData() : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>string</code>SQL string for the mailing list subscriptions data.</div>
+<code>array</code>The array of mailing list subscriptions data.</div>
 </div></div>
 </div>
-<a id="method_getMailingListsSql"></a><div class="element clickable method public method_getMailingListsSql" data-toggle="collapse" data-target=".method_getMailingListsSql .collapse" title="public">
-<h2>Get an SQL string of the mailing lists data.</h2>
-<pre>getMailingListsSql() : string</pre>
+<a id="method_getMailingListsData"></a><div class="element clickable method public method_getMailingListsData" data-toggle="collapse" data-target=".method_getMailingListsData .collapse" title="public">
+<h2>Get the array of mailing lists data.</h2>
+<pre>getMailingListsData() : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>string</code>SQL string for the mailing lists data.</div>
+<code>array</code>The array of mailing lists data.</div>
 </div></div>
 </div>
-<a id="method_getMembersGroupSql"></a><div class="element clickable method public method_getMembersGroupSql" data-toggle="collapse" data-target=".method_getMembersGroupSql .collapse" title="public">
-<h2>Get an SQL string of the membersGroup data.</h2>
-<pre>getMembersGroupSql() : string</pre>
+<a id="method_getMembersData"></a><div class="element clickable method public method_getMembersData" data-toggle="collapse" data-target=".method_getMembersData .collapse" title="public">
+<h2>Get the array of member data.</h2>
+<pre>getMembersData() : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>string</code>SQL string for the membersGroup data.</div>
+<code>array</code>Array of member data.</div>
 </div></div>
 </div>
-<a id="method_getMembersSql"></a><div class="element clickable method public method_getMembersSql" data-toggle="collapse" data-target=".method_getMembersSql .collapse" title="public">
-<h2>Get an SQL string of the members data.</h2>
-<pre>getMembersSql() : string</pre>
+<a id="method_getMembersGroupData"></a><div class="element clickable method public method_getMembersGroupData" data-toggle="collapse" data-target=".method_getMembersGroupData .collapse" title="public">
+<h2>Get the array of membersGroup data.</h2>
+<pre>getMembersGroupData() : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>string</code>SQL string for the members data.</div>
+<code>array</code>The array of membersGroup data.</div>
 </div></div>
 </div>
-<a id="method_getPinsSql"></a><div class="element clickable method public method_getPinsSql" data-toggle="collapse" data-target=".method_getPinsSql .collapse" title="public">
-<h2>Get an SQL string of the pins data.</h2>
-<pre>getPinsSql() : string</pre>
+<a id="method_getPinsData"></a><div class="element clickable method public method_getPinsData" data-toggle="collapse" data-target=".method_getPinsData .collapse" title="public">
+<h2>Get the array of pins data.</h2>
+<pre>getPinsData() : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>string</code>SQL string for the pins data.</div>
+<code>array</code>The array of pins data.</div>
 </div></div>
 </div>
-<a id="method_getRfidTagsSql"></a><div class="element clickable method public method_getRfidTagsSql" data-toggle="collapse" data-target=".method_getRfidTagsSql .collapse" title="public">
-<h2>Get an SQL string of the RFID tags data.</h2>
-<pre>getRfidTagsSql() : string</pre>
+<a id="method_getRfidTagsData"></a><div class="element clickable method public method_getRfidTagsData" data-toggle="collapse" data-target=".method_getRfidTagsData .collapse" title="public">
+<h2>Get the array of RFID tags data.</h2>
+<pre>getRfidTagsData() : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>string</code>SQL string for the RFID tags data.</div>
+<code>array</code>The array of RFID tags data.</div>
 </div></div>
 </div>
-<a id="method_getStatusUpdatesSql"></a><div class="element clickable method public method_getStatusUpdatesSql" data-toggle="collapse" data-target=".method_getStatusUpdatesSql .collapse" title="public">
-<h2>Get an SQL string of the status updates data.</h2>
-<pre>getStatusUpdatesSql() : string</pre>
+<a id="method_getStatusUpdatesData"></a><div class="element clickable method public method_getStatusUpdatesData" data-toggle="collapse" data-target=".method_getStatusUpdatesData .collapse" title="public">
+<h2>Get the array of status updates data.</h2>
+<pre>getStatusUpdatesData() : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>string</code>SQL string for the status updates data.</div>
+<code>array</code>The array of status updates data.</div>
 </div></div>
 </div>
 <a id="method___generateAccount"></a><div class="element clickable method private method___generateAccount" data-toggle="collapse" data-target=".method___generateAccount .collapse" title="private">
@@ -356,24 +353,6 @@ Creative Commons Attribution-Share Alike 3.0 United States license.</div>
 <code>mixed</code>A unique value returned from $genFunc.</div>
 </div></div>
 </div>
-<a id="method___getSql"></a><div class="element clickable method private method___getSql" data-toggle="collapse" data-target=".method___getSql .collapse" title="private">
-<h2>Get the MYSql of an array</h2>
-<pre>__getSql(array $array, string $title) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$array</h4>
-<code>array</code><p>The array to use.</p></div>
-<div class="subelement argument">
-<h4>$title</h4>
-<code>string</code><p>The name of the table</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>MYSql string of array data.</div>
-</div></div>
-</div>
 <a id="method___getStockData"></a><div class="element clickable method private method___getStockData" data-toggle="collapse" data-target=".method___getStockData .collapse" title="private">
 <h2>Pop a single element of the stock data and return it.</h2>
 <pre>__getStockData() : array</pre>
@@ -430,21 +409,6 @@ Creative Commons Attribution-Share Alike 3.0 United States license.</div>
 <div class="subelement argument">
 <h4>$groupList</h4>
 <code>array</code><p>List of group id's.</p></div>
-</div></div>
-</div>
-<a id="method___sqlize"></a><div class="element clickable method private method___sqlize" data-toggle="collapse" data-target=".method___sqlize .collapse" title="private">
-<h2>Get the SQL version of a value.</h2>
-<pre>__sqlize(mixed $value) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$value</h4>
-<code>mixed</code><p>The value to transform.</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>SQL version of the value.</div>
 </div></div>
 </div>
 <a id="method___subscribeEmailToList"></a><div class="element clickable method private method___subscribeEmailToList" data-toggle="collapse" data-target=".method___subscribeEmailToList .collapse" title="private">
@@ -606,7 +570,7 @@ Creative Commons Attribution-Share Alike 3.0 United States license.</div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-29T21:14:38Z.<br></footer></div>
+            generated on 2013-12-30T14:20:29Z.<br></footer></div>
 </div>
 </body>
 </html>
