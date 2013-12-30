@@ -9,7 +9,7 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @copyright     HMS Team
- * @package       dev.Setup
+ * @package       dev.Setup.Lib
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
@@ -248,145 +248,84 @@ class DataGenerator {
 	}
 
 /**
- * Get the SQL version of a value.
+ * Get the array of member data.
  * 
- * @param mixed $value The value to transform.
- * @return string SQL version of the value.
+ * @return array Array of member data.
  */
-	private function __sqlize($value) {
-		if (is_string($value)) {
-			// Note that this escaping is not secure
-			// but it's about the best we can do without connecting
-			// to a database.
-			return "'" . str_replace("'", "\'", $value) . "'";
-		}
-
-		if (is_numeric($value)) {
-			return (string)$value;
-		}
-
-		if ($value == null) {
-			return 'NULL';
-		}
+	public function getMembersData() {
+		return $this->__members;
 	}
 
 /**
- * Get the MYSql of an array
- * 
- * @param array $array The array to use.
- * @param string $title The name of the table
- * @return string MYSql string of array data.
- */
-	private function __getSql($array, $title) {
-		$headers = array_keys($array[0]);
-		$formattedHeaders = array_map( function ($val) {
-			return "`$val`";
-		}, $headers);
-
-		$sql = "INSERT INTO `$title` (";
-		$sql .= implode(', ', $formattedHeaders);
-		$sql .= ") VALUES" . PHP_EOL;
-
-		$numItems = count($array);
-		for ($i = 0; $i < $numItems; $i++) {
-			$values = $array[$i];
-
-			$formattedValues = array_map( function ($val) {
-				return $this->__sqlize($val);
-			}, $values);
-
-			$sql .= "(" . implode(', ', $formattedValues) . ")";
-
-			if ($i < count($array) - 1) {
-				$sql .= ',';
-			} else {
-				$sql .= ';';
-			}
-			$sql .= PHP_EOL;
-		}
-
-		return $sql;
-	}
-
-/**
- * Get an SQL string of the members data.
- * 
- * @return string SQL string for the members data.
- */
-	public function getMembersSql() {
-		return $this->__getSql($this->__members, 'members');
-	}
-
-/**
- * Get an SQL string of the membersGroup data.
+ * Get the array of membersGroup data.
  *
- * @return string SQL string for the membersGroup data.
+ * @return array The array of membersGroup data.
  */
-	public function getMembersGroupSql() {
-		return $this->__getSql($this->__membersGroup, 'member_group');
+	public function getMembersGroupData() {
+		return $this->__membersGroup;
 	}
 
 /**
- * Get an SQL string of the accounts data.
+ * Get the array of accounts data.
  *
- * @return string SQL string for the accounts data.
+ * @return array The array of accounts data.
  */
-	public function getAccountsSql() {
-		return $this->__getSql($this->__accounts, 'account');
+	public function getAccountsData() {
+		return $this->__accounts;
 	}
 
 /**
- * Get an SQL string of the pins data.
+ * Get the array of pins data.
  *
- * @return string SQL string for the pins data.
+ * @return array The array of pins data.
  */
-	public function getPinsSql() {
-		return $this->__getSql($this->__pins, 'pins');
+	public function getPinsData() {
+		return $this->__pins;
 	}
 
 /**
- * Get an SQL string of the RFID tags data.
+ * Get the array of RFID tags data.
  *
- * @return string SQL string for the RFID tags data.
+ * @return array The array of RFID tags data.
  */
-	public function getRfidTagsSql() {
-		return $this->__getSql($this->__rfidTags, 'rfid_tags');
+	public function getRfidTagsData() {
+		return $this->__rfidTags;
 	}
 
 /**
- * Get an SQL string of the status updates data.
+ * Get the array of status updates data.
  *
- * @return string SQL string for the status updates data.
+ * @return array The array of status updates data.
  */
-	public function getStatusUpdatesSql() {
-		return $this->__getSql($this->__statusUpdates, 'status_updates');
+	public function getStatusUpdatesData() {
+		return $this->__statusUpdates;
 	}
 
 /**
- * Get an SQL string of the mailing lists data.
+ * Get the array of mailing lists data.
  *
- * @return string SQL string for the mailing lists data.
+ * @return array The array of mailing lists data.
  */
-	public function getMailingListsSql() {
-		return $this->__getSql($this->__mailingLists, 'mailinglists');
+	public function getMailingListsData() {
+		return $this->__mailingLists;
 	}
 
 /**
- * Get an SQL string of the mailing list subscriptions data.
+ * Get the array of mailing list subscriptions data.
  *
- * @return string SQL string for the mailing list subscriptions data.
+ * @return array The array of mailing list subscriptions data.
  */
-	public function getMailingListSubscriptionsSql() {
-		return $this->__getSql($this->__mailingListSubscriptions, 'mailinglist_subscriptions');
+	public function getMailingListSubscriptionsData() {
+		return $this->__mailingListSubscriptions;
 	}
 
 /**
- * Get an SQL string of the email record data.
+ * Get the array of email record data.
  *
- * @return string SQL string for the email record data.
+ * @return array The array of email record data.
  */
-	public function getEmailRecordSql() {
-		return $this->__getSql($this->__emailRecords, 'hms_emails');
+	public function getEmailRecordData() {
+		return $this->__emailRecords;
 	}
 
 /**

@@ -46,7 +46,7 @@ class SqlWriter {
  * @param  array $data An associative array of data.
  * @return string|null The SQL code needed to insert data into the table, or null on error.
  */
-	public function writeTable($name, $data) {
+	public function writeInsert($name, $data) {
 		if (!is_array($data) || count($data) <= 0) {
 			return null;
 		}

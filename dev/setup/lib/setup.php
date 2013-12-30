@@ -17,6 +17,7 @@ ini_set('max_execution_time', 600); // Give us 10 mins to execute, we might be d
 
 require_once ('Utils.php');
 require_once ('DataGenerator.php');
+require_once ('SqlWriter.php');
 
 /**
  * Setup is a class that is responsible for parsing options and then performing certain steps based on those options.
@@ -432,55 +433,59 @@ class Setup {
 
 		$this->__logMessage('Writing SQL files');
 
-		$pathsAndFunctions = array(
-			'./sql/members_data.sql' => function() use (&$gen)
-			{
-				return $gen->getMembersSql();
-			},
-
-			'./sql/member_group_data.sql' => function() use (&$gen)
-			{
-				return $gen->getMembersGroupSql();
-			},
-
-			'./sql/account_data.sql' => function() use (&$gen)
-			{
-				return $gen->getAccountsSql();
-			},
-
-			'./sql/pins_data.sql' => function() use (&$gen)
-			{
-				return $gen->getPinsSql();
-			},
-
-			'./sql/rfid_tags_data.sql' => function() use (&$gen)
-			{
-				return $gen->getRfidTagsSql();
-			},
-
-			'./sql/status_updates_data.sql' => function() use (&$gen)
-			{
-				return $gen->getStatusUpdatesSql();
-			},
-
-			'./sql/mailinglists_data.development.sql' => function() use (&$gen)
-			{
-				return $gen->getMailingListsSql();
-			},
-
-			'./sql/mailinglist_subscriptions_data.development.sql' => function() use (&$gen)
-			{
-				return $gen->getMailingListSubscriptionsSql();
-			},
-
-			'./sql/hms_emails_data.development.sql' => function() use (&$gen)
-			{
-				return $gen->getEmailRecordSql();
-			},
+		$sqlData = array(
+			array(
+				'filepath' => './sql/members_data.sql',
+				'tableName' => 'members',
+				'data' => $gen->getMembersData(),
+			),
+			array(
+				'filepath' => './sql/member_group_data.sql',
+				'tableName' => 'member_group',
+				'data' => $gen->getMembersGroupData(),
+			),
+			array(
+				'filepath' => './sql/account_data.sql',
+				'tableName' => 'account',
+				'data' => $gen->getAccountsData(),
+			),
+			array(
+				'filepath' => './sql/pins_data.sql',
+				'tableName' => 'pins',
+				'data' => $gen->getPinsData(),
+			),
+			array(
+				'filepath' => './sql/rfid_tags_data.sql',
+				'tableName' => 'rfid_tags',
+				'data' => $gen->getRfidTagsData(),
+			),
+			array(
+				'filepath' => './sql/status_updates_data.sql',
+				'tableName' => 'status_updates',
+				'data' => $gen->getStatusUpdatesData(),
+			),
+			array(
+				'filepath' => './sql/mailinglists_data.development.sql',
+				'tableName' => 'mailinglists',
+				'data' => $gen->getMailingListsData(),
+			),
+			array(
+				'filepath' => './sql/mailinglist_subscriptions_data.development.sql',
+				'tableName' => 'mailinglist_subscriptions',
+				'data' => $gen->getMailingListSubscriptionsData(),
+			),
+			array(
+				'filepath' => './sql/hms_emails_data.development.sql',
+				'tableName' => 'hms_emails',
+				'data' => $gen->getEmailRecordData(),
+			),
 		);
 
-		foreach ($pathsAndFunctions as $path => $func) {
-			if ($this->__writeToFile($path, $func())) {
+		$sqlWriter = new sqlWriter();
+		foreach ($sqlData as $dataEntry) {
+			$sqlString = $sqlWriter->writeInsert($dataEntry['tableName'], $dataEntry['data']);
+			$path = $dataEntry['filepath'];
+			if ($this->__writeToFile($path, $sqlString)) {
 				$this->__logMessage("Wrote $path");
 			} else {
 				$this->__logMessage("Failed to write $path");

@@ -60,18 +60,18 @@ class SqlWriterTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals("'you don\'t want none of this'", $result);
 	}
 
-	public function testWriteTable_WhenPassedInEmptyTableNameAndNullData_ReturnsNull() {
-		$result = $this->__writer->writeTable('', null);
+	public function testWriteInsert_WhenPassedInEmptyTableNameAndNullData_ReturnsNull() {
+		$result = $this->__writer->writeInsert('', null);
 		$this->assertEquals(null, $result);
 	}
 
-	public function testWriteTable_WhenPassedInEmptyTableNameAndEmptyData_ReturnsNull() {
-		$result = $this->__writer->writeTable('', array());
+	public function testWriteInsert_WhenPassedInEmptyTableNameAndEmptyData_ReturnsNull() {
+		$result = $this->__writer->writeInsert('', array());
 		$this->assertEquals(null, $result);
 	}
 
-	public function testWriteTable_WhenPassedInEmptyTableNameAndSingleRowOfData_ReturnsSqlForInsertingDataIntoUnnamedTable() {
-		$result = $this->__writer->writeTable('', array(
+	public function testWriteInsert_WhenPassedInEmptyTableNameAndSingleRowOfData_ReturnsSqlForInsertingDataIntoUnnamedTable() {
+		$result = $this->__writer->writeInsert('', array(
 			array(
 				'header1' => 'data1',
 				'header2' => 2,
@@ -82,8 +82,8 @@ class SqlWriterTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-	public function testWriteTable_WhenPassedInEmptyTableNameAndMultipleRowsOfData_ReturnsSqlForInsertingDataIntoUnnamedTable() {
-		$result = $this->__writer->writeTable('', array(
+	public function testWriteInsert_WhenPassedInEmptyTableNameAndMultipleRowsOfData_ReturnsSqlForInsertingDataIntoUnnamedTable() {
+		$result = $this->__writer->writeInsert('', array(
 			array(
 				'header1' => 'data1',
 				'header2' => 2,
@@ -99,8 +99,8 @@ class SqlWriterTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-	public function testWriteTable_WhenPassedInTableNameAndMultipleRowsOfData_ReturnsSqlForInsertingDataIntoUnnamedTable() {
-		$result = $this->__writer->writeTable('tableName', array(
+	public function testWriteInsert_WhenPassedInTableNameAndMultipleRowsOfData_ReturnsSqlForInsertingDataIntoUnnamedTable() {
+		$result = $this->__writer->writeInsert('tableName', array(
 			array(
 				'header1' => 'data1',
 				'header2' => 2,
