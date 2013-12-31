@@ -14,6 +14,7 @@
   <file name="app\Lib\AutomationDriver\HmsAutomationDriverTest.php"/>
   <file name="app\Console\Command\AppShell.php"/>
   <file name="app\Model\Member.php"/>
+  <file name="dev\setup\lib\MailingListDataGenerator.php"/>
   <file name="app\Model\Status.php"/>
   <file name="app\Model\StatusUpdate.php"/>
   <file name="app\Model\Permission.php"/>
@@ -49,6 +50,7 @@
   <file name="plugins\MemberVoice\Model\MemberVoiceStatus.php"/>
   <file name="app\index.php"/>
   <file name="app\Model\AppModel.php"/>
+  <file name="dev\setup\lib\EmailGenerator.php"/>
   <file name="dev\setup\lib\updates\0.3.3.php"/>
   <file name="app\View\Helper\TinymceHelper.php"/>
   <file name="app\Model\MailingList.php"/>

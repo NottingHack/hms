@@ -81,8 +81,6 @@
 <li class="method public "><a href="#method_generateMember" title="generateMember() :: Generate a new member record"><span class="description">Generate a new member record</span><pre>generateMember()</pre></a></li>
 <li class="method public "><a href="#method_getAccountsData" title="getAccountsData() :: Get the array of accounts data."><span class="description">Get the array of accounts data.</span><pre>getAccountsData()</pre></a></li>
 <li class="method public "><a href="#method_getEmailRecordData" title="getEmailRecordData() :: Get the array of email record data."><span class="description">Get the array of email record data.</span><pre>getEmailRecordData()</pre></a></li>
-<li class="method public "><a href="#method_getMailingListSubscriptionsData" title="getMailingListSubscriptionsData() :: Get the array of mailing list subscriptions data."><span class="description">Get the array of mailing list subscriptions data.</span><pre>getMailingListSubscriptionsData()</pre></a></li>
-<li class="method public "><a href="#method_getMailingListsData" title="getMailingListsData() :: Get the array of mailing lists data."><span class="description">Get the array of mailing lists data.</span><pre>getMailingListsData()</pre></a></li>
 <li class="method public "><a href="#method_getMembersData" title="getMembersData() :: Get the array of member data."><span class="description">Get the array of member data.</span><pre>getMembersData()</pre></a></li>
 <li class="method public "><a href="#method_getMembersGroupData" title="getMembersGroupData() :: Get the array of membersGroup data."><span class="description">Get the array of membersGroup data.</span><pre>getMembersGroupData()</pre></a></li>
 <li class="method public "><a href="#method_getPinsData" title="getPinsData() :: Get the array of pins data."><span class="description">Get the array of pins data.</span><pre>getPinsData()</pre></a></li>
@@ -99,10 +97,8 @@
 <li class="method private "><a href="#method___generateUniqueEntry" title="__generateUniqueEntry() :: Given an array of array data, a key to the inner array, and a function to generate data, keep generating until the data is unique."><span class="description">Given an array of array data, a key to the inner array, and a function to generate data, keep generating until the data is unique.</span><pre>__generateUniqueEntry()</pre></a></li>
 <li class="method private "><a href="#method___getStockData" title="__getStockData() :: Pop a single element of the stock data and return it."><span class="description">Pop a single element of the stock data and return it.</span><pre>__getStockData()</pre></a></li>
 <li class="method private "><a href="#method___parseCsv" title="__parseCsv() :: Parse a CSV file, adding the data to the stockData array."><span class="description">Parse a CSV file, adding the data to the stockData array.</span><pre>__parseCsv()</pre></a></li>
-<li class="method private "><a href="#method___populateMailingLists" title="__populateMailingLists() :: Populate the mailing lists array."><span class="description">Populate the mailing lists array.</span><pre>__populateMailingLists()</pre></a></li>
 <li class="method private "><a href="#method___registerCard" title="__registerCard() :: Register an rfid card using the members pin."><span class="description">Register an rfid card using the members pin.</span><pre>__registerCard()</pre></a></li>
 <li class="method private "><a href="#method___setMemberGroups" title="__setMemberGroups() :: Set the groups which a member will belong to."><span class="description">Set the groups which a member will belong to.</span><pre>__setMemberGroups()</pre></a></li>
-<li class="method private "><a href="#method___subscribeEmailToList" title="__subscribeEmailToList() :: Subscribe an e-mail to a mailing list."><span class="description">Subscribe an e-mail to a mailing list.</span><pre>__subscribeEmailToList()</pre></a></li>
 <li class="method private "><a href="#method___useValOrDefault" title="__useValOrDefault() :: Return $array[$key] if it is set, otherwise return $default."><span class="description">Return $array[$key] if it is set, otherwise return $default.</span><pre>__useValOrDefault()</pre></a></li>
 </ul>
 </li>
@@ -114,8 +110,6 @@
                     <ul>
 <li class="property private "><a href="#property___accounts" title="$__accounts() :: Array of accounts."><span class="description"></span><pre>$__accounts</pre></a></li>
 <li class="property private "><a href="#property___emailRecords" title="$__emailRecords() :: Array of email records."><span class="description"></span><pre>$__emailRecords</pre></a></li>
-<li class="property private "><a href="#property___mailingListSubscriptions" title="$__mailingListSubscriptions() :: Array of mailing list subscriptions."><span class="description"></span><pre>$__mailingListSubscriptions</pre></a></li>
-<li class="property private "><a href="#property___mailingLists" title="$__mailingLists() :: Array of mailing lists."><span class="description"></span><pre>$__mailingLists</pre></a></li>
 <li class="property private "><a href="#property___members" title="$__members() :: Array of members."><span class="description"></span><pre>$__members</pre></a></li>
 <li class="property private "><a href="#property___membersGroup" title="$__membersGroup() :: Array of which members are in which groups."><span class="description"></span><pre>$__membersGroup</pre></a></li>
 <li class="property private "><a href="#property___pins" title="$__pins() :: Array of pins."><span class="description"></span><pre>$__pins</pre></a></li>
@@ -185,28 +179,6 @@ Creative Commons Attribution-Share Alike 3.0 United States license.</div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>array</code>The array of email record data.</div>
-</div></div>
-</div>
-<a id="method_getMailingListSubscriptionsData"></a><div class="element clickable method public method_getMailingListSubscriptionsData" data-toggle="collapse" data-target=".method_getMailingListSubscriptionsData .collapse" title="public">
-<h2>Get the array of mailing list subscriptions data.</h2>
-<pre>getMailingListSubscriptionsData() : array</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>array</code>The array of mailing list subscriptions data.</div>
-</div></div>
-</div>
-<a id="method_getMailingListsData"></a><div class="element clickable method public method_getMailingListsData" data-toggle="collapse" data-target=".method_getMailingListsData .collapse" title="public">
-<h2>Get the array of mailing lists data.</h2>
-<pre>getMailingListsData() : array</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>array</code>The array of mailing lists data.</div>
 </div></div>
 </div>
 <a id="method_getMembersData"></a><div class="element clickable method public method_getMembersData" data-toggle="collapse" data-target=".method_getMembersData .collapse" title="public">
@@ -375,12 +347,6 @@ Creative Commons Attribution-Share Alike 3.0 United States license.</div>
 <h4>$filepath</h4><p>string Path to the .csv file to try and parse.</p></div>
 </div></div>
 </div>
-<a id="method___populateMailingLists"></a><div class="element clickable method private method___populateMailingLists" data-toggle="collapse" data-target=".method___populateMailingLists .collapse" title="private">
-<h2>Populate the mailing lists array.</h2>
-<pre>__populateMailingLists() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
 <a id="method___registerCard"></a><div class="element clickable method private method___registerCard" data-toggle="collapse" data-target=".method___registerCard .collapse" title="private">
 <h2>Register an rfid card using the members pin.</h2>
 <pre>__registerCard(int $memberId, int $registerTime) </pre>
@@ -409,24 +375,6 @@ Creative Commons Attribution-Share Alike 3.0 United States license.</div>
 <div class="subelement argument">
 <h4>$groupList</h4>
 <code>array</code><p>List of group id's.</p></div>
-</div></div>
-</div>
-<a id="method___subscribeEmailToList"></a><div class="element clickable method private method___subscribeEmailToList" data-toggle="collapse" data-target=".method___subscribeEmailToList .collapse" title="private">
-<h2>Subscribe an e-mail to a mailing list.</h2>
-<pre>__subscribeEmailToList(string $email, string $listId, int $timestamp) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$email</h4>
-<code>string</code><p>The e-mail address to subscribe.</p></div>
-<div class="subelement argument">
-<h4>$listId</h4>
-<code>string</code><p>The id of the list to subscribe them to.</p></div>
-<div class="subelement argument">
-<h4>$timestamp</h4>
-<code>int</code><p>The time the subscription happened.</p></div>
 </div></div>
 </div>
 <a id="method___useValOrDefault"></a><div class="element clickable method private method___useValOrDefault" data-toggle="collapse" data-target=".method___useValOrDefault .collapse" title="private">
@@ -465,26 +413,6 @@ Creative Commons Attribution-Share Alike 3.0 United States license.</div>
 <a id="property___emailRecords"> </a><div class="element clickable property private property___emailRecords" data-toggle="collapse" data-target=".property___emailRecords .collapse" title="private">
 <h2>Array of email records.</h2>
 <pre>$__emailRecords : array</pre>
-<div class="row collapse"><div class="detail-description">
-<h3>Default</h3>
-<div class="subelement argument"><code>array()</code></div>
-</div></div>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
-<a id="property___mailingListSubscriptions"> </a><div class="element clickable property private property___mailingListSubscriptions" data-toggle="collapse" data-target=".property___mailingListSubscriptions .collapse" title="private">
-<h2>Array of mailing list subscriptions.</h2>
-<pre>$__mailingListSubscriptions : array</pre>
-<div class="row collapse"><div class="detail-description">
-<h3>Default</h3>
-<div class="subelement argument"><code>array()</code></div>
-</div></div>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
-<a id="property___mailingLists"> </a><div class="element clickable property private property___mailingLists" data-toggle="collapse" data-target=".property___mailingLists .collapse" title="private">
-<h2>Array of mailing lists.</h2>
-<pre>$__mailingLists : array</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>array()</code></div>
@@ -570,7 +498,7 @@ Creative Commons Attribution-Share Alike 3.0 United States license.</div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
 </a> and<br>
-            generated on 2013-12-30T14:20:29Z.<br></footer></div>
+            generated on 2013-12-31T03:22:40Z.<br></footer></div>
 </div>
 </body>
 </html>
