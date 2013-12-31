@@ -18,6 +18,8 @@ ini_set('max_execution_time', 600); // Give us 10 mins to execute, we might be d
 require_once ('Utils.php');
 require_once ('DataGenerator.php');
 require_once ('SqlWriter.php');
+require_once ('MailingListDataGenerator.php');
+require_once ('EmailGenerator.php');
 
 /**
  * Setup is a class that is responsible for parsing options and then performing certain steps based on those options.
@@ -412,10 +414,10 @@ class Setup {
 		$this->__logMessage("Generating data for $totalMembersToGenerate members.");
 
 		// Generate!
-		$gen = new DataGenerator();
+		$dataGenerator = new DataGenerator();
 		foreach ($genDetails as $status => $num) {
 			for ($i = 0; $i < $num; $i++) {
-				$gen->generateMember($status);
+				$dataGenerator->generateMember($status);
 			}
 		}
 
@@ -429,7 +431,31 @@ class Setup {
 				Group::CURRENT_MEMBERS, Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN,
 			),
 		);
-		$gen->generateMember(Status::CURRENT_MEMBER, $details);
+		$dataGenerator->generateMember(Status::CURRENT_MEMBER, $details);
+
+		// Generate some subscriptions
+		$memberData = $dataGenerator->getMembersData();
+
+		$memberEmails = array_map(function ($data) {
+			return $data['email'];
+		}, $memberData);
+
+		$emailGenerator = new emailGenerator();
+		$randomEmails = array();
+		for ($i = 0; $i < 50; $i++) {
+			array_push($randomEmails, $emailGenerator->generate());
+		}
+		$allEmails = array_merge($memberEmails, $randomEmails);
+
+		$mailingListDataGenerator = new MailingListDataGenerator();
+		foreach ($mailingListDataGenerator->getMailingListsData() as $list) {
+			$numToAdd = rand(10, 30);
+			for ($i = 0; $i < $numToAdd; $i++) {
+				$timestamp = rand(strtotime('last year'), time());
+				$email = $allEmails[array_rand($allEmails)];
+				$mailingListDataGenerator->subscribeEmailToList($email, $list['id'], $timestamp);
+			}
+		}
 
 		$this->__logMessage('Writing SQL files');
 
@@ -437,47 +463,47 @@ class Setup {
 			array(
 				'filepath' => './sql/members_data.sql',
 				'tableName' => 'members',
-				'data' => $gen->getMembersData(),
+				'data' => $memberData,
 			),
 			array(
 				'filepath' => './sql/member_group_data.sql',
 				'tableName' => 'member_group',
-				'data' => $gen->getMembersGroupData(),
+				'data' => $dataGenerator->getMembersGroupData(),
 			),
 			array(
 				'filepath' => './sql/account_data.sql',
 				'tableName' => 'account',
-				'data' => $gen->getAccountsData(),
+				'data' => $dataGenerator->getAccountsData(),
 			),
 			array(
 				'filepath' => './sql/pins_data.sql',
 				'tableName' => 'pins',
-				'data' => $gen->getPinsData(),
+				'data' => $dataGenerator->getPinsData(),
 			),
 			array(
 				'filepath' => './sql/rfid_tags_data.sql',
 				'tableName' => 'rfid_tags',
-				'data' => $gen->getRfidTagsData(),
+				'data' => $dataGenerator->getRfidTagsData(),
 			),
 			array(
 				'filepath' => './sql/status_updates_data.sql',
 				'tableName' => 'status_updates',
-				'data' => $gen->getStatusUpdatesData(),
+				'data' => $dataGenerator->getStatusUpdatesData(),
 			),
 			array(
 				'filepath' => './sql/mailinglists_data.development.sql',
 				'tableName' => 'mailinglists',
-				'data' => $gen->getMailingListsData(),
+				'data' => $mailingListDataGenerator->getMailingListsData(),
 			),
 			array(
 				'filepath' => './sql/mailinglist_subscriptions_data.development.sql',
 				'tableName' => 'mailinglist_subscriptions',
-				'data' => $gen->getMailingListSubscriptionsData(),
+				'data' => $mailingListDataGenerator->getMailingListSubscriptionsData(),
 			),
 			array(
 				'filepath' => './sql/hms_emails_data.development.sql',
 				'tableName' => 'hms_emails',
-				'data' => $gen->getEmailRecordData(),
+				'data' => $dataGenerator->getEmailRecordData(),
 			),
 		);
 
