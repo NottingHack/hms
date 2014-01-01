@@ -273,6 +273,8 @@
                 $this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
                 $this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
 
+                $this->assertArrayHasKey( 'bestName', $memberInfo, 'Member has no best name.' );
+
                 $this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' ); 
                 $this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' ); 
                 $this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 

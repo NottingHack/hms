@@ -51,7 +51,7 @@
 	{
 		echo $this->Form->input('account_id', array( 
 				'options' => $accounts,
-				'label' => 'Account [ Payment Ref ]',
+				'label' => 'Account',
 			) 
 		);
 	}

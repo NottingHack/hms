@@ -455,7 +455,9 @@ class Member extends AppModel {
 		/*
 			Data should be presented to the view in an array like so:
 			[id] => member id
-			[name] => member name
+			[bestName] => The name of the member, or the username, or the e-mail (depending on what data we have)
+			[firstname] => member first name
+			[surname] => member surname
 			[username] => member username
 			[email] => member email
 			[groups] =>
@@ -546,8 +548,17 @@ class Member extends AppModel {
 			$lastStatusUpdate = $this->StatusUpdate->formatStatusUpdate(Hash::get($memberInfo, 'StatusUpdate.0.id'));
 		}
 
+		$bestName = $email;
+		if (isset($username)) {
+			$bestName = $username;
+		}
+		if (isset($firstname) && isset($surname)) {
+			$bestName = $firstname . ' ' . $surname;
+		}
+
 		$allValues = array(
 			'id' => $id,
+			'bestName' => $bestName,
 			'firstname' => $firstname,
 			'surname' => $surname,
 			'username' => $username,

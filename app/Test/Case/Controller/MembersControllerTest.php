@@ -1902,6 +1902,7 @@
 
 			$expectedMemberInfo = array(
 				'id' => '4',
+				'bestName' => 'Kelly Savala',
 				'firstname' => 'Kelly',
 				'surname' => 'Savala',
 				'username' => 'huskycolossus',
@@ -1992,6 +1993,7 @@
 
 			$expectedMemberInfo = array(
 				'id' => '3',
+				'bestName' => 'Guy Viles',
 				'firstname' => 'Guy',
 				'surname' => 'Viles',
 				'username' => 'buntweyr',
@@ -2071,6 +2073,7 @@
 
 			$expectedMemberInfo = array(
 				'id' => '4',
+				'bestName' => 'Kelly Savala',
 				'firstname' => 'Kelly',
 				'surname' => 'Savala',
 				'username' => 'huskycolossus',
@@ -2160,6 +2163,7 @@
 
 			$expectedMemberInfo = array(
 				'id' => '3',
+				'bestName' => 'Guy Viles',
 				'firstname' => 'Guy',
 				'surname' => 'Viles',
 				'username' => 'buntweyr',
@@ -2214,6 +2218,7 @@
 
 			$expectedMemberInfo = array(
 				'id' => '7',
+				'bestName' => 'CherylLCarignan@teleworm.us',
 				'email' => 'CherylLCarignan@teleworm.us',
 				'status' => array(
 					'id' => '1',
@@ -2257,6 +2262,7 @@
 
 			$expectedMemberInfo = array(
 				'id' => '9',
+				'bestName' => 'Dorothy Russell',
 				'firstname' => 'Dorothy',
 				'surname' => 'Russell',
 				'username' => 'Warang29',
@@ -2300,6 +2306,7 @@
 
 			$expectedMemberInfo = array(
 				'id' => '11',
+				'bestName' => 'Betty Paris',
 				'firstname' => 'Betty',
 				'surname' => 'Paris',
 				'username' => 'Beltonstlend51',
@@ -2350,6 +2357,7 @@
 
 			$expectedMemberInfo = array(
 				'id' => '4',
+				'bestName' => 'Kelly Savala',
 				'firstname' => 'Kelly',
 				'surname' => 'Savala',
 				'username' => 'huskycolossus',
@@ -2435,6 +2443,7 @@
 
 			$expectedMemberVal = array(
 				'id' => '2',
+				'bestName' => 'Annabelle Santini',
 				'firstname' => 'Annabelle',
 				'surname' => 'Santini',
 				'username' => 'pecanpaella',
@@ -2478,6 +2487,7 @@
 
 			$expectedViewVal = array(
 				'id' => '2',
+				'bestName' => 'Annabelle Santini',
 				'firstname' => 'Annabelle',
 				'surname' => 'Santini',
 				'username' => 'pecanpaella',
@@ -2625,6 +2635,7 @@
 
 			$expectedViewVal = array(
 				'id' => '2',
+				'bestName' => 'Annabelle Santini',
 				'firstname' => 'Annabelle',
 				'surname' => 'Santini',
 				'username' => 'pecanpaella',
@@ -2750,6 +2761,7 @@
 
 			$expectedViewVal = array(
 				'id' => '4',
+				'bestName' => 'Kelly Savala',
 				'firstname' => 'Kelly',
 				'surname' => 'Savala',
 				'username' => 'huskycolossus',
@@ -2915,6 +2927,7 @@
 
 			$expectedViewVal = array(
 				'id' => '2',
+				'bestName' => 'Annabelle Santini',
 				'firstname' => 'Annabelle',
 				'surname' => 'Santini',
 				'username' => 'pecanpaella',
@@ -3055,6 +3068,7 @@
 
 			$expectedViewVal = array(
 				'id' => '5',
+				'bestName' => 'Jessie Easterwood',
 				'firstname' => 'Jessie',
 				'surname' => 'Easterwood',
 				'username' => 'chollertonbanker',
@@ -3195,6 +3209,7 @@
 
 			$expectedViewVal = array(
 				'id' => '3',
+				'bestName' => 'Guy Viles',
 				'firstname' => 'Guy',
 				'surname' => 'Viles',
 				'username' => 'buntweyr',
@@ -3347,6 +3362,7 @@
 
 			$expectedViewVal = array(
 				'id' => '3',
+				'bestName' => 'Guy Viles',
 				'firstname' => 'Guy',
 				'surname' => 'Viles',
 				'username' => 'buntweyr',
@@ -3556,6 +3572,7 @@
 
 			$expectedViewVal = array(
 				'id' => '3',
+				'bestName' => 'Guy Viles',
 				'firstname' => 'Guy',
 				'surname' => 'Viles',
 				'username' => 'buntweyr',

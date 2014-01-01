@@ -61,7 +61,7 @@
 	<ul>
 	<?php foreach ($membersSubscribed as $memberInfo): ?>
 		<li>
-			<?php echo $this->Html->link(sprintf('%s %s', $memberInfo['firstname'], $memberInfo['surname']), array('controller' => 'members', 'action' => 'view', $memberInfo['id'])); ?>
+			<?php echo $this->Html->link($memberInfo['bestName'], array('controller' => 'members', 'action' => 'view', $memberInfo['id'])); ?>
 		</li>
 	<?php endforeach; ?>
 	</ul>
@@ -75,7 +75,7 @@
 	<ul>
 	<?php foreach ($membersNotSubscribed as $memberInfo): ?>
 		<li>
-			<?php echo $this->Html->link(sprintf('%s %s', $memberInfo['firstname'], $memberInfo['surname']), array('controller' => 'members', 'action' => 'view', $memberInfo['id'])); ?>
+			<?php echo $this->Html->link($memberInfo['bestName'], array('controller' => 'members', 'action' => 'view', $memberInfo['id'])); ?>
 		</li>
 	<?php endforeach; ?>
 	</ul>

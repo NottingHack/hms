@@ -215,13 +215,16 @@ class DataGenerator {
 		$lastYear = strtotime('last year');
 		$registerTimestamp = rand($lastYear, $now);
 
+		if ((int)$membershipStage >= Status::PRE_MEMBER_3) {
+			$accountId = $this->__generateAccount();
+		}
+
 		if ((int)$membershipStage >= Status::CURRENT_MEMBER) {
 			$creditLimit = 5000;
 			$balance = rand(-$creditLimit, 0);
 
 			$joinDate = date('Y-m-d', $registerTimestamp);
 
-			$accountId = $this->__generateAccount();
 			$this->__generatePin($memberId, $registerTimestamp);
 
 			// Has this member set up access yet?

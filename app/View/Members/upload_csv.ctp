@@ -26,7 +26,7 @@
 	    <?php foreach ($memberList as $member): ?>
 
 	    	<tr>
-	    		<td> <?php echo $this->Html->link($member['name'], array('controller' => 'members', 'action' => 'view', $member['id'])); ?> </td>
+	    		<td> <?php echo $this->Html->link($member['bestName'], array('controller' => 'members', 'action' => 'view', $member['id'])); ?> </td>
 	    		<td> <?php echo $member['paymentRef']; ?> </td>
 	    	</tr>
 
