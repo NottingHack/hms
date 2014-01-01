@@ -202,7 +202,7 @@ class Setup {
 			$templateFilePath = makeAbsolutePath("../Settings/$settingName.{$this->__environmentType}.template");
 			if (!file_exists($templateFilePath)) {
 				// Fall back to the regular template
-				$templateFilePath = makeAbsolutePath("$settingName.template");
+				$templateFilePath = makeAbsolutePath("../Settings/$settingName.template");
 
 				if (!file_exists($templateFilePath)) {
 					$fullFilePath = makeAbsolutePath("$configPath$settingName.php");
