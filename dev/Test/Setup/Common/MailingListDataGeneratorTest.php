@@ -1,6 +1,6 @@
 <?php
 
-require_once ('Setup/Lib/MailingListDataGenerator.php');
+require_once ('Setup/Common/MailingListDataGenerator.php');
 
 class MailingListDataGeneratorTest extends PHPUnit_Framework_TestCase {
 

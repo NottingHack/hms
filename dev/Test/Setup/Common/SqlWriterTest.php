@@ -1,6 +1,6 @@
 <?php
 
-require_once ('Setup/Lib/SqlWriter.php');
+require_once ('Setup/Common/SqlWriter.php');
 
 class SqlWriterTest extends PHPUnit_Framework_TestCase {
 

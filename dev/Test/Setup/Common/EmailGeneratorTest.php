@@ -1,6 +1,6 @@
 <?php
 
-require_once ('Setup/Lib/EmailGenerator.php');
+require_once ('Setup/Common/EmailGenerator.php');
 
 class EmailGeneratorTest extends PHPUnit_Framework_TestCase {
 
