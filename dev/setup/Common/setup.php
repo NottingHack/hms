@@ -9,7 +9,7 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @copyright     HMS Team
- * @package       dev.Setup.Lib
+ * @package       dev.Setup.Common
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
@@ -199,7 +199,7 @@ class Setup {
 		// Create each of the config files
 		foreach ($__settings as $settingName => $settingData) {
 			// First check for dev/production templates
-			$templateFilePath = makeAbsolutePath("$settingName.{$this->__environmentType}.template");
+			$templateFilePath = makeAbsolutePath("../Settings/$settingName.{$this->__environmentType}.template");
 			if (!file_exists($templateFilePath)) {
 				// Fall back to the regular template
 				$templateFilePath = makeAbsolutePath("$settingName.template");
@@ -235,7 +235,7 @@ class Setup {
  */
 	private function __getSqlFilesContaining($subStr) {
 		$validFiles = array();
-		$dirList = scandir(makeAbsolutePath('./sql'));
+		$dirList = scandir(makeAbsolutePath('../Sql'));
 
 		foreach ($dirList as $filename) {
 			if ( pathinfo($filename, PATHINFO_EXTENSION) == 'sql' &&
@@ -246,7 +246,7 @@ class Setup {
 					// Is this file for all environment types or the one we're currently using?
 					if ($parts[1] == 'sql' ||
 						$parts[1] == $this->__environmentType) {
-						array_push($validFiles, makeAbsolutePath('./sql/' . $filename));
+						array_push($validFiles, makeAbsolutePath('../Sql/' . $filename));
 					}
 				}
 			}
@@ -461,47 +461,47 @@ class Setup {
 
 		$sqlData = array(
 			array(
-				'filepath' => './sql/members_data.sql',
+				'filepath' => '../Sql/members_data.sql',
 				'tableName' => 'members',
 				'data' => $memberData,
 			),
 			array(
-				'filepath' => './sql/member_group_data.sql',
+				'filepath' => '../Sql/member_group_data.sql',
 				'tableName' => 'member_group',
 				'data' => $dataGenerator->getMembersGroupData(),
 			),
 			array(
-				'filepath' => './sql/account_data.sql',
+				'filepath' => '../Sql/account_data.sql',
 				'tableName' => 'account',
 				'data' => $dataGenerator->getAccountsData(),
 			),
 			array(
-				'filepath' => './sql/pins_data.sql',
+				'filepath' => '../Sql/pins_data.sql',
 				'tableName' => 'pins',
 				'data' => $dataGenerator->getPinsData(),
 			),
 			array(
-				'filepath' => './sql/rfid_tags_data.sql',
+				'filepath' => '../Sql/rfid_tags_data.sql',
 				'tableName' => 'rfid_tags',
 				'data' => $dataGenerator->getRfidTagsData(),
 			),
 			array(
-				'filepath' => './sql/status_updates_data.sql',
+				'filepath' => '../Sql/status_updates_data.sql',
 				'tableName' => 'status_updates',
 				'data' => $dataGenerator->getStatusUpdatesData(),
 			),
 			array(
-				'filepath' => './sql/mailinglists_data.development.sql',
+				'filepath' => '../Sql/mailinglists_data.development.sql',
 				'tableName' => 'mailinglists',
 				'data' => $mailingListDataGenerator->getMailingListsData(),
 			),
 			array(
-				'filepath' => './sql/mailinglist_subscriptions_data.development.sql',
+				'filepath' => '../Sql/mailinglist_subscriptions_data.development.sql',
 				'tableName' => 'mailinglist_subscriptions',
 				'data' => $mailingListDataGenerator->getMailingListSubscriptionsData(),
 			),
 			array(
-				'filepath' => './sql/hms_emails_data.development.sql',
+				'filepath' => '../Sql/hms_emails_data.development.sql',
 				'tableName' => 'hms_emails',
 				'data' => $dataGenerator->getEmailRecordData(),
 			),
@@ -642,7 +642,7 @@ class Setup {
 		$this->__pushLogIndent();
 
 		$fromFile = $this->__useRealKrb ? 'krb5Auth.real.php' : 'krb5Auth.dummy.php';
-		$this->__copyLibFile($fromFile, '../../../app/Lib/Krb/krb5Auth.php');
+		$this->__copyLibFile('../Libs/Krb/' . $fromFile, '../../../app/Lib/Krb/krb5Auth.php');
 
 		$this->__popLogIndent();
 	}
@@ -655,7 +655,7 @@ class Setup {
 		$this->__pushLogIndent();
 
 		$fromFile = "MCAPI.{$this->__environmentType}";
-		$this->__copyLibFile($fromFile, '../../../app/Lib/MailChimp/MCAPI.php');
+		$this->__copyLibFile('../Libs/Mailchimp/' . $fromFile, '../../../app/Lib/MailChimp/MCAPI.php');
 
 		$this->__popLogIndent();
 	}
@@ -810,7 +810,7 @@ class Setup {
 			),
 		);
 
-		$overrideSettings = 'hms.settings';
+		$overrideSettings = '../Settings/hms.settings';
 		if (file_exists(makeAbsolutePath($overrideSettings))) {
 			include ($overrideSettings);
 		}
@@ -884,7 +884,7 @@ class Setup {
 		$this->__logMessage("Writing db version $versionStr to database");
 
 		$conn = $this->__getDbConnection('default', true);
-		$this->__runQueryFromFile($conn, makeAbsolutePath('sql/hms_meta_schema.sql'));
+		$this->__runQueryFromFile($conn, makeAbsolutePath('../Sql/hms_meta_schema.sql'));
 		$this->__runQuery($conn, "INSERT INTO `hms_meta` (`name`, `value`) VALUES ('db_version', '$versionStr') ON DUPLICATE KEY UPDATE value='$versionStr'");
 	}
 

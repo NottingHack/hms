@@ -9,7 +9,7 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @copyright     HMS Team
- * @package       dev.Setup.Lib
+ * @package       dev.Setup.Common
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
@@ -96,7 +96,7 @@ class DataGenerator {
  * Constructor
  */
 	public function __construct() {
-		$this->__parseCsv('./FakeNameGeneratorData.csv');
+		$this->__parseCsv('./SourceData/FakeNameGeneratorData.csv');
 	}
 
 /**

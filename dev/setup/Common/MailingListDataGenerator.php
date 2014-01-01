@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * PHP 5
@@ -10,7 +9,7 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @copyright     HMS Team
- * @package       dev.Setup.Lib
+ * @package       dev.Setup.Common
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 

@@ -13,7 +13,7 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-require_once ('../Lib/Setup.php');
+require_once ('../Common/Setup.php');
 
 /** 
  * Given an index in the POST var array, return a bool version
