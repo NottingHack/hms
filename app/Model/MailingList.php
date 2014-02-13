@@ -54,7 +54,7 @@ class MailingList extends AppModel {
 		Configure::load('mailchimp', 'default');
 
 		// Set-up mailchimp
-		$this->apikey = Configure::read('mailchimp___apiKey');
+		$this->apikey = Configure::read('mailchimp_apiKey');
 		$this->__api = new MCAPI($this->apikey, true);
 
 		// Bit hacky, we need to tell the MCAPI class
