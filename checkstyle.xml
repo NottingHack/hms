@@ -23,7 +23,6 @@
   <file name="app\Model\Permission.php"/>
   <file name="app\Model\MemberEmail.php"/>
   <file name="app\Model\EmailRecord.php"/>
-  <file name="app\Lib\Krb\krb5Auth.php"/>
   <file name="app\Model\ChangePassword.php"/>
   <file name="dev\Setup\Updates\0.3.1.php"/>
   <file name="app\View\Helper\AppHelper.php"/>
@@ -32,6 +31,7 @@
   <file name="dev\Setup\Common\DataGenerator.php"/>
   <file name="dev\Setup\Web\setup.php"/>
   <file name="plugins\MemberVoice\Model\MemberVoiceAppModel.php"/>
+  <file name="app\Lib\Krb\Krb5Auth.php"/>
   <file name="app\Lib\Error\Exception\NotAuthorizedException.php"/>
   <file name="dev\Setup\Common\Setup.php"/>
   <file name="app\Lib\CsvReader\CsvReader.php"/>
