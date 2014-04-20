@@ -7,6 +7,7 @@ create table tl_tools
   tool_restrictions varchar(20),  -- UNRESTRICTED or RESTRICTED
   tool_status_text  varchar(255), -- If tool_status=DISABLED, holds the reason why (free text)
   tool_pph          int,          -- Cost - pence per hour
+  tool_calendar     varchar(255), -- id of google calendar
   primary key (tool_id),
   unique (tool_name)
 );
