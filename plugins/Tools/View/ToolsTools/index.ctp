@@ -20,8 +20,8 @@ if (count($tools) > 0) {
 
 	<tr>
 		<td><?php echo($tool['Tool']['tool_name']); ?></td>
-		<td><?php echo($tool['Tool']['tool_status']); ?></td>
-		<td>&pound;<?php echo($tool['Tool']['tool_pph'] / 100); ?></td>
+		<td<?php echo($tool['Tool']['tool_status'] == "DISABLED" ? ' style="background-color: #FF0000"' : ''); ?>><?php echo(ucwords(strtolower($tool['Tool']['tool_status']))); ?></td>
+		<td>&pound;<?php echo(number_format($tool['Tool']['tool_pph'] / 100, 2)); ?></td>
 		<td><?php echo($tool['Tool']['next_booking']->format('jS F Y @ H:i')); ?></td>
 		<td>
 <?php

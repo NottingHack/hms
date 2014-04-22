@@ -65,93 +65,6 @@ class ToolsToolsController extends ToolsAppController {
 		$this->ToolsGoogle->setIdentity($this->googleId);
 	}
 
-	/**
-	 * Show a list of all tools.
-	 */
-	public function index() {
-		if ($this->isAuthorized($this->_getUserID(), $this->request)) {
-			// Get the tools
-			$tools = $this->ToolsTool->find('all');
-
-			// Is user Full access
-			$fullAccess = false;
-			if ($this->Member->GroupsMember->isMemberInGroup( $this->_getUserID(), Group::FULL_ACCESS )) {
-				$fullAccess = true;
-			}
-
-			for ($i = 0; $i < count($tools); $i++) {
-				// is user inducted on this tool?
-				$inducted = $this->ToolsTool->isUserInducted($tools[$i]['Tool']['tool_id']);
-				// is user an inductor on this tool?
-				$inductor = $this->ToolsTool->isUserAnInductor($tools[$i]['Tool']['tool_id']);
-
-				$tools[$i]['Tool']['next_booking'] = $this->ToolsGoogle->getNextBooking($tools[$i]['Tool']['tool_calendar']);
-				// all users can do these actions
-				$tools[$i]['Tool']['actions'] = array();
-				if ($inducted) {
-					$tools[$i]['Tool']['actions']['Book timeslot'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'createBooking', $tools[$i]['Tool']['tool_id']);
-					$tools[$i]['Tool']['actions']['View bookings'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'bookings', $tools[$i]['Tool']['tool_id']);
-				}
-				if ($inductor) {
-					$tools[$i]['Tool']['actions']['Induct user'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'induct', $tools[$i]['Tool']['tool_id']);
-				}
-				if ($fullAccess) {
-					$tools[$i]['Tool']['actions']['Edit'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'edit', $tools[$i]['Tool']['tool_id']);
-				}
-			}
-
-			// Set the view variables
-			$this->set('tools', $tools);
-		}
-	}
-
-	/**
-	 * Add a tool.  Only available to admins
-	 */
-	public function add() {
-		if ($this->isAuthorized($this->_getUserID(), $this->request)) {
-			// is google setup?
-			if (!$this->ToolsGoogle->authorised()) {
-				$this->redirect(array(
-					'plugin'		=>	'Tools',
-					'controller'	=>	'ToolsTools',
-					'action'		=>	'setupGoogle'
-					));
-			}
-
-			if ($this->request->is('post')) {
-				// first, save the entered details as a new tool
-				// this will throw validation errors early.
-				$this->ToolsTool->create();
-
-				$saveFields = array('tool_name', 'tool_restrictions', 'tool_pph', 'tool_address');
-				if ($this->ToolsTool->save($this->request->data, true, $saveFields)) {
-					// The data is saved, and validated.
-					// This means that tool_name is definitely unique.
-					// we now need to create the calendar for the tool and save to the DB
-					$calendar = $this->ToolsGoogle->createCalendar($this->request->data['Tool']['tool_name']);
-					if ($calendar) {
-						// save into the DB
-						$this->ToolsTool->saveField('tool_calendar', $calendar);
-						$this->redirect(array(
-							'plugin'		=>	'Tools',
-							'controller'	=>	'ToolsTools',
-							'action'		=>	'index'
-							));
-					}
-					else {
-						// delete the entire record!
-						$this->Session->setFlash(__('Unable to add your Tool.'));
-						$this->ToolsTool->delete($this->ToolsTool->id);
-					}
-				}
-				else {
-					$this->Session->setFlash(__('Unable to add your Tool.'));
-				}
-			}
-		}
-	}
-
 	public function setupGoogle() {
 		
 		if (!$this->ToolsGoogle->authorised()) {
@@ -199,5 +112,142 @@ class ToolsToolsController extends ToolsAppController {
 		}
 	}
 
+	/**
+	 * Show a list of all tools.
+	 */
+	public function index() {
+		if ($this->isAuthorized($this->_getUserID(), $this->request)) {
+			// Get the tools
+			$tools = $this->ToolsTool->find('all');
+
+			// Is user Full access
+			$fullAccess = false;
+			if ($this->Member->GroupsMember->isMemberInGroup( $this->_getUserID(), Group::FULL_ACCESS )) {
+				$fullAccess = true;
+			}
+
+			for ($i = 0; $i < count($tools); $i++) {
+				// is user inducted on this tool?
+				$inducted = $this->ToolsTool->isUserInducted($tools[$i]['Tool']['tool_id']);
+				// is user an inductor on this tool?
+				$inductor = $this->ToolsTool->isUserAnInductor($tools[$i]['Tool']['tool_id']);
+
+				$tools[$i]['Tool']['next_booking'] = $this->ToolsGoogle->getNextBooking($tools[$i]['Tool']['tool_calendar']);
+				// all users can do these actions
+				$tools[$i]['Tool']['actions'] = array();
+				$tools[$i]['Tool']['actions']['Access Calendar'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'publicAccess', $tools[$i]['Tool']['tool_id']);
+
+				if ($inducted) {
+					$tools[$i]['Tool']['actions']['Book timeslot'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'createBooking', $tools[$i]['Tool']['tool_id']);
+					$tools[$i]['Tool']['actions']['View my bookings'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'bookings', $tools[$i]['Tool']['tool_id']);
+				}
+				if ($inductor) {
+					$tools[$i]['Tool']['actions']['Induct user'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'induct', $tools[$i]['Tool']['tool_id']);
+				}
+				if ($fullAccess) {
+					$tools[$i]['Tool']['actions']['Edit'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'edit', $tools[$i]['Tool']['tool_id']);
+				}
+			}
+
+			// Set the view variables
+			$this->set('tools', $tools);
+		}
+	}
+
+	/**
+	 * Add a tool.  Only available to admins
+	 */
+	public function add() {
+		if ($this->isAuthorized($this->_getUserID(), $this->request)) {
+			// is google setup?
+			if (!$this->ToolsGoogle->authorised()) {
+				$this->redirect(array(
+					'plugin'		=>	'Tools',
+					'controller'	=>	'ToolsTools',
+					'action'		=>	'setupGoogle'
+					));
+			}
+
+			if ($this->request->is('post')) {
+				// first, save the entered details as a new tool
+				// this will throw validation errors early.
+				$this->ToolsTool->create();
+
+				$saveFields = array('tool_name', 'tool_restrictions', 'tool_pph', 'tool_address');
+				if ($this->ToolsTool->save($this->request->data, true, $saveFields)) {
+					// The data is saved, and validated.
+					// This means that tool_name is definitely unique.
+					// we now need to create the calendar for the tool and save to the DB
+					$calendar = $this->ToolsGoogle->createCalendar($this->request->data['Tool']['tool_name']);
+					if ($calendar) {
+						// save into the DB
+						$this->ToolsTool->saveField('tool_calendar', $calendar);
+						$this->Session->setFlash(__('Tool Added.'));
+						$this->redirect(array(
+							'plugin'		=>	'Tools',
+							'controller'	=>	'ToolsTools',
+							'action'		=>	'index'
+							));
+					}
+					else {
+						// delete the entire record!
+						$this->Session->setFlash(__('Unable to add your Tool.'));
+						$this->ToolsTool->delete($this->ToolsTool->id);
+					}
+				}
+				else {
+					$this->Session->setFlash(__('Unable to add your Tool.'));
+				}
+			}
+		}
+	}
+
+	public function edit($tool_id = null) {
+		if (!$tool_id) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+		$tool = $this->ToolsTool->findByToolId($tool_id);
+		if (!$tool) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+		
+		if ($this->request->is('post') || $this->request->is('put')) {
+			// If the form data can be validated and saved...
+			$this->ToolsTool->id = $tool_id;
+			if ($this->ToolsTool->save($this->request->data)) {
+				$this->Session->setFlash('Tool Saved!');
+				return $this->redirect(array(
+					'plugin'		=>	'Tools',
+					'controller'	=>	'ToolsTools',
+					'action'		=>	'index'
+					));
+			}
+		}
+		else {
+			debug("crap");
+		}
+
+		if (!$this->request->data) {
+			$this->request->data = $tool;
+		}
+	}
+
+	public function publicAccess($tool_id) {
+		if (!$tool_id) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+		$tool = $this->ToolsTool->findByToolId($tool_id);
+		if (!$tool) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+		$addresses = $this->ToolsGoogle->getPublicAddresses($tool['Tool']['tool_calendar']);
+		$this->set("addresses", $addresses);
+
+		$this->set("tool", $tool['Tool']['tool_name']);
+
+	}
 }
 ?>

@@ -1,4 +1,4 @@
-<h2>Add Tool</h2>
+<h2>Edit Tool</h2>
 <?php
 echo $this->Form->create('Tool');
 echo $this->Form->input('tool_name', array(

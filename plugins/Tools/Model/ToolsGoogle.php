@@ -234,6 +234,23 @@ class ToolsGoogle extends ToolsAppModel {
 	}
 
 	/**
+	 * Returns an array of public addresses of a calendar
+	 *
+	 * @param string calender id
+	 * @return array addresses
+	 */
+	public function getPublicAddresses($calendar_id) {
+		$addresses = array(
+			'email'	=>	$calendar_id,
+			'xml'	=>	'https://www.google.com/calendar/feeds/' . urlencode($calendar_id) . '/public/basic',	
+			'ical'	=>	'https://www.google.com/calendar/ical/' . urlencode($calendar_id) . '/public/basic.ics',
+			'html'	=>	'https://www.google.com/calendar/embed?src=' . urlencode($calendar_id) . '&ctz=Europe/London',
+			);
+		
+		return $addresses;
+	}
+
+	/**
 	 * Return the refresh token iff one is saved
 	 *
 	 * @return string token if saved, otherwise null
@@ -267,6 +284,7 @@ class ToolsGoogle extends ToolsAppModel {
 
 		return $tokens;
 	}
+
 }
 
 ?>
