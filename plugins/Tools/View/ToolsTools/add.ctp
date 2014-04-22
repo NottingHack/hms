@@ -1,3 +1,8 @@
+<?php
+/* Breadcrumbs */
+$this->Html->addCrumb('Tools', '/tools/');
+$this->Html->addCrumb('Add', '/tools/add/');
+?>
 <h2>Add Tool</h2>
 <?php
 echo $this->Form->create('Tool');

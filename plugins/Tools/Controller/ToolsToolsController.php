@@ -224,9 +224,6 @@ class ToolsToolsController extends ToolsAppController {
 					));
 			}
 		}
-		else {
-			debug("crap");
-		}
 
 		if (!$this->request->data) {
 			$this->request->data = $tool;
@@ -246,7 +243,7 @@ class ToolsToolsController extends ToolsAppController {
 		$addresses = $this->ToolsGoogle->getPublicAddresses($tool['Tool']['tool_calendar']);
 		$this->set("addresses", $addresses);
 
-		$this->set("tool", $tool['Tool']['tool_name']);
+		$this->set("tool", $tool);
 
 	}
 }

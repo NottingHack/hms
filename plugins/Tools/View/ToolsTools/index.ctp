@@ -1,3 +1,7 @@
+<?php
+/* Breadcrumbs */
+$this->Html->addCrumb('Tools', '/tools/');
+?>
 <h2>Tools</h2>
 
 <?php
