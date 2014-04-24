@@ -16,6 +16,7 @@
 
 App::uses('AppController', 'Controller');
 App::uses('Xml', 'Utility');
+App::uses('PhpReader', 'Configure');
 
 /**
  * Static content controller
@@ -104,5 +105,17 @@ class PagesController extends AppController {
 		} else {
 			$this->Nav->add('Register Now!', 'members', 'register', array(), 'big_button');
 		}
+	}
+
+	/**
+	 * The credits page.  Pulls from the config files, which plugins can contribute to
+	 */
+	public function credits() {
+		Configure::config('default', new PhpReader());
+		Configure::load('credits', 'default');
+
+		$media = Configure::read('hms_media');
+
+		$this->set('media', $media);
 	}
 }
