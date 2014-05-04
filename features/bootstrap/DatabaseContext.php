@@ -21,7 +21,7 @@ class DatabaseContext extends HmsContext {
 			$this->_fail('Failed to run query ' . $query . ' (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
 		}
 		$rows = array();
-		while($row = $result->fetch_assoc()) {
+		while ($row = $result->fetch_assoc()) {
 			array_push($rows, $row);
 		}
 		return $rows;
