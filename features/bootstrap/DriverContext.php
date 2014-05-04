@@ -18,7 +18,7 @@ class DriverContext extends HmsContext {
 			new Given("I follow \"Register Now!\""),
 			new Given("I fill in \"MemberEmail\" with \"$email\""),
 			new When("I press \"Register\""),
-			new Then("I should be on \"/pages/home\""),
+			new Then("I should be on the homepage"),
 			new Then("I should see \"Registration successful, please check your inbox.\""),
 		);
 	}
