@@ -46,6 +46,7 @@ class FeatureContext extends HmsContext {
 		$this->useContext('file', new FileContext($mergedParams));
 		$this->useContext('email', new EmailContext($mergedParams));
 		$this->useContext('driver', new DriverContext($mergedParams));
+		$this->useContext('database', new DatabaseContext($mergedParams));
 	}
 
 /**

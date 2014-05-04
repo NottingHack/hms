@@ -21,8 +21,5 @@ class DriverContext extends HmsContext {
 			new Then("I should be on \"/pages/home\""),
 			new Then("I should see \"Registration successful, please check your inbox.\""),
 		);
-
-		// And foo@bar.com should receive the welcome email
-		// And the member admins should receive the new member e-mail
 	}
 }

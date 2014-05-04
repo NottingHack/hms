@@ -45,11 +45,20 @@ class HmsContext extends BehatContext {
 		return $this->__getSubContext('nagivation');
 	}
 
+	protected function _databaseContext() {
+		return $this->__getSubContext('database');
+	}
+
 	protected function _testDir() {
 		return $this->__testDir;
 	}
 
 	protected function _logger() {
 		return $this->__logger;
+	}
+
+	protected function _fail($message) {
+		$this->__logger->logError($message);
+		assertTrue(false, $message);
 	}
 }

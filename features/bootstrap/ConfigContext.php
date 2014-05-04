@@ -62,6 +62,16 @@ class ConfigContext extends HmsContext {
 		$this->_fileContext()->moveFolderTo($currentConfigDir, $backupConfigDir);
 	}
 
+	public function readDatabaseConfig() {
+		$file = $this->__getConfigDir() . '/database.php';
+		$this->_logger()->logInfo("Reading database config file at: $file");
+		include $file;
+
+		$dbConfig = new DATABASE_CONFIG();
+
+		return $dbConfig->default;
+	}
+
 /**
  * @AfterScenario
  */

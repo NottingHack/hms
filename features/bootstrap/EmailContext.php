@@ -12,6 +12,10 @@ class EmailContext extends HmsContext {
 		return $this->_testDir() . 'HMS_Emails/';
 	}
 
+	private function __getFromAddress() {
+		return 'Nottinghack Membership <membership@nottinghack.org.uk>';
+	}
+
 	public function beforeScenario() {
 		$emailDir = $this->__getEmailDir();
 		$this->_configContext()->iSetTheEmailDebugDirectoryTo($emailDir);
@@ -48,7 +52,7 @@ class EmailContext extends HmsContext {
 		$result = $this->__checkForEmail(
 			'Welcome to Nottingham Hackspace',
 			$newMemberEmail,
-			'Nottinghack Membership <membership@nottinghack.org.uk>',
+			$this->__getFromAddress(),
 			function($message) {
 				return preg_match('/\/members\/setupLogin\/(\d)/', $message) === 1;
 			}
@@ -61,10 +65,11 @@ class EmailContext extends HmsContext {
  */
 	public function theMemberAdminsShouldReceiveTheNewMemberEMail() {
 		$newMemberEmail = $this->_memberContext()->getTestMemberData('email');
+		$memberAdminEmailAddress = $this->_databaseContext()->getMemberAdminEmailAddresses();
 		$result = $this->__checkForEmail(
 			'New Prospective Member Notification',
-			"LorindaRSchroeder@gustr.com, NatashaRichards@armyspy.com, MichaelForbes@dayrep.com, JefferyCRoberts@teleworm.us, CailynMiller@armyspy.com, JamesRKnowlton@cuvox.de, MichelleNHernandez@gustr.com, EllisSmith@teleworm.us, KristenBTrapp@einrot.com, BenStone@cuvox.de, AustinMacleod@armyspy.com, BrianCDurbin@teleworm.us, EllisMoore@teleworm.us, BenjaminMarshall@teleworm.us, JemmaWatson@dayrep.com, FinleyGray@einrot.com, LucyGriffiths@gustr.com, AlexaMcIntyre@einrot.com, IsaacEvans@einrot.com, PaytonMacleod@gustr.com, LawrenceBurns@superrito.com, ConnieTYoung@dayrep.com, WarrenMSours@superrito.com, EllaNBlauvelt@cuvox.de, GeraldineRLewin@dayrep.com, ErinManning@einrot.com, RuairidhDuncan@superrito.com, RobertLDupuis@gustr.com, OlivierMcIntyre@gustr.com, MatildaBaker@cuvox.de, pyroka@gmail.com",
-			'Nottinghack Membership <membership@nottinghack.org.uk>',
+			join(', ', $memberAdminEmailAddress),
+			$this->__getFromAddress(),
 			function($message) use($newMemberEmail) {
 				$regexFriendlyEmail = preg_quote($newMemberEmail, '/');
 				return preg_match("/Someone with the e-mail $regexFriendlyEmail/", $message) === 1;
