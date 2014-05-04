@@ -641,8 +641,8 @@ class Setup {
 		$this->__logMessage('Copying KRB lib file');
 		$this->__pushLogIndent();
 
-		$fromFile = $this->__useRealKrb ? 'krb5Auth.real.php' : 'krb5Auth.dummy.php';
-		$this->__copyLibFile('../Libs/Krb/' . $fromFile, '../../../app/Lib/Krb/krb5Auth.php');
+		$fromFile = $this->__useRealKrb ? 'Krb5Auth.real.php' : 'Krb5Auth.dummy.php';
+		$this->__copyLibFile('../Libs/Krb/' . $fromFile, '../../../app/Lib/Krb/Krb5Auth.php');
 
 		$this->__popLogIndent();
 	}
