@@ -215,6 +215,7 @@ class MembersController extends AppController {
  */
 	public function register() {
 		$this->MailingList = $this->getMailingList();
+
 		// Need a list of mailing-lists that the user can opt-in to
 		$mailingLists = $this->MailingList->listMailinglists(false);
 		$this->set('mailingLists', $mailingLists);

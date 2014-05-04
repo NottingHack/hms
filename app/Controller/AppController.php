@@ -191,6 +191,7 @@ class AppController extends Controller {
 			$this->set('userMessage', $userMessage);
 			$this->set('memberId', $loggedInMemberId);
 			$this->set('username', $this->Member->getUsernameForMember($this->Auth->user()));
+			$this->set('email', $this->Member->getEmailForMember($this->Auth->user()));
 		}
 
 		$jsonData = json_decode(file_get_contents('http://lspace.nottinghack.org.uk/status/status.php'));
@@ -256,6 +257,21 @@ class AppController extends Controller {
 		$email->subject($subject);
 		$email->template($template);
 		$email->viewVars($viewVars);
+
+		$emailDebugDirectory = null;
+		try {
+			Configure::load('debug');
+			$emailDebugDirectory = Configure::read('emailDebugDirectory');
+		} catch(ConfigureException $e) {
+			$emailDebugDirectory = null;
+		}
+		if ($emailDebugDirectory != null) {
+			$email->transport('Debug');
+			$emailContents = $email->send();
+			$this->__writeEmailContents($emailContents, $emailDebugDirectory);
+			return true;
+		}
+
 		return $email->send();
 	}
 
@@ -267,5 +283,24 @@ class AppController extends Controller {
 	protected function _getLoggedInMemberId() {
 		Controller::loadModel('Member');
 		return $this->Member->getIdForMember($this->Auth->user());
+	}
+
+	private function __writeEmailContents($data, $toFolder) {
+		$headers = $this->__splitEmailHeaders($data['headers']);
+		$data['headers'] = $headers;
+		$subject = $headers['Subject'];
+		$timestamp = time();
+		$filename = $toFolder . '/' . $subject . '_' . $timestamp . '.js';
+		file_put_contents($filename, json_encode($data, JSON_PRETTY_PRINT));
+	}
+
+	private function __splitEmailHeaders($headers) {
+		$arrayHeaders = array();
+		foreach (explode("\r\n", $headers) as $header) {
+			$headerParts = explode(':', $header);
+			$arrayHeaders[$headerParts[0]] = trim($headerParts[1]);
+		}
+
+		return $arrayHeaders;
 	}
 }

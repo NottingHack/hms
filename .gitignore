@@ -29,3 +29,5 @@ CodeSnifferReport.txt
 dev/coverage.xml
 dev/coverage_report/
 dev/junit.xml
+vendor/
+bin/

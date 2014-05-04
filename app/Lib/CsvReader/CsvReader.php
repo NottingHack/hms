@@ -45,7 +45,7 @@ class CsvReader {
 		$this->__lines = array();
 
 		while (($data = fgetcsv($fileHandle)) !== false) {
-			// Ignore blank __lines
+			// Ignore blank lines
 			if ($data != null) {
 				array_push($this->__lines, $data);
 			}
