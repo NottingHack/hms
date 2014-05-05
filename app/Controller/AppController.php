@@ -249,7 +249,6 @@ class AppController extends Controller {
 		}
 
 		$email = $this->email;
-		$email->config('smtp');
 		$email->from(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 		$email->sender(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 		$email->emailFormat('html');
@@ -272,6 +271,7 @@ class AppController extends Controller {
 			return true;
 		}
 
+		$email->config('smtp');
 		return $email->send();
 	}
 
