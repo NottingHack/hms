@@ -12,5 +12,7 @@ Scenario: Register from homepage
 	And I submit the register form
 	Then I should be on the homepage
 	And I should see the registration successful message
-	And the new member should receive the welcome email
-	And the member admins should receive the new member e-mail
+	And the following e-mails are sent
+		| emailType                     |
+		| new_member_welcome_email      |
+		| new_member_member_admin_email |
