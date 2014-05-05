@@ -50,6 +50,9 @@ class Geocode {
 
 /**
  * Constructor.
+ * @param GeocodeUrlBuilder $urlBuilder The url builder to use, if null use the default.
+ * @param GeocodeResultDecoder $resultDecoder The result decoder to use, if null use the default.
+ * @param GeocodeResultChecker $resultChecker The result checker to use, if null use the default.
  */
 	public function __construct($urlBuilder = null, $resultDecoder = null, $resultChecker = null) {
 		try {

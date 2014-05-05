@@ -285,6 +285,11 @@ class AppController extends Controller {
 		return $this->Member->getIdForMember($this->Auth->user());
 	}
 
+/**
+ * Write an e-mail to a file.
+ * @param array $data Aray of e-mail data.
+ * @param string $toFolder The folder to save to e-mail to.
+ */
 	private function __writeEmailContents($data, $toFolder) {
 		$headers = $this->__splitEmailHeaders($data['headers']);
 		$data['headers'] = $headers;
@@ -294,6 +299,11 @@ class AppController extends Controller {
 		file_put_contents($filename, json_encode($data, JSON_PRETTY_PRINT));
 	}
 
+/**
+ * Given a list of headers, split them into an assoc array.
+ * @param string $headers String containing all header info.
+ * @return array An assoc array of headers.
+ */
 	private function __splitEmailHeaders($headers) {
 		$arrayHeaders = array();
 		foreach (explode("\r\n", $headers) as $header) {
