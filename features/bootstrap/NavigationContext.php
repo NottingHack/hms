@@ -194,7 +194,7 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
 		if ($address != $indexPagePath &&
 			$address != $homePagePath ) {
 			$message = sprintf('Current page is "%s", but should be either "%s" or "%s"', $address, $indexPagePath, $homePagePath);
-			$this->_fail($message);
+			$this->getMainContext()->fail($message);
 		}
 	}
 

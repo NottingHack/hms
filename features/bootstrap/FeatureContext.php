@@ -78,4 +78,9 @@ class FeatureContext extends HmsContext {
 	public function afterStep(StepEvent $event) {
 		$this->_logger()->logInfo('<< End Step: ' . $event->getStep()->getText() . ' >>');
 	}
+
+	public function fail($message) {
+		$this->_logger()->logError($message);
+		assertTrue(false, $message);
+	}
 }
