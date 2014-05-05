@@ -58,7 +58,6 @@ class HmsContext extends BehatContext {
 	}
 
 	protected function _fail($message) {
-		$this->__logger->logError($message);
-		assertTrue(false, $message);
+		$this->getMainContext()->fail($message);
 	}
 }

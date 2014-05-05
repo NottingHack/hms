@@ -83,4 +83,8 @@ class FeatureContext extends HmsContext {
 		$this->_logger()->logError($message);
 		assertTrue(false, $message);
 	}
+
+	public function log($message) {
+		$this->_logger()->logInfo($message);
+	}
 }

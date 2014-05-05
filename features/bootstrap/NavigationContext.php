@@ -12,6 +12,47 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
 		$this->assertSession()->elementNotExists('css', '.cake-error');
 	}
 
+	private function __logCurrentUrl() {
+		$address = $this->getSession()->getCurrentUrl();
+		$this->getMainContext()->log('Current url is: ' . $address);
+	}
+
+/**
+ * 
+ * @when I click the register link on the home page
+ */
+	public function iClickTheRegisterLinkOnTheHomePage() {
+		$this->assertHomepage();
+		$this->clickLink('Register Now');
+	}
+
+/**
+ * 
+ * @when I fill in the register form
+ */
+	public function iFillInTheRegisterForm() {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		$email = $memberContext->getNewEmail();
+		$memberContext->setTestMemberData('email', $email);
+		$this->fillField('MemberEmail', $email);
+	}
+
+/**
+ * 
+ * @when I submit the register form
+ */
+	public function iSubmitInTheRegisterForm() {
+		$this->pressButton('Register');
+	}
+
+/**
+ * 
+ * @Then I should see the registration successful message
+ */
+	public function iShouldSeeTheRegistrationSuccessfulMessage() {
+		$this->assertPageContainsText('Registration successful, please check your inbox.');
+	}
+
 /**
  * Opens homepage.
  *
@@ -20,6 +61,7 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
  */
 	public function iAmOnHomepage() {
 		$this->getSession()->visit($this->locatePath('/'));
+		$this->__logCurrentUrl();
 		$this->__assertNoCakeError();
 	}
 
@@ -31,6 +73,7 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
  */
 	public function visit($page) {
 		$this->getSession()->visit($this->locatePath($page));
+		$this->__logCurrentUrl();
 		$this->__assertNoCakeError();
 	}
 
@@ -41,6 +84,7 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
  */
 	public function reload() {
 		$this->getSession()->reload();
+		$this->__logCurrentUrl();
 		$this->__assertNoCakeError();
 	}
 
@@ -51,6 +95,7 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
  */
 	public function back() {
 		$this->getSession()->back();
+		$this->__logCurrentUrl();
 		$this->__assertNoCakeError();
 	}
 
@@ -61,6 +106,7 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
  */
 	public function forward() {
 		$this->getSession()->forward();
+		$this->__logCurrentUrl();
 		$this->__assertNoCakeError();
 	}
 
@@ -72,6 +118,7 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
 	public function pressButton($button) {
 		$button = $this->_fixStepArgument($button);
 		$this->getSession()->getPage()->pressButton($button);
+		$this->__logCurrentUrl();
 		$this->__assertNoCakeError();
 	}
 
@@ -83,6 +130,7 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
 	public function clickLink($link) {
 		$link = $this->_fixStepArgument($link);
 		$this->getSession()->getPage()->clickLink($link);
+		$this->__logCurrentUrl();
 		$this->__assertNoCakeError();
 	}
 
