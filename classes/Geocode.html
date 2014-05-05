@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>HMS - The Hackspace Management System » \SqlWriter</title>
+<title>HMS - The Hackspace Management System » \Geocode</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -68,65 +68,124 @@
 <button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
 </div>
 </div>
-<ul class="side-nav nav nav-list"><li class="nav-header">
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_write" title="write() :: Given a value, return an SQL version of that value."><span class="description">Given a value, return an SQL version of that value.</span><pre>write()</pre></a></li>
-<li class="method public "><a href="#method_writeInsert" title="writeInsert() :: Given an name and an array of data, return the SQL code needed
-to insert that data into the named table."><span class="description">Given an name and an array of data, return the SQL code needed
-to insert that data into the named table.</span><pre>writeInsert()</pre></a></li>
+<li class="method public "><a href="#method___construct" title="__construct() :: Constructor."><span class="description">Constructor.</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_checkAddress" title="checkAddress() :: Query the geocode service to check the validity of an address."><span class="description">Query the geocode service to check the validity of an address.</span><pre>checkAddress()</pre></a></li>
 </ul>
-</li></ul>
+</li>
+<li class="nav-header">
+<i title="Properties" class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="property private "><a href="#property___apiKey" title="$__apiKey() :: String containing the API key we should use for requests."><span class="description"></span><pre>$__apiKey</pre></a></li>
+<li class="property private "><a href="#property___resultChecker" title="$__resultChecker() :: ResultChecker To convert the json array into something meaningful"><span class="description"></span><pre>$__resultChecker</pre></a></li>
+<li class="property private "><a href="#property___resultDecoder" title="$__resultDecoder() :: ResultDecoder to serialise the data from the url into a json array."><span class="description"></span><pre>$__resultDecoder</pre></a></li>
+<li class="property private "><a href="#property___urlBuilder" title="$__urlBuilder() :: UrlBuilder to build our valid urls."><span class="description"></span><pre>$__urlBuilder</pre></a></li>
+</ul>
+</li>
+</ul>
 </div>
 <div class="span8">
-<a id="\SqlWriter"></a><ul class="breadcrumb">
+<a id="\Geocode"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
 <li><a href="../namespaces/.html"></a></li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/SqlWriter.html">SqlWriter</a>
+<span class="divider">\</span><a href="../classes/Geocode.html">Geocode</a>
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">Class that handles writing runtime data to SQL format.</p>
+<p class="short_description">Class that wrapps Googles Geocoding service
+https://developers.google.com/maps/documentation/geocoding</p>
 <div class="details">
 <div class="long_description"></div>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
-<a id="method_write"></a><div class="element clickable method public method_write" data-toggle="collapse" data-target=".method_write .collapse" title="public">
-<h2>Given a value, return an SQL version of that value.</h2>
-<pre>write(mixed $value) : string</pre>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse" title="public">
+<h2>Constructor.</h2>
+<pre>__construct(\GeocodeUrlBuilder $urlBuilder<code> = null</code>, \GeocodeResultDecoder $resultDecoder<code> = null</code>, \GeocodeResultChecker $resultChecker<code> = null</code>) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$value</h4>
-<code>mixed</code><p>The value to write.</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>SQL string representation of the value.</div>
+<h4>$urlBuilder</h4>
+<code>\GeocodeUrlBuilder</code><p>The url builder to use, if null use the default.</p></div>
+<div class="subelement argument">
+<h4>$resultDecoder</h4>
+<code>\GeocodeResultDecoder</code><p>The result decoder to use, if null use the default.</p></div>
+<div class="subelement argument">
+<h4>$resultChecker</h4>
+<code>\GeocodeResultChecker</code><p>The result checker to use, if null use the default.</p></div>
 </div></div>
 </div>
-<a id="method_writeInsert"></a><div class="element clickable method public method_writeInsert" data-toggle="collapse" data-target=".method_writeInsert .collapse" title="public">
-<h2>Given an name and an array of data, return the SQL code needed
-to insert that data into the named table.</h2>
-<pre>writeInsert(string $name, array $data) : string | null</pre>
+<a id="method_checkAddress"></a><div class="element clickable method public method_checkAddress" data-toggle="collapse" data-target=".method_checkAddress .collapse" title="public">
+<h2>Query the geocode service to check the validity of an address.</h2>
+<pre>checkAddress(string[] $address) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$name</h4>
-<code>string</code><p>Name of the table.</p></div>
-<div class="subelement argument">
-<h4>$data</h4>
-<code>array</code><p>An associative array of data.</p></div>
+<h4>$address</h4>
+<code>string[]</code><p>An array of address data.</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code>\GeocodeException</code></th>
+<td>If any error occurs.</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>string</code><code>null</code>The SQL code needed to insert data into the table, or null on error.</div>
+<code>bool</code>True if address exists, false if it does not.</div>
 </div></div>
+</div>
+<h3>
+<i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
+<a id="property___apiKey"> </a><div class="element clickable property private property___apiKey" data-toggle="collapse" data-target=".property___apiKey .collapse" title="private">
+<h2>String containing the API key we should use for requests.</h2>
+<pre>$__apiKey : string</pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property___resultChecker"> </a><div class="element clickable property private property___resultChecker" data-toggle="collapse" data-target=".property___resultChecker .collapse" title="private">
+<h2>ResultChecker To convert the json array into something meaningful</h2>
+<pre>$__resultChecker : \GeocodeResultChecker</pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property___resultDecoder"> </a><div class="element clickable property private property___resultDecoder" data-toggle="collapse" data-target=".property___resultDecoder .collapse" title="private">
+<h2>ResultDecoder to serialise the data from the url into a json array.</h2>
+<pre>$__resultDecoder : \GeocodeResultDecoder</pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property___urlBuilder"> </a><div class="element clickable property private property___urlBuilder" data-toggle="collapse" data-target=".property___urlBuilder .collapse" title="private">
+<h2>UrlBuilder to build our valid urls.</h2>
+<pre>$__urlBuilder : \GeocodeUrlBuilder</pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 </div>
 </div>

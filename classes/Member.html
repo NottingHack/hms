@@ -19,24 +19,19 @@
 <li class="dropdown">
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/.html"><i class="icon-th"></i> </a></li>
+<li><a href="../namespaces/global.html"><i class="icon-th"></i> global</a></li>
 <li><a>Packages</a></li>
 <li><a href="../packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
 <li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
-<li><a href="../packages/app.Lib.AutomationDriver.html"><i class="icon-folder-open"></i> app.Lib.AutomationDriver</a></li>
-<li><a href="../packages/app.Lib.CsvReader.html"><i class="icon-folder-open"></i> app.Lib.CsvReader</a></li>
-<li><a href="../packages/app.Lib.Error.Exception.html"><i class="icon-folder-open"></i> app.Lib.Error.Exception</a></li>
-<li><a href="../packages/app.Lib.Krb.html"><i class="icon-folder-open"></i> app.Lib.Krb</a></li>
-<li><a href="../packages/app.Lib.MailChimp.html"><i class="icon-folder-open"></i> app.Lib.MailChimp</a></li>
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
-<li><a href="../packages/app.Model.Behavior.html"><i class="icon-folder-open"></i> app.Model.Behavior</a></li>
-<li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
 <li><a href="../packages/dev.Setup.Cmd.html"><i class="icon-folder-open"></i> dev.Setup.Cmd</a></li>
 <li><a href="../packages/dev.Setup.Common.html"><i class="icon-folder-open"></i> dev.Setup.Common</a></li>
 <li><a href="../packages/dev.Setup.Web.html"><i class="icon-folder-open"></i> dev.Setup.Web</a></li>
-<li><a href="../packages/plugins.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Controller</a></li>
-<li><a href="../packages/plugins.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Model</a></li>
+<li><a href="../packages/global.html"><i class="icon-folder-open"></i> global</a></li>
 </ul>
 </li>
 <li class="dropdown" id="charts-menu">
@@ -158,6 +153,7 @@
 <li>
 <a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
+<li><a href="../namespaces/.html"></a></li>
 <li class="active">
 <span class="divider">\</span><a href="../classes/Member.html">Member</a>
 </li>
@@ -186,7 +182,7 @@
 <code>int</code><p>The id of the member admin who's accepting the details.</p></div>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>
-<th><code><a href="../classes/InvalidStatusException.html">\InvalidStatusException</a></code></th>
+<th><code>\InvalidStatusException</code></th>
 <td>if the member is not a pre-member stage 2.</td>
 </tr></table>
 <h3>Returns</h3>
@@ -227,7 +223,7 @@
 <code>int</code><p>The id of the member admin who is approving the member.</p></div>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>
-<th><code><a href="../classes/InvalidStatusException.html">\InvalidStatusException</a></code></th>
+<th><code>\InvalidStatusException</code></th>
 <td>if the member is not a pre-member stage 3.</td>
 </tr></table>
 <h3>Returns</h3>
@@ -270,11 +266,11 @@
 <h3>Exceptions</h3>
 <table class="table table-bordered">
 <tr>
-<th><code><a href="../classes/InvalidStatusException.html">\InvalidStatusException</a></code></th>
+<th><code>\InvalidStatusException</code></th>
 <td>if the member is a prospective member.</td>
 </tr>
 <tr>
-<th><code><a href="../classes/NotAuthorizedException.html">\NotAuthorizedException</a></code></th>
+<th><code>\NotAuthorizedException</code></th>
 <td>if the member specified by $adminId doesn't have permission to do this.</td>
 </tr>
 </table>
@@ -350,7 +346,7 @@
 <code>array</code><p>Array of data containing the user submitted e-mail.</p></div>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>
-<th><code><a href="../classes/InvalidStatusException.html">\InvalidStatusException</a></code></th>
+<th><code>\InvalidStatusException</code></th>
 <td>if the member is a prospective member.</td>
 </tr></table>
 <h3>Returns</h3>
@@ -576,13 +572,13 @@
 </div>
 <a id="method_getMailingList"></a><div class="element clickable method public method_getMailingList" data-toggle="collapse" data-target=".method_getMailingList .collapse" title="public">
 <h2>Get a MailingList model.</h2>
-<pre>getMailingList() : <a href="../classes/MailingList.html">\MailingList</a></pre>
+<pre>getMailingList() : \MailingList</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code><a href="../classes/MailingList.html">\MailingList</a></code>The MailingList model.</div>
+<code>\MailingList</code>The MailingList model.</div>
 </div></div>
 </div>
 <a id="method_getMemberSummaryAll"></a><div class="element clickable method public method_getMemberSummaryAll" data-toggle="collapse" data-target=".method_getMemberSummaryAll .collapse" title="public">
@@ -830,7 +826,7 @@
 <code>int</code><p>The id of the member admin who is rejecting the details.</p></div>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>
-<th><code><a href="../classes/InvalidStatusException.html">\InvalidStatusException</a></code></th>
+<th><code>\InvalidStatusException</code></th>
 <td>if the member is not a pre-member stage 2.</td>
 </tr></table>
 <h3>Returns</h3>
@@ -922,7 +918,7 @@
 <code>array</code><p>The data to use.</p></div>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>
-<th><code><a href="../classes/InvalidStatusException.html">\InvalidStatusException</a></code></th>
+<th><code>\InvalidStatusException</code></th>
 <td>if the member is not a pre-member stage 1.</td>
 </tr></table>
 <h3>Returns</h3>
@@ -945,7 +941,7 @@
 <code>array</code><p>The data to use.</p></div>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>
-<th><code><a href="../classes/InvalidStatusException.html">\InvalidStatusException</a></code></th>
+<th><code>\InvalidStatusException</code></th>
 <td>if the member is not a prospective member.</td>
 </tr></table>
 <h3>Returns</h3>
@@ -1053,11 +1049,11 @@
 <h3>Exceptions</h3>
 <table class="table table-bordered">
 <tr>
-<th><code><a href="../classes/InvalidStatusException.html">\InvalidStatusException</a></code></th>
+<th><code>\InvalidStatusException</code></th>
 <td>if the members status does not match $requiredCurrentStatus.</td>
 </tr>
 <tr>
-<th><code><a href="../classes/NotAuthorizedException.html">\NotAuthorizedException</a></code></th>
+<th><code>\NotAuthorizedException</code></th>
 <td>if the member specified by $adminId doesn't have permission to do this.</td>
 </tr>
 </table>
@@ -1131,7 +1127,7 @@
 </div>
 <a id="property_mailingList"> </a><div class="element clickable property public property_mailingList" data-toggle="collapse" data-target=".property_mailingList .collapse" title="public">
 <h2>MailingList object, for easy mocking</h2>
-<pre>$mailingList : <a href="../classes/MailingList.html">\MailingList</a></pre>
+<pre>$mailingList : \MailingList</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>null</code></div>
@@ -1179,9 +1175,9 @@
 </div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
-            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.5.0-DEV
 </a> and<br>
-            generated on 2014-05-04T20:23:23+01:00.<br></footer></div>
+            generated on 2014-05-05T17:17:08+01:00.<br></footer></div>
 </div>
 </body>
 </html>

@@ -19,24 +19,19 @@
 <li class="dropdown">
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/.html"><i class="icon-th"></i> </a></li>
+<li><a href="../namespaces/global.html"><i class="icon-th"></i> global</a></li>
 <li><a>Packages</a></li>
 <li><a href="../packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
 <li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
-<li><a href="../packages/app.Lib.AutomationDriver.html"><i class="icon-folder-open"></i> app.Lib.AutomationDriver</a></li>
-<li><a href="../packages/app.Lib.CsvReader.html"><i class="icon-folder-open"></i> app.Lib.CsvReader</a></li>
-<li><a href="../packages/app.Lib.Error.Exception.html"><i class="icon-folder-open"></i> app.Lib.Error.Exception</a></li>
-<li><a href="../packages/app.Lib.Krb.html"><i class="icon-folder-open"></i> app.Lib.Krb</a></li>
-<li><a href="../packages/app.Lib.MailChimp.html"><i class="icon-folder-open"></i> app.Lib.MailChimp</a></li>
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
-<li><a href="../packages/app.Model.Behavior.html"><i class="icon-folder-open"></i> app.Model.Behavior</a></li>
-<li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
 <li><a href="../packages/dev.Setup.Cmd.html"><i class="icon-folder-open"></i> dev.Setup.Cmd</a></li>
 <li><a href="../packages/dev.Setup.Common.html"><i class="icon-folder-open"></i> dev.Setup.Common</a></li>
 <li><a href="../packages/dev.Setup.Web.html"><i class="icon-folder-open"></i> dev.Setup.Web</a></li>
-<li><a href="../packages/plugins.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Controller</a></li>
-<li><a href="../packages/plugins.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Model</a></li>
+<li><a href="../packages/global.html"><i class="icon-folder-open"></i> global</a></li>
 </ul>
 </li>
 <li class="dropdown" id="charts-menu">
@@ -75,7 +70,11 @@
 </div>
 <ul class="side-nav nav nav-list"><li class="nav-header">
 <i title="Properties" class="icon-custom icon-property"></i> Properties
-                    <ul><li class="property public "><a href="#property_useTable" title="$useTable() :: Specify the table to use."><span class="description"></span><pre>$useTable</pre></a></li></ul>
+                    <ul>
+<li class="property public "><a href="#property_mvUserModel" title="$mvUserModel() :: Name of the model in the app that contains user data."><span class="description"></span><pre>$mvUserModel</pre></a></li>
+<li class="property public "><a href="#property_tablePrefix" title="$tablePrefix() :: Prefix for the MemberVoice tables."><span class="description"></span><pre>$tablePrefix</pre></a></li>
+<li class="property public "><a href="#property_useTable" title="$useTable() :: Specify the table to use."><span class="description"></span><pre>$useTable</pre></a></li>
+</ul>
 </li></ul>
 </div>
 <div class="span8">
@@ -83,6 +82,7 @@
 <li>
 <a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
+<li><a href="../namespaces/.html"></a></li>
 <li class="active">
 <span class="divider">\</span><a href="../classes/MemberVoiceStatus.html">MemberVoiceStatus</a>
 </li>
@@ -93,6 +93,26 @@
 <div class="long_description"></div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_mvUserModel"> </a><div class="element clickable property public property_mvUserModel" data-toggle="collapse" data-target=".property_mvUserModel .collapse" title="public">
+<h2>Name of the model in the app that contains user data.</h2>
+<pre>$mvUserModel : string</pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"><code>'Member'</code></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_tablePrefix"> </a><div class="element clickable property public property_tablePrefix" data-toggle="collapse" data-target=".property_tablePrefix .collapse" title="public">
+<h2>Prefix for the MemberVoice tables.</h2>
+<pre>$tablePrefix : string</pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"><code>"mv_"</code></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="property_useTable"> </a><div class="element clickable property public property_useTable" data-toggle="collapse" data-target=".property_useTable .collapse" title="public">
 <h2>Specify the table to use.</h2>
 <pre>$useTable : string</pre>
@@ -109,9 +129,9 @@
 </div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
-            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.5.0-DEV
 </a> and<br>
-            generated on 2014-05-04T20:23:23+01:00.<br></footer></div>
+            generated on 2014-05-05T17:17:09+01:00.<br></footer></div>
 </div>
 </body>
 </html>

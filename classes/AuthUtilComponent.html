@@ -19,24 +19,19 @@
 <li class="dropdown">
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/.html"><i class="icon-th"></i> </a></li>
+<li><a href="../namespaces/global.html"><i class="icon-th"></i> global</a></li>
 <li><a>Packages</a></li>
 <li><a href="../packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
 <li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
-<li><a href="../packages/app.Lib.AutomationDriver.html"><i class="icon-folder-open"></i> app.Lib.AutomationDriver</a></li>
-<li><a href="../packages/app.Lib.CsvReader.html"><i class="icon-folder-open"></i> app.Lib.CsvReader</a></li>
-<li><a href="../packages/app.Lib.Error.Exception.html"><i class="icon-folder-open"></i> app.Lib.Error.Exception</a></li>
-<li><a href="../packages/app.Lib.Krb.html"><i class="icon-folder-open"></i> app.Lib.Krb</a></li>
-<li><a href="../packages/app.Lib.MailChimp.html"><i class="icon-folder-open"></i> app.Lib.MailChimp</a></li>
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
-<li><a href="../packages/app.Model.Behavior.html"><i class="icon-folder-open"></i> app.Model.Behavior</a></li>
-<li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
 <li><a href="../packages/dev.Setup.Cmd.html"><i class="icon-folder-open"></i> dev.Setup.Cmd</a></li>
 <li><a href="../packages/dev.Setup.Common.html"><i class="icon-folder-open"></i> dev.Setup.Common</a></li>
 <li><a href="../packages/dev.Setup.Web.html"><i class="icon-folder-open"></i> dev.Setup.Web</a></li>
-<li><a href="../packages/plugins.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Controller</a></li>
-<li><a href="../packages/plugins.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Model</a></li>
+<li><a href="../packages/global.html"><i class="icon-folder-open"></i> global</a></li>
 </ul>
 </li>
 <li class="dropdown" id="charts-menu">
@@ -105,6 +100,7 @@ in the fastest method possible.</span><pre>__getController()</pre></a></li></ul>
 <li>
 <a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
+<li><a href="../namespaces/.html"></a></li>
 <li class="active">
 <span class="divider">\</span><a href="../classes/AuthUtilComponent.html">AuthUtilComponent</a>
 </li>
@@ -133,7 +129,7 @@ authorized on any controller. It is slow and it is sad about this.</p>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$controller</h4>
-<code><a href="Controller.html">\Controller</a></code><p>Controller with components to initialize</p></div>
+<code>\Controller</code><p>Controller with components to initialize</p></div>
 </div></div>
 </div>
 <a id="method_isAuthorized"></a><div class="element clickable method public method_isAuthorized" data-toggle="collapse" data-target=".method_isAuthorized .collapse" title="public">
@@ -161,7 +157,7 @@ an action on a certain controller (with certain params).</h2>
 <a id="method___getController"></a><div class="element clickable method private method___getController" data-toggle="collapse" data-target=".method___getController .collapse" title="private">
 <h2>Given the name of a controller, return an instance of said controller
 in the fastest method possible.</h2>
-<pre>__getController(string $name) : <a href="Controller.html">\Controller</a> | null</pre>
+<pre>__getController(string $name) : \Controller | null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -171,7 +167,7 @@ in the fastest method possible.</h2>
 <code>string</code><p>The name of the controller.</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code><a href="Controller.html">\Controller</a></code><code>null</code>A controller instance if we can find or create one, null otherwise.</div>
+<code>\Controller</code><code>null</code>A controller instance if we can find or create one, null otherwise.</div>
 </div></div>
 </div>
 <h3>
@@ -198,7 +194,7 @@ in the fastest method possible.</h2>
 </div>
 <a id="property___currentController"> </a><div class="element clickable property private property___currentController" data-toggle="collapse" data-target=".property___currentController .collapse" title="private">
 <h2>The current controller this component is attached to.</h2>
-<pre>$__currentController : <a href="%5Btype%5D.html">\[type]</a></pre>
+<pre>$__currentController : \[type]</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>null</code></div>
@@ -212,9 +208,9 @@ in the fastest method possible.</h2>
 </div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
-            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.5.0-DEV
 </a> and<br>
-            generated on 2014-05-04T20:23:22+01:00.<br></footer></div>
+            generated on 2014-05-05T17:17:09+01:00.<br></footer></div>
 </div>
 </body>
 </html>

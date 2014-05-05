@@ -19,24 +19,19 @@
 <li class="dropdown">
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/.html"><i class="icon-th"></i> </a></li>
+<li><a href="../namespaces/global.html"><i class="icon-th"></i> global</a></li>
 <li><a>Packages</a></li>
 <li><a href="../packages/app.Console.Command.html"><i class="icon-folder-open"></i> app.Console.Command</a></li>
 <li><a href="../packages/app.Controller.html"><i class="icon-folder-open"></i> app.Controller</a></li>
 <li><a href="../packages/app.Controller.Component.html"><i class="icon-folder-open"></i> app.Controller.Component</a></li>
 <li><a href="../packages/app.Controller.Component.Auth.html"><i class="icon-folder-open"></i> app.Controller.Component.Auth</a></li>
-<li><a href="../packages/app.Lib.AutomationDriver.html"><i class="icon-folder-open"></i> app.Lib.AutomationDriver</a></li>
-<li><a href="../packages/app.Lib.CsvReader.html"><i class="icon-folder-open"></i> app.Lib.CsvReader</a></li>
-<li><a href="../packages/app.Lib.Error.Exception.html"><i class="icon-folder-open"></i> app.Lib.Error.Exception</a></li>
-<li><a href="../packages/app.Lib.Krb.html"><i class="icon-folder-open"></i> app.Lib.Krb</a></li>
-<li><a href="../packages/app.Lib.MailChimp.html"><i class="icon-folder-open"></i> app.Lib.MailChimp</a></li>
 <li><a href="../packages/app.Model.html"><i class="icon-folder-open"></i> app.Model</a></li>
-<li><a href="../packages/app.Model.Behavior.html"><i class="icon-folder-open"></i> app.Model.Behavior</a></li>
-<li><a href="../packages/app.View.Helper.html"><i class="icon-folder-open"></i> app.View.Helper</a></li>
 <li><a href="../packages/dev.Setup.Cmd.html"><i class="icon-folder-open"></i> dev.Setup.Cmd</a></li>
 <li><a href="../packages/dev.Setup.Common.html"><i class="icon-folder-open"></i> dev.Setup.Common</a></li>
 <li><a href="../packages/dev.Setup.Web.html"><i class="icon-folder-open"></i> dev.Setup.Web</a></li>
-<li><a href="../packages/plugins.MemberVoice.Controller.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Controller</a></li>
-<li><a href="../packages/plugins.MemberVoice.Model.html"><i class="icon-folder-open"></i> plugins.MemberVoice.Model</a></li>
+<li><a href="../packages/global.html"><i class="icon-folder-open"></i> global</a></li>
 </ul>
 </li>
 <li class="dropdown" id="charts-menu">
@@ -92,7 +87,11 @@
 </ul>
 </li>
 <li class="nav-header private">» Private
-                    <ul><li class="method private "><a href="#method___addMainNav" title="__addMainNav() :: Add an item to the main nav list."><span class="description">Add an item to the main nav list.</span><pre>__addMainNav()</pre></a></li></ul>
+                    <ul>
+<li class="method private "><a href="#method___addMainNav" title="__addMainNav() :: Add an item to the main nav list."><span class="description">Add an item to the main nav list.</span><pre>__addMainNav()</pre></a></li>
+<li class="method private "><a href="#method___splitEmailHeaders" title="__splitEmailHeaders() :: Given a list of headers, split them into an assoc array."><span class="description">Given a list of headers, split them into an assoc array.</span><pre>__splitEmailHeaders()</pre></a></li>
+<li class="method private "><a href="#method___writeEmailContents" title="__writeEmailContents() :: Write an e-mail to a file."><span class="description">Write an e-mail to a file.</span><pre>__writeEmailContents()</pre></a></li>
+</ul>
 </li>
 <li class="nav-header">
 <i title="Properties" class="icon-custom icon-property"></i> Properties
@@ -120,6 +119,7 @@
 <li>
 <a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
+<li><a href="../namespaces/.html"></a></li>
 <li class="active">
 <span class="divider">\</span><a href="../classes/AppController.html">AppController</a>
 </li>
@@ -139,11 +139,11 @@
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$request</h4>
-<code><a href="CakeRequest.html">\CakeRequest</a></code><p>Request object for this controller. Can be null for testing,
+<code>\CakeRequest</code><p>Request object for this controller. Can be null for testing,
  but expect that features that use the request parameters will not work.</p></div>
 <div class="subelement argument">
 <h4>$response</h4>
-<code><a href="CakeResponse.html">\CakeResponse</a></code><p>Response object for this controller.</p></div>
+<code>\CakeResponse</code><p>Response object for this controller.</p></div>
 </div></div>
 </div>
 <a id="method_beforeFilter"></a><div class="element clickable method public method_beforeFilter" data-toggle="collapse" data-target=".method_beforeFilter .collapse" title="public">
@@ -208,7 +208,7 @@
 <code>array</code><p>An array of data describing the user attempting to make the request.</p></div>
 <div class="subelement argument">
 <h4>$request</h4>
-<code><a href="CakeRequest.html">\CakeRequest</a></code><p>The request the user is trying to make.</p></div>
+<code>\CakeRequest</code><p>The request the user is trying to make.</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>boolean</code>True if user is able to complete request, false otherwise.</div>
@@ -273,6 +273,36 @@
 <code>int[]</code><code>null</code><p>A list of status ids, a member must be in one of these statuses for this link to be visible.</p></div>
 </div></div>
 </div>
+<a id="method___splitEmailHeaders"></a><div class="element clickable method private method___splitEmailHeaders" data-toggle="collapse" data-target=".method___splitEmailHeaders .collapse" title="private">
+<h2>Given a list of headers, split them into an assoc array.</h2>
+<pre>__splitEmailHeaders(string $headers) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$headers</h4>
+<code>string</code><p>String containing all header info.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>An assoc array of headers.</div>
+</div></div>
+</div>
+<a id="method___writeEmailContents"></a><div class="element clickable method private method___writeEmailContents" data-toggle="collapse" data-target=".method___writeEmailContents .collapse" title="private">
+<h2>Write an e-mail to a file.</h2>
+<pre>__writeEmailContents(array $data, string $toFolder) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Aray of e-mail data.</p></div>
+<div class="subelement argument">
+<h4>$toFolder</h4>
+<code>string</code><p>The folder to save to e-mail to.</p></div>
+</div></div>
+</div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
 <a id="property_components"> </a><div class="element clickable property public property_components" data-toggle="collapse" data-target=".property_components .collapse" title="public">
@@ -287,7 +317,7 @@
 </div>
 <a id="property_email"> </a><div class="element clickable property public property_email" data-toggle="collapse" data-target=".property_email .collapse" title="public">
 <h2>Email object, used for easy mocking.</h2>
-<pre>$email : <a href="class.html">\class</a></pre>
+<pre>$email : \class</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"><code>null</code></div>
@@ -341,9 +371,9 @@
 </div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
-            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.2.0
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.5.0-DEV
 </a> and<br>
-            generated on 2014-05-04T20:23:22+01:00.<br></footer></div>
+            generated on 2014-05-05T17:17:09+01:00.<br></footer></div>
 </div>
 </body>
 </html>

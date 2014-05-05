@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>HMS - The Hackspace Management System » \SqlWriter</title>
+<title>HMS - The Hackspace Management System » \GeocodeResultChecker</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -70,62 +70,44 @@
 </div>
 <ul class="side-nav nav nav-list"><li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
-                    <ul>
-<li class="method public "><a href="#method_write" title="write() :: Given a value, return an SQL version of that value."><span class="description">Given a value, return an SQL version of that value.</span><pre>write()</pre></a></li>
-<li class="method public "><a href="#method_writeInsert" title="writeInsert() :: Given an name and an array of data, return the SQL code needed
-to insert that data into the named table."><span class="description">Given an name and an array of data, return the SQL code needed
-to insert that data into the named table.</span><pre>writeInsert()</pre></a></li>
-</ul>
+                    <ul><li class="method public "><a href="#method_checkJsonResult" title="checkJsonResult() :: Given an array of data, return the status part converted to a bool."><span class="description">Given an array of data, return the status part converted to a bool.</span><pre>checkJsonResult()</pre></a></li></ul>
 </li></ul>
 </div>
 <div class="span8">
-<a id="\SqlWriter"></a><ul class="breadcrumb">
+<a id="\GeocodeResultChecker"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
 <li><a href="../namespaces/.html"></a></li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/SqlWriter.html">SqlWriter</a>
+<span class="divider">\</span><a href="../classes/GeocodeResultChecker.html">GeocodeResultChecker</a>
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">Class that handles writing runtime data to SQL format.</p>
+<p class="short_description">Class to fetch geocode urls
+https://developers.google.com/maps/documentation/geocoding</p>
 <div class="details">
 <div class="long_description"></div>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
-<a id="method_write"></a><div class="element clickable method public method_write" data-toggle="collapse" data-target=".method_write .collapse" title="public">
-<h2>Given a value, return an SQL version of that value.</h2>
-<pre>write(mixed $value) : string</pre>
+<a id="method_checkJsonResult"></a><div class="element clickable method public method_checkJsonResult" data-toggle="collapse" data-target=".method_checkJsonResult .collapse" title="public">
+<h2>Given an array of data, return the status part converted to a bool.</h2>
+<pre>checkJsonResult(array $data) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$value</h4>
-<code>mixed</code><p>The value to write.</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>SQL string representation of the value.</div>
-</div></div>
-</div>
-<a id="method_writeInsert"></a><div class="element clickable method public method_writeInsert" data-toggle="collapse" data-target=".method_writeInsert .collapse" title="public">
-<h2>Given an name and an array of data, return the SQL code needed
-to insert that data into the named table.</h2>
-<pre>writeInsert(string $name, array $data) : string | null</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$name</h4>
-<code>string</code><p>Name of the table.</p></div>
 <div class="subelement argument">
 <h4>$data</h4>
-<code>array</code><p>An associative array of data.</p></div>
+<code>array</code><p>An array of decoded json data.</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code>\GeocodeException</code></th>
+<td>If status indicates an error or status cannot be determined.</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>string</code><code>null</code>The SQL code needed to insert data into the table, or null on error.</div>
+<code>bool</code>True if status indicates address is found, false if address is not found.</div>
 </div></div>
 </div>
 </div>
