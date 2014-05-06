@@ -17,6 +17,12 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
 		$this->getMainContext()->log('Current url is: ' . $address);
 	}
 
+	private function __registerWithEmail($email) {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		$memberContext->setTestMemberData('email', $email);
+		$this->fillField('MemberEmail', $email);
+	}
+
 /**
  * 
  * @when I click the register link on the home page
@@ -33,8 +39,17 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
 	public function iFillInTheRegisterForm() {
 		$memberContext = $this->getMainContext()->getSubcontext('member');
 		$email = $memberContext->getNewEmail();
-		$memberContext->setTestMemberData('email', $email);
-		$this->fillField('MemberEmail', $email);
+		$this->__registerWithEmail($email);
+	}
+
+/**
+ * 
+ * @when I fill in the register form with an e-mail that has already been registered
+ */
+	public function iFillInTheRegisterFormWithAnEmailThatHasAlreadyBeenRegistered() {
+		$databaseContext = $this->getMainContext()->getSubcontext('database');
+		$email = $databaseContext->getEmailForMemberWithStatus(1);
+		$this->__registerWithEmail($email);
 	}
 
 /**

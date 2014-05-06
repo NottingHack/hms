@@ -36,4 +36,11 @@ class DatabaseContext extends HmsContext {
 		}, $emails);
 	}
 
+	public function getEmailForMemberWithStatus($status) {
+		$mysqli = $this->__getConnection();
+		$query = "SELECT members.email FROM members WHERE member_status=$status LIMIT 1";
+		$email = $this->__runQuery($mysqli, $query);
+		return $email[0]['email'];
+	}
+
 }

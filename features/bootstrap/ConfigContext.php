@@ -65,7 +65,10 @@ class ConfigContext extends HmsContext {
 	public function readDatabaseConfig() {
 		$file = $this->__getConfigDir() . '/database.php';
 		$this->_logger()->logInfo("Reading database config file at: $file");
-		include $file;
+
+		if (!class_exists("DATABASE_CONFIG")) {
+			include $file;
+		}
 
 		$dbConfig = new DATABASE_CONFIG();
 

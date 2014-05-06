@@ -29,4 +29,3 @@ Scenario: Register when already registered
 	And the following e-mails are sent
 		| emailType                     |
 		| new_member_welcome_email      |
-		| new_member_member_admin_email |
