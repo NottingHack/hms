@@ -19,7 +19,7 @@ class EmailContext extends HmsContext {
 			$newMemberEmail,
 			$this->__getFromAddress(),
 			function($message) {
-				return true;//preg_match('/\/members\/setupLogin\/(\d)/', $message) === 1;
+				return preg_match('/\/members\/setupLogin\/(\d)/', $message) === 1;
 			}
 		);
 	}
