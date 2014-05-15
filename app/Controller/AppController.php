@@ -294,9 +294,10 @@ class AppController extends Controller {
 		$headers = $this->__splitEmailHeaders($data['headers']);
 		$data['headers'] = $headers;
 		$subject = $headers['Subject'];
-		$timestamp = time();
-		$filename = $toFolder . '/' . $subject . '_' . $timestamp . '.js';
-		file_put_contents($filename, json_encode($data, JSON_PRETTY_PRINT));
+
+		$numEmailFiles = $this->__countFilesInFolder($toFolder);
+		$filepath = sprintf('%s/%03d_%s.js', $toFolder, $numEmailFiles, $subject);
+		file_put_contents($filepath, json_encode($data, JSON_PRETTY_PRINT));
 	}
 
 /**
@@ -312,5 +313,15 @@ class AppController extends Controller {
 		}
 
 		return $arrayHeaders;
+	}
+
+/**
+ * Given the path to a directory, return the number of files in said directory
+ * @param string $folder Path to folder to count files in.
+ * @return int The number of files in the folder.
+ */
+	private function __countFilesInFolder($folder) {
+		$iter = new FilesystemIterator($folder, FilesystemIterator::SKIP_DOTS);
+		return iterator_count($iter);
 	}
 }
