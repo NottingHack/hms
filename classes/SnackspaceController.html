@@ -91,6 +91,7 @@
 <li class="nav-header private">» Private
                     <ul>
 <li class="method private "><a href="#method___addMainNav" title="__addMainNav() :: Add an item to the main nav list."><span class="description">Add an item to the main nav list.</span><pre>__addMainNav()</pre></a></li>
+<li class="method private "><a href="#method___countFilesInFolder" title="__countFilesInFolder() :: Given the path to a directory, return the number of files in said directory"><span class="description">Given the path to a directory, return the number of files in said directory</span><pre>__countFilesInFolder()</pre></a></li>
 <li class="method private "><a href="#method___splitEmailHeaders" title="__splitEmailHeaders() :: Given a list of headers, split them into an assoc array."><span class="description">Given a list of headers, split them into an assoc array.</span><pre>__splitEmailHeaders()</pre></a></li>
 <li class="method private "><a href="#method___transactionList" title="__transactionList() :: List all transactions for a given member"><span class="description">List all transactions for a given member</span><pre>__transactionList()</pre></a></li>
 <li class="method private "><a href="#method___writeEmailContents" title="__writeEmailContents() :: Write an e-mail to a file."><span class="description">Write an e-mail to a file.</span><pre>__writeEmailContents()</pre></a></li>
@@ -311,6 +312,21 @@
 <code>int[]</code><code>null</code><p>A list of status ids, a member must be in one of these statuses for this link to be visible.</p></div>
 </div></div>
 </div>
+<a id="method___countFilesInFolder"></a><div class="element clickable method private method___countFilesInFolder" data-toggle="collapse" data-target=".method___countFilesInFolder .collapse" title="private">
+<h2>Given the path to a directory, return the number of files in said directory</h2>
+<pre>__countFilesInFolder(string $folder) : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$folder</h4>
+<code>string</code><p>Path to folder to count files in.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>The number of files in the folder.</div>
+</div></div>
+</div>
 <a id="method___splitEmailHeaders"></a><div class="element clickable method private method___splitEmailHeaders" data-toggle="collapse" data-target=".method___splitEmailHeaders .collapse" title="private">
 <h2>Given a list of headers, split them into an assoc array.</h2>
 <pre>__splitEmailHeaders(string $headers) : array</pre>
@@ -433,7 +449,7 @@
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.5.0-DEV
 </a> and<br>
-            generated on 2014-05-15T22:33:24+01:00.<br></footer></div>
+            generated on 2014-05-15T23:01:02+01:00.<br></footer></div>
 </div>
 </body>
 </html>

@@ -406,21 +406,40 @@ on the view.</description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="307" package="global">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="308" package="global">
         <name>__splitEmailHeaders</name>
         <full_name>\AppController::__splitEmailHeaders()</full_name>
-        <docblock line="307">
+        <docblock line="308">
           <description>Given a list of headers, split them into an assoc array.</description>
           <long-description></long-description>
-          <tag name="param" line="307" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
+          <tag name="param" line="308" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
             <type>string</type>
           </tag>
-          <tag name="return" line="307" description="An assoc array of headers." type="array">
+          <tag name="return" line="308" description="An assoc array of headers." type="array">
             <type>array</type>
           </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$headers</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="323" package="global">
+        <name>__countFilesInFolder</name>
+        <full_name>\AppController::__countFilesInFolder()</full_name>
+        <docblock line="323">
+          <description>Given the path to a directory, return the number of files in said directory</description>
+          <long-description></long-description>
+          <tag name="param" line="323" description="&lt;p&gt;Path to folder to count files in.&lt;/p&gt;" type="string" variable="$folder">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="323" description="The number of files in the folder." type="int">
+            <type>int</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$folder</name>
           <default></default>
           <type>string</type>
         </argument>
@@ -1579,21 +1598,40 @@ edited, and registered.</description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="307" package="global">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="308" package="global">
         <name>__splitEmailHeaders</name>
         <full_name>\AppController::__splitEmailHeaders()</full_name>
-        <docblock line="307">
+        <docblock line="308">
           <description>Given a list of headers, split them into an assoc array.</description>
           <long-description></long-description>
-          <tag name="param" line="307" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
+          <tag name="param" line="308" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
             <type>string</type>
           </tag>
-          <tag name="return" line="307" description="An assoc array of headers." type="array">
+          <tag name="return" line="308" description="An assoc array of headers." type="array">
             <type>array</type>
           </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$headers</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="323" package="global">
+        <name>__countFilesInFolder</name>
+        <full_name>\AppController::__countFilesInFolder()</full_name>
+        <docblock line="323">
+          <description>Given the path to a directory, return the number of files in said directory</description>
+          <long-description></long-description>
+          <tag name="param" line="323" description="&lt;p&gt;Path to folder to count files in.&lt;/p&gt;" type="string" variable="$folder">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="323" description="The number of files in the folder." type="int">
+            <type>int</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$folder</name>
           <default></default>
           <type>string</type>
         </argument>
@@ -1985,21 +2023,40 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="307" package="global">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="308" package="global">
         <name>__splitEmailHeaders</name>
         <full_name>\AppController::__splitEmailHeaders()</full_name>
-        <docblock line="307">
+        <docblock line="308">
           <description>Given a list of headers, split them into an assoc array.</description>
           <long-description></long-description>
-          <tag name="param" line="307" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
+          <tag name="param" line="308" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
             <type>string</type>
           </tag>
-          <tag name="return" line="307" description="An assoc array of headers." type="array">
+          <tag name="return" line="308" description="An assoc array of headers." type="array">
             <type>array</type>
           </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$headers</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="323" package="global">
+        <name>__countFilesInFolder</name>
+        <full_name>\AppController::__countFilesInFolder()</full_name>
+        <docblock line="323">
+          <description>Given the path to a directory, return the number of files in said directory</description>
+          <long-description></long-description>
+          <tag name="param" line="323" description="&lt;p&gt;Path to folder to count files in.&lt;/p&gt;" type="string" variable="$folder">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="323" description="The number of files in the folder." type="int">
+            <type>int</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$folder</name>
           <default></default>
           <type>string</type>
         </argument>
@@ -2428,21 +2485,40 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="307" package="global">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="308" package="global">
         <name>__splitEmailHeaders</name>
         <full_name>\AppController::__splitEmailHeaders()</full_name>
-        <docblock line="307">
+        <docblock line="308">
           <description>Given a list of headers, split them into an assoc array.</description>
           <long-description></long-description>
-          <tag name="param" line="307" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
+          <tag name="param" line="308" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
             <type>string</type>
           </tag>
-          <tag name="return" line="307" description="An assoc array of headers." type="array">
+          <tag name="return" line="308" description="An assoc array of headers." type="array">
             <type>array</type>
           </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$headers</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="323" package="global">
+        <name>__countFilesInFolder</name>
+        <full_name>\AppController::__countFilesInFolder()</full_name>
+        <docblock line="323">
+          <description>Given the path to a directory, return the number of files in said directory</description>
+          <long-description></long-description>
+          <tag name="param" line="323" description="&lt;p&gt;Path to folder to count files in.&lt;/p&gt;" type="string" variable="$folder">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="323" description="The number of files in the folder." type="int">
+            <type>int</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$folder</name>
           <default></default>
           <type>string</type>
         </argument>
@@ -8117,21 +8193,40 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="307" package="global">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="308" package="global">
         <name>__splitEmailHeaders</name>
         <full_name>\AppController::__splitEmailHeaders()</full_name>
-        <docblock line="307">
+        <docblock line="308">
           <description>Given a list of headers, split them into an assoc array.</description>
           <long-description></long-description>
-          <tag name="param" line="307" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
+          <tag name="param" line="308" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
             <type>string</type>
           </tag>
-          <tag name="return" line="307" description="An assoc array of headers." type="array">
+          <tag name="return" line="308" description="An assoc array of headers." type="array">
             <type>array</type>
           </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$headers</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="323" package="global">
+        <name>__countFilesInFolder</name>
+        <full_name>\AppController::__countFilesInFolder()</full_name>
+        <docblock line="323">
+          <description>Given the path to a directory, return the number of files in said directory</description>
+          <long-description></long-description>
+          <tag name="param" line="323" description="&lt;p&gt;Path to folder to count files in.&lt;/p&gt;" type="string" variable="$folder">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="323" description="The number of files in the folder." type="int">
+            <type>int</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$folder</name>
           <default></default>
           <type>string</type>
         </argument>
@@ -8552,21 +8647,40 @@ view all the groups, and modify which users belong in which groups.</description
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="307" package="global">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="308" package="global">
         <name>__splitEmailHeaders</name>
         <full_name>\AppController::__splitEmailHeaders()</full_name>
-        <docblock line="307">
+        <docblock line="308">
           <description>Given a list of headers, split them into an assoc array.</description>
           <long-description></long-description>
-          <tag name="param" line="307" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
+          <tag name="param" line="308" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
             <type>string</type>
           </tag>
-          <tag name="return" line="307" description="An assoc array of headers." type="array">
+          <tag name="return" line="308" description="An assoc array of headers." type="array">
             <type>array</type>
           </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$headers</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="323" package="global">
+        <name>__countFilesInFolder</name>
+        <full_name>\AppController::__countFilesInFolder()</full_name>
+        <docblock line="323">
+          <description>Given the path to a directory, return the number of files in said directory</description>
+          <long-description></long-description>
+          <tag name="param" line="323" description="&lt;p&gt;Path to folder to count files in.&lt;/p&gt;" type="string" variable="$folder">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="323" description="The number of files in the folder." type="int">
+            <type>int</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$folder</name>
           <default></default>
           <type>string</type>
         </argument>
@@ -9114,21 +9228,40 @@ members etc.</description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="307" package="global">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="308" package="global">
         <name>__splitEmailHeaders</name>
         <full_name>\AppController::__splitEmailHeaders()</full_name>
-        <docblock line="307">
+        <docblock line="308">
           <description>Given a list of headers, split them into an assoc array.</description>
           <long-description></long-description>
-          <tag name="param" line="307" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
+          <tag name="param" line="308" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
             <type>string</type>
           </tag>
-          <tag name="return" line="307" description="An assoc array of headers." type="array">
+          <tag name="return" line="308" description="An assoc array of headers." type="array">
             <type>array</type>
           </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$headers</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="323" package="global">
+        <name>__countFilesInFolder</name>
+        <full_name>\AppController::__countFilesInFolder()</full_name>
+        <docblock line="323">
+          <description>Given the path to a directory, return the number of files in said directory</description>
+          <long-description></long-description>
+          <tag name="param" line="323" description="&lt;p&gt;Path to folder to count files in.&lt;/p&gt;" type="string" variable="$folder">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="323" description="The number of files in the folder." type="int">
+            <type>int</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$folder</name>
           <default></default>
           <type>string</type>
         </argument>
@@ -9550,21 +9683,40 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="307" package="global">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="308" package="global">
         <name>__splitEmailHeaders</name>
         <full_name>\AppController::__splitEmailHeaders()</full_name>
-        <docblock line="307">
+        <docblock line="308">
           <description>Given a list of headers, split them into an assoc array.</description>
           <long-description></long-description>
-          <tag name="param" line="307" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
+          <tag name="param" line="308" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
             <type>string</type>
           </tag>
-          <tag name="return" line="307" description="An assoc array of headers." type="array">
+          <tag name="return" line="308" description="An assoc array of headers." type="array">
             <type>array</type>
           </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$headers</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="323" package="global">
+        <name>__countFilesInFolder</name>
+        <full_name>\AppController::__countFilesInFolder()</full_name>
+        <docblock line="323">
+          <description>Given the path to a directory, return the number of files in said directory</description>
+          <long-description></long-description>
+          <tag name="param" line="323" description="&lt;p&gt;Path to folder to count files in.&lt;/p&gt;" type="string" variable="$folder">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="323" description="The number of files in the folder." type="int">
+            <type>int</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$folder</name>
           <default></default>
           <type>string</type>
         </argument>
@@ -10528,7 +10680,7 @@ Redistributions of files must retain the above copyright notice.</long-descripti
     </class>
     <source>eJzFVdtu20YQfZa+YoAIEGVYZFEgL0qTxlUKpGiMCqnzbCzJobgRuUvsxapQ5N87u1xSpCo7FweOAAHk7lzOnDkz/OXXpmymycXFFC7A/TdvN/CcHtzzWjYHxbelgWi9gLfXf8MNsjpcvuMZCo05WJGjgpsS4fqPm+7YWbzHnGujeGoNl0KDLKDgFWqorTag0DAuwJAfS+UdQtZnE9JQlDgken28cL8BDHjdsGzHtgjtjzVNfC1zrOLfsGR3XCpvVLWQgtEAJESlMc0qSfb7fSwbOpJWUWKptklw0knNzTK8xMTVgkIm0+lV06xWlu6juc/YJZxfQnswX7wYWW3K5j0yYspZrKUo+NYqdFYDo7WsGylQmGBklKwqchlb/anS51fWlM7oHU8TevfZQhcDFKuIW2aAVZXca2BQO1jAsgy1BiM98+TqIgEXBlXBWtKTaVYxsgmXXWmA/xgUuYZRwfBvn7gLJtOPmJnYc3/HVHfuI08axe+YQZjd3u5U+lf6EV6CsFV1xL8hJFLVhIkbzirQaGwTd/qklitWtxhg1tbktNc+7XGuEFLkYgvMGJaVJFAj44EnU4odYEZRDVlpuBIH6F8aqps8CiVrz4+PGgcViR0EvaRS7uKM7ZAE4dXyc/xTgiLx5jpJAzc6Lk1dPcsUMhd+yZbdzTKjtqQk3kCKTUliUFiRuVFpS46GNV4OEL9sa4gWCyJ/MunFtFpl/jGa51gwWzkVCdxDLz3yeDF2qCTLozk1wmmp83JamkxmpuR6+WrYJorVaS8aBKHy2iC3pE8lWE2yvoSzBoal994prOq5R/ip18K6xGznxKoRgRe+J65He6ly4Jp2hlKd1r5UHffowm0qUs2sq8H79S8EIXNYznn0gG6G6MYetO2sEkDCIUDK+mLOFAIRTRQlfWPr+uDODdkSYQWraF1JKl/tuQ5T+j/ZEIuesE0IfKqgrprLI+ZWQgHdScuXr7JRtLP+o3Zd5TktGqcTZ3q6ZPRBG6yfpldu5PDrmjVwOdetdordcFpaoZgTqMc2i+j6QKAf3SYW4ny+QW+wQlq+TNAyp2+zY8R3ql94P6BXucd0P/H+/vsS39LwEPcPE54f/Y8eI6I/NLn7yplQq+6l9iSUWp/9nAvNpptn7+HmdDgBVj/Qhd6wjf0dm7EumdjiF+ysgP1zK2sU7Zz/yUQYt3epQtaOgh8M/dRflHOUD+A8mmSn1d99qG9TvD36nyj+038EfQ8c</source>
   </file>
-  <file path="app\Controller\AppController.php" generated-path="app.Controller.AppController.html" hash="b13fbab3d2b24fbd4bec8589bb63463b" package="app.Controller">
+  <file path="app\Controller\AppController.php" generated-path="app.Controller.AppController.html" hash="1305efdf09f69afab4f56b52f5f23fa2" package="app.Controller">
     <docblock line="0">
       <description>Application level Controller</description>
       <long-description>Application-wide logic.
@@ -10854,16 +11006,16 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="307" package="global">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="308" package="global">
         <name>__splitEmailHeaders</name>
         <full_name>\AppController::__splitEmailHeaders()</full_name>
-        <docblock line="307">
+        <docblock line="308">
           <description>Given a list of headers, split them into an assoc array.</description>
           <long-description></long-description>
-          <tag name="param" line="307" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
+          <tag name="param" line="308" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
             <type>string</type>
           </tag>
-          <tag name="return" line="307" description="An assoc array of headers." type="array">
+          <tag name="return" line="308" description="An assoc array of headers." type="array">
             <type>array</type>
           </tag>
         </docblock>
@@ -10873,8 +11025,27 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>string</type>
         </argument>
       </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="323" package="global">
+        <name>__countFilesInFolder</name>
+        <full_name>\AppController::__countFilesInFolder()</full_name>
+        <docblock line="323">
+          <description>Given the path to a directory, return the number of files in said directory</description>
+          <long-description></long-description>
+          <tag name="param" line="323" description="&lt;p&gt;Path to folder to count files in.&lt;/p&gt;" type="string" variable="$folder">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="323" description="The number of files in the folder." type="int">
+            <type>int</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$folder</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
     </class>
-    <source>eJzFGmtT40bys/kVkxxXslPG3tzji/fg1gE2kAKyBezmrsiWS5bGWEHS6KQRrO/Cf79+zIxGliBsLpXb2gJpZvox/e4Wf/t7sS52pl99tSO+EvOiSJMo1InKRSrvZSoOVa5LlaayhP2tI3sPSSxFqm6TaGJ23528E381z4eq2JTJ7VqL4eFInJxfiWsZZmbzLIlkXslY1HksS3G9luL89Nou44lLGSeVLpNljbQqoVZilaSyElldaVFKHSa50AAXLtW9FJGjlisNWCxHb5oN/OexId4UYXQX3krB/8KimLSuK96kzI454DEohmuti9l0+vDwMFEFLKm6BKKqvJ0aoGqaJXrPvExAyCNAOd3ZAQHOZjXsD4OGWjAW/tvotX/sXGZLPnKuYplu7X5bqrp4anNe6/WhygqVy1y3iUxxb+v4lQ51XbWQ9ZlGS0rTnSgNqwoPNOtCftIyjyvvqPjPzs4gAk1q8eH48ur0+4vF+fy77y/Fvnj1urNzekE7f+7sfPP+9OwIdv7SsHYGdoLmsZZpIctK3CfyoQILQcsCC1uVKgNDSSqwEcfMQ5KmYh2C4YRRJIF9rSak8vuwFGFZhhu62qCol3BtsWtx7/PmMDjRWYqCeqvKDH9fhPe+uI6zMEmFWv4kIz0WNVr6SoFYwmojMhXdJfltQ48E2KYnCX5f5HWadm8aWZVWnYuhIp+9iQdrL7MzGARXIATQbTDGFzINsX/Q7A8C9PN8HqEBbG0NgiKtYZOWkeExrzZc0U6QkR1XgdkOG1yMnDdG44YcxoASJOgR7NASHToF+DQZsU8hAWv4FDTIVa1/Q+wQqoo03ODyWmXS0jnJqo6sVolMY385AJWVeQhQhIo0bxAMaI99kTZtKPAEFYKuVJn8W/ookTDt0w8yTqfY9xrww9uoa1dpkt+JJAdLzdjT9TrU7CtLyVaslfEsir0ZBuE8vE9u+bxMZQam1W+AZXIfail2FwsEA56cAXqsHKK3l3WkVelCeBGWYSYOwzt5Kf9VS+B1tzQPdoE9jXxsyyMmAJgj+6hPPgAA4H9jxC0gvUCwKhCYLruSEAJLWfEbXJnuackRJ1JjJCCpQK4RD6q8m3T4rMDJABgYNU9u6RlWW566qnOyMLFYRFYoQ3fxfWOfDQFeGUGcHQyAE1DDbNYH6sGg3AeD6VTM47ilT1jdReb2DhaLMI7PWV82FaH5s+LECxzGuX2fQ4qRRUV5bDZ7+/7sbDE/PDy+uhoLs3Z+fP4NhP+T03eL+RGkBoChq75+ik2C+zwuby3I78YkPIC/3ZLzfaZEGTI1gL8bx1c5FEwVVE3ys9itfLAWs0AD/HxD7DIwY+U6ZDY7fH95eXxxvWBOx8KuH//DLI2eES+Z3QeVPMWtMcx7c6LDNhS34TPiZX6twB6bQglcCQJOomWGwdL3KoEa80OFwAIXTGBXJzqVUJh+0ghjsgmEGL0mBBiXe+BuPopdCtlzvB1CFiGVMgSEFcoJlS244uKAQyge1jI3wdyVIwZ/kuubjz9TxNw1BRLTgCRBniKS2ITIdhHFIQ3Rj0WyskoFNOxf26c7F/MJV6RtCMVzEhzS5iUkDlgFK5AbAgjwIGQobPAYXBECooN3oZauDWTh8H1SJctUTtq5yYu5ni2xesYs7LGVyLjhkIOuM0OT3kA9+37qp4ROqILBYP9gYNA2e4jebBGlZocpBrRlqDeblgvetm9uv22elxLSWw7CsyLtZm+j2BCzXylAbKA/9cC5n4lvq0zs4tHTWHyfp5tejAyHEhfLDSuDsNvaoiS2ZMyYS8MkmVyj/e3y5Il8eSu10xzzxfppepHZLFVhTHWVa684F+4C82dApmrVJoMB0JRhtBbDbSWLsBIIxCRAO0ZW+2IVppXE8DQARxjimRurRzCMfREEBsYHAhdlmEeQXSURMqkWzEkbxchCN6y1SSBj/GJPMiN8Ab713gGnSvuWmKfTnNat/JzNO6L9TMO/JTBzZ14ed9xPvo4B/h/Y6BdBPzNMGLVHJQ40sBuwMwydEY8UliFWtGAxJpCw61DgCrndBXt1CjQkRv4liB3nfx/FF75a+42hozAPHFXGr42ce4QFBs6ZEJpPXmsMHQyrg+IpXT121bTz1HWdY9ww1xzHPmKI4wUKXh9fOyz0wziyA26FokMgATwtJQqE0pLXx3LSnYgrCdED8g1NeqB7gWhixhCuPaCwYOYxS6XuJhFU4MW6oGnMnyavpjKfNpiryRoS4x9MMbyXJiu5F22iFH4CP0ssVfrDCvP5Nkmh/B+2Ij52VXsHHnfSmxNgJ/a67yw1bd2DHfmEK226rY54MDiXdT6mLsaTI05AaM/MQCiqgiStICOVZQBNx6BLS9DOwe69wI0yhRV2DPQ8qaP/j8Av6Q5G4ODHV/AOBdaGWRSQpjkz4b0gHrtpl13DSzbir6QeBtYaobgzywBIbjVno+cxRzUccfB/UeJI1e2tjE9zE7nQ17puexp7LusbBLqvJUfut43O5Zc4S3KboQwKP+F14AjlgOLDOURNnHd6qe3lAabLEIQaW5C/uzw2Ffniaxcx+kgGh6BiMB6JlqoE6AmMeaPqkowbrFrEONlNqy+8ccaLe0rQbl0cMQJUbkcnIzFqIlTLJkiuNCcRnoz5tH/OuxQe9V67Z6339LHSj5nGQOMew3lvNp83ny5Snib1YaQJ5QvQkah2f6pUfhTqEBSJj4tYRuAEQ5zILwAZjhk0FnrDwMSFlBq+Sa40zlrW4OUYHSb13ZSzk/mFg/HA2L3Pt6WHrNtnP4z+Kj/2Ye/BfGje6TnRB167ouaKgPxovJZguFga9NXFOFVNJQT+0M6KWjUyV7JkLWJuC1uoaGMUaSyrqEyW2AhiwKJDoYb+sdC0pqCBvGvNoVq4e+di197QyiEFlnW58XC2qm2I5KmEzvUaKgS8p7slFu3+Fd0ciYoaoQB/+ZBU8olyPKnmNtvFXKeMHZ8vL8w/u2b8peiLjIzcLMSbjwhbVhq52IrpsalnbDXXWMe3Ehsm085zCLP6jOoSh3H06clYXUvuBmhuH7h/fQqsv9/Zslzi36KH3jbXq2Hwx3hC/8HkK5muZrPWZ5jOIn6B2V6kjy9ttzDpWMg9+mIBdkI9OHTlWIzwZwzI0VB3mw8TnunaKcbPbgyixHGC5oQYnZO0kBggqE2AhpM4JY8kx0dYg191GpaWJwM56VCGSrnmYSy6i3028ieqfTDomCnWeD+sE6jimTsqpdwO3KOupA9sAgAe+xCWdprisw19MJUrthzbHucg6FgcyVVYp5pWMUBsGLNPCv0YHSxSZSxOV2S/iIG/llagL2dl4N1GRg+Su3AEgnqxRQcRdCKFCxMWAfQugPvpqFAqDdLF72BuxoK8UBoCz1Zjp41xI+OxJzJXtYzd7bidYXP3AoT5eOYPxAftLZGDujBwMvkm0REWxm4AfzE4PX2GkF8SssDWYbYmoE8unRKR2LtWtkhAubRyuodx7yCCNlLLC/nAC8MW7kacXha3t/eF8dpt7B3gp9KhKdRMibVOijfdJM7l1kWzLs7d8cAMZQ3Oiuv33xirNNVLFmosObI0aG1r5UTn+GBpDFticeeNvQ2d5bW2rQ0OnTWagoL2j+Syvj2iT4mq3LiPtoMBJFtnQ6vkti4lm8cwiBHEGM8TSDwY0HNsSrn2McbwKKDljNZDB3H8KZIFudiutOb/PKeP1vT7jn3RdiQrsjLMq0KVIP+jzm0OTTmItubZwbBlzIvFQ5lodkELMGzDj0UfR4ylk549hUUkimFQZbpgxuwkYpubdgrHCJnEWyk43Qiu3nHCzBbpEplBizPQ6xfCUuZ6RdNxhZ8B6zx+JkZCcj/bah2GL6yamkv/ij7UE8wPqKV2jg/pb3F6EhwVtHObuPk8rvUmUvVWpfavf1b8CLgr/ESA6c1Se3pG32c/SG3cIDeDmjW4EP/9hjO+qkgT7oJOeJNhbwJzNvjIMWBrEVGYF9q2ZUOzfBNc8RqPw3Z1kkGpG2YF5it4Zi/YRQliS0c8WVFMRDAN4KdDCwsLWmiwwNLkpypAJNR/FbXXfzm0Y27UZE6NmhHLd1dQxUGzfn39T/h1enG9pepvk3vpfxwwN4I6EIWFhp2hrSuqz6pKRd3yw2rXSvyqW6Hhn97QLg3z+0b+LeweI0+bQo82DYyxAEJ14szAm4C4eaz8VKQorC9/LH/MvxyLBgMOZvnFRkF+exeWFOQsZDALHJiJdT7dGx/s5hVNT0E82bC1/vXHJmVbD/axkMYed/4Ls7Gneg==</source>
+    <source>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</source>
   </file>
   <file path="plugins\MemberVoice\Model\MemberVoiceStatus.php" generated-path="plugins.MemberVoice.Model.MemberVoiceStatus.html" hash="d0f48e2070fde1a5a69540e2f1cd9581" package="plugins.MemberVoice.Model">
     <docblock line="0">
@@ -13136,21 +13307,40 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="307" package="global">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="308" package="global">
         <name>__splitEmailHeaders</name>
         <full_name>\AppController::__splitEmailHeaders()</full_name>
-        <docblock line="307">
+        <docblock line="308">
           <description>Given a list of headers, split them into an assoc array.</description>
           <long-description></long-description>
-          <tag name="param" line="307" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
+          <tag name="param" line="308" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
             <type>string</type>
           </tag>
-          <tag name="return" line="307" description="An assoc array of headers." type="array">
+          <tag name="return" line="308" description="An assoc array of headers." type="array">
             <type>array</type>
           </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$headers</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="323" package="global">
+        <name>__countFilesInFolder</name>
+        <full_name>\AppController::__countFilesInFolder()</full_name>
+        <docblock line="323">
+          <description>Given the path to a directory, return the number of files in said directory</description>
+          <long-description></long-description>
+          <tag name="param" line="323" description="&lt;p&gt;Path to folder to count files in.&lt;/p&gt;" type="string" variable="$folder">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="323" description="The number of files in the folder." type="int">
+            <type>int</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$folder</name>
           <default></default>
           <type>string</type>
         </argument>
@@ -13970,21 +14160,40 @@ Redistributions of files must retain the above copyright notice.</long-descripti
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="307" package="global">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="308" package="global">
         <name>__splitEmailHeaders</name>
         <full_name>\AppController::__splitEmailHeaders()</full_name>
-        <docblock line="307">
+        <docblock line="308">
           <description>Given a list of headers, split them into an assoc array.</description>
           <long-description></long-description>
-          <tag name="param" line="307" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
+          <tag name="param" line="308" description="&lt;p&gt;String containing all header info.&lt;/p&gt;" type="string" variable="$headers">
             <type>string</type>
           </tag>
-          <tag name="return" line="307" description="An assoc array of headers." type="array">
+          <tag name="return" line="308" description="An assoc array of headers." type="array">
             <type>array</type>
           </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$headers</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="" line="323" package="global">
+        <name>__countFilesInFolder</name>
+        <full_name>\AppController::__countFilesInFolder()</full_name>
+        <docblock line="323">
+          <description>Given the path to a directory, return the number of files in said directory</description>
+          <long-description></long-description>
+          <tag name="param" line="323" description="&lt;p&gt;Path to folder to count files in.&lt;/p&gt;" type="string" variable="$folder">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="323" description="The number of files in the folder." type="int">
+            <type>int</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$folder</name>
           <default></default>
           <type>string</type>
         </argument>
