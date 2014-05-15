@@ -1,6 +1,6 @@
 Feature: Registration
 	To cope with a growing userbase
-	It should be possible to automate most of the sign-up proceedure
+	It should be possible to automate most of the sign-up procedure
 	Through HMS
 
 Scenario: Register from homepage

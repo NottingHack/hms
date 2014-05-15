@@ -98,59 +98,77 @@ class EmailContext extends HmsContext {
  * @Then the following e-mails are sent
  */
 	public function checkEmailsSent(TableNode $emailTable) {
+		$expectedEmailTypes = $this->__getEmailTypesFromTable($emailTable);
+
 		$allEmails = $this->__getAllEmails();
+		$notFoundEmailTypes = $expectedEmailTypes;
 
-		$expectedEmailTypes = array_map(function($row) {
-			return $row['emailType'];
-		}, $emailTable->getHash());
+		// Try to find an email that matches each of the expected types
+		foreach ($expectedEmailTypes as $emailType) {
+			$emailIdx = $this->__findEmailOfType($emailType, $allEmails);
+			if ($emailIdx >= 0) {
 
-		$foundEmailTypes = array();
+				// Remove it from the list of e-mails to check next time
+				array_splice($allEmails, $emailIdx, 1);
 
-		$numEmailTypes = count($expectedEmailTypes);
-		for ($i = 0; $i < $numEmailTypes; $i++) {
-			$emailType = $expectedEmailTypes[$i];
-
-			// If we find an e-mail that matches, remove it from the list
-			$numEmails = count($allEmails);
-			for ($j = 0; $j < $numEmails; $j++) {
-				$emailData = $allEmails[$j];
-
-				if ($this->__checkEmailType($emailType, $emailData)) {
-
-					if ($this->__doesEmailHaveError($emailData)) {
-						$this->_fail('Found matching e-mail for: ' . $emailType . ' but it contained an error.');
-						return;
-					}
-
-					array_splice($allEmails, $j, 1);
-					array_push($foundEmailTypes, $emailType);
-					break;
+				// Also want to remove it from the list of 'not found'
+				// email types
+				$notFoundIdx = array_search($emailType, $notFoundEmailTypes, true);
+				if ($notFoundIdx !== false) {
+					array_splice($notFoundEmailTypes, $notFoundIdx, 1);
 				}
 			}
 		}
 
 		$failMessage = '';
-		if (count($allEmails) > 0) {
-			$emailSubjects = array_map(function($email) {
-				return $email['headers']['Subject'];
-			}, $allEmails);
+
+		// Did we get more e-mails than we were expecting?
+		$unexpectedEmails = $allEmails;
+		if (count($unexpectedEmails) > 0) {
+			$emailSubjects = $this->__getSubjectsFromEmails($unexpectedEmails);
 			$failMessage .= 'Found more e-mails than expected: ' . join(', ', $emailSubjects) . PHP_EOL;
 		}
 
-		if (count($foundEmailTypes) < count($expectedEmailTypes)) {
-
-			$notFoundTypes = array();
-			foreach ($expectedEmailTypes as $type) {
-				if (array_search($type, $foundEmailTypes) === false) {
-					array_push($notFoundTypes, $type);
-				}
-			}
-
-			$failMessage .= 'Failed to find the following e-mails: ' . join(', ', $notFoundTypes);
+		// Did we not get some e-mails we were expecting
+		if (count($notFoundEmailTypes) > 0) {
+			$failMessage .= 'Failed to find the following e-mails: ' . join(', ', $notFoundEmailTypes);
 		}
 
 		if ($failMessage != '') {
 			$this->_fail($failMessage);
 		}
+	}
+
+	private function __getEmailTypesFromTable(TableNode $emailTable) {
+		return array_map(function($row) {
+			return $row['emailType'];
+		}, $emailTable->getHash());
+	}
+
+	private function __findEmailOfType($emailType, $allEmails) {
+		$numEmails = count($allEmails);
+		for ($i = 0; $i < $numEmails; $i++) {
+			if ($this->__checkEmailType($emailType, $allEmails[$i])) {
+
+				// We've found the e-mail, take this opportunity to
+				// check if the e-mail contains an error
+				if ($this->__doesEmailHaveError($allEmails[$i])) {
+					$this->_fail('Found matching e-mail for: ' . $emailType . ' but it contained an error.');
+					return -1;
+				}
+
+				return $i;
+			}
+		}
+
+		return -1;
+	}
+
+	private function __getSubjectsFromEmails($allEmails) {
+		return array_map(
+			function($email) {
+				return $email['headers']['Subject'];
+			},
+			$allEmails);
 	}
 }
