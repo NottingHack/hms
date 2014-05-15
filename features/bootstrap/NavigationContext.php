@@ -23,6 +23,12 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
 		$this->fillField('MemberEmail', $email);
 	}
 
+	private function __registerWithEmailThatBelongsToMemberWithStatus($status) {
+		$databaseContext = $this->getMainContext()->getSubcontext('database');
+		$email = $databaseContext->getEmailForMemberWithStatus($status);
+		$this->__registerWithEmail($email);
+	}
+
 /**
  * 
  * @when I click the register link on the home page
@@ -44,12 +50,56 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
 
 /**
  * 
- * @when I fill in the register form with an e-mail that has already been registered
+ * @when I fill in the register form with an e-mail that belongs to a prospective member
  */
-	public function iFillInTheRegisterFormWithAnEmailThatHasAlreadyBeenRegistered() {
-		$databaseContext = $this->getMainContext()->getSubcontext('database');
-		$email = $databaseContext->getEmailForMemberWithStatus(1);
-		$this->__registerWithEmail($email);
+	public function iFillInTheRegisterFormWithAnEmailThatBelongsToAProspectiveMember() {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		$this->__registerWithEmailThatBelongsToMemberWithStatus($memberContext::STATUS_PROSPECTIVE_MEMBER);
+	}
+
+/**
+ * 
+ * @when I fill in the register form with an e-mail that belongs to a waiting for contact details member
+ */
+	public function iFillInTheRegisterFormWithAnEmailThatBelongsToAWaitingForContactDetailsMember() {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		$this->__registerWithEmailThatBelongsToMemberWithStatus($memberContext::STATUS_PRE_MEMBER_1);
+	}
+
+/**
+ * 
+ * @when I fill in the register form with an e-mail that belongs to a waiting for contact detail approval member
+ */
+	public function iFillInTheRegisterFormWithAnEmailThatBelongsToAWaitingForContactDetailApprovalMember() {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		$this->__registerWithEmailThatBelongsToMemberWithStatus($memberContext::STATUS_PRE_MEMBER_2);
+	}
+
+/**
+ * 
+ * @when I fill in the register form with an e-mail that belongs to a waiting for payment member
+ */
+	public function iFillInTheRegisterFormWithAnEmailBelongsToAWaitingForPaymentMember() {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		$this->__registerWithEmailThatBelongsToMemberWithStatus($memberContext::STATUS_PRE_MEMBER_3);
+	}
+
+/**
+ * 
+ * @when I fill in the register form with an e-mail that belongs to a current member
+ */
+	public function iFillInTheRegisterFormWithAnEmailBelongsToACurrentMember() {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		$this->__registerWithEmailThatBelongsToMemberWithStatus($memberContext::STATUS_CURRENT_MEMBER);
+	}
+
+/**
+ * 
+ * @when I fill in the register form with an e-mail that belongs to an ex member
+ */
+	public function iFillInTheRegisterFormWithAnEmailBelongsToAnExMember() {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		$this->__registerWithEmailThatBelongsToMemberWithStatus($memberContext::STATUS_EX_MEMBER);
 	}
 
 /**

@@ -95,9 +95,20 @@ class EmailContext extends HmsContext {
 	}
 
 /**
+ * @Then no e-mails are sent
+ */
+	public function noEmailsAreSent() {
+		$allEmails = $this->__getAllEmails();
+		if (count($allEmails) > 0) {
+			$emailSubjects = $this->__getSubjectsFromEmails($allEmails);
+			$this->__fail('The following e-mails were sent unexpectedly: ' . join(', ', $emailSubjects));
+		}
+	}
+
+/**
  * @Then the following e-mails are sent
  */
-	public function checkEmailsSent(TableNode $emailTable) {
+	public function theFollowingEmailsAreSent(TableNode $emailTable) {
 		$expectedEmailTypes = $this->__getEmailTypesFromTable($emailTable);
 
 		$allEmails = $this->__getAllEmails();
