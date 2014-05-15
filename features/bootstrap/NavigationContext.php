@@ -17,111 +17,9 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
 		$this->getMainContext()->log('Current url is: ' . $address);
 	}
 
-	private function __registerWithEmail($email) {
-		$memberContext = $this->getMainContext()->getSubcontext('member');
-		$memberContext->setTestMemberData('email', $email);
-		$this->fillField('MemberEmail', $email);
-	}
-
-	private function __registerWithEmailThatBelongsToMemberWithStatus($status) {
-		$databaseContext = $this->getMainContext()->getSubcontext('database');
-		$email = $databaseContext->getEmailForMemberWithStatus($status);
-		$this->__registerWithEmail($email);
-	}
-
-/**
- * 
- * @when I click the register link on the home page
- */
-	public function iClickTheRegisterLinkOnTheHomePage() {
-		$this->assertHomepage();
-		$this->clickLink('Register Now');
-	}
-
-/**
- * 
- * @when I fill in the register form
- */
-	public function iFillInTheRegisterForm() {
-		$memberContext = $this->getMainContext()->getSubcontext('member');
-		$email = $memberContext->getNewEmail();
-		$this->__registerWithEmail($email);
-	}
-
-/**
- * 
- * @when I fill in the register form with an e-mail that belongs to a prospective member
- */
-	public function iFillInTheRegisterFormWithAnEmailThatBelongsToAProspectiveMember() {
-		$memberContext = $this->getMainContext()->getSubcontext('member');
-		$this->__registerWithEmailThatBelongsToMemberWithStatus($memberContext::STATUS_PROSPECTIVE_MEMBER);
-	}
-
-/**
- * 
- * @when I fill in the register form with an e-mail that belongs to a waiting for contact details member
- */
-	public function iFillInTheRegisterFormWithAnEmailThatBelongsToAWaitingForContactDetailsMember() {
-		$memberContext = $this->getMainContext()->getSubcontext('member');
-		$this->__registerWithEmailThatBelongsToMemberWithStatus($memberContext::STATUS_PRE_MEMBER_1);
-	}
-
-/**
- * 
- * @when I fill in the register form with an e-mail that belongs to a waiting for contact detail approval member
- */
-	public function iFillInTheRegisterFormWithAnEmailThatBelongsToAWaitingForContactDetailApprovalMember() {
-		$memberContext = $this->getMainContext()->getSubcontext('member');
-		$this->__registerWithEmailThatBelongsToMemberWithStatus($memberContext::STATUS_PRE_MEMBER_2);
-	}
-
-/**
- * 
- * @when I fill in the register form with an e-mail that belongs to a waiting for payment member
- */
-	public function iFillInTheRegisterFormWithAnEmailBelongsToAWaitingForPaymentMember() {
-		$memberContext = $this->getMainContext()->getSubcontext('member');
-		$this->__registerWithEmailThatBelongsToMemberWithStatus($memberContext::STATUS_PRE_MEMBER_3);
-	}
-
-/**
- * 
- * @when I fill in the register form with an e-mail that belongs to a current member
- */
-	public function iFillInTheRegisterFormWithAnEmailBelongsToACurrentMember() {
-		$memberContext = $this->getMainContext()->getSubcontext('member');
-		$this->__registerWithEmailThatBelongsToMemberWithStatus($memberContext::STATUS_CURRENT_MEMBER);
-	}
-
-/**
- * 
- * @when I fill in the register form with an e-mail that belongs to an ex member
- */
-	public function iFillInTheRegisterFormWithAnEmailBelongsToAnExMember() {
-		$memberContext = $this->getMainContext()->getSubcontext('member');
-		$this->__registerWithEmailThatBelongsToMemberWithStatus($memberContext::STATUS_EX_MEMBER);
-	}
-
-/**
- * 
- * @when I submit the register form
- */
-	public function iSubmitInTheRegisterForm() {
-		$this->pressButton('Register');
-	}
-
-/**
- * 
- * @Then I should see the registration successful message
- */
-	public function iShouldSeeTheRegistrationSuccessfulMessage() {
-		$this->assertPageContainsText('Registration successful, please check your inbox.');
-	}
-
 /**
  * Opens homepage.
  *
- * @Given /^(?:|I )am on (?:|the )homepage$/
  * @When /^(?:|I )go to (?:|the )homepage$/
  */
 	public function iAmOnHomepage() {
@@ -292,11 +190,6 @@ class NavigationContext extends RawMinkContext implements TranslatedContextInter
 		$this->assertSession()->addressEquals($this->locatePath($page));
 	}
 
-/**
- * Checks, that current page is the homepage.
- *
- * @Then /^(?:|I )should be on (?:|the )homepage$/
- */
 	public function assertHomepage() {
 		// We have 2 pages that qualify as the home page
 		$address = $this->getSession()->getCurrentUrl();

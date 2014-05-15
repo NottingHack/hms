@@ -42,7 +42,7 @@ class HmsContext extends BehatContext {
 	}
 
 	protected function _navigationContext() {
-		return $this->__getSubContext('nagivation');
+		return $this->__getSubContext('navigation');
 	}
 
 	protected function _databaseContext() {
