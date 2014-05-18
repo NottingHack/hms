@@ -27,6 +27,13 @@ class DatabaseContext extends HmsContext {
 		return $rows;
 	}
 
+	private function __getDataForMemberWithStatus($status) {
+		$mysqli = $this->__getConnection();
+		$query = "SELECT * FROM members WHERE member_status=$status LIMIT 1";
+		$data = $this->__runQuery($mysqli, $query);
+		return $data[0];
+	}
+
 	public function getMemberAdminEmailAddresses() {
 		$mysqli = $this->__getConnection();
 		$query = 'SELECT members.email FROM members INNER JOIN member_group ON members.member_id=member_group.member_id WHERE member_group.grp_id=5';
@@ -37,10 +44,16 @@ class DatabaseContext extends HmsContext {
 	}
 
 	public function getEmailForMemberWithStatus($status) {
-		$mysqli = $this->__getConnection();
-		$query = "SELECT members.email FROM members WHERE member_status=$status LIMIT 1";
-		$email = $this->__runQuery($mysqli, $query);
-		return $email[0]['email'];
+		$memberData = $this->__getDataForMemberWithStatus($status);
+		return $memberData['email'];
+	}
+
+	public function getIdAndEmailForMemberWithStatus($status) {
+		$memberData = $this->__getDataForMemberWithStatus($status);
+		return array(
+			'id' => $memberData['member_id'],
+			'email' => $memberData['email']
+		);
 	}
 
 }

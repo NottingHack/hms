@@ -104,7 +104,7 @@ class MemberRegisterPageContext extends HmsContext {
  * 
  * @when I submit the register form
  */
-	public function iSubmitInTheRegisterForm() {
+	public function iSubmitTheRegisterForm() {
 		return new When('I press "Register"');
 	}
 

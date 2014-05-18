@@ -17,6 +17,10 @@ class MemberContext extends HmsContext {
 		return time() . '@example.com';
 	}
 
+	public function getNewUsername() {
+		return 'testUsername' . time();
+	}
+
 	public function setTestMemberData($key, $value) {
 		$this->__testMemberData[$key] = $value;
 	}

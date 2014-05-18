@@ -52,6 +52,7 @@ class FeatureContext extends HmsContext {
 		$this->useContext('homePage', new HomePageContext($mergedParams));
 		$this->useContext('memberRegisterPage', new MemberRegisterPageContext($mergedParams));
 		$this->useContext('memberLoginPage', new MemberLoginPageContext($mergedParams));
+		$this->useContext('memberSetupLoginPage', new MemberSetupLoginPageContext($mergedParams));
 	}
 
 	private function __getTitle($event) {

@@ -1,7 +1,6 @@
 Feature: Registration
-	To cope with a growing userbase
-	It should be possible to automate most of the sign-up procedure
-	Through HMS
+	People should be able to register through the
+	HMS website
 
 	Background:
 		Given I am in the hackspace
