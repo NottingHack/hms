@@ -303,7 +303,7 @@ class MembersController extends AppController {
 			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
 		}
 
-		$memberStatus = $this->Member->getStatusForMember($loggedInMemberId);
+		$memberStatus = $this->Member->getStatusForMember($id);
 		if ($memberStatus != Status::PROSPECTIVE_MEMBER) {
 			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
 		}
