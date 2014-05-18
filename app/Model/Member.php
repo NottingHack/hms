@@ -106,7 +106,7 @@ class Member extends AppModel {
 			'length' => array(
 				'rule' => array('between', 1, 100),
 				'required' => true,
-				'message' => 'Firstname must be between 1 and 100 characters long',
+				'message' => 'Email must be between 1 and 100 characters long',
 			),
 			'content' => array(
 				'rule' => 'email',

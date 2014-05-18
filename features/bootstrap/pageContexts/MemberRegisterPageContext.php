@@ -40,6 +40,14 @@ class MemberRegisterPageContext extends HmsContext {
 
 /**
  * 
+ * @when I fill in the register form with an invalid e-mail
+ */
+	public function iFillInTheRegisterFormWithAnInvalidEmail() {
+		return $this->__registerWithEmail('invalid');
+	}
+
+/**
+ * 
  * @when I fill in the register form with an e-mail that belongs to a prospective member
  */
 	public function iFillInTheRegisterFormWithAnEmailThatBelongsToAProspectiveMember() {

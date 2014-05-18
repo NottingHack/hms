@@ -54,11 +54,25 @@ class FeatureContext extends HmsContext {
 		$this->useContext('memberLoginPage', new MemberLoginPageContext($mergedParams));
 	}
 
+	private function __getTitle($event) {
+		$class = get_class($event);
+		switch($class) {
+			case 'Behat\Behat\Event\ScenarioEvent':
+				return $event->getScenario()->getTitle();
+
+			case 'Behat\Behat\Event\OutlineExampleEvent':
+				return $event->getOutline()->getTitle();
+		}
+
+		$this->_fail('Unknown event type in getTitle: ' + $class);
+	}
+
 /**
  * @BeforeScenario
  */
-	public function beforeScenario(ScenarioEvent $event) {
-		$this->_logger()->logInfo('<<< Begin Scenario: ' . $event->getScenario()->getTitle() . ' >>>');
+	public function beforeScenario($event) {
+		$title = $this->__getTitle($event);
+		$this->_logger()->logInfo('<<< Begin Scenario: ' . $title . ' >>>');
 		$this->_configContext()->beforeScenario();
 		$this->_emailContext()->beforeScenario();
 	}
@@ -66,8 +80,9 @@ class FeatureContext extends HmsContext {
 /**
  * @AfterScenario
  */
-	public function afterScenario(ScenarioEvent $event) {
-		$this->_logger()->logInfo('<<< End Scenario: ' . $event->getScenario()->getTitle() . ' >>>');
+	public function afterScenario($event) {
+		$title = $this->__getTitle($event);
+		$this->_logger()->logInfo('<<< End Scenario: ' . $title . ' >>>');
 	}
 
 /**

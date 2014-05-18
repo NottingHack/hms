@@ -78,7 +78,7 @@ class ConfigContext extends HmsContext {
 /**
  * @AfterScenario
  */
-	public function restoreOldConfigFiles(ScenarioEvent $event) {
+	public function restoreOldConfigFiles($event) {
 		$currentConfigDir = $this->__getConfigDir();
 		$backupConfigDir = $this->__getBackupConfigDir();
 		$this->_fileContext()->moveFolderTo($backupConfigDir, $currentConfigDir);
