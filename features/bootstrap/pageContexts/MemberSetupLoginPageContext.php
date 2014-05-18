@@ -8,7 +8,7 @@ use Behat\Behat\Context\Step\When;
 
 class MemberSetupLoginPageContext extends HmsContext {
 
-	private function __fillInTheSetupDetailsForm($username, $email, $password, $passwordConfim) {
+	private function __fillInTheSetupLoginForm($username, $email, $password, $passwordConfim) {
 		$formData = array(
 			'MemberFirstname' => 'Bob',
 			'MemberSurname' => 'Bobson',
@@ -32,6 +32,16 @@ class MemberSetupLoginPageContext extends HmsContext {
 		return "/members/setupLogin/$id";
 	}
 
+	private function __iAmOnTheMemberSetupLoginPageForAMemberWithStatus($status) {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		$databaseContext = $this->getMainContext()->getSubcontext('database');
+		$idAndEmail = $databaseContext->getIdAndEmailForMemberWithStatus($status);
+
+		$memberContext->setTestMemberData('id', $idAndEmail['id']);
+		$memberContext->setTestMemberData('email', $idAndEmail['email']);
+		return new Then('I go to "' . $this->__getSetupLoginPageUrlForTestMember() . '"');
+	}
+
 /**
  * 
  * @Given I am on the member setup login page
@@ -46,43 +56,96 @@ class MemberSetupLoginPageContext extends HmsContext {
  */
 	public function IAmOnTheMemberSetupLoginPageForAProspectiveMember() {
 		$memberContext = $this->getMainContext()->getSubcontext('member');
-		$databaseContext = $this->getMainContext()->getSubcontext('database');
-		$idAndEmail = $databaseContext->getIdAndEmailForMemberWithStatus($memberContext::STATUS_PROSPECTIVE_MEMBER);
+		return $this->__iAmOnTheMemberSetupLoginPageForAMemberWithStatus($memberContext::STATUS_PROSPECTIVE_MEMBER);
+	}
 
-		$memberContext->setTestMemberData('id', $idAndEmail['id']);
-		$memberContext->setTestMemberData('email', $idAndEmail['email']);
-		return new Then('I go to "' . $this->__getSetupLoginPageUrlForTestMember() . '"');
+/**
+ *
+ * @When I am on the member setup login page for a waiting for contact details member
+ */
+	public function IAmOnTheMemberSetupLoginPageForAWaitingForContactDetailsMember() {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		return $this->__iAmOnTheMemberSetupLoginPageForAMemberWithStatus($memberContext::STATUS_PRE_MEMBER_1);
+	}
+
+/**
+ *
+ * @When I am on the member setup login page for a waiting for contact detail approval member
+ */
+	public function IAmOnTheMemberSetupLoginPageForAWaitingForContactDetailApprovalMember() {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		return $this->__iAmOnTheMemberSetupLoginPageForAMemberWithStatus($memberContext::STATUS_PRE_MEMBER_2);
+	}
+
+/**
+ *
+ * @When I am on the member setup login page for a waiting for payment member
+ */
+	public function IAmOnTheMemberSetupLoginPageForAWaitingForPaymentMember() {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		return $this->__iAmOnTheMemberSetupLoginPageForAMemberWithStatus($memberContext::STATUS_PRE_MEMBER_3);
+	}
+
+/**
+ *
+ * @When I am on the member setup login page for a current member
+ */
+	public function IAmOnTheMemberSetupLoginPageForACurrentMember() {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		return $this->__iAmOnTheMemberSetupLoginPageForAMemberWithStatus($memberContext::STATUS_CURRENT_MEMBER);
+	}
+
+/**
+ *
+ * @When I am on the member setup login page for an ex member
+ */
+	public function IAmOnTheMemberSetupLoginPageForAnExMember() {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		return $this->__iAmOnTheMemberSetupLoginPageForAMemberWithStatus($memberContext::STATUS_EX_MEMBER);
 	}
 
 /**
  * 
  * @when I fill in the setup login form
  */
-	public function IFillInTheSetupDetailsForm() {
+	public function IFillInTheSetupLoginForm() {
 		$memberContext = $this->getMainContext()->getSubcontext('member');
 		$username = $memberContext->getNewUsername();
 		$email = $memberContext->getTestMemberData('email');
 		$password = 'hunter2';
-		return $this->__fillInTheSetupDetailsForm($username, $email, $password, $password);
+		return $this->__fillInTheSetupLoginForm($username, $email, $password, $password);
 	}
 
 /**
  * 
  * @when I fill in the setup login form with the incorrect e-mail
  */
-	public function IFillInTheSetupDetailsFormWithTheIncorrectEmail() {
+	public function IFillInTheSetupLoginFormWithTheIncorrectEmail() {
 		$memberContext = $this->getMainContext()->getSubcontext('member');
 		$username = $memberContext->getNewUsername();
 		$email = $memberContext->getNewEmail();
 		$password = 'hunter2';
-		return $this->__fillInTheSetupDetailsForm($username, $email, $password, $password);
+		return $this->__fillInTheSetupLoginForm($username, $email, $password, $password);
+	}
+
+/**
+ * 
+ * @when I fill in the setup login form with invalid details
+ */
+	public function IFillInTheSetupLoginFormWithInvalidDetails() {
+		$memberContext = $this->getMainContext()->getSubcontext('member');
+		$username = $memberContext->getNewUsername();
+		$email = $memberContext->getNewEmail();
+		$password = 'hunter2';
+		$passwordConfirm = 'notTheSame';
+		return $this->__fillInTheSetupLoginForm($username, $email, $password, $passwordConfirm);
 	}
 
 /**
  * 
  * @when I submit the setup login form
  */
-	public function iSubmitTheSetupDetailsForm() {
+	public function iSubmitTheSetupLoginForm() {
 		return new When('I press "Create"');
 	}
 
