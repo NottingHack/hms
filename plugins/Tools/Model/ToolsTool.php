@@ -56,7 +56,11 @@ class ToolsTool extends ToolsAppModel {
 	}
 
 	public function isUserAnInductor($toolId) {
-		return true;
+		return false;
+	}
+
+	public function isUserAMaintainer($toolId) {
+		return false;
 	}
 }
 

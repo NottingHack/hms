@@ -22,6 +22,11 @@ App::uses('PhpReader', 'Configure');
 class ToolsGoogle extends ToolsAppModel {
 
 	/**
+	 * The date format google expects.  Also useful for passing around datetime values
+	 */
+	const DATETIME_STR = 'Y-m-d\TH:i:sP';
+
+	/**
 	 * Specify the table to use.
 	 * @var string
 	 */
@@ -223,12 +228,17 @@ class ToolsGoogle extends ToolsAppModel {
 				'maxResults'	=>	1,
 				'orderBy'		=>	'startTime',
 				'singleEvents'	=>	true,
-				'timeMin'		=>	date('Y-m-d\TH:i:sP'),
+				'timeMin'		=>	date(self::DATETIME_STR),
 				);
 
 			$events = $this->__service->events->listEvents($calendarId, $params)->getItems();
 
-			return new DateTime($events[0]['start']['dateTime'], new DateTimeZone('Europe/London'));
+			if (count($events) > 0) {
+				return new DateTime($events[0]['start']['dateTime'], new DateTimeZone('Europe/London'));
+			}
+			else {
+				return false;
+			}
 		}
 		return false;
 	}
@@ -239,15 +249,45 @@ class ToolsGoogle extends ToolsAppModel {
 	 * @param string calender id
 	 * @return array addresses
 	 */
-	public function getPublicAddresses($calendar_id) {
+	public function getPublicAddresses($calendarId) {
 		$addresses = array(
-			'email'	=>	$calendar_id,
-			'xml'	=>	'https://www.google.com/calendar/feeds/' . urlencode($calendar_id) . '/public/basic',	
-			'ical'	=>	'https://www.google.com/calendar/ical/' . urlencode($calendar_id) . '/public/basic.ics',
-			'html'	=>	'https://www.google.com/calendar/embed?src=' . urlencode($calendar_id) . '&ctz=Europe/London',
+			'email'	=>	$calendarId,
+			'xml'	=>	'https://www.google.com/calendar/feeds/' . urlencode($calendarId) . '/public/basic',	
+			'ical'	=>	'https://www.google.com/calendar/ical/' . urlencode($calendarId) . '/public/basic.ics',
+			'html'	=>	'https://www.google.com/calendar/embed?src=' . urlencode($calendarId) . '&ctz=Europe/London',
 			);
 		
 		return $addresses;
+	}
+
+	/**
+	 * Returns the events for the week starting from the provided DateTime
+	 *
+	 * @param DateTime the start of the week
+	 * @param string calender id
+	 * @return array all events in the week
+	 */
+	public function getWeeksEvents($weekStart, $calendarId) {
+		if ($this->authorised()) {
+			$weekEnd = clone $weekStart;
+			$weekEnd->add(new DateInterval('P7D'));
+
+			$params = array(
+				'orderBy'		=>	'startTime',
+				'singleEvents'	=>	true,
+				'timeMin'		=>	$weekStart->format(self::DATETIME_STR),
+				'timeMax'		=>	$weekEnd->format(self::DATETIME_STR),
+				);
+
+			$googleEvents = $this->__service->events->listEvents($calendarId, $params)->getItems();
+			if (count($googleEvents) == 0) {
+				return $googleEvents;
+			}
+
+			return $this->__parseEvents($googleEvents);
+
+		}
+		return array();
 	}
 
 	/**
@@ -285,6 +325,27 @@ class ToolsGoogle extends ToolsAppModel {
 		return $tokens;
 	}
 
+	/**
+	 * Takes an array of google events and returns an array with the important info
+	 *
+	 * @param array google events
+	 * @return array events
+	 */
+	private function __parseEvents($googleEvents) {
+		$events = array();
+		foreach ($googleEvents as $googleEvent) {
+			$event = array(
+				'id'			=>	$googleEvent->getId(),
+				'title'			=>	$googleEvent->getSummary(),
+				'description'	=>	$googleEvent->getDescription(),
+				'start'			=>	new DateTime($googleEvent->getStart()->getDateTime()),
+				'end'			=>	new DateTime($googleEvent->getEnd()->getDateTime()),
+				);
+			$events[] = $event;
+		}
+
+		return $events;
+	}
 }
 
 ?>

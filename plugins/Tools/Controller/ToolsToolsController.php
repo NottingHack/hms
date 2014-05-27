@@ -127,26 +127,13 @@ class ToolsToolsController extends ToolsAppController {
 			}
 
 			for ($i = 0; $i < count($tools); $i++) {
-				// is user inducted on this tool?
-				$inducted = $this->ToolsTool->isUserInducted($tools[$i]['Tool']['tool_id']);
-				// is user an inductor on this tool?
-				$inductor = $this->ToolsTool->isUserAnInductor($tools[$i]['Tool']['tool_id']);
-
 				$tools[$i]['Tool']['next_booking'] = $this->ToolsGoogle->getNextBooking($tools[$i]['Tool']['tool_calendar']);
-				// all users can do these actions
-				$tools[$i]['Tool']['actions'] = array();
-				$tools[$i]['Tool']['actions']['Access Calendar'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'publicAccess', $tools[$i]['Tool']['tool_id']);
-
-				if ($inducted) {
-					$tools[$i]['Tool']['actions']['Book timeslot'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'createBooking', $tools[$i]['Tool']['tool_id']);
-					$tools[$i]['Tool']['actions']['View my bookings'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'bookings', $tools[$i]['Tool']['tool_id']);
-				}
-				if ($inductor) {
-					$tools[$i]['Tool']['actions']['Induct user'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'induct', $tools[$i]['Tool']['tool_id']);
-				}
-				if ($fullAccess) {
-					$tools[$i]['Tool']['actions']['Edit'] = array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'edit', $tools[$i]['Tool']['tool_id']);
-				}
+				
+				// The view action
+				$tools[$i]['Tool']['view'] = array(
+					'image'	=> 'icon_calendar.png',
+					'link'	=> array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'view', $tools[$i]['Tool']['tool_id']),
+					);
 			}
 
 			// Set the view variables
@@ -202,6 +189,11 @@ class ToolsToolsController extends ToolsAppController {
 		}
 	}
 
+	/**
+	 * Edit a tool
+	 *
+	 * @param int the tool ID
+	 */
 	public function edit($tool_id = null) {
 		if (!$tool_id) {
 			throw new NotFoundException(__('Invalid tool'));
@@ -230,6 +222,11 @@ class ToolsToolsController extends ToolsAppController {
 		}
 	}
 
+	/**
+	 * Shows the links to the calendar
+	 *
+	 * @param int the tool ID
+	 */
 	public function publicAccess($tool_id) {
 		if (!$tool_id) {
 			throw new NotFoundException(__('Invalid tool'));
@@ -244,7 +241,84 @@ class ToolsToolsController extends ToolsAppController {
 		$this->set("addresses", $addresses);
 
 		$this->set("tool", $tool);
+	}
 
+	/**
+	 * The main page for each tool.
+	 * 
+	 * @param int the tool ID
+	 */
+	public function view($tool_id) {
+		// check we have a valid tool
+		if (!$tool_id) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+		$tool = $this->ToolsTool->findByToolId($tool_id);
+		if (!$tool) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+		$monday = $this->__getMonday();
+		$events = $this->ToolsGoogle->getWeeksEvents($monday, $tool['Tool']['tool_calendar']);
+		//debug($events);
+
+		$this->set('tool', $tool);
+		$this->set('events', $events);
+		$this->set('monday', $monday);
+	}
+
+	/**
+	 * Adds a booking
+	 *
+	 * @param int the tool ID
+	 */
+	public function addBooking($tool_id) {
+		if (!$tool_id) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+		$tool = $this->ToolsTool->findByToolId($tool_id);
+		if (!$tool) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+
+		// what types of booking will this user be able to make?
+		$type = array('normal'=>'Normal');
+
+		// is user an inductor on this tool?
+		if ($this->ToolsTool->isUserAnInductor($tool_id)) {
+			$type['induction'] = 'Induction';
+		}
+		if ($this->ToolsTool->isUserAMaintainer($tool_id)) {
+			$type['maintenance'] = 'Maintenance';
+		}
+
+		
+
+		$this->set('tool', $tool);
+		$this->set('type_options', $type);
+	}
+
+	/**
+	 * Returns a datetime object for the monday of this week at midnight (morning)
+	 *
+	 * @return DateTime monday morning at midnight
+	 */
+	private function __getMonday() {
+		$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
+		$dayOfWeek = $date->format('N');
+
+		// set the time to midnight
+		$date->setTime(0,0,0);
+
+		$offset = $dayOfWeek - 1;
+
+		$date->sub(new DateInterval('P' . $offset . 'D'));
+
+		return $date;
 	}
 }
 ?>

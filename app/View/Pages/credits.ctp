@@ -8,7 +8,7 @@ foreach ($media as $item) {
 ?>
 
 <div style="clear: both; margin-top: 15px; overflow: hidden;">
-	<img src="<?php echo(Router::url('/') . $item['location']); ?>" style="float: left;" />
+	<?php echo($this->Html->image('Tools.' . $item['location'], array('style' => 'float: left; padding-right: 20px;'))); ?>
 	<div>
 		<p><a href="<?php echo($item['link']) ?>"><?php echo($item['attribution']) ?></a></p>
 		<p><a href="<?php echo($item['licence_link']) ?>"><?php echo($item['licence']) ?></a></p>
