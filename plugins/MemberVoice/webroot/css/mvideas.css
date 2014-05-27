@@ -7,6 +7,7 @@ div.memberVoice, div.memberVoice * {
 
 div.memberVoice {
 	position: relative;
+	min-height: 55px;
 }
 
 div.memberVoice ul.mvIdeas {

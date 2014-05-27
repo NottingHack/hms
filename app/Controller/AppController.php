@@ -191,6 +191,7 @@ class AppController extends Controller {
 			$this->set('userMessage', $userMessage);
 			$this->set('memberId', $loggedInMemberId);
 			$this->set('username', $this->Member->getUsernameForMember($this->Auth->user()));
+			$this->set('email', $this->Member->getEmailForMember($this->Auth->user()));
 		}
 
 		$jsonData = json_decode(file_get_contents('http://lspace.nottinghack.org.uk/status/status.php'));
@@ -248,7 +249,6 @@ class AppController extends Controller {
 		}
 
 		$email = $this->email;
-		$email->config('smtp');
 		$email->from(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 		$email->sender(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 		$email->emailFormat('html');
@@ -256,6 +256,22 @@ class AppController extends Controller {
 		$email->subject($subject);
 		$email->template($template);
 		$email->viewVars($viewVars);
+
+		$emailDebugDirectory = null;
+		try {
+			Configure::load('debug');
+			$emailDebugDirectory = Configure::read('emailDebugDirectory');
+		} catch(ConfigureException $e) {
+			$emailDebugDirectory = null;
+		}
+		if ($emailDebugDirectory != null) {
+			$email->transport('Debug');
+			$emailContents = $email->send();
+			$this->__writeEmailContents($emailContents, $emailDebugDirectory);
+			return true;
+		}
+
+		$email->config('smtp');
 		return $email->send();
 	}
 
@@ -267,5 +283,45 @@ class AppController extends Controller {
 	protected function _getLoggedInMemberId() {
 		Controller::loadModel('Member');
 		return $this->Member->getIdForMember($this->Auth->user());
+	}
+
+/**
+ * Write an e-mail to a file.
+ * @param array $data Aray of e-mail data.
+ * @param string $toFolder The folder to save to e-mail to.
+ */
+	private function __writeEmailContents($data, $toFolder) {
+		$headers = $this->__splitEmailHeaders($data['headers']);
+		$data['headers'] = $headers;
+		$subject = $headers['Subject'];
+
+		$numEmailFiles = $this->__countFilesInFolder($toFolder);
+		$filepath = sprintf('%s/%03d_%s.js', $toFolder, $numEmailFiles, $subject);
+		file_put_contents($filepath, json_encode($data, JSON_PRETTY_PRINT));
+	}
+
+/**
+ * Given a list of headers, split them into an assoc array.
+ * @param string $headers String containing all header info.
+ * @return array An assoc array of headers.
+ */
+	private function __splitEmailHeaders($headers) {
+		$arrayHeaders = array();
+		foreach (explode("\r\n", $headers) as $header) {
+			$headerParts = explode(':', $header);
+			$arrayHeaders[$headerParts[0]] = trim($headerParts[1]);
+		}
+
+		return $arrayHeaders;
+	}
+
+/**
+ * Given the path to a directory, return the number of files in said directory
+ * @param string $folder Path to folder to count files in.
+ * @return int The number of files in the folder.
+ */
+	private function __countFilesInFolder($folder) {
+		$iter = new FilesystemIterator($folder, FilesystemIterator::SKIP_DOTS);
+		return iterator_count($iter);
 	}
 }

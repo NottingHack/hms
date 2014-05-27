@@ -30,3 +30,5 @@ dev/coverage.xml
 dev/coverage_report/
 dev/junit.xml
 /plugins/Tools/Config/google.php
+vendor/
+bin/

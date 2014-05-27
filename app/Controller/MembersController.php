@@ -215,6 +215,7 @@ class MembersController extends AppController {
  */
 	public function register() {
 		$this->MailingList = $this->getMailingList();
+
 		// Need a list of mailing-lists that the user can opt-in to
 		$mailingLists = $this->MailingList->listMailinglists(false);
 		$this->set('mailingLists', $mailingLists);
@@ -299,6 +300,11 @@ class MembersController extends AppController {
  */
 	public function setupLogin($id = null) {
 		if ($id == null) {
+			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
+		}
+
+		$memberStatus = $this->Member->getStatusForMember($id);
+		if ($memberStatus != Status::PROSPECTIVE_MEMBER) {
 			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
 		}
 

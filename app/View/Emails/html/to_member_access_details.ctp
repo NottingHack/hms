@@ -16,15 +16,8 @@
 </p>
 
 <p>
-	NOTE: This doesn't indicate when they *will* be at the space, just when they could potentially meet you to do gatekeeper setup and answer any other questions you might have. Switch to week view to see hours in which people can be available. Here are emails for the current membership team:
+	NOTE: This doesn't indicate when they *will* be at the space, just when they could potentially meet you to do gatekeeper setup and answer any other questions you might have. Switch to week view to see hours in which people can be available. If there are any issues please contact the member admin team at membership@nottinghack.org.uk
 </p>
-
-<p>
-	David Hayward: nachimir@gmail.com<br>
-	Kate Bolin: katebolin@gmail.com<br>
-	Joe Duckhouse: congojoe@gmail.com<br>
-</p>
-
 
 <p>
 	Here's a PDF hackspace manual:<br>

@@ -1,0 +1,53 @@
+#autofill-map-canvas {
+	height: 400px;
+    margin: 0px;
+    padding: 0px
+}
+
+#autofill-map-canvas div {
+	padding: 0px;
+	margin-bottom: 0px;
+}
+
+#autofill-map-canvas img {
+    max-width: none;
+}
+
+.autofill-controls {
+	margin-top: 16px;
+	border: 1px solid transparent;
+	border-radius: 2px 0 0 2px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	height: 32px;
+	outline: none;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#autofill-pac-input {
+	background-color: #fff;
+	padding: 0 11px 0 13px;
+	width: 400px;
+	font-family: Roboto;
+	font-size: 15px;
+	font-weight: 300;
+	text-overflow: ellipsis;
+}
+
+#autofill-pac-input:focus {
+	border-color: #4d90fe;
+	margin-left: -1px;
+	padding-left: 14px;  /* Regular padding-left + 1. */
+	width: 401px;
+}
+
+.autofill-pac-container {
+	font-family: Roboto;
+}
+.autofill-infowindow {
+	padding: 30px;
+}
+
+#autofill-map-canvas div #autofill-infowindow {
+	#padding: 10px 30px;
+}

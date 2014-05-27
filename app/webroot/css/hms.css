@@ -1026,3 +1026,19 @@ input[type=file] {
 .emailRecordDay ul li {
 	margin: 5px 12px;
 }
+
+ #type-selector {
+	color: #fff;
+	background-color: #4d90fe;
+	padding: 5px 11px 0px 11px;
+}
+
+#type-selector label {
+	font-family: Roboto;
+	font-size: 13px;
+	font-weight: 300;
+}
+
+#address_map {
+	display: none;
+}
