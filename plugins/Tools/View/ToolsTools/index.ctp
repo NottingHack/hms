@@ -1,6 +1,13 @@
 <?php
 /* Breadcrumbs */
 $this->Html->addCrumb('Tools', '/tools/');
+
+$tool_status = array(
+	'IN_USE'	=>	'In Use',
+	'FREE'		=>	'Available',
+	'DISABLED'	=>	'Disabled',
+	);
+
 ?>
 <h2>Tools</h2>
 
@@ -29,7 +36,7 @@ if (count($tools) > 0) {
 	<tr>
 		<td width="25"><?php echo($this->Html->image("Tools." . $tool['Tool']['view']['image'], $img_options)) ?></td>
 		<td><?php echo($this->Html->link($tool['Tool']['tool_name'], $tool['Tool']['view']['link'])); ?></td>
-		<td<?php echo($tool['Tool']['tool_status'] == "DISABLED" ? ' style="background-color: #FF0000"' : ''); ?>><?php echo(ucwords(strtolower($tool['Tool']['tool_status']))); ?></td>
+		<td<?php echo($tool['Tool']['tool_status'] == "DISABLED" ? ' style="background-color: #FF0000"' : ''); ?>><?php echo($tool_status[$tool['Tool']['tool_status']]); ?></td>
 		<td>&pound;<?php echo(number_format($tool['Tool']['tool_pph'] / 100, 2)); ?></td>
 		<td><?php echo($tool['Tool']['next_booking'] ? $tool['Tool']['next_booking']->format('jS F Y @ H:i') : "None"); ?></td>
 	</tr>

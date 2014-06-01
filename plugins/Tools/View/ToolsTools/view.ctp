@@ -9,9 +9,57 @@ $this->Html->css('Tools.view', null, array('inline' => false));
 /* Load the Add Booking JS */
 // Actually, let's do this as seperate pages for now
 //$this->Html->script('Tools.addbooking_ajax', array('inline' => false));
-?>
-<p>Hello</p>
 
+// We don't need booking links for past slots
+$now = new DateTime('now -30 minutes', new DateTimeZone('Europe/London'));
+
+// previous week link
+$date = clone $monday;
+$date->sub(new DateInterval('P7D'));
+$previous = array(
+	'alt'	=> 'Previous Week',
+	'title'	=> 'Previous Week',
+	'class' => 'navleft',
+	'url'	=> array(
+		'plugin'		=>	'Tools',
+		'controller'	=>	'ToolsTools',
+		'action'		=>	'view',
+		16,
+		'?'				=>	array(
+			'mon'	=> $date->format(ToolsGoogle::DATETIME_STR),
+			),
+		),
+	);
+
+// next week link
+$date->add(new DateInterval('P14D'));
+$next = array(
+	'alt'	=> 'Next Week',
+	'title'	=> 'Next Week',
+	'class' => 'navright',
+	'url'	=> array(
+		'plugin'		=>	'Tools',
+		'controller'	=>	'ToolsTools',
+		'action'		=>	'view',
+		16,
+		'?'				=>	array(
+			'mon'	=> $date->format(ToolsGoogle::DATETIME_STR),
+			),
+		),
+	);
+?>
+
+<h2><?php echo($tool['Tool']['tool_name']); ?></h2>
+
+<div class="calendarnav">
+<?php echo($this->Html->image("Tools.icon_arrow_left.png", $previous)) ?>
+<?php echo($this->Html->image("Tools.icon_arrow_right.png", $next)) ?>
+	<div class="key">
+		<div class="normal">Booking</div>
+		<div class="induction">Induction</div>
+		<div class="maintenance">Maintenance</div>
+	</div>
+</div>
 <div class="toolscalendar" cellspacing="0" cellpadding="0">
 	<table>
 		<tr>
@@ -35,24 +83,31 @@ $this->Html->css('Tools.view', null, array('inline' => false));
 			echo('<td class="time" rowspan="2">');
 			echo('<span>' . $date->format('H:i') . '</span>');
 			echo('</td>');
-			$class = ' class="light"';
+			$row = 'light';
 		}
 		else {
-			$class = '';
+			$row = '';
 		}
 
 		for ($j = 0; $j < 7; $j++) {
+			if ($date > $now) {
+				$class = ' class="' . $row . '"';
+				$link =$this->Html->link("", array(
+					'plugin'		=>	'Tools',
+					'controller'	=>	'ToolsTools',
+					'action'		=>	'addbooking',
+					16,
+					'?'				=>	array(
+						't'	=> $date->format(ToolsGoogle::DATETIME_STR),
+						),
+					));
+			}
+			else {
+				$class = ' class="' . $row . ' past"';
+				$link = '';
+			}
 			echo('<td' . $class . '>');
-			echo($this->Html->link("", array(
-				'plugin'		=>	'Tools',
-				'controller'	=>	'ToolsTools',
-				'action'		=>	'addbooking',
-				16,
-				'?'				=>	array(
-					't'	=> $date->format(ToolsGoogle::DATETIME_STR),
-					),
-				)));
-			//echo('<a href="?t=' . $date->format(ToolsGoogle::DATETIME_STR) . '" class="addbooking"></a>');
+			echo($link);
 			echo('</td>');
 			$date->add(new DateInterval('P1D'));
 		}
@@ -71,7 +126,7 @@ $this->Html->css('Tools.view', null, array('inline' => false));
 		if ($event['start']->getTimestamp() < $monday->getTimestamp()) {
 			$day = 1;
 			$length = ($event['end']->format('H') * 60) + $event['end']->format('i');
-			echo(getEventDiv($event['title'], $day, $length, '0000'));
+			echo(getEventDiv($event['title'], $day, $length, '0000', $event['type']));
 		}
 		else {
 			$day = strtolower($event['start']->format('N'));
@@ -82,22 +137,31 @@ $this->Html->css('Tools.view', null, array('inline' => false));
 				// goes over the end of the day, truncate and add to next day, if not sunday
 				$new_length = 1440 - $start_mins;
 				if ($day < 7) {
-					echo(getEventDiv('', $day+1, $length-$new_length, "0000"));
+					echo(getEventDiv('', $day+1, $length-$new_length, "0000", $event['type']));
 				}
 				$length = $new_length;
 			}
 
-			echo(getEventDiv($event['title'], $day, $length, $event['start']->format('Hi')));
+			echo(getEventDiv($event['title'], $day, $length, $event['start']->format('Hi'), $event['type']));
 		}
 	}
 
 
 ?>
 </div>
+<div class="calendarnav">
+<?php echo($this->Html->image("Tools.icon_arrow_left.png", $previous)) ?>
+<?php echo($this->Html->image("Tools.icon_arrow_right.png", $next)) ?>
+	<div class="key">
+		<div class="normal">Booking</div>
+		<div class="induction">Induction</div>
+		<div class="maintenance">Maintenance</div>
+	</div>
+</div>
 <?php
 
-function getEventDiv($title, $day, $length, $start) {
-	$div = '<div class="event booking day_' . $day . ' len_' . $length . ' start_' . $start .'">';
+function getEventDiv($title, $day, $length, $start, $type) {
+	$div = '<div class="event ' . $type . ' day_' . $day . ' len_' . $length . ' start_' . $start .'">';
 	$div .= $title;
 	$div .= '</div>';
 

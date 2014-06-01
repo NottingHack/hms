@@ -14,6 +14,7 @@
  */
 
 App::uses('AppModel', 'Model');
+App::uses('Member', 'Model');
 App::uses('PhpReader', 'Configure');
 
 /**
@@ -291,6 +292,98 @@ class ToolsGoogle extends ToolsAppModel {
 	}
 
 	/**
+	 * Returns the future .  Currently this limits at 2 years
+	 *
+	 * @param string calender id
+	 * @return array events
+	 */
+	public function getFutureEvents($calendarId) {
+		if ($this->authorised()) {
+			$now = new DateTime('now', new DateTimeZone('Europe/London'));
+			$future = clone $now;
+			$future->add(new DateInterval('P2Y'));
+
+			$params = array(
+				'orderBy'		=>	'startTime',
+				'singleEvents'	=>	true,
+				'timeMin'		=>	$now->format(self::DATETIME_STR),
+				'timeMax'		=>	$future->format(self::DATETIME_STR),
+				);
+
+			$googleEvents = $this->__service->events->listEvents($calendarId, $params)->getItems();
+			if (count($googleEvents) == 0) {
+				return $googleEvents;
+			}
+
+			return $this->__parseEvents($googleEvents);
+		}
+	}
+
+	/**
+	 * Returns all events for a specified user
+	 *
+	 * @param string member id
+	 * @param mixed either an array of events or the calendarId
+	 * @return array events
+	 */
+	public function getEventsForUser($memberId, $mixed) {
+		if (is_array($mixed)) {
+			$events = $mixed;
+		}
+		else {
+			$events = $this->getFutureEvents($mixed);
+		}
+
+		$userEvents = array();
+		foreach ($events as $event) {
+			if ($event['member'] == $memberId) {
+				$userEvents[] = $event;
+			}
+		}
+		return $userEvents;
+	}
+
+	/**
+	 * Saves event
+	 *
+	 * @param DateTime booking start
+	 * @param DateTime booking end
+	 * @param array additional booking details
+	 * @param string calendarId of the calendar to save it to
+	 * @return boolean success or failure
+	 */
+	public function saveEvent($start_date, $end_date, $details, $calendarId) {
+		if ($this->authorised()) {
+			// get memeber details so we can build the title
+			$this->Member = new Member();
+			$member = $this->Member->getMemberSummaryForMember($details['member'], false);
+
+			// build the parts of the event
+			$title = $member['Member']['firstname'] . " " . $member['Member']['surname'];
+
+			$start = new Google_Service_Calendar_EventDateTime();
+			$start->setDateTime($start_date->format(self::DATETIME_STR));
+
+			$end = new Google_Service_Calendar_EventDateTime();
+			$end->setDateTime($end_date->format(self::DATETIME_STR));
+
+			// set up the event
+			$event = new Google_Service_Calendar_Event();
+			$event->setSummary($title);
+			$event->setDescription(json_encode($details));
+			$event->setStart($start);
+			$event->setEnd($end);
+
+			// send it to google
+			$created = $this->__service->events->insert($calendarId, $event);
+			if ($created->getId()) {
+				return true;
+			}
+			return false;
+		}
+	}
+
+	/**
 	 * Return the refresh token iff one is saved
 	 *
 	 * @return string token if saved, otherwise null
@@ -334,12 +427,15 @@ class ToolsGoogle extends ToolsAppModel {
 	private function __parseEvents($googleEvents) {
 		$events = array();
 		foreach ($googleEvents as $googleEvent) {
+			$description = json_decode($googleEvent->getDescription());
 			$event = array(
-				'id'			=>	$googleEvent->getId(),
-				'title'			=>	$googleEvent->getSummary(),
-				'description'	=>	$googleEvent->getDescription(),
-				'start'			=>	new DateTime($googleEvent->getStart()->getDateTime()),
-				'end'			=>	new DateTime($googleEvent->getEnd()->getDateTime()),
+				'id'		=>	$googleEvent->getId(),
+				'title'		=>	$googleEvent->getSummary(),
+				'type'		=>	$description->type,
+				'booked'	=>	new DateTime($description->booked),
+				'member'	=>	$description->member,
+				'start'		=>	new DateTime($googleEvent->getStart()->getDateTime()),
+				'end'		=>	new DateTime($googleEvent->getEnd()->getDateTime()),
 				);
 			$events[] = $event;
 		}

@@ -19,6 +19,19 @@
 class ToolsTool extends ToolsAppModel {
 
 	/**
+	 * What we store in the level column
+	 */
+	const LVL_USER = 'USER';
+	const LVL_INDUCTOR = 'INDUCTOR';
+	const LVL_MAINTAINER = 'MAINTAINER';
+
+	/**
+	 * What we store in the restrictions column
+	 */
+	const RESTRICTED = 'RESTRICTED';
+	const UNRESTRICTED = 'UNRESTRICTED';
+
+	/**
 	 * Specify the table to use.
 	 *
 	 * @var string
@@ -51,15 +64,83 @@ class ToolsTool extends ToolsAppModel {
 			),
 		); 
 
-	public function isUserInducted($toolId) {
-		return true;
+	/**
+	 * Specify 'has many associations.
+	 * @var array
+	 */
+	public $hasMany = array(
+		'Member'	=> array(
+				'className'	=>	'Tools.ToolsMember',
+			),
+		);
+
+	public function isUserInducted($toolId, $userId) {
+		if (!$toolId) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+		$tool = $this->findByToolId($toolId);
+		if (!$tool) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+		
+		if ($tool['Tool']['tool_restrictions'] == self::UNRESTRICTED) {
+			return true;
+		}
+
+		$level = $this->__extractMemberLevel($tool, $userId);
+		if ($level != false) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
-	public function isUserAnInductor($toolId) {
-		return false;
+	public function isUserAnInductor($toolId, $userId) {
+		if (!$toolId) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+		$tool = $this->findByToolId($toolId);
+		if (!$tool) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+		
+		$level = $this->__extractMemberLevel($tool, $userId);
+		if ($level == self::LVL_INDUCTOR || $level == self::LVL_MAINTAINER) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
-	public function isUserAMaintainer($toolId) {
+	public function isUserAMaintainer($toolId, $userId) {
+		if (!$toolId) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+		$tool = $this->findByToolId($toolId);
+		if (!$tool) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+		
+		$level = $this->__extractMemberLevel($tool, $userId);
+		if ($level == self::LVL_MAINTAINER) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	private function __extractMemberLevel($tool, $userId) {
+		foreach ($tool['Member'] as $member) {
+			if ($member['member_id'] == $userId) {
+				return $member['mt_access_level'];
+			}
+		}
 		return false;
 	}
 }

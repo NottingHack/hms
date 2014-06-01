@@ -1,3 +1,34 @@
+div.calendarnav {
+	margin: 10px 0 10px 0;
+}
+
+img.navleft {
+	float: left;
+	top: 0px;
+}
+
+img.navright {
+	float: right;
+	top: 0px;
+}
+
+.key {
+	width: 300px;
+	height: 30px;
+	margin: 0 auto;
+}
+
+.key div {
+	float: left;
+	margin: 0px 5px 0 5px;
+	width: 88px;
+	padding: 5px 0 5px 0;
+	border: 1px solid #000000;
+	text-align: center;
+	font-size: 0.8em;
+	font-weight: bold;
+}
+
 div.toolscalendar {
 	position: relative;
 }
@@ -25,6 +56,12 @@ div.toolscalendar tr.light,
 div.toolscalendar th.light,
 div.toolscalendar td.light {
 	border-bottom: 1px solid #CCCCCC;
+}
+
+div.toolscalendar tr.past,
+div.toolscalendar th.past,
+div.toolscalendar td.past {
+	background: #CCCCCC;
 }
 
 div.toolscalendar th {
@@ -55,8 +92,18 @@ div.event {
 	font-size: 0.9em;
 }
 
-div.booking {
-	background: #0000FF;
+.normal {
+	background: #195905;
+	color: #FFFFFF;
+}
+
+.induction {
+	background: #FF0000;
+	color: #FFFFFF;
+}
+
+.maintenance {
+	background: #000000;
 	color: #FFFFFF;
 }
 

@@ -15,6 +15,7 @@
 
 App::uses('HmsAuthenticate', 'Controller/Component/Auth');
 App::uses('Member', 'Model');
+App::uses('Tools.ToolsTool', 'Model');
 
 /**
  * Base controller for all controllers in the Tools plugin.
@@ -65,10 +66,26 @@ class ToolsAppController extends AppController {
 													 ),
 								);
 
+		// Array of all requests in this plugin that may be restricted
+		$restrictedRequests = array(
+									'ToolsTools' =>	array(
+														  'view',
+														  'addbooking',
+														  )
+									);
+
 		if ($this->request->params['plugin'] == 'Tools') {
+			// is it a general page?
 			if (array_key_exists($this->request->params['controller'], $allowedRequests)) {
 				if (in_array($this->request->params['action'], $allowedRequests[$this->request->params['controller']])) {
 					return true;
+				}
+			}
+
+			// Is this user allowed to access this page?
+			if (array_key_exists($this->request->params['controller'], $restrictedRequests)) {
+				if (in_array($this->request->params['action'], $restrictedRequests[$this->request->params['controller']])) {
+					return $this->ToolsTool->isUserInducted($this->request->params['pass'][0], $memberId);
 				}
 			}
 		}

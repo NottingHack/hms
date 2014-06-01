@@ -27,7 +27,7 @@ class ToolsToolsController extends ToolsAppController {
 	 * The models we will need in this controller
 	 * @var array
 	 */
-	public $uses = array('Tools.ToolsTool', 'Tools.ToolsGoogle');
+	public $uses = array('Tools.ToolsTool', 'Tools.ToolsGoogle', 'Member');
 
 	/**
 	 * List of components this controller uses.
@@ -51,6 +51,13 @@ class ToolsToolsController extends ToolsAppController {
 			'Tool.tool_name' => 'desc'
 		)
 	);
+
+	/**
+	 * Booking types
+	 */
+	const TYPE_NORMAL = "normal";
+	const TYPE_INDUCTION = "induction";
+	const TYPE_MAINTAIN = "maintenance";
 
 	/**
 	 * call the parent constructor and setup the google model
@@ -154,6 +161,9 @@ class ToolsToolsController extends ToolsAppController {
 					'action'		=>	'setupGoogle'
 					));
 			}
+			$this->loadModel('Tools.ToolsTool');
+			$restricted = array(ToolsTool::UNRESTRICTED => 'Unrestricted', ToolsTool::RESTRICTED => 'Restricted');
+			$this->set("restricted", $restricted);
 
 			if ($this->request->is('post')) {
 				// first, save the entered details as a new tool
@@ -194,19 +204,23 @@ class ToolsToolsController extends ToolsAppController {
 	 *
 	 * @param int the tool ID
 	 */
-	public function edit($tool_id = null) {
-		if (!$tool_id) {
+	public function edit($toolId = null) {
+		if (!$toolId) {
 			throw new NotFoundException(__('Invalid tool'));
 		}
 
-		$tool = $this->ToolsTool->findByToolId($tool_id);
+		$tool = $this->ToolsTool->findByToolId($toolId);
 		if (!$tool) {
 			throw new NotFoundException(__('Invalid tool'));
 		}
 		
+		$this->loadModel('Tools.ToolsTool');
+		$restricted = array(ToolsTool::UNRESTRICTED => 'Unrestricted', ToolsTool::RESTRICTED => 'Restricted');
+		$this->set("restricted", $restricted);
+
 		if ($this->request->is('post') || $this->request->is('put')) {
 			// If the form data can be validated and saved...
-			$this->ToolsTool->id = $tool_id;
+			$this->ToolsTool->id = $toolId;
 			if ($this->ToolsTool->save($this->request->data)) {
 				$this->Session->setFlash('Tool Saved!');
 				return $this->redirect(array(
@@ -227,12 +241,12 @@ class ToolsToolsController extends ToolsAppController {
 	 *
 	 * @param int the tool ID
 	 */
-	public function publicAccess($tool_id) {
-		if (!$tool_id) {
+	public function publicAccess($toolId) {
+		if (!$toolId) {
 			throw new NotFoundException(__('Invalid tool'));
 		}
 
-		$tool = $this->ToolsTool->findByToolId($tool_id);
+		$tool = $this->ToolsTool->findByToolId($toolId);
 		if (!$tool) {
 			throw new NotFoundException(__('Invalid tool'));
 		}
@@ -248,18 +262,23 @@ class ToolsToolsController extends ToolsAppController {
 	 * 
 	 * @param int the tool ID
 	 */
-	public function view($tool_id) {
+	public function view($toolId) {
 		// check we have a valid tool
-		if (!$tool_id) {
+		if (!$toolId) {
 			throw new NotFoundException(__('Invalid tool'));
 		}
 
-		$tool = $this->ToolsTool->findByToolId($tool_id);
+		$tool = $this->ToolsTool->findByToolId($toolId);
 		if (!$tool) {
 			throw new NotFoundException(__('Invalid tool'));
 		}
 
-		$monday = $this->__getMonday();
+		if (isset($this->request->query['mon'])) {
+			$monday = new DateTime($this->request->query['mon']);
+		}
+		else {
+			$monday = $this->__getMonday();
+		}
 		$events = $this->ToolsGoogle->getWeeksEvents($monday, $tool['Tool']['tool_calendar']);
 		//debug($events);
 
@@ -273,32 +292,133 @@ class ToolsToolsController extends ToolsAppController {
 	 *
 	 * @param int the tool ID
 	 */
-	public function addBooking($tool_id) {
-		if (!$tool_id) {
+	public function addBooking($toolId) {
+		if (!$toolId) {
 			throw new NotFoundException(__('Invalid tool'));
 		}
 
-		$tool = $this->ToolsTool->findByToolId($tool_id);
+		$tool = $this->ToolsTool->findByToolId($toolId);
 		if (!$tool) {
 			throw new NotFoundException(__('Invalid tool'));
 		}
 
-
 		// what types of booking will this user be able to make?
-		$type = array('normal'=>'Normal');
+		$type = array(self::TYPE_NORMAL=>'Normal');
 
+		$userId = $this->_getUserID();
 		// is user an inductor on this tool?
-		if ($this->ToolsTool->isUserAnInductor($tool_id)) {
-			$type['induction'] = 'Induction';
+		if ($this->ToolsTool->isUserAnInductor($toolId, $userId)) {
+			$type[self::TYPE_INDUCTION] = 'Induction';
 		}
-		if ($this->ToolsTool->isUserAMaintainer($tool_id)) {
-			$type['maintenance'] = 'Maintenance';
+		// is the user a maintainer?
+		if ($this->ToolsTool->isUserAMaintainer($toolId, $userId)) {
+			$type[self::TYPE_MAINTAIN] = 'Maintenance';
 		}
-
-		
 
 		$this->set('tool', $tool);
 		$this->set('type_options', $type);
+
+		if ($this->request->is('post')) {
+			// process the input
+			// we know it is dd/mm/yyyy, but PHP can't parse that
+			$start_parts = explode('/', $this->request['data']['Tool']['start_date']);
+			$end_parts = explode('/', $this->request['data']['Tool']['end_date']);
+			
+			$start_date = new DateTime($start_parts[2] . '-' . $start_parts[1] . '-' . $start_parts[0] . ' ' . $this->request['data']['Tool']['start_hours'] . ':' . $this->request['data']['Tool']['start_mins'], new DateTimeZone('Europe/London'));
+			$end_date = new DateTime($end_parts[2] . '-' . $end_parts[1] . '-' . $end_parts[0] . ' ' . $this->request['data']['Tool']['end_hours'] . ':' . $this->request['data']['Tool']['end_mins'], new DateTimeZone('Europe/London'));
+
+			// the view will need these if there is an error
+			$this->set('start_date', $start_date);
+			$this->set('end_date', $end_date);
+
+			// set preview based on start date
+
+			// BASIC CHECKS
+			// can this user post this event?
+			// we know that only inducted users can here, because of isAuthorized
+			if ($this->request['data']['Tool']['booking_type'] == self::TYPE_INDUCTION && !$this->ToolsTool->isUserAMaintainer($toolId, $userId)) {
+				$this->Session->setFlash(__("Must be an maintainer to book a maintenance slot"));
+				return;
+			}
+			if ($this->request['data']['Tool']['booking_type'] == self::TYPE_MAINTAIN && !$this->ToolsTool->isUserAnInductor($toolId, $userId)) {
+				$this->Session->setFlash(__("Must be an inductor to book an induction"));
+				return;
+			}
+
+			// check start date is in the future (within 30 minutes)
+			$now = new DateTime('now -30 minutes', new DateTimeZone('Europe/London'));
+			if ($start_date <= $now) {
+				$this->Session->setFlash(__("Start date cannot be in the past"));
+				return;
+			}
+
+			// check the end date is after the start date
+			if ($end_date < $start_date) {
+				$this->Session->setFlash(__("End date must be after the start date"));
+				return;
+			}
+
+			// check the end and start date aren't the same?
+			if ($end_date == $start_date) {
+				$this->Session->setFlash(__("Length of booking must be greater than zero!"));
+				return;
+			}
+
+			// check length <= max
+			$length = ($end_date->getTimestamp() - $start_date->getTimestamp()) / 60;
+			if ($length > $tool['Tool']['tool_length_max']) {
+				$this->Session->setFlash(__("Maximum booking time is " . $tool['Tool']['tool_length_max'] . " minutes for this tool"));
+				return;
+			}
+
+			// ADVANCED CHECKS
+			// get a list of events from google, from today for a year
+			$events = $this->ToolsGoogle->getFutureEvents($tool['Tool']['tool_calendar']);
+
+			// does it clash?
+			if ($this->__checkForClash($start_date, $end_date, $events)) {
+				$this->Session->setFlash(__("Clashes with another booking"));
+				return;
+			}
+
+			// how many existing bookings does user have?
+			if ($this->request['data']['Tool']['booking_type'] == self::TYPE_INDUCTION || $this->request['data']['Tool']['booking_type'] == self::TYPE_MAINTAIN) {
+				// users can have infinite of these
+			}
+			else {
+				$userEvents = $this->__getNormalEvents($this->ToolsGoogle->getEventsForUser($userId, $events));
+				if (count($userEvents) + 1 >= $tool['Tool']['tool_bookings_max']) {
+					$txt = $tool['Tool']['tool_bookings_max'] > 1 ? "bookings" : "booking";
+					$this->Session->setFlash(__("You can only have " . $tool['Tool']['tool_bookings_max'] . " " . $txt . " for this tool"));
+					return;
+				}
+			}
+
+			// Phew!  We can now add the booking
+			$now->add(new DateInterval('PT30M'));
+			$details = array(
+				'type'		=>	$this->request['data']['Tool']['booking_type'],
+				'booked'	=>	$now->format(ToolsGoogle::DATETIME_STR),
+				'member'	=>	$userId,
+				);
+			if ($this->ToolsGoogle->saveEvent($start_date, $end_date, $details, $tool['Tool']['tool_calendar'])) {
+				$this->Session->setFlash(__("Booking Added"));
+			}
+			else {
+				$this->Session->setFlash(__("Booking Failed"));
+			}
+			return $this->redirect(array(
+					'plugin'		=>	'Tools',
+					'controller'	=>	'ToolsTools',
+					'action'		=>	'view',
+					$toolId,
+					));
+		}
+		else {
+			// set preview based on passed parameter
+			// look at 2 weeks before and after to show the preview
+			$start_date = new DateTime($this->request->query['t'], new DateTimeZone('Europe/London'));
+		}
 	}
 
 	/**
@@ -319,6 +439,52 @@ class ToolsToolsController extends ToolsAppController {
 		$date->sub(new DateInterval('P' . $offset . 'D'));
 
 		return $date;
+	}
+
+	/**
+	 * Checks to see if the event in question clashes with any others
+	 *
+	 * @param DateTime the start date/time of the event
+	 * @param DateTime the end date/time of the event
+	 * @param Array an array of future events, sorted by start date
+	 * @return Boolean true is the new event clashes with an existing event
+	 */
+	private function __checkForClash($start, $end, $events) {
+		foreach ($events as $event) {
+			// first possibility, the new event <= existing events
+			// If the start or end are within an existing event, there is a clash
+
+			if ($start > $event['start'] && $start < $event['end']) {
+				return true;
+			}
+			if ($end > $event['start'] && $end < $event['end']) {
+				return true;
+			}
+
+			// second possibility, the new event < existing events
+			// If the existing event start is within the new event, there is a clash
+			if ($event['start'] > $start && $event['start'] < $end) {
+				return true;
+			}
+
+		}
+		return false;
+	}
+
+	/**
+	 * Checks to see if the event in question clashes with any others
+	 *
+	 * @param array events to check
+	 * @return array only normal events
+	 */
+	private function __getNormalEvents($events) {
+		$normalEvents = array();
+		foreach ($events as $event) {
+			if ($event['type'] = self::TYPE_NORMAL) {
+				$normalEvents[] = $event;
+			}
+		}
+		return $normalEvents;
 	}
 }
 ?>

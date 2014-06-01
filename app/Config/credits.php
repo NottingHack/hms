@@ -14,6 +14,22 @@ $config = array(
 			),
 		array(
 			'type'			=> 'image',
+			'location'		=> 'icon_arrow_right_large.png',
+			'attribution'	=> 'Arrow designed by Jamison Wieser from the Noun Project',
+			'link'			=> 'http://www.thenounproject.com/term/arrow/5440/',
+			'licence'		=> 'Creative Commons – Attribution (CC BY 3.0)',	
+			'licence_link'	=> 'http://creativecommons.org/licenses/by/3.0/us/',
+			),
+		array(
+			'type'			=> 'image',
+			'location'		=> 'icon_arrow_left_large.png',
+			'attribution'	=> 'Arrow designed by Jamison Wieser from the Noun Project',
+			'link'			=> 'http://www.thenounproject.com/term/arrow/5443/',
+			'licence'		=> 'Creative Commons – Attribution (CC BY 3.0)',	
+			'licence_link'	=> 'http://creativecommons.org/licenses/by/3.0/us/',
+			),
+		/*array(
+			'type'			=> 'image',
 			'location'		=> 'icon_calendar_add_large.png',
 			'attribution'	=> 'Calendar designed by Simple Icons from the Noun Project',
 			'link'			=> 'http://thenounproject.com/term/calendar/31040/',
@@ -43,7 +59,7 @@ $config = array(
 			'link'			=> 'http://www.thenounproject.com/term/smile/31236/',
 			'licence'		=> 'Creative Commons – Attribution (CC BY 3.0)',	
 			'licence_link'	=> 'http://creativecommons.org/licenses/by/3.0/us/',
-			),
+			),*/
 		),
 	);
 

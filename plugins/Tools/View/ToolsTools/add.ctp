@@ -12,7 +12,7 @@ echo $this->Form->input('tool_name', array(
 echo $this->Form->input('tool_restrictions', array(
 	'label'		=>	'Restricted?',
 	'type'		=>	'select',
-	'options'	=>	array('UNRESTRICTED' => 'Unrestricted', 'RESTRICTED' => 'Restricted'),
+	'options'	=>	$restricted,
 	));
 echo $this->Form->input('tool_pph', array(
 	'label'		=>	'Cost (pence per hour)',
