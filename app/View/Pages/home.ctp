@@ -31,7 +31,7 @@
 	?>
 <?php else: ?>
 
-	<h2>Welcome to Notthingham Hackspace HMS!</h2>
+	<h2>Welcome to Nottingham Hackspace HMS!</h2>
 
 	<h3>What is Nottinghack?</h3>
 	<p>Nottinghack is a Nottingham based group for hackers, makers and crafty creatives!</p>
