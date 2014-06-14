@@ -164,7 +164,7 @@ class ToolsToolsController extends ToolsAppController {
 				// this will throw validation errors early.
 				$this->ToolsTool->create();
 
-				$saveFields = array('tool_name', 'tool_restrictions', 'tool_pph', 'tool_address');
+				$saveFields = array('tool_name', 'tool_restrictions', 'tool_pph', 'tool_booking_length', 'tool_length_max', 'tool_bookings_max');
 				if ($this->ToolsTool->save($this->request->data, true, $saveFields)) {
 					// The data is saved, and validated.
 					// This means that tool_name is definitely unique.

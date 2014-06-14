@@ -17,8 +17,14 @@ echo $this->Form->input('tool_restrictions', array(
 echo $this->Form->input('tool_pph', array(
 	'label'		=>	'Cost (pence per hour)',
 	));
-echo $this->Form->input('tool_address', array(
-	'label'		=>	'Arduino address',
+echo $this->Form->input('tool_booking_length', array(
+	'label'		=>	'Default booking length (minutes)',
+	));
+echo $this->Form->input('tool_length_max', array(
+	'label'		=>	'Maximum booking length (minutes)',
+	));
+echo $this->Form->input('tool_bookings_max', array(
+	'label'		=>	'Maximum number of booking per user',
 	));
 echo $this->Form->end('Save Tool');
 
