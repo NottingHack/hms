@@ -24,7 +24,7 @@ $previous = array(
 		'plugin'		=>	'Tools',
 		'controller'	=>	'ToolsTools',
 		'action'		=>	'view',
-		16,
+		$tool['Tool']['tool_id'],
 		'?'				=>	array(
 			'mon'	=> $date->format(ToolsGoogle::DATETIME_STR),
 			),
@@ -41,7 +41,7 @@ $next = array(
 		'plugin'		=>	'Tools',
 		'controller'	=>	'ToolsTools',
 		'action'		=>	'view',
-		16,
+		$tool['Tool']['tool_id'],
 		'?'				=>	array(
 			'mon'	=> $date->format(ToolsGoogle::DATETIME_STR),
 			),
@@ -96,7 +96,7 @@ $next = array(
 					'plugin'		=>	'Tools',
 					'controller'	=>	'ToolsTools',
 					'action'		=>	'addbooking',
-					16,
+					$tool['Tool']['tool_id'],
 					'?'				=>	array(
 						't'	=> $date->format(ToolsGoogle::DATETIME_STR),
 						),
