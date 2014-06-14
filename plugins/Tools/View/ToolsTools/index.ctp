@@ -8,6 +8,11 @@ $tool_status = array(
 	'DISABLED'	=>	'Disabled',
 	);
 
+// Tool status may not be set, so need to deal with that.
+if (!isset($tool['Tool']['tool_status'])) {
+	$tool['Tool']['tool_status'] = '';
+}
+
 ?>
 <h2>Tools</h2>
 

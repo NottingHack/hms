@@ -127,12 +127,6 @@ class ToolsToolsController extends ToolsAppController {
 			// Get the tools
 			$tools = $this->ToolsTool->find('all');
 
-			// Is user Full access
-			$fullAccess = false;
-			if ($this->Member->GroupsMember->isMemberInGroup( $this->_getUserID(), Group::FULL_ACCESS )) {
-				$fullAccess = true;
-			}
-
 			for ($i = 0; $i < count($tools); $i++) {
 				$tools[$i]['Tool']['next_booking'] = $this->ToolsGoogle->getNextBooking($tools[$i]['Tool']['tool_calendar']);
 				
