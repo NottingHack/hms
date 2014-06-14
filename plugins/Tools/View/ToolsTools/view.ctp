@@ -51,6 +51,8 @@ $next = array(
 
 <h2><?php echo($tool['Tool']['tool_name']); ?></h2>
 
+<p>To add a booking, click on any white area in the calendar below.</p>
+
 <div class="calendarnav">
 <?php echo($this->Html->image("Tools.icon_arrow_left.png", $previous)) ?>
 <?php echo($this->Html->image("Tools.icon_arrow_right.png", $next)) ?>
