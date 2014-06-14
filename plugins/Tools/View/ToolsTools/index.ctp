@@ -8,11 +8,6 @@ $tool_status = array(
 	'DISABLED'	=>	'Disabled',
 	);
 
-// Tool status may not be set, so need to deal with that.
-if (!isset($tool['Tool']['tool_status'])) {
-	$tool['Tool']['tool_status'] = '';
-}
-
 ?>
 <h2>Tools</h2>
 
@@ -32,6 +27,12 @@ if (count($tools) > 0) {
 <?php
 
 	foreach ($tools as $tool) {
+		debug ($tool);
+		// Tool status may not be set, so need to deal with that.
+		if ((isset($tool['Tool']['tool_status']) && $tool['Tool']['tool_status'] == '') || !isset($tool['Tool']['tool_status'])) {
+			$tool['Tool']['tool_status'] = 'DISABLED';
+		}
+
 		$img_options = array(
 			'alt'	=> 'Access Tool',
 			'title'	=> 'Access Tool',
