@@ -1,0 +1,10 @@
+div#booking {
+	width: 60%;
+	float: left;
+}
+
+div#dayview {
+	width: 35%;
+	float: right;
+	overflow: auto;
+}

@@ -1,0 +1,345 @@
+div.calendarnav {
+	margin: 10px 0 10px 0;
+}
+
+img.navleft {
+	float: left;
+	top: 0px;
+}
+
+img.navright {
+	float: right;
+	top: 0px;
+}
+
+.key {
+	width: 300px;
+	height: 30px;
+	margin: 0 auto;
+}
+
+.key div {
+	float: left;
+	margin: 0px 5px 0 5px;
+	width: 88px;
+	padding: 5px 0 5px 0;
+	border: 1px solid #000000;
+	text-align: center;
+	font-size: 0.8em;
+	font-weight: bold;
+}
+
+div.toolscalendar {
+	position: relative;
+}
+
+div.toolscalendar table,
+div.toolscalendar tr,
+div.toolscalendar th,
+div.toolscalendar td {
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
+
+div.toolscalendar tr,
+div.toolscalendar th,
+div.toolscalendar td {
+	border: 1px solid #195905;
+	height: 14px;
+}
+
+div.toolscalendar tr.light,
+div.toolscalendar th.light,
+div.toolscalendar td.light {
+	border-bottom: 1px solid #CCCCCC;
+}
+
+div.toolscalendar tr.past,
+div.toolscalendar th.past,
+div.toolscalendar td.past {
+	background: #CCCCCC;
+}
+
+div.toolscalendar th {
+	height: 29px;
+}
+
+div.toolscalendar td a {
+	display: block;
+	height: 14px;
+}
+
+div.toolscalendar td.time {
+	padding: 0px;
+	text-align: right;
+}
+
+div.toolscalendar td.time span {
+	font-size: 0.6em;
+	padding-right: 5px;
+}
+
+div.event {
+	width: 110px;
+	border-radius: 5px;
+	padding: 1px 5px 1px 5px;
+	position: absolute;
+	top: 0px;
+	font-size: 0.9em;
+}
+
+.normal {
+	background: #195905;
+	color: #FFFFFF;
+}
+
+.induction {
+	background: #FF0000;
+	color: #FFFFFF;
+}
+
+.maintenance {
+	background: #000000;
+	color: #FFFFFF;
+}
+
+div.day_1 {
+	left: 54px;
+}
+
+div.day_2 {
+	left: 181px;
+}
+
+div.day_3 {
+	left: 308px;
+}
+
+div.day_4 {
+	left: 435px;
+}
+
+div.day_5 {
+	left: 562px;
+}
+
+div.day_6 {
+	left: 689px;
+}
+
+div.day_7 {
+	left: 816px;
+}
+
+div.len_30 {
+	height: 8px;
+	font-size: 0.7em;
+}
+
+div.len_60 {
+	height: 23px;
+}
+
+div.len_90 {
+	height: 38px;
+}
+
+div.len_120 {
+	height: 53px;
+}
+
+div.start_0000 {
+	top: 33px;
+}
+
+div.start_0030 {
+	top: 48px;	
+}
+
+div.start_0100 {
+	top: 63px;
+}
+
+div.start_0130 {
+	top: 78px;
+}
+
+div.start_0200 {
+	top: 93px;
+}
+
+div.start_0230 {
+	top: 108px;
+}
+
+div.start_0300 {
+	top: 123px;
+}
+
+div.start_0330 {
+	top: 138px;
+}
+
+div.start_0400 {
+	top: 153px;
+}
+
+div.start_0430 {
+	top: 168px;
+}
+
+div.start_0500 {
+	top: 183px;
+}
+
+div.start_0530 {
+	top: 198px;
+}
+
+div.start_0600 {
+	top: 213px;
+}
+
+div.start_0630 {
+	top: 228px;
+}
+
+div.start_0700 {
+	top: 243px;
+}
+
+div.start_0730 {
+	top: 258px;
+}
+
+div.start_0800 {
+	top: 273px;
+}
+
+div.start_0830 {
+	top: 288px;
+}
+
+div.start_0900 {
+	top: 303px;
+}
+
+div.start_0930 {
+	top: 318px;
+}
+
+div.start_1000 {
+	top: 333px;
+}
+
+div.start_1030 {
+	top: 348px;
+}
+
+div.start_1100 {
+	top: 363px;
+}
+
+div.start_1130 {
+	top: 378px;
+}
+
+div.start_1200 {
+	top: 393px;
+}
+
+div.start_1230 {
+	top: 408px;
+}
+
+div.start_1300 {
+	top: 423px;
+}
+
+div.start_1330 {
+	top: 438px;
+}
+
+div.start_1400 {
+	top: 453px;
+}
+
+div.start_1430 {
+	top: 468px;
+}
+
+div.start_1500 {
+	top: 483px;
+}
+
+div.start_1530 {
+	top: 498px;
+}
+
+div.start_1600 {
+	top: 513px;
+}
+
+div.start_1630 {
+	top: 528px;
+}
+
+div.start_1700 {
+	top: 543px;	
+}
+
+div.start_1730 {
+	top: 558px;
+}
+
+div.start_1800 {
+	top: 573px;
+}
+
+div.start_1830 {
+	top: 588px;
+}
+
+div.start_1900 {
+	top: 603px;
+}
+
+div.start_1930 {
+	top: 618px;
+}
+
+div.start_2000 {
+	top: 633px;
+}
+
+div.start_2030 {
+	top: 648px;
+}
+
+div.start_2100 {
+	top: 663px;
+}
+
+div.start_2130 {
+	top: 678px;
+}
+
+div.start_2200 {
+	top: 693px;
+}
+
+div.start_2230 {
+	top: 708px;
+}
+
+div.start_2300 {
+	top: 723px;
+}
+
+div.start_2330 {
+	top: 738px;
+}
