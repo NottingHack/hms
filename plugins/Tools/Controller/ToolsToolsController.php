@@ -381,7 +381,7 @@ class ToolsToolsController extends ToolsAppController {
 			}
 			else {
 				$userEvents = $this->__getNormalEvents($this->ToolsGoogle->getEventsForUser($userId, $events));
-				if (count($userEvents) + 1 >= $tool['Tool']['tool_bookings_max']) {
+				if (count($userEvents) >= $tool['Tool']['tool_bookings_max']) {
 					$txt = $tool['Tool']['tool_bookings_max'] > 1 ? "bookings" : "booking";
 					$this->Session->setFlash(__("You can only have " . $tool['Tool']['tool_bookings_max'] . " " . $txt . " for this tool"));
 					return;
