@@ -88,7 +88,8 @@ if (isset($this->request->query['t'])) {
 		));
 	}
 	else {
-		$type = array_keys($type_options)[0];
+		$type = array_keys($type_options);
+		$type = $type[0];
 		echo $this->Form->hidden('booking_type', array('value'=>$type));
 	}
 
