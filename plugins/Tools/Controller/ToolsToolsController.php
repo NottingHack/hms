@@ -330,11 +330,11 @@ class ToolsToolsController extends ToolsAppController {
 			// BASIC CHECKS
 			// can this user post this event?
 			// we know that only inducted users can here, because of isAuthorized
-			if ($this->request['data']['Tool']['booking_type'] == self::TYPE_INDUCTION && !$this->ToolsTool->isUserAMaintainer($toolId, $userId)) {
+			if ($this->request['data']['Tool']['booking_type'] == self::TYPE_MAINTAIN && !$this->ToolsTool->isUserAMaintainer($toolId, $userId)) {
 				$this->Session->setFlash(__("Must be an maintainer to book a maintenance slot"));
 				return;
 			}
-			if ($this->request['data']['Tool']['booking_type'] == self::TYPE_MAINTAIN && !$this->ToolsTool->isUserAnInductor($toolId, $userId)) {
+			if ($this->request['data']['Tool']['booking_type'] == self::TYPE_INDUCTION && !$this->ToolsTool->isUserAnInductor($toolId, $userId)) {
 				$this->Session->setFlash(__("Must be an inductor to book an induction"));
 				return;
 			}
