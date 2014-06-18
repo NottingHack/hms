@@ -474,7 +474,7 @@ class ToolsToolsController extends ToolsAppController {
 	private function __getNormalEvents($events) {
 		$normalEvents = array();
 		foreach ($events as $event) {
-			if ($event['type'] = self::TYPE_NORMAL) {
+			if ($event['type'] == self::TYPE_NORMAL) {
 				$normalEvents[] = $event;
 			}
 		}
