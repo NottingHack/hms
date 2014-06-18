@@ -282,6 +282,30 @@ class ToolsToolsController extends ToolsAppController {
 	}
 
 	/**
+	 * Requests an induction
+	 * Sends an email to the tools induction address with the member's availability
+	 *
+	 * @param in the tool ID
+	 */
+	public function requestInduction($toolId) {
+		// check we have a valid tool
+		if (!$toolId) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+		$tool = $this->ToolsTool->findByToolId($toolId);
+		if (!$tool) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+		$this->set('tool', $tool);
+		
+		if ($tool['Tool']['tool_restrictions'] == ToolsTool::UNRESTRICTED) {
+			throw new NotFoundException(__('This tool doesn\'t require an induction'));
+		}
+
+	}
+
+	/**
 	 * Adds a booking
 	 *
 	 * @param int the tool ID
