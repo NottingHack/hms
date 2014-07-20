@@ -182,12 +182,12 @@ class ToolsToolsController extends ToolsAppController {
 					}
 					else {
 						// delete the entire record!
-						$this->Session->setFlash(__('Unable to add your Tool.'));
+						$this->Session->setFlash(__('Unable to add your Tool (Google).'));
 						$this->ToolsTool->delete($this->ToolsTool->id);
 					}
 				}
 				else {
-					$this->Session->setFlash(__('Unable to add your Tool.'));
+					$this->Session->setFlash(__('Unable to add your Tool (DB).'));
 				}
 			}
 		}

@@ -192,6 +192,8 @@ class ToolsGoogle extends ToolsAppModel {
 			// set up the calendar and save
 			$calendar = new Google_Service_Calendar_Calendar();
 			$calendar->setSummary($calendarName);
+			$calendar->setTimeZone('Europe/London');
+			$calendar->setLocation('United Kingdom');
 			try {
 				$calendar = $this->__service->calendars->insert($calendar);
 			} catch (Exception $e) {
@@ -225,17 +227,17 @@ class ToolsGoogle extends ToolsAppModel {
 	 */
 	public function getNextBooking($calendarId) {
 		if ($this->authorised()) {
+			// getting rid of maxResults as we need to filter invitations!
 			$params = array(
-				'maxResults'	=>	1,
 				'orderBy'		=>	'startTime',
 				'singleEvents'	=>	true,
 				'timeMin'		=>	date(self::DATETIME_STR),
 				);
 
-			$events = $this->__service->events->listEvents($calendarId, $params)->getItems();
+			$events = $this->__parseEvents($this->__service->events->listEvents($calendarId, $params)->getItems(), $calendarId);
 
 			if (count($events) > 0) {
-				return new DateTime($events[0]['start']['dateTime'], new DateTimeZone('Europe/London'));
+				return $events[0]['start'];
 			}
 			else {
 				return false;
@@ -285,7 +287,7 @@ class ToolsGoogle extends ToolsAppModel {
 				return $googleEvents;
 			}
 
-			return $this->__parseEvents($googleEvents);
+			return $this->__parseEvents($googleEvents, $calendarId);
 
 		}
 		return array();
@@ -315,7 +317,7 @@ class ToolsGoogle extends ToolsAppModel {
 				return $googleEvents;
 			}
 
-			return $this->__parseEvents($googleEvents);
+			return $this->__parseEvents($googleEvents, $calendarId);
 		}
 	}
 
@@ -421,21 +423,28 @@ class ToolsGoogle extends ToolsAppModel {
 	/**
 	 * Takes an array of google events and returns an array with the important info
 	 *
+	 * Discards any events not organised by this calendar, as we are not able to
+	 * turn off invitations
+	 *
 	 * @param array google events
 	 * @return array events
 	 */
-	private function __parseEvents($googleEvents) {
+	private function __parseEvents($googleEvents, $calendarId) {
 		$events = array();
 		foreach ($googleEvents as $googleEvent) {
+			if ($googleEvent->getOrganizer()->getEmail() != $calendarId) {
+				// this is not organised by us, probably an invitation
+				continue;
+			}
 			$description = json_decode($googleEvent->getDescription());
 			$event = array(
 				'id'		=>	$googleEvent->getId(),
 				'title'		=>	$googleEvent->getSummary(),
 				'type'		=>	$description->type,
-				'booked'	=>	new DateTime($description->booked),
+				'booked'	=>	new DateTime($description->booked, new DateTimeZone('Europe/London')),
 				'member'	=>	$description->member,
-				'start'		=>	new DateTime($googleEvent->getStart()->getDateTime()),
-				'end'		=>	new DateTime($googleEvent->getEnd()->getDateTime()),
+				'start'		=>	new DateTime($googleEvent->getStart()->getDateTime(), new DateTimeZone('Europe/London')),
+				'end'		=>	new DateTime($googleEvent->getEnd()->getDateTime(), new DateTimeZone('Europe/London')),
 				);
 			$events[] = $event;
 		}
