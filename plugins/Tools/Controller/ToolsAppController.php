@@ -71,7 +71,8 @@ class ToolsAppController extends AppController {
 									'ToolsTools' =>	array(
 														  'view',
 														  'addbooking',
-														  'listbookings'
+														  'listBookings',
+														  'publicAccess',
 														  )
 									);
 

@@ -47,11 +47,26 @@ $next = array(
 			),
 		),
 	);
+
+// action links
+$publicAccess = array(
+	'plugin'		=>	'Tools',
+	'controller'	=>	'ToolsTools',
+	'action'		=>	'publicAccess',
+	$tool['Tool']['tool_id'],
+);
+$listBookings = array(
+	'plugin'		=>	'Tools',
+	'controller'	=>	'ToolsTools',
+	'action'		=>	'listBookings',
+	$tool['Tool']['tool_id'],
+);
 ?>
 
 <h2><?php echo($tool['Tool']['tool_name']); ?></h2>
 
 <p>To add a booking, click on any white area in the calendar below.</p>
+<p><?php echo($this->Html->link("Subscribe to Calendar", $publicAccess)); ?> | <?php echo($this->Html->link("List / Cancel Bookings", $listBookings)); ?></p>
 
 <div class="calendarnav">
 <?php echo($this->Html->image("Tools.icon_arrow_left.png", $previous)) ?>
