@@ -464,6 +464,32 @@ class ToolsToolsController extends ToolsAppController {
 	}
 
 	/**
+	 * Delete a booking
+	 *
+	 * @param int the tool ID
+	 * @param string the event ID
+	 */
+	public function deleteBooking($toolId, $eventId) {
+		if (!$toolId) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+		$tool = $this->ToolsTool->findByToolId($toolId);
+		if (!$tool) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+		$this->ToolsGoogle->deleteBooking($tool['Tool']['tool_calendar'], $eventId);
+
+		return $this->redirect(array(
+					'plugin'		=>	'Tools',
+					'controller'	=>	'ToolsTools',
+					'action'		=>	'view',
+					$toolId,
+					));
+	}
+
+	/**
 	 * Returns a datetime object for the monday of this week at midnight (morning)
 	 *
 	 * @return DateTime monday morning at midnight

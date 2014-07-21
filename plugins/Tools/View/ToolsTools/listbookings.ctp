@@ -4,6 +4,9 @@ $this->Html->addCrumb('Tools', '/tools/');
 $this->Html->addCrumb($tool['Tool']['tool_name'], '/tools/view/' . $tool['Tool']['tool_id']);
 $this->Html->addCrumb('List Bookings', '#');
 
+/* Load the Add Booking JS */
+$this->Html->script('Tools.listbookings', array('inline' => false));
+
 ?>
 <h2>Your Bookings</h2>
 
@@ -26,6 +29,7 @@ if (count($events) > 0) {
 		$img_options = array(
 							'alt'	=> 'Delete Booking',
 							'title'	=> 'Delete Booking',
+							'class'	=> 'delete',
 							'url'	=> array('plugin' => 'Tools', 'controller' => 'ToolsTools', 'action' => 'deleteBooking', $tool['Tool']['tool_id'], $event['id']),
 							);
 ?>
@@ -43,5 +47,13 @@ if (count($events) > 0) {
 
 <?php
 }
-
+else {
 ?>
+<p>No future events found.</p>
+
+<?php
+}
+?>
+<div id="dialog-confirm" title="Are you sure?">
+  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Delete the booking that starts on </p>
+</div>

@@ -386,6 +386,18 @@ class ToolsGoogle extends ToolsAppModel {
 	}
 
 	/**
+	 * Delete an event from a calendar
+	 *
+	 * @param string calendarId of the calendar the event is in
+	 * @param string eventId of the event to delete
+	 */
+	public function deleteBooking($calendarId, $eventId) {
+		if ($this->authorised()) {
+			$this->__service->events->delete($calendarId, $eventId);
+		}
+	}
+
+	/**
 	 * Return the refresh token iff one is saved
 	 *
 	 * @return string token if saved, otherwise null
