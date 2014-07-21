@@ -440,6 +440,30 @@ class ToolsToolsController extends ToolsAppController {
 	}
 
 	/**
+	 * Lists the user's booking
+	 *
+	 * @param int the tool ID
+	 */
+	public function listBookings($toolId) {
+		if (!$toolId) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+
+		$tool = $this->ToolsTool->findByToolId($toolId);
+		if (!$tool) {
+			throw new NotFoundException(__('Invalid tool'));
+		}
+		$this->set('tool', $tool);
+
+		// Get this user's events
+		$userId = $this->_getUserID();
+
+		$events = $this->ToolsGoogle->getEventsForUser($userId, $tool['Tool']['tool_calendar']);
+
+		$this->set('events', $events);
+	}
+
+	/**
 	 * Returns a datetime object for the monday of this week at midnight (morning)
 	 *
 	 * @return DateTime monday morning at midnight

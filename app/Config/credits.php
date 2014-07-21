@@ -28,6 +28,14 @@ $config = array(
 			'licence'		=> 'Creative Commons – Attribution (CC BY 3.0)',	
 			'licence_link'	=> 'http://creativecommons.org/licenses/by/3.0/us/',
 			),
+		array(
+			'type'			=> 'image',
+			'location'		=> 'icon_delete_large.png',
+			'attribution'	=> 'Cross designed by Evgeniy Kozachenko from the Noun Project',
+			'link'			=> 'http://thenounproject.com/term/cross/16661/',
+			'licence'		=> 'Creative Commons – Attribution (CC BY 3.0)',	
+			'licence_link'	=> 'http://creativecommons.org/licenses/by/3.0/us/',
+			),
 		/*array(
 			'type'			=> 'image',
 			'location'		=> 'icon_calendar_add_large.png',
