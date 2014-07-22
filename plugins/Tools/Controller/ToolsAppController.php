@@ -73,6 +73,7 @@ class ToolsAppController extends AppController {
 														  'addbooking',
 														  'listBookings',
 														  'publicAccess',
+														  'deleteBooking'
 														  )
 									);
 
