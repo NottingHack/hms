@@ -32,10 +32,12 @@ class MemberEmail extends AppModel {
  */
 	public $validate = array(
 		'subject' => array(
-			'rule' => 'notEmpty'
+			'rule' => 'notEmpty',
+            'message' => 'This field cannot be left blank'
 		),
 		'message' => array(
-			'rule' => 'notEmpty'
+			'rule' => 'notEmpty',
+            'message' => 'This field cannot be left blank'
 		),
 	);
 

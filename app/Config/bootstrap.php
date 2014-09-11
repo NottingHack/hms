@@ -72,6 +72,24 @@ Cache::config('default', array('engine' => 'File'));
  *
  */
 
+CakePlugin::load('TinyMCE');
+Configure::write('TinyMCE.configs', array(
+    'basic' => array(
+        'selector' => 'textarea',
+        'theme' => 'advanced',
+        'plugins' => 'safari,advlink,paste',
+        'theme_advanced_buttons1' => 'code,|,copy,pastetext,|,bold,italic,underline,|,link,unlink,|,bullist,numlist',
+        'theme_advanced_buttons2' => '',
+        'theme_advanced_buttons3' => '',
+        'theme_advanced_toolbar_location' => 'top',
+        'theme_advanced_toolbar_align' => 'center',
+        'theme_advanced_statusbar_location' => 'none',
+        'theme_advanced_resizing' => false,
+        'theme_advanced_resize_horizontal' => false,
+        'convert_fonts_to_spans' => false
+    )
+));
+
 CakePlugin::load('MemberVoice', array('routes' => true));
 CakePlugin::load('Tools', array('routes' => true));
 
