@@ -76,13 +76,8 @@ $this->Html->script('MemberVoice.idea', array('inline' => false));
 	<h3><?php echo($start); ?> the conversation:</h3>
 	<?php
 	echo $this->Form->create('Comment', array('url' => $this->Html->url(array('plugin' => 'membervoice', 'controller' => 'comments', 'action' => 'add', 'base' => false))));
-	/*echo $this->Tinymce->input(
-		'Comment.comment', 
-		array( 'label' => 'Message' ),
-		array( 'language'=>'en' ), 
-		'basic' 
-		);*/
 	echo $this->Form->input('Comment.comment');
+	// echo $this->TinyMCE->editor('basic');
 	echo $this->Form->hidden('Comment.idea_id', array('value' => $idea['Idea']['id']));
 	echo $this->Form->hidden('Comment.user_id', array('value' => $user));
 	echo $this->Form->end('Comment');

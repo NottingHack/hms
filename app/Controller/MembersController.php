@@ -32,7 +32,7 @@ class MembersController extends AppController {
  * Views rendered from this controller will have access to the following helpers.
  * @var array
  */
-	public $helpers = array('Html', 'Form', 'Paginator', 'Tinymce', 'Currency', 'Mailinglist');
+	public $helpers = array('Html', 'Form', 'Paginator', 'TinyMCE.TinyMCE', 'Currency', 'Mailinglist');
 
 /**
  * The list of components this Controller relies on.
@@ -386,9 +386,10 @@ class MembersController extends AppController {
 			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
 		}
 
+		$this->set('id', $id);
 		$this->set('name', $this->Member->getUsernameForMember($id));
 
-		if ($this->request->is('post')) {
+		if ($this->request->is('post') && $this->Member->validateEmail($this->request->data)) {
 			try {
 				if ($this->Member->rejectDetails($id, $this->request->data, $this->_getLoggedInMemberId())) {
 					$this->Session->setFlash('Member has been contacted.');

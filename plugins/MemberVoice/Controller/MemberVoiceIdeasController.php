@@ -22,7 +22,7 @@ class MemberVoiceIdeasController extends MemberVoiceAppController {
  * Views rendered from this controller will have access to the following helpers.
  * @var array
  */
-	public $helpers = array('Html', 'Form', 'Paginator', 'Tinymce');
+	public $helpers = array('Html', 'Form', 'Paginator', 'TinyMCE.TinyMCE');
 
 /**
  * List of components this controller uses.
