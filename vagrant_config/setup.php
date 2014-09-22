@@ -43,7 +43,7 @@ function parseStringFromWebVar($index) {
 $setup = new Setup();
 
 $setup->setCreateDatabase(true);
-$setup->setUseRealKrb(false);
+$setup->setUseRealKrb(true);
 $setup->setSetupTempFolders(true);
 $setup->setUseDevelopmentEnvironment(true);
 $setup->setUserInfo('Admin', 'Account', 'Admin', 'admin@example.org');
