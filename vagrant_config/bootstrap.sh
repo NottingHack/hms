@@ -19,7 +19,8 @@ debconf-set-selections <<< 'krb5-config krb5-config/admin_server string hmsdev.n
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
 
-apt-get install -y apache2 php5-mysql libapache2-mod-php5 git haveged expect php-pear php5-dev libkrb5-dev mysql-server
+# nb. SetupCmd.php needs php5-mysqlnd not php5-mysql
+apt-get install -y apache2  php5-mysqlnd libapache2-mod-php5 git haveged expect php-pear php5-dev libkrb5-dev mysql-server
 
 
 # Install krb, create database, and set the master password to "krbMasterPassword"
@@ -71,14 +72,16 @@ mysql -uroot -proot -e "FLUSH PRIVILEGES"
 
 # Move the tmp folder into /home, having it in the shared/synced vagrant folder seems to cause permissions issues
 rm -rf /vagrant/app/tmp
-mkdir -p /home/vagrant/hms-tmp/hms
+
 chmod a+rw -R /home/vagrant/hms-tmp/hms
-ln -s /home/vagrant/hms-tmp/hms /vagrant/app/tmp
+
 
 # do hms setup
-cp /vagrant/vagrant_config/setup.php /vagrant/dev/Setup/Web/vagrant-setup.php
-cd /vagrant/dev/Setup/Web/
-php vagrant-setup.php
+cd /vagrant/dev/Setup/Cmd
+php SetupCmd.php -d -h=admin -n=admin -s=user -e=admin@example.org -k -v -f
+mkdir -p /home/vagrant/hms-tmp/hms
+mv /vagrant/app/tmp /home/vagrant/hms-tmp/hms
+ln -s /home/vagrant/hms-tmp/hms/tmp  /vagrant/app/tmp
 chmod a+rw -R /home/vagrant/hms-tmp/hms
 cp /vagrant/vagrant_config/krb.php /vagrant/app/Config
 
