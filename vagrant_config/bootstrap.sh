@@ -4,6 +4,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
 
+
 # set some default config for Kerberos & MySQL, so the installer doesn't ask during installation
 debconf-set-selections <<< 'libssl1.0.0:amd64 libssl1.0.0/restart-services string ntp'
 debconf-set-selections <<< 'krb5-config krb5-config/add_servers_realm string NOTTINGTEST.ORG.UK'
@@ -21,7 +22,6 @@ debconf-set-selections <<< 'mysql-server mysql-server/root_password_again passwo
 
 # nb. SetupCmd.php needs php5-mysqlnd not php5-mysql
 apt-get install -y apache2  php5-mysqlnd libapache2-mod-php5 git haveged expect php-pear php5-dev libkrb5-dev mysql-server
-
 
 # Install krb, create database, and set the master password to "krbMasterPassword"
 apt-get install krb5-{admin-server,kdc} -y
@@ -91,7 +91,13 @@ cp /vagrant/vagrant_config/krb.php /vagrant/app/Config
 kadmin.local -q "addprinc -randkey hms/web"
 rm /vagrant/app/Config/hms.keytab
 kadmin.local -q "ktadd -k /vagrant/app/Config/hms.keytab hms/web"
-chmod a+r /vagrant/app/Config/hms.keytab 
+chmod a+r /vagrant/app/Config/hms.keytab
+
+# PHPUnit for cakePHP 2.x
+pear upgrade PEAR
+pear config-set auto_discover 1
+pear install pear.phpunit.de/PHPUnit-3.7.32
+
 apachectl restart
 
 echo "alias sql=\"mysql -proot -uroot hms\"" > /home/vagrant/.bash_aliases
