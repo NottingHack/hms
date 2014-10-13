@@ -19,9 +19,14 @@ debconf-set-selections <<< 'krb5-config krb5-config/add_servers boolean true'
 debconf-set-selections <<< 'krb5-config krb5-config/admin_server string hmsdev.nottingtest.org.uk'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/dbconfig-install boolean true'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password root'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/app-password-confirm password phpmyadmin'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password mysql'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2'
 
 # nb. SetupCmd.php needs php5-mysqlnd not php5-mysql
-apt-get install -y apache2  php5-mysqlnd libapache2-mod-php5 git haveged expect php-pear php5-dev libkrb5-dev mysql-server
+apt-get install -y apache2  php5-mysqlnd libapache2-mod-php5 git haveged expect php-pear php5-dev libkrb5-dev mysql-server phpmyadmin
 
 # Install krb, create database, and set the master password to "krbMasterPassword"
 apt-get install krb5-{admin-server,kdc} -y
@@ -113,5 +118,7 @@ echo "kadmin: username = vagrant      password = vagrant"
 echo ""
 echo "Once connected, run 'sql' to start an SQL session in the HMS database, "
 echo "and 'kadmin' administer the password database (password=vagrant)"
+echo ""
+echo "You can access the database at http://localhost:8080/phpmyadmin/"
 echo "------------------------------------------------------------------------"
 echo ""

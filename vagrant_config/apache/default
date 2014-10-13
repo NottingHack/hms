@@ -28,4 +28,13 @@
         LogLevel warn
 
         CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        Alias /phpmyadmin/ "/usr/share/phpmyadmin/"
+        <Directory "/usr/share/phpmyadmin/">
+                Options  FollowSymLinks
+                AllowOverride None
+                DirectoryIndex index.php
+                Order deny,allow
+                Allow from all
+        </Directory>
 </VirtualHost>
