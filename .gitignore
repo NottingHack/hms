@@ -1,3 +1,5 @@
+# This file needs some comments!
+
 /app/Config/database.php
 /app/Config/hms.php
 /app/Config/krb.php
@@ -32,3 +34,7 @@ dev/junit.xml
 /plugins/Tools/Config/google.php
 vendor/
 bin/
+
+# Vagrant development ends up adding some files that we don't want to commit
+.vagrant
+app/Plugin/TinyMCE

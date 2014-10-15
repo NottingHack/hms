@@ -1,0 +1,19 @@
+--- /root/php-krb/krb5-1.0.0/php_krb5_kadm.h.old	2014-09-22 00:43:04.982002038 +0000
++++ /root/php-krb/krb5-1.0.0/php_krb5_kadm.h	2014-09-22 00:43:23.998001712 +0000
+@@ -27,14 +27,14 @@
+ 
+ #ifdef SUCCESS
+ #define OLD_SUCC SUCCESS
++#undef SUCCESS
+ #endif
+-#define SUCCESS KRB5_SUCCESS
+ #include <kadm5/admin.h>
+-#undef SUCCESS
+ #ifdef OLD_SUCC
+ #define SUCCESS OLD_SUCC
+ #endif
+ 
++
+ /* KADM5 Object */
+ 	zend_class_entry *krb5_ce_kadm5;
+ 
