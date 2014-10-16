@@ -231,7 +231,12 @@
 					break;
 
 				case 2:
-					$statusUpdate = "Contact Details Accepted";
+					if ($member['lastStatusUpdate']['from'] == 3) {
+						$statusUpdate = "Contact Details Rejected";
+					}
+					else {
+						$showUpdate = false;
+					}
 					break;
 				
 				default:
