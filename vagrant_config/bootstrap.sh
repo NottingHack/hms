@@ -105,12 +105,21 @@ pear install pear.phpunit.de/PHPUnit-3.7.32
 
 apachectl restart
 
+echo "Setting the password of all dummy accounts to be \"password\""...
+mysql -uroot -proot hms <<<"select lower(username) from members where username is not null and username != 'Admin'" |
+while IFS='\n' read USERNAME
+do
+  kadmin.local -q "addprinc -pw password $USERNAME" > /dev/null 2>&1
+done
+echo "...Done"
+
 echo "alias sql=\"mysql -proot -uroot hms\"" > /home/vagrant/.bash_aliases
 
 echo ""
 echo "------------------------------------------------------------------------"
 echo " **** HMS should now be running at http://localhost:8080/ **** "
 echo " **** Login using username=Admin, password=admin          ****"
+echo "      (all other accounts have the password \"password\")"
 echo ""
 echo "MySQL:  username = root,        password = root"
 echo "kadmin: username = admin/admin, password = admin"
