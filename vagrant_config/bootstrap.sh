@@ -75,19 +75,17 @@ apachectl restart
 mysql -uroot -proot -e "GRANT ALL ON *.* TO 'hms'@'localhost' IDENTIFIED BY '' WITH GRANT OPTION"
 mysql -uroot -proot -e "FLUSH PRIVILEGES"
 
-# Move the tmp folder into /home, having it in the shared/synced vagrant folder seems to cause permissions issues
-rm -rf /vagrant/app/tmp
-
-chmod a+rw -R /home/vagrant/hms-tmp/hms
-
-
 # do hms setup
 cd /vagrant/dev/Setup/Cmd
 php SetupCmd.php -d -h=admin -n=admin -s=user -e=admin@example.org -k -v -f
+
+# Move the tmp folder into /home, having it in the shared/synced vagrant folder seems to cause permissions issues
 mkdir -p /home/vagrant/hms-tmp/hms
 mv /vagrant/app/tmp /home/vagrant/hms-tmp/hms
 ln -s /home/vagrant/hms-tmp/hms/tmp  /vagrant/app/tmp
 chmod a+rw -R /home/vagrant/hms-tmp/hms
+
+# Configure HMS to use Kerberos
 cp /vagrant/vagrant_config/krb.php /vagrant/app/Config
 
 # Create Kerberos account and keytab for HMS
