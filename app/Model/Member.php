@@ -422,7 +422,7 @@ class Member extends AppModel {
 					"Member.surname Like'%$keyword%'",
 					"Member.email Like'%$keyword%'",
 					"Member.username Like'%$keyword%'",
-                    "Account.payment_ref Like'%$keyword%'",
+					"Account.payment_ref Like'%$keyword%'",
 				)
 			)
 		);
