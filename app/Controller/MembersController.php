@@ -182,7 +182,7 @@ class MembersController extends AppController {
 			return $this->redirect( array('controller' => 'members', 'action' => 'listMembers') );
 		}
 
-		$keyword = $this->params['url']['query'];
+		$keyword = trim($this->params['url']['query']);
 
 		$this->__paginateMemberList($this->Member->getMemberSummaryForSearchQuery(true, $keyword));
 	}
