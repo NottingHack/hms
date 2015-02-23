@@ -1182,6 +1182,10 @@
             	)
             ));
 
+			// use a mock Kerberos behaviour during tests
+			$this->controller->Member->Behaviors->unload('KrbAuth');
+			$this->controller->Member->Behaviors->load('MockKrbAuth');
+
             $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
 
             $data = array(
@@ -1206,6 +1210,10 @@
             	)
             ));
 
+			// use a mock Kerberos behaviour during tests
+			$this->controller->Member->Behaviors->unload('KrbAuth');
+			$this->controller->Member->Behaviors->load('MockKrbAuth');
+
             $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
             $data = array(
@@ -1229,6 +1237,10 @@
             		)
             	)
             ));
+
+			// use a mock Kerberos behaviour during tests
+			$this->controller->Member->Behaviors->unload('KrbAuth');
+			$this->controller->Member->Behaviors->load('MockKrbAuth');
 
             $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
@@ -3853,6 +3865,10 @@
 				),
 			));
 
+			// prevents 'You are not authorized to access that location' message from being set as a flash message which
+			// seems to break some Controller tests since upgrading from CakekPHP 2.3.5 to 2.6.2
+			$this->controller->Auth->authError = false;
+
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue($adminId));
 			$this->controller->Session->expects($this->once())->method('setFlash')->with($expectedFlash);
 
@@ -4002,6 +4018,10 @@
 					'getMemberIdSessionKey',
 				),
 			));
+
+			// prevents 'You are not authorized to access that location' message from being set as a flash message which
+			// seems to break some Controller tests since upgrading from CakekPHP 2.3.5 to 2.6.2
+			$this->controller->Auth->authError = false;
 
 			$mockEmail = $this->getMock('CakeEmail');
 			$this->controller->email = $mockEmail;
