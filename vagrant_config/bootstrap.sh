@@ -99,10 +99,8 @@ rm /vagrant/app/Config/hms.keytab
 kadmin.local -q "ktadd -k /vagrant/app/Config/hms.keytab hms/web"
 chmod a+r /vagrant/app/Config/hms.keytab
 
-# PHPUnit for cakePHP 2.x
-pear upgrade PEAR
-pear config-set auto_discover 1
-pear install pear.phpunit.de/PHPUnit-3.7.32
+# Download PHPUunit (CakePHP will read it directly from the PHAR from CakePHP 2.5.7)
+wget -O /vagrant/app/Vendor/phpunit.phar https://phar.phpunit.de/phpunit-3.7.38.phar
 
 apachectl restart
 
