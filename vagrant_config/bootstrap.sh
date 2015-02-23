@@ -88,9 +88,12 @@ chmod a+rw -R /home/vagrant/hms-tmp/hms
 # Configure HMS to use Kerberos
 cp /vagrant/vagrant_config/krb.php /vagrant/app/Config
 
-# Create Kerberos account and keytab for HMS
-/etc/init.d/krb5-kdc restart 
+# Allow HMS principal to manage the Kerberos database
+echo "hms/web@NOTTINGTEST.ORG.UK * " >> /etc/krb5kdc/kadm5.acl
+/etc/init.d/krb5-kdc restart
 /etc/init.d/krb5-admin-server restart 
+
+# Create Kerberos account and keytab for HMS
 kadmin.local -q "addprinc -randkey hms/web"
 rm /vagrant/app/Config/hms.keytab
 kadmin.local -q "ktadd -k /vagrant/app/Config/hms.keytab hms/web"
