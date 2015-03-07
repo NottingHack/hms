@@ -48,6 +48,9 @@ ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/
 cp /vagrant/vagrant_config/apache/default /etc/apache2/sites-available/
 
 # install TinyMCE plugin
+if [ -d '/vagrant/app/Plugin/TinyMCE' ]; then
+    rm -rf /vagrant/app/Plugin/TinyMCE
+fi
 git clone https://github.com/CakeDC/TinyMCE.git /vagrant/app/Plugin/TinyMCE
 
 apachectl restart
@@ -74,6 +77,11 @@ apachectl restart
 # Create HMS MySQL account
 mysql -uroot -proot -e "GRANT ALL ON *.* TO 'hms'@'localhost' IDENTIFIED BY '' WITH GRANT OPTION"
 mysql -uroot -proot -e "FLUSH PRIVILEGES"
+
+# if tmp symlink from the previous vagranet exsists remove it
+if [ -L '/vagrant/app/tmp' ]; then
+    rm -rf /vagrant/app/tmp
+fi
 
 # do hms setup
 cd /vagrant/dev/Setup/Cmd
