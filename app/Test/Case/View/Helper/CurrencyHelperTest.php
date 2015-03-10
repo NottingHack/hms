@@ -14,7 +14,7 @@ class CurrencyHelperTest extends CakeTestCase {
 
     public function testCurrency() {
     	$result = $this->Currency->output(500);
-    	$this->assertContains('&#163;5.00', $result);
+    	$this->assertContains('£5.00', $result);
 
     	$result = $this->Currency->output(5);
     	$this->assertContains('5p', $result);
@@ -25,7 +25,7 @@ class CurrencyHelperTest extends CakeTestCase {
     	$this->assertContains('span class="currency_negative"', $result);
 
     	$result = $this->Currency->output(500000);
-    	$this->assertContains('&#163;5,000.00', $result);
+    	$this->assertContains('£5,000.00', $result);
     }
 }
 

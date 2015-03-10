@@ -1,18 +1,22 @@
 <?php
 /**
+ * Static content controller.
  *
- * PHP 5
+ * This file will render views from views/pages/
  *
- * Copyright (C) HMS Team
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     HMS Team
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
  * @package       app.Controller
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @since         CakePHP(tm) v 0.2.9
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 
 App::uses('AppController', 'Controller');
 App::uses('Xml', 'Utility');
@@ -23,7 +27,7 @@ App::uses('PhpReader', 'Configure');
  *
  * Override this controller by placing a copy in controllers directory of an application
  *
- * @package app.Controller
+ * @package       app.Controller
  * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
  */
 class PagesController extends AppController {
@@ -35,22 +39,25 @@ class PagesController extends AppController {
 	public $components = array('Auth');
 
 /**
- * Controller name.
+ * This controller does not use a model
  *
- * @var string
+ * @var array
  */
-	public $name = 'Pages';
+	public $uses = array();
 
 /**
- * Displays a view.
+ * Displays a view
  *
+ * @return void
+ * @throws NotFoundException When the view file could not be found
+ *	or MissingViewException in debug mode.
  */
 	public function display() {
 		$path = func_get_args();
 
 		$count = count($path);
 		if (!$count) {
-			$this->redirect('/');
+			return $this->redirect('/');
 		}
 		$page = $subpage = $title_for_layout = null;
 
@@ -70,7 +77,15 @@ class PagesController extends AppController {
 		}
 
 		$this->set(compact('page', 'subpage', 'title_for_layout'));
-		$this->render(implode('/', $path));
+
+		try {
+			$this->render(implode('/', $path));
+		} catch (MissingViewException $e) {
+			if (Configure::read('debug')) {
+				throw $e;
+			}
+			throw new NotFoundException();
+		}
 	}
 
 /**
@@ -107,9 +122,9 @@ class PagesController extends AppController {
 		}
 	}
 
-	/**
-	 * The credits page.  Pulls from the config files, which plugins can contribute to
-	 */
+/**
+ * The credits page.  Pulls from the config files, which plugins can contribute to
+ */
 	public function credits() {
 		Configure::config('default', new PhpReader());
 		Configure::load('credits', 'default');

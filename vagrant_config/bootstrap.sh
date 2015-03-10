@@ -48,6 +48,9 @@ ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/
 cp /vagrant/vagrant_config/apache/default /etc/apache2/sites-available/
 
 # install TinyMCE plugin
+if [ -d '/vagrant/app/Plugin/TinyMCE' ]; then
+    rm -rf /vagrant/app/Plugin/TinyMCE
+fi
 git clone https://github.com/CakeDC/TinyMCE.git /vagrant/app/Plugin/TinyMCE
 
 apachectl restart
@@ -75,6 +78,11 @@ apachectl restart
 mysql -uroot -proot -e "GRANT ALL ON *.* TO 'hms'@'localhost' IDENTIFIED BY '' WITH GRANT OPTION"
 mysql -uroot -proot -e "FLUSH PRIVILEGES"
 
+# if tmp symlink from the previous vagranet exsists remove it
+if [ -L '/vagrant/app/tmp' ]; then
+    rm -rf /vagrant/app/tmp
+fi
+
 # do hms setup
 cd /vagrant/dev/Setup/Cmd
 php SetupCmd.php -d -h=admin -n=admin -s=user -e=admin@example.org -k -v -f
@@ -88,18 +96,19 @@ chmod a+rw -R /home/vagrant/hms-tmp/hms
 # Configure HMS to use Kerberos
 cp /vagrant/vagrant_config/krb.php /vagrant/app/Config
 
-# Create Kerberos account and keytab for HMS
-/etc/init.d/krb5-kdc restart 
+# Allow HMS principal to manage the Kerberos database
+echo "hms/web@NOTTINGTEST.ORG.UK * " >> /etc/krb5kdc/kadm5.acl
+/etc/init.d/krb5-kdc restart
 /etc/init.d/krb5-admin-server restart 
+
+# Create Kerberos account and keytab for HMS
 kadmin.local -q "addprinc -randkey hms/web"
 rm /vagrant/app/Config/hms.keytab
 kadmin.local -q "ktadd -k /vagrant/app/Config/hms.keytab hms/web"
 chmod a+r /vagrant/app/Config/hms.keytab
 
-# PHPUnit for cakePHP 2.x
-pear upgrade PEAR
-pear config-set auto_discover 1
-pear install pear.phpunit.de/PHPUnit-3.7.32
+# Download PHPUunit (CakePHP will read it directly from the PHAR from CakePHP 2.5.7)
+wget -O /vagrant/app/Vendor/phpunit.phar https://phar.phpunit.de/phpunit-3.7.38.phar
 
 apachectl restart
 

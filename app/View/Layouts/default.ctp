@@ -1,19 +1,17 @@
 <?php
 /**
- *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       Cake.View.Layouts
+ * @package       app.View.Layouts
  * @since         CakePHP(tm) v 0.10.0.1076
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 $cakeDescription = "Nottingham Hackspace Management System";
@@ -24,7 +22,7 @@ $cakeDescription = "Nottingham Hackspace Management System";
 	<?php echo $this->Html->charset(); ?>
 	<title>
 		<?php echo $cakeDescription ?> -
-		<?php echo $title_for_layout; ?>
+		<?php echo $this->fetch('title'); ?>
 	</title>
 	<?php
 		$this->Html->meta('icon', null, array('inline' => false));
@@ -63,20 +61,20 @@ $cakeDescription = "Nottingham Hackspace Management System";
 			<div class="userBar">
 				<div class="login">
 					<?php if( isset($memberId)): ?>
-						Logged in as: 
+						Logged in as:
 						<?php echo $this->Html->link(isset($username) ? $username : $email, array( 'plugin' => null, 'controller' => 'members', 'action' => 'view', $memberId ) ); ?>
 						<span class="loginSpace">
 							<?php echo $this->Html->link('Logout', array( 'plugin' => null, 'controller' => 'members', 'action' => 'logout' )) ?>
 						</span>
 					<?php else: ?>
-						Already a member? 
+						Already a member?
 						<?php echo $this->Html->link('Login', array( 'plugin' => null, 'controller' => 'members', 'action' => 'login' )) ?>
 					<?php endif; ?>
 				</div>
 				<?php if( isset($adminNav) && count($adminNav) > 0 ): ?>
 					<div class="adminNav">
 						<ul>
-							<?php 
+							<?php
 								foreach ($adminNav as $text => $options) {
 									echo '<li>';
 									echo $this->Html->link($text, $options);
@@ -90,7 +88,7 @@ $cakeDescription = "Nottingham Hackspace Management System";
 				<?php if( isset($userMessage) && count($userMessage) > 0 ): ?>
 					<div class="userMessage">
 						<ul>
-							<?php 
+							<?php
 								foreach ($userMessage as $text => $options) {
 									echo '<li>';
 									echo $this->Html->link($text, $options);
@@ -111,10 +109,10 @@ $cakeDescription = "Nottingham Hackspace Management System";
 			<?php echo $this->fetch('content'); ?>
 			<?php
 				# AT [16/09/2012] Use the NavHelper to render any navigation links
-				if(	isset($navLinks) && 
+				if(	isset($navLinks) &&
 					count($navLinks) > 0)
 				{
-					echo $this->Nav->output($navLinks); 
+					echo $this->Nav->output($navLinks);
 				}
 			?>
 		</div>
@@ -159,7 +157,7 @@ $cakeDescription = "Nottingham Hackspace Management System";
 
 				<div id="fourth" class="widget-area">
 					<ul class="xoxo">
-						<li id="text-5" class="widget-container widget_text">			
+						<li id="text-5" class="widget-container widget_text">
 							<div class="textwidget">Unit F6 BizSpace<br />
 							Roden House Business Centre<br />
 							Nottingham<br />
