@@ -216,6 +216,10 @@ class Member extends AppModel {
 				'rule' => array('between', 1, 20),
 				'message' => 'Contact number must be between 1 and 20 characters long',
 			),
+			'characters' => array(
+				'rule' => '/^\+?[0-9() ]*$/',
+				'message' => 'Contact number can only have digits, (, ) a + character at the start.'
+			)
 		),
 	);
 
