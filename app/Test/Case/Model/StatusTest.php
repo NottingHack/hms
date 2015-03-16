@@ -4,7 +4,7 @@
 
     class StatusTest extends CakeTestCase 
     {
-        public $fixtures = array( 'app.Status', 'app.Member', 'app.Account', 'app.Pin', 'app.Group', 'app.GroupsMember' );
+        public $fixtures = array( 'app.Status', 'app.Member', 'app.Account', 'app.Pin', 'app.Group', 'app.GroupsMember', 'app.StatusUpdate' );
 
         public function setUp() 
         {

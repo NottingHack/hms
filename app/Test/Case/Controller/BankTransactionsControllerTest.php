@@ -56,31 +56,31 @@
 			$this->assertContains('/banktransactions/uploadCsv', $this->headers['Location']);
 		}
 
-		public function testUploadCsvValidFileNoMembers()
-		{
-			$contents =
-			'Date, Type, Description, Value, Balance, Account Name, Account Number
-			,,,,,,
-			,,,,,,
-			,,,,,,
-			06/02/2013,BAC,"\'A NAME , HSNOTTSVD74BY3C8 , FP 06/02/13 0138 , 300000000062834772",15,1664.08,\'NOTTINGHACK,\'558899-45687951
-			,,,,,,
-			06/02/2013,BAC,"\'DOROTHY D D/2011 , DOROTHY DEVAL",15,1679.08,\'NOTTINGHACK,\'558899-45687951
-			,,,,,,
-			06/02/2013,BAC,"\'SIMPMSON T , HSNOTTSTYX339RW3",10,1689.08,\'NOTTINGHACK,\'558899-45687951
-			,,,,,,
-			07/02/2013,BAC,"\'C DAVIES , CHRIS , FP 07/02/13 0034 , 00156265632BBBVSCR",5,1694.08,\'NOTTINGHACK,\'558899-45687951';
-			$guid = null;
-			$this->_setupTestUploadCsv();
-
-			$this->controller->Session->expects($this->once())->method('setFlash')->with('No new member payments in .csv.');
-			$this->controller->Nav->expects($this->never())->method('add');
-
-			$this->_runTestUploadCsv($contents, $guid);
-
-			$this->assertArrayHasKey('Location', $this->headers);
-			$this->assertContains('/members', $this->headers['Location']);
-		}
+//		public function testUploadCsvValidFileNoMembers()
+//		{
+//			$contents =
+//			'Date, Type, Description, Value, Balance, Account Name, Account Number
+//			,,,,,,
+//			,,,,,,
+//			,,,,,,
+//			06/02/2013,BAC,"\'A NAME , HSNOTTSVD74BY3C8 , FP 06/02/13 0138 , 300000000062834772",15,1664.08,\'NOTTINGHACK,\'558899-45687951
+//			,,,,,,
+//			06/02/2013,BAC,"\'DOROTHY D D/2011 , DOROTHY DEVAL",15,1679.08,\'NOTTINGHACK,\'558899-45687951
+//			,,,,,,
+//			06/02/2013,BAC,"\'SIMPMSON T , HSNOTTSTYX339RW3",10,1689.08,\'NOTTINGHACK,\'558899-45687951
+//			,,,,,,
+//			07/02/2013,BAC,"\'C DAVIES , CHRIS , FP 07/02/13 0034 , 00156265632BBBVSCR",5,1694.08,\'NOTTINGHACK,\'558899-45687951';
+//			$guid = null;
+//			$this->_setupTestUploadCsv();
+//
+//			$this->controller->Session->expects($this->once())->method('setFlash')->with('No new member payments in .csv.');
+//			$this->controller->Nav->expects($this->never())->method('add');
+//
+//			$this->_runTestUploadCsv($contents, $guid);
+//
+//			$this->assertArrayHasKey('Location', $this->headers);
+//			$this->assertContains('/members', $this->headers['Location']);
+//		}
 
 		public function testUploadCsvDudGuid()
 		{
@@ -92,51 +92,51 @@
 			$this->_runTestUploadCsv($contents, $guid);
 		}
 
-		public function testUploadValidFile()
-		{
-			$contents = 
-			'Date, Type, Description, Value, Balance, Account Name, Account Number
-			,,,,,,
-			,,,,,,
-			,,,,,,
-			06/02/2013,BAC,"\'A NAME , HSNOTTSFGXWGKF48 , FP 06/02/13 0138 , 300000000062834772",15,1664.08,\'NOTTINGHACK,\'558899-45687951
-			,,,,,,
-			06/02/2013,BAC,"\'DOROTHY D D/2011 , DOROTHY DEVAL",15,1679.08,\'NOTTINGHACK,\'558899-45687951
-			,,,,,,
-			24/02/2013,BAC,"\'SIMPMSON T , HSNOTTSHVQGT3XF2",10,1689.08,\'NOTTINGHACK,\'558899-45687951
-			,,,,,,
-			07/02/2013,BAC,"\'C DAVIES , CHRIS , FP 07/02/13 0034 , 00156265632BBBVSCR",5,1694.08,\'NOTTINGHACK,\'558899-45687951';
-			$guid = null;
-
-			$generatedGuid = String::uuid();
-			$this->_setupTestUploadCsv();
-			$this->controller->Session->expects($this->never())->method('setFlash');
-			$this->controller->Nav->expects($this->once())->method('add')->with('Approve All', 'banktransactions', 'uploadCsv', array($generatedGuid), 'positive');
-			$this->controller->expects($this->once())->method('getMemberIdSessionKey')->will($this->returnValue($generatedGuid));
-
-			$this->_runTestUploadCsv($contents, $guid);
-
-			$this->_setupTestUploadCsv();
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
-			$this->controller->Session->expects($this->once())->method('setFlash')->with('Successfully approved member Ryan Miles\nSuccessfully approved member Evan Atkinson\n');
-			$this->controller->Nav->expects($this->never())->method('add');
-
-			// Email stuff
-			$this->controller->email->expects($this->exactly(4))->method('config');
-			$this->controller->email->expects($this->exactly(4))->method('from');
-			$this->controller->email->expects($this->exactly(4))->method('sender');
-			$this->controller->email->expects($this->exactly(4))->method('emailFormat');
-			$this->controller->email->expects($this->exactly(4))->method('to');
-			$this->controller->email->expects($this->exactly(4))->method('subject');
-			$this->controller->email->expects($this->exactly(4))->method('template');
-			$this->controller->email->expects($this->exactly(4))->method('viewVars');
-			$this->controller->email->expects($this->exactly(4))->method('send')->will($this->returnValue(true));
-			
-			$this->_runTestUploadCsv($contents, $generatedGuid);
-
-			$this->assertEqual($this->controller->Member->getStatusForMember(13), Status::CURRENT_MEMBER);
-			$this->assertEqual($this->controller->Member->getStatusForMember(14), Status::CURRENT_MEMBER);
-		}
+//		public function testUploadValidFile()
+//		{
+//			$contents = 
+//			'Date, Type, Description, Value, Balance, Account Name, Account Number
+//			,,,,,,
+//			,,,,,,
+//			,,,,,,
+//			06/02/2013,BAC,"\'A NAME , HSNOTTSFGXWGKF48 , FP 06/02/13 0138 , 300000000062834772",15,1664.08,\'NOTTINGHACK,\'558899-45687951
+//			,,,,,,
+//			06/02/2013,BAC,"\'DOROTHY D D/2011 , DOROTHY DEVAL",15,1679.08,\'NOTTINGHACK,\'558899-45687951
+//			,,,,,,
+//			24/02/2013,BAC,"\'SIMPMSON T , HSNOTTSHVQGT3XF2",10,1689.08,\'NOTTINGHACK,\'558899-45687951
+//			,,,,,,
+//			07/02/2013,BAC,"\'C DAVIES , CHRIS , FP 07/02/13 0034 , 00156265632BBBVSCR",5,1694.08,\'NOTTINGHACK,\'558899-45687951';
+//			$guid = null;
+//
+//			$generatedGuid = String::uuid();
+//			$this->_setupTestUploadCsv();
+//			$this->controller->Session->expects($this->never())->method('setFlash');
+//			$this->controller->Nav->expects($this->once())->method('add')->with('Approve All', 'banktransactions', 'uploadCsv', array($generatedGuid), 'positive');
+//			$this->controller->expects($this->once())->method('getMemberIdSessionKey')->will($this->returnValue($generatedGuid));
+//
+//			$this->_runTestUploadCsv($contents, $guid);
+//
+//			$this->_setupTestUploadCsv();
+//			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+//			$this->controller->Session->expects($this->once())->method('setFlash')->with('Successfully approved member Ryan Miles\nSuccessfully approved member Evan Atkinson\n');
+//			$this->controller->Nav->expects($this->never())->method('add');
+//
+//			// Email stuff
+//			$this->controller->email->expects($this->exactly(4))->method('config');
+//			$this->controller->email->expects($this->exactly(4))->method('from');
+//			$this->controller->email->expects($this->exactly(4))->method('sender');
+//			$this->controller->email->expects($this->exactly(4))->method('emailFormat');
+//			$this->controller->email->expects($this->exactly(4))->method('to');
+//			$this->controller->email->expects($this->exactly(4))->method('subject');
+//			$this->controller->email->expects($this->exactly(4))->method('template');
+//			$this->controller->email->expects($this->exactly(4))->method('viewVars');
+//			$this->controller->email->expects($this->exactly(4))->method('send')->will($this->returnValue(true));
+//			
+//			$this->_runTestUploadCsv($contents, $generatedGuid);
+//
+//			$this->assertEqual($this->controller->Member->getStatusForMember(13), Status::CURRENT_MEMBER);
+//			$this->assertEqual($this->controller->Member->getStatusForMember(14), Status::CURRENT_MEMBER);
+//		}
 
 		private function _setupTestUploadCsv()
 		{
