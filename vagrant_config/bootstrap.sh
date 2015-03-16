@@ -26,7 +26,7 @@ debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password mysql'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2'
 
 # nb. SetupCmd.php needs php5-mysqlnd not php5-mysql
-apt-get install -y apache2  php5-mysqlnd libapache2-mod-php5 git haveged expect php-pear php5-dev libkrb5-dev mysql-server phpmyadmin
+apt-get install -y apache2  php5-mysqlnd libapache2-mod-php5 git haveged expect php-pear php5-dev libkrb5-dev mysql-server phpmyadmin php5-xdebug
 
 # Install krb, create database, and set the master password to "krbMasterPassword"
 apt-get install krb5-{admin-server,kdc} -y
