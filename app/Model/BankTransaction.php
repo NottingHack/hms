@@ -24,14 +24,24 @@ class BankTransaction extends AppModel {
  * Specify the table to use
  * @var string
  */
-	public $useTable = "bank_transactions";
+	public $useTable = 'bank_transactions';
 
 /**
  * Specify the primary key to use.
  * @var string
  */
 	public $primaryKey = 'bank_transaction_id';	//!< Specify the primary key to use.
-
+/**
+ * Specify 'belongs to' associations.
+ * @var array
+ */
+	public $belongsTo = array(
+			'AccountBT' => array(
+			'className' => 'Account',
+			'foreignKey' => 'account_id',
+			'type' => 'inner'
+			)
+		);
 /**
  * Validation rules.
  * @var array

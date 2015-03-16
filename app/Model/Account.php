@@ -40,6 +40,9 @@ class Account extends AppModel {
 		'Member' => array(
 			'className' => 'Member',
 		),
+        'BankTransaction' => array(
+            'className' => 'BankTransaction',
+        ),
 	);
 
 /**
