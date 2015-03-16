@@ -33,10 +33,59 @@ class BankTransactionsController extends AppController {
  */
 	public $components = array('BankStatement');
 
+    
+/** 
+ * Test to see if a user is authorized to make a request.
+ *
+ * @param array $user Member record for the user.
+ * @param CakeRequest $request The request the user is attempting to make.
+ * @return bool True if the user is authorized to make the request, otherwise false.
+ * @link http://api20.cakephp.org/class/cake-request
+ */
+	public function isAuthorized($user, $request) {
+		if (parent::isAuthorized($user, $request)) {
+			return true;
+		}
+
+        $memberId = $this->Member->getIdForMember($user);
+        
+		$authGranted = false;
+
+		// Only history page implemented so far
+		if ($request->params['action'] == 'history') {
+            // Get the member_id details have been requested for & the logged in users member_id
+            if (isset($request->params['pass'][0])) {
+                $reqMemberId = $request->params['pass'][0];
+            } else {
+                $reqMemberId = $memberId;
+            }
+
+            // Allow everyone to view their own transaction history
+            if ($reqMemberId == $memberId) {
+                $authGranted = true;
+            } elseif ($this->Member->GroupsMember->isMemberInGroup( $memberId, Group::MEMBERSHIP_ADMIN )) {
+                // Only allow 'Full Access' (via parent::isAuthorized) and 'Membership Admins' to view the transaction history of others
+                $authGranted = true;
+            }
+        }
+        
+        $memberIsMembershipAdmin = $this->Member->GroupsMember->isMemberInGroup( $memberId, Group::MEMBERSHIP_ADMIN );
+        
+        switch ($request->action) {
+            case 'uploadCsv':
+                return $memberIsMembershipAdmin;
+        
+        }
+		return $authGranted;
+	}
+    
+/**
+ *
     public function index() {
+        // notthing to see here
     }
     
-    /**
+/**
  * Upload a .csv file of bank transactions and look for members to approve.
  *
  * @param string $guid If set then look here in the session for a list of account id's to approve.
@@ -151,5 +200,33 @@ class BankTransactionsController extends AppController {
 		return String::uuid();
 	}
     
+/**
+ * Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set.
+ * @param int|null $memberId The members id to list all transactions for
+ */
+	public function history($memberId = null) {
+		$this->loadModel('BankTransaction');
+
+		if ($memberId == null) {
+			$memberId = $this->_getLoggedInMemberId();
+		}
+        // grab account_id from member_id
+        $this->Member->id = $memberId;
+        $accountId = $this->Member->field('account_id');
+        
+        $this->__transactionList($accountId);
+
+	}
+
+/**
+ * List all transactions for a given member
+ *
+ * @param int $memberId The members id to list all transactions for
+ */
+	private function __transactionList($accountId) {
+		$this->paginate = $this->BankTransaction->getBankTransactionList(true, array('AccountBT.account_id' => $accountId));
+		$bankTransactionsList = $this->paginate('BankTransaction');
+		$this->set('bankTransactionsList', $bankTransactionsList);
+	}
     
 }

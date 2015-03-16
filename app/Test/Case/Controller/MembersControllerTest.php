@@ -18,40 +18,40 @@
 	{
 		public $fixtures = array( 'app.Member', 'app.Status', 'app.Group', 'app.GroupsMember', 'app.Account', 'app.Pin', 'app.StatusUpdate', 'app.ForgotPassword', 'app.MailingLists', 'app.MailingListSubscriptions', 'app.EmailRecord' );
 
-		public function setUp()
-		{
-			parent::setUp();
+		public function setUp() 
+        {
+        	parent::setUp();
 
-			$this->MembersController = new MembersController();
-			$this->MembersController->constructClasses();
-		}
+            $this->MembersController = new MembersController();
+            $this->MembersController->constructClasses();
+        }
 
-		private function _testMailingListView($expectedResults)
-		{
-			$this->assertArrayHasKey( 'mailingLists', $this->vars, 'No view value called \'mailingLists\'.' );
-			$this->assertInternalType('array', $this->vars['mailingLists'], 'Mailing lists is not of array type.');
+        private function _testMailingListView($expectedResults)
+        {
+        	$this->assertArrayHasKey( 'mailingLists', $this->vars, 'No view value called \'mailingLists\'.' );
+        	$this->assertInternalType('array', $this->vars['mailingLists'], 'Mailing lists is not of array type.');
 
-			$this->assertArrayHasKey('total', $this->vars['mailingLists'], 'Mailing lists has no total.');
-			$this->assertEqual($this->vars['mailingLists']['total'], 2, 'Mailing list total is incorrect.');
+        	$this->assertArrayHasKey('total', $this->vars['mailingLists'], 'Mailing lists has no total.');
+        	$this->assertEqual($this->vars['mailingLists']['total'], 2, 'Mailing list total is incorrect.');
 
-			$this->assertArrayHasKey('data', $this->vars['mailingLists'], 'Mailing lists has no data');
+        	$this->assertArrayHasKey('data', $this->vars['mailingLists'], 'Mailing lists has no data');
 
-			foreach ($this->vars['mailingLists']['data'] as $listData)
-			{
-				$this->assertInternalType('array', $listData, 'List data is not of array type.');
-				$this->assertArrayHasKey('subscribed', $listData, 'List data has no subscribed info for id ' . $listData['id']);
-				$this->assertEqual($listData['subscribed'], $expectedResults[$listData['id']], 'List data subscribed has incorrect value for id ' . $listData['id']);
-			}
-		}
+        	foreach ($this->vars['mailingLists']['data'] as $listData) 
+        	{
+        		$this->assertInternalType('array', $listData, 'List data is not of array type.');
+        		$this->assertArrayHasKey('subscribed', $listData, 'List data has no subscribed info for id ' . $listData['id']);
+        		$this->assertEqual($listData['subscribed'], $expectedResults[$listData['id']], 'List data subscribed has incorrect value for id ' . $listData['id']);
+        	}
+        }
 
-		private function _constructMailingList()
-		{
-			App::uses('MailingList', 'Model');
+        private function _constructMailingList()
+        {
+        	App::uses('MailingList', 'Model');
 			$this->controller->expects($this->any())->method('getMailingList')->will($this->returnValue(new MailingList(false, null, 'test')));
 			$this->controller->Member->mailingList = new MailingList(false, null, 'test');
-		}
+        }
 
-		private function _mockMemberEmail()
+        private function _mockMemberEmail()
 		{
 			$this->controller = $this->generate('Members', array(
 				'methods' => array(
@@ -85,33 +85,31 @@
 		{
 			// Need fake requests for all the functions we need to test
 			$fakeRequestDetails = array(
-				array( 'name' => 'index', 								'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'listMembers', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'listMembersWithStatus', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'emailMembersWithStatus', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'search', 								'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'revokeMembership', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'reinstateMembership', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'acceptDetails', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'rejectDetails', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'approveMember', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'sendProspectiveMemberReminder',		'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'sendContactDetailsReminder', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'sendSoDetailsReminder', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'addExistingMember', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'uploadTsb', 							'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'index', 							'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'listMembers', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'listMembersWithStatus', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'emailMembersWithStatus', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'search', 							'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'revokeMembership', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'reinstateMembership', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'acceptDetails', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'rejectDetails', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'approveMember', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'sendMembershipReminder', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'sendContactDetailsReminder', 		'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'sendSoDetailsReminder', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'addExistingMember', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'changePassword', 					'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'changePassword', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 
-				array( 'name' => 'changePassword', 						'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'changePassword', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'view', 							'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'view', 							'params' => array('otherId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
 
-				array( 'name' => 'view', 								'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'view', 								'params' => array('otherId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'edit', 							'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'edit', 							'params' => array('otherId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 
-				array( 'name' => 'edit', 								'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'edit', 								'params' => array('otherId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-
-				array( 'name' => 'setupDetails', 						'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'setupDetails', 						'params' => array('otherId'), 	'access' => array( 'fullAccessMember' ) ),
+				array( 'name' => 'setupDetails', 					'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'setupDetails', 					'params' => array('otherId'), 	'access' => array( 'fullAccessMember' ) ),
 			);
 
 			$this->_testIsAuthorized($this->MembersController, $fakeRequestDetails);
@@ -124,17 +122,17 @@
 				'192.0.0.4' => false,
 			);
 
-			foreach ($testIps as $ip => $expectedResult)
+			foreach ($testIps as $ip => $expectedResult) 
 			{
 				$this->controller = $this->generate('Members', array(
-					'methods' => array(
-						'getRequestIpAddress',
+		        	'methods' => array(
+					    'getRequestIpAddress',
 					),
-				));
+		        ));
 
-				$this->controller->expects($this->once())->method('getRequestIpAddress')->will($this->returnValue($ip));
-
-				$this->assertEqual($this->controller->isRequestLocal(), $expectedResult, 'Ip address ' . $ip . ' was not handled correctly.');
+		        $this->controller->expects($this->once())->method('getRequestIpAddress')->will($this->returnValue($ip));
+		        
+		        $this->assertEqual($this->controller->isRequestLocal(), $expectedResult, 'Ip address ' . $ip . ' was not handled correctly.');
 			}
 		}
 
@@ -142,19 +140,19 @@
 		{
 			$this->controller = $this->generate('Members', array(
 				'components' => array(
-					'Auth' => array(
-						'user',
-					)
+            		'Auth' => array(
+            			'user',
+            		)
+            	),
+	        	'methods' => array(
+				    'isRequestLocal'
 				),
-				'methods' => array(
-					'isRequestLocal'
-				),
-			));
+	        ));
 
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue($userId));
-			$this->controller->expects($this->any())->method('isRequestLocal')->will($this->returnValue($local));
+	        $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue($userId));
+		    $this->controller->expects($this->any())->method('isRequestLocal')->will($this->returnValue($local));
 
-			$this->controller->beforeFilter();
+		    $this->controller->beforeFilter();
 
 			$actualResult = in_array('register', $this->controller->Auth->allowedActions);
 			$this->assertEqual($actualResult, $result, sprintf('Combination handled incorrectly: userId - %s local - %s.', $userId, ($local ? 'true' : 'false')));
@@ -209,8 +207,8 @@
 			$this->testAction('/members/index');
 
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-			$this->assertArrayHasKey( 'memberStatusInfo', $this->vars, 'No view value called \'memberStatusInfo\'.' );
-			$this->assertArrayHasKey( 'memberTotalCount', $this->vars, 'No view value called \'memberTotalCount\'.' );
+			$this->assertArrayHasKey( 'memberStatusInfo', $this->vars, 'No view value called \'memberStatusInfo\'.' ); 
+			$this->assertArrayHasKey( 'memberTotalCount', $this->vars, 'No view value called \'memberTotalCount\'.' ); 
 
 			$this->assertInternalType( 'array', $this->vars['memberStatusInfo'], 'No array by the name of memberStatusInfo.' );
 			$this->assertIdentical( count($this->vars['memberStatusInfo']), $this->MembersController->Member->Status->find('count'), 'All statuses are not included in index.' );
@@ -225,39 +223,39 @@
 			$this->testAction('/members/listMembers');
 
 			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
-			$this->assertArrayHasKey( 'memberList', $this->vars, 'No view value called \'memberList\'.' );
+			$this->assertArrayHasKey( 'memberList', $this->vars, 'No view value called \'memberList\'.' ); 
 
 			$this->assertInternalType( 'array', $this->vars['memberList'], 'No array by the name of memberInfo' );
 			$this->assertIdentical( count($this->vars['memberList']), $this->MembersController->Member->find('count'), 'All members not included.' );
 
 			foreach ($this->vars['memberList'] as $memberInfo)
 			{
-				$this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' );
+				$this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
 				$this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
 
-				$this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' );
-				$this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' );
-				$this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' );
-				$this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' );
+				$this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' ); 
+                $this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' ); 
+				$this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
+				$this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
 
-				foreach ($memberInfo['groups'] as $group)
+				foreach ($memberInfo['groups'] as $group) 
 				{
-					$this->assertArrayHasKey( 'id', $group, 'Group has no id.' );
+					$this->assertArrayHasKey( 'id', $group, 'Group has no id.' ); 
 					$this->assertArrayHasKey( 'description', $group, 'Group has no description.' );
 					$this->assertInternalType( 'string', $group['description'], 'Group description is not a string.' );
 				}
 
-				$this->assertArrayHasKey( 'status', $memberInfo, 'Member has no status.' );
+				$this->assertArrayHasKey( 'status', $memberInfo, 'Member has no status.' ); 
 				$this->assertInternalType( 'array', $memberInfo['status'], 'No array by the name of status' );
 
-				$this->assertArrayHasKey( 'actions', $memberInfo, 'Member has no actions.' );
+				$this->assertArrayHasKey( 'actions', $memberInfo, 'Member has no actions.' ); 
 
-				foreach ($memberInfo['actions'] as $action)
+				foreach ($memberInfo['actions'] as $action) 
 				{
-					$this->assertArrayHasKey( 'title', $action, 'Action has no title.' );
-					$this->assertArrayHasKey( 'controller', $action, 'Action has no controller.' );
-					$this->assertArrayHasKey( 'action', $action, 'Action has no action.' );
-					$this->assertArrayHasKey( 'params', $action, 'Action has no params.' );
+					$this->assertArrayHasKey( 'title', $action, 'Action has no title.' ); 
+					$this->assertArrayHasKey( 'controller', $action, 'Action has no controller.' ); 
+					$this->assertArrayHasKey( 'action', $action, 'Action has no action.' ); 
+					$this->assertArrayHasKey( 'params', $action, 'Action has no params.' ); 					
 				}
 			}
 		}
@@ -270,7 +268,7 @@
 			{
 				$this->testAction('/members/listMembersWithStatus/' . $status);
 				$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-				$this->assertArrayHasKey( 'memberList', $this->vars, 'No view value called \'memberList\'.' );
+				$this->assertArrayHasKey( 'memberList', $this->vars, 'No view value called \'memberList\'.' ); 
 				$this->assertArrayHasKey( 'statusInfo', $this->vars, 'No view value called \'statusInfo\'.' );
 				$this->assertIdentical( count($this->vars['memberList']), 0, 'MemberList is not empty.' );
 
@@ -283,38 +281,38 @@
 			{
 				$this->testAction('/members/listMembersWithStatus/1');
 				$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-				$this->assertArrayHasKey( 'memberList', $this->vars, 'No view value called \'memberList\'.' );
+				$this->assertArrayHasKey( 'memberList', $this->vars, 'No view value called \'memberList\'.' ); 
 				$this->assertArrayHasKey( 'statusInfo', $this->vars, 'No view value called \'statusInfo\'.' );
 				$this->assertGreaterThan( 0, count($this->vars['memberList']), 'MemberList is empty.' );
 
 				foreach ($this->vars['memberList'] as $memberInfo)
 				{
-					$this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' );
+					$this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
 					$this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
 
-					$this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' );
-					$this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' );
-					$this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' );
-					$this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' );
+					$this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' ); 
+                	$this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' ); 
+					$this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
+					$this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
 
-					foreach ($memberInfo['groups'] as $group)
+					foreach ($memberInfo['groups'] as $group) 
 					{
-						$this->assertArrayHasKey( 'id', $group, 'Group has no id.' );
+						$this->assertArrayHasKey( 'id', $group, 'Group has no id.' ); 
 						$this->assertArrayHasKey( 'description', $group, 'Group has no description.' );
 						$this->assertInternalType( 'string', $group['description'], 'Group description is not a string.' );
 					}
 
-					$this->assertArrayHasKey( 'status', $memberInfo, 'Member has no status.' );
+					$this->assertArrayHasKey( 'status', $memberInfo, 'Member has no status.' ); 
 					$this->assertInternalType( 'array', $memberInfo['status'], 'No array by the name of status' );
 
-					$this->assertArrayHasKey( 'actions', $memberInfo, 'Member has no actions.' );
+					$this->assertArrayHasKey( 'actions', $memberInfo, 'Member has no actions.' ); 
 
-					foreach ($memberInfo['actions'] as $action)
+					foreach ($memberInfo['actions'] as $action) 
 					{
-						$this->assertArrayHasKey( 'title', $action, 'Action has no title.' );
-						$this->assertArrayHasKey( 'controller', $action, 'Action has no controller.' );
-						$this->assertArrayHasKey( 'action', $action, 'Action has no action.' );
-						$this->assertArrayHasKey( 'params', $action, 'Action has no params.' );
+						$this->assertArrayHasKey( 'title', $action, 'Action has no title.' ); 
+						$this->assertArrayHasKey( 'controller', $action, 'Action has no controller.' ); 
+						$this->assertArrayHasKey( 'action', $action, 'Action has no action.' ); 
+						$this->assertArrayHasKey( 'params', $action, 'Action has no params.' ); 					
 					}
 				}
 			}
@@ -323,55 +321,55 @@
 		public function testSearch()
 		{
 			$data = array(
-				'query' => 'teleworm',
-			);
+		        'query' => 'teleworm',
+		    );
 
-			$this->testAction('/members/search', array('data' => $data, 'method' => 'get'));
+		    $this->testAction('/members/search', array('data' => $data, 'method' => 'get'));
 
 			$this->assertIdentical( count($this->vars), 1, 'Unexpected number of view values.' );
-			$this->assertArrayHasKey( 'memberList', $this->vars, 'No view value called \'memberList\'.' );
+			$this->assertArrayHasKey( 'memberList', $this->vars, 'No view value called \'memberList\'.' ); 
 
 			$this->assertInternalType( 'array', $this->vars['memberList'], 'No array by the name of memberInfo' );
 			$this->assertGreaterThan( 0, count($this->vars['memberList']), 'No search results returned.' );
 
 			foreach ($this->vars['memberList'] as $memberInfo)
 			{
-				$this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' );
+				$this->assertArrayHasKey( 'id', $memberInfo, 'Member has no id.' ); 
 				$this->assertGreaterThan( 0, $memberInfo['id'], 'Member id is invalid.' );
 
-				$this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' );
-				$this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' );
-				$this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' );
-				$this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' );
+				$this->assertArrayHasKey( 'firstname', $memberInfo, 'Member has no firstname.' ); 
+				$this->assertArrayHasKey( 'surname', $memberInfo, 'Member has no surname.' ); 
+				$this->assertArrayHasKey( 'email', $memberInfo, 'Member has no email.' ); 
+				$this->assertArrayHasKey( 'groups', $memberInfo, 'Member has no groups.' ); 
 
-				foreach ($memberInfo['groups'] as $group)
+				foreach ($memberInfo['groups'] as $group) 
 				{
-					$this->assertArrayHasKey( 'id', $group, 'Group has no id.' );
+					$this->assertArrayHasKey( 'id', $group, 'Group has no id.' ); 
 					$this->assertArrayHasKey( 'description', $group, 'Group has no description.' );
 					$this->assertInternalType( 'string', $group['description'], 'Group description is not a string.' );
 				}
 
-				$this->assertArrayHasKey( 'status', $memberInfo, 'Member has no status.' );
+				$this->assertArrayHasKey( 'status', $memberInfo, 'Member has no status.' ); 
 				$this->assertInternalType( 'array', $memberInfo['status'], 'No array by the name of status' );
 
-				$this->assertArrayHasKey( 'actions', $memberInfo, 'Member has no actions.' );
+				$this->assertArrayHasKey( 'actions', $memberInfo, 'Member has no actions.' ); 
 
-				foreach ($memberInfo['actions'] as $action)
+				foreach ($memberInfo['actions'] as $action) 
 				{
-					$this->assertArrayHasKey( 'title', $action, 'Action has no title.' );
-					$this->assertArrayHasKey( 'controller', $action, 'Action has no controller.' );
-					$this->assertArrayHasKey( 'action', $action, 'Action has no action.' );
-					$this->assertArrayHasKey( 'params', $action, 'Action has no params.' );
+					$this->assertArrayHasKey( 'title', $action, 'Action has no title.' ); 
+					$this->assertArrayHasKey( 'controller', $action, 'Action has no controller.' ); 
+					$this->assertArrayHasKey( 'action', $action, 'Action has no action.' ); 
+					$this->assertArrayHasKey( 'params', $action, 'Action has no params.' ); 					
 				}
 			}
 
 			$data = array(
-			);
+		    );
 
 
 			// This should redirect
-			$this->testAction('/members/search', array('data' => $data, 'method' => 'get'));
-			$this->assertContains('/members/listMembers', $this->headers['Location']);
+		    $this->testAction('/members/search', array('data' => $data, 'method' => 'get'));
+		    $this->assertContains('/members/listMembers', $this->headers['Location']);
 		}
 
 		public function testRegisterNoData()
@@ -400,10 +398,11 @@
 			$mockEmail->expects($this->exactly(2))->method('template');
 			$mockEmail->expects($this->exactly(2))->method('viewVars');
 			$mockEmail->expects($this->exactly(2))->method('send')->will($this->returnValue(true));
+
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with('membership@localhost');
+			$mockEmail->expects($this->at(3))->method('to')->with(array('j.easterwood@googlemail.com'));
 			$mockEmail->expects($this->at(4))->method('subject')->with('New Prospective Member Notification');
 			$mockEmail->expects($this->at(5))->method('template')->with('notify_admins_member_added');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('email' => $emailAddress));
@@ -423,12 +422,13 @@
 			$this->controller->Session->expects($this->once())->method('setFlash')->with('Registration successful, please check your inbox.\nSuccessfully subscribed to Nottingham Hackspace The Other List\n');
 
 			$expectedIdsAndSubjects = array(
+				5 => 'New Prospective Member Notification',
 				15 => 'Welcome to Nottingham Hackspace',
 			);
 			$data = array(
 				'Member' => array(
 					'email' => $emailAddress
-				),
+				), 
 				'MailingLists' => array(
 					'MailingLists' => array(
 						'455de2ac56'
@@ -460,7 +460,7 @@
 			$this->testAction('/members/register', array('data' => array('Member' => array('email' => $emailAddress), 'MailingLists' => array('MailingLists' => '')), 'method' => 'post'));
 		}
 
-
+		
 		public function testRegisterExistingPropspectiveMember()
 		{
 			// Test with an email address belonging to a member who is currently a prospective member
@@ -496,7 +496,7 @@
 			$data = array(
 				'Member' => array(
 					'email' => $emailAddress
-				),
+				), 
 				'MailingLists' => array(
 					'MailingLists' => array(
 					)
@@ -559,10 +559,10 @@
 		public function testSetupLoginWithInvalidMember()
 		{
 			$invalidMemberIds = array(1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14);
-			foreach ($invalidMemberIds as $memberId)
+			foreach ($invalidMemberIds as $memberId) 
 			{
 				$this->testAction('/members/setupLogin/' . $memberId);
-
+				
 				$this->assertTrue( isset($this->headers), 'Redirect to home page did not occur for member: ' . $memberId . '.' );
 				$this->assertInternalType( 'array', $this->headers, 'Redirect to home page did not occur for member: ' . $memberId . '.' );
 				$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect to home page did not occur for member: ' . $memberId . '.' );
@@ -583,7 +583,7 @@
 				),
 			);
 
-			foreach ($invalidData as $memberId => $data)
+			foreach ($invalidData as $memberId => $data) 
 			{
 				$this->testAction('/members/setupLogin/' . $memberId, array('data' => $data, 'method' => 'post'));
 				$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect to home page occurred for member: ' . $memberId . '.' );
@@ -615,10 +615,10 @@
 				),
 			);
 
-			foreach ($validData as $memberId => $data)
+			foreach ($validData as $memberId => $data) 
 			{
 				$this->testAction('/members/setupLogin/' . $memberId, array('data' => $data, 'method' => 'post'));
-
+				
 				$this->assertTrue( isset($this->headers), 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				$this->assertInternalType( 'array', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
@@ -629,20 +629,20 @@
 		public function testSetupDetailsWithInvalidMembers()
 		{
 			$data = array(
-				'Member' => array(
-					'address_1' => '27A The Mews',
-					'address_2' => 'Test Road',
-					'address_city' => 'Testington',
-					'address_postcode' => 'DE22 7BU',
-					'contact_number' => '07973 235786',
-				)
-			);
+                'Member' => array(
+                    'address_1' => '27A The Mews',
+                    'address_2' => 'Test Road',
+                    'address_city' => 'Testington',
+                    'address_postcode' => 'DE22 7BU',
+                    'contact_number' => '07973 235786',
+                )
+            );
 
-			$memberList = array( 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14 );
+            $memberList = array( 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14 );
 
-			foreach ($memberList as $memberId)
-			{
-				$mockEmail = $this->_mockMemberEmail();
+            foreach ($memberList as $memberId)
+            {
+            	$mockEmail = $this->_mockMemberEmail();
 
 				$mockEmail->expects($this->never())->method('config');
 				$mockEmail->expects($this->never())->method('from');
@@ -654,27 +654,27 @@
 				$mockEmail->expects($this->never())->method('viewVars');
 				$mockEmail->expects($this->never())->method('send');
 
-				$this->testAction('/members/setupDetails/' . $memberId, array('data' => $data, 'method' => 'post'));
-
+            	$this->testAction('/members/setupDetails/' . $memberId, array('data' => $data, 'method' => 'post'));
+				
 				$this->assertTrue( isset($this->headers), 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				$this->assertInternalType( 'array', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				$this->assertContains('/pages/home', $this->headers['Location'], 'Redirect to login page did not occur for member: ' . $memberId . '.' );
-			}
+            }
 
 		}
 
 		public function testSetupDetails()
 		{
 			$data = array(
-				'Member' => array(
-					'address_1' => '27A The Mews',
-					'address_2' => 'Test Road',
-					'address_city' => 'Testington',
-					'address_postcode' => 'DE22 7BU',
-					'contact_number' => '07973 235786',
-				)
-			);
+                'Member' => array(
+                    'address_1' => '27A The Mews',
+                    'address_2' => 'Test Road',
+                    'address_city' => 'Testington',
+                    'address_postcode' => 'DE22 7BU',
+                    'contact_number' => '07973 235786',
+                )
+            );
 
 			$mockEmail = $this->_mockMemberEmail();
 
@@ -691,7 +691,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with('membership@localhost');
+			$mockEmail->expects($this->at(3))->method('to')->with(array('j.easterwood@googlemail.com'));
 			$mockEmail->expects($this->at(4))->method('subject')->with('New Member Contact Details');
 			$mockEmail->expects($this->at(5))->method('template')->with('notify_admins_check_contact_details');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('email' => 'DorothyDRussell@dayrep.com', 'id' => 9));
@@ -711,6 +711,7 @@
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(9));
 
 			$expectedIdsAndSubjects = array(
+				5 => 'New Member Contact Details',
 				9 => 'Contact Information Completed',
 			);
 			$this->_testRecordedEmailAction('/members/setupDetails/9', $data, $expectedIdsAndSubjects);
@@ -721,51 +722,51 @@
 
 			$record = $this->MembersController->Member->findByMemberId(9);
 
-			$this->assertNotIdentical( $record, null, 'Could not find record for member id.' );
-			$this->assertInternalType( 'array', $record, 'Could not find record for member id.' );
+            $this->assertNotIdentical( $record, null, 'Could not find record for member id.' );
+            $this->assertInternalType( 'array', $record, 'Could not find record for member id.' );
 
-			$this->assertArrayHasKey( 'Member', $record, 'Record does not have member key for member id.' );
+            $this->assertArrayHasKey( 'Member', $record, 'Record does not have member key for member id.' );
 
-			$this->assertArrayHasKey( 'member_id', $record['Member'], 'Record Member does not have member_id key for member id.' );
-			$this->assertArrayHasKey( 'address_1', $record['Member'], 'Record Member does not have address_1 key for member id.' );
-			$this->assertIdentical( $record['Member']['address_1'], $data['Member']['address_1'], 'Record address_1 is incorrect for member id.' );
+            $this->assertArrayHasKey( 'member_id', $record['Member'], 'Record Member does not have member_id key for member id.' );
+            $this->assertArrayHasKey( 'address_1', $record['Member'], 'Record Member does not have address_1 key for member id.' );
+            $this->assertIdentical( $record['Member']['address_1'], $data['Member']['address_1'], 'Record address_1 is incorrect for member id.' );
 
-			$this->assertArrayHasKey( 'member_status', $record['Member'], 'Record Member does not have member_status key for member id.' );
-			$this->assertEqual( $record['Member']['member_status'], Status::PRE_MEMBER_2, 'Record has incorrect status for member id.' );
+            $this->assertArrayHasKey( 'member_status', $record['Member'], 'Record Member does not have member_status key for member id.' );
+            $this->assertEqual( $record['Member']['member_status'], Status::PRE_MEMBER_2, 'Record has incorrect status for member id.' );
 
-			$this->assertArrayHasKey( 'address_2', $record['Member'], 'Record Member does not have address_2 key for member id.' );
-			$this->assertEqual( $record['Member']['address_2'], $data['Member']['address_2'], 'Record has incorrect address_2 for member id.' );
+            $this->assertArrayHasKey( 'address_2', $record['Member'], 'Record Member does not have address_2 key for member id.' );
+            $this->assertEqual( $record['Member']['address_2'], $data['Member']['address_2'], 'Record has incorrect address_2 for member id.' );
 
-			$this->assertArrayHasKey( 'address_city', $record['Member'], 'Record Member does not have address_city key for member id.' );
-			$this->assertEqual( $record['Member']['address_city'], $data['Member']['address_city'], 'Record has incorrect address_city for member id.' );
+            $this->assertArrayHasKey( 'address_city', $record['Member'], 'Record Member does not have address_city key for member id.' );
+            $this->assertEqual( $record['Member']['address_city'], $data['Member']['address_city'], 'Record has incorrect address_city for member id.' );
 
-			$this->assertArrayHasKey( 'address_postcode', $record['Member'], 'Record Member does not have address_postcode key for member id.' );
-			$this->assertEqual( $record['Member']['address_postcode'], $data['Member']['address_postcode'], 'Record has incorrect address_postcode for member id.' );
+            $this->assertArrayHasKey( 'address_postcode', $record['Member'], 'Record Member does not have address_postcode key for member id.' );
+            $this->assertEqual( $record['Member']['address_postcode'], $data['Member']['address_postcode'], 'Record has incorrect address_postcode for member id.' );
 
-			$this->assertArrayHasKey( 'contact_number', $record['Member'], 'Record Member does not have contact_number key for member id.' );
-			$this->assertEqual( $record['Member']['contact_number'], $data['Member']['contact_number'], 'Record has incorrect contact_number for member id.' );
+            $this->assertArrayHasKey( 'contact_number', $record['Member'], 'Record Member does not have contact_number key for member id.' );
+            $this->assertEqual( $record['Member']['contact_number'], $data['Member']['contact_number'], 'Record has incorrect contact_number for member id.' );
 		}
 
 		public function testRejectDetailsWithInvalidMembers()
 		{
 			$data = array(
-				'MemberEmail' => array(
-					'subject' => 'Fooooooooooooooooooo',
-					'message' => 'barrrrrrrrrrrr',
-				)
-			);
+                'MemberEmail' => array(
+                    'subject' => 'Fooooooooooooooooooo',
+                    'message' => 'barrrrrrrrrrrr',
+                )
+            );
 
 			$memberList = array( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14 );
 
-			foreach ($memberList as $memberId)
-			{
-				$this->controller = $this->generate('Members', array(
-					'components' => array(
-						'Auth' => array(
-							'user',
-						)
-					)
-				));
+            foreach ($memberList as $memberId)
+            {
+            	$this->controller = $this->generate('Members', array(
+	            	'components' => array(
+	            		'Auth' => array(
+	            			'user',
+	            		)
+	            	)
+	            ));
 
 				$mockEmail = $this->getMock('CakeEmail');
 				$this->controller->email = $mockEmail;
@@ -781,37 +782,37 @@
 				$mockEmail->expects($this->never())->method('viewVars');
 				$mockEmail->expects($this->never())->method('send');
 
-				$this->testAction('/members/rejectDetails/' . $memberId, array('data' => $data, 'method' => 'post'));
-
+            	$this->testAction('/members/rejectDetails/' . $memberId, array('data' => $data, 'method' => 'post'));
+				
 				$this->assertTrue( isset($this->headers), 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				$this->assertInternalType( 'array', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				$this->assertContains('/pages/home', $this->headers['Location'], 'Redirect to login page did not occur for member: ' . $memberId . '.' );
-			}
+            }
 		}
 
 		public function testRejectDetails()
 		{
 			$data = array(
-				'MemberEmail' => array(
-					'subject' => 'Fooooooooooooooooooo',
-					'message' => 'barrrrrrrrrrrr',
-				)
-			);
+                'MemberEmail' => array(
+                    'subject' => 'Fooooooooooooooooooo',
+                    'message' => 'barrrrrrrrrrrr',
+                )
+            );
 
-			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					)
-				)
-			));
+            $this->controller = $this->generate('Members', array(
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
 
 			$mockEmail = $this->getMock('CakeEmail');
 			$this->controller->email = $mockEmail;
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
-			$mockEmail->expects($this->exactly(1))->method('config');
+            $mockEmail->expects($this->exactly(1))->method('config');
 			$mockEmail->expects($this->exactly(1))->method('from');
 			$mockEmail->expects($this->exactly(1))->method('sender');
 			$mockEmail->expects($this->exactly(1))->method('emailFormat');
@@ -831,7 +832,7 @@
 			$mockEmail->expects($this->at(7))->method('config')->with('smtp');
 			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
 
-			$this->_testRecordedEmailAction('/members/rejectDetails/11', $data, array( 11 => 'Issue With Contact Information'));
+            $this->_testRecordedEmailAction('/members/rejectDetails/11', $data, array( 11 => 'Issue With Contact Information'));
 
 			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect did not occurred.' );
 			$this->assertContains('/members/view/11', $this->headers['Location'], 'Redirect to member view did not occur.' );
@@ -843,52 +844,52 @@
 			$emailRecord->setDataSource('test');
 
 			$lastEmailRecord = $emailRecord->find('first', array( 'order' => 'EmailRecord.hms_email_id DESC') );
-			$lastEmailRecordId = $lastEmailRecord['EmailRecord']['hms_email_id'];
+            $lastEmailRecordId = $lastEmailRecord['EmailRecord']['hms_email_id'];
 
 			$beforeTime = time();
 			if($data == null)
 			{
-				$this->testAction($action);
+				$this->testAction($action);	
 			}
 			else
 			{
 				$this->testAction($action, array('data' => $data, 'method' => 'post'));
 			}
+            
+            $afterTime = time();
 
-			$afterTime = time();
-
-			$recordToCheck = $lastEmailRecordId + 1;
-			foreach ($expectedData as $id => $subject)
-			{
-				$createdEmailRecord = $emailRecord->findByHmsEmailId($recordToCheck);
-				EmailRecordTest::validateRecord($this, $createdEmailRecord, $id, $subject, $beforeTime, $afterTime);
-				$recordToCheck++;
-			}
+            $recordToCheck = $lastEmailRecordId + 1;
+            foreach ($expectedData as $id => $subject) 
+            {
+            	$createdEmailRecord = $emailRecord->findByHmsEmailId($recordToCheck);
+            	EmailRecordTest::validateRecord($this, $createdEmailRecord, $id, $subject, $beforeTime, $afterTime);
+            	$recordToCheck++;
+            }
 		}
 
 		public function testAcceptDetailsWithInvalidMembers()
 		{
 			$data = array(
-				'Account' => array(
-					'account_id' => '2',
-				)
-			);
+                'Account' => array(
+                    'account_id' => '2',
+                )
+            );
 
 			$memberList = array( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14 );
 
-			foreach ($memberList as $memberId)
-			{
-				$this->controller = $this->generate('Members', array(
-					'components' => array(
-						'Auth' => array(
-							'user',
-						)
-					)
-				));
+            foreach ($memberList as $memberId)
+            {
+            	$this->controller = $this->generate('Members', array(
+	            	'components' => array(
+	            		'Auth' => array(
+	            			'user',
+	            		)
+	            	)
+	            ));
 
 				$mockEmail = $this->getMock('CakeEmail');
 				$this->controller->email = $mockEmail;
-				$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+	            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
 				$mockEmail->expects($this->never())->method('config');
 				$mockEmail->expects($this->never())->method('from');
@@ -900,8 +901,8 @@
 				$mockEmail->expects($this->never())->method('viewVars');
 				$mockEmail->expects($this->never())->method('send');
 
-				$this->testAction('/members/acceptDetails/' . $memberId, array('data' => $data, 'method' => 'post'));
-
+            	$this->testAction('/members/acceptDetails/' . $memberId, array('data' => $data, 'method' => 'post'));
+				
 				$this->assertTrue( isset($this->headers), 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				$this->assertInternalType( 'array', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
@@ -912,39 +913,39 @@
 				$this->assertEqual( $this->vars['accounts'], array( '-1' => 'Create new', '1' => 'Mathew Pryce', '2' => 'Annabelle Santini', '3' => 'Jessie Easterwood, Kelly Savala and Guy Viles', '6' => 'Guy Garrette', '7' => 'Ryan Miles', '8' => 'Evan Atkinson' ), 'Accounts view var not set correctly.' );
 
 				$this->assertArrayHasKey('name', $this->vars, 'No view value called \'name\' for member: ' . $memberId . '.' );
-			}
+            }
 		}
 
 		public function testAcceptDetails()
 		{
 			$data = array(
-				'Account' => array(
-					'account_id' => '5',
-				)
-			);
+                'Account' => array(
+                    'account_id' => '5',
+                )
+            );
 
 			$this->controller = $this->generate('Members', array(
 				'models' => array(
 					'Member' => array(
-						'getSoDetails',
+						'getSoDetails', 
 						'__construct'
 					)
 				),
 				'components' => array(
-					'Auth' => array(
-						'user',
-					)
-				)
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
 			));
 
 			$mockEmail = $this->getMock('CakeEmail');
 			$this->controller->email = $mockEmail;
 
-			$fakePaymentRef = 'HSTSBKFTYX339RW4';
+			$fakePaymentRef = 'HSNOTTSTYX339RW4';
 			$this->controller->Member->expects($this->exactly(2))->method('getSoDetails')->will($this->returnValue(array('firstname' => 'Roy', 'surname' => 'Forsman', 'email' => 'RoyJForsman@teleworm.us', 'paymentRef' => $fakePaymentRef)));
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
-			$mockEmail->expects($this->exactly(2))->method('config');
+            $mockEmail->expects($this->exactly(2))->method('config');
 			$mockEmail->expects($this->exactly(2))->method('from');
 			$mockEmail->expects($this->exactly(2))->method('sender');
 			$mockEmail->expects($this->exactly(2))->method('emailFormat');
@@ -954,7 +955,7 @@
 			$mockEmail->expects($this->exactly(2))->method('viewVars');
 			$mockEmail->expects($this->exactly(2))->method('send')->will($this->returnValue(true));
 
-
+			
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
@@ -968,7 +969,7 @@
 			$mockEmail->expects($this->at(9))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(10))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(11))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(12))->method('to')->with('membership@localhost');
+			$mockEmail->expects($this->at(12))->method('to')->with(array('j.easterwood@googlemail.com'));
 			$mockEmail->expects($this->at(13))->method('subject')->with('Impending Payment');
 			$mockEmail->expects($this->at(14))->method('template')->with('notify_admins_payment_incoming');
 			$mockEmail->expects($this->at(15))->method('viewVars')->with(array('memberId' => '12', 'memberName' => 'Roy Forsman', 'memberEmail' => 'RoyJForsman@teleworm.us', 'memberPayRef' => $fakePaymentRef));
@@ -977,6 +978,7 @@
 
 			$expectedIdsAndSubjects = array(
 				12 => 'Bank Details',
+				5 => 'Impending Payment',
 			);
 			$this->_testRecordedEmailAction('/members/acceptDetails/12', $data, $expectedIdsAndSubjects);
 
@@ -993,9 +995,9 @@
 
 			$memberList = array( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 );
 
-			foreach ($memberList as $memberId)
-			{
-				$mockEmail = $this->_mockMemberEmail();
+            foreach ($memberList as $memberId)
+            {
+            	$mockEmail = $this->_mockMemberEmail();
 
 				$mockEmail->expects($this->never())->method('config');
 				$mockEmail->expects($this->never())->method('from');
@@ -1007,37 +1009,37 @@
 				$mockEmail->expects($this->never())->method('viewVars');
 				$mockEmail->expects($this->never())->method('send');
 
-				$this->testAction('/members/approveMember/' . $memberId);
-
+            	$this->testAction('/members/approveMember/' . $memberId);
+				
 				$this->assertTrue( isset($this->headers), 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				$this->assertInternalType( 'array', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect to login page did not occur for member: ' . $memberId . '.' );
 				//$this->assertContains('/pages/home', $this->headers['Location'], 'Redirect to login page did not occur for member: ' . $memberId . '.' );
-			}
+            }
 		}
 
 		public function testApproveMember()
 		{
-			$this->controller = $this->generate('Members', array(
-				'models' => array(
-					'Member' => array(
-						'getApproveDetails',
-						'__construct',
-					)
-				),
-				'components' => array(
-					'Auth' => array(
-						'user',
-					)
-				)
-			));
+            $this->controller = $this->generate('Members', array(
+            	'models' => array(
+            		'Member' => array(
+            			'getApproveDetails', 
+            			'__construct',
+            		)
+            	),
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
 
 			$mockEmail = $this->getMock('CakeEmail');
 			$this->controller->email = $mockEmail;
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
-			$this->controller->Member->expects($this->exactly(1))->method('getApproveDetails')->will($this->returnValue(array('firstname' => 'Ryan', 'surname' => 'Miles', 'id' => 13, 'email' => 'RyanMiles@dayrep.com', 'pin' => '2234')));
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+            $this->controller->Member->expects($this->exactly(1))->method('getApproveDetails')->will($this->returnValue(array('firstname' => 'Ryan', 'surname' => 'Miles', 'id' => 13, 'email' => 'RyanMiles@dayrep.com', 'pin' => '2234')));
 
-			$mockEmail->expects($this->exactly(2))->method('config');
+            $mockEmail->expects($this->exactly(2))->method('config');
 			$mockEmail->expects($this->exactly(2))->method('from');
 			$mockEmail->expects($this->exactly(2))->method('sender');
 			$mockEmail->expects($this->exactly(2))->method('emailFormat');
@@ -1050,7 +1052,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with('membership@localhost');
+			$mockEmail->expects($this->at(3))->method('to')->with(array('j.easterwood@googlemail.com'));
 			$mockEmail->expects($this->at(4))->method('subject')->with('Member Approved');
 			$mockEmail->expects($this->at(5))->method('template')->with('notify_admins_member_approved');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('memberName' => 'Ryan Miles', 'memberId' => 13, 'memberEmail' => 'RyanMiles@dayrep.com', 'memberPin' => '2234'));
@@ -1068,6 +1070,7 @@
 			$mockEmail->expects($this->at(17))->method('send')->will($this->returnValue(true));
 
 			$expectedIdsAndSubjects = array(
+				5 => 'Member Approved',
 				13 => 'Membership Complete',
 			);
 			$this->_testRecordedEmailAction('/members/approveMember/13', null, $expectedIdsAndSubjects);
@@ -1078,14 +1081,14 @@
 		public function testChangePasswordNoInputOwnAccount()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					)
-				)
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
 
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(3));
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(3));
 
 			$this->testAction('/members/changePassword/3');
 
@@ -1102,16 +1105,16 @@
 		public function testChangePasswordNoInputMemberAdmin()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					)
-				)
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
 
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
-			$this->testAction('/members/changePassword/5');
+            $this->testAction('/members/changePassword/5');
 
 			$this->assertIdentical( count($this->vars), 3, 'Unexpected number of view vars.' );
 			$this->assertArrayHasKey( 'id', $this->vars, 'No id value in view vars.' );
@@ -1126,16 +1129,16 @@
 		public function testChangePasswordNoInputMemberAdminOwnAccount()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					)
-				)
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
 
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
-			$this->testAction('/members/changePassword/2');
+            $this->testAction('/members/changePassword/2');
 
 			$this->assertIdentical( count($this->vars), 3, 'Unexpected number of view vars.' );
 			$this->assertArrayHasKey( 'id', $this->vars, 'No id value in view vars.' );
@@ -1155,14 +1158,14 @@
 
 			// A logged in user that is a non member-admin cannot change the password of another member.
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					)
-				)
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
 
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(3));
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(3));
 			$this->testAction('/members/changePassword/2');
 			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
 		}
@@ -1170,26 +1173,26 @@
 		public function testChangePasswordMemberCanChangeOwnPassword()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					)
-				)
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
 
 			// use a mock Kerberos behaviour during tests
 			$this->controller->Member->Behaviors->unload('KrbAuth');
 			$this->controller->Member->Behaviors->load('MockKrbAuth');
 
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
 
-			$data = array(
-				'ChangePassword' => array(
-					'current_password' => 'hunter2',
-					'new_password' => 'c*6vUc88i1"C=3$',
-					'new_password_confirm' => 'c*6vUc88i1"C=3$',
-				)
-			);
+            $data = array(
+            	'ChangePassword' => array(
+            		'current_password' => 'hunter2',
+            		'new_password' => 'c*6vUc88i1"C=3$',
+            		'new_password_confirm' => 'c*6vUc88i1"C=3$',
+            	)
+            );
 			$this->testAction('/members/changePassword/2', array('data' => $data, 'method' => 'post'));
 			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
 			$this->assertContains('/members/view/2', $this->headers['Location'], 'Redirect to member view did not occur.' );
@@ -1198,26 +1201,26 @@
 		public function testChangePasswordMemberAdminCanChangeOtherPassword()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					)
-				)
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
 
 			// use a mock Kerberos behaviour during tests
 			$this->controller->Member->Behaviors->unload('KrbAuth');
 			$this->controller->Member->Behaviors->load('MockKrbAuth');
 
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
-			$data = array(
-				'ChangePassword' => array(
-					'current_password' => 'hunter2',
-					'new_password' => 'c*6vUc88i1"C=3$',
-					'new_password_confirm' => 'c*6vUc88i1"C=3$',
-				)
-			);
+            $data = array(
+            	'ChangePassword' => array(
+            		'current_password' => 'hunter2',
+            		'new_password' => 'c*6vUc88i1"C=3$',
+            		'new_password_confirm' => 'c*6vUc88i1"C=3$',
+            	)
+            );
 			$this->testAction('/members/changePassword/3', array('data' => $data, 'method' => 'post'));
 			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
 			$this->assertContains('/members/view/3', $this->headers['Location'], 'Redirect to member view did not occur.' );
@@ -1226,26 +1229,26 @@
 		public function testChangePasswordMemberAdminCanChangeOwnPassword()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					)
-				)
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
 
 			// use a mock Kerberos behaviour during tests
 			$this->controller->Member->Behaviors->unload('KrbAuth');
 			$this->controller->Member->Behaviors->load('MockKrbAuth');
 
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
-			$data = array(
-				'ChangePassword' => array(
-					'current_password' => 'hunter2',
-					'new_password' => 'c*6vUc88i1"C=3$',
-					'new_password_confirm' => 'c*6vUc88i1"C=3$',
-				)
-			);
+            $data = array(
+            	'ChangePassword' => array(
+            		'current_password' => 'hunter2',
+            		'new_password' => 'c*6vUc88i1"C=3$',
+            		'new_password_confirm' => 'c*6vUc88i1"C=3$',
+            	)
+            );
 			$this->testAction('/members/changePassword/5', array('data' => $data, 'method' => 'post'));
 			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
 			$this->assertContains('/members/view/5', $this->headers['Location'], 'Redirect to member view did not occur.' );
@@ -1546,7 +1549,7 @@
 			$this->assertContains('/pages/forgot_password_error', $this->headers['Location'], 'Redirect to forgot password error view did not occur.' );
 		}
 
-		public function testsendProspectiveMemberReminderInvalidData()
+		public function testSendMembershipReminderInvalidData()
 		{
 			$mockEmail = $this->_mockMemberEmail();
 
@@ -1560,10 +1563,10 @@
 			$mockEmail->expects($this->never())->method('viewVars');
 			$mockEmail->expects($this->never())->method('send');
 
-			$this->testAction('/members/sendProspectiveMemberReminder/sdfsfgresr');
+			$this->testAction('/members/sendMembershipReminder/sdfsfgresr');
 		}
 
-		public function testsendProspectiveMemberReminder()
+		public function testSendMembershipReminder()
 		{
 			$mockEmail = $this->_mockMemberEmail();
 
@@ -1590,7 +1593,7 @@
 			$expectedIdsAndSubjects = array(
 				7 => 'Welcome to Nottingham Hackspace',
 			);
-			$this->_testRecordedEmailAction('/members/sendProspectiveMemberReminder/7', null, $expectedIdsAndSubjects);
+			$this->_testRecordedEmailAction('/members/sendMembershipReminder/7', null, $expectedIdsAndSubjects);
 		}
 
 		public function testSendSoDetailsReminderInvalidData()
@@ -1630,7 +1633,7 @@
 			$mockEmail->expects($this->at(3))->method('to')->with('RyanMiles@dayrep.com');
 			$mockEmail->expects($this->at(4))->method('subject')->with('Bank Details');
 			$mockEmail->expects($this->at(5))->method('template')->with('to_member_so_details');
-			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('name' => 'Ryan Miles', 'paymentRef' => 'HSTSBKFFGXWGKF48', 'accountNum' => Configure::read('hms_so_accountNumber'), 'sortCode' => Configure::read('hms_so_sortCode'), 'accountName' => Configure::read('hms_so_accountName') ));
+			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('name' => 'Ryan Miles', 'paymentRef' => 'HSNOTTSFGXWGKF48', 'accountNum' => Configure::read('hms_so_accountNumber'), 'sortCode' => Configure::read('hms_so_sortCode'), 'accountName' => Configure::read('hms_so_accountName') ));
 			$mockEmail->expects($this->at(7))->method('config')->with('smtp');
 			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
 
@@ -1782,7 +1785,7 @@
 			);
 
 			$index = 0;
-			foreach ($emails as $email)
+			foreach ($emails as $email) 
 			{
 				$mockEmail->expects($this->at($index++))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 				$mockEmail->expects($this->at($index++))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
@@ -1832,7 +1835,7 @@
 
 			$index = 0;
 			$count = 0;
-			foreach ($emails as $email)
+			foreach ($emails as $email) 
 			{
 				$mockEmail->expects($this->at($index++))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 				$mockEmail->expects($this->at($index++))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
@@ -1862,12 +1865,12 @@
 		public function testViewMemberAsAnotherMember()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					)
-				)
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		)
+            	)
+            ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
 
@@ -1879,32 +1882,30 @@
 		public function testViewMemberAsMemberAdmin()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					),
-					'Nav' => array(
-						'add',
-					)
-				),
-				'methods' => array(
-					'getMailingList',
-				),
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
+            ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(6))->method('add');
+			$this->controller->Nav->expects($this->exactly(4))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
-			$this->controller->Nav->expects($this->at(4))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(4));
-			$this->controller->Nav->expects($this->at(5))->method('add')->with('Resend Welcome Email', 'members', 'sendMembershipCompleteMail', array(4));
 
-			// Should not redirect, and should populate
+			// Should not redirect, and should populate 
 			$this->testAction('members/view/4');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
@@ -1936,13 +1937,13 @@
 				'balance' => '-5649',
 				'creditLimit' => '5000',
 				'pin' => array(
-					0 => array(
+					0 => array( 
 						'id' => 4,
 						'pin' => '5436',
 						'state' => 30,
 					)
 				),
-				'paymentRef' => 'HSTSBKFYT7H4CW3G',
+				'paymentRef' => 'HSNOTTSYT7H4CW3G',
 				'address' => array(
 					'part1' => '8 Elm Close',
 					'part2' => 'Tetsworth',
@@ -1972,33 +1973,31 @@
 		public function testViewMemberAsMembershipTeam()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					),
-					'Nav' => array(
-						'add',
-					)
-				),
-				'methods' => array(
-					'getMailingList',
-				),
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
+            ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(4));
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(6))->method('add');
+			$this->controller->Nav->expects($this->exactly(4))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(3));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(3));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(3));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(3));
-			$this->controller->Nav->expects($this->at(4))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(3));
-			$this->controller->Nav->expects($this->at(5))->method('add')->with('Resend Welcome Email', 'members', 'sendMembershipCompleteMail', array(3));
 
-			// Should not redirect, and should populate
- 				$this->testAction('members/view/3');
+			// Should not redirect, and should populate 
+			$this->testAction('members/view/3');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
 			$this->_testMailingListView(array('us8gz1v8rq' => true, '455de2ac56' => false));
@@ -2025,13 +2024,13 @@
 				'balance' => '-985',
 				'creditLimit' => '5000',
 				'pin' => array(
-					0 => array(
+					0 => array( 
 						'id' => 3,
 						'pin' => '5142',
 						'state' => 30,
 					)
 				),
-				'paymentRef' => 'HSTSBKFYT7H4CW3G',
+				'paymentRef' => 'HSNOTTSYT7H4CW3G',
 				'lastStatusUpdate' => array(
 					'id' => '3',
 					'by' => '5',
@@ -2054,32 +2053,30 @@
 		public function testViewMemberAsFullAccess()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					),
-					'Nav' => array(
-						'add',
-					)
-				),
-				'methods' => array(
-					'getMailingList',
-				),
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
+            ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(1));
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(6))->method('add');
+			$this->controller->Nav->expects($this->exactly(4))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
-			$this->controller->Nav->expects($this->at(4))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(4));
-			$this->controller->Nav->expects($this->at(5))->method('add')->with('Resend Welcome Email', 'members', 'sendMembershipCompleteMail', array(4));
 
-			// Should not redirect, and should populate
+			// Should not redirect, and should populate 
 			$this->testAction('members/view/4');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
@@ -2111,13 +2108,13 @@
 				'balance' => '-5649',
 				'creditLimit' => '5000',
 				'pin' => array(
-					0 => array(
+					0 => array( 
 						'id' => 4,
 						'pin' => '5436',
 						'state' => 30,
 					)
 				),
-				'paymentRef' => 'HSTSBKFYT7H4CW3G',
+				'paymentRef' => 'HSNOTTSYT7H4CW3G',
 				'address' => array(
 					'part1' => '8 Elm Close',
 					'part2' => 'Tetsworth',
@@ -2147,31 +2144,29 @@
 		public function testViewMemberAsSameMember()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					),
-					'Nav' => array(
-						'add',
-					)
-				),
-				'methods' => array(
-					'getMailingList',
-				),
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
+            ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(3));
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(5))->method('add');
+			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(3));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(3));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(3));
-			$this->controller->Nav->expects($this->at(3))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(3));
-			$this->controller->Nav->expects($this->at(4))->method('add')->with('Resend Welcome Email', 'members', 'sendMembershipCompleteMail', array(3));
 
-			// Should not redirect, and should populate
+			// Should not redirect, and should populate 
 			$this->testAction('members/view/3');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
@@ -2188,7 +2183,7 @@
 				'unlockText' => 'Sup Guy',
 				'balance' => '-985',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSTSBKFYT7H4CW3G',
+				'paymentRef' => 'HSNOTTSYT7H4CW3G',
 				'address' => array(
 					'part1' => '4 Fraser Crescent',
 					'part2' => '',
@@ -2204,18 +2199,18 @@
 		public function testViewMemberAsMemberAdminThatIsProspectiveMember()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					),
-					'Nav' => array(
-						'add',
-					)
-				),
-				'methods' => array(
-					'getMailingList',
-				),
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
+            ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
@@ -2224,9 +2219,9 @@
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(7));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(7));
-			$this->controller->Nav->expects($this->at(2))->method('add')->with('Send Membership Reminder', 'members', 'sendProspectiveMemberReminder', array(7));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Send Membership Reminder', 'members', 'sendMembershipReminder', array(7));
 
-			// Should not redirect, and should populate
+			// Should not redirect, and should populate 
 			$this->testAction('members/view/7');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
@@ -2248,18 +2243,18 @@
 		public function testViewMemberAsSameMemberThatIsPreMember1()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					),
-					'Nav' => array(
-						'add',
-					)
-				),
-				'methods' => array(
-					'getMailingList',
-				),
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
+            ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(9));
 
@@ -2270,7 +2265,7 @@
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(9));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Send Contact Details Reminder', 'members', 'sendContactDetailsReminder', array(9));
 
-			// Should not redirect, and should populate
+			// Should not redirect, and should populate 
 			$this->testAction('members/view/9');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
@@ -2291,18 +2286,18 @@
 		public function testViewMemberAsSameMemberThatIsPreMember2()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					),
-					'Nav' => array(
-						'add',
-					)
-				),
-				'methods' => array(
-					'getMailingList',
-				),
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
+            ));
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(11));
 
@@ -2314,7 +2309,7 @@
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Accept Details', 'members', 'acceptDetails', array(11));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Reject Details', 'members', 'rejectDetails', array(11));
 
-			// Should not redirect, and should populate
+			// Should not redirect, and should populate 
 			$this->testAction('members/view/11');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
@@ -2342,50 +2337,89 @@
 		public function testViewMemberAsSameMemberThatIsPreMember3()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					),
-					'Nav' => array(
-						'add',
-					)
-				),
-				'methods' => array(
-					'getMailingList',
-				),
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            		'Nav' => array(
+            			'add',
+            		)
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
+            ));
 
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(13));
+			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(4));
 
 			$this->_constructMailingList();
 
 			$this->controller->Nav->expects($this->exactly(4))->method('add');
-			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(13));
-			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(13));
-			$this->controller->Nav->expects($this->at(2))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(13));
-			$this->controller->Nav->expects($this->at(3))->method('add')->with('Approve Member', 'members', 'approveMember', array(13));
-			
-			// Should not redirect, and should populate
-			$this->testAction('members/view/13');
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
+			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
+
+			// Should not redirect, and should populate 
+			$this->testAction('members/view/4');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-			$this->_testMailingListView(array('us8gz1v8rq' => false, '455de2ac56' => true));
+			$this->_testMailingListView(array('us8gz1v8rq' => true, '455de2ac56' => false));
 
 			$expectedMemberInfo = array(
-				'id' => '13',
-				'bestName' => 'Ryan Miles',
-				'firstname' => 'Ryan',
-				'surname' => 'Miles',
-				'username' => 'Samer1955',
-				'email' => 'RyanMiles@dayrep.com',
-				'paymentRef' => 'HSTSBKFFGXWGKF48',
+				'id' => '4',
+				'bestName' => 'Kelly Savala',
+				'firstname' => 'Kelly',
+				'surname' => 'Savala',
+				'username' => 'huskycolossus',
+				'email' => 'k.savala@yahoo.co.uk',
+				'joinDate' => '2010-09-22',
+				'unlockText' => 'Hey Kelly',
+				'balance' => '-5649',
+				'creditLimit' => '5000',
+				'paymentRef' => 'HSNOTTSYT7H4CW3G',
 				'address' => array(
-					'part1' => '86 Prince Consort Road',
-					'part2' => '',
-					'city' => 'Kempsey',
-					'postcode' => 'WR5 8WJ',
+					'part1' => '8 Elm Close',
+					'part2' => 'Tetsworth',
+					'city' => 'Thame',
+					'postcode' => 'OX9 7AP',
 				),
-				'contactNumber' => '078 5295 7976',
+				'contactNumber' => '079 0644 8720',
+				'groups' => array(
+					0 => array(
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
+				    1 => array(
+				        'id' => '4',
+				        'description' => 'Gatekeeper Admin',
+				    ),
+				),
+				'status' => array(
+					'id' => '5',
+				    'name' => 'Current Member',
+				),
+				'pin' => array(
+					0 => array( 
+						'id' => 4,
+						'pin' => '5436',
+						'state' => 30,
+					)
+				),
+				'lastStatusUpdate' => array(
+					'id' => '4',
+					'by' => '5',
+					'from' => '4',
+					'to' => '5',
+					'at' => '2012-12-17 19:19:59',
+					'by_username' => 'chollertonbanker',
+				),
+				'lastEmail' => array(
+					'id' => '4',
+					'member_id' => '4',
+					'subject' => 'Test email 2',
+					'timestamp' => '2013-06-05 13:51:04'
+				)
 			);
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
@@ -2401,19 +2435,19 @@
 		public function testEditMemberGetOwn()
 		{
 			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					),
-				),
-				'methods' => array(
-					'getMailingList',
-				),
-			));
+            	'components' => array(
+            		'Auth' => array(
+            			'user',
+            		),
+            	),
+            	'methods' => array(
+            		'getMailingList',
+            	),
+            ));
 
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(2));
 
-			$this->_constructMailingList();
+            $this->_constructMailingList();
 
 			$this->testAction('members/edit/2');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
@@ -2443,7 +2477,7 @@
 		public function testEditMemberEditOwn()
 		{
 			$inputData = array(
-				'Member' => array(
+            	'Member' => array(
 					'firstname' => 'Nat',
 					'surname' => 'Gillian',
 					'username' => 'foo',
@@ -2484,12 +2518,12 @@
 
 			$expectedRecordData = array(
 				'Member' => array(
-					'member_id' => '2',
-					'account_id' => '2',
-					'member_status' => '5',
-					'join_date' => '2011-02-24',
-					'balance' => '0',
-					'credit_limit' => '5000',
+				    'member_id' => '2',
+            		'account_id' => '2',
+            		'member_status' => '5',
+            		'join_date' => '2011-02-24',
+            		'balance' => '0',
+            		'credit_limit' => '5000',
 					'firstname' => 'Nat',
 					'surname' => 'Gillian',
 					'username' => 'foo',
@@ -2502,46 +2536,45 @@
 					'contact_number' => '079716523804',
 				),
 				'Status' => array(
-					'status_id' => '5',
-					'title' => 'Current Member',
+				    'status_id' => '5',
+				    'title' => 'Current Member',
 				),
 				'Account' => array(
-					'account_id' => '2',
-					'payment_ref' => 'HSTSBKFK2R62GQW6',
-					'natwest_ref' => 'HSNOTTSKFK2R62GQ',
+				    'account_id' => '2',
+				    'payment_ref' => 'HSNOTTSK2R62GQW6',
 				),
 				'Pin' => array(
 					0 => array(
-						'pin_id' => '2',
-						'pin' => '7422',
-						'date_added' => '2012-12-03 23:56:43',
-						'expiry' => null,
-						'state' => '30',
-						'member_id' => '2',
-					),
+					    'pin_id' => '2',
+					    'pin' => '7422',
+					    'date_added' => '2012-12-03 23:56:43',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '2',
+				    ),
 				),
 				'StatusUpdate' => array(
 				),
 				'Group' => array(
-					0 => array(
-						'grp_id' => '2',
-						'grp_description' => 'Current Members',
-					),
-					1 => array(
-						'grp_id' => '3',
-						'grp_description' => 'Snackspace Admin',
-					),
+				    0 => array(
+				        'grp_id' => '2',
+				        'grp_description' => 'Current Members',
+				    ),
+				    1 => array(
+				        'grp_id' => '3',
+				        'grp_description' => 'Snackspace Admin',
+				    ),
 				),
 			);
 
 			$this->_testEditMember(
-				2,
-				2,
-				$inputData,
-				$expectedViewVal,
-				$expectedRecordData,
+				2, 
+				2, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
 				array(
-					'us8gz1v8rq' => true,
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				),
 				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace The Other List\nSuccessfully unsubscribed from Nottingham Hackspace Announcements\n'
@@ -2551,15 +2584,15 @@
 		public function testEditMemberEditOwnAllValues()
 		{
 			$inputData = array(
-				'Member' => array(
-					'member_id' => '243',
-					'firstname' => 'Nat',
-					'surname' => 'Gillian',
-					'account_id' => '325',
-					'member_status' => '1',
-					'join_date' => '2013-12-30',
-					'balance' => '100000',
-					'credit_limit' => '20000',
+            	'Member' => array(
+            		'member_id' => '243',
+            		'firstname' => 'Nat',
+            		'surname' => 'Gillian',
+            		'account_id' => '325',
+            		'member_status' => '1',
+            		'join_date' => '2013-12-30',
+            		'balance' => '100000',
+            		'credit_limit' => '20000',
 					'username' => 'foo',
 					'email' => 'totallydifferent@hotmail.com',
 					'unlock_text' => 'Would you kindly?',
@@ -2570,24 +2603,23 @@
 					'contact_number' => '079716523804',
 				),
 				'Status' => array(
-					'status_id' => '3',
-					'title' => 'Special Status',
+				    'status_id' => '3',
+				    'title' => 'Special Status',
 				),
 				'Account' => array(
-					'account_id' => '56',
-					'payment_ref' => 'INEEDNOPAYMENTREF',
-					'natwest_ref' => '',
+				    'account_id' => '56',
+				    'payment_ref' => 'INEEDNOPAYMENTREF',
 				),
 				'Pin' => array(
 					0 => array(
-						'pin_id' => '4',
-						'pin' => '5555',
-						'unlock_text' => 'MAYBE USED',
-						'date_added' => '2010-01-01 00:00:00',
-						'expiry' => 'NEVER!',
-						'state' => '22',
-						'member_id' => '15',
-					),
+					    'pin_id' => '4',
+					    'pin' => '5555',
+					    'unlock_text' => 'MAYBE USED',
+					    'date_added' => '2010-01-01 00:00:00',
+					    'expiry' => 'NEVER!',
+					    'state' => '22',
+					    'member_id' => '15',
+				    ),
 				),
 				'StatusUpdate' => array(
 					0 => array(
@@ -2600,10 +2632,10 @@
 					),
 				),
 				'Group' => array(
-					0 => array(
-						'grp_id' => '1',
-						'grp_description' => 'Full Access',
-					),
+				    0 => array(
+				        'grp_id' => '1',
+				        'grp_description' => 'Full Access',
+				    ),
 				),
 				'MailingLists' => array(
 					'MailingLists' => array(
@@ -2634,14 +2666,14 @@
 
 			$expectedRecordData = array(
 				'Member' => array(
-					'member_id' => '2',
-					'account_id' => '2',
-					'member_status' => '5',
-					'join_date' => '2011-02-24',
-					'balance' => '0',
-					'credit_limit' => '5000',
+				    'member_id' => '2',
+            		'account_id' => '2',
+            		'member_status' => '5',
+            		'join_date' => '2011-02-24',
+            		'balance' => '0',
+            		'credit_limit' => '5000',
 					'firstname' => 'Nat',
-					'surname' => 'Gillian',
+            		'surname' => 'Gillian',
 					'username' => 'foo',
 					'email' => 'totallydifferent@hotmail.com',
 					'unlock_text' => 'Would you kindly?',
@@ -2652,45 +2684,44 @@
 					'contact_number' => '079716523804',
 				),
 				'Status' => array(
-					'status_id' => '5',
-					'title' => 'Current Member',
+				    'status_id' => '5',
+				    'title' => 'Current Member',
 				),
 				'Account' => array(
-					'account_id' => '2',
-					'payment_ref' => 'HSTSBKFK2R62GQW6',
-					'natwest_ref' => 'HSNOTTSKFK2R62GQ',
+				    'account_id' => '2',
+				    'payment_ref' => 'HSNOTTSK2R62GQW6',
 				),
 				'Pin' => array(
-					0 => array(
-						'pin_id' => '2',
-						'pin' => '7422',
-						'date_added' => '2012-12-03 23:56:43',
-						'expiry' => null,
-						'state' => '30',
-						'member_id' => '2',
+					0 => array( 
+					    'pin_id' => '2',
+					    'pin' => '7422',
+					    'date_added' => '2012-12-03 23:56:43',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '2',
 					),
 				),
 				'StatusUpdate' => array(
 				),
 				'Group' => array(
-					0 => array(
-						'grp_id' => '2',
-						'grp_description' => 'Current Members',
-					),
-					1 => array(
-						'grp_id' => '3',
-						'grp_description' => 'Snackspace Admin',
-					),
+				    0 => array(
+				        'grp_id' => '2',
+				        'grp_description' => 'Current Members',
+				    ),
+				    1 => array(
+				        'grp_id' => '3',
+				        'grp_description' => 'Snackspace Admin',
+				    ),
 				),
 			);
 			$this->_testEditMember(
-				2,
-				2,
-				$inputData,
-				$expectedViewVal,
-				$expectedRecordData,
+				2, 
+				2, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
 				array(
-					'us8gz1v8rq' => true,
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				),
 				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace Announcements\n'
@@ -2710,7 +2741,7 @@
 		private function _testEditMemberSetAdminFields($adminId)
 		{
 			$inputData = array(
-				'Member' => array(
+            	'Member' => array(
 					'firstname' => 'Ser',
 					'surname' => 'Dantus',
 					'username' => 'loremipsum',
@@ -2750,7 +2781,7 @@
 				'unlockText' => 'Hey Kelly',
 				'balance' => '-5649',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSTSBKFYT7H4CW3G',
+				'paymentRef' => 'HSNOTTSYT7H4CW3G',
 				'address' => array(
 					'part1' => '8 Elm Close',
 					'part2' => 'Tetsworth',
@@ -2759,7 +2790,7 @@
 				),
 				'contactNumber' => '079 0644 8720',
 				'pin' => array(
-					0 => array(
+					0 => array( 
 						'id' => 4,
 						'pin' => '5436',
 						'state' => 30,
@@ -2767,17 +2798,17 @@
 				),
 				'groups' => array(
 					0 => array(
-						'id' => '2',
-						'description' => 'Current Members',
-					),
-					1 => array(
-						'id' => '4',
-						'description' => 'Gatekeeper Admin',
-					),
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
+				    1 => array(
+				        'id' => '4',
+				        'description' => 'Gatekeeper Admin',
+				    ),
 				),
 				'status' => array(
 					'id' => '5',
-					'name' => 'Current Member',
+				    'name' => 'Current Member',
 				),
 				'lastStatusUpdate' => array(
 					'id' => '4',
@@ -2791,12 +2822,12 @@
 
 			$expectedRecordData = array(
 				'Member' => array(
-					'member_id' => '4',
-					'account_id' => '4',
-					'member_status' => '5',
-					'join_date' => '2010-09-22',
-					'balance' => '-5649',
-					'credit_limit' => '5000',
+				    'member_id' => '4',
+            		'account_id' => '4',
+            		'member_status' => '5',
+            		'join_date' => '2010-09-22',
+            		'balance' => '-5649',
+            		'credit_limit' => '5000',
 					'firstname' => 'Ser',
 					'surname' => 'Dantus',
 					'username' => 'loremipsum',
@@ -2809,22 +2840,21 @@
 					'contact_number' => '01321564895',
 				),
 				'Status' => array(
-					'status_id' => '5',
-					'title' => 'Current Member',
+				    'status_id' => '5',
+				    'title' => 'Current Member',
 				),
 				'Account' => array(
-					'account_id' => '4',
-					'payment_ref' => 'HSTSBKFCV3TFFDGX',
-					'natwest_ref' => 'HSNOTTSKFCV3TFFD',
+				    'account_id' => '4',
+				    'payment_ref' => 'HSNOTTSCV3TFFDGX',
 				),
 				'Pin' => array(
 					0 => array(
-						'pin_id' => '4',
-						'pin' => '5436',
-						'date_added' => '2012-12-18 21:01:05',
-						'expiry' => null,
-						'state' => '30',
-						'member_id' => '4',
+					    'pin_id' => '4',
+					    'pin' => '5436',
+					    'date_added' => '2012-12-18 21:01:05',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '4',
 					),
 				),
 				'StatusUpdate' => array(
@@ -2854,13 +2884,13 @@
 			);
 
 			$this->_testEditMember(
-				4,
-				$adminId,
-				$inputData,
-				$expectedViewVal,
-				$expectedRecordData,
+				4, 
+				$adminId, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
 				array(
-					'us8gz1v8rq' => true,
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				),
 				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace The Other List\n'
@@ -2880,7 +2910,7 @@
 		private function _testEditMemberRemoveGroups($adminId)
 		{
 			$inputData = array(
-				'Member' => array(
+            	'Member' => array(
 					'firstname' => 'Ser',
 					'surname' => 'Dantus',
 					'username' => 'loremipsum',
@@ -2917,7 +2947,7 @@
 				'unlockText' => 'Welcome Annabelle',
 				'balance' => '0',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSTSBKFK2R62GQW6',
+				'paymentRef' => 'HSNOTTSK2R62GQW6',
 				'address' => array(
 					'part1' => '1 Saint Paul\'s Church Yard',
 					'part2' => 'The City',
@@ -2926,7 +2956,7 @@
 				),
 				'contactNumber' => '077 1755 4342',
 				'pin' => array(
-					0 => array(
+					0 => array( 
 						'id' => 2,
 						'pin' => '7422',
 						'state' => '30',
@@ -2934,28 +2964,28 @@
 				),
 				'groups' => array(
 					0 => array(
-						'id' => '2',
-						'description' => 'Current Members',
-					),
-					1 => array(
-						'id' => '3',
-						'description' => 'Snackspace Admin',
-					),
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
+				    1 => array(
+				        'id' => '3',
+				        'description' => 'Snackspace Admin',
+				    ),
 				),
 				'status' => array(
 					'id' => '5',
-					'name' => 'Current Member',
+				    'name' => 'Current Member',
 				),
 			);
 
 			$expectedRecordData = array(
 				'Member' => array(
-					'member_id' => '2',
-					'account_id' => '4',
-					'member_status' => '5',
-					'join_date' => '2011-02-24',
-					'balance' => '0',
-					'credit_limit' => '5000',
+				    'member_id' => '2',
+            		'account_id' => '4',
+            		'member_status' => '5',
+            		'join_date' => '2011-02-24',
+            		'balance' => '0',
+            		'credit_limit' => '5000',
 					'firstname' => 'Ser',
 					'surname' => 'Dantus',
 					'username' => 'loremipsum',
@@ -2968,22 +2998,21 @@
 					'contact_number' => '01321564895',
 				),
 				'Status' => array(
-					'status_id' => '5',
-					'title' => 'Current Member',
+				    'status_id' => '5',
+				    'title' => 'Current Member',
 				),
 				'Account' => array(
-					'account_id' => '4',
-					'payment_ref' => 'HSTSBKFCV3TFFDGX',
-					'natwest_ref' => 'HSNOTTSKFCV3TFFD',
+				    'account_id' => '4',
+				    'payment_ref' => 'HSNOTTSCV3TFFDGX',
 				),
 				'Pin' => array(
-					0 => array(
-						'pin_id' => '2',
-						'pin' => '7422',
-						'date_added' => '2012-12-03 23:56:43',
-						'expiry' => null,
-						'state' => '30',
-						'member_id' => '2',
+					0 => array( 
+					    'pin_id' => '2',
+					    'pin' => '7422',
+					    'date_added' => '2012-12-03 23:56:43',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '2',
 					),
 				),
 				'StatusUpdate' => array(
@@ -2997,13 +3026,13 @@
 			);
 
 			$this->_testEditMember(
-				2,
-				$adminId,
-				$inputData,
-				$expectedViewVal,
-				$expectedRecordData,
+				2, 
+				$adminId, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
 				array(
-					'us8gz1v8rq' => true,
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				),
 				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace The Other List\nSuccessfully unsubscribed from Nottingham Hackspace Announcements\n'
@@ -3023,14 +3052,14 @@
 		private function _testEditMemberRemoveAllGroups($adminId)
 		{
 			$inputData = array(
-				'Member' => array(
+            	'Member' => array(
 					'firstname' => 'Ser',
 					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'email' => 'not_the_same@gmail.com',
 					'unlock_text' => 'Open the damn door',
 					'address_1' => '34fewarg',
-					'address_2' => '',
+					'address_2' => '', 
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
@@ -3059,7 +3088,7 @@
 				'unlockText' => 'Oh dear...',
 				'balance' => '-3465',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSTSBKFYT7H4CW3G',
+				'paymentRef' => 'HSNOTTSYT7H4CW3G',
 				'address' => array(
 					'part1' => '9 Langton Avenue',
 					'part2' => 'East Calder',
@@ -3068,7 +3097,7 @@
 				),
 				'contactNumber' => '070 0036 0548',
 				'pin' => array(
-					0 => array(
+					0 => array( 
 						'id' => 5,
 						'pin' => '3014',
 						'state' => '30',
@@ -3076,28 +3105,28 @@
 				),
 				'groups' => array(
 					0 => array(
-						'id' => '2',
-						'description' => 'Current Members',
-					),
-					1 => array(
-						'id' => '5',
-						'description' => 'Member Admin',
-					),
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
+				    1 => array(
+				        'id' => '5',
+				        'description' => 'Member Admin',
+				    ),
 				),
 				'status' => array(
 					'id' => '5',
-					'name' => 'Current Member',
+				    'name' => 'Current Member',
 				),
 			);
 
 			$expectedRecordData = array(
 				'Member' => array(
-					'member_id' => '5',
-					'account_id' => '4',
-					'member_status' => '5',
-					'join_date' => '2010-09-22',
-					'balance' => '-3465',
-					'credit_limit' => '5000',
+				    'member_id' => '5',
+            		'account_id' => '4',
+            		'member_status' => '5',
+            		'join_date' => '2010-09-22',
+            		'balance' => '-3465',
+            		'credit_limit' => '5000',
 					'firstname' => 'Ser',
 					'surname' => 'Dantus',
 					'username' => 'loremipsum',
@@ -3110,22 +3139,21 @@
 					'contact_number' => '01321564895',
 				),
 				'Status' => array(
-					'status_id' => '5',
-					'title' => 'Current Member',
+				    'status_id' => '5',
+				    'title' => 'Current Member',
 				),
 				'Account' => array(
-			  		'account_id' => '4',
-					'payment_ref' => 'HSTSBKFCV3TFFDGX',
-					'natwest_ref' => 'HSNOTTSKFCV3TFFD',
+				    'account_id' => '4',
+				    'payment_ref' => 'HSNOTTSCV3TFFDGX',
 				),
 				'Pin' => array(
 					0 => array(
-						'pin_id' => '5',
-						'pin' => '3014',
-						'date_added' => '2012-12-19 19:54:12',
-						'expiry' => null,
-						'state' => '30',
-						'member_id' => '5',
+					    'pin_id' => '5',
+					    'pin' => '3014',
+					    'date_added' => '2012-12-19 19:54:12',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '5',
 					),
 				),
 				'StatusUpdate' => array(
@@ -3139,13 +3167,13 @@
 			);
 
 			$this->_testEditMember(
-				5,
-				$adminId,
-				$inputData,
-				$expectedViewVal,
-				$expectedRecordData,
+				5, 
+				$adminId, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
 				array(
-					'us8gz1v8rq' => true,
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				),
 				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace Announcements\n'
@@ -3165,14 +3193,14 @@
 		private function _testEditMemberJoinAccount($adminId)
 		{
 			$inputData = array(
-				'Member' => array(
+            	'Member' => array(
 					'firstname' => 'Ser',
 					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'email' => 'not_the_same@gmail.com',
 					'unlock_text' => 'Open the damn door',
 					'address_1' => '34fewarg',
-					'address_2' => '',
+					'address_2' => '', 
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
@@ -3201,7 +3229,7 @@
 				'unlockText' => 'Sup Guy',
 				'balance' => '-985',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSTSBKFYT7H4CW3G',
+				'paymentRef' => 'HSNOTTSYT7H4CW3G',
 				'address' => array(
 					'part1' => '4 Fraser Crescent',
 					'part2' => '',
@@ -3210,7 +3238,7 @@
 				),
 				'contactNumber' => '077 7181 0959',
 				'pin' => array(
-					0 => array(
+					0 => array( 
 						'id' => 3,
 						'pin' => '5142',
 						'state' => '30',
@@ -3218,13 +3246,13 @@
 				),
 				'groups' => array(
 					0 => array(
-						'id' => '2',
-						'description' => 'Current Members',
-					),
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
 				),
 				'status' => array(
 					'id' => '5',
-					'name' => 'Current Member',
+				    'name' => 'Current Member',
 				),
 				'lastStatusUpdate' => array(
 					'id' => '3',
@@ -3238,12 +3266,12 @@
 
 			$expectedRecordData = array(
 				'Member' => array(
-					'member_id' => '3',
-					'account_id' => '3',
-					'member_status' => '5',
-					'join_date' => '2010-08-18',
-					'balance' => '-985',
-					'credit_limit' => '5000',
+				    'member_id' => '3',
+            		'account_id' => '3',
+            		'member_status' => '5',
+            		'join_date' => '2010-08-18',
+            		'balance' => '-985',
+            		'credit_limit' => '5000',
 					'firstname' => 'Ser',
 					'surname' => 'Dantus',
 					'username' => 'loremipsum',
@@ -3256,22 +3284,21 @@
 					'contact_number' => '01321564895',
 				),
 				'Status' => array(
-					'status_id' => '5',
-					'title' => 'Current Member',
+				    'status_id' => '5',
+				    'title' => 'Current Member',
 				),
 				'Account' => array(
-					'account_id' => '3',
-					'payment_ref' => 'HSTSBKFYT7H4CW3G',
-					'natwest_ref' => 'HSNOTTSKFYT7H4CW',
+				    'account_id' => '3',
+				    'payment_ref' => 'HSNOTTSYT7H4CW3G',
 				),
 				'Pin' => array(
-					0 => array(
-						'pin_id' => '3',
-						'pin' => '5142',
-						'date_added' => '2012-12-18 20:15:00',
-						'expiry' => null,
-						'state' => '30',
-						'member_id' => '3',
+					0 => array( 
+					    'pin_id' => '3',
+					    'pin' => '5142',
+					    'date_added' => '2012-12-18 20:15:00',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '3',
 					),
 				),
 				'StatusUpdate' => array(
@@ -3293,13 +3320,13 @@
 			);
 
 			$this->_testEditMember(
-				3,
-				$adminId,
-				$inputData,
-				$expectedViewVal,
-				$expectedRecordData,
+				3, 
+				$adminId, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
 				array(
-					'us8gz1v8rq' => true,
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				),
 				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace The Other List\n'
@@ -3319,14 +3346,14 @@
 		private function _testEditMemberLeaveJointAccount($adminId)
 		{
 			$inputData = array(
-				'Member' => array(
+            	'Member' => array(
 					'firstname' => 'Ser',
 					'surname' => 'Dantus',
 					'username' => 'loremipsum',
 					'email' => 'not_the_same@gmail.com',
 					'unlock_text' => 'Open the damn door',
 					'address_1' => '34fewarg',
-					'address_2' => '',
+					'address_2' => '', 
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
@@ -3355,7 +3382,7 @@
 				'unlockText' => 'Sup Guy',
 				'balance' => '-985',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSTSBKFYT7H4CW3G',
+				'paymentRef' => 'HSNOTTSYT7H4CW3G',
 				'address' => array(
 					'part1' => '4 Fraser Crescent',
 					'part2' => '',
@@ -3364,7 +3391,7 @@
 				),
 				'contactNumber' => '077 7181 0959',
 				'pin' => array(
-					0 => array(
+					0 => array( 
 						'id' => 3,
 						'pin' => '5142',
 						'state' => '30',
@@ -3372,13 +3399,13 @@
 				),
 				'groups' => array(
 					0 => array(
-						'id' => '2',
-						'description' => 'Current Members',
-					),
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
 				),
 				'status' => array(
 					'id' => '5',
-					'name' => 'Current Member',
+				    'name' => 'Current Member',
 				),
 				'lastStatusUpdate' => array(
 					'id' => '3',
@@ -3392,12 +3419,12 @@
 
 			$expectedRecordData = array(
 				'Member' => array(
-					'member_id' => '3',
-					'account_id' => '9',
-					'member_status' => '5',
-					'join_date' => '2010-08-18',
-					'balance' => '-985',
-					'credit_limit' => '5000',
+				    'member_id' => '3',
+            		'account_id' => '9',
+            		'member_status' => '5',
+            		'join_date' => '2010-08-18',
+            		'balance' => '-985',
+            		'credit_limit' => '5000',
 					'firstname' => 'Ser',
 					'surname' => 'Dantus',
 					'username' => 'loremipsum',
@@ -3410,21 +3437,20 @@
 					'contact_number' => '01321564895',
 				),
 				'Status' => array(
-					'status_id' => '5',
-					'title' => 'Current Member',
+				    'status_id' => '5',
+				    'title' => 'Current Member',
 				),
 				'Account' => array(
-					'account_id' => '9',
-					'natwest_ref' => '',
+				    'account_id' => '9',
 				),
 				'Pin' => array(
 					0 => array(
-						'pin_id' => '3',
-						'pin' => '5142',
-						'date_added' => '2012-12-18 20:15:00',
-						'expiry' => null,
-						'state' => '30',
-						'member_id' => '3',
+					    'pin_id' => '3',
+					    'pin' => '5142',
+					    'date_added' => '2012-12-18 20:15:00',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '3',
 					),
 				),
 				'StatusUpdate' => array(
@@ -3446,29 +3472,29 @@
 			);
 
 			$controllerMock = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					),
-					'Session' => array(
-						'setFlash',
-					),
-				),
-				'methods' => array(
-					'getMailingList',
-				),
-			));
+	        	'components' => array(
+	        		'Auth' => array(
+	        			'user',
+	        		),
+	        		'Session' => array(
+	        			'setFlash',
+	        		),
+	        	),
+	        	'methods' => array(
+            		'getMailingList',
+            	),
+	        ));
 
 			$this->_testEditMember(
-				3,
-				$adminId,
-				$inputData,
-				$expectedViewVal,
-				$expectedRecordData,
+				3, 
+				$adminId, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
 				array(
-					'us8gz1v8rq' => true,
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
-				),
+				), 
 				'Details updated.\nSuccessfully subscribed to Nottingham Hackspace Announcements\n',
 				$controllerMock,
 				function ($recordData) {
@@ -3490,13 +3516,13 @@
 		private function _testEditMemberSetEverything($adminId)
 		{
 			$inputData = array(
-				'Member' => array(
-					'member_id' => '6',
-					'account_id' => '1',
-					'member_status' => '8',
-					'join_date' => '2012-10-11',
-					'balance' => '-6575',
-					'credit_limit' => '8976',
+            	'Member' => array(
+				    'member_id' => '6',
+            		'account_id' => '1',
+            		'member_status' => '8',
+            		'join_date' => '2012-10-11',
+            		'balance' => '-6575',
+            		'credit_limit' => '8976',
 					'firstname' => 'Ser',
 					'surname' => 'Dantus',
 					'username' => 'loremipsum',
@@ -3509,23 +3535,22 @@
 					'contact_number' => '01321564895',
 				),
 				'Status' => array(
-					'status_id' => '1',
-					'title' => 'Full Access',
+				    'status_id' => '1',
+				    'title' => 'Full Access',
 				),
 				'Account' => array(
-					'account_id' => '1',
-					'payment_ref' => 'HSTSBKFYT7H4CW3G',
-					'natwest_ref' => 'HSNOTTSKF6762KC8',
+				    'account_id' => '1',
+				    'payment_ref' => 'HSNOTTSYT7H4CW3G',
 				),
 				'Pin' => array(
 					0 => array(
-						'pin_id' => '4',
-						'pin' => '9995',
-						'unlock_text' => 'Might be used',
-						'date_added' => '2011-04-06 04:23:59',
-						'expiry' => '2011-04-06',
-						'state' => '20',
-						'member_id' => '1',
+					    'pin_id' => '4',
+					    'pin' => '9995',
+					    'unlock_text' => 'Might be used',
+					    'date_added' => '2011-04-06 04:23:59',
+					    'expiry' => '2011-04-06',
+					    'state' => '20',
+					    'member_id' => '1',
 					),
 				),
 				'StatusUpdate' => array(
@@ -3567,7 +3592,7 @@
 				'unlockText' => 'Sup Guy',
 				'balance' => '-985',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSTSBKFYT7H4CW3G',
+				'paymentRef' => 'HSNOTTSYT7H4CW3G',
 				'address' => array(
 					'part1' => '4 Fraser Crescent',
 					'part2' => '',
@@ -3576,7 +3601,7 @@
 				),
 				'contactNumber' => '077 7181 0959',
 				'pin' => array(
-					0 => array(
+					0 => array( 
 						'id' => 3,
 						'pin' => '5142',
 						'state' => '30',
@@ -3584,13 +3609,13 @@
 				),
 				'groups' => array(
 					0 => array(
-						'id' => '2',
-						'description' => 'Current Members',
-					),
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
 				),
 				'status' => array(
 					'id' => '5',
-					'name' => 'Current Member',
+				    'name' => 'Current Member',
 				),
 				'lastStatusUpdate' => array(
 					'id' => '3',
@@ -3604,12 +3629,12 @@
 
 			$expectedRecordData = array(
 				'Member' => array(
-					'member_id' => '3',
-					'account_id' => '1',
-					'member_status' => '5',
-					'join_date' => '2010-08-18',
-					'balance' => '-985',
-					'credit_limit' => '5000',
+				    'member_id' => '3',
+            		'account_id' => '1',
+            		'member_status' => '5',
+            		'join_date' => '2010-08-18',
+            		'balance' => '-985',
+            		'credit_limit' => '5000',
 					'firstname' => 'Ser',
 					'surname' => 'Dantus',
 					'username' => 'loremipsum',
@@ -3622,22 +3647,21 @@
 					'contact_number' => '01321564895',
 				),
 				'Status' => array(
-					'status_id' => '5',
-					'title' => 'Current Member',
+				    'status_id' => '5',
+				    'title' => 'Current Member',
 				),
 				'Account' => array(
-					'account_id' => '1',
-					'payment_ref' => 'HSTSBKF6762KC8JD',
-					'natwest_ref' => 'HSNOTTSKF6762KC8',
+				    'account_id' => '1',
+				    'payment_ref' => 'HSNOTTS6762KC8JD',
 				),
 				'Pin' => array(
 					0 => array(
-						'pin_id' => '3',
-						'pin' => '5142',
-						'date_added' => '2012-12-18 20:15:00',
-						'expiry' => null,
-						'state' => '30',
-						'member_id' => '3',
+					    'pin_id' => '3',
+					    'pin' => '5142',
+					    'date_added' => '2012-12-18 20:15:00',
+					    'expiry' => null,
+					    'state' => '30',
+					    'member_id' => '3',
 					),
 				),
 				'StatusUpdate' => array(
@@ -3675,13 +3699,13 @@
 			);
 
 			$this->_testEditMember(
-				3,
-				$adminId,
-				$inputData,
-				$expectedViewVal,
-				$expectedRecordData,
+				3, 
+				$adminId, 
+				$inputData, 
+				$expectedViewVal, 
+				$expectedRecordData, 
 				array(
-					'us8gz1v8rq' => true,
+					'us8gz1v8rq' => true, 
 					'455de2ac56' => false
 				)
 				,'Details updated.\nSuccessfully subscribed to Nottingham Hackspace The Other List\nSuccessfully subscribed to Nottingham Hackspace Announcements\n'
@@ -3693,29 +3717,29 @@
 			if($controllerMock == null)
 			{
 				$this->controller = $this->generate('Members', array(
-					'components' => array(
-						'Auth' => array(
-							'user',
-						),
-						'Session' => array(
-							'setFlash',
-						),
-					),
-					'methods' => array(
-						'getMailingList',
-					),
-				));
+		        	'components' => array(
+		        		'Auth' => array(
+		        			'user',
+		        		),
+		        		'Session' => array(
+		        			'setFlash',
+		        		),
+		        	),
+		        	'methods' => array(
+	            		'getMailingList',
+	            	),
+		        ));
 			}
 			else
 			{
 				$this->controller = $controllerMock;
 			}
 
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue($adminId));
+            $this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue($adminId));
 
-			$this->_constructMailingList();
+            $this->_constructMailingList();
 
-		   	$this->controller->Session->expects($this->once())->method('setFlash')->with($expectedFlash);
+           	$this->controller->Session->expects($this->once())->method('setFlash')->with($expectedFlash);
 
 			$this->testAction('members/edit/' . $memberId, array('data' => $inputData, 'method' => 'post'));
 			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
@@ -3744,13 +3768,13 @@
 			$this->assertEqual( $this->vars['member'], $expectedMemberVal, 'Member array is incorrect.' );
 
 			$expectedAccountsVal = array(
-				'-1' => 'Create new',
-				'1' => 'Mathew Pryce',
-				'2' => 'Annabelle Santini',
-				'3' => 'Jessie Easterwood, Kelly Savala and Guy Viles',
-				'6' => 'Guy Garrette',
-				'7' => 'Ryan Miles',
-				'8' => 'Evan Atkinson'
+				'-1' => 'Create new', 
+				'1' => 'Mathew Pryce', 
+				'2' => 'Annabelle Santini', 
+				'3' => 'Jessie Easterwood, Kelly Savala and Guy Viles', 
+				'6' => 'Guy Garrette', 
+				'7' => 'Ryan Miles', 
+				'8' => 'Evan Atkinson' 
 			);
 
 			$this->assertEqual( $this->vars['accounts'], $expectedAccountsVal, 'Accounts array is incorrect.' );
@@ -3861,213 +3885,6 @@
 				$this->assertEqual($record['StatusUpdate'][0]['old_status'], $oldStatus, 'StatusUpdate has incorrect oldStatus');
 				$this->assertEqual($record['StatusUpdate'][0]['new_status'], $newStatus, 'StatusUpdate has incorrect oldStatus');
 			}
-		}
-
-		public function testUploadCsvInvalidFile()
-		{
-			$contents = 'iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCM';
-			$guid = null;
-
-			$this->_setupTestUploadCsv();
-
-			$this->controller->Session->expects($this->once())->method('setFlash')->with('That did not seem to be a valid bank .csv file');
-			$this->controller->Nav->expects($this->never())->method('add');
-
-			$this->_runTestUploadCsv($contents, $guid);
-
-			$this->assertArrayHasKey('Location', $this->headers);
-			$this->assertContains('/members/uploadTsb', $this->headers['Location']);
-		}
-
-		public function testUploadCsvDudFile()
-		{
-			$contents = 'This, is not a valid .csv file, even though, it has, the correct, number, of commas';
-			$guid = null;
-			$this->_setupTestUploadCsv();
-			$this->controller->Session->expects($this->once())->method('setFlash')->with('That did not seem to be a valid bank .csv file');
-			$this->controller->Nav->expects($this->never())->method('add');
-			$this->_runTestUploadCsv($contents, $guid);
-
-			$this->assertArrayHasKey('Location', $this->headers);
-			$this->assertContains('/members/uploadTsb', $this->headers['Location']);
-		}
-
-		public function testUploadCsvValidFileNoMembers()
-		{
-			$contents =
-			'Date, Type, Description, Value, Balance, Account Name, Account Number
-			,,,,,,
-			,,,,,,
-			,,,,,,
-			06/02/2013,BAC,"\'A NAME , HSTSBKFVD74BY3C8 , FP 06/02/13 0138 , 300000000062834772",15,1664.08,\'NOTTINGHACK,\'558899-45687951
-			,,,,,,
-			06/02/2013,BAC,"\'DOROTHY D D/2011 , DOROTHY DEVAL",15,1679.08,\'NOTTINGHACK,\'558899-45687951
-			,,,,,,
-			06/02/2013,BAC,"\'SIMPMSON T , HSTSBKFTYX339RW3",10,1689.08,\'NOTTINGHACK,\'558899-45687951
-			,,,,,,
-			07/02/2013,BAC,"\'C DAVIES , CHRIS , FP 07/02/13 0034 , 00156265632BBBVSCR",5,1694.08,\'NOTTINGHACK,\'558899-45687951';
-			$guid = null;
-			$this->_setupTestUploadCsv();
-
-			$this->controller->Session->expects($this->once())->method('setFlash')->with('No new member payments in .csv.');
-			$this->controller->Nav->expects($this->never())->method('add');
-
-			$this->_runTestUploadCsv($contents, $guid);
-
-			$this->assertArrayHasKey('Location', $this->headers);
-			$this->assertContains('/members', $this->headers['Location']);
-		}
-
-		public function testUploadCsvDudGuid()
-		{
-			$contents = null;
-			$guid = '123456789';
-			$this->_setupTestUploadCsv();
-			$this->controller->Session->expects($this->never())->method('setFlash');
-			$this->controller->Nav->expects($this->never())->method('add');
-			$this->_runTestUploadCsv($contents, $guid);
-		}
-
-		public function testUploadValidFile()
-		{
-			$contents =
-			'Date, Type, Description, Value, Balance, Account Name, Account Number
-			,,,,,,
-			,,,,,,
-			,,,,,,
-			06/02/2013,BAC,"\'A NAME , HSTSBKFFGXWGKF48 , FP 06/02/13 0138 , 300000000062834772",15,1664.08,\'NOTTINGHACK,\'558899-45687951
-			,,,,,,
-			06/02/2013,BAC,"\'DOROTHY D D/2011 , DOROTHY DEVAL",15,1679.08,\'NOTTINGHACK,\'558899-45687951
-			,,,,,,
-			24/02/2013,BAC,"\'SIMPMSON T , HSTSBKFHVQGT3XF2",10,1689.08,\'NOTTINGHACK,\'558899-45687951
-			,,,,,,
-			07/02/2013,BAC,"\'C DAVIES , CHRIS , FP 07/02/13 0034 , 00156265632BBBVSCR",5,1694.08,\'NOTTINGHACK,\'558899-45687951';
-			$guid = null;
-
-			$generatedGuid = String::uuid();
-			$this->_setupTestUploadCsv();
-			$this->controller->Session->expects($this->never())->method('setFlash');
-			$this->controller->Nav->expects($this->once())->method('add')->with('Approve All', 'members', 'uploadTsb', array($generatedGuid), 'positive');
-			$this->controller->expects($this->once())->method('getMemberIdSessionKey')->will($this->returnValue($generatedGuid));
-
-			$this->_runTestUploadCsv($contents, $guid);
-
-			$this->_setupTestUploadCsv();
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
-			$this->controller->Session->expects($this->once())->method('setFlash')->with('Successfully approved member Ryan Miles\nSuccessfully approved member Evan Atkinson\n');
-			$this->controller->Nav->expects($this->never())->method('add');
-
-			// Email stuff
-			$this->controller->email->expects($this->exactly(4))->method('config');
-			$this->controller->email->expects($this->exactly(4))->method('from');
-			$this->controller->email->expects($this->exactly(4))->method('sender');
-			$this->controller->email->expects($this->exactly(4))->method('emailFormat');
-			$this->controller->email->expects($this->exactly(4))->method('to');
-			$this->controller->email->expects($this->exactly(4))->method('subject');
-			$this->controller->email->expects($this->exactly(4))->method('template');
-			$this->controller->email->expects($this->exactly(4))->method('viewVars');
-			$this->controller->email->expects($this->exactly(4))->method('send')->will($this->returnValue(true));
-
-			$this->_runTestUploadCsv($contents, $generatedGuid);
-
-			$this->assertEqual($this->controller->Member->getStatusForMember(13), Status::CURRENT_MEMBER);
-			$this->assertEqual($this->controller->Member->getStatusForMember(14), Status::CURRENT_MEMBER);
-		}
-
-		private function _setupTestUploadCsv()
-		{
-			$this->controller = $this->generate('Members', array(
-				'components' => array(
-					'Auth' => array(
-						'user',
-					),
-					'Session' => array(
-						'setFlash',
-					),
-					'Nav' => array(
-						'add',
-					),
-				),
-				'methods' => array(
-					'getMemberIdSessionKey',
-				),
-			));
-
-			// prevents 'You are not authorized to access that location' message from being set as a flash message which
-			// seems to break some Controller tests since upgrading from CakekPHP 2.3.5 to 2.6.2
-			$this->controller->Auth->authError = false;
-
-			$mockEmail = $this->getMock('CakeEmail');
-			$this->controller->email = $mockEmail;
-
-			$this->controller->Member->setDataSource('test');
-			$this->controller->Member->Account->setDataSource('test');
-		}
-
-		private function _runTestUploadCsv($fileContents, $guid)
-		{
-			$action = 'members/uploadTsb';
-			if($guid != null)
-			{
-				$action .= '/' . $guid;
-			}
-
-			if($fileContents == null)
-			{
-				$this->testAction($action);
-			}
-			else
-			{
-				$data = $this->_makeFileUploadData($fileContents);
-				$this->testAction($action, array('data' => $data, 'method' => 'post'));
-			}
-		}
-
-		private function _makeFileUploadData($contents)
-		{
-			$filePath = $this->_makeTmpFile($contents);
-			if($filePath != false)
-			{
-				return array(
-					'FileUpload' => array(
-						'filename' => array(
-							'name' => 'uploaded.tmp',
-							'type' => $this->_getFileType($filePath),
-							'tmp_name' => $filePath,
-							'error' => 0,
-							'size' => filesize($filePath),
-						),
-					),
-				);
-			}
-
-			return false;
-		}
-
-		private function _getFileType($filename)
-		{
-			// None of the proper ways to do this seem to work, but it doesn't matter for our tests
-			return 'text';
-		}
-
-		private function _makeTmpFile($contents)
-		{
-			$tmpFile = tempnam(sys_get_temp_dir(), 'tst');
-			if($tmpFile != false)
-			{
-				$filehandle = fopen($tmpFile, 'w');
-				if($filehandle != false)
-				{
-					$success = fwrite($filehandle, $contents);
-					fclose($filehandle);
-					if($success)
-					{
-						return $tmpFile;
-					}
-				}
-			}
-
-			return false;
 		}
 	}
 

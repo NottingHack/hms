@@ -84,4 +84,25 @@ class BankTransaction extends AppModel {
         ),
         
 	);
+    
+/**
+ * Get a list of transations for a member
+ * 
+ * @param $paginate If true, return a query to retrieve a page of the data, otherwise return the data.
+ * @param array $conditions An array of conditions to decide which member records to access.
+ * @return array A list of transactions or query to reports a list of transactions
+ */
+	public function getBankTransactionList($paginate, $conditions = array()) {
+		$findOptions = array(
+			'conditions' => $conditions,
+                             //'order' => 'BankTransaction.date DESC'
+		);
+		if ($paginate) {
+			return $findOptions;
+		}
+
+		$info = $this->find( 'all', $findOptions );
+
+		return $info;
+	}
 }

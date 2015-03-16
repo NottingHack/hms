@@ -1,4 +1,4 @@
-<!-- File: /app/View/Member/upload_csv.ctp -->
+<!-- File: /app/View/BankTransactions/upload_csv.ctp -->
 
 <?php
 	$this->Html->addCrumb('Members', '/members');
