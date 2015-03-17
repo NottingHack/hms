@@ -214,18 +214,19 @@ class BankTransactionsController extends AppController {
         $this->Member->id = $memberId;
         $accountId = $this->Member->field('account_id');
         
-        $this->__transactionList($accountId);
+        $this->__paginateTransactionList($accountId);
 
 	}
 
 /**
- * List all transactions for a given member
+ * Pagainate a list of all transactions for a given member
  *
  * @param int $memberId The members id to list all transactions for
  */
-	private function __transactionList($accountId) {
-		$this->paginate = $this->BankTransaction->getBankTransactionList(true, array('AccountBT.account_id' => $accountId), array('BankTransaction.amount', 'BankTransaction.date', 'Bank.name'));
+	private function __paginateTransactionList($accountId) {
+		$this->paginate = $this->BankTransaction->getBankTransactionList(true, array('AccountBT.account_id' => $accountId));
 		$bankTransactionsList = $this->paginate('BankTransaction');
+        $bankTransactionsList = $this->BankTransaction->formatBankTransactionList($bankTransactionsList, false);
 		$this->set('bankTransactionsList', $bankTransactionsList);
 	}
     
