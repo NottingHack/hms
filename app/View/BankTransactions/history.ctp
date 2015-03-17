@@ -8,6 +8,7 @@
 	<tr>
 		<th>Date</th>
 		<th>Amount</th>
+        <th>Bank Account</th>
 	</tr>
 <?php
 	foreach ($bankTransactionsList as $transaction)
@@ -15,6 +16,7 @@
 		echo "\t<tr>\n";
 		echo "\t\t<td>" . $transaction['BankTransaction']['date'] . "</td>\n";
 		echo "\t\t<td>" . $this->Currency->output($transaction['BankTransaction']['amount']*100) . "</td>\n";
+		echo "\t\t<td>" . $transaction['Bank']['name'] . "</td>\n";
 		echo "\t</tr>\n";
 	}
 echo "</table>\n";

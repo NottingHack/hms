@@ -224,7 +224,7 @@ class BankTransactionsController extends AppController {
  * @param int $memberId The members id to list all transactions for
  */
 	private function __transactionList($accountId) {
-		$this->paginate = $this->BankTransaction->getBankTransactionList(true, array('AccountBT.account_id' => $accountId));
+		$this->paginate = $this->BankTransaction->getBankTransactionList(true, array('AccountBT.account_id' => $accountId), array('BankTransaction.amount', 'BankTransaction.date', 'Bank.name'));
 		$bankTransactionsList = $this->paginate('BankTransaction');
 		$this->set('bankTransactionsList', $bankTransactionsList);
 	}
