@@ -4,8 +4,8 @@
 	{
 		public $useDbConfig = 'test';
 		public $import = 'BankTransaction';
-        public $tabel = 'bank_transactions';
-        public $primaryKey = 'bank_transaction_id';	
+//        public $tabel = 'bank_transactions';
+//        public $primaryKey = 'bank_transaction_id';	
 		public $records = array(
         );
 	}

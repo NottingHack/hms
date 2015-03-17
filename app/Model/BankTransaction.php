@@ -40,7 +40,8 @@ class BankTransaction extends AppModel {
 			'className' => 'Account',
 			'foreignKey' => 'account_id',
 			'type' => 'inner'
-			)
+			),
+            'Bank',
 		);
 /**
  * Validation rules.
