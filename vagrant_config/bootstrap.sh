@@ -28,6 +28,9 @@ debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver multisel
 # nb. SetupCmd.php needs php5-mysqlnd not php5-mysql
 apt-get install -y apache2  php5-mysqlnd libapache2-mod-php5 git haveged expect php-pear php5-dev libkrb5-dev mysql-server phpmyadmin php5-xdebug
 
+# bump php.ini memory limit's for xdebug code coverage
+sed -i -e 's/memory_limit = 128M/memory_limit = 256M/' /etc/php5/apache2/php.ini
+
 # Install krb, create database, and set the master password to "krbMasterPassword"
 apt-get install krb5-{admin-server,kdc} -y
 kdb5_util create -s -P krbMasterPassword
