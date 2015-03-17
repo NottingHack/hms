@@ -2,7 +2,7 @@
 
 <?php
     $this->Html->addCrumb('Members', '/members');
-    $this->Html->addCrumb('Membership Payments', '/banktrasnactions/uploadCsv');
+    $this->Html->addCrumb('Membership Payments', '/banktransactions/history/');
 ?>
 <table>
 	<tr>
@@ -13,8 +13,8 @@
 	foreach ($bankTransactionsList as $transaction)
 	{
 		echo "\t<tr>\n";
-		echo "\t\t<td>" . $transaction['Transactions']['transaction_datetime'] . "</td>\n";
-		echo "\t\t<td>" . $this->Currency->output($transaction['Transactions']['amount']) . "</td>\n";
+		echo "\t\t<td>" . $transaction['BankTransaction']['date'] . "</td>\n";
+		echo "\t\t<td>" . $this->Currency->output($transaction['BankTransaction']['amount']*100) . "</td>\n";
 		echo "\t</tr>\n";
 	}
 echo "</table>\n";
