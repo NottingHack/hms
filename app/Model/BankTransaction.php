@@ -92,10 +92,11 @@ class BankTransaction extends AppModel {
  * @param array $conditions An array of conditions to decide which member records to access.
  * @return array A list of transactions or query to reports a list of transactions
  */
-	public function getBankTransactionList($paginate, $conditions = array()) {
+	public function getBankTransactionList($paginate, $conditions = array(), $fields = array()) {
 		$findOptions = array(
 			'conditions' => $conditions,
-                             //'order' => 'BankTransaction.date DESC'
+            'fields' => $fields,
+            'order' => 'BankTransaction.date DESC'
 		);
 		if ($paginate) {
 			return $findOptions;
