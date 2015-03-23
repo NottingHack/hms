@@ -106,8 +106,9 @@ $listBookings = array(
 			$row = '';
 		}
 
+		$newdate = clone $date;
 		for ($j = 0; $j < 7; $j++) {
-			if ($date > $now) {
+			if ($newdate > $now) {
 				$class = ' class="' . $row . '"';
 				$link =$this->Html->link("", array(
 					'plugin'		=>	'Tools',
@@ -115,7 +116,7 @@ $listBookings = array(
 					'action'		=>	'addbooking',
 					$tool['Tool']['tool_id'],
 					'?'				=>	array(
-						't'	=> $date->format(ToolsGoogle::DATETIME_STR),
+						't'	=> $newdate->format(ToolsGoogle::DATETIME_STR),
 						),
 					));
 			}
@@ -126,9 +127,8 @@ $listBookings = array(
 			echo('<td' . $class . '>');
 			echo($link);
 			echo('</td>');
-			$date->add(new DateInterval('P1D'));
+			$newdate->add(new DateInterval('P1D'));
 		}
-		$date->sub(new DateInterval('P7D'));
 
 		echo('</tr>' . "\n");
 		$date->add(new DateInterval('PT30M'));
