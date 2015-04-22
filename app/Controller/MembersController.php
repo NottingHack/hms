@@ -237,7 +237,7 @@ class MembersController extends AppController {
 				// E-mail the member admins for a created record
 				if ($result['createdRecord'] === true) {
 					$this->_sendEmail(
-						$this->Member->getEmailsForMembersInGroup(Group::MEMBERSHIP_ADMIN),
+						Configure::read('hms_membership_email'),
 						'New Prospective Member Notification',
 						'notify_admins_member_added',
 						array(
@@ -351,7 +351,7 @@ class MembersController extends AppController {
 					$this->Session->setFlash('Contact details saved.');
 
 					$this->_sendEmail(
-						$this->Member->getEmailsForMembersInGroup(Group::MEMBERSHIP_ADMIN),
+						Configure::read('hms_membership_email'),
 						'New Member Contact Details',
 						'notify_admins_check_contact_details',
 						array(
@@ -439,7 +439,7 @@ class MembersController extends AppController {
 					$this->__sendSoDetailsToMember($id);
 
 					$this->_sendEmail(
-						$this->Member->getEmailsForMembersInGroup(Group::MEMBERSHIP_ADMIN),
+						Configure::read('hms_membership_email'),
 						'Impending Payment',
 						'notify_admins_payment_incoming',
 						array(
@@ -493,7 +493,7 @@ class MembersController extends AppController {
 
 			// Notify all the member admins
 			$this->_sendEmail(
-				$this->Member->getEmailsForMembersInGroup(Group::MEMBERSHIP_ADMIN),
+				Configure::read('hms_membership_email'),
 				'Member Approved',
 				'notify_admins_member_approved',
 				array(
