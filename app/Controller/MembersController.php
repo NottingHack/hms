@@ -481,6 +481,31 @@ class MembersController extends AppController {
 	}
 
 /**
+ *
+ * Send a "membership complete" e-mail to the member
+ * @param int $id The id of the member to send to
+ *
+ */
+	private function _sendMembershipCompleteMail($id) {
+		$email = $this->Member->getEmailForMember($id);
+		if ($email) {
+		
+			$this->_sendEmail(
+				$email,
+				'Membership Complete',
+				'to_member_access_details',
+				array(
+					'manLink' => Configure::read('hms_help_manual_url'),
+					'outerDoorCode' => Configure::read('hms_access_street_door'),
+					'innerDoorCode' => Configure::read('hms_access_inner_door'),
+					'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
+					'wifiPass' => Configure::read('hms_access_wifi_password'),
+				)
+			);
+		}
+	}
+
+/**
  * Approve a membership.
  *
  * @param int $id The id of the member who we are approving.
@@ -504,19 +529,7 @@ class MembersController extends AppController {
 				)
 			);
 
-			// E-mail the member
-			$this->_sendEmail(
-				$memberDetails['email'],
-				'Membership Complete',
-				'to_member_access_details',
-				array(
-					'manLink' => Configure::read('hms_help_manual_url'),
-					'outerDoorCode' => Configure::read('hms_access_street_door'),
-					'innerDoorCode' => Configure::read('hms_access_inner_door'),
-					'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
-					'wifiPass' => Configure::read('hms_access_wifi_password'),
-				)
-			);
+			$this->_sendMembershipCompleteMail($id); // E-mail the member
 
 			return true;
 		} else {
