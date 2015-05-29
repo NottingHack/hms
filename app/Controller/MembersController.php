@@ -40,7 +40,7 @@ class MembersController extends AppController {
  */
 	public $components = array('BankStatement');
 
-/** 
+/**
  * Test to see if a user is authorized to make a request.
  *
  * @param array $user Member record for the user.
@@ -489,7 +489,7 @@ class MembersController extends AppController {
 	private function _sendMembershipCompleteMail($id) {
 		$email = $this->Member->getEmailForMember($id);
 		if ($email) {
-		
+
 			$this->_sendEmail(
 				$email,
 				'Membership Complete',
@@ -875,9 +875,9 @@ class MembersController extends AppController {
 		return $this->redirect($this->referer());
 	}
 
-/** 
+/**
  * Check to see if certain view/edit params should be shown to the logged in member.
- * 
+ *
  * @param int $memberId The id of the member being viewed.
  * @param bool $showAdminFeatures (out) If this is set to true then admin features should be shown.
  * @param bool $showFinances (out) If this is set to true then financial information should be shown.
@@ -987,7 +987,7 @@ class MembersController extends AppController {
 
 /**
  * Adds the appropriate actions to each member in the member list.
- * 
+ *
  * @param array $memberList A list of member summaries to add the actions to.
  * @return array The original memberList, with the actions added for each member.
  */
@@ -1004,7 +1004,7 @@ class MembersController extends AppController {
 
 /**
  * Get an array of possible actions for a member
- * 
+ *
  * @param int $memberId The id of the member to work with.
  * @return array An array of actions.
  */
@@ -1102,6 +1102,18 @@ class MembersController extends AppController {
 						'class' => 'negative',
 					)
 				);
+
+				array_push($actions,
+					array(
+						'title' => 'Send SO Details Reminder',
+						'controller' => 'members',
+						'action' => 'sendSoDetailsReminder',
+						'params' => array(
+							$memberId,
+						),
+					)
+				);
+
 			break;
 
 			case Status::EX_MEMBER:
@@ -1261,7 +1273,7 @@ class MembersController extends AppController {
 
 /**
  * Get the key used to store members ids in the session after uploading a csv.
- * 
+ *
  * @return string The key to be used in the session.
  * @link MemberController::uploadCsv
  */
