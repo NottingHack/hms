@@ -155,4 +155,17 @@ class Account extends AppModel {
 
 		return array();
 	}
+	/**
+ * Get a list of account ids from a list of natwest payment refs
+ *
+ * @param array $paymentRefs An array of payment refs.
+ * @return array An array of account ids.
+ */
+	public function getAccountIdsForNatwestRefs($paymentRefs) {
+		if (is_array($paymentRefs)) {
+			return array_values($this->find('list', array('conditions' => array('Account.natwest_ref' => $paymentRefs))));
+		}
+
+		return array();
+	}
 }

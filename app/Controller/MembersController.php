@@ -1171,7 +1171,7 @@ class MembersController extends AppController {
 					});
 
 					// Ok so we have a list of payment refs, get the account id's from them
-					$accountIds = $this->Member->Account->getAccountIdsForRefs($payRefs);
+					$accountIds = $this->Member->Account->getAccountIdsForNatwestRefs($payRefs);
 					if ( is_array($accountIds) && count($accountIds) > 0) {
 						// Ok now we need the rest of the member info
 						$members = $this->Member->getMemberSummaryForAccountIds(false, $accountIds);
