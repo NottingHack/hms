@@ -57,7 +57,7 @@
                             $linkOptions['action'] = $action['action'];
 
                             echo $this->Html->link($action['title'], $linkOptions);
-                            echo '<br>';
+                            echo "<br>";
                         }
                     ?>
                 </td>

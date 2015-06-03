@@ -96,7 +96,6 @@
 				array( 'name' => 'rejectDetails', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 				array( 'name' => 'approveMember', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
 				array( 'name' => 'sendMembershipReminder', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'sendMembershipCompleteMail',		'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
 				array( 'name' => 'sendContactDetailsReminder', 		'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
 				array( 'name' => 'sendSoDetailsReminder', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
 				array( 'name' => 'addExistingMember', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
@@ -401,11 +400,10 @@
 			$mockEmail->expects($this->exactly(2))->method('template');
 			$mockEmail->expects($this->exactly(2))->method('viewVars');
 			$mockEmail->expects($this->exactly(2))->method('send')->will($this->returnValue(true));
-
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with(array('j.easterwood@googlemail.com'));
+			$mockEmail->expects($this->at(3))->method('to')->with('membership@localhost');
 			$mockEmail->expects($this->at(4))->method('subject')->with('New Prospective Member Notification');
 			$mockEmail->expects($this->at(5))->method('template')->with('notify_admins_member_added');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('email' => $emailAddress));
@@ -425,7 +423,6 @@
 			$this->controller->Session->expects($this->once())->method('setFlash')->with('Registration successful, please check your inbox.\nSuccessfully subscribed to Nottingham Hackspace The Other List\n');
 
 			$expectedIdsAndSubjects = array(
-				5 => 'New Prospective Member Notification',
 				15 => 'Welcome to Nottingham Hackspace',
 			);
 			$data = array(
@@ -694,7 +691,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with(array('j.easterwood@googlemail.com'));
+			$mockEmail->expects($this->at(3))->method('to')->with('membership@localhost');
 			$mockEmail->expects($this->at(4))->method('subject')->with('New Member Contact Details');
 			$mockEmail->expects($this->at(5))->method('template')->with('notify_admins_check_contact_details');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('email' => 'DorothyDRussell@dayrep.com', 'id' => 9));
@@ -714,7 +711,6 @@
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(9));
 
 			$expectedIdsAndSubjects = array(
-				5 => 'New Member Contact Details',
 				9 => 'Contact Information Completed',
 			);
 			$this->_testRecordedEmailAction('/members/setupDetails/9', $data, $expectedIdsAndSubjects);
@@ -972,7 +968,7 @@
 			$mockEmail->expects($this->at(9))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(10))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(11))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(12))->method('to')->with(array('j.easterwood@googlemail.com'));
+			$mockEmail->expects($this->at(12))->method('to')->with('membership@localhost');
 			$mockEmail->expects($this->at(13))->method('subject')->with('Impending Payment');
 			$mockEmail->expects($this->at(14))->method('template')->with('notify_admins_payment_incoming');
 			$mockEmail->expects($this->at(15))->method('viewVars')->with(array('memberId' => '12', 'memberName' => 'Roy Forsman', 'memberEmail' => 'RoyJForsman@teleworm.us', 'memberPayRef' => $fakePaymentRef));
@@ -981,7 +977,6 @@
 
 			$expectedIdsAndSubjects = array(
 				12 => 'Bank Details',
-				5 => 'Impending Payment',
 			);
 			$this->_testRecordedEmailAction('/members/acceptDetails/12', $data, $expectedIdsAndSubjects);
 
@@ -1055,7 +1050,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with(array('j.easterwood@googlemail.com'));
+			$mockEmail->expects($this->at(3))->method('to')->with('membership@localhost');
 			$mockEmail->expects($this->at(4))->method('subject')->with('Member Approved');
 			$mockEmail->expects($this->at(5))->method('template')->with('notify_admins_member_approved');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('memberName' => 'Ryan Miles', 'memberId' => 13, 'memberEmail' => 'RyanMiles@dayrep.com', 'memberPin' => '2234'));
@@ -1073,7 +1068,6 @@
 			$mockEmail->expects($this->at(17))->method('send')->will($this->returnValue(true));
 
 			$expectedIdsAndSubjects = array(
-				5 => 'Member Approved',
 				13 => 'Membership Complete',
 			);
 			$this->_testRecordedEmailAction('/members/approveMember/13', null, $expectedIdsAndSubjects);
@@ -1902,12 +1896,11 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(5))->method('add');
+			$this->controller->Nav->expects($this->exactly(4))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
-			$this->controller->Nav->expects($this->at(4))->method('add')->with('Resend Membership Complete Email', 'members', 'sendMembershipCompleteMail', array(4));
 
 			// Should not redirect, and should populate
 			$this->testAction('members/view/4');
@@ -1994,12 +1987,11 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(5))->method('add');
+			$this->controller->Nav->expects($this->exactly(4))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(3));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(3));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(3));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(3));
-			$this->controller->Nav->expects($this->at(4))->method('add')->with('Resend Membership Complete Email', 'members', 'sendMembershipCompleteMail', array(3));
 
 			// Should not redirect, and should populate
 			$this->testAction('members/view/3');
@@ -2075,12 +2067,11 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(5))->method('add');
+			$this->controller->Nav->expects($this->exactly(4))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
-			$this->controller->Nav->expects($this->at(4))->method('add')->with('Resend Membership Complete Email', 'members', 'sendMembershipCompleteMail', array(4));
 
 			// Should not redirect, and should populate
 			$this->testAction('members/view/4');
@@ -2167,11 +2158,10 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(4))->method('add');
+			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(3));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(3));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(3));
-			$this->controller->Nav->expects($this->at(3))->method('add')->with('Resend Membership Complete Email', 'members', 'sendMembershipCompleteMail', array(3));
 
 			// Should not redirect, and should populate
 			$this->testAction('members/view/3');
@@ -2362,31 +2352,74 @@
 			$this->_constructMailingList();
 
 			$this->controller->Nav->expects($this->exactly(4))->method('add');
-			/* There was a test for View Email History here, but didn't pass. Button appears on page. */
-			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(13));
-			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(13));
-			$this->controller->Nav->expects($this->at(2))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(13));
-			$this->controller->Nav->expects($this->at(3))->method('add')->with('Approve Member', 'members', 'approveMember', array(13));
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
+			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
 
 			// Should not redirect, and should populate
-			$this->testAction('members/view/13');
+			$this->testAction('members/view/4');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-			$this->_testMailingListView(array('us8gz1v8rq' => false, '455de2ac56' => true));
+			$this->_testMailingListView(array('us8gz1v8rq' => true, '455de2ac56' => false));
 
-			$expectedMemberStatus = array(
+			$expectedMemberInfo = array(
 				'id' => '4',
-			    'name' => 'Waiting for standing order payment',
+				'bestName' => 'Kelly Savala',
+				'firstname' => 'Kelly',
+				'surname' => 'Savala',
+				'username' => 'huskycolossus',
+				'email' => 'k.savala@yahoo.co.uk',
+				'joinDate' => '2010-09-22',
+				'unlockText' => 'Hey Kelly',
+				'balance' => '-5649',
+				'creditLimit' => '5000',
+				'paymentRef' => 'HSNOTTSYT7H4CW3G',
+				'address' => array(
+					'part1' => '8 Elm Close',
+					'part2' => 'Tetsworth',
+					'city' => 'Thame',
+					'postcode' => 'OX9 7AP',
+				),
+				'contactNumber' => '079 0644 8720',
+				'groups' => array(
+					0 => array(
+				        'id' => '2',
+				        'description' => 'Current Members',
+				    ),
+				    1 => array(
+				        'id' => '4',
+				        'description' => 'Gatekeeper Admin',
+				    ),
+				),
+				'status' => array(
+					'id' => '5',
+				    'name' => 'Current Member',
+				),
+				'pin' => array(
+					0 => array(
+						'id' => 4,
+						'pin' => '5436',
+						'state' => 30,
+					)
+				),
+				'lastStatusUpdate' => array(
+					'id' => '4',
+					'by' => '5',
+					'from' => '4',
+					'to' => '5',
+					'at' => '2012-12-17 19:19:59',
+					'by_username' => 'chollertonbanker',
+				),
+				'lastEmail' => array(
+					'id' => '4',
+					'member_id' => '4',
+					'subject' => 'Test email 2',
+					'timestamp' => '2013-06-05 13:51:04'
+				)
 			);
 
-			$this->assertEqual( $this->vars['member']['id'], 13, 'Member ID was not correct.' );
-			$this->assertEqual( $this->vars['member']['bestName'], 'Ryan Miles', 'Member best name was not correct.' );
-			$this->assertEqual( $this->vars['member']['firstname'], 'Ryan', 'Member first name was not correct.' );
-			$this->assertEqual( $this->vars['member']['surname'], 'Miles', 'Member surname was not correct.' );
-			$this->assertEqual( $this->vars['member']['username'], 'Samer1955', 'Member username was not correct.' );
-			$this->assertEqual( $this->vars['member']['email'], 'RyanMiles@dayrep.com', 'Member email was not correct.' );
-			$this->assertEqual( $this->vars['member']['paymentRef'], 'HSNOTTSFGXWGKF48', 'Member payment ref was not correct.' );
-			$this->assertEqual( $this->vars['member']['status'], $expectedMemberStatus, 'Member status was not correct.' );
+			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
 		}
 
 		public function testEditMemberInvalidData()

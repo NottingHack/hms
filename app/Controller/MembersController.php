@@ -79,7 +79,6 @@ class MembersController extends AppController {
 			case 'listMembers':
 			case 'listMembersWithStatus':
 			case 'search':
-			case 'sendMembershipCompleteMail':
 				return $memberIsMembershipAdmin || $memberIsOnMembershipTeam;
 
 			case 'changePassword':
@@ -463,57 +462,6 @@ class MembersController extends AppController {
 	}
 
 /**
- *
- * Public access for sending membership complete email
- * @param int $id The id of the member to send to
- *
- */
-	public function sendMembershipCompleteMail($id) {
-		try {
-			if ($this->__sendMembershipCompleteMail($id)) {
-				$this->Session->setFlash('Email sent.');
-			} else {
-				$this->Session->setFlash('Email could not be sent.');
-			}
-		} catch (InvalidStatusException $e) {
-			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
-		}
-
-		return $this->redirect($this->referer());
-	}
-
-/**
- *
- * Send a "membership complete" e-mail to the member
- * @param int $id The id of the member to send to
- *
- */
-	private function __sendMembershipCompleteMail($id) {
-		$email = $this->Member->getEmailForMember($id);
-		if ($email) {
-
-			$this->_sendEmail(
-				$email,
-				'Membership Complete',
-				'to_member_access_details',
-				array(
-					'manLink' => Configure::read('hms_help_manual_url'),
-					'outerDoorCode' => Configure::read('hms_access_street_door'),
-					'innerDoorCode' => Configure::read('hms_access_inner_door'),
-					'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
-					'wifiPass' => Configure::read('hms_access_wifi_password'),
-				)
-			);
-
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-/**
  * Approve a membership and report back to the user.
  *
  * @param int $id The id of the member who we are approving.
@@ -530,6 +478,31 @@ class MembersController extends AppController {
 		}
 
 		return $this->redirect($this->referer());
+	}
+
+/**
+ *
+ * Send a "membership complete" e-mail to the member
+ * @param int $id The id of the member to send to
+ *
+ */
+	private function _sendMembershipCompleteMail($id) {
+		$email = $this->Member->getEmailForMember($id);
+		if ($email) {
+
+			$this->_sendEmail(
+				$email,
+				'Membership Complete',
+				'to_member_access_details',
+				array(
+					'manLink' => Configure::read('hms_help_manual_url'),
+					'outerDoorCode' => Configure::read('hms_access_street_door'),
+					'innerDoorCode' => Configure::read('hms_access_inner_door'),
+					'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
+					'wifiPass' => Configure::read('hms_access_wifi_password'),
+				)
+			);
+		}
 	}
 
 /**
@@ -556,7 +529,7 @@ class MembersController extends AppController {
 				)
 			);
 
-			$this->__sendMembershipCompleteMail($id); // E-mail the member
+			$this->_sendMembershipCompleteMail($id); // E-mail the member
 
 			return true;
 		} else {
@@ -1118,7 +1091,6 @@ class MembersController extends AppController {
 			break;
 
 			case Status::CURRENT_MEMBER:
-
 				array_push($actions,
 					array(
 						'title' => 'Revoke Membership',
@@ -1133,13 +1105,12 @@ class MembersController extends AppController {
 
 				array_push($actions,
 					array(
-						'title' => 'Resend Membership Complete Email',
+						'title' => 'Send SO Details Reminder',
 						'controller' => 'members',
-						'action' => 'sendMembershipCompleteMail',
+						'action' => 'sendSoDetailsReminder',
 						'params' => array(
 							$memberId,
 						),
-						'class' => 'positive',
 					)
 				);
 
@@ -1225,7 +1196,7 @@ class MembersController extends AppController {
 					});
 
 					// Ok so we have a list of payment refs, get the account id's from them
-					$accountIds = $this->Member->Account->getAccountIdsForNatwestRefs($payRefs);
+					$accountIds = $this->Member->Account->getAccountIdsForRefs($payRefs);
 					if ( is_array($accountIds) && count($accountIds) > 0) {
 						// Ok now we need the rest of the member info
 						$members = $this->Member->getMemberSummaryForAccountIds(false, $accountIds);
