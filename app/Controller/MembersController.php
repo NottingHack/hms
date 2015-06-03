@@ -40,7 +40,7 @@ class MembersController extends AppController {
  */
 	public $components = array('BankStatement');
 
-/** 
+/**
  * Test to see if a user is authorized to make a request.
  *
  * @param array $user Member record for the user.
@@ -79,6 +79,7 @@ class MembersController extends AppController {
 			case 'listMembers':
 			case 'listMembersWithStatus':
 			case 'search':
+			case 'sendMembershipCompleteMail':
 				return $memberIsMembershipAdmin || $memberIsOnMembershipTeam;
 
 			case 'changePassword':
@@ -462,6 +463,57 @@ class MembersController extends AppController {
 	}
 
 /**
+ *
+ * Public access for sending membership complete email
+ * @param int $id The id of the member to send to
+ *
+ */
+	public function sendMembershipCompleteMail($id) {
+		try {
+			if ($this->__sendMembershipCompleteMail($id)) {
+				$this->Session->setFlash('Email sent.');
+			} else {
+				$this->Session->setFlash('Email could not be sent.');
+			}
+		} catch (InvalidStatusException $e) {
+			return $this->redirect(array('controller' => 'pages', 'action' => 'home'));
+		}
+
+		return $this->redirect($this->referer());
+	}
+
+/**
+ *
+ * Send a "membership complete" e-mail to the member
+ * @param int $id The id of the member to send to
+ *
+ */
+	private function __sendMembershipCompleteMail($id) {
+		$email = $this->Member->getEmailForMember($id);
+		if ($email) {
+
+			$this->_sendEmail(
+				$email,
+				'Membership Complete',
+				'to_member_access_details',
+				array(
+					'manLink' => Configure::read('hms_help_manual_url'),
+					'outerDoorCode' => Configure::read('hms_access_street_door'),
+					'innerDoorCode' => Configure::read('hms_access_inner_door'),
+					'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
+					'wifiPass' => Configure::read('hms_access_wifi_password'),
+				)
+			);
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+/**
  * Approve a membership and report back to the user.
  *
  * @param int $id The id of the member who we are approving.
@@ -504,19 +556,7 @@ class MembersController extends AppController {
 				)
 			);
 
-			// E-mail the member
-			$this->_sendEmail(
-				$memberDetails['email'],
-				'Membership Complete',
-				'to_member_access_details',
-				array(
-					'manLink' => Configure::read('hms_help_manual_url'),
-					'outerDoorCode' => Configure::read('hms_access_street_door'),
-					'innerDoorCode' => Configure::read('hms_access_inner_door'),
-					'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
-					'wifiPass' => Configure::read('hms_access_wifi_password'),
-				)
-			);
+			$this->__sendMembershipCompleteMail($id); // E-mail the member
 
 			return true;
 		} else {
@@ -862,9 +902,9 @@ class MembersController extends AppController {
 		return $this->redirect($this->referer());
 	}
 
-/** 
+/**
  * Check to see if certain view/edit params should be shown to the logged in member.
- * 
+ *
  * @param int $memberId The id of the member being viewed.
  * @param bool $showAdminFeatures (out) If this is set to true then admin features should be shown.
  * @param bool $showFinances (out) If this is set to true then financial information should be shown.
@@ -974,7 +1014,7 @@ class MembersController extends AppController {
 
 /**
  * Adds the appropriate actions to each member in the member list.
- * 
+ *
  * @param array $memberList A list of member summaries to add the actions to.
  * @return array The original memberList, with the actions added for each member.
  */
@@ -991,7 +1031,7 @@ class MembersController extends AppController {
 
 /**
  * Get an array of possible actions for a member
- * 
+ *
  * @param int $memberId The id of the member to work with.
  * @return array An array of actions.
  */
@@ -1078,6 +1118,7 @@ class MembersController extends AppController {
 			break;
 
 			case Status::CURRENT_MEMBER:
+
 				array_push($actions,
 					array(
 						'title' => 'Revoke Membership',
@@ -1089,6 +1130,19 @@ class MembersController extends AppController {
 						'class' => 'negative',
 					)
 				);
+
+				array_push($actions,
+					array(
+						'title' => 'Resend Membership Complete Email',
+						'controller' => 'members',
+						'action' => 'sendMembershipCompleteMail',
+						'params' => array(
+							$memberId,
+						),
+						'class' => 'positive',
+					)
+				);
+
 			break;
 
 			case Status::EX_MEMBER:
@@ -1248,7 +1302,7 @@ class MembersController extends AppController {
 
 /**
  * Get the key used to store members ids in the session after uploading a csv.
- * 
+ *
  * @return string The key to be used in the session.
  * @link MemberController::uploadCsv
  */
