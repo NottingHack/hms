@@ -2,8 +2,6 @@
 /**
  * FileTest file
  *
- * PHP 5
- *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -15,8 +13,9 @@
  * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.Test.Case.Utility
  * @since         CakePHP(tm) v 1.2.0.4206
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 App::uses('File', 'Utility');
 App::uses('Folder', 'Utility');
 
@@ -30,7 +29,7 @@ class FileTest extends CakeTestCase {
 /**
  * File property
  *
- * @var mixed null
+ * @var mixed
  */
 	public $File = null;
 
@@ -82,8 +81,7 @@ class FileTest extends CakeTestCase {
 			'filesize' => filesize($file),
 			'mime' => 'text/plain'
 		);
-		if (
-			!function_exists('finfo_open') &&
+		if (!function_exists('finfo_open') &&
 			(!function_exists('mime_content_type') ||
 			function_exists('mime_content_type') &&
 			mime_content_type($this->File->pwd()) === false)
@@ -126,6 +124,8 @@ class FileTest extends CakeTestCase {
 
 /**
  * testPermission method
+ *
+ * @return void
  */
 	public function testPermission() {
 		$this->skipIf(DIRECTORY_SEPARATOR === '\\', 'File permissions tests not supported on Windows.');
@@ -216,19 +216,19 @@ class FileTest extends CakeTestCase {
 		$this->assertTrue(is_resource($this->File->handle));
 
 		$result = $this->File->offset();
-		$expecting = 0;
-		$this->assertSame($result, $expecting);
+		$expected = 0;
+		$this->assertSame($expected, $result);
 
 		$data = file_get_contents(__FILE__);
 		$success = $this->File->offset(5);
-		$expecting = substr($data, 5, 3);
+		$expected = substr($data, 5, 3);
 		$result = $this->File->read(3);
 		$this->assertTrue($success);
-		$this->assertEquals($expecting, $result);
+		$this->assertEquals($expected, $result);
 
 		$result = $this->File->offset();
-		$expecting = 5 + 3;
-		$this->assertSame($result, $expecting);
+		$expected = 5 + 3;
+		$this->assertSame($expected, $result);
 	}
 
 /**
@@ -309,11 +309,11 @@ class FileTest extends CakeTestCase {
 		} else {
 			$expected = "some\nvery\ncool\nteststring here\n\n\nfor\n\n\n\n\nhere";
 		}
-		$this->assertSame(File::prepare($string), $expected);
+		$this->assertSame($expected, File::prepare($string));
 
 		$expected = "some\r\nvery\r\ncool\r\nteststring here\r\n\r\n\r\n";
 		$expected .= "for\r\n\r\n\r\n\r\n\r\nhere";
-		$this->assertSame(File::prepare($string, true), $expected);
+		$this->assertSame($expected, File::prepare($string, true));
 	}
 
 /**
@@ -395,7 +395,7 @@ class FileTest extends CakeTestCase {
 	public function testWrite() {
 		if (!$tmpFile = $this->_getTmpFile()) {
 			return false;
-		};
+		}
 		if (file_exists($tmpFile)) {
 			unlink($tmpFile);
 		}
@@ -425,7 +425,7 @@ class FileTest extends CakeTestCase {
 	public function testAppend() {
 		if (!$tmpFile = $this->_getTmpFile()) {
 			return false;
-		};
+		}
 		if (file_exists($tmpFile)) {
 			unlink($tmpFile);
 		}
@@ -533,7 +533,7 @@ class FileTest extends CakeTestCase {
 		$path = CAKE . 'Test' . DS . 'test_app' . DS . 'webroot' . DS . 'img' . DS . 'cake.power.gif';
 		$file = new File($path);
 		$expected = 'image/gif';
-		if (function_exists('mime_content_type') && false === mime_content_type($file->pwd())) {
+		if (function_exists('mime_content_type') && mime_content_type($file->pwd()) === false) {
 			$expected = false;
 		}
 		$this->assertEquals($expected, $file->mime());
@@ -549,7 +549,7 @@ class FileTest extends CakeTestCase {
 		$tmpFile = TMP . 'tests' . DS . 'cakephp.file.test.tmp';
 		if (is_writable(dirname($tmpFile)) && (!file_exists($tmpFile) || is_writable($tmpFile))) {
 			return $tmpFile;
-		};
+		}
 
 		if ($paintSkip) {
 			$trace = debug_backtrace();
@@ -560,5 +560,53 @@ class FileTest extends CakeTestCase {
 			$this->markTestSkipped($message);
 		}
 		return false;
+	}
+
+/**
+ * testReplaceText method
+ *
+ * @return void
+ */
+	public function testReplaceText() {
+		$TestFile = new File(dirname(__FILE__) . '/../../test_app/Vendor/welcome.php');
+		$TmpFile = new File(TMP . 'tests' . DS . 'cakephp.file.test.tmp');
+
+		// Copy the test file to the temporary location
+		$TestFile->copy($TmpFile->path, true);
+
+		// Replace the contents of the tempory file
+		$result = $TmpFile->replaceText('welcome.php', 'welcome.tmp');
+		$this->assertTrue($result);
+
+		// Double check
+		$expected = 'This is the welcome.tmp file in vendors directory';
+		$contents = $TmpFile->read();
+		$this->assertContains($expected, $contents);
+
+		$search = array('This is the', 'welcome.php file', 'in tmp directory');
+		$replace = array('This should be a', 'welcome.tmp file', 'in the Lib directory');
+
+		// Replace the contents of the tempory file
+		$result = $TmpFile->replaceText($search, $replace);
+		$this->assertTrue($result);
+
+		// Double check
+		$expected = 'This should be a welcome.tmp file in vendors directory';
+		$contents = $TmpFile->read();
+		$this->assertContains($expected, $contents);
+
+		$TmpFile->delete();
+	}
+
+/**
+ * Tests that no path is being set for passed file paths that
+ * do not exist.
+ *
+ * @return void
+ */
+	public function testNoPartialPathBeingSetForNonExistentPath() {
+		$tmpFile = new File('/non/existent/file');
+		$this->assertNull($tmpFile->pwd());
+		$this->assertNull($tmpFile->path);
 	}
 }

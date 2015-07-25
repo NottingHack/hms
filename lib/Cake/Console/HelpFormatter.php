@@ -2,8 +2,6 @@
 /**
  * HelpFormatter
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -13,8 +11,9 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 App::uses('String', 'Utility');
 
 /**
@@ -34,19 +33,19 @@ class HelpFormatter {
 /**
  * The maximum number of arguments shown when generating usage.
  *
- * @var integer
+ * @var int
  */
 	protected $_maxArgs = 6;
 
 /**
  * The maximum number of options shown when generating usage.
  *
- * @var integer
+ * @var int
  */
 	protected $_maxOptions = 6;
 
 /**
- * Build the help formatter for a an OptionParser
+ * Build the help formatter for an OptionParser
  *
  * @param ConsoleOptionParser $parser The option parser help is being generated for.
  */
@@ -57,7 +56,7 @@ class HelpFormatter {
 /**
  * Get the help as formatted text suitable for output on the command line.
  *
- * @param integer $width The width of the help output.
+ * @param int $width The width of the help output.
  * @return string
  */
 	public function text($width = 72) {
@@ -160,8 +159,8 @@ class HelpFormatter {
 /**
  * Iterate over a collection and find the longest named thing.
  *
- * @param array $collection
- * @return integer
+ * @param array $collection The collection to find a max length of.
+ * @return int
  */
 	protected function _getMaxLength($collection) {
 		$max = 0;
@@ -174,7 +173,7 @@ class HelpFormatter {
 /**
  * Get the help as an xml string.
  *
- * @param boolean $string Return the SimpleXml object or a string. Defaults to true.
+ * @param bool $string Return the SimpleXml object or a string. Defaults to true.
  * @return string|SimpleXmlElement See $string
  */
 	public function xml($string = true) {

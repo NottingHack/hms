@@ -2,7 +2,7 @@
 
 <?php
 	$this->Html->addCrumb('Members', '/members');
-	$this->Html->addCrumb('Email members with status ' . $status['name'], '/members/email_members_with_status/' . $status['id']);
+	$this->Html->addCrumb('Email members with status "' . $status['name'] . '"');
 ?>
 
 <?php
@@ -26,14 +26,10 @@
 <?php if(count($members) > 0 && count($membersWithEmails) > 0): ?>
 
 	<?php
-		echo $this->Form->create('MemberEmail');
-		echo $this->Form->input('subject');
-		echo $this->Tinymce->input('Member.message', 
-			array( 'label' => 'Message' ),
-			array( 'language'=>'en' ), 
-            'basic' 
-        ); 
-		#echo $this->Form->input('message', array('type' => 'textarea'));
+		echo $this->Form->create('MemberEmail', array('novalidate' => true));
+		echo $this->Form->input('MemberEmail.subject');
+		echo $this->Form->input('MemberEmail.message', array('type' => 'textarea'));
+		echo $this->TinyMCE->editor('basic');
 	?>
 
 	<p>This e-mail will be sent to the following members:</p>
@@ -42,7 +38,7 @@
 		foreach ($membersWithEmails as $memberInfo) {
 			echo '<li>';
 
-			echo $memberInfo['name'] . ' [' . $memberInfo['email'] . ']';
+			echo $memberInfo['bestName'] . ' [' . $memberInfo['email'] . ']';
 
 			echo '</li>';
 		}

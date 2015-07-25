@@ -14,6 +14,10 @@
             $this->Member = ClassRegistry::init('Member');
             App::uses('MailingList', 'Model');
             $this->Member->mailingList = new MailingList(false, null, 'test');
+
+            // use a mock Kerberos behaviour during tests
+            $this->Member->Behaviors->unload('KrbAuth');
+            $this->Member->Behaviors->load('MockKrbAuth');
         }
 
         public function testPasswordConfirmMatchesPassword()

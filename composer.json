@@ -6,10 +6,16 @@
         "behat/mink-goutte-driver": "*",
         "behat/mink-selenium2-driver": "*",
         "phpunit/phpunit": "4.1.*",
-        "phpdocumentor/phpdocumentor": "2.*"
+        "phpdocumentor/phpdocumentor": "2.*",
+        "cakedc/tiny-mce": "1.2.0"
     },
     "minimum-stability": "dev",
     "config": {
         "bin-dir": "bin/"
+    },
+    "extra": {
+        "installer-paths": {
+            "app/Plugin/TinyMCE": ["cakedc/tiny-mce"]
+        }
     }
 }

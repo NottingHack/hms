@@ -16,7 +16,6 @@
 App::uses('ModelBehavior', 'Model');
 
 App::uses('PhpReader', 'Configure');
-App::uses('Component', 'Controller');
 App::uses('Krb5Auth', 'Lib/Krb');
 
 /**

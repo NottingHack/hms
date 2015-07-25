@@ -106,29 +106,30 @@ $listBookings = array(
 			$row = '';
 		}
 
-	        $newdate = clone $date;
-	        for ($j = 0; $j < 7; $j++) {
-	            if ($newdate > $now) {
-	                $class = ' class="' . $row . '"';
-	                $link =$this->Html->link("", array(
-	                    'plugin'        =>  'Tools',
-	                    'controller'    =>  'ToolsTools',
-	                    'action'        =>  'addbooking',
-	                    $tool['Tool']['tool_id'],
-	                    '?'             =>  array(
-	                        't' => $newdate->format(ToolsGoogle::DATETIME_STR),
-	                        ),
-	                    ));
-	            }
-	            else {
-	               	 $class = ' class="' . $row . ' past"';
-	               	 $link = '';
-		    }
-	            echo('<td' . $class . '>');
-	            echo($link);
-	            echo('</td>');
-	            $newdate->add(new DateInterval('P1D'));
-	        }
+		$newdate = clone $date;
+		for ($j = 0; $j < 7; $j++) {
+			if ($newdate > $now) {
+				$class = ' class="' . $row . '"';
+				$link =$this->Html->link("", array(
+					'plugin'		=>	'Tools',
+					'controller'	=>	'ToolsTools',
+					'action'		=>	'addbooking',
+					$tool['Tool']['tool_id'],
+					'?'				=>	array(
+						't'	=> $newdate->format(ToolsGoogle::DATETIME_STR),
+						),
+					));
+			}
+			else {
+				$class = ' class="' . $row . ' past"';
+				$link = '';
+			}
+			echo('<td' . $class . '>');
+			echo($link);
+			echo('</td>');
+			$newdate->add(new DateInterval('P1D'));
+		}
+
 		echo('</tr>' . "\n");
 		$date->add(new DateInterval('PT30M'));
 	}

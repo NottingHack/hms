@@ -165,6 +165,7 @@ class Account extends AppModel {
 		if (is_array($paymentRefs)) {
 			return array_values($this->find('list', array('conditions' => array('Account.natwest_ref' => $paymentRefs))));
 		}
+
 		return array();
 	}
 }

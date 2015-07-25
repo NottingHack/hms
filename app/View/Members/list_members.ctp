@@ -50,13 +50,14 @@
                 </td>
                 <td>
                     <?php
-                        foreach ($member['actions'] as $action) 
+                        foreach ($member['actions'] as $action)
                         {
                             $linkOptions = $action['params'];
                             $linkOptions['controller'] = $action['controller'];
                             $linkOptions['action'] = $action['action'];
 
                             echo $this->Html->link($action['title'], $linkOptions);
+                            echo "<br>";
                         }
                     ?>
                 </td>
