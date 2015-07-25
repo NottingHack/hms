@@ -1124,7 +1124,7 @@ class Setup {
 
 		$this->__createDatabases();
 		$this->__runDatabaseUpdate();
-		$this->__copyKrbLibFile();
+		//$this->__copyKrbLibFile();
 		$this->__copyMcapiLibFile();
 		$this->__setupTempFolders();
 

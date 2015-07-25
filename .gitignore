@@ -24,7 +24,6 @@ hms.settings
 /dev/Setup/Sql/mailinglists_data.development.sql
 /dev/Setup/Sql/mailinglist_subscriptions_data.development.sql
 /dev/Setup/Sql/hms_emails_data.development.sql
-app/Lib/Krb/Krb5Auth.php
 app/Lib/MailChimp/MCAPI.php
 docs
 CodeSnifferReport.txt
