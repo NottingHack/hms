@@ -940,7 +940,7 @@
 			$mockEmail = $this->getMock('CakeEmail');
 			$this->controller->email = $mockEmail;
 
-			$fakePaymentRef = 'HSNOTTSTYX339RW4';
+			$fakePaymentRef = 'HSTSBKFTYX339RW4';
 			$this->controller->Member->expects($this->exactly(2))->method('getSoDetails')->will($this->returnValue(array('firstname' => 'Roy', 'surname' => 'Forsman', 'email' => 'RoyJForsman@teleworm.us', 'paymentRef' => $fakePaymentRef)));
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(5));
 
@@ -1630,7 +1630,7 @@
 			$mockEmail->expects($this->at(3))->method('to')->with('RyanMiles@dayrep.com');
 			$mockEmail->expects($this->at(4))->method('subject')->with('Bank Details');
 			$mockEmail->expects($this->at(5))->method('template')->with('to_member_so_details');
-			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('name' => 'Ryan Miles', 'paymentRef' => 'HSNOTTSFGXWGKF48', 'accountNum' => Configure::read('hms_so_accountNumber'), 'sortCode' => Configure::read('hms_so_sortCode'), 'accountName' => Configure::read('hms_so_accountName') ));
+			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('name' => 'Ryan Miles', 'paymentRef' => 'HSTSBKFFGXWGKF48', 'accountNum' => Configure::read('hms_so_accountNumber'), 'sortCode' => Configure::read('hms_so_sortCode'), 'accountName' => Configure::read('hms_so_accountName') ));
 			$mockEmail->expects($this->at(7))->method('config')->with('smtp');
 			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
 
@@ -1941,7 +1941,7 @@
 						'state' => 30,
 					)
 				),
-				'paymentRef' => 'HSNOTTSYT7H4CW3G',
+				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'address' => array(
 					'part1' => '8 Elm Close',
 					'part2' => 'Tetsworth',
@@ -2029,7 +2029,7 @@
 						'state' => 30,
 					)
 				),
-				'paymentRef' => 'HSNOTTSYT7H4CW3G',
+				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'lastStatusUpdate' => array(
 					'id' => '3',
 					'by' => '5',
@@ -2114,7 +2114,7 @@
 						'state' => 30,
 					)
 				),
-				'paymentRef' => 'HSNOTTSYT7H4CW3G',
+				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'address' => array(
 					'part1' => '8 Elm Close',
 					'part2' => 'Tetsworth',
@@ -2184,7 +2184,7 @@
 				'unlockText' => 'Sup Guy',
 				'balance' => '-985',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSNOTTSYT7H4CW3G',
+				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'address' => array(
 					'part1' => '4 Fraser Crescent',
 					'part2' => '',
@@ -2379,7 +2379,7 @@
 				'unlockText' => 'Hey Kelly',
 				'balance' => '-5649',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSNOTTSYT7H4CW3G',
+				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'address' => array(
 					'part1' => '8 Elm Close',
 					'part2' => 'Tetsworth',
@@ -2543,7 +2543,7 @@
 				),
 				'Account' => array(
 				    'account_id' => '2',
-				    'payment_ref' => 'HSNOTTSK2R62GQW6',
+				    'payment_ref' => 'HSTSBKFK2R62GQW6',
 				),
 				'Pin' => array(
 					0 => array(
@@ -2691,7 +2691,7 @@
 				),
 				'Account' => array(
 				    'account_id' => '2',
-				    'payment_ref' => 'HSNOTTSK2R62GQW6',
+				    'payment_ref' => 'HSTSBKFK2R62GQW6',
 				),
 				'Pin' => array(
 					0 => array(
@@ -2783,7 +2783,7 @@
 				'unlockText' => 'Hey Kelly',
 				'balance' => '-5649',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSNOTTSYT7H4CW3G',
+				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'address' => array(
 					'part1' => '8 Elm Close',
 					'part2' => 'Tetsworth',
@@ -2847,7 +2847,7 @@
 				),
 				'Account' => array(
 				    'account_id' => '4',
-				    'payment_ref' => 'HSNOTTSCV3TFFDGX',
+				    'payment_ref' => 'HSTSBKFCV3TFFDGX',
 				),
 				'Pin' => array(
 					0 => array(
@@ -2949,7 +2949,7 @@
 				'unlockText' => 'Welcome Annabelle',
 				'balance' => '0',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSNOTTSK2R62GQW6',
+				'paymentRef' => 'HSTSBKFK2R62GQW6',
 				'address' => array(
 					'part1' => '1 Saint Paul\'s Church Yard',
 					'part2' => 'The City',
@@ -3005,7 +3005,7 @@
 				),
 				'Account' => array(
 				    'account_id' => '4',
-				    'payment_ref' => 'HSNOTTSCV3TFFDGX',
+				    'payment_ref' => 'HSTSBKFCV3TFFDGX',
 				),
 				'Pin' => array(
 					0 => array(
@@ -3090,7 +3090,7 @@
 				'unlockText' => 'Oh dear...',
 				'balance' => '-3465',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSNOTTSYT7H4CW3G',
+				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'address' => array(
 					'part1' => '9 Langton Avenue',
 					'part2' => 'East Calder',
@@ -3146,7 +3146,7 @@
 				),
 				'Account' => array(
 				    'account_id' => '4',
-				    'payment_ref' => 'HSNOTTSCV3TFFDGX',
+				    'payment_ref' => 'HSTSBKFCV3TFFDGX',
 				),
 				'Pin' => array(
 					0 => array(
@@ -3231,7 +3231,7 @@
 				'unlockText' => 'Sup Guy',
 				'balance' => '-985',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSNOTTSYT7H4CW3G',
+				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'address' => array(
 					'part1' => '4 Fraser Crescent',
 					'part2' => '',
@@ -3291,7 +3291,7 @@
 				),
 				'Account' => array(
 				    'account_id' => '3',
-				    'payment_ref' => 'HSNOTTSYT7H4CW3G',
+				    'payment_ref' => 'HSTSBKFYT7H4CW3G',
 				),
 				'Pin' => array(
 					0 => array(
@@ -3384,7 +3384,7 @@
 				'unlockText' => 'Sup Guy',
 				'balance' => '-985',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSNOTTSYT7H4CW3G',
+				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'address' => array(
 					'part1' => '4 Fraser Crescent',
 					'part2' => '',
@@ -3542,7 +3542,7 @@
 				),
 				'Account' => array(
 				    'account_id' => '1',
-				    'payment_ref' => 'HSNOTTSYT7H4CW3G',
+				    'payment_ref' => 'HSTSBKFYT7H4CW3G',
 				),
 				'Pin' => array(
 					0 => array(
@@ -3594,7 +3594,7 @@
 				'unlockText' => 'Sup Guy',
 				'balance' => '-985',
 				'creditLimit' => '5000',
-				'paymentRef' => 'HSNOTTSYT7H4CW3G',
+				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'address' => array(
 					'part1' => '4 Fraser Crescent',
 					'part2' => '',
@@ -3654,7 +3654,7 @@
 				),
 				'Account' => array(
 				    'account_id' => '1',
-				    'payment_ref' => 'HSNOTTS6762KC8JD',
+				    'payment_ref' => 'HSTSBKF6762KC8JD',
 				),
 				'Pin' => array(
 					0 => array(
@@ -3925,11 +3925,11 @@
 			,,,,,,
 			,,,,,,
 			,,,,,,
-			06/02/2013,BAC,"\'A NAME , HSNOTTSVD74BY3C8 , FP 06/02/13 0138 , 300000000062834772",15,1664.08,\'NOTTINGHACK,\'558899-45687951
+			06/02/2013,BAC,"\'A NAME , HSTSBKFVD74BY3C8 , FP 06/02/13 0138 , 300000000062834772",15,1664.08,\'NOTTINGHACK,\'558899-45687951
 			,,,,,,
 			06/02/2013,BAC,"\'DOROTHY D D/2011 , DOROTHY DEVAL",15,1679.08,\'NOTTINGHACK,\'558899-45687951
 			,,,,,,
-			06/02/2013,BAC,"\'SIMPMSON T , HSNOTTSTYX339RW3",10,1689.08,\'NOTTINGHACK,\'558899-45687951
+			06/02/2013,BAC,"\'SIMPMSON T , HSTSBKFTYX339RW3",10,1689.08,\'NOTTINGHACK,\'558899-45687951
 			,,,,,,
 			07/02/2013,BAC,"\'C DAVIES , CHRIS , FP 07/02/13 0034 , 00156265632BBBVSCR",5,1694.08,\'NOTTINGHACK,\'558899-45687951';
 			$guid = null;
@@ -3961,11 +3961,11 @@
 			,,,,,,
 			,,,,,,
 			,,,,,,
-			06/02/2013,BAC,"\'A NAME , HSNOTTSFGXWGKF48 , FP 06/02/13 0138 , 300000000062834772",15,1664.08,\'NOTTINGHACK,\'558899-45687951
+			06/02/2013,BAC,"\'A NAME , HSTSBKFFGXWGKF48 , FP 06/02/13 0138 , 300000000062834772",15,1664.08,\'NOTTINGHACK,\'558899-45687951
 			,,,,,,
 			06/02/2013,BAC,"\'DOROTHY D D/2011 , DOROTHY DEVAL",15,1679.08,\'NOTTINGHACK,\'558899-45687951
 			,,,,,,
-			24/02/2013,BAC,"\'SIMPMSON T , HSNOTTSHVQGT3XF2",10,1689.08,\'NOTTINGHACK,\'558899-45687951
+			24/02/2013,BAC,"\'SIMPMSON T , HSTSBKFHVQGT3XF2",10,1689.08,\'NOTTINGHACK,\'558899-45687951
 			,,,,,,
 			07/02/2013,BAC,"\'C DAVIES , CHRIS , FP 07/02/13 0034 , 00156265632BBBVSCR",5,1694.08,\'NOTTINGHACK,\'558899-45687951';
 			$guid = null;
