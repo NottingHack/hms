@@ -1,0 +1,136 @@
+div.calendarnav {
+	margin: 10px 0 10px 0;
+}
+
+img.navleft {
+	float: left;
+	top: 0px;
+}
+
+img.navright {
+	float: right;
+	top: 0px;
+}
+
+.key {
+	width: 300px;
+	height: 30px;
+	margin: 0 auto;
+}
+
+.key div {
+	float: left;
+	margin: 0px 5px 0 5px;
+	width: 88px;
+	padding: 5px 0 5px 0;
+	border: 1px solid #000000;
+	text-align: center;
+	font-size: 0.8em;
+	font-weight: bold;
+}
+
+div.toolscalendar {
+	position: relative;
+}
+
+div.toolscalendar table,
+div.toolscalendar tr,
+div.toolscalendar th,
+div.toolscalendar td {
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
+
+div.toolscalendar tr,
+div.toolscalendar th,
+div.toolscalendar td {
+	border: 1px solid #195905;
+	height: 14px;
+}
+
+div.toolscalendar tr.light,
+div.toolscalendar th.light,
+div.toolscalendar td.light {
+	border-bottom: 1px solid #CCCCCC;
+}
+
+div.toolscalendar tr.past,
+div.toolscalendar th.past,
+div.toolscalendar td.past {
+	background: #CCCCCC;
+}
+
+div.toolscalendar th {
+	height: 29px;
+}
+
+div.toolscalendar td a {
+	display: block;
+	height: 14px;
+}
+
+div.toolscalendar td.time {
+	padding: 0px;
+	text-align: right;
+}
+
+div.toolscalendar td.time span {
+	font-size: 0.6em;
+	padding-right: 5px;
+}
+
+div.event {
+	width: 110px;
+	border-radius: 5px;
+	padding: 1px 5px 1px 5px;
+	position: absolute;
+	top: 0px;
+	font-size: 0.9em;
+}
+
+.normal {
+	background: #195905;
+	color: #FFFFFF;
+}
+
+.induction {
+	background: #FF0000;
+	color: #FFFFFF;
+}
+
+.maintenance {
+	background: #000000;
+	color: #FFFFFF;
+}
+
+div.day_1 {
+       left: 54px;
+}
+
+div.day_2 {
+       left: 181px;
+}
+
+div.day_3 {
+       left: 308px;
+}
+
+div.day_4 {
+       left: 435px;
+}
+
+div.day_5 {
+       left: 562px;
+}
+
+div.day_6 {
+       left: 689px;
+}
+
+div.day_7 {
+       left: 816px;
+}
