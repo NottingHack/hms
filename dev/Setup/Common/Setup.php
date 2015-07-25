@@ -796,8 +796,6 @@ class Setup {
 			),
 			'debug' => array(
 			),
-			'krb' => array(
-			),
 			'mailchimp'	=> array(
 				'key' => 'w1zg905ych1e090og9pvjb7td6b05vlg-2y8',
 				'list' => 'us8gz1v8rq',
@@ -811,6 +809,7 @@ class Setup {
 			),
 		);
 
+		$aSettings = array();
 		$overrideSettings = '../Settings/hms.settings';
 		if (file_exists(makeAbsolutePath($overrideSettings))) {
 			include ($overrideSettings);
@@ -1124,7 +1123,7 @@ class Setup {
 
 		$this->__createDatabases();
 		$this->__runDatabaseUpdate();
-		$this->__copyKrbLibFile();
+		//$this->__copyKrbLibFile();
 		$this->__copyMcapiLibFile();
 		$this->__setupTempFolders();
 
