@@ -796,8 +796,8 @@ class Setup {
 			),
 			'debug' => array(
 			),
-			'krb' => array(
-			),
+//			'krb' => array(
+//			),
 			'mailchimp'	=> array(
 				'key' => 'w1zg905ych1e090og9pvjb7td6b05vlg-2y8',
 				'list' => 'us8gz1v8rq',
@@ -811,6 +811,7 @@ class Setup {
 			),
 		);
 
+		$aSettings = array();
 		$overrideSettings = '../Settings/hms.settings';
 		if (file_exists(makeAbsolutePath($overrideSettings))) {
 			include ($overrideSettings);

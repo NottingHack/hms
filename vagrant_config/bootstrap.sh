@@ -97,7 +97,7 @@ ln -s /home/vagrant/hms-tmp/hms/tmp  /vagrant/app/tmp
 chmod a+rw -R /home/vagrant/hms-tmp/hms
 
 # Configure HMS to use Kerberos
-# cp /vagrant/vagrant_config/krb.php /vagrant/app/Config
+cp /vagrant/vagrant_config/krb.php /vagrant/app/Config
 
 # Allow HMS principal to manage the Kerberos database
 echo "hms/web@NOTTINGTEST.ORG.UK * " >> /etc/krb5kdc/kadm5.acl
