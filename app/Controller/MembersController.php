@@ -68,6 +68,7 @@ class MembersController extends AppController {
 			case 'rejectDetails':
 			case 'addExistingMember':
 			case 'uploadCsv':
+			case 'uploadTsb':
 			case 'emailMembersWithStatus':
 				return $memberIsMembershipAdmin;
 
@@ -136,6 +137,7 @@ class MembersController extends AppController {
 		$this->Nav->add('Register Member', 'members', 'register');
 		$this->Nav->add('E-mail all current members', 'members', 'emailMembersWithStatus', array( Status::CURRENT_MEMBER ) );
 		$this->Nav->add('Upload CSV', 'members', 'uploadCsv' );
+		$this->Nav->add('Upload TSB', 'members', 'uploadTsb' );
 	}
 /**
  * Show a list of all members, their e-mail address, status and the groups they're in.
@@ -1140,6 +1142,113 @@ class MembersController extends AppController {
 		return $_SERVER["REMOTE_ADDR"];
 	}
 
+
+/**
+ * Upload TSB a .csv file of bank transactions and look for members to approve.
+ *
+ * @param string $guid If set then look here in the session for a list of account id's to approve.
+ */
+	public function uploadTsb($guid = null) {
+		$validMemberIds = array();
+		$preview = true;
+
+		// If the guid is not set then we should show the upload form
+		if ($guid == null) {
+			// Has a file been uploaded?
+			if ($this->request->is('post')) {
+				// Ok, read the file
+				Controller::loadModel('FileUpload');
+
+				$filename = $this->FileUpload->getTmpName($this->request->data);
+
+				if ($this->BankStatement->readfile($filename)) {
+					// It seems ot be a valid .csv, grab all the payment references
+					$payRefs = array();
+					$this->BankStatement->iterate(function ($transaction) use(&$payRefs) {
+						$ref = $transaction['ref'];
+
+						if (is_string($ref) && strlen($ref) > 0) {
+							array_push($payRefs, $ref);
+						}
+					});
+
+					// Ok so we have a list of payment refs, get the account id's from them
+					$accountIds = $this->Member->Account->getAccountIdsForRefs($payRefs);
+					if ( is_array($accountIds) && count($accountIds) > 0) {
+						// Ok now we need the rest of the member info
+						$members = $this->Member->getMemberSummaryForAccountIds(false, $accountIds);
+
+						// We only want members who we're waiting for payments from (Pre-Member 3)
+						foreach ($members as $member) {
+							if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3) {
+								array_push(
+									$validMemberIds,
+									$member['id']
+								);
+							}
+						}
+					}
+
+					// Did we find any? If so write them to the session with a guid.
+					// This is 100% not dodgy... Honest.
+					if (count($validMemberIds) > 0) {
+						$guid = $this->getMemberIdSessionKey();
+						$this->Session->write($guid, $validMemberIds);
+
+						$this->Nav->add('Approve All', 'members', 'uploadTsb', array($guid), 'positive');
+					} else {
+						$this->Session->setFlash('No new member payments in .csv.');
+						return $this->redirect(array('controller' => 'members', 'action' => 'index'));
+					}
+				} else {
+					// Invalid file
+					$this->Session->setFlash('That did not seem to be a valid bank .csv file');
+					return $this->redirect(array('controller' => 'members', 'action' => 'uploadTsb'));
+				}
+			}
+		} else {
+			// Guid exists, is it valid?
+			if ($this->Session->check($guid)) {
+				// Yup then grab the member ids
+				$validMemberIds = $this->Session->read($guid);
+				$preview = false;
+			} else {
+				// Invalid guid, redirect to upload
+				return $this->redirect(array('controller' => 'members', 'action' => 'uploadTsb'));
+			}
+		}
+
+		// If there are no valid members then just show the upload form
+		if (count($validMemberIds) <= 0) {
+			$this->set('memberList', null);
+		} else {
+			// Grab the member info, this might actually be the second time we're doing this if we've just uploaded.
+			$members = $this->Member->getMemberSummaryForMembers($validMemberIds, true);
+			$this->set('memberList', $members);
+
+			// If we're not previewing, they do the actual approval
+			if (!$preview) {
+				$flash = '';
+				// Actually approve the members
+				foreach ($members as $member) {
+					if ($this->__approveMember($member['id'])) {
+						$flash .= 'Successfully approved';
+					} else {
+						$flash .= 'Unable to approve';
+					}
+
+					$flash .= sprintf(' member %s %s\n', $member['firstname'], $member['surname']);
+				}
+
+				$this->Session->delete($guid);
+
+				$this->Session->setFlash($flash);
+				return $this->redirect(array('controller' => 'members', 'action' => 'index'));
+			}
+		}
+	}
+
+
 /**
  * Upload a .csv file of bank transactions and look for members to approve.
  *
@@ -1170,7 +1279,7 @@ class MembersController extends AppController {
 					});
 
 					// Ok so we have a list of payment refs, get the account id's from them
-					$accountIds = $this->Member->Account->getAccountIdsForRefs($payRefs);
+					$accountIds = $this->Member->Account->getAccountIdsForNatwestRefs($payRefs);
 					if ( is_array($accountIds) && count($accountIds) > 0) {
 						// Ok now we need the rest of the member info
 						$members = $this->Member->getMemberSummaryForAccountIds(false, $accountIds);

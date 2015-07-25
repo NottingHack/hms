@@ -77,7 +77,7 @@ class Account extends AppModel {
 		$safeChars = "2346789BCDFGHJKMPQRTVWXY";
 
 		// We prefix the ref with a string that lets people know it's us
-		$prefix = 'HSNOTTS';
+		$prefix = 'HSNTSB';
 
 		// Payment references can be up to 18 chars according to: http://www.bacs.co.uk/Bacs/Businesses/BacsDirectCredit/Receiving/Pages/PaymentReferenceInformation.aspx
 		$maxRefLength = 16;
@@ -153,6 +153,18 @@ class Account extends AppModel {
 			return array_values($this->find('list', array('conditions' => array('Account.payment_ref' => $paymentRefs))));
 		}
 
+		return array();
+	}
+	/**
+ * Get a list of account ids from a list of natwest payment refs
+ *
+ * @param array $paymentRefs An array of payment refs.
+ * @return array An array of account ids.
+ */
+	public function getAccountIdsForNatwestRefs($paymentRefs) {
+		if (is_array($paymentRefs)) {
+			return array_values($this->find('list', array('conditions' => array('Account.natwest_ref' => $paymentRefs))));
+		}
 		return array();
 	}
 }
