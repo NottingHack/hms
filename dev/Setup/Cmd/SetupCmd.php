@@ -47,7 +47,6 @@ $shortopts .= 'h:'; // Users handle
 $shortopts .= 'n:'; // Users firstname
 $shortopts .= 's:'; // Users surname
 $shortopts .= 'e:'; // Users e-mail
-$shortopts .= 'k';	// If present, use the 'proper' krb auth script instead of the dummy.
 $shortopts .= 'f';	// If present, set-up the tmp folders
 $shortopts .= 'v';	// If present, use development configs, settings and databases
 
@@ -57,7 +56,6 @@ if (is_array($options)) {
 	$setup = new Setup();
 
 	$setup->setCreateDatabase( parseBoolFromArray('d', $options) );
-	$setup->setUseRealKrb( parseBoolFromArray('k', $options) );
 	$setup->setSetupTempFolders( parseBoolFromArray('f', $options) );
 	$setup->setUseDevelopmentEnvironment( parseBoolFromArray('v', $options) );
 	$setup->setUserInfo(

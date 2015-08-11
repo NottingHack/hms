@@ -11,6 +11,14 @@
     }
 ?>
 
+<div class="search">
+<?php
+    echo $this->form->create("Member", array('action' => 'search', 'type' => 'GET'));
+    echo $this->form->input("query", array('label' => ''));
+    echo $this->form->end("Search"); 
+?>
+</div>
+
 <?php if(count($memberList) > 0): ?>
     <table>
         <tr>
