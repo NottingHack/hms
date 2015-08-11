@@ -38,7 +38,7 @@ class AppController extends Controller {
 
 	const VERSION_MAJOR = 0;
 	const VERSION_MINOR = 3;
-	const VERSION_BUILD = 6;
+	const VERSION_BUILD = 7;
 
 /**
  * List of helpers views rendered from this controller will have access to.
