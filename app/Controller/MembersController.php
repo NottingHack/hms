@@ -72,7 +72,7 @@ class MembersController extends AppController {
 			case 'emailMembersWithStatus':
 				return $memberIsMembershipAdmin;
 
-			case 'sendMembershipReminder':
+			case 'sendProspectiveMemberReminder':
 			case 'sendContactDetailsReminder':
 			case 'sendSoDetailsReminder':
 			case 'approveMember':
@@ -645,7 +645,7 @@ class MembersController extends AppController {
  *
  * @param int $id The id of the member to send the message to.
  */
-	public function sendMembershipReminder($id = null) {
+	public function sendProspectiveMemberReminder($id = null) {
 		if ($id != null) {
 			if ($this->__sendProspectiveMemberEmail($id)) {
 				$this->Session->setFlash('Member has been contacted');
@@ -1042,7 +1042,7 @@ class MembersController extends AppController {
 					array(
 						'title' => 'Send Membership Reminder',
 						'controller' => 'members',
-						'action' => 'sendMembershipReminder',
+						'action' => 'sendProspectiveMemberReminder',
 						'params' => array(
 							$memberId,
 						),
