@@ -1103,8 +1103,8 @@ class Member extends AppModel {
 			return null;
 		}
 
-		if ($memberStatus != Status::PRE_MEMBER_3 ) {
-			throw new InvalidStatusException( 'Member does not have status: ' . Status::PRE_MEMBER_3 );
+		if ($memberStatus != Status::PRE_MEMBER_3 &&  $memberStatus != Status::EX_MEMBER) {
+			throw new InvalidStatusException( 'Member does not have a valid status to approve them');
 		}
 
 		$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));

@@ -1205,7 +1205,7 @@ class MembersController extends AppController {
 
                                                // We only want members who we're waiting for payments from (Pre-Member 3)
                                                foreach ($members as $member) {
-                                                       if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3) {
+                                                       if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3 || Hash::get($member, 'status.id') == Status::EX_MEMBER) {
                                                                array_push(
                                                                        $validMemberIds,
                                                                        $member['id']

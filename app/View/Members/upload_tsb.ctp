@@ -20,6 +20,7 @@
 	<table>
         <tr>
 	        <th>Name</th>
+	        <th>Type</th>
 	        <th>Payment Ref</th>
 	    </tr>
 
@@ -27,6 +28,7 @@
 
 	    	<tr>
 	    		<td> <?php echo $this->Html->link($member['bestName'], array('controller' => 'members', 'action' => 'view', $member['id'])); ?> </td>
+	    		<td> <?php echo $member['status']['name']; ?></td>
 	    		<td> <?php echo $member['paymentRef']; ?> </td>
 	    	</tr>
 
