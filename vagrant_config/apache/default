@@ -11,6 +11,8 @@
                 AllowOverride All
              #   Order allow,deny
              #   allow from all
+
+             SetEnv CAKEPHP_DEBUG 2
         </Directory>
 
         ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
