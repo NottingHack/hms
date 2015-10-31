@@ -7,8 +7,7 @@ use Behat\Behat\Context\Step\When;
 use Behat\Behat\Event\ScenarioEvent;
 
 require_once ('KLogger.php');
-require_once ('PHPUnit/Autoload.php');
-require_once ('PHPUnit/Framework/Assert/Functions.php');
+require_once __DIR__.'/../../vendor/phpunit/phpunit/src/Framework/Assert/Functions.php';
 
 class HmsContext extends BehatContext {
 
