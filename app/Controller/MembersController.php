@@ -76,6 +76,7 @@ class MembersController extends AppController {
 			case 'sendContactDetailsReminder':
 			case 'sendSoDetailsReminder':
 			case 'approveMember':
+			case 'sendMembershipCompleteMail':
 			case 'index':
 			case 'listMembers':
 			case 'listMembersWithStatus':
@@ -482,13 +483,28 @@ class MembersController extends AppController {
 		return $this->redirect($this->referer());
 	}
 
+
+/**
+ * Send the 'membership complete' email to a member.
+ *
+ * @param int $id The id of the member to contact.
+ */
+	public function sendMembershipCompleteMail($id = null) {
+		if ($this->__sendMembershipCompleteMail($id)) {
+			$this->Session->setFlash('Member has been contacted');
+		} else {
+			$this->Session->setFlash('Unable to contact member');
+		}
+		return $this->redirect($this->referer());
+	}
+
 /**
  *
  * Send a "membership complete" e-mail to the member
  * @param int $id The id of the member to send to
  *
  */
-	private function _sendMembershipCompleteMail($id) {
+	private function __sendMembershipCompleteMail($id) {
 		$email = $this->Member->getEmailForMember($id);
 		if ($email) {
 
@@ -504,6 +520,12 @@ class MembersController extends AppController {
 					'wifiPass' => Configure::read('hms_access_wifi_password'),
 				)
 			);
+
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 
@@ -531,7 +553,7 @@ class MembersController extends AppController {
 				)
 			);
 
-			$this->_sendMembershipCompleteMail($id); // E-mail the member
+			$this->__sendMembershipCompleteMail($id); // E-mail the member
 
 			return true;
 		} else {
@@ -1110,6 +1132,17 @@ class MembersController extends AppController {
 						'title' => 'Send SO Details Reminder',
 						'controller' => 'members',
 						'action' => 'sendSoDetailsReminder',
+						'params' => array(
+							$memberId,
+						),
+					)
+				);
+
+				array_push($actions,
+					array(
+						'title' => 'Resend Welcome Email',
+						'controller' => 'members',
+						'action' => 'sendMembershipCompleteMail',
 						'params' => array(
 							$memberId,
 						),
