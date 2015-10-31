@@ -801,11 +801,11 @@ class Setup {
 				'list' => 'us8gz1v8rq',
 			),
 			'email' => array(
-				'from_address' => 'site@localhost',
-				'host' => 'localhost',
-				'port' => 25,
-				'username' => 'user',
-				'password' => 'hunter2',
+				'from_address' => 'hms-dev@nottinghack.org.uk',
+				'host' => 'mailtrap.io',
+				'port' => 2525,
+				'username' => '2536565eb232461fc',
+				'password' => 'd4b2263a5e18e4',
 			),
 		);
 
