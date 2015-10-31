@@ -1116,6 +1116,12 @@ class Member extends AppModel {
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
 
+		// actually, delete any existing pins first
+		if (!$this->Pin->deletePinForMember($memberId)) {
+			$dataSource->rollback();
+			return null;
+		}
+
 		if ( !$this->Pin->createNewRecord($memberId) ) {
 			$dataSource->rollback();
 			return null;

@@ -146,4 +146,23 @@ class Pin extends AppModel {
 		}
 		return false;
 	}
+
+/**
+ * Deletes all pins for a member
+ *
+ * @param int $memberId The id of the member to delete pins for.
+ * @return bool True if deletion was successful, false otherwise.
+ */
+	public function deletePinForMember($memberId) {
+		$pins = $this->find('all', array('conditions' => array('Pin.member_id' => $memberId)));
+		$return = true;
+		foreach ($pins as $pin) {
+			if (!$this->delete($pin['Pin']['pin_id'], false)) {
+				$return = false;
+			}
+		}
+
+		return $return;
+	}
+
 }

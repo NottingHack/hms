@@ -488,14 +488,22 @@ class MembersController extends AppController {
  * @param int $id The id of the member to send to
  *
  */
-	private function _sendMembershipCompleteMail($id) {
+	private function _sendMembershipCompleteMail($id, $status) {
 		$email = $this->Member->getEmailForMember($id);
 		if ($email) {
 
+			if ($status['id'] == Status::PRE_MEMBER_3) {
+				$subject = 'Membership Complete';
+				$template = 'to_member_access_details';
+			} elseif ($status['id'] == Status::EX_MEMBER) {
+				$subject = 'Your Membership Has Been Reinstated';
+				$template = 'to_member_access_details_reinstated';
+			}
+
 			$this->_sendEmail(
 				$email,
-				'Membership Complete',
-				'to_member_access_details',
+				$subject,
+				$template,
 				array(
 					'manLink' => Configure::read('hms_help_manual_url'),
 					'outerDoorCode' => Configure::read('hms_access_street_door'),
@@ -512,17 +520,24 @@ class MembersController extends AppController {
  *
  * @param int $id The id of the member who we are approving.
  */
-	private function __approveMember($id) {
+	private function __approveMember($id, $status) {
 		$adminId = $this->_getLoggedInMemberId();
 		$memberDetails = $this->Member->approveMember($id, $adminId);
 		if ($memberDetails) {
 			$adminDetails = $this->Member->getMemberSummaryForMember($adminId);
 
+			if ($status['id'] == Status::PRE_MEMBER_3) {
+				$subject = 'Member Approved';
+				$template = 'notify_admins_member_approved';
+			} elseif ($status['id'] == Status::EX_MEMBER) {
+				$subject = 'Member Reinstated';
+				$template = 'notify_admins_member_reinstated';
+			}
 			// Notify all the member admins
 			$this->_sendEmail(
 				Configure::read('hms_membership_email'),
-				'Member Approved',
-				'notify_admins_member_approved',
+				$subject,
+				$template,
 				array(
 					'memberName' => sprintf('%s %s', $memberDetails['firstname'], $memberDetails['surname']),
 					'memberEmail' => $memberDetails['email'],
@@ -531,7 +546,7 @@ class MembersController extends AppController {
 				)
 			);
 
-			$this->_sendMembershipCompleteMail($id); // E-mail the member
+			$this->_sendMembershipCompleteMail($id, $status); // E-mail the member
 
 			return true;
 		} else {
@@ -1256,7 +1271,7 @@ class MembersController extends AppController {
                                $flash = '';
                                // Actually approve the members
                                foreach ($members as $member) {
-                                       if ($this->__approveMember($member['id'])) {
+                                       if ($this->__approveMember($member['id'], $member['status'])) {
                                                $flash .= 'Successfully approved';
                                        } else {
                                                $flash .= 'Unable to approve';
