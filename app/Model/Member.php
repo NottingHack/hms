@@ -67,6 +67,9 @@ class Member extends AppModel {
 		'Pin' => array(
 			'className' => 'Pin',
 		),
+		'RfidTag' => array(
+			'className' => 'RfidTag',
+		),
 	);
 
 /**
@@ -539,6 +542,21 @@ class Member extends AppModel {
 			}
 		}
 
+		$rfidtags = array();
+		if (array_key_exists('RfidTag', $memberInfo)) {
+			foreach ($memberInfo['RfidTag'] as $tag) {
+				array_push($rfidtags,
+					array(
+						'serial' => Hash::get($tag, 'rfid_serial'),
+						'state' => Hash::get($tag, 'state'),
+						'last_used' => Hash::get($tag, 'last_used'),
+						'name' => Hash::get($tag, 'friendly_name'),
+					)
+				);
+			}
+		}
+
+
 		$paymentRef = Hash::get($memberInfo, 'Account.payment_ref');
 		$address = array(
 			'part1' => Hash::get($memberInfo, 'Member.address_1'),
@@ -576,6 +594,7 @@ class Member extends AppModel {
 			'balance' => $balance,
 			'creditLimit' => $creditLimit,
 			'pin' => $pins,
+			'rfidtag' => $rfidtags,
 			'address' => $address,
 			'contactNumber' => $contactNumber,
 			'lastStatusUpdate' => $lastStatusUpdate,
