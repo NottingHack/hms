@@ -1112,19 +1112,21 @@ class Member extends AppModel {
 			return null;
 		}
 
-		// Create a pin first..
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
-
-		// actually, delete any existing pins first
-		if (!$this->Pin->deletePinForMember($memberId)) {
-			$dataSource->rollback();
-			return null;
+		// has this member already got a pin?
+		$createPin = true;
+		if (count($this->Pin->find('first', array('conditions' => array('Pin.member_id' => $memberId)))) > 0) {
+			$createPin = false;
 		}
 
-		if ( !$this->Pin->createNewRecord($memberId) ) {
-			$dataSource->rollback();
-			return null;
+		// create one if not
+		if ($createPin === true) {
+			$dataSource = $this->getDataSource();
+			$dataSource->begin();
+
+			if ( !$this->Pin->createNewRecord($memberId) ) {
+				$dataSource->rollback();
+				return null;
+			}
 		}
 
 		$hardcodedMemberData = array(
@@ -1144,14 +1146,17 @@ class Member extends AppModel {
 				'unlock_text',
 				'credit_limit',
 				'join_date'
-			),
-			'Pin' => array(
+			)
+		);
+
+		if ($createPin == true) {
+			$fieldsToSave['Pin'] = array(
 				'unlock_text',
 				'pin',
 				'state',
 				'member_id'
-			)
-		);
+			);
+		}
 
 		if ( is_array($this->__saveMemberData($dataToSave, $fieldsToSave, $adminId)) ) {
 			$approveDetails = $this->getApproveDetails($memberId);
