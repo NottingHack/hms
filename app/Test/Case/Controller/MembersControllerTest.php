@@ -99,7 +99,7 @@
 				array( 'name' => 'sendContactDetailsReminder', 		'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
 				array( 'name' => 'sendSoDetailsReminder', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
 				array( 'name' => 'addExistingMember', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'uploadCsv', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'uploadTsb', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 
 				array( 'name' => 'changePassword', 					'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
 				array( 'name' => 'changePassword', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
@@ -2544,6 +2544,7 @@
 				'Account' => array(
 				    'account_id' => '2',
 				    'payment_ref' => 'HSTSBKFK2R62GQW6',
+                    'natwest_ref' => 'HSNOTTSKFK2R62GQ',
 				),
 				'Pin' => array(
 					0 => array(
@@ -2610,7 +2611,8 @@
 				),
 				'Account' => array(
 				    'account_id' => '56',
-				    'payment_ref' => 'INEEDNOPAYMENTREF',
+                    'payment_ref' => 'INEEDNOPAYMENTREF',
+                    'natwest_ref' => '',
 				),
 				'Pin' => array(
 					0 => array(
@@ -2691,7 +2693,8 @@
 				),
 				'Account' => array(
 				    'account_id' => '2',
-				    'payment_ref' => 'HSTSBKFK2R62GQW6',
+                    'payment_ref' => 'HSTSBKFK2R62GQW6',
+                    'natwest_ref' => 'HSNOTTSKFK2R62GQ',
 				),
 				'Pin' => array(
 					0 => array(
@@ -2848,6 +2851,7 @@
 				'Account' => array(
 				    'account_id' => '4',
 				    'payment_ref' => 'HSTSBKFCV3TFFDGX',
+                    'natwest_ref' => 'HSNOTTSKFCV3TFFD',
 				),
 				'Pin' => array(
 					0 => array(
@@ -3005,7 +3009,8 @@
 				),
 				'Account' => array(
 				    'account_id' => '4',
-				    'payment_ref' => 'HSTSBKFCV3TFFDGX',
+                    'payment_ref' => 'HSTSBKFCV3TFFDGX',
+                    'natwest_ref' => 'HSNOTTSKFCV3TFFD',
 				),
 				'Pin' => array(
 					0 => array(
@@ -3145,8 +3150,9 @@
 				    'title' => 'Current Member',
 				),
 				'Account' => array(
-				    'account_id' => '4',
-				    'payment_ref' => 'HSTSBKFCV3TFFDGX',
+			  	    'account_id' => '4',
+                    'payment_ref' => 'HSTSBKFCV3TFFDGX',
+                    'natwest_ref' => 'HSNOTTSKFCV3TFFD',
 				),
 				'Pin' => array(
 					0 => array(
@@ -3291,7 +3297,8 @@
 				),
 				'Account' => array(
 				    'account_id' => '3',
-				    'payment_ref' => 'HSTSBKFYT7H4CW3G',
+                    'payment_ref' => 'HSTSBKFYT7H4CW3G',
+                    'natwest_ref' => 'HSNOTTSKFYT7H4CW',
 				),
 				'Pin' => array(
 					0 => array(
@@ -3444,6 +3451,7 @@
 				),
 				'Account' => array(
 				    'account_id' => '9',
+                    'natwest_ref' => '',
 				),
 				'Pin' => array(
 					0 => array(
@@ -3542,7 +3550,8 @@
 				),
 				'Account' => array(
 				    'account_id' => '1',
-				    'payment_ref' => 'HSTSBKFYT7H4CW3G',
+                    'payment_ref' => 'HSTSBKFYT7H4CW3G',
+                    'natwest_ref' => 'HSNOTTSKF6762KC8',
 				),
 				'Pin' => array(
 					0 => array(
@@ -3654,7 +3663,8 @@
 				),
 				'Account' => array(
 				    'account_id' => '1',
-				    'payment_ref' => 'HSTSBKF6762KC8JD',
+                    'payment_ref' => 'HSTSBKF6762KC8JD',
+                    'natwest_ref' => 'HSNOTTSKF6762KC8',
 				),
 				'Pin' => array(
 					0 => array(
@@ -3902,7 +3912,7 @@
 			$this->_runTestUploadCsv($contents, $guid);
 
 			$this->assertArrayHasKey('Location', $this->headers);
-			$this->assertContains('/members/uploadCsv', $this->headers['Location']);
+			$this->assertContains('/members/uploadTsb', $this->headers['Location']);
 		}
 
 		public function testUploadCsvDudFile()
@@ -3915,7 +3925,7 @@
 			$this->_runTestUploadCsv($contents, $guid);
 
 			$this->assertArrayHasKey('Location', $this->headers);
-			$this->assertContains('/members/uploadCsv', $this->headers['Location']);
+			$this->assertContains('/members/uploadTsb', $this->headers['Location']);
 		}
 
 		public function testUploadCsvValidFileNoMembers()
@@ -3973,7 +3983,7 @@
 			$generatedGuid = String::uuid();
 			$this->_setupTestUploadCsv();
 			$this->controller->Session->expects($this->never())->method('setFlash');
-			$this->controller->Nav->expects($this->once())->method('add')->with('Approve All', 'members', 'uploadCsv', array($generatedGuid), 'positive');
+			$this->controller->Nav->expects($this->once())->method('add')->with('Approve All', 'members', 'uploadTsb', array($generatedGuid), 'positive');
 			$this->controller->expects($this->once())->method('getMemberIdSessionKey')->will($this->returnValue($generatedGuid));
 
 			$this->_runTestUploadCsv($contents, $guid);
@@ -4032,7 +4042,7 @@
 
 		private function _runTestUploadCsv($fileContents, $guid)
 		{
-			$action = 'members/uploadCsv';
+			$action = 'members/uploadTsb';
 			if($guid != null)
 			{
 				$action .= '/' . $guid;
