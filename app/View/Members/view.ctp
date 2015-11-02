@@ -111,7 +111,29 @@
 					echo $pin['pin'] . '<br/>';	
 				}
 			?>
-		</dd>
+		</dd>	
+	<?php endif; ?>
+
+    <?php if( isset($member['rfidtag']) ): ?>
+	    <dt>
+	    	Registered Cards
+	    </dt>
+	    <dd>
+	    	<?php
+	    	    	  
+	    	  $msg = ((count($member['rfidtag']) == 1) ? 'card' : 'cards');
+
+	    	  echo $this->Html->link(
+	    	  	count($member['rfidtag']) . ' '.  $msg . ' registered', 
+	    	  	array(
+	    	  		'controller' => 'rfidtags',
+	    	  		'action' => 'view',
+	    	  		$member['id']
+	    	  	),
+	    	  	array('escape' => false)
+	    	  );
+	    	?>
+	    </dd>
 	<?php endif; ?>
 
 	<?php if(isset($member['balance'])): ?>
