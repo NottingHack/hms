@@ -50,15 +50,9 @@ class RfidTagsController extends AppController {
  * @link http://api20.cakephp.org/class/cake-request
  */
 	public function isAuthorized($user, $request) {
+		// allows full access to see everything
 		if (parent::isAuthorized($user, $request)) {
 			return true;
-		}
-
-		$authGranted = false;
-
-		// Only history page implemented so far
-		if ($request->params['action'] != 'view') {
-			return false;
 		}
 
 		// Get the member_id details have been requested for & the logged in users member_id
@@ -69,15 +63,19 @@ class RfidTagsController extends AppController {
 			$reqMemberId = $logMemberId;
 		}
 
-		// Allow everyone to view their own transaction history
-		if ($reqMemberId == $logMemberId) {
-			$authGranted = true;
-		} elseif ($this->Member->GroupsMember->isMemberInGroup( $logMemberId, Group::MEMBERSHIP_ADMIN )) {
-			// Only allow 'Full Access' (via parent::isAuthorized) and 'Membership Admins' to view the card details of others
-			$authGranted = true;
-		}
+		$memberAdmin = $this->Member->GroupsMember->isMemberInGroup( $logMemberId, Group::MEMBERSHIP_ADMIN);
 
-		return $authGranted;
+		switch ($request->action) {
+			case 'view':
+				// Allow everyone to view their own transaction history
+				if ($reqMemberId == $logMemberId or $memberAdmin) {
+					return true;
+				}
+				return false;
+			case 'edit':
+				// we'll sort this out later
+				return true;
+		}
 	}
 
 /**
