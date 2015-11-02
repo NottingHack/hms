@@ -85,33 +85,33 @@
 		{
 			// Need fake requests for all the functions we need to test
 			$fakeRequestDetails = array(
-				array( 'name' => 'index', 							'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'listMembers', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'listMembersWithStatus', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'emailMembersWithStatus', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'search', 							'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'revokeMembership', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'reinstateMembership', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'acceptDetails', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'rejectDetails', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'approveMember', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'sendMembershipReminder', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'sendContactDetailsReminder', 		'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'sendSoDetailsReminder', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'addExistingMember', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
-				array( 'name' => 'uploadTsb', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'index', 								'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'listMembers', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'listMembersWithStatus', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'emailMembersWithStatus', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'search', 								'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'revokeMembership', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'reinstateMembership', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'acceptDetails', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'rejectDetails', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'approveMember', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'sendProspectiveMemberReminder',		'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'sendContactDetailsReminder', 			'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'sendSoDetailsReminder', 				'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'addExistingMember', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'uploadTsb', 							'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 
-				array( 'name' => 'changePassword', 					'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'changePassword', 					'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'changePassword', 						'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'changePassword', 						'params' => array(), 			'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 
-				array( 'name' => 'view', 							'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'view', 							'params' => array('otherId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'view', 								'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'view', 								'params' => array('otherId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'membershipTeamMember' ) ),
 
-				array( 'name' => 'edit', 							'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'edit', 							'params' => array('otherId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
+				array( 'name' => 'edit', 								'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'edit', 								'params' => array('otherId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember' ) ),
 
-				array( 'name' => 'setupDetails', 					'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
-				array( 'name' => 'setupDetails', 					'params' => array('otherId'), 	'access' => array( 'fullAccessMember' ) ),
+				array( 'name' => 'setupDetails', 						'params' => array('ourId'), 	'access' => array( 'fullAccessMember', 'memberAdminMember', 'normalMember', 'membershipTeamMember' ) ),
+				array( 'name' => 'setupDetails', 						'params' => array('otherId'), 	'access' => array( 'fullAccessMember' ) ),
 			);
 
 			$this->_testIsAuthorized($this->MembersController, $fakeRequestDetails);
@@ -1546,7 +1546,7 @@
 			$this->assertContains('/pages/forgot_password_error', $this->headers['Location'], 'Redirect to forgot password error view did not occur.' );
 		}
 
-		public function testSendMembershipReminderInvalidData()
+		public function testsendProspectiveMemberReminderInvalidData()
 		{
 			$mockEmail = $this->_mockMemberEmail();
 
@@ -1560,10 +1560,10 @@
 			$mockEmail->expects($this->never())->method('viewVars');
 			$mockEmail->expects($this->never())->method('send');
 
-			$this->testAction('/members/sendMembershipReminder/sdfsfgresr');
+			$this->testAction('/members/sendProspectiveMemberReminder/sdfsfgresr');
 		}
 
-		public function testSendMembershipReminder()
+		public function testsendProspectiveMemberReminder()
 		{
 			$mockEmail = $this->_mockMemberEmail();
 
@@ -1590,7 +1590,7 @@
 			$expectedIdsAndSubjects = array(
 				7 => 'Welcome to Nottingham Hackspace',
 			);
-			$this->_testRecordedEmailAction('/members/sendMembershipReminder/7', null, $expectedIdsAndSubjects);
+			$this->_testRecordedEmailAction('/members/sendProspectiveMemberReminder/7', null, $expectedIdsAndSubjects);
 		}
 
 		public function testSendSoDetailsReminderInvalidData()
@@ -1896,12 +1896,13 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(5))->method('add');
+			$this->controller->Nav->expects($this->exactly(6))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
 			$this->controller->Nav->expects($this->at(4))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(4));
+			$this->controller->Nav->expects($this->at(5))->method('add')->with('Resend Welcome Email', 'members', 'sendMembershipCompleteMail', array(4));
 
 			// Should not redirect, and should populate
 			$this->testAction('members/view/4');
@@ -1988,15 +1989,16 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(5))->method('add');
+			$this->controller->Nav->expects($this->exactly(6))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(3));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(3));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(3));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(3));
 			$this->controller->Nav->expects($this->at(4))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(3));
+			$this->controller->Nav->expects($this->at(5))->method('add')->with('Resend Welcome Email', 'members', 'sendMembershipCompleteMail', array(3));
 
 			// Should not redirect, and should populate
-			$this->testAction('members/view/3');
+ 				$this->testAction('members/view/3');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
 			$this->_testMailingListView(array('us8gz1v8rq' => true, '455de2ac56' => false));
@@ -2069,13 +2071,14 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(5))->method('add');
+			$this->controller->Nav->expects($this->exactly(6))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
 			$this->controller->Nav->expects($this->at(4))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(4));
-			
+			$this->controller->Nav->expects($this->at(5))->method('add')->with('Resend Welcome Email', 'members', 'sendMembershipCompleteMail', array(4));
+
 			// Should not redirect, and should populate
 			$this->testAction('members/view/4');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
@@ -2161,12 +2164,13 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(4))->method('add');
+			$this->controller->Nav->expects($this->exactly(5))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(3));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(3));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(3));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(3));
-			
+			$this->controller->Nav->expects($this->at(4))->method('add')->with('Resend Welcome Email', 'members', 'sendMembershipCompleteMail', array(3));
+
 			// Should not redirect, and should populate
 			$this->testAction('members/view/3');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
@@ -2220,7 +2224,7 @@
 			$this->controller->Nav->expects($this->exactly(3))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(7));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(7));
-			$this->controller->Nav->expects($this->at(2))->method('add')->with('Send Membership Reminder', 'members', 'sendMembershipReminder', array(7));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Send Membership Reminder', 'members', 'sendProspectiveMemberReminder', array(7));
 
 			// Should not redirect, and should populate
 			$this->testAction('members/view/7');
@@ -2351,77 +2355,37 @@
 				),
 			));
 
-			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(4));
+			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(13));
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(5))->method('add');
-			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
-			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
-			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
-			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
-			$this->controller->Nav->expects($this->at(4))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(4));
+			$this->controller->Nav->expects($this->exactly(4))->method('add');
+			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(13));
+			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(13));
+			$this->controller->Nav->expects($this->at(2))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(13));
+			$this->controller->Nav->expects($this->at(3))->method('add')->with('Approve Member', 'members', 'approveMember', array(13));
 			
 			// Should not redirect, and should populate
-			$this->testAction('members/view/4');
+			$this->testAction('members/view/13');
 			$this->assertArrayNotHasKey( 'Location', $this->headers, 'Redirect has occurred.' );
 			$this->assertIdentical( count($this->vars), 2, 'Unexpected number of view values.' );
-			$this->_testMailingListView(array('us8gz1v8rq' => true, '455de2ac56' => false));
+			$this->_testMailingListView(array('us8gz1v8rq' => false, '455de2ac56' => true));
 
 			$expectedMemberInfo = array(
-				'id' => '4',
-				'bestName' => 'Kelly Savala',
-				'firstname' => 'Kelly',
-				'surname' => 'Savala',
-				'username' => 'huskycolossus',
-				'email' => 'k.savala@yahoo.co.uk',
-				'joinDate' => '2010-09-22',
-				'unlockText' => 'Hey Kelly',
-				'balance' => '-5649',
-				'creditLimit' => '5000',
-				'paymentRef' => 'HSTSBKFYT7H4CW3G',
+				'id' => '13',
+				'bestName' => 'Ryan Miles',
+				'firstname' => 'Ryan',
+				'surname' => 'Miles',
+				'username' => 'Samer1955',
+				'email' => 'RyanMiles@dayrep.com',
+				'paymentRef' => 'HSTSBKFFGXWGKF48',
 				'address' => array(
-					'part1' => '8 Elm Close',
-					'part2' => 'Tetsworth',
-					'city' => 'Thame',
-					'postcode' => 'OX9 7AP',
+					'part1' => '86 Prince Consort Road',
+					'part2' => '',
+					'city' => 'Kempsey',
+					'postcode' => 'WR5 8WJ',
 				),
-				'contactNumber' => '079 0644 8720',
-				'groups' => array(
-					0 => array(
-						'id' => '2',
-						'description' => 'Current Members',
-					),
-					1 => array(
-						'id' => '4',
-						'description' => 'Gatekeeper Admin',
-					),
-				),
-				'status' => array(
-					'id' => '5',
-					'name' => 'Current Member',
-				),
-				'pin' => array(
-					0 => array(
-						'id' => 4,
-						'pin' => '5436',
-						'state' => 30,
-					)
-				),
-				'lastStatusUpdate' => array(
-					'id' => '4',
-					'by' => '5',
-					'from' => '4',
-					'to' => '5',
-					'at' => '2012-12-17 19:19:59',
-					'by_username' => 'chollertonbanker',
-				),
-				'lastEmail' => array(
-					'id' => '4',
-					'member_id' => '4',
-					'subject' => 'Test email 2',
-					'timestamp' => '2013-06-05 13:51:04'
-				)
+				'contactNumber' => '078 5295 7976',
 			);
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );

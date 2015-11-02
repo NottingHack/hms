@@ -72,10 +72,11 @@ class MembersController extends AppController {
 			case 'emailMembersWithStatus':
 				return $memberIsMembershipAdmin;
 
-			case 'sendMembershipReminder':
+			case 'sendProspectiveMemberReminder':
 			case 'sendContactDetailsReminder':
 			case 'sendSoDetailsReminder':
 			case 'approveMember':
+			case 'sendMembershipCompleteMail':
 			case 'index':
 			case 'listMembers':
 			case 'listMembersWithStatus':
@@ -482,20 +483,50 @@ class MembersController extends AppController {
 		return $this->redirect($this->referer());
 	}
 
+
+/**
+ * Send the 'membership complete' email to a member.
+ *
+ * @param int $id The id of the member to contact.
+ */
+	public function sendMembershipCompleteMail($id = null) {
+		if ($this->__sendMembershipCompleteMail($id)) {
+			$this->Session->setFlash('Member has been contacted');
+		} else {
+			$this->Session->setFlash('Unable to contact member');
+		}
+		return $this->redirect($this->referer());
+	}
+
 /**
  *
  * Send a "membership complete" e-mail to the member
  * @param int $id The id of the member to send to
  *
  */
-	private function _sendMembershipCompleteMail($id) {
+	private function __sendMembershipCompleteMail($id, $status = null) {
+		if ($status === null) {
+			// If no status given, this is likely to be for a current member.  Fall back onto pre -> member
+			$status = array(
+				'id' => Status::PRE_MEMBER_3,
+				);
+		}
+
 		$email = $this->Member->getEmailForMember($id);
 		if ($email) {
 
+			if ($status['id'] == Status::PRE_MEMBER_3) {
+				$subject = 'Membership Complete';
+				$template = 'to_member_access_details';
+			} elseif ($status['id'] == Status::EX_MEMBER) {
+				$subject = 'Your Membership Has Been Reinstated';
+				$template = 'to_member_access_details_reinstated';
+			}
+
 			$this->_sendEmail(
 				$email,
-				'Membership Complete',
-				'to_member_access_details',
+				$subject,
+				$template,
 				array(
 					'manLink' => Configure::read('hms_help_manual_url'),
 					'outerDoorCode' => Configure::read('hms_access_street_door'),
@@ -504,6 +535,12 @@ class MembersController extends AppController {
 					'wifiPass' => Configure::read('hms_access_wifi_password'),
 				)
 			);
+
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 
@@ -512,17 +549,24 @@ class MembersController extends AppController {
  *
  * @param int $id The id of the member who we are approving.
  */
-	private function __approveMember($id) {
+	private function __approveMember($id, $status) {
 		$adminId = $this->_getLoggedInMemberId();
 		$memberDetails = $this->Member->approveMember($id, $adminId);
 		if ($memberDetails) {
 			$adminDetails = $this->Member->getMemberSummaryForMember($adminId);
 
+			if ($status['id'] == Status::PRE_MEMBER_3) {
+				$subject = 'Member Approved';
+				$template = 'notify_admins_member_approved';
+			} elseif ($status['id'] == Status::EX_MEMBER) {
+				$subject = 'Member Reinstated';
+				$template = 'notify_admins_member_reinstated';
+			}
 			// Notify all the member admins
 			$this->_sendEmail(
 				Configure::read('hms_membership_email'),
-				'Member Approved',
-				'notify_admins_member_approved',
+				$subject,
+				$template,
 				array(
 					'memberName' => sprintf('%s %s', $memberDetails['firstname'], $memberDetails['surname']),
 					'memberEmail' => $memberDetails['email'],
@@ -531,7 +575,7 @@ class MembersController extends AppController {
 				)
 			);
 
-			$this->_sendMembershipCompleteMail($id); // E-mail the member
+			$this->__sendMembershipCompleteMail($id, $status); // E-mail the member
 
 			return true;
 		} else {
@@ -623,7 +667,7 @@ class MembersController extends AppController {
  *
  * @param int $id The id of the member to send the message to.
  */
-	public function sendMembershipReminder($id = null) {
+	public function sendProspectiveMemberReminder($id = null) {
 		if ($id != null) {
 			if ($this->__sendProspectiveMemberEmail($id)) {
 				$this->Session->setFlash('Member has been contacted');
@@ -1020,7 +1064,7 @@ class MembersController extends AppController {
 					array(
 						'title' => 'Send Membership Reminder',
 						'controller' => 'members',
-						'action' => 'sendMembershipReminder',
+						'action' => 'sendProspectiveMemberReminder',
 						'params' => array(
 							$memberId,
 						),
@@ -1086,7 +1130,7 @@ class MembersController extends AppController {
 						'params' => array(
 							$memberId,
 						),
-						'class' => 'positive attention',
+						'class' => 'positive attention approve_member',
 					)
 				);
 
@@ -1110,6 +1154,17 @@ class MembersController extends AppController {
 						'title' => 'Send SO Details Reminder',
 						'controller' => 'members',
 						'action' => 'sendSoDetailsReminder',
+						'params' => array(
+							$memberId,
+						),
+					)
+				);
+
+				array_push($actions,
+					array(
+						'title' => 'Resend Welcome Email',
+						'controller' => 'members',
+						'action' => 'sendMembershipCompleteMail',
 						'params' => array(
 							$memberId,
 						),
@@ -1203,9 +1258,9 @@ class MembersController extends AppController {
 						// Ok now we need the rest of the member info
 						$members = $this->Member->getMemberSummaryForAccountIds(false, $accountIds);
 
-						// We only want members who we're waiting for payments from (Pre-Member 3)
+						// We only want members who we're waiting for payments from (Pre-Member 3 or Ex members)
 						foreach ($members as $member) {
-							if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3) {
+							if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3 || Hash::get($member, 'status.id') == Status::EX_MEMBER) {
 								array_push(
 									$validMemberIds,
 									$member['id']
@@ -1256,7 +1311,7 @@ class MembersController extends AppController {
 				$flash = '';
 				// Actually approve the members
 				foreach ($members as $member) {
-					if ($this->__approveMember($member['id'])) {
+					if ($this->__approveMember($member['id'], $member['status'])) {
 						$flash .= 'Successfully approved';
 					} else {
 						$flash .= 'Unable to approve';
@@ -1308,9 +1363,9 @@ class MembersController extends AppController {
 						// Ok now we need the rest of the member info
 						$members = $this->Member->getMemberSummaryForAccountIds(false, $accountIds);
 
-						// We only want members who we're waiting for payments from (Pre-Member 3)
+						// We only want members who we're waiting for payments from (Pre-Member 3 or Ex members)
 						foreach ($members as $member) {
-							if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3) {
+							if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3 || Hash::get($member, 'status.id') == Status::EX_MEMBER) {
 								array_push(
 									$validMemberIds,
 									$member['id']
@@ -1361,7 +1416,7 @@ class MembersController extends AppController {
 				$flash = '';
 				// Actually approve the members
 				foreach ($members as $member) {
-					if ($this->__approveMember($member['id'])) {
+					if ($this->__approveMember($member['id'], $member['status'])) {
 						$flash .= 'Successfully approved';
 					} else {
 						$flash .= 'Unable to approve';

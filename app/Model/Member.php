@@ -67,6 +67,9 @@ class Member extends AppModel {
 		'Pin' => array(
 			'className' => 'Pin',
 		),
+		'RfidTag' => array(
+			'className' => 'RfidTag',
+		),
 	);
 
 /**
@@ -539,6 +542,21 @@ class Member extends AppModel {
 			}
 		}
 
+		$rfidtags = array();
+		if (array_key_exists('RfidTag', $memberInfo)) {
+			foreach ($memberInfo['RfidTag'] as $tag) {
+				array_push($rfidtags,
+					array(
+						'serial' => Hash::get($tag, 'rfid_serial'),
+						'state' => Hash::get($tag, 'state'),
+						'last_used' => Hash::get($tag, 'last_used'),
+						'name' => Hash::get($tag, 'friendly_name'),
+					)
+				);
+			}
+		}
+
+
 		$paymentRef = Hash::get($memberInfo, 'Account.payment_ref');
 		$address = array(
 			'part1' => Hash::get($memberInfo, 'Member.address_1'),
@@ -576,6 +594,7 @@ class Member extends AppModel {
 			'balance' => $balance,
 			'creditLimit' => $creditLimit,
 			'pin' => $pins,
+			'rfidtag' => $rfidtags,
 			'address' => $address,
 			'contactNumber' => $contactNumber,
 			'lastStatusUpdate' => $lastStatusUpdate,
@@ -1103,8 +1122,8 @@ class Member extends AppModel {
 			return null;
 		}
 
-		if ($memberStatus != Status::PRE_MEMBER_3 ) {
-			throw new InvalidStatusException( 'Member does not have status: ' . Status::PRE_MEMBER_3 );
+		if ($memberStatus != Status::PRE_MEMBER_3 &&  $memberStatus != Status::EX_MEMBER) {
+			throw new InvalidStatusException( 'Member does not have a valid status to approve them');
 		}
 
 		$memberInfo = $this->find('first', array('conditions' => array('Member.member_id' => $memberId)));
@@ -1112,13 +1131,22 @@ class Member extends AppModel {
 			return null;
 		}
 
-		// Create a pin first..
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
 
-		if ( !$this->Pin->createNewRecord($memberId) ) {
-			$dataSource->rollback();
-			return null;
+		// has this member already got a pin?
+		$createPin = true;
+		if (count($this->Pin->find('first', array('conditions' => array('Pin.member_id' => $memberId)))) > 0) {
+			$createPin = false;
+		}
+
+		// create one if not
+		if ($createPin === true) {
+
+			if ( !$this->Pin->createNewRecord($memberId) ) {
+				$dataSource->rollback();
+				return null;
+			}
 		}
 
 		$hardcodedMemberData = array(
@@ -1138,14 +1166,17 @@ class Member extends AppModel {
 				'unlock_text',
 				'credit_limit',
 				'join_date'
-			),
-			'Pin' => array(
+			)
+		);
+
+		if ($createPin == true) {
+			$fieldsToSave['Pin'] = array(
 				'unlock_text',
 				'pin',
 				'state',
 				'member_id'
-			)
-		);
+			);
+		}
 
 		if ( is_array($this->__saveMemberData($dataToSave, $fieldsToSave, $adminId)) ) {
 			$approveDetails = $this->getApproveDetails($memberId);
