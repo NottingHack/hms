@@ -1101,7 +1101,7 @@ class MembersController extends AppController {
 						'params' => array(
 							$memberId,
 						),
-						'class' => 'positive attention',
+						'class' => 'positive attention approve_member',
 					)
 				);
 
