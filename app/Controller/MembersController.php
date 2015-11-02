@@ -1218,7 +1218,7 @@ class MembersController extends AppController {
                                                // Ok now we need the rest of the member info
                                                $members = $this->Member->getMemberSummaryForAccountIds(false, $accountIds);
 
-                                               // We only want members who we're waiting for payments from (Pre-Member 3)
+                                               // We only want members who we're waiting for payments from (Pre-Member 3 or Ex members)
                                                foreach ($members as $member) {
                                                        if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3 || Hash::get($member, 'status.id') == Status::EX_MEMBER) {
                                                                array_push(
@@ -1323,9 +1323,9 @@ class MembersController extends AppController {
 						// Ok now we need the rest of the member info
 						$members = $this->Member->getMemberSummaryForAccountIds(false, $accountIds);
 
-						// We only want members who we're waiting for payments from (Pre-Member 3)
+						// We only want members who we're waiting for payments from (Pre-Member 3 or Ex members)
 						foreach ($members as $member) {
-							if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3) {
+							if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3 || Hash::get($member, 'status.id') == Status::EX_MEMBER) {
 								array_push(
 									$validMemberIds,
 									$member['id']
@@ -1376,7 +1376,7 @@ class MembersController extends AppController {
 				$flash = '';
 				// Actually approve the members
 				foreach ($members as $member) {
-					if ($this->__approveMember($member['id'])) {
+					if ($this->__approveMember($member['id'], $member['status'])) {
 						$flash .= 'Successfully approved';
 					} else {
 						$flash .= 'Unable to approve';
