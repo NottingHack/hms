@@ -3,6 +3,7 @@
 <?php
 	$this->Html->addCrumb('Members', '/members');
 	$this->Html->addCrumb(isset($member['username']) ? $member['username'] : $member['email'], '/members/view/' . $member['id']);
+    $this->Html->script('listmembers', array('inline' => false));
 ?>
 
 
@@ -301,3 +302,7 @@
 	?>
 
 </dl>
+
+<div id="dialog-confirm" title="Are you sure?">
+  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Approve this member?</p>
+</div>
