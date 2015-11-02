@@ -1112,6 +1112,9 @@ class Member extends AppModel {
 			return null;
 		}
 
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
+
 		// has this member already got a pin?
 		$createPin = true;
 		if (count($this->Pin->find('first', array('conditions' => array('Pin.member_id' => $memberId)))) > 0) {
@@ -1120,8 +1123,6 @@ class Member extends AppModel {
 
 		// create one if not
 		if ($createPin === true) {
-			$dataSource = $this->getDataSource();
-			$dataSource->begin();
 
 			if ( !$this->Pin->createNewRecord($memberId) ) {
 				$dataSource->rollback();
