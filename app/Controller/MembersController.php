@@ -504,7 +504,14 @@ class MembersController extends AppController {
  * @param int $id The id of the member to send to
  *
  */
-	private function __sendMembershipCompleteMail($id) {
+	private function __sendMembershipCompleteMail($id, $status = null) {
+		if ($status === null) {
+			// If no status given, this is likely to be for a current member.  Fall back onto pre -> member
+			$status = array(
+				'id' => Status::PRE_MEMBER_3,
+				);
+		}
+
 		$email = $this->Member->getEmailForMember($id);
 		if ($email) {
 
@@ -568,7 +575,7 @@ class MembersController extends AppController {
 				)
 			);
 
-			$this->__sendMembershipCompleteMail($id); // E-mail the member
+			$this->__sendMembershipCompleteMail($id, $status); // E-mail the member
 
 			return true;
 		} else {
