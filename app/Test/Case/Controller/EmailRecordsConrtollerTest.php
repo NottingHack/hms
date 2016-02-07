@@ -8,7 +8,20 @@
 
 	class EmailRecordsControllerTest extends HmsControllerTestBase
 	{
-		public $fixtures = array( 'app.Member', 'app.Status', 'app.Group', 'app.GroupsMember', 'app.Account', 'app.Pin', 'app.StatusUpdate', 'app.ForgotPassword', 'app.MailingLists', 'app.MailingListSubscriptions', 'app.EmailRecord' );
+		public $fixtures = array(
+                                 'app.Member',
+                                 'app.Status',
+                                 'app.Group',
+                                 'app.GroupsMember',
+                                 'app.Account',
+                                 'app.Pin',
+                                 'app.StatusUpdate',
+                                 'app.ForgotPassword',
+                                 'app.MailingLists',
+                                 'app.MailingListSubscriptions',
+                                 'app.EmailRecord',
+                                 'app.RfidTag',                                 
+                                 );
 
 		public function setUp() 
         {

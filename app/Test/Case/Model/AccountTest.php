@@ -4,7 +4,13 @@
 
     class AccountTest extends CakeTestCase 
     {
-        public $fixtures = array( 'app.Account', 'app.Member', 'app.BankTransaction', 'app.Bank' );
+        public $fixtures = array(
+                                 'app.Account',
+                                 'app.Member',
+                                 'app.RfidTag',
+                                 'app.BankTransaction',
+                                 'app.Bank',
+                                 );
 
         public function setUp() 
         {
