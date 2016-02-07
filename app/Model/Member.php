@@ -484,6 +484,12 @@ class Member extends AppModel {
 					[id] => pin id
 					[pin] => pin number
 					[statee] => pin state (see constance defined in Pin.php)
+            [rfidtag] =>
+                [n] =>
+                    [serial] => rfid_serial
+                    [state] => state (see constance deined in RfidTag.php
+                    [last_used] => last_used
+                    [name] => friendly_name
 			[paymentRef] => member payment ref
 			[address] =>
 				[part1] => member address part 1

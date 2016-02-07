@@ -1955,6 +1955,20 @@
 						'state' => 30,
 					)
 				),
+                'rfidtag' => array(
+                    0 => array(
+                        'serial' => '1846700113',
+                        'state' => '10',
+                        'last_used' => '2015-11-28 01:48:45',
+                        'name' => 'White one',
+                    ),
+                    1 => array(
+                        'serial' => '158317848',
+                        'state' => '20',
+                        'last_used' => '2016-01-14 11:27:42',
+                        'name' => 'Lost',
+                    ),
+                ),
 				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'address' => array(
 					'part1' => '8 Elm Close',
@@ -2044,6 +2058,14 @@
 						'state' => 30,
 					)
 				),
+                'rfidtag' => array(
+                    0 => array(
+                        'serial' => '178100790',
+                        'state' => '10',
+                        'last_used' => '2015-12-19 01:32:14',
+                        'name' => '',
+                    )
+                ),
 				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'lastStatusUpdate' => array(
 					'id' => '3',
@@ -2130,6 +2152,20 @@
 						'state' => 30,
 					)
 				),
+                'rfidtag' => array(
+                    0 => array(
+                        'serial' => '1846700113',
+                        'state' => '10',
+                        'last_used' => '2015-11-28 01:48:45',
+                        'name' => 'White one',
+                    ),
+                    1 => array(
+                        'serial' => '158317848',
+                        'state' => '20',
+                        'last_used' => '2016-01-14 11:27:42',
+                        'name' => 'Lost',
+                    ),
+                ),
 				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'address' => array(
 					'part1' => '8 Elm Close',
@@ -2201,6 +2237,14 @@
 				'unlockText' => 'Sup Guy',
 				'balance' => '-985',
 				'creditLimit' => '5000',
+                'rfidtag' => array(
+                    0 => array(
+                        'serial' => '178100790',
+                        'state' => '10',
+                        'last_used' => '2015-12-19 01:32:14',
+                        'name' => '',
+                    )
+                ),
 				'paymentRef' => 'HSTSBKFYT7H4CW3G',
 				'address' => array(
 					'part1' => '4 Fraser Crescent',
@@ -2442,6 +2486,14 @@
 				'unlockText' => 'Welcome Annabelle',
 				'balance' => '0',
 				'creditLimit' => '5000',
+                'rfidtag' => array(
+                    0 => array(
+                        'serial' => '1727513448',
+                        'state' => '10',
+                        'last_used' => '2015-12-10 00:48:41',
+                        'name' => 'Mango',
+                    )
+                ),
 				'address' => array(
 					'part1' => '1 Saint Paul\'s Church Yard',
 					'part2' => 'The City',
@@ -2486,6 +2538,14 @@
 				'unlockText' => 'Welcome Annabelle',
 				'balance' => '0',
 				'creditLimit' => '5000',
+                'rfidtag' => array(
+                    0 => array(
+                        'serial' => '1727513448',
+                        'state' => '10',
+                        'last_used' => '2015-12-10 00:48:41',
+                        'name' => 'Mango',
+                    )
+                ),
 				'address' => array(
 					'part1' => '1 Saint Paul\'s Church Yard',
 					'part2' => 'The City',
@@ -2533,6 +2593,15 @@
 						'member_id' => '2',
 					),
 				),
+                'RfidTag' => array(
+                    0 => array(
+                        'member_id' => '2',
+                        'rfid_serial' => '1727513448',
+                        'state' => '10',
+                        'last_used' => '2015-12-10 00:48:41',
+                        'friendly_name' => 'Mango',
+                    )
+                ),
 				'StatusUpdate' => array(
 				),
 				'Group' => array(
@@ -2636,6 +2705,14 @@
 				'unlockText' => 'Welcome Annabelle',
 				'balance' => '0',
 				'creditLimit' => '5000',
+                'rfidtag' => array(
+                    0 => array(
+                        'serial' => '1727513448',
+                        'state' => '10',
+                        'last_used' => '2015-12-10 00:48:41',
+                        'name' => 'Mango',
+                    )
+                ),
 				'address' => array(
 					'part1' => '1 Saint Paul\'s Church Yard',
 					'part2' => 'The City',
@@ -2683,6 +2760,15 @@
 						'member_id' => '2',
 					),
 				),
+                'RfidTag' => array(
+                    0 => array(
+                        'member_id' => '2',
+                        'rfid_serial' => '1727513448',
+                        'state' => '10',
+                        'last_used' => '2015-12-10 00:48:41',
+                        'friendly_name' => 'Mango',
+                    )
+                ),
 				'StatusUpdate' => array(
 				),
 				'Group' => array(
@@ -2778,6 +2864,20 @@
 						'state' => 30,
 					)
 				),
+                'rfidtag' => array(
+                    0 => array(
+                        'serial' => '1846700113',
+                        'state' => '10',
+                        'last_used' => '2015-11-28 01:48:45',
+                        'name' => 'White one',
+                    ),
+                    1 => array(
+                        'serial' => '158317848',
+                        'state' => '20',
+                        'last_used' => '2016-01-14 11:27:42',
+                        'name' => 'Lost',
+                    ),
+                ),
 				'groups' => array(
 					0 => array(
 						'id' => '2',
@@ -2840,6 +2940,22 @@
 						'member_id' => '4',
 					),
 				),
+                'RfidTag' => array(
+                    0 => array(
+                        'member_id' => '4',
+                        'rfid_serial' => '1846700113',
+                        'state' => '10',
+                        'last_used' => '2015-11-28 01:48:45',
+                        'friendly_name' => 'White one',
+                    ),
+                    1 => array(
+                        'member_id' => '4',
+                        'rfid_serial' => '158317848',
+                        'state' => '20',
+                        'last_used' => '2016-01-14 11:27:42',
+                        'friendly_name' => 'Lost',
+                    ),
+                ),
 				'StatusUpdate' => array(
 					0 => array(
 						'id' => '2',
@@ -2945,6 +3061,14 @@
 						'state' => '30',
 					)
 				),
+                'rfidtag' => array(
+                    0 => array(
+                        'serial' => '1727513448',
+                        'state' => '10',
+                        'last_used' => '2015-12-10 00:48:41',
+                        'name' => 'Mango',
+                    )
+                ),
 				'groups' => array(
 					0 => array(
 						'id' => '2',
@@ -2999,6 +3123,15 @@
 						'member_id' => '2',
 					),
 				),
+                'RfidTag' => array(
+                    0 => array(
+                        'member_id' => '2',
+                        'rfid_serial' => '1727513448',
+                        'state' => '10',
+                        'last_used' => '2015-12-10 00:48:41',
+                        'friendly_name' => 'Mango',
+                    )
+                ),
 				'StatusUpdate' => array(
 				),
 				'Group' => array(
@@ -3141,6 +3274,8 @@
 						'member_id' => '5',
 					),
 				),
+                'RfidTag' => array(
+                ),
 				'StatusUpdate' => array(
 				),
 				'Group' => array(
@@ -3229,6 +3364,14 @@
 						'state' => '30',
 					)
 				),
+                'rfidtag' => array(
+                    0 => array(
+                        'serial' => '178100790',
+                        'state' => '10',
+                        'last_used' => '2015-12-19 01:32:14',
+                        'name' => '',
+                    )
+                ),
 				'groups' => array(
 					0 => array(
 						'id' => '2',
@@ -3287,6 +3430,15 @@
 						'member_id' => '3',
 					),
 				),
+                'RfidTag' => array(
+                    0 => array(
+                        'member_id' => '3',
+                        'rfid_serial' => '178100790',
+                        'state' => '10',
+                        'last_used' => '2015-12-19 01:32:14',
+                        'friendly_name' => '',
+                    )
+                ),
 				'StatusUpdate' => array(
 					0 => array(
 						'id' => '3',
@@ -3383,6 +3535,14 @@
 						'state' => '30',
 					)
 				),
+                'rfidtag' => array(
+                    0 => array(
+                        'serial' => '178100790',
+                        'state' => '10',
+                        'last_used' => '2015-12-19 01:32:14',
+                        'name' => '',
+                    )
+                ),
 				'groups' => array(
 					0 => array(
 						'id' => '2',
@@ -3440,6 +3600,15 @@
 						'member_id' => '3',
 					),
 				),
+                'RfidTag' => array(
+                    0 => array(
+                        'member_id' => '3',
+                        'rfid_serial' => '178100790',
+                        'state' => '10',
+                        'last_used' => '2015-12-19 01:32:14',
+                        'friendly_name' => '',
+                    )
+                ),
 				'StatusUpdate' => array(
 					0 => array(
 						'id' => '3',
@@ -3595,6 +3764,14 @@
 						'state' => '30',
 					)
 				),
+                'rfidtag' => array(
+                    0 => array(
+                        'serial' => '178100790',
+                        'state' => '10',
+                        'last_used' => '2015-12-19 01:32:14',
+                        'name' => '',
+                    )
+                ),
 				'groups' => array(
 					0 => array(
 						'id' => '2',
@@ -3653,6 +3830,15 @@
 						'member_id' => '3',
 					),
 				),
+                'RfidTag' => array(
+                    0 => array(
+                        'member_id' => '3',
+                        'rfid_serial' => '178100790',
+                        'state' => '10',
+                        'last_used' => '2015-12-19 01:32:14',
+                        'friendly_name' => '',
+                    )
+                ),
 				'StatusUpdate' => array(
 					0 => array(
 						'id' => '3',
@@ -3742,7 +3928,7 @@
 			{
 				$record = $recordCallback($record);
 			}
-
+			
 			$this->assertEqual( $record, $expectedRecordData, 'Member record was not updated correctly.' );
 		}
 
