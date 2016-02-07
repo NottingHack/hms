@@ -66,10 +66,10 @@ class BankTransaction extends AppModel {
             ),
             'unique' => array(
               'rule' => array('isUnique', array('description', 'transaction_date', 'amount'), false),
-                'message' => 'This record allready exists.'
+                'message' => 'This record already exists.'
             ),
 		),
-		'ammount' => array(
+		'amount' => array(
 			'content' => array(
 				'rule' => 'numeric',
 				'message' => 'Only numbers are allowed',
@@ -110,10 +110,10 @@ class BankTransaction extends AppModel {
 /**
  * Format bank transaction information into a nicer arrangement.
  * 
- * @param array $bankTransactionInfo The info to format, usually retrieved from BankTrasnaction::getBankTransactionList.
+ * @param array $bankTransactionInfo The info to format, usually retrieved from BankTransaction::getBankTransactionList.
  * @param bool $removeNullEntries If true then entries that have a value of null, false or an empty array won't exist in the final array.
  * @return array An array of bank transaction information, formatted so that nothing needs to know database rows.
- * @link BankTrasnaction::getBankTransactionList
+ * @link BankTransaction::getBankTransactionList
  * @link
  */
 	public function formatBankTransactionInfo($bankTransactionInfo, $removeNullEntries) {
@@ -163,7 +163,7 @@ class BankTransaction extends AppModel {
 
 
 /**
- * Get a list of transations for a given Account
+ * Get a list of transactions for a given Account
  * 
  * @param $paginate If true, return a query to retrieve a page of the data, otherwise return the data.
  * @param array $conditions An array of conditions to decide which member records to access.
@@ -191,7 +191,7 @@ class BankTransaction extends AppModel {
 /**
  * Proces
  *
- * Incomming array expects the following format for each transation
+ * Incoming array expects the following format for each transaction
  * array(
  *
  * @param array $transactions array of transactions we need to add to the db

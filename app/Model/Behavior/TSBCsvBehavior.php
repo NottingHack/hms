@@ -39,7 +39,7 @@ class TSBCsvBehavior extends ModelBehavior {
     
 /**
  * afterFind Callback
- * Use this callback to reformat the data to a shape that matches what BankTransaction Models importTransations function expects
+ * Use this callback to reformat the data to a shape that matches what BankTransaction Models importTransactions function expects
  *
  * @param Model $Model Model find was run on
  * @param array $results Array of model results.
@@ -47,14 +47,14 @@ class TSBCsvBehavior extends ModelBehavior {
  * @return array Modified results
  */
     public function afterFind(Model $model, $results, $primary = false) {
-        $formatedTransactions = array();
+        $formattedTransactions = array();
         foreach($results as $transaction) {
-            array_push($formatedTransactions, $this->__formatTransaction($transaction['CsvUpload'], true, false));
+            array_push($formattedTransactions, $this->__formatTransaction($transaction['CsvUpload'], true, false));
         }
         
         // get account_id's in bulk
         $refsToMatch = array();
-        foreach ($formatedTransactions as $transaction) {
+        foreach ($formattedTransactions as $transaction) {
             if (isset($transaction['ref'])) {
                 array_push($refsToMatch, $transaction['ref']);
             }
@@ -62,7 +62,7 @@ class TSBCsvBehavior extends ModelBehavior {
         $accountIds = $this->Account->getAccountIdsForRefs($refsToMatch);
         
         $withIds = array();
-        foreach ($formatedTransactions as $transaction) {
+        foreach ($formattedTransactions as $transaction) {
             if (isset($transaction['ref']) && isset($accountIds[$transaction['ref']])) {
                 $transaction['account_id'] = $accountIds[$transaction['ref']];
                 unset($transaction['ref']);
@@ -76,13 +76,13 @@ class TSBCsvBehavior extends ModelBehavior {
 /**
  * Format Transaction 
  *
- * @param array $transaction The transation to format as retrieved from a CSV record
+ * @param array $transaction The transaction to format as retrieved from a CSV record
  * @param bool $removeNullEntries If true then entries that have a value of null, false or an empty array won't exist in the final array.
- * @param bool $getAccountID If ture we got off to Account and look for the ref match and return account_id, else we return the $ref
+ * @param bool $getAccountID If true we got off to Account and look for the ref match and return account_id, else we return the $ref
  * @return array An array of member information, formatted so that nothing needs to know database rows.
  */
     private function __formatTransaction($transaction, $removeNullEntries, $getAccountId = true) {
-        /*  incomming transaction
+        /*  incoming transaction
          array(
             'Transaction Date' => '03/02/2016',
             'Transaction Type' => 'FPI',

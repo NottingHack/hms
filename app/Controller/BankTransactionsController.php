@@ -31,11 +31,11 @@ class BankTransactionsController extends AppController {
     public $uses = array('BankTransaction');
     
 /** 
- * Test to see if a user is authorized to make a request.
+ * Test to see if a user is authorised to make a request.
  *
  * @param array $user Member record for the user.
  * @param CakeRequest $request The request the user is attempting to make.
- * @return bool True if the user is authorized to make the request, otherwise false.
+ * @return bool True if the user is authorised to make the request, otherwise false.
  * @link http://api20.cakephp.org/class/cake-request
  */
 	public function isAuthorized($user, $request) {
@@ -80,7 +80,7 @@ class BankTransactionsController extends AppController {
  *
  */
     public function index() {
-        // notthing to see here
+        // nothing to see here
     }
    
 /**
@@ -108,15 +108,15 @@ class BankTransactionsController extends AppController {
             $filename = Hash::get($data, 'filename.name');
             $dir = Configure::read('hms_csv_folder');
             
-            // has this file allready been uploaded if so
+            // has this file already been uploaded if so
             if (file_exists("$dir/$filename")) {
-                $this->Session->setFlash("A file with this name has already been uploaded before");
+                $this->Session->setFlash("A file with this name has already been previously uploaded");
                 return;
             }
             
             move_uploaded_file($tmp_name, "$dir/$filename");
             
-            // strip .csv from file name befor passing to classRegistry
+            // strip .csv from file name before passing to classRegistry
             $filename = preg_replace('/.csv$/', '', $filename);
             
             // load CsvUpload model
@@ -126,7 +126,7 @@ class BankTransactionsController extends AppController {
                                       'table' => $filename
                                       ));
             
-            // read csv and get a nice formated list of new transactions
+            // read csv and get a nice formatted list of new transactions
             $transactions = $this->CsvUpload->find('all');
             
             if (count($transactions) == 0) {
@@ -167,7 +167,7 @@ class BankTransactionsController extends AppController {
 	}
 
 /**
- * Pagainate a list of all transactions for a given member
+ * Paginate a list of all transactions for a given member
  *
  * @param int $memberId The members id to list all transactions for
  */

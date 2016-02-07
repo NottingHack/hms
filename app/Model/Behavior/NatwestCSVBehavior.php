@@ -39,7 +39,7 @@ class NatwestCsvBehavior extends ModelBehavior {
     
 /**
  * afterFind Callback
- * Use this callback to reformat the data to a shape that matches what BankTransaction Models importTransations function expects
+ * Use this callback to reformat the data to a shape that matches what BankTransaction Models importTransactions function expects
  *
  * @param Model $Model Model find was run on
  * @param array $results Array of model results.
@@ -51,14 +51,14 @@ class NatwestCsvBehavior extends ModelBehavior {
         unset($results[0]); // remove item at index 0
         $results = array_values($results); // 'reindex' array
         
-        $formatedTransactions = array();
+        $formattedTransactions = array();
         foreach($results as $transaction) {
-            array_push($formatedTransactions, $this->__formatTransaction($transaction['CsvUpload'], true, false));
+            array_push($formattedTransactions, $this->__formatTransaction($transaction['CsvUpload'], true, false));
         }
         
         // get account_id's in bulk
         $refsToMatch = array();
-        foreach ($formatedTransactions as $transaction) {
+        foreach ($formattedTransactions as $transaction) {
             if (isset($transaction['ref'])) {
                 array_push($refsToMatch, $transaction['ref']);
             }
@@ -66,7 +66,7 @@ class NatwestCsvBehavior extends ModelBehavior {
         $accountIds = $this->Account->getAccountIdsForNatwestRefs($refsToMatch);
         
         $withIds = array();
-        foreach ($formatedTransactions as $transaction) {
+        foreach ($formattedTransactions as $transaction) {
             if (isset($transaction['ref']) && isset($accountIds[$transaction['ref']])) {
                 $transaction['account_id'] = $accountIds[$transaction['ref']];
                 unset($transaction['ref']);
@@ -80,13 +80,13 @@ class NatwestCsvBehavior extends ModelBehavior {
 /**
  * Format Transaction 
  *
- * @param array $transaction The transation to format as retrieved from a CSV record
+ * @param array $transaction The transition to format as retrieved from a CSV record
  * @param bool $removeNullEntries If true then entries that have a value of null, false or an empty array won't exist in the final array. 
- * @param bool $getAccountID If ture we got off to Account and look for the ref match and return account_id, else we return the $ref
+ * @param bool $getAccountID If true we got off to Account and look for the ref match and return account_id, else we return the $ref
  * @return array An array of member information, formatted so that nothing needs to know database rows.
  */
     private function __formatTransaction($transaction, $removeNullEntries, $getAccountId = true) {
-        /*  incomming transaction
+        /*  incoming transaction
          array(
 			'Date' => '02/12/2015',
 			' Type' => 'BAC',
@@ -105,7 +105,7 @@ class NatwestCsvBehavior extends ModelBehavior {
         
         $pattern = '/^HSNOTTS/';
         if (preg_match($pattern, $parsedDesc['ref']) != 1) {
-            // we didnt get something with HSNOTTS in it, use a combined (name , ref) limited to 18 chars
+            // we didn't get something with HSNOTTS in it, use a combined (name , ref) limited to 18 chars
             $newRef = $parsedDesc['name'] . ' , ' . $parsedDesc['ref'];
             $ref = substr($newRef, 0, 18);
         } else {

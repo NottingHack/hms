@@ -25,7 +25,7 @@
  *   );
  */
 /*
- * This file has been heavly modified by the HMS Team to work for our Bank CSV Uplaods
+ * This file has been modified by the HMS Team to work for our Bank CSV Uploads
  *
  * Create a datasource in your config/database.php
  *   public $csvupload = array(
