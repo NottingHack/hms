@@ -501,7 +501,7 @@ class DataGenerator {
 			'member_id' => $memberId,
 			'rfid_serial' => $serial,
 			'state' => 10,
-			'last_used' => $lastUsed,
+			'last_used' => date('Y-m-d H:i:s', $lastUsed),
 		);
 
 		array_push($this->__rfidTags, $record);
