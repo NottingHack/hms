@@ -1462,7 +1462,7 @@
 
         public function testApproveMemberThrows()
         {
-            $testMemberIds = array( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 );
+            $testMemberIds = array( 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12 );
             foreach ($testMemberIds as $memberId) 
             {
                 $threw = false;
