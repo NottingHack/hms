@@ -59,15 +59,21 @@ class BankTransaction extends AppModel {
 				'message' => 'Number must be between 1 and 11 characters long',
 			),
 		),
+        'description' => array(
+            'content' => array(
+                'rule' => 'notEmpty',
+                'message' => 'Must have a description',
+            ),
+            'unique' => array(
+              'rule' => array('isUnique', array('description', 'transaction_date', 'amount'), false),
+                'message' => 'This record allready exists.'
+            ),
+		),
 		'ammount' => array(
 			'content' => array(
 				'rule' => 'numeric',
 				'message' => 'Only numbers are allowed',
 			),
-		),
-        'description' => array(
-			'rule' => 'notEmpty',
-			'message' => 'Must have a description',
 		),
 		'account_id' => array(
 			'length' => array(
@@ -79,12 +85,11 @@ class BankTransaction extends AppModel {
 				'message' => 'Account id must be a number',
 			),
 		),
-        'datetime' => array(
+        'transaction_date' => array(
             'rule' => 'date',
             'allowEmpty' => false,
             'message' => 'Must have a valid date'
         ),
-        
 	);
     
 /**
@@ -113,7 +118,7 @@ class BankTransaction extends AppModel {
  */
 	public function formatBankTransactionInfo($bankTransactionInfo, $removeNullEntries) {
 		$id = Hash::get($bankTransactionInfo, 'BankTransaction.bank_transaction_id');
-        $date = Hash::get($bankTransactionInfo, 'BankTransaction.date');
+        $transaction_date = Hash::get($bankTransactionInfo, 'BankTransaction.transaction_date');
 		$description = Hash::get($bankTransactionInfo, 'BankTransaction.description');
 		$amount = Hash::get($bankTransactionInfo, 'BankTransaction.amount');
         $bank = Hash::get($bankTransactionInfo, 'Bank.name');
@@ -125,7 +130,7 @@ class BankTransaction extends AppModel {
 
 		$allValues = array(
 			'id' => $id,
-            'date' => $date,
+            'transaction_date' => $transaction_date,
             'description' => $description,
             'amount' => $amount,
             'bank' => $bank,
@@ -168,7 +173,7 @@ class BankTransaction extends AppModel {
 	public function getBankTransactionList($paginate, $conditions = array(), $format = true) {
 		$findOptions = array(
 			'conditions' => $conditions,
-            'order' => 'BankTransaction.date DESC'
+            'order' => 'BankTransaction.transaction_date DESC'
 		);
 		if ($paginate) {
 			return $findOptions;
@@ -179,7 +184,35 @@ class BankTransaction extends AppModel {
         if ($format) {
             return $this->formatBankTransactionList($info, false);
         }
-
+        
 		return $info;
 	}
+    
+/**
+ * Proces
+ *
+ * Incomming array expects the following format for each transation
+ * array(
+ *
+ * @param array $transactions array of transactions we need to add to the db
+ * @return int Import results
+ */
+    public function importTransactions($transactions) {
+        $result = $this->saveMany($transactions,
+                                  $options = array(
+                                                   'validate' => true,
+                                                   'atomic' => false,
+                                                   'fieldList' => array(
+                                                                        'transaction_date',
+                                                                        'description',
+                                                                        'amount',
+                                                                        'bank_id',
+                                                                        'account_id',
+                                                                        )
+                                                   )
+                                  );
+
+        return $result;
+    }
+    
 }

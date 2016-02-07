@@ -3423,8 +3423,8 @@ class Model extends Object implements CakeEventListener {
 		if (!empty($this->id)) {
 			$fields[$this->alias . '.' . $this->primaryKey . ' !='] = $this->id;
 		}
-
-		return !$this->find('count', array('conditions' => $fields, 'recursive' => -1));
+        
+        return !$this->find('count', array('conditions' => $fields, 'recursive' => -1));
 	}
 
 /**

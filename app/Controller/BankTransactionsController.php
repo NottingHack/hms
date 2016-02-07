@@ -14,7 +14,10 @@
  */
 
 App::uses('AppController', 'Controller');
-
+App::uses('PhpReader', 'Configure');
+Configure::config('default', new PhpReader());
+Configure::load('hms', 'default');
+    
 /**
  * Controller for the Bank Transactions, handles upload of CSV's and 
  * showing an Accounts Transaction history
@@ -26,13 +29,6 @@ class BankTransactionsController extends AppController {
  * @var array
  */
     public $uses = array('BankTransaction');
-    
-/**
- * The list of components this Controller relies on.
- * @var array
- */
-	public $components = array('BankStatement');
-
     
 /** 
  * Test to see if a user is authorized to make a request.
@@ -80,132 +76,84 @@ class BankTransactionsController extends AppController {
 	}
     
 /**
+ * Present an empty index page
  *
+ */
     public function index() {
         // notthing to see here
     }
-    
+   
 /**
  * Upload a .csv file of bank transactions and look for members to approve.
  *
  * @param string $guid If set then look here in the session for a list of account id's to approve.
  */
-	public function uploadCsv($guid = null) {
-		$validMemberIds = array();
-		$preview = true;
+    public function uploadCsv() {
+        if ($this->request->is('post')) {
+            $data = $this->request->data;
 
-		// If the guid is not set then we should show the upload form
-		if ($guid == null) {
-			// Has a file been uploaded?
-			if ($this->request->is('post')) {
-				// Ok, read the file
-				Controller::loadModel('FileUpload');
+            // did we actually get a file
+            if (!Hash::get($data, 'filename.tmp_name')) {
+                // didn't get a filename
+                $this->Session->setFlash('No file uploaded.');
+                return;
+            }
+            // does it have .csv extension (or is mimeType text/csv
+            if (Hash::get($data, 'filename.type') != "text/csv") {
+                $this->Session->setFlash('File is not a CSV type');
+                return;
+            }
+            // move file to csv folder
+            $tmp_name = Hash::get($data, 'filename.tmp_name');
+            $filename = Hash::get($data, 'filename.name');
+            $dir = Configure::read('hms_csv_folder');
+            
+            // has this file allready been uploaded if so
+            if (file_exists("$dir/$filename")) {
+                $this->Session->setFlash("A file with this name has already been uploaded before");
+                return;
+            }
+            
+            move_uploaded_file($tmp_name, "$dir/$filename");
+            
+            // strip .csv from file name befor passing to classRegistry
+            $filename = preg_replace('/.csv$/', '', $filename);
+            
+            // load CsvUpload model
+            $this->CsvUpload = ClassRegistry::init(array(
+                                      'class' => 'CsvUpload',
+                                      'alias' => 'CsvUpload',
+                                      'table' => $filename
+                                      ));
+            
+            // read csv and get a nice formated list of new transactions
+            $transactions = $this->CsvUpload->find('all');
+            
+            if (count($transactions) == 0) {
+                $this->Session->setFlash("No transactions found in CSV file");
+                return;
+            }
+            
 
-				$filename = $this->FileUpload->getTmpName($this->request->data);
+            // ok looks good like we have something pass it on to the model to import
+            $ret = $this->BankTransaction->importTransactions($transactions);
+            
+            // email accounts with list a transaction that could not be matched to accounts, some might just be other xfers, some might be special people)
+            // TODO:
+            
+            
+            // place holder for returns
+            $this->Session->setFlash("CSV upload complete");
+            return;
+        }
+        
+    }
 
-				if ($this->BankStatement->readfile($filename)) {
-					// It seems ot be a valid .csv, grab all the payment references
-					$payRefs = array();
-					$this->BankStatement->iterate(function ($transaction) use(&$payRefs) {
-						$ref = $transaction['ref'];
-
-						if (is_string($ref) && strlen($ref) > 0) {
-							array_push($payRefs, $ref);
-						}
-					});
-
-					// Ok so we have a list of payment refs, get the account id's from them
-					$accountIds = $this->Member->Account->getAccountIdsForRefs($payRefs);
-					if ( is_array($accountIds) && count($accountIds) > 0) {
-						// Ok now we need the rest of the member info
-						$members = $this->Member->getMemberSummaryForAccountIds(false, $accountIds);
-
-						// We only want members who we're waiting for payments from (Pre-Member 3)
-						foreach ($members as $member) {
-							if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3) {
-								array_push(
-									$validMemberIds,
-									$member['id']
-								);
-							}
-						}
-					}
-
-					// Did we find any? If so write them to the session with a guid.
-					// This is 100% not dodgy... Honest.
-					if (count($validMemberIds) > 0) {
-						$guid = $this->getMemberIdSessionKey();
-						$this->Session->write($guid, $validMemberIds);
-
-						$this->Nav->add('Approve All', 'banktransactions', 'uploadCsv', array($guid), 'positive');
-					} else {
-						$this->Session->setFlash('No new member payments in .csv.');
-						return $this->redirect(array('controller' => 'members', 'action' => 'index'));
-					}
-				} else {
-					// Invalid file
-					$this->Session->setFlash('That did not seem to be a valid bank .csv file');
-					return $this->redirect(array('controller' => 'banktransactions', 'action' => 'uploadCsv'));
-				}
-			}
-		} else {
-			// Guid exists, is it valid?
-			if ($this->Session->check($guid)) {
-				// Yup then grab the member ids
-				$validMemberIds = $this->Session->read($guid);
-				$preview = false;
-			} else {
-				// Invalid guid, redirect to upload
-				return $this->redirect(array('controller' => 'banktransactions', 'action' => 'uploadCsv'));
-			}
-		}
-
-		// If there are no valid members then just show the upload form
-		if (count($validMemberIds) <= 0) {
-			$this->set('memberList', null);
-		} else {
-			// Grab the member info, this might actually be the second time we're doing this if we've just uploaded.
-			$members = $this->Member->getMemberSummaryForMembers($validMemberIds, true);
-			$this->set('memberList', $members);
-
-			// If we're not previewing, they do the actual approval
-			if (!$preview) {
-				$flash = '';
-				// Actually approve the members
-				foreach ($members as $member) {
-					if ($this->__approveMember($member['id'])) {
-						$flash .= 'Successfully approved';
-					} else {
-						$flash .= 'Unable to approve';
-					}
-
-					$flash .= sprintf(' member %s %s\n', $member['firstname'], $member['surname']);
-				}
-
-				$this->Session->delete($guid);
-
-				$this->Session->setFlash($flash);
-				return $this->redirect(array('controller' => 'members', 'action' => 'index'));
-			}
-		}
-	}
-
-/**
- * Get the key used to store members ids in the session after uploading a csv.
- * 
- * @return string The key to be used in the session.
- * @link MemberController::uploadCsv
- */
-	public function getMemberIdSessionKey() {
-		return String::uuid();
-	}
-    
 /**
  * Show a list of all transactions for $memberId, or for the logged in member if $memberId isn't set.
  * @param int|null $memberId The members id to list all transactions for
  */
 	public function history($memberId = null) {
-		$this->loadModel('BankTransaction');
 
 		if ($memberId == null) {
 			$memberId = $this->_getLoggedInMemberId();
@@ -227,7 +175,7 @@ class BankTransactionsController extends AppController {
 		$this->paginate = $this->BankTransaction->getBankTransactionList(true, array('AccountBT.account_id' => $accountId));
 		$bankTransactionsList = $this->paginate('BankTransaction');
         $bankTransactionsList = $this->BankTransaction->formatBankTransactionList($bankTransactionsList, false);
-		$this->set('bankTransactionsList', $bankTransactionsList);
+ 		$this->set('bankTransactionsList', $bankTransactionsList);
 	}
-    
+
 }

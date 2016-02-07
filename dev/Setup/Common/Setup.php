@@ -786,13 +786,15 @@ class Setup {
 				'test_host' => 'localhost',
 				'test_login' =>	'hms',
 				'test_password' => '',
-				'test_database' => 'hms_test'
+				'test_database' => 'hms_test',
+				'csv_folder' => '/vagrant/csv',
 			),
 			'hms' => array(
 				'streetdoor' => '1234',
 				'innerdoor' => '1234',
 				'wifi' => '123456',
                 'membership_email' => 'membership@localhost',
+				'csv_folder' => '/vagrant/csv',
 			),
 			'debug' => array(
 			),

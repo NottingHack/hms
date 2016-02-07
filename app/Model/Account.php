@@ -153,7 +153,11 @@ class Account extends AppModel {
  */
 	public function getAccountIdsForRefs($paymentRefs) {
 		if (is_array($paymentRefs)) {
-			return array_values($this->find('list', array('conditions' => array('Account.payment_ref' => $paymentRefs))));
+			return $this->find('list',array(
+                                            'conditions' => array('Account.payment_ref' => $paymentRefs),
+                                            'fields' => array('Account.payment_ref', 'Account.account_id')
+                                            )
+                               );
 		}
 
 		return array();

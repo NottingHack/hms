@@ -14,7 +14,7 @@
 	foreach ($bankTransactionsList as $transaction)
 	{
 		echo "\t<tr>\n";
-		echo "\t\t<td>" . $transaction['date'] . "</td>\n";
+		echo "\t\t<td>" . $transaction['transaction_date'] . "</td>\n";
 		echo "\t\t<td>" . $this->Currency->output($transaction['amount']*100) . "</td>\n";
 		echo "\t\t<td>" . $transaction['bank'] . "</td>\n";
 		echo "\t</tr>\n";
