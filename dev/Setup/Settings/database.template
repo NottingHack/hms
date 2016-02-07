@@ -83,7 +83,7 @@ class DATABASE_CONFIG {
 
 	public $csvupload = array(
 		'datasource' => 'CsvSource',
-		'path' => '%%csv_folder%%'', // Path, Needs to match 'hms_csv_folder' in config.php
+		'path' => '%%csv_folder%%', // Path, Needs to match 'hms_csv_folder' in config.php
 		'extension' => 'csv', // File extension
 		'readonly' => true, // Mark for read only access
 		'recursive' => false // Only false is supported at the moment
