@@ -71,7 +71,7 @@ class BankTransaction extends AppModel {
 		),
 		'amount' => array(
 			'content' => array(
-				'rule' => 'numeric',
+				'rule' => array('decimal', 2),
 				'message' => 'Only numbers are allowed',
 			),
 		),
