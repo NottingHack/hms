@@ -54,6 +54,7 @@ class MembersController extends AppController {
 		}
 
 		$memberId = $this->Member->getIdForMember($user);
+        $memberIsCurrentMember = ($this->Member->getStatusForMember($memberId) == Status::CURRENT_MEMBER);
 		$memberIsMembershipAdmin = $this->Member->GroupsMember->isMemberInGroup( $memberId, Group::MEMBERSHIP_ADMIN );
 		$memberIsOnMembershipTeam = $this->Member->GroupsMember->isMemberInGroup( $memberId, Group::MEMBERSHIP_TEAM );
 		$actionHasParams = isset( $request->params ) && isset($request->params['pass']) && count( $request->params['pass'] ) > 0;
@@ -92,6 +93,9 @@ class MembersController extends AppController {
 
 			case 'setupDetails':
 				return $firstParamIsMemberId;
+            
+            case 'viewAccessCodes':
+                return $memberIsCurrentMember;
 		}
 
 		return false;
@@ -921,6 +925,24 @@ class MembersController extends AppController {
 		return $this->redirect($this->referer());
 	}
 
+/**
+ * View the current hackspace access codes and wifi details
+ *
+ */
+    public function viewAccessCodes() {
+        // gather various access codes to pass to view and present to the view
+        
+        $accessCodes = array(
+                             'outerDoorCode' => Configure::read('hms_access_street_door'),
+                             'innerDoorCode' => Configure::read('hms_access_inner_door'),
+                             'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
+                             'wifiPass' => Configure::read('hms_access_wifi_password'),
+        );
+        
+        
+        $this->set('accessCodes', $accessCodes);
+    }
+    
 /**
  * Check to see if certain view/edit params should be shown to the logged in member.
  *
