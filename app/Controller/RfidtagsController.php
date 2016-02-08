@@ -84,7 +84,6 @@ class RfidTagsController extends AppController {
  * @param int|null $memberId The id fo the member to view; null grabs the currently logged-in user id instead
  */
 	public function view($memberId = null) {
-		//$this->loadModel('Transactions');
 
 		if ($memberId == null) {
 			$memberId = $this->_getLoggedInMemberId();
@@ -104,7 +103,6 @@ class RfidTagsController extends AppController {
  * @param int|null $rfidSerial The serial number of the card to edit
  */
 	public function edit($rfidSerial = null) {
-		//$this->loadModel('Transactions');
 
 		$this->set('states', $this->RfidTag->statusStrings);
 
