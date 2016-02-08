@@ -70,6 +70,7 @@ class MembersController extends AppController {
 			case 'uploadCsv':
 			case 'uploadTsb':
 			case 'emailMembersWithStatus':
+            case 'resetPinToEnroll':
 				return $memberIsMembershipAdmin;
 
 			case 'sendProspectiveMemberReminder':
@@ -1048,6 +1049,23 @@ class MembersController extends AppController {
 		return $memberList;
 	}
 
+/** 
+ * Reset Pin To allow RFID Enroll
+ * 
+ * @param int $memberId 
+ *
+ */
+    public function resetPinToEnroll($memberId) {
+        // TODO: fix this, either use Pin model directly or add wrap helper to Member
+        if ($this->Member->Pin->resetPinToEnrollForMember($memberId)) {
+            $this->Session->setFlash('Pin has been reactivated');
+        } else {
+            $this->Session->setFlash('Failed to set pin to Enroll');
+        }
+        
+        return $this->redirect(array('action' => 'view', $memberId));
+    }
+
 /**
  * Get an array of possible actions for a member
  *
@@ -1170,7 +1188,20 @@ class MembersController extends AppController {
 						),
 					)
 				);
-
+                
+                // TODO: fix this, either use Pin model directly or add wrap helper to Member
+                if ($this->Member->Pin->getPinStateForMember($memberId) == Pin::STATE_CANCELLED) {
+                    array_push($actions,
+                        array(
+                            'title' => 'Reactivate Pin',
+                            'controller' => 'members',
+                            'action' => 'resetPinToEnroll',
+                            'params' => array(
+                                $memberId,
+                            ),
+                        )
+                    );
+                }
 			break;
 
 			case Status::EX_MEMBER:
