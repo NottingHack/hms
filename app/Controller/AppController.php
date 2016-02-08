@@ -97,8 +97,8 @@ class AppController extends Controller {
 		$this->__addMainNav('Groups', array( 'plugin' => null, 'controller' => 'groups', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN), null);
 		$this->__addMainNav('Mailing Lists', array( 'plugin' => null, 'controller' => 'mailinglists', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN), null);
 		$this->__addMainNav('Snackspace', array( 'plugin' => null, 'controller' => 'snackspace', 'action' => 'history' ), null, array(Status::CURRENT_MEMBER, Status::EX_MEMBER));
-		$this->__addMainNav('MemberVoice', array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ), null, null);
-		$this->__addMainNav('Tools', array( 'plugin' => 'tools', 'controller' => 'tools', 'action' => 'index' ), null, null);
+		$this->__addMainNav('MemberVoice', array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ), null, array(Status::CURRENT_MEMBER));
+		$this->__addMainNav('Tools', array( 'plugin' => 'tools', 'controller' => 'tools', 'action' => 'index' ), null, array(Status::CURRENT_MEMBER));
 	}
 
 /**
