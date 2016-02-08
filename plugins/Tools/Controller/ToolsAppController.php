@@ -88,6 +88,9 @@ class ToolsAppController extends AppController {
 			// Is this user allowed to access this page?
 			if (array_key_exists($this->request->params['controller'], $restrictedRequests)) {
 				if (in_array($this->request->params['action'], $restrictedRequests[$this->request->params['controller']])) {
+                    if ($this->Member->getStatusForMember($memberId) != Status::CURRENT_MEMBER) {
+                        return false; // only current members can access tools
+                    }
 					return $this->ToolsTool->isUserInducted($this->request->params['pass'][0], $memberId);
 				}
 			}
