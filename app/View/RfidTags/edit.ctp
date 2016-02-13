@@ -3,7 +3,7 @@
 <?php
 	$this->Html->addCrumb('Members', '/members');
 	$this->Html->addCrumb(isset($member['username']) ? $member['username'] : $member['email'], '/members/view/' . $member['id']);
-	$this->Html->addCrumb('Registerd Cards', '/rfidtags/view/');
+	$this->Html->addCrumb('Registerd Cards', '/rfidtags/view/' . $member['id']);
 	$this->Html->addCrumb(isset($rfidTagDetails['tagName']) ? $rfidTagDetails['tagName'] : $rfidTagDetails['tagSerial'], '/rfidtags/edit/'. $rfidTagDetails['tagSerial']);
 ?>
 

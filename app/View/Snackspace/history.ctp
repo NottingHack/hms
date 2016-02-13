@@ -1,7 +1,9 @@
 <!-- File: /app/View/Snackspace/history.ctp -->
 
 <?php
-	$this->Html->addCrumb('Snackspace', '/snackspace/history');
+    $this->Html->addCrumb('Members', '/memebers');
+    $this->Html->addCrumb(isset($member['username']) ? $member['username'] : $member['email'], '/members/view/' . $member['id']);
+	$this->Html->addCrumb('Snackspace', '/snackspace/history/' . $member['id']);
 ?>
 <dl>
 	<dt>
