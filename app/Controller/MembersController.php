@@ -54,6 +54,7 @@ class MembersController extends AppController {
 		}
 
 		$memberId = $this->Member->getIdForMember($user);
+        $memberIsCurrentMember = ($this->Member->getStatusForMember($memberId) == Status::CURRENT_MEMBER);
 		$memberIsMembershipAdmin = $this->Member->GroupsMember->isMemberInGroup( $memberId, Group::MEMBERSHIP_ADMIN );
 		$memberIsOnMembershipTeam = $this->Member->GroupsMember->isMemberInGroup( $memberId, Group::MEMBERSHIP_TEAM );
 		$actionHasParams = isset( $request->params ) && isset($request->params['pass']) && count( $request->params['pass'] ) > 0;
@@ -68,14 +69,16 @@ class MembersController extends AppController {
 			case 'rejectDetails':
 			case 'addExistingMember':
 			case 'uploadCsv':
-            case 'uploadTsb':
+			case 'uploadTsb':
 			case 'emailMembersWithStatus':
+            case 'resetPinToEnroll':
 				return $memberIsMembershipAdmin;
 
-			case 'sendMembershipReminder':
+			case 'sendProspectiveMemberReminder':
 			case 'sendContactDetailsReminder':
 			case 'sendSoDetailsReminder':
 			case 'approveMember':
+			case 'sendMembershipCompleteMail':
 			case 'index':
 			case 'listMembers':
 			case 'listMembersWithStatus':
@@ -91,6 +94,9 @@ class MembersController extends AppController {
 
 			case 'setupDetails':
 				return $firstParamIsMemberId;
+            
+            case 'viewAccessCodes':
+                return $memberIsCurrentMember;
 		}
 
 		return false;
@@ -137,7 +143,7 @@ class MembersController extends AppController {
 		$this->Nav->add('Register Member', 'members', 'register');
 		$this->Nav->add('E-mail all current members', 'members', 'emailMembersWithStatus', array( Status::CURRENT_MEMBER ) );
 		$this->Nav->add('Upload CSV', 'members', 'uploadCsv' );
-        	$this->Nav->add('Upload TSB', 'members', 'uploadTsb' );
+		$this->Nav->add('Upload TSB', 'members', 'uploadTsb' );
 	}
 /**
  * Show a list of all members, their e-mail address, status and the groups they're in.
@@ -482,20 +488,49 @@ class MembersController extends AppController {
 		return $this->redirect($this->referer());
 	}
 
+
+/**
+ * Send the 'membership complete' email to a member.
+ *
+ * @param int $id The id of the member to contact.
+ */
+	public function sendMembershipCompleteMail($id = null) {
+		if ($this->__sendMembershipCompleteMail($id)) {
+			$this->Session->setFlash('Member has been contacted');
+		} else {
+			$this->Session->setFlash('Unable to contact member');
+		}
+		return $this->redirect($this->referer());
+	}
+
 /**
  *
  * Send a "membership complete" e-mail to the member
  * @param int $id The id of the member to send to
+ * @param int $statusId previous status_id of the member to email
  *
  */
-	private function _sendMembershipCompleteMail($id) {
+	private function __sendMembershipCompleteMail($id, $statusId = null) {
+		if ($statusId === null) {
+			// If no status given, this is likely to be for a current member.  Fall back onto pre -> member
+			$statusId = Status::PRE_MEMBER_3;
+		}
+
 		$email = $this->Member->getEmailForMember($id);
 		if ($email) {
 
+			if ($statusId == Status::PRE_MEMBER_3) {
+				$subject = 'Membership Complete';
+				$template = 'to_member_access_details';
+			} elseif ($statusId == Status::EX_MEMBER) {
+				$subject = 'Your Membership Has Been Reinstated';
+				$template = 'to_member_access_details_reinstated';
+			}
+
 			$this->_sendEmail(
 				$email,
-				'Membership Complete',
-				'to_member_access_details',
+				$subject,
+				$template,
 				array(
 					'manLink' => Configure::read('hms_help_manual_url'),
 					'outerDoorCode' => Configure::read('hms_access_street_door'),
@@ -504,6 +539,12 @@ class MembersController extends AppController {
 					'wifiPass' => Configure::read('hms_access_wifi_password'),
 				)
 			);
+
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 
@@ -514,15 +555,23 @@ class MembersController extends AppController {
  */
 	private function __approveMember($id) {
 		$adminId = $this->_getLoggedInMemberId();
+        $statusId = $this->Member->getStatusForMember($id);
 		$memberDetails = $this->Member->approveMember($id, $adminId);
 		if ($memberDetails) {
 			$adminDetails = $this->Member->getMemberSummaryForMember($adminId);
 
+			if ($statusId == Status::PRE_MEMBER_3) {
+				$subject = 'Member Approved';
+				$template = 'notify_admins_member_approved';
+			} elseif ($statusId == Status::EX_MEMBER) {
+				$subject = 'Member Reinstated';
+				$template = 'notify_admins_member_reinstated';
+			}
 			// Notify all the member admins
 			$this->_sendEmail(
 				Configure::read('hms_membership_email'),
-				'Member Approved',
-				'notify_admins_member_approved',
+				$subject,
+				$template,
 				array(
 					'memberName' => sprintf('%s %s', $memberDetails['firstname'], $memberDetails['surname']),
 					'memberEmail' => $memberDetails['email'],
@@ -531,7 +580,7 @@ class MembersController extends AppController {
 				)
 			);
 
-			$this->_sendMembershipCompleteMail($id); // E-mail the member
+			$this->__sendMembershipCompleteMail($id, $statusId); // E-mail the member
 
 			return true;
 		} else {
@@ -623,7 +672,7 @@ class MembersController extends AppController {
  *
  * @param int $id The id of the member to send the message to.
  */
-	public function sendMembershipReminder($id = null) {
+	public function sendProspectiveMemberReminder($id = null) {
 		if ($id != null) {
 			if ($this->__sendProspectiveMemberEmail($id)) {
 				$this->Session->setFlash('Member has been contacted');
@@ -878,6 +927,24 @@ class MembersController extends AppController {
 	}
 
 /**
+ * View the current hackspace access codes and wifi details
+ *
+ */
+    public function viewAccessCodes() {
+        // gather various access codes to pass to view and present to the view
+        
+        $accessCodes = array(
+                             'outerDoorCode' => Configure::read('hms_access_street_door'),
+                             'innerDoorCode' => Configure::read('hms_access_inner_door'),
+                             'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
+                             'wifiPass' => Configure::read('hms_access_wifi_password'),
+        );
+        
+        
+        $this->set('accessCodes', $accessCodes);
+    }
+    
+/**
  * Check to see if certain view/edit params should be shown to the logged in member.
  *
  * @param int $memberId The id of the member being viewed.
@@ -1004,6 +1071,23 @@ class MembersController extends AppController {
 		return $memberList;
 	}
 
+/** 
+ * Reset Pin To allow RFID Enroll
+ * 
+ * @param int $memberId 
+ *
+ */
+    public function resetPinToEnroll($memberId) {
+        // TODO: fix this, either use Pin model directly or add wrap helper to Member
+        if ($this->Member->Pin->resetPinToEnrollForMember($memberId)) {
+            $this->Session->setFlash('Pin has been reactivated');
+        } else {
+            $this->Session->setFlash('Failed to set pin to Enroll');
+        }
+        
+        return $this->redirect(array('action' => 'view', $memberId));
+    }
+
 /**
  * Get an array of possible actions for a member
  *
@@ -1020,7 +1104,7 @@ class MembersController extends AppController {
 					array(
 						'title' => 'Send Membership Reminder',
 						'controller' => 'members',
-						'action' => 'sendMembershipReminder',
+						'action' => 'sendProspectiveMemberReminder',
 						'params' => array(
 							$memberId,
 						),
@@ -1086,7 +1170,7 @@ class MembersController extends AppController {
 						'params' => array(
 							$memberId,
 						),
-						'class' => 'positive attention',
+						'class' => 'positive attention approve_member',
 					)
 				);
 
@@ -1116,6 +1200,30 @@ class MembersController extends AppController {
 					)
 				);
 
+				array_push($actions,
+					array(
+						'title' => 'Resend Welcome Email',
+						'controller' => 'members',
+						'action' => 'sendMembershipCompleteMail',
+						'params' => array(
+							$memberId,
+						),
+					)
+				);
+                
+                // TODO: fix this, either use Pin model directly or add wrap helper to Member
+                if ($this->Member->Pin->getPinStateForMember($memberId) == Pin::STATE_CANCELLED) {
+                    array_push($actions,
+                        array(
+                            'title' => 'Reactivate Pin',
+                            'controller' => 'members',
+                            'action' => 'resetPinToEnroll',
+                            'params' => array(
+                                $memberId,
+                            ),
+                        )
+                    );
+                }
 			break;
 
 			case Status::EX_MEMBER:
@@ -1173,105 +1281,105 @@ class MembersController extends AppController {
  *
  * @param string $guid If set then look here in the session for a list of account id's to approve.
  */
-       public function uploadTsb($guid = null) {
-               $validMemberIds = array();
-               $preview = true;
+	public function uploadTsb($guid = null) {
+		$validMemberIds = array();
+		$preview = true;
 
-               // If the guid is not set then we should show the upload form
-               if ($guid == null) {
-                       // Has a file been uploaded?
-                       if ($this->request->is('post')) {
-                               // Ok, read the file
-                               Controller::loadModel('FileUpload');
+		// If the guid is not set then we should show the upload form
+		if ($guid == null) {
+			// Has a file been uploaded?
+			if ($this->request->is('post')) {
+				// Ok, read the file
+				Controller::loadModel('FileUpload');
 
-                               $filename = $this->FileUpload->getTmpName($this->request->data);
+				$filename = $this->FileUpload->getTmpName($this->request->data);
 
-                               if ($this->BankStatement->readfile($filename)) {
-                                       // It seems ot be a valid .csv, grab all the payment references
-                                       $payRefs = array();
-                                       $this->BankStatement->iterate(function ($transaction) use(&$payRefs) {
-                                               $ref = $transaction['ref'];
+				if ($this->BankStatement->readfile($filename)) {
+					// It seems ot be a valid .csv, grab all the payment references
+					$payRefs = array();
+					$this->BankStatement->iterate(function ($transaction) use(&$payRefs) {
+							$ref = $transaction['ref'];
 
-                                               if (is_string($ref) && strlen($ref) > 0) {
-                                                       array_push($payRefs, $ref);
-                                               }
-                                       });
+						if (is_string($ref) && strlen($ref) > 0) {
+							array_push($payRefs, $ref);
+						}
+					});
 
-                                       // Ok so we have a list of payment refs, get the account id's from them
-                                       $accountIds = $this->Member->Account->getAccountIdsForRefs($payRefs);
-                                       if ( is_array($accountIds) && count($accountIds) > 0) {
-                                               // Ok now we need the rest of the member info
-                                               $members = $this->Member->getMemberSummaryForAccountIds(false, $accountIds);
+					// Ok so we have a list of payment refs, get the account id's from them
+					$accountIds = $this->Member->Account->getAccountIdsForRefs($payRefs);
+					if ( is_array($accountIds) && count($accountIds) > 0) {
+						// Ok now we need the rest of the member info
+						$members = $this->Member->getMemberSummaryForAccountIds(false, $accountIds);
 
-                                               // We only want members who we're waiting for payments from (Pre-Member 3)
-                                               foreach ($members as $member) {
-                                                       if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3) {
-                                                               array_push(
-                                                                       $validMemberIds,
-                                                                       $member['id']
-                                                               );
-                                                       }
-                                               }
-                                       }
+						// We only want members who we're waiting for payments from (Pre-Member 3 or Ex members)
+						foreach ($members as $member) {
+							if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3 || Hash::get($member, 'status.id') == Status::EX_MEMBER) {
+								array_push(
+									$validMemberIds,
+									$member['id']
+								);
+							}
+						}
+					}
 
-                                       // Did we find any? If so write them to the session with a guid.
-                                       // This is 100% not dodgy... Honest.
-                                       if (count($validMemberIds) > 0) {
-                                               $guid = $this->getMemberIdSessionKey();
-                                               $this->Session->write($guid, $validMemberIds);
+					// Did we find any? If so write them to the session with a guid.
+					// This is 100% not dodgy... Honest.
+					if (count($validMemberIds) > 0) {
+						$guid = $this->getMemberIdSessionKey();
+						$this->Session->write($guid, $validMemberIds);
 
-                                               $this->Nav->add('Approve All', 'members', 'uploadTsb', array($guid), 'positive');
-                                       } else {
-                                               $this->Session->setFlash('No new member payments in .csv.');
-                                               return $this->redirect(array('controller' => 'members', 'action' => 'index'));
-                                       }
-                               } else {
-                                       // Invalid file
-                                       $this->Session->setFlash('That did not seem to be a valid bank .csv file');
-                                       return $this->redirect(array('controller' => 'members', 'action' => 'uploadTsb'));
-                               }
-                       }
-               } else {
-                       // Guid exists, is it valid?
-                       if ($this->Session->check($guid)) {
-                               // Yup then grab the member ids
-                               $validMemberIds = $this->Session->read($guid);
-                               $preview = false;
-                       } else {
-                               // Invalid guid, redirect to upload
-                               return $this->redirect(array('controller' => 'members', 'action' => 'uploadTsb'));
-                       }
-               }
+						$this->Nav->add('Approve All', 'members', 'uploadTsb', array($guid), 'positive');
+					} else {
+						$this->Session->setFlash('No new member payments in .csv.');
+						return $this->redirect(array('controller' => 'members', 'action' => 'index'));
+					}
+				} else {
+					// Invalid file
+					$this->Session->setFlash('That did not seem to be a valid bank .csv file');
+					return $this->redirect(array('controller' => 'members', 'action' => 'uploadTsb'));
+				}
+			}
+		} else {
+			// Guid exists, is it valid?
+			if ($this->Session->check($guid)) {
+				// Yup then grab the member ids
+				$validMemberIds = $this->Session->read($guid);
+				$preview = false;
+			} else {
+				// Invalid guid, redirect to upload
+				return $this->redirect(array('controller' => 'members', 'action' => 'uploadTsb'));
+			}
+		}
 
-               // If there are no valid members then just show the upload form
-               if (count($validMemberIds) <= 0) {
-                       $this->set('memberList', null);
-               } else {
-                       // Grab the member info, this might actually be the second time we're doing this if we've just uploaded.
-                       $members = $this->Member->getMemberSummaryForMembers($validMemberIds, true);
-                       $this->set('memberList', $members);
+		// If there are no valid members then just show the upload form
+		if (count($validMemberIds) <= 0) {
+			$this->set('memberList', null);
+		} else {
+			// Grab the member info, this might actually be the second time we're doing this if we've just uploaded.
+			$members = $this->Member->getMemberSummaryForMembers($validMemberIds, true);
+			$this->set('memberList', $members);
 
-                       // If we're not previewing, they do the actual approval
-                       if (!$preview) {
-                               $flash = '';
-                               // Actually approve the members
-                               foreach ($members as $member) {
-                                       if ($this->__approveMember($member['id'])) {
-                                               $flash .= 'Successfully approved';
-                                       } else {
-                                               $flash .= 'Unable to approve';
-                                       }
+			// If we're not previewing, they do the actual approval
+			if (!$preview) {
+				$flash = '';
+				// Actually approve the members
+				foreach ($members as $member) {
+					if ($this->__approveMember($member['id'])) {
+						$flash .= 'Successfully approved';
+					} else {
+						$flash .= 'Unable to approve';
+					}
 
-                                       $flash .= sprintf(' member %s %s\n', $member['firstname'], $member['surname']);
-                               }
+					$flash .= sprintf(' member %s %s\n', $member['firstname'], $member['surname']);
+				}
 
-                               $this->Session->delete($guid);
+				$this->Session->delete($guid);
 
-                               $this->Session->setFlash($flash);
-                               return $this->redirect(array('controller' => 'members', 'action' => 'index'));
-                       }
-               }
-       }
+				$this->Session->setFlash($flash);
+				return $this->redirect(array('controller' => 'members', 'action' => 'index'));
+			}
+		}
+	}
 
 /**
  * Upload a .csv file of bank transactions and look for members to approve.
@@ -1303,14 +1411,14 @@ class MembersController extends AppController {
 					});
 
 					// Ok so we have a list of payment refs, get the account id's from them
-                    $accountIds = $this->Member->Account->getAccountIdsForNatwestRefs($payRefs);
+					$accountIds = $this->Member->Account->getAccountIdsForNatwestRefs($payRefs);
 					if ( is_array($accountIds) && count($accountIds) > 0) {
 						// Ok now we need the rest of the member info
 						$members = $this->Member->getMemberSummaryForAccountIds(false, $accountIds);
 
-						// We only want members who we're waiting for payments from (Pre-Member 3)
+						// We only want members who we're waiting for payments from (Pre-Member 3 or Ex members)
 						foreach ($members as $member) {
-							if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3) {
+							if (Hash::get($member, 'status.id') == Status::PRE_MEMBER_3 || Hash::get($member, 'status.id') == Status::EX_MEMBER) {
 								array_push(
 									$validMemberIds,
 									$member['id']

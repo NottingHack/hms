@@ -9,6 +9,9 @@
     {
         $this->Html->addCrumb($statusInfo['name'], '/members/listMembersWithStatus/' . $statusInfo['id']);
     }
+
+    $this->Html->script('listmembers', array('inline' => false));
+
 ?>
 
 <div class="search">
@@ -63,8 +66,14 @@
                             $linkOptions = $action['params'];
                             $linkOptions['controller'] = $action['controller'];
                             $linkOptions['action'] = $action['action'];
+                            
+                            $options = null;
+                            if (isset($action['class']))
+                            {
+                                $options = array('class' => $action['class']);
+                            }
 
-                            echo $this->Html->link($action['title'], $linkOptions);
+                            echo $this->Html->link($action['title'], $linkOptions, $options);
                             echo "<br>";
                         }
                     ?>
@@ -78,3 +87,7 @@
 <?php else: ?>
     <p> No members to list. </p>
 <?php endif; ?>
+
+<div id="dialog-confirm" title="Are you sure?">
+  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Approve this member?</p>
+</div>

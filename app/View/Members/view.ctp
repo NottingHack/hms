@@ -3,6 +3,7 @@
 <?php
 	$this->Html->addCrumb('Members', '/members');
 	$this->Html->addCrumb(isset($member['username']) ? $member['username'] : $member['email'], '/members/view/' . $member['id']);
+    $this->Html->script('listmembers', array('inline' => false));
 ?>
 
 
@@ -110,7 +111,29 @@
 					echo $pin['pin'] . '<br/>';	
 				}
 			?>
-		</dd>
+		</dd>	
+	<?php endif; ?>
+
+    <?php if( isset($member['rfidtag']) ): ?>
+	    <dt>
+	    	Registered Cards
+	    </dt>
+	    <dd>
+	    	<?php
+	    	    	  
+	    	  $msg = ((count($member['rfidtag']) == 1) ? 'card' : 'cards');
+
+	    	  echo $this->Html->link(
+	    	  	count($member['rfidtag']) . ' '.  $msg . ' registered', 
+	    	  	array(
+	    	  		'controller' => 'rfidtags',
+	    	  		'action' => 'view',
+	    	  		$member['id']
+	    	  	),
+	    	  	array('escape' => false)
+	    	  );
+	    	?>
+	    </dd>
 	<?php endif; ?>
 
 	<?php if(isset($member['balance'])): ?>
@@ -279,3 +302,7 @@
 	?>
 
 </dl>
+
+<div id="dialog-confirm" title="Are you sure?">
+  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Approve this member?</p>
+</div>

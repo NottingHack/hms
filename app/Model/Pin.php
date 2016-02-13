@@ -40,6 +40,15 @@ class Pin extends AppModel {
  */
 	const STATE_ENROLL = 40;
 
+/** 
+ * String representation of states for display
+ */
+    public $statusStrings = array(
+                                  10 => 'Active',
+                                  20 => 'Expired',
+                                  30 => 'Calcelled',
+                                  40 => 'Enroll',
+                                  );
 /**
  * Specify the table to use.
  * @var string
@@ -146,4 +155,53 @@ class Pin extends AppModel {
 		}
 		return false;
 	}
+
+/**
+ * Reset pin to enroll state
+ *
+ * @param int $memberId The id of the member pin to change
+ * @return bool pass or fail
+ */
+    public function resetPinToEnrollForMember($memberId) {
+        if (is_numeric($memberId) && $memberId > 0) {
+            $findOptions = array(
+                'conditions' => array(
+                    'Pin.member_id' => $memberId,
+                ),
+                'fields' => array('Pin.*'),
+            );
+            // should only get one pin back anyway
+            $pinRecord = $this->find('first', $findOptions);
+
+            if ((int)$pinRecord['Pin']['state'] == Pin::STATE_CANCELLED) {
+                $pinRecord['Pin']['state'] = Pin::STATE_ENROLL;
+                return ($this->save($pinRecord) != false);
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+    
+/**
+ * Get pin state for memberId
+ *
+ * @param int $memberId The id of the member
+ * @return mixed False if no pin exists, pin state other wise
+ */
+    public function getPinStateForMember($memberId) {
+        if (is_numeric($memberId) && $memberId > 0) {
+                        $findOptions = array(
+                'conditions' => array(
+                    'Pin.member_id' => $memberId,
+                ),
+                'fields' => array('Pin.state'),
+            );
+            // should only get one pin back anyway
+            $pinRecord = $this->find('first', $findOptions);
+            
+            return $pinRecord['Pin']['state'];
+        }
+        return false;
+    }
 }
