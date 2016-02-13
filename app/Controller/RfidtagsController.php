@@ -13,16 +13,6 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-// App::uses('AppController', 'Controller');
-// App::uses('HmsAuthenticate', 'Controller/Component/Auth');
- //App::uses('MembersController', 'Controller');
-// App::uses('ForgotPassword', 'Model');
-// App::uses('CakeEmail', 'Network/Email');
-// App::uses('PhpReader', 'Configure');
-// Configure::config('default', new PhpReader());
-// Configure::load('hms', 'default');
-
-
 /**
  * Controller to handle Member functionality, allows members to be viewed,
  * edited, and registered.
@@ -39,7 +29,7 @@ class RfidTagsController extends AppController {
  * The list of models this Controller relies on.
  * @var array
  */
-	public $uses = array('RfidTag');
+	public $uses = array('RfidTag', 'Member');
 
 /**
  * Test to see if a user is authorized to make a request.
@@ -84,7 +74,6 @@ class RfidTagsController extends AppController {
  * @param int|null $memberId The id fo the member to view; null grabs the currently logged-in user id instead
  */
 	public function view($memberId = null) {
-		//$this->loadModel('Transactions');
 
 		if ($memberId == null) {
 			$memberId = $this->_getLoggedInMemberId();
@@ -92,7 +81,6 @@ class RfidTagsController extends AppController {
 
 		$this->__tagsList($memberId);
 
-		$this->loadModel('Member');
 		$member = $this->Member->getMemberSummaryForMember($memberId);
 		$this->set('member', $member);
 
@@ -104,7 +92,6 @@ class RfidTagsController extends AppController {
  * @param int|null $rfidSerial The serial number of the card to edit
  */
 	public function edit($rfidSerial = null) {
-		//$this->loadModel('Transactions');
 
 		$this->set('states', $this->RfidTag->statusStrings);
 

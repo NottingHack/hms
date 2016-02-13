@@ -48,6 +48,7 @@ class MembersController extends AppController {
 		}
 
 		$memberId = $this->Member->getIdForMember($user);
+        $memberIsCurrentMember = ($this->Member->getStatusForMember($memberId) == Status::CURRENT_MEMBER);
 		$memberIsMembershipAdmin = $this->Member->GroupsMember->isMemberInGroup( $memberId, Group::MEMBERSHIP_ADMIN );
 		$memberIsOnMembershipTeam = $this->Member->GroupsMember->isMemberInGroup( $memberId, Group::MEMBERSHIP_TEAM );
 		$actionHasParams = isset( $request->params ) && isset($request->params['pass']) && count( $request->params['pass'] ) > 0;
@@ -62,6 +63,7 @@ class MembersController extends AppController {
 			case 'rejectDetails':
 			case 'addExistingMember':
 			case 'emailMembersWithStatus':
+            case 'resetPinToEnroll':
 				return $memberIsMembershipAdmin;
 
 			case 'sendProspectiveMemberReminder':
@@ -84,6 +86,9 @@ class MembersController extends AppController {
 
 			case 'setupDetails':
 				return $firstParamIsMemberId;
+            
+            case 'viewAccessCodes':
+                return $memberIsCurrentMember;
 		}
 
 		return false;
@@ -914,6 +919,24 @@ class MembersController extends AppController {
 	}
 
 /**
+ * View the current hackspace access codes and wifi details
+ *
+ */
+    public function viewAccessCodes() {
+        // gather various access codes to pass to view and present to the view
+        
+        $accessCodes = array(
+                             'outerDoorCode' => Configure::read('hms_access_street_door'),
+                             'innerDoorCode' => Configure::read('hms_access_inner_door'),
+                             'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
+                             'wifiPass' => Configure::read('hms_access_wifi_password'),
+        );
+        
+        
+        $this->set('accessCodes', $accessCodes);
+    }
+    
+/**
  * Check to see if certain view/edit params should be shown to the logged in member.
  *
  * @param int $memberId The id of the member being viewed.
@@ -1040,6 +1063,23 @@ class MembersController extends AppController {
 		return $memberList;
 	}
 
+/** 
+ * Reset Pin To allow RFID Enroll
+ * 
+ * @param int $memberId 
+ *
+ */
+    public function resetPinToEnroll($memberId) {
+        // TODO: fix this, either use Pin model directly or add wrap helper to Member
+        if ($this->Member->Pin->resetPinToEnrollForMember($memberId)) {
+            $this->Session->setFlash('Pin has been reactivated');
+        } else {
+            $this->Session->setFlash('Failed to set pin to Enroll');
+        }
+        
+        return $this->redirect(array('action' => 'view', $memberId));
+    }
+
 /**
  * Get an array of possible actions for a member
  *
@@ -1162,7 +1202,20 @@ class MembersController extends AppController {
 						),
 					)
 				);
-
+                
+                // TODO: fix this, either use Pin model directly or add wrap helper to Member
+                if ($this->Member->Pin->getPinStateForMember($memberId) == Pin::STATE_CANCELLED) {
+                    array_push($actions,
+                        array(
+                            'title' => 'Reactivate Pin',
+                            'controller' => 'members',
+                            'action' => 'resetPinToEnroll',
+                            'params' => array(
+                                $memberId,
+                            ),
+                        )
+                    );
+                }
 			break;
 
 			case Status::EX_MEMBER:

@@ -483,11 +483,11 @@ class Member extends AppModel {
 				[n] =>
 					[id] => pin id
 					[pin] => pin number
-					[statee] => pin state (see constance defined in Pin.php)
+					[state] => pin state (see constance defined in Pin.php)
             [rfidtag] =>
                 [n] =>
                     [serial] => rfid_serial
-                    [state] => state (see constance deined in RfidTag.php
+                    [state] => state (see constance deined in RfidTag.php)
                     [last_used] => last_used
                     [name] => friendly_name
 			[paymentRef] => member payment ref
@@ -1903,6 +1903,37 @@ class Member extends AppModel {
 			return null;
 		}
 
+/**
+ *  Get the account_id for a member, will hit the database.
+ * 
+ * @param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
+ * @return int The account_id for the member, or null if account_id could not be found.
+ */
+		public function getAccountIdForMember($memberData) {
+			if (!isset($memberData)) {
+				return null;
+			}
+
+			if (is_array($memberData)) {
+				$memberData = Hash::get($memberData, 'Member.member_id');
+			}
+            
+            $memberInfo = $this->find('first', array(
+                                                     'fields' => array('Member.account_id'),
+                                                     'conditions' => array('Member.member_id' => $memberData),
+                                                     'recursive' => -1,
+                                                     )
+                                      );
+            
+			if (is_array($memberInfo)) {
+				$account_id = Hash::get($memberInfo, 'Member.account_id');
+				if (isset($accountId)) {
+					return $accountId;
+				}
+			}
+			return null;
+		}
+		
 /**
  * Get a list of member names or e-mails (if we don't have their name) for all members.
  * 
