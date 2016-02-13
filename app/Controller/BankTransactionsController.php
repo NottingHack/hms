@@ -28,7 +28,7 @@ class BankTransactionsController extends AppController {
  * List of models this controller uses.
  * @var array
  */
-    public $uses = array('BankTransaction');
+    public $uses = array('BankTransaction', 'Member');
     
 /** 
  * Test to see if a user is authorised to make a request.
@@ -158,9 +158,13 @@ class BankTransactionsController extends AppController {
 		if ($memberId == null) {
 			$memberId = $this->_getLoggedInMemberId();
 		}
-        // grab account_id from member_id
-        $this->Member->id = $memberId;
-        $accountId = $this->Member->field('account_id');
+
+        // grab memeberSummary for breadcrums
+        $member = $this->Member->getMemberSummaryForMember($memberId);
+        $this->set('member', $member);
+        
+        // grab account_id as its not in memberSummary
+        $accountId = $this->Member->getAccountIdForMember($memberId);
         
         $this->__paginateTransactionList($accountId);
 

@@ -2,7 +2,8 @@
 
 <?php
     $this->Html->addCrumb('Members', '/members');
-    $this->Html->addCrumb('Membership Payments', '/banktransactions/history/');
+    $this->Html->addCrumb(isset($member['username']) ? $member['username'] : $member['email'], '/members/view/' . $member['id']);
+    $this->Html->addCrumb('Membership Payments', '/banktransactions/history/' . $member['id']);
 ?>
 <table>
 	<tr>
