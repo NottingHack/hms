@@ -1909,13 +1909,14 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(6))->method('add');
+			$this->controller->Nav->expects($this->exactly(7))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
 			$this->controller->Nav->expects($this->at(4))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(4));
 			$this->controller->Nav->expects($this->at(5))->method('add')->with('Resend Welcome Email', 'members', 'sendMembershipCompleteMail', array(4));
+            $this->controller->Nav->expects($this->at(6))->method('add')->with('Reactivate Pin', 'members', 'resetPinToEnroll', array(4));
 
 			// Should not redirect, and should populate
 			$this->testAction('members/view/4');
@@ -2016,13 +2017,15 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(6))->method('add');
+			$this->controller->Nav->expects($this->exactly(7))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(3));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(3));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(3));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(3));
 			$this->controller->Nav->expects($this->at(4))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(3));
 			$this->controller->Nav->expects($this->at(5))->method('add')->with('Resend Welcome Email', 'members', 'sendMembershipCompleteMail', array(3));
+            $this->controller->Nav->expects($this->at(6))->method('add')->with('Reactivate Pin', 'members', 'resetPinToEnroll', array(3));
+
 
 			// Should not redirect, and should populate
  				$this->testAction('members/view/3');
@@ -2106,13 +2109,14 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(6))->method('add');
+			$this->controller->Nav->expects($this->exactly(7))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('View Email History', 'emailRecords', 'view', array(4));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Edit', 'members', 'edit', array(4));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Change Password', 'members', 'changePassword', array(4));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(4));
 			$this->controller->Nav->expects($this->at(4))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(4));
 			$this->controller->Nav->expects($this->at(5))->method('add')->with('Resend Welcome Email', 'members', 'sendMembershipCompleteMail', array(4));
+            $this->controller->Nav->expects($this->at(6))->method('add')->with('Reactivate Pin', 'members', 'resetPinToEnroll', array(4));
 
 			// Should not redirect, and should populate
 			$this->testAction('members/view/4');
@@ -2213,12 +2217,13 @@
 
 			$this->_constructMailingList();
 
-			$this->controller->Nav->expects($this->exactly(5))->method('add');
+			$this->controller->Nav->expects($this->exactly(6))->method('add');
 			$this->controller->Nav->expects($this->at(0))->method('add')->with('Edit', 'members', 'edit', array(3));
 			$this->controller->Nav->expects($this->at(1))->method('add')->with('Change Password', 'members', 'changePassword', array(3));
 			$this->controller->Nav->expects($this->at(2))->method('add')->with('Revoke Membership', 'members', 'revokeMembership', array(3));
 			$this->controller->Nav->expects($this->at(3))->method('add')->with('Send SO Details Reminder', 'members', 'sendSoDetailsReminder', array(3));
 			$this->controller->Nav->expects($this->at(4))->method('add')->with('Resend Welcome Email', 'members', 'sendMembershipCompleteMail', array(3));
+            $this->controller->Nav->expects($this->at(5))->method('add')->with('Reactivate Pin', 'members', 'resetPinToEnroll', array(3));
 
 			// Should not redirect, and should populate
 			$this->testAction('members/view/3');

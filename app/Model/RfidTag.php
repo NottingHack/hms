@@ -30,13 +30,19 @@ class RfidTag extends AppModel {
  */
 	const STATE_EXPIRED = 20;
 
+/**
+ * RfidTag has been lost and can no longer be used for entry.
+ */
 	const STATE_LOST = 30;
 
-public $statusStrings = array(
-	10 => 'Active',
-	20 => 'Expired',
-	30 => 'Lost',
-	);
+/**
+ * String representation of states for display
+ */
+    public $statusStrings = array(
+                                  10 => 'Active',
+                                  20 => 'Expired',
+                                  30 => 'Lost',
+                                  );
 
 /**
  * Specify the table to use.
@@ -129,14 +135,20 @@ public $statusStrings = array(
 		return $info;
 	}
 
-
-public function formatRfidTagList($tagsList, $removeNullEntries) {
-	$formatted = array();
-	foreach($tagsList as $tag) {
-		array_push($formatted, $this->formatDetails($tag, $removeNullEntries));
-	}
-	return $formatted;
-}
+/**
+ * Format an array of tags
+ * 
+ * @param array $tagsList The array of tags.
+ * @param bool $removeNullEntries If true then entries that have a value of null, false or an empty array won't exist in the final array.
+ * @return array A list of tags or query to report a list of tags
+ */
+    public function formatRfidTagList($tagsList, $removeNullEntries) {
+        $formatted = array();
+        foreach($tagsList as $tag) {
+            array_push($formatted, $this->formatDetails($tag, $removeNullEntries));
+        }
+        return $formatted;
+    }
 
 /**
  * Flatten tag details array
