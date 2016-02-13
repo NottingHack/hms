@@ -1926,7 +1926,7 @@ class Member extends AppModel {
                                       );
             
 			if (is_array($memberInfo)) {
-				$account_id = Hash::get($memberInfo, 'Member.account_id');
+				$accountId = Hash::get($memberInfo, 'Member.account_id');
 				if (isset($accountId)) {
 					return $accountId;
 				}
