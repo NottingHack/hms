@@ -29,7 +29,7 @@ class RfidTagsController extends AppController {
  * The list of models this Controller relies on.
  * @var array
  */
-	public $uses = array('RfidTag');
+	public $uses = array('RfidTag', 'Member');
 
 /**
  * Test to see if a user is authorized to make a request.
@@ -81,7 +81,6 @@ class RfidTagsController extends AppController {
 
 		$this->__tagsList($memberId);
 
-		$this->loadModel('Member');
 		$member = $this->Member->getMemberSummaryForMember($memberId);
 		$this->set('member', $member);
 
