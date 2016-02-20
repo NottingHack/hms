@@ -29,7 +29,13 @@ class AuditMembersController extends AppController {
  * The list of models this Controller relies on.
  * @var array
  */
-	public $uses = array('Member', 'BankTransaction', 'Account');
+	public $uses = array('Member', 'BankTransaction');
+
+/**
+ * Constanst to define when membership is remove and warned
+ */
+    const REVOKE_INTERVAL = "P2M";
+    const WARN_INTERVAL = "P1M14D";
 
 /**
  * Test to see if a user is authorized to make a request.
@@ -70,6 +76,7 @@ class AuditMembersController extends AppController {
             'group' => array(
                              'BankTransaction.account_id'
                              ),
+            'recursive' => -1,
         );
         
         $bt = $this->BankTransaction->find('all', $btOptions);
@@ -107,54 +114,63 @@ class AuditMembersController extends AppController {
          */
         $memberIdsAndStatusForAccounts = $this->Member->find('list', $mOptions);
         
-        // now we have the data we need
-//        debug($latestTransactionDateForAccounts);
-//        debug($memberIdsAndStatusForAccounts);
+        // now we have the data we need from the DB
         
         $approveIds = array();
         $warnIds = array();
         $revokeIds = array();
         $reactivateIds = array();
-        $ohcrapIds = array();
+        $ohCrapIds = array();
+
+        $dateNow = new DateTime(); // this will be the server time the we run, might need to shift time portion to end of the day 23:59
+        $dateNow->setTime(0,0,0);
+        $warnDate = clone $dateNow;
+        $warnDate->sub(new DateInterval(self::WARN_INTERVAL));
+        $revokeDate = clone $dateNow;
+        $revokeDate->sub(new DateInterval(self::REVOKE_INTERVAL));
+
         // now we can work through the data and apply audit logic
         foreach ($memberIdsAndStatusForAccounts as $accountId => $membersForAccount) {
             if (isset($latestTransactionDateForAccounts[$accountId])) {
-                $latestDate = $latestTransactionDateForAccounts[$accountId];
-//                $trasnactionDiff = // Now - $latestDate
+                $transactionDate = new DateTime($latestTransactionDateForAccounts[$accountId]);
             } else {
-                $latestDate = null;
-                $trasnactionDiff = null;
+                $transactionDate = null;
             }
+            
             
             foreach ($membersForAccount as $memberId => $memberStatus) {
                 // either switch on transaction age or on status???
                 switch ($memberStatus) {
                     case Status::PRE_MEMBER_3:
-                        if ($latestDate === null) {
-                            break;
-                        } elseif ( /* date diff is less than 2 months */ ) {
+                        if ($transactionDate === null) {
+                            break; // not paid us yet notting to do here
+                        } elseif ($transactionDate > $revokeDate) { // transaction date is newer than revoke date
                             // approve member
                             array_push($approveIds, $memberId);
+                        } else { // transaction date is older than revoke date
+                            // why have they not yet been approved yet tell the admins
+                            array_push($ohCrapIds, $memberId);
                         }
                         break;
+
                     case Status::CURRENT_MEMBER:
-                        if ($latestDate === null) {
-                            // hmmmmmmmmmmmmmmmmm should not be here
-                            // warn admins some how
-                            array_push($ohcrapIds, $memberId);
-                            
-                        } elseif ( /* date diff is over 2 months */ ) {
+                        if ($transactionDate === null) {
+                            // current member that has never paid us?
+                            // tell the admins
+                            array_push($ohCrapIds, $memberId);
+                        } elseif ($transactionDate < $revokeDate) { // transaction date is older than revoke date
                             // make ex member
-                            array_push(revokeIds, $memberId);
-                        } elseif ( /* date diff is ==== 1.5 months */ ) {
+                            array_push($revokeIds, $memberId);
+                        } elseif ($transactionDate < $warnDate) { // transaction date is older than warning date
                             // if not all ready warned
                                 // warn membership may be terminated if we dont see one soon
-                                array_push($warnIds, $memberId);
+                            array_push($warnIds, $memberId);
                         }
-                        /* date diff should be less than 1.5 months */
+                        // date diff should be less than 1.5 months
                         break;
+
                     case Status::EX_MEMBER:
-                        if ( /* date diff less than 2 months */ ) {
+                        if ($transactionDate > $revokeDate){ // transaction date is newer than revoke date
                             // reactivate member
                             array_push($reactivateIds, $memberId);
                         }
@@ -171,11 +187,17 @@ class AuditMembersController extends AppController {
         // showing diffrent bits of info for diffrent states
         // approve, name, emial, pin, joint?
         // warn, name, email, last payment date, ref, last visit date, joint?
-        // revoker, name, email, last payment date, ref, last visit date, joint?
+        // revoke, name, email, last payment date, ref, last visit date, joint?
         // reactivte, name, emial, date they were made ex, last visit date, joint?
         // ohcrap list to software@, member_id
         
-        
+        debug($approveIds);
+        debug($warnIds);
+        debug($revokeIds);
+        debug($reactivateIds);
+        debug($ohCrapIds);
+              
+
         
         $this->Session->setFlash('No audit ran');
         
