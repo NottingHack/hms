@@ -289,7 +289,8 @@ class MemberProjectsController extends AppController {
             
                 if ($result) {
                     // pass redirect to list
-                    return $this->redirect(array('controller' => 'memberproject', 'action' => 'listProjects'));
+                    $this->Session->setFlash('Project created');
+                    return $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
                 } else {
                     // fail set flash and show page again
                     $this->Session->setFlash('Unable to create project');

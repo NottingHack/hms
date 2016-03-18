@@ -223,6 +223,27 @@ class MemberProject extends AppModel {
  */
     public function newProjectForMember($memberId, $projectName, $description) {
         
+        $project = array(
+                         'MemberProject' => array(
+                                                  'member_id' => $memberId,
+                                                  'project_name' => $projectName,
+                                                  'description' => $description,
+                                                  'start_date' => date('Y-m-d'),
+                                                  'state' => MemberProject::PROJCET_ACTIVE
+                                                  )
+                         );
+        $datasource = $this->getDataSource();
+        $datasource->begin();
+        
+        $this->create();
+        
+        
+        if (!$this->save($project)) {
+            $datasource->rollback();
+            return false;
+        }
+        
+        $datasource->commit();
         return true;
     }
     
