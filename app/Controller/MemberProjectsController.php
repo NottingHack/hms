@@ -127,7 +127,7 @@ class MemberProjectsController extends AppController {
  */
     public function view($memberProjectId = null) {
         if ($memberProjectId == null) {
-            $this->redirect(array('controller' => 'memberproject', 'action' => 'listProjects'));
+            $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
         }
         
         $memberId = $this->_getLoggedInMemberId();
@@ -156,7 +156,7 @@ class MemberProjectsController extends AppController {
  */
 	public function edit($memberProjectId = null) {
         if ($memberProjectId == null) {
-            $this->redirect(array('controller' => 'memberproject', 'action' => 'listProjects'));
+            $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
         }
         
         $memberId = $this->_getLoggedInMemberId();
@@ -195,7 +195,7 @@ class MemberProjectsController extends AppController {
  */
 	public function printDNHLabel($memberProjectId = null) {
         if ($memberProjectId == null) {
-            $this->redirect(array('controller' => 'memberproject', 'action' => 'listProjects'));
+            $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
         }
         
         $this->Session->setFlash('Not yet implmented');
@@ -210,7 +210,7 @@ class MemberProjectsController extends AppController {
  */
 	public function markComplete($memberProjectId = null) {
         if ($memberProjectId == null) {
-            $this->redirect(array('controller' => 'memberproject', 'action' => 'listProjects'));
+            $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
         }
         
         if ($this->MemberProject->changeStateForPorject($memberProjectId, MemberProject::PROJCET_COMPLETE)) {
@@ -230,7 +230,7 @@ class MemberProjectsController extends AppController {
 	public function markAbandoned($memberProjectId = null) {
 
         if ($memberProjectId == null) {
-            $this->redirect(array('controller' => 'memberproject', 'action' => 'listProjects'));
+            $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
         }
         
         if ($this->MemberProject->changeStateForPorject($memberProjectId, MemberProject::PROJCET_ABANDONED)) {
@@ -251,7 +251,7 @@ class MemberProjectsController extends AppController {
 	public function resume($memberProjectId = null) {
 
         if ($memberProjectId == null) {
-            $this->redirect(array('controller' => 'memberproject', 'action' => 'listProjects'));
+            $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
         }
         
         if ($this->MemberProject->changeStateForPorject($memberProjectId, MemberProject::PROJCET_ACTIVE)) {
