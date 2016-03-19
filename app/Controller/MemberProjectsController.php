@@ -89,18 +89,18 @@ EOD;
 
 		// Get the member_id details have been requested for & the logged in users member_id
 		$logMemberId = $this->_getLoggedInMemberId();
-		if (isset($request->params['pass'][0])) {
-			$reqMemberId = $request->params['pass'][0];
-		} else {
-			$reqMemberId = $logMemberId;
-		}
+        
 
+        
+        $memberIsCurrentMember = ($this->Member->getStatusForMember($logMemberId) == Status::CURRENT_MEMBER);
 		$memberAdmin = $this->Member->GroupsMember->isMemberInGroup( $logMemberId, Group::MEMBERSHIP_ADMIN);
 
 		switch ($request->action) {
             case 'index':
                 if (isset($request->params['pass'][0])) {
-                    return true;
+                    $reqProjectId = $request->params['pass'][0];
+                    $reqProjectMemberId = $this->MemberProject->getMemberIDforProject($reqProjectId);
+                    return $memberAdmin || ($reqProjectMemberId == $logMemberId);
                 } else {
                     return false;
                 }
@@ -112,9 +112,16 @@ EOD;
                 }
                 return $memberAdmin || ($reqMemberId == $logMemberId);
             case 'view':                // rest take memberProjcetId
+            case 'markComplete':
+                if (isset($request->params['pass'][0])) {
+                    $reqProjectId = $request->params['pass'][0];
+                } else {
+                    return false;
+                }
+                $reqProjectMemberId = $this->MemberProject->getMemberIDforProject($reqProjectId);
+                return $memberAdmin || ($reqProjectMemberId == $logMemberId);
 			case 'edit':
             case 'printDNHLabel':
-            case 'markComplete':
             case 'markAbandoned':
             case 'resume':
                 if (isset($request->params['pass'][0])) {
@@ -122,10 +129,10 @@ EOD;
                 } else {
                     return false;
                 }
-                $reqMemberId = $this->MemberProject->getMemberIDforProject($reqProjectId);
-                return $memberAdmin || ($reqMemberId == $logMemberId);
+                $reqProjectMemberId = $this->MemberProject->getMemberIDforProject($reqProjectId);
+                return $memberIsCurrentMember && ($memberAdmin || ($reqProjectMemberId == $logMemberId));
             case 'add':                 // takes no param
-                return true;
+                return $memberIsCurrentMember;
 		}
 	}
 
@@ -169,7 +176,7 @@ EOD;
         $this->set('member', $member);
         
         // you can only add your own projects
-        if ($memberId == $this->_getLoggedInMemberId()) {
+        if ($memberId == $this->_getLoggedInMemberId() && $this->Member->getStatusForMember($memberId) == Status::CURRENT_MEMBER) {
             $this->Nav->add('Add new project', 'memberprojects', 'add');
         }
 	}
