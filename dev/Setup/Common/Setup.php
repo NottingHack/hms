@@ -793,6 +793,7 @@ class Setup {
 				'innerdoor' => '1234',
 				'wifi' => '123456',
                 'membership_email' => 'membership@localhost',
+                'label_printer_ip' => 'localhost',
 			),
 			'debug' => array(
 			),

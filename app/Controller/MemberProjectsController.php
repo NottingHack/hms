@@ -13,7 +13,8 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 App::uses('AppController', 'Controller');
-
+App::uses('String', 'Utility');
+    
 /**
  * Controller to handle Member projects functionality.
  */
@@ -29,6 +30,48 @@ class MemberProjectsController extends AppController {
  * @var array
  */
 	public $uses = array('MemberProject', 'Member');
+    
+/**
+ * The list of components this Controller relies on.
+ * @var array
+ */
+    public $components = array('LabelPrinter');
+
+/**
+ * Label template
+ * Written in ELP2 with subsittutions use via sprintf
+ */
+    public $label_template = <<<'EOD'
+N
+q608
+A40,5,0,4,3,3,N,"DO NOT HACK"
+
+;General info
+A10,90,0,4,1,1,N,"Project name:"
+A10,135,0,4,1,1,N,":projectName"
+A10,180,0,4,1,1,N,"Member Name:"
+A10,225,0,:memberFontSize,1,1,N,":memberName"
+A10,270,0,4,1,1,N,"Member Username:"
+A10,315,0,4,1,1,N,":username"
+A10,360,0,4,1,1,N,"Start date: :startDate"
+
+;Worked on box
+LO416,180,176,4
+LO416,220,176,2
+LO416,180,4,420
+LO592,180,4,420
+LO416,600,176,4
+A426,190,0,4,1,1,N,"Worked on"
+A426,230,0,3,1,1,N,":lastDate"
+
+;qrcode and project Id
+b10,405,Q,s6,":qrURL"
+A220,405,0,4,1,1,N,"Project Id:"
+A:idOffset,490,0,4,2,2,N,":memberProjectId"
+
+P1
+
+EOD;
 
 /**
  * Test to see if a user is authorized to make a request.
@@ -198,7 +241,49 @@ class MemberProjectsController extends AppController {
             $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
         }
         
-        $this->Session->setFlash('Not yet implmented');
+ 
+        $project = $this->MemberProject->getProject($memberProjectId);
+        $member = $this->Member->getMemberSummaryForMember($project['memberId']);
+        
+        $qrURL = Router::url([
+                          'controller' => 'memberprojects',
+                          'action' => 'view',
+                          $project['memberProjectId'],
+                          ], true);
+        
+        $qrURL = 'http://lspsce.nottinghack.org.uk/hms/memberprojects/view/99999';
+        
+        $memberName = $member['firstname'] . ' ' . $member['surname'];
+
+        // attempt to
+        if (strlen($memberName) > 24) {
+            $memberFontSize = '3';
+        } else {
+            $memberFontSize = '4';
+        }
+ 
+        // hack to offset the ID printing and give the look of right justification
+        $idOffset = (5 - strlen($project['memberProjectId'])) * 35;
+
+        $substitutions = array(
+                               'memberName' => $memberName,
+                               'memberFontSize' => $memberFontSize,
+                               'username' => $member['username'],
+                               'projectName' => $project['projectName'],
+                               'startDate' => $project['startDate'],
+                               'memberProjectId' => $project['memberProjectId'],
+                               'qrURL' => $qrURL,
+                               'lastDate' => date('Y-m-d'),
+                               'idOffset' => 220 + $idOffset,
+                               );
+
+        $label = String::insert($this->label_template, $substitutions);
+        
+        if ($this->LabelPrinter->printLabel($label)) {
+            $this->Session->setFlash('Label sent to printer');
+        } else {
+            $this->Session->setFlash('Unable to print label');
+        }
         
         return $this->redirect($this->referer());
 	}
