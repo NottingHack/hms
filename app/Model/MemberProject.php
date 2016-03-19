@@ -132,6 +132,26 @@ class MemberProject extends AppModel {
 
 		return $details;
     }
+
+/** 
+ * Get memberId for a project
+ *
+ * @param int $memberProjectId
+ * @return int $memberId
+ */
+    public function getMemberIDforProject($memberProjectId) {
+        $findOptions = array(
+                             'conditions' => array(
+                                                   'MemberProject.member_project_id' => $memberProjectId,
+                                                   ),
+                             'fields' => array('MemberProject.member_project_id', 'MemberProject.member_id'),
+                             );
+        
+        $details = $this->find( 'first', $findOptions );
+        
+        return Hash::get($details ,'MemberProject.member_id');
+    }
+    
 /**
  * Get a list of projects for a member
  * 

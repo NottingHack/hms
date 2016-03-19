@@ -100,19 +100,30 @@ EOD;
 		switch ($request->action) {
             case 'index':
                 if (isset($request->params['pass'][0])) {
-                    // redirect to viewProject/{id}
-                    // hmm can we call view in index then render when it returns?
                     return true;
                 } else {
                     return false;
                 }
             case 'listProjects':                // takes memberId (or if null shows loggedInMemberId
+                if (isset($request->params['pass'][0])) {
+                    $reqMemberId = $request->params['pass'][0];
+                } else {
+                    $reqMemberId = $logMemberId;
+                }
+                return $memberAdmin || ($reqMemberId == $logMemberId);
             case 'view':                // rest take memberProjcetId
 			case 'edit':
             case 'printDNHLabel':
             case 'markComplete':
             case 'markAbandoned':
             case 'resume':
+                if (isset($request->params['pass'][0])) {
+                    $reqProjectId = $request->params['pass'][0];
+                } else {
+                    return false;
+                }
+                $reqMemberId = $this->MemberProject->getMemberIDforProject($reqProjectId);
+                return $memberAdmin || ($reqMemberId == $logMemberId);
             case 'add':                 // takes no param
                 return true;
 		}
