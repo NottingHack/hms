@@ -43,31 +43,31 @@ class MemberProjectsController extends AppController {
  */
     public $label_template = <<<'EOD'
 N
-q608
+q792
 A40,5,0,4,3,3,N,"DO NOT HACK"
 
 ;General info
 A10,90,0,4,1,1,N,"Project name:"
-A10,135,0,4,1,1,N,":projectName"
-A10,180,0,4,1,1,N,"Member Name:"
-A10,225,0,:memberFontSize,1,1,N,":memberName"
-A10,270,0,4,1,1,N,"Member Username:"
-A10,315,0,4,1,1,N,":username"
-A10,360,0,4,1,1,N,"Start date: :startDate"
+A10,130,0,4,1,1,N,":projectName"
+A10,170,0,4,1,1,N,"Member Name:"
+A10,210,0,:memberFontSize,1,1,N,":memberName"
+A10,250,0,4,1,1,N,"Member Username:"
+A10,290,0,4,1,1,N,":username"
+A10,330,0,4,1,1,N,"Start date: :startDate"
 
 ;Worked on box
-LO416,180,176,4
-LO416,220,176,2
-LO416,180,4,420
-LO592,180,4,420
-LO416,600,176,4
-A426,190,0,4,1,1,N,"Worked on"
-A426,230,0,3,1,1,N,":lastDate"
+LO600,5,176,4
+LO600,45,176,2
+LO600,5,4,563
+LO776,5,4,563
+LO600,568,176,4
+A610,15,0,4,1,1,N,"Worked on"
+A610,55,0,3,1,1,N,":lastDate"
 
 ;qrcode and project Id
-b10,405,Q,s6,":qrURL"
-A220,405,0,4,1,1,N,"Project Id:"
-A:idOffset,490,0,4,2,2,N,":memberProjectId"
+b10,370,Q,s6,":qrURL"
+A220,370,0,4,1,1,N,"Project Id:"
+A:idOffset,455,0,4,2,2,N,":memberProjectId"
 
 P1
 
