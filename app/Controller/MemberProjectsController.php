@@ -269,8 +269,6 @@ EOD;
                           $project['memberProjectId'],
                           ], true);
         
-        $qrURL = 'http://lspsce.nottinghack.org.uk/hms/memberprojects/view/99999';
-        
         $memberName = $member['firstname'] . ' ' . $member['surname'];
 
         // attempt to
