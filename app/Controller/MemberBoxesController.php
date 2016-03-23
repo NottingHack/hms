@@ -153,7 +153,7 @@ class MemberBoxesController extends AppController {
             $this->Nav->add('Buy new box', 'memberBoxes', 'buy');
         }
         
-        if ($this->Member->GroupsMember->isMemberInGroup( $logMemberId, Group::MEMBERSHIP_ADMIN)) {
+        if ($this->Member->GroupsMember->isMemberInGroup( $this->_getLoggedInMemberId(), Group::MEMBERSHIP_ADMIN)) {
             $this->Nav->add('Issue new box', 'memberBoxes', 'issue', array($memberId));
         }
 	}
@@ -323,7 +323,7 @@ class MemberBoxesController extends AppController {
  * @param int $memberId
  */
     public function issue($memberId) {
-        if ($memberBoxId == null) {
+        if ($memberId == null) {
             $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
         }
         

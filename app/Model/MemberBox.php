@@ -227,7 +227,7 @@ class MemberBox extends AppModel {
                          'MemberBox' => array(
                                                   'member_id' => $memberId,
                                                   'brought_date' => date('Y-m-d'),
-                                                  'state' => MemberBox::BOX_INSUE
+                                                  'state' => MemberBox::BOX_INUSE
                                                   )
                          );
         $datasource = $this->getDataSource();
