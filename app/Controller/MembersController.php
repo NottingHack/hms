@@ -1224,6 +1224,18 @@ class MembersController extends AppController {
                         )
                     );
                 }
+                
+                array_push($actions,
+                       array(
+                             'title' => 'View Projects',
+                             'controller' => 'memberProjects',
+                             'action' => 'listProjects',
+                             'params' => array(
+                                               $memberId,
+                                               ),
+                             )
+                       );
+                
 			break;
 
 			case Status::EX_MEMBER:

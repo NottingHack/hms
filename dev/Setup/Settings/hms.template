@@ -13,5 +13,7 @@
         'hms_access_wifi_ssid' => 'HSNOTTS',
         'hms_access_wifi_password' => '%%wifi%%',
         'hms_membership_email' => '%%membership_email%%',
+        
+        'hms_label_printer_ip' => '%%label_printer_ip%%',
         );
 ?>
