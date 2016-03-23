@@ -38,40 +38,9 @@ class MemberProjectsController extends AppController {
     public $components = array('LabelPrinter');
 
 /**
- * Label template
- * Written in ELP2 with subsittutions use via sprintf
+ * Label template name
  */
-    public $label_template = <<<'EOD'
-N
-q792
-A40,5,0,4,3,3,N,"DO NOT HACK"
-
-;General info
-A10,90,0,4,1,1,N,"Project name:"
-A10,130,0,4,1,1,N,":projectName"
-A10,170,0,4,1,1,N,"Member Name:"
-A10,210,0,:memberFontSize,1,1,N,":memberName"
-A10,250,0,4,1,1,N,"Member Username:"
-A10,290,0,4,1,1,N,":username"
-A10,330,0,4,1,1,N,"Start date: :startDate"
-
-;Worked on box
-LO600,5,176,4
-LO600,45,176,2
-LO600,5,4,563
-LO776,5,4,563
-LO600,568,176,4
-A610,15,0,4,1,1,N,"Worked on"
-A610,55,0,3,1,1,N,":lastDate"
-
-;qrcode and project Id
-b10,370,Q,s6,":qrURL"
-A220,370,0,4,1,1,N,"Project Id:"
-A:idOffset,455,0,4,2,2,N,":memberProjectId"
-
-P1
-
-EOD;
+    public $label_template = 'member_project';
 
 /**
  * Test to see if a user is authorized to make a request.
@@ -270,20 +239,12 @@ EOD;
                           ], true);
         
         $memberName = $member['firstname'] . ' ' . $member['surname'];
-
-        // attempt to
-        if (strlen($memberName) > 24) {
-            $memberFontSize = '3';
-        } else {
-            $memberFontSize = '4';
-        }
  
         // hack to offset the ID printing and give the look of right justification
         $idOffset = (5 - strlen($project['memberProjectId'])) * 35;
 
         $substitutions = array(
                                'memberName' => $memberName,
-                               'memberFontSize' => $memberFontSize,
                                'username' => $member['username'],
                                'projectName' => $project['projectName'],
                                'startDate' => $project['startDate'],
@@ -293,9 +254,7 @@ EOD;
                                'idOffset' => 220 + $idOffset,
                                );
 
-        $label = String::insert($this->label_template, $substitutions);
-        
-        if ($this->LabelPrinter->printLabel($label)) {
+        if ($this->LabelPrinter->printLabel($this->label_template, $substitutions)) {
             $this->Session->setFlash('Label sent to printer');
         } else {
             $this->Session->setFlash('Unable to print label');

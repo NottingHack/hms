@@ -32,10 +32,22 @@ class LabelPrinterComponent extends Component {
 /**
  * Print a label
  * thanks to http://stackoverflow.com/a/15956807
- * @param string $label
+ *
+ * @param string $templateName
+ * @param array $substitutions
  * @return bool
  */
-    public function printLabel($label) {
+    public function printLabel($templateName, $substitutions = array()) {
+        
+        $this->LabelTemplate = ClassRegistry::init('LabelTemplate');
+        
+        $template = $this->LabelTemplate->getTemplate($templateName);
+        if ($template == null) {
+            return false;
+        }
+        
+        $label = String::insert($template, $substitutions);
+        
         // Get the IP address for the printer.
         $host = Configure::read('hms_label_printer_ip');
         
