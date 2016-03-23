@@ -1235,6 +1235,16 @@ class MembersController extends AppController {
                                                ),
                              )
                        );
+                array_push($actions,
+                           array(
+                                 'title' => 'View Boxes',
+                                 'controller' => 'memberBoxes',
+                                 'action' => 'listBoxes',
+                                 'params' => array(
+                                                   $memberId,
+                                                   ),
+                                 )
+                           );
                 
 			break;
 
