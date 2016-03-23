@@ -204,7 +204,7 @@ class MemberProject extends AppModel {
   		[projectName] => Project Name
   		[description] => full lenght description
   		[startDate] => date project started
-        [completeDate] => completer date
+        [completeDate] => complete date
   		[stateId] => state of card as used in the DB
   		[stateName] => description of the stateId value
   	*/

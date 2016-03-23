@@ -181,7 +181,7 @@ class MemberProjectsController extends AppController {
 /**
  * Edit a project
  *
- * @param int|null $memberProjectId The id of the project to view; null redirect to list
+ * @param int|null $memberProjectId The id of the project to edit; null redirect to list
  */
 	public function edit($memberProjectId = null) {
         if ($memberProjectId == null) {
@@ -220,7 +220,7 @@ class MemberProjectsController extends AppController {
 /**
  * Print Do-Not-Hack label for a project
  *
- * @param int|null $memberProjectId The id of the project to view; null redirect to list
+ * @param int|null $memberProjectId The id of the project to print; null redirect to list
  */
 	public function printDNHLabel($memberProjectId = null) {
         if ($memberProjectId == null) {
@@ -337,7 +337,6 @@ class MemberProjectsController extends AppController {
             // sanitise!
             $sanitisedData = $this->request->data;
             
-            var_dump($sanitisedData);
             if ($sanitisedData) {
                 // clean the data
                 // create a new projectformember
