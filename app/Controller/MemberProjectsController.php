@@ -111,7 +111,7 @@ class MemberProjectsController extends AppController {
  */
 	public function index($memberProjectId = null) {
         if ($memberProjectId == null) {
-            return $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
+            return $this->redirect(array('controller' => 'memberProjects', 'action' => 'listProjects'));
         }
         
         $this->view($memberProjectId);
@@ -145,7 +145,7 @@ class MemberProjectsController extends AppController {
         
         // you can only add your own projects
         if ($memberId == $this->_getLoggedInMemberId() && $this->Member->getStatusForMember($memberId) == Status::CURRENT_MEMBER) {
-            $this->Nav->add('Add new project', 'memberprojects', 'add');
+            $this->Nav->add('Add new project', 'memberProjects', 'add');
         }
 	}
     
@@ -156,7 +156,7 @@ class MemberProjectsController extends AppController {
  */
     public function view($memberProjectId = null) {
         if ($memberProjectId == null) {
-            $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
+            $this->redirect(array('controller' => 'memberProjects', 'action' => 'listProjects'));
         }
         
         $project = $this->MemberProject->getProject($memberProjectId);
@@ -183,7 +183,7 @@ class MemberProjectsController extends AppController {
  */
 	public function edit($memberProjectId = null) {
         if ($memberProjectId == null) {
-            $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
+            $this->redirect(array('controller' => 'memberProjects', 'action' => 'listProjects'));
         }
         
         $project = $this->MemberProject->getProject($memberProjectId, false);
@@ -221,7 +221,7 @@ class MemberProjectsController extends AppController {
  */
 	public function printDNHLabel($memberProjectId = null) {
         if ($memberProjectId == null) {
-            $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
+            $this->redirect(array('controller' => 'memberProjects', 'action' => 'listProjects'));
         }
         
  
@@ -229,7 +229,7 @@ class MemberProjectsController extends AppController {
         $member = $this->Member->getMemberSummaryForMember($project['memberId']);
         
         $qrURL = Router::url([
-                          'controller' => 'memberprojects',
+                          'controller' => 'memberProjects',
                           'action' => 'view',
                           $project['memberProjectId'],
                           ], true);
@@ -266,7 +266,7 @@ class MemberProjectsController extends AppController {
  */
 	public function markComplete($memberProjectId = null) {
         if ($memberProjectId == null) {
-            $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
+            $this->redirect(array('controller' => 'memberProjects', 'action' => 'listProjects'));
         }
         
         if ($this->MemberProject->changeStateForPorject($memberProjectId, MemberProject::PROJCET_COMPLETE)) {
@@ -286,7 +286,7 @@ class MemberProjectsController extends AppController {
 	public function markAbandoned($memberProjectId = null) {
 
         if ($memberProjectId == null) {
-            $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
+            $this->redirect(array('controller' => 'memberProjects', 'action' => 'listProjects'));
         }
         
         if ($this->MemberProject->changeStateForPorject($memberProjectId, MemberProject::PROJCET_ABANDONED)) {
@@ -307,7 +307,7 @@ class MemberProjectsController extends AppController {
 	public function resume($memberProjectId = null) {
 
         if ($memberProjectId == null) {
-            $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
+            $this->redirect(array('controller' => 'memberProjects', 'action' => 'listProjects'));
         }
         
         if ($this->MemberProject->changeStateForPorject($memberProjectId, MemberProject::PROJCET_ACTIVE)) {
@@ -345,7 +345,7 @@ class MemberProjectsController extends AppController {
                 if ($result) {
                     // pass redirect to list
                     $this->Session->setFlash('Project created');
-                    return $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
+                    return $this->redirect(array('controller' => 'memberProjects', 'action' => 'listProjects'));
                 } else {
                     // fail set flash and show page again
                     $this->Session->setFlash('Unable to create project');
@@ -387,7 +387,7 @@ class MemberProjectsController extends AppController {
             array_push($actions,
                        array(
                              'title' => 'Edit Project',
-                             'controller' => 'memberprojects',
+                             'controller' => 'memberProjects',
                              'action' => 'edit',
                              'params' => array(
                                                $project['memberProjectId'],
@@ -398,7 +398,7 @@ class MemberProjectsController extends AppController {
             array_push($actions,
                        array(
                              'title' => 'View Project',
-                             'controller' => 'memberprojects',
+                             'controller' => 'memberProjects',
                              'action' => 'view',
                              'params' => array(
                                                $project['memberProjectId'],
@@ -412,7 +412,7 @@ class MemberProjectsController extends AppController {
             array_push($actions,
                        array(
                              'title' => 'Print Do-Not-Hack Label',
-                             'controller' => 'memberprojects',
+                             'controller' => 'memberProjects',
                              'action' => 'printDNHLabel',
                              'params' => array(
                                                $project['memberProjectId'],
@@ -428,7 +428,7 @@ class MemberProjectsController extends AppController {
             array_push($actions,
                        array(
                              'title' => 'Mark Complete',
-                             'controller' => 'memberprojects',
+                             'controller' => 'memberProjects',
                              'action' => 'markComplete',
                              'params' => array(
                                                $project['memberProjectId'],
@@ -441,7 +441,7 @@ class MemberProjectsController extends AppController {
         array_push($actions,
                    array(
                          'title' => 'Mark Abandoned',
-                         'controller' => 'memberprojects',
+                         'controller' => 'memberProjects',
                          'action' => 'markAbandoned',
                          'params' => array(
                                            $project['memberProjectId'],
@@ -453,7 +453,7 @@ class MemberProjectsController extends AppController {
         array_push($actions,
                    array(
                          'title' => 'Resume Project',
-                         'controller' => 'memberprojects',
+                         'controller' => 'memberProjects',
                          'action' => 'resume',
                          'params' => array(
                                            $project['memberProjectId'],
