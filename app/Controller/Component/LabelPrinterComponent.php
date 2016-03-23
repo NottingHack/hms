@@ -17,6 +17,7 @@ App::uses('Component', 'Controller');
 App::uses('PhpReader', 'Configure');
 Configure::config('default', new PhpReader());
 Configure::load('hms', 'default');
+App::uses('String', 'Utility');
 
 /**
  * LabelPrinterComponent is a component to handle printing to a network attached zebra printer.

@@ -13,7 +13,6 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 App::uses('AppController', 'Controller');
-App::uses('String', 'Utility');
     
 /**
  * Controller to handle Member projects functionality.
@@ -115,7 +114,7 @@ class MemberProjectsController extends AppController {
             return $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
         }
         
-        $this->viewProject($memberProjectId);
+        $this->view($memberProjectId);
         $this->render('view');
         
 	}
