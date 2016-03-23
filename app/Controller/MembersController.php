@@ -1224,7 +1224,7 @@ class MembersController extends AppController {
                         )
                     );
                 }
-                // TODO: fix this, either use Pin model directly or add wrap helper to Member
+                
                 array_push($actions,
                        array(
                              'title' => 'View Projects',
