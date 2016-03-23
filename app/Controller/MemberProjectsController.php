@@ -159,13 +159,11 @@ class MemberProjectsController extends AppController {
             $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
         }
         
-        $memberId = $this->_getLoggedInMemberId();
-        
-        $member = $this->Member->getMemberSummaryForMember($memberId);
-        $this->set('member', $member);
-        
         $project = $this->MemberProject->getProject($memberProjectId);
         $this->set('project', $project);
+        
+        $member = $this->Member->getMemberSummaryForMember($project['memberId']);
+        $this->set('member', $member);
         
         $project = $this->__addActionsForProject($project, true);
         
@@ -188,13 +186,12 @@ class MemberProjectsController extends AppController {
             $this->redirect(array('controller' => 'memberprojects', 'action' => 'listProjects'));
         }
         
-        $memberId = $this->_getLoggedInMemberId();
-        
-        $member = $this->Member->getMemberSummaryForMember($memberId);
-        $this->set('member', $member);
-        
         $project = $this->MemberProject->getProject($memberProjectId, false);
-        $this->set('project', $this->MemberProject->formatDetails($project));
+        $projectFormated = $this->MemberProject->formatDetails($project);
+        $this->set('project', $projectFormated);
+
+        $member = $this->Member->getMemberSummaryForMember($projectFormated['memberId']);
+        $this->set('member', $member);
         
         if ( $this->request->is('post') || $this->request->is('put')) {
             $sanitisedData = $this->request->data;
