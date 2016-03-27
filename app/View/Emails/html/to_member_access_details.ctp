@@ -7,20 +7,11 @@
 </p>
 
 <p>
-	GateKeeper is our RFID entry system, for which you need a suitable card set up. If you have a CityCard, Nottingham Library card, or Oyster Card, it will work with it, otherwise, we have blank RFIDs for a £1 deposit. Please contact someone from the membership team to arrange a meeting, or visit on the next open hack night and ask people to point you to one of the team.
+	GateKeeper is our RFID entry system for which you need a suitable card set up, which we provide. Visit on the next open hack night and ask people to point you to one of the membership team, or please contact membership@nottinghack.org.uk if you are unable to attend one.
 </p>
 
 <p>
-	Here's a calendar showing when people from the membership team could potentially meet you at the space:
-	<?php echo $this->Html->link('https://www.google.com/calendar/embed?src=bmnnboh643lt5gl0b2ku45c4p0%40group.calendar.google.com&ctz=Europe/London'); ?>
-</p>
-
-<p>
-	NOTE: This doesn't indicate when they *will* be at the space, just when they could potentially meet you to do gatekeeper setup and answer any other questions you might have. Switch to week view to see hours in which people can be available. If there are any issues please contact the member admin team at membership@nottinghack.org.uk
-</p>
-
-<p>
-	Here's a PDF hackspace manual:<br>
+	Here's a PDF hackspace manual, it can also be found at guide.nottinghack.org.uk<br>
 	<?php echo $manLink; ?>
 </p>
 
@@ -35,13 +26,18 @@
 </p>
 
 <p>
-	Here again is the google group:<br>
+	Our Google Group is where a lot of online discussion takes place:<br>
 	<?php echo $this->Html->link('https://groups.google.com/group/nottinghack?hl=en'); ?>
 </p>
 
 <p>
-	and the hackspace rules:<br>
-	<?php echo $this->Html->link('http://wiki.nottinghack.org.uk/wiki/Category:Rules'); ?>
+	The hackspace rules:<br>
+	<?php echo $this->Html->link('http://rules.nottinghack.org.uk'); ?>
+</p>
+
+<p>
+	We also have a wiki, with lots of information about the tools in the Hackspace:<br>
+	<?php echo $this->Html->link('http://wiki.nottinghack.org.uk/wiki'); ?>
 </p>
 
 <p>
@@ -50,5 +46,5 @@
 
 <p>
 	Thanks,<br>
-	Nottinghack Member Admin Team
+	Nottinghack Membership Team
 </p>
