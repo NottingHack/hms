@@ -58,3 +58,10 @@ $this->__logMessage('Insert into `lable_templates` table.');
     $query = "INSERT INTO `label_templates` (`template_name`, `template`) VALUES
     ('member_box', 'N\r\nq792\r\nA40,5,0,4,3,3,N,"MEMBERS BOX"\r\n\r\n;General info\r\nA10,90,0,4,1,1,N,"Member Name:"\r\nA10,130,0,4,2,2,N,":memberName"\r\nA10,230,0,4,1,1,N,"Member Username:"\r\nA10,270,0,4,2,2,N,":username"\r\n\r\n;qrcode and project Id\r\nb10,370,Q,s6,":qrURL"\r\nA220,370,0,4,1,1,N,"Box Id:"\r\nA:idOffset,455,0,4,2,2,N,":memberProjectId"\r\n\r\nP1\r\n');";
 $this->__runQuery($conn, $query);
+
+$this->__logMessage('Insert into `hms_meta` table.');
+$query = "INSERT INTO `hms_meta` (`name`, `value`) VALUES
+    ('member_box_cost', '-500'),
+    ('member_box_individual_limit', '3'),
+    ('member_box_limit', '129');";
+$this->__runQuery($conn, $query);

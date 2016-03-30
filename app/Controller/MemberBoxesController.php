@@ -28,7 +28,7 @@ class MemberBoxesController extends AppController {
  * The list of models this Controller relies on.
  * @var array
  */
-	public $uses = array('MemberBox', 'Member');
+	public $uses = array('MemberBox', 'Meta', 'Member');
     
 /**
  * The list of components this Controller relies on.
@@ -39,8 +39,13 @@ class MemberBoxesController extends AppController {
 /**
  * Label template name
  */
-    public $label_template = 'member_box';
-
+    private $labelTemplate = 'member_box';
+    
+    private $individualLimitKey = 'member_box_individual_limit';
+    private $maxLimitKey = 'member_box_limit';
+    private $boxCostKey = 'member_box_cost';
+    
+    
 /**
  * Test to see if a user is authorized to make a request.
  *
@@ -218,7 +223,7 @@ class MemberBoxesController extends AppController {
                                'idOffset' => 220 + $idOffset,
                                );
 
-        if ($this->LabelPrinter->printLabel($this->label_template, $substitutions)) {
+        if ($this->LabelPrinter->printLabel($this->labelTemplate, $substitutions)) {
             $this->Session->setFlash('Label sent to printer');
         } else {
             $this->Session->setFlash('Unable to print label');
@@ -297,12 +302,48 @@ class MemberBoxesController extends AppController {
         $member = $this->Member->getMemberSummaryForMember($memberId);
         $this->set('member', $member);
         
-        // if this is a POST/PUT:
-        if ($this->request->is('post') || $this->request->is('put')) {
-            // sanitise!
-            $sanitisedData = $this->request->data;
+        $individualLimit = ($this->Meta->getValueFor($this->individualLimitKey));
+        $maxLimit = ($this->Meta->getValueFor($this->maxLimitKey));
+        $boxCost = ($this->Meta->getValueFor($this->boxCostKey));
+        
+        $this->set('boxCost', -$boxCost);
+        
+        // check member does not all ready have max number of boxes
+        $memberBoxCount = $this->MemberBox->boxCountForMember($memberId);
+        $canBuyBox = true;
+        
+        if ($memberBoxCount == $individualLimit) {
+            // all ready got to many boxes
+            $this->Session->setFlash('Too many boxes already');
+            $canBuyBox = false;
             
-            // create a new boxformember
+        }
+        
+        // check we have not hit max limit of boxes
+        $spaceBoxCount = $this->MemberBox->boxCountForSpace();
+        if ($spaceBoxCount == $maxLimit) {
+            $this->Session->setFlash('Sorry we have no room for any more boxes');
+            $canBuyBox = false;
+            
+        }
+        
+        if (($member['balance'] + $boxCost) < (-1 *$member['creditLimit'])) {
+            $this->Session->setFlash('Sorry you do not have enought credit to buy another box');
+            $canBuyBox = false;
+        }
+
+        $this->set('canBuyBox', $canBuyBox);
+
+        // if this is a POST/PUT: and member has no hit limit or max limit
+        if ($this->request->is('post') || $this->request->is('put')) {
+            if (!$canBuyBox) {
+                $this->Session->setFlash('Unable to buy a box');
+                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
+            }
+            
+            // charge for box
+            
+            // create a new box for member
             $result = $this->MemberBox->newBoxForMember($memberId);
         
             if ($result) {
@@ -311,10 +352,10 @@ class MemberBoxesController extends AppController {
                 return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
             } else {
                 // fail set flash and show page again
-                $this->Session->setFlash('Unable to create box');
+                $this->Session->setFlash('Unable to buy a box');
+                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
             }
         }
-        
     }
     
 /**
@@ -326,20 +367,28 @@ class MemberBoxesController extends AppController {
         if ($memberId == null) {
             $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
         }
+        // check member does not all ready have max number of boxes
         
-        // create a new boxformember
-        $result = $this->MemberBox->newBoxForMember($memberId);
-    
-        if ($result) {
-            // pass redirect to list
-            $this->Session->setFlash('Box created');
-            return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
-        } else {
-            // fail set flash and show page again
-            $this->Session->setFlash('Unable to create box');
-            return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
-        }
         
+        // check we have not hit max limit of boxes
+        
+//        if ( ) {
+//            // create a new boxformember
+//            $result = $this->MemberBox->newBoxForMember($memberId);
+//            
+//            if ($result) {
+//                // pass redirect to list
+//                $this->Session->setFlash('Box created');
+//                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
+//            } else {
+//                // fail set flash and show page again
+//                $this->Session->setFlash('Unable to issue box');
+//                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
+//            }
+//        } else {
+//            $this->Session->setFlash('Unable to issue box due to limits');
+//            return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
+//        }
     }
     
 /**

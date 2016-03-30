@@ -6,11 +6,16 @@ $this->Html->addCrumb(isset($member['username']) ? $member['username'] : $member
 $this->Html->addCrumb('Boxes', '/memberBoxes/listboxes/' . $member['id']);
 ?>
 
-<!-- add some text here about needing a little info to start a project-->
-
+<?
+if ($canBuyBox) {
+?>
+By clicking the Buy button you agreee to debit you tab <? echo $this->Currency->output($boxCost);?><br/>
 <?
 echo $this->Form->create('MemberBox');
-echo $this->Form->hidden('member_id');
 echo $this->Form->end('Buy');
-
+} else {
+?>
+Sorry you can not have a box at this time.
+<?
+}
 ?>

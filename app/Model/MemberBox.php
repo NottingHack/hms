@@ -267,4 +267,36 @@ class MemberBox extends AppModel {
         
         return $this->save($box);
     }
+
+/**
+ * get box count for member
+ *
+ * @param int $memberId
+ * @return int
+ */
+    public function boxCountForMember($memberId) {
+        $findOptions = array(
+                             'conditions' => array(
+                                                   'MemberBox.member_id' => $memberId,
+                                                   'MemberBox.state' => MemberBox::BOX_INUSE,
+                                                   ),
+                             );
+        
+        return $this->find('count', $findOptions);
+    }
+
+/**
+ * get box count for space (BOX_INUSE)
+ *
+ * @return int
+ */
+    public function boxCountForSpace() {
+        $findOptions = array(
+                             'conditions' => array(
+                                                   'MemberBox.state' => MemberBox::BOX_INUSE,
+                                                   ),
+                             );
+        
+        return $this->find('count', $findOptions);
+    }
 }
