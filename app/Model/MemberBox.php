@@ -230,18 +230,18 @@ class MemberBox extends AppModel {
                                                   'state' => MemberBox::BOX_INUSE
                                                   )
                          );
-        $datasource = $this->getDataSource();
-        $datasource->begin();
+        $dataSource = $this->getDataSource();
+        $dataSource->begin();
         
         $this->create();
         
         
         if (!$this->save($box)) {
-            $datasource->rollback();
+            $dataSource->rollback();
             return false;
         }
         
-        $datasource->commit();
+        $dataSource->commit();
         return true;
     }
 
