@@ -262,7 +262,7 @@ class MemberBoxesController extends AppController {
             $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
         }
         
-        if ($this->MemberBox->changeStateForPorject($memberBoxId, MemberBox::BOX_ABANDONED)) {
+        if ($this->MemberBox->changeStateForBox($memberBoxId, MemberBox::BOX_ABANDONED)) {
             $this->Session->setFlash('Box marked Abandoned');
         } else {
             $this->Session->setFlash('Unable to update box');
@@ -282,8 +282,15 @@ class MemberBoxesController extends AppController {
         if ($memberBoxId == null) {
             $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
         }
+        // check member is not at limit for number of allowed boxes
+        $individualLimit = ($this->Meta->getValueFor($this->individualLimitKey));
         
-        if ($this->MemberBox->changeStateForPorject($memberBoxId, MemberBox::BOX_INUSE)) {
+        $memberBoxCount = $this->MemberBox->boxCountForMemberByBox($memberBoxId);
+        
+        if ($memberBoxCount == $individualLimit) {
+            // all ready got to many boxes
+            $this->Session->setFlash('Too many boxes already');
+        } else if ($this->MemberBox->changeStateForBox($memberBoxId, MemberBox::BOX_INUSE)) {
             $this->Session->setFlash('Box marked inuse');
         } else {
             $this->Session->setFlash('Unable to update box');

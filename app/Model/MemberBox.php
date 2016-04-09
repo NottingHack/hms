@@ -252,7 +252,7 @@ class MemberBox extends AppModel {
  * @param int $state
  * @retrun bool
  */
-    public function changeStateForPorject($memberBoxId, $state) {
+    public function changeStateForBox($memberBoxId, $state) {
         $completeDate = '';
         if ($state == MemberBox::BOX_REMOVED) {
             $removedDate = date( 'Y-m-d' );
@@ -293,6 +293,24 @@ class MemberBox extends AppModel {
     public function boxCountForSpace() {
         $findOptions = array(
                              'conditions' => array(
+                                                   'MemberBox.state' => MemberBox::BOX_INUSE,
+                                                   ),
+                             );
+        
+        return $this->find('count', $findOptions);
+    }
+    
+/**
+ * get box count for member based on another box id
+ *
+ * @param int $memberId
+ * @return int
+ */
+    public function boxCountForMemberByBox($memberBoxId) {
+        $memberId = $this->getMemberIDforBox($memberBoxId);
+        $findOptions = array(
+                             'conditions' => array(
+                                                   'MemberBox.member_id' => $memberId,
                                                    'MemberBox.state' => MemberBox::BOX_INUSE,
                                                    ),
                              );
