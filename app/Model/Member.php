@@ -1902,6 +1902,45 @@ class Member extends AppModel {
 			}
 			return null;
 		}
+    
+/**
+ *  Update the balance for a member, by ammount given
+ * 
+ * @param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
+ * @param int
+ * @return bool
+ */
+		public function updateBalanceForMember($memberData) {
+			if (!isset($memberData)) {
+				return null;
+			}
+
+			if (!is_array($memberData)) {
+                $memberInfo = $this->find('first', array('fields' => array('Member.balance'), 'conditions' => array('Member.member_id' => $memberData) ));
+            } else {
+                $memberInfo = array('Member' => array(
+                                                      'member_id' => $memberData['id'],
+                                                      'balance' => $memberData['balance'],
+                                                      )
+                                    );
+            }
+            
+			if (is_array($memberInfo)) {
+                $memberInfo['Member']['balance'] += $ammount;
+                
+                $result = $this->save($memberInfo,
+                                      $params = array(
+                                                      'callbacks' => false,
+                                                            'fieldList' => array('balance'),
+                                                            )
+                                      );
+                if ($result) {
+                    return true;
+                }
+				
+			}
+			return false;
+		}
 
 /**
  *  Get the account_id for a member, will hit the database.
