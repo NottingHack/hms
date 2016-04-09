@@ -80,20 +80,20 @@ class Transaction extends AppModel {
  * Record a new transaction for a member
  *
  * @param int $memberId
- * @param int $ammount in pence, negative is charge, postive is credit
+ * @param int $amount in pence, negative is charge, postive is credit
  * @param string $type
  * @param string $description
  * @param int $recordedBy person who recorded the transaction, can be null if same as $memberID
  * @return bool
  */
-    public function recordTransaction($memberId, $ammount, $type, $description, $recordedBy = null) {
+    public function recordTransaction($memberId, $amount, $type, $description, $recordedBy = null) {
         // check member is not null
         if ($memberId == null) {
             return false;
         }
         
         // check amount is number
-        if (!isNumeric($amount)) {
+        if (!is_numeric($amount)) {
             return false;
         }
 
@@ -104,7 +104,7 @@ class Transaction extends AppModel {
         
         // grab member and double check credit
         $member = $this->Member->getMemberSummaryForMember($memberId, false);
-        if (($member['Member']['balance'] + $ammount) < (-1 *$member['creditLimit'])) {
+        if (($member['Member']['balance'] + $amount) < (-1 *$member['Member']['credit_limit'])) {
             return false;
         }
         
@@ -112,7 +112,7 @@ class Transaction extends AppModel {
         $transaction = array(
                              'Transaction' => array(
                                                     'member_id' => $memberId,
-                                                    'ammount' => $ammount,
+                                                    'amount' => $amount,
                                                     'transaction_type' => $type,
                                                     'transaction_status' => Transaction::STATE_COMPLETE,
                                                     'transaction_desc' => $description,
@@ -129,10 +129,11 @@ class Transaction extends AppModel {
         
         if(!$this->save($transaction)) {
             $dataSource->rollback();
+            return false;
         }
         
         // update memberBalance
-        if (!$this->Member->updateBalanceForMember($member, $ammount)) {
+        if (!$this->Member->updateBalanceForMember($member, $amount)) {
             $dataSource->rollback();
             return false;
         }

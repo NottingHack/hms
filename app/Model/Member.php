@@ -1910,7 +1910,7 @@ class Member extends AppModel {
  * @param int
  * @return bool
  */
-		public function updateBalanceForMember($memberData) {
+		public function updateBalanceForMember($memberData, $amount) {
 			if (!isset($memberData)) {
 				return null;
 			}
@@ -1919,14 +1919,14 @@ class Member extends AppModel {
                 $memberInfo = $this->find('first', array('fields' => array('Member.balance'), 'conditions' => array('Member.member_id' => $memberData) ));
             } else {
                 $memberInfo = array('Member' => array(
-                                                      'member_id' => $memberData['id'],
-                                                      'balance' => $memberData['balance'],
+                                                      'member_id' => $memberData['Member']['member_id'],
+                                                      'balance' => $memberData['Member']['balance'],
                                                       )
                                     );
             }
             
 			if (is_array($memberInfo)) {
-                $memberInfo['Member']['balance'] += $ammount;
+                $memberInfo['Member']['balance'] += $amount;
                 
                 $result = $this->save($memberInfo,
                                       $params = array(
