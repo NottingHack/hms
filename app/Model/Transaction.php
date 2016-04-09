@@ -22,7 +22,7 @@ App::uses('Status', 'Model');
  *
  * @package       app.Model
  */
-class Transactions extends AppModel {
+class Transaction extends AppModel {
 
 	const TYPE_VEND = "VEND";			// Transaction relates to either vending machine purchace, or a payment received by note acceptor
 	const TYPE_MANUAL = "MANUAL";	// Transaction is a manually entered (via web interface) record of a payment or purchase
@@ -64,7 +64,7 @@ class Transactions extends AppModel {
 	public function getTransactionList($paginate, $conditions = array()) {
 		$findOptions = array(
 			'conditions' => $conditions,
-			'order' => 'Transactions.transaction_datetime DESC'
+			'order' => 'Transaction.transaction_datetime DESC'
 		);
 
 		if ($paginate) {
