@@ -28,7 +28,7 @@ class MemberBoxesController extends AppController {
  * The list of models this Controller relies on.
  * @var array
  */
-	public $uses = array('MemberBox', 'Meta', 'Member');
+	public $uses = array('MemberBox', 'Meta', 'Member', 'Transaction');
     
 /**
  * The list of components this Controller relies on.
@@ -342,18 +342,25 @@ class MemberBoxesController extends AppController {
             }
             
             // charge for box
+            if ($this->Transaction->recordTransaction($memberId, $boxCost, Transaction::TYPE_MEMBERBOX, 'Members Box')) {
+                // create a new box for member
+                $result = $this->MemberBox->newBoxForMember($memberId);
             
-            // create a new box for member
-            $result = $this->MemberBox->newBoxForMember($memberId);
-        
-            if ($result) {
-                // pass redirect to list
-                $this->Session->setFlash('Box created');
-                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
+                if ($result) {
+                    // pass redirect to list
+                    $this->Session->setFlash('Box created');
+                    return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
+                } else {
+                    // TODO: should roll back the payment aswell
+                
+                    // fail set flash and show page again
+                    $this->Session->setFlash('Unable to buy a box, but you have been charged');
+                    return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
+                }
             } else {
-                // fail set flash and show page again
-                $this->Session->setFlash('Unable to buy a box');
-                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
+                // failed to charge for a box
+                $this->Session->setFlash('Unable to buy a box, your account has not been charged');
+                return; // $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
             }
         }
     }
@@ -367,28 +374,53 @@ class MemberBoxesController extends AppController {
         if ($memberId == null) {
             $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
         }
-        // check member does not all ready have max number of boxes
         
+        $individualLimit = ($this->Meta->getValueFor($this->individualLimitKey));
+        $maxLimit = ($this->Meta->getValueFor($this->maxLimitKey));
+        $boxCost = ($this->Meta->getValueFor($this->boxCostKey));
+        
+        $this->set('boxCost', -$boxCost);
+        
+        // check member does not all ready have max number of boxes
+        $memberBoxCount = $this->MemberBox->boxCountForMember($memberId);
+        $canBuyBox = true;
+        
+        if ($memberBoxCount == $individualLimit) {
+            // all ready got to many boxes
+            $this->Session->setFlash('Too many boxes already');
+            $canBuyBox = false;
+            
+        }
+        
+        // check we have not hit max limit of boxes
+        $spaceBoxCount = $this->MemberBox->boxCountForSpace();
+        if ($spaceBoxCount == $maxLimit) {
+            $this->Session->setFlash('Sorry we have no room for any more boxes');
+            $canBuyBox = false;
+            
+        }
+        
+        $this->set('canBuyBox', $canBuyBox);
         
         // check we have not hit max limit of boxes
         
-//        if ( ) {
-//            // create a new boxformember
-//            $result = $this->MemberBox->newBoxForMember($memberId);
-//            
-//            if ($result) {
-//                // pass redirect to list
-//                $this->Session->setFlash('Box created');
-//                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
-//            } else {
-//                // fail set flash and show page again
-//                $this->Session->setFlash('Unable to issue box');
-//                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
-//            }
-//        } else {
-//            $this->Session->setFlash('Unable to issue box due to limits');
-//            return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
-//        }
+        if ($canBuyBox) {
+            // create a new boxformember
+            $result = $this->MemberBox->newBoxForMember($memberId);
+            
+            if ($result) {
+                // pass redirect to list
+                $this->Session->setFlash('Box created');
+                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
+            } else {
+                // fail set flash and show page again
+                $this->Session->setFlash('Unable to issue box');
+                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
+            }
+        } else {
+            $this->Session->setFlash('Unable to issue box due to limits');
+            return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
+        }
     }
     
 /**

@@ -27,7 +27,7 @@ class Transaction extends AppModel {
 	const TYPE_VEND = "VEND";			// Transaction relates to either vending machine purchace, or a payment received by note acceptor
 	const TYPE_MANUAL = "MANUAL";	// Transaction is a manually entered (via web interface) record of a payment or purchase
     const TYPE_TOOL = "TOOL";
-    const TYPE_MEMBERBOX = "MEMBERBOX";
+    const TYPE_MEMBERBOX = "BOX";
     const STATE_COMPLETE = "COMPLETE";
     const STATE_PENDING = "PENDING";
 /**
