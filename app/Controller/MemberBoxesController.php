@@ -418,15 +418,15 @@ class MemberBoxesController extends AppController {
             if ($result) {
                 // pass redirect to list
                 $this->Session->setFlash('Box created');
-                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
+                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', $memberId));
             } else {
                 // fail set flash and show page again
                 $this->Session->setFlash('Unable to issue box');
-                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
+                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', $memberId));
             }
         } else {
             $this->Session->setFlash('Unable to issue box due to limits');
-            return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', array($memberId)));
+            return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes', $memberId));
         }
     }
     
