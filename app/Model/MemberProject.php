@@ -252,18 +252,18 @@ class MemberProject extends AppModel {
                                                   'state' => MemberProject::PROJCET_ACTIVE
                                                   )
                          );
-        $datasource = $this->getDataSource();
-        $datasource->begin();
+        $dataSource = $this->getDataSource();
+        $dataSource->begin();
         
         $this->create();
         
         
         if (!$this->save($project)) {
-            $datasource->rollback();
+            $dataSource->rollback();
             return false;
         }
         
-        $datasource->commit();
+        $dataSource->commit();
         return true;
     }
     
@@ -275,7 +275,7 @@ class MemberProject extends AppModel {
  * @param int $state
  * @retrun bool
  */
-    public function changeStateForPorject($memberProjectId, $state) {
+    public function changeStateForProject($memberProjectId, $state) {
         $completeDate = '';
         if ($state == MemberProject::PROJCET_COMPLETE) {
             $completeDate = date( 'Y-m-d' );

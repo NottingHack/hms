@@ -101,6 +101,7 @@ class AppController extends Controller {
 		$this->__addMainNav('MemberVoice', array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ), null, null);
 		$this->__addMainNav('Tools', array( 'plugin' => 'tools', 'controller' => 'tools', 'action' => 'index' ), null, null);
         $this->__addMainNav('Projects', array( 'plugin' => null, 'controller' => 'memberProjects', 'action' => 'listProjects' ), null, array(Status::CURRENT_MEMBER, Status::EX_MEMBER));
+        $this->__addMainNav('Boxes', array( 'plugin' => null, 'controller' => 'memberBoxes', 'action' => 'listBoxes' ), null, array(Status::CURRENT_MEMBER, Status::EX_MEMBER));
 	}
 
 /**
