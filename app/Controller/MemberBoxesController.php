@@ -530,7 +530,7 @@ class MemberBoxesController extends AppController {
         if ($box['stateId'] != MemberBox::BOX_INUSE) {
         array_push($actions,
                    array(
-                         'title' => 'Mark Inuse',
+                         'title' => 'Mark In Use',
                          'controller' => 'memberBoxes',
                          'action' => 'markInuse',
                          'params' => array(
