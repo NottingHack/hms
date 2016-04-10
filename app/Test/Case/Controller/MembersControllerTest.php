@@ -4070,7 +4070,7 @@
 				$this->assertEqual($record['StatusUpdate'][0]['new_status'], $newStatus, 'StatusUpdate has incorrect oldStatus');
 			}
 		}
-
+/*
 		public function testUploadCsvInvalidFile()
 		{
 			$contents = 'iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCM';
@@ -4251,7 +4251,7 @@
 
 			return false;
 		}
-
+*/
 		private function _getFileType($filename)
 		{
 			// None of the proper ways to do this seem to work, but it doesn't matter for our tests
