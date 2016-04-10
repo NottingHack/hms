@@ -269,7 +269,7 @@ class MemberProjectsController extends AppController {
             $this->redirect(array('controller' => 'memberProjects', 'action' => 'listProjects'));
         }
         
-        if ($this->MemberProject->changeStateForPorject($memberProjectId, MemberProject::PROJCET_COMPLETE)) {
+        if ($this->MemberProject->changeStateForProject($memberProjectId, MemberProject::PROJCET_COMPLETE)) {
             $this->Session->setFlash('Project marked Complete');
         } else {
             $this->Session->setFlash('Unable to update project');
@@ -289,7 +289,7 @@ class MemberProjectsController extends AppController {
             $this->redirect(array('controller' => 'memberProjects', 'action' => 'listProjects'));
         }
         
-        if ($this->MemberProject->changeStateForPorject($memberProjectId, MemberProject::PROJCET_ABANDONED)) {
+        if ($this->MemberProject->changeStateForProject($memberProjectId, MemberProject::PROJCET_ABANDONED)) {
             $this->Session->setFlash('Project marked Abandoned');
         } else {
             $this->Session->setFlash('Unable to update project');
@@ -310,7 +310,7 @@ class MemberProjectsController extends AppController {
             $this->redirect(array('controller' => 'memberProjects', 'action' => 'listProjects'));
         }
         
-        if ($this->MemberProject->changeStateForPorject($memberProjectId, MemberProject::PROJCET_ACTIVE)) {
+        if ($this->MemberProject->changeStateForProject($memberProjectId, MemberProject::PROJCET_ACTIVE)) {
             $this->Session->setFlash('Project marked active');
         } else {
             $this->Session->setFlash('Unable to update project');

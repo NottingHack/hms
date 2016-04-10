@@ -287,7 +287,13 @@ class MemberBoxesController extends AppController {
         
         $memberBoxCount = $this->MemberBox->boxCountForMemberByBox($memberBoxId);
         
-        if ($memberBoxCount == $individualLimit) {
+        // check we have not hit max limit of boxes
+        $maxLimit = ($this->Meta->getValueFor($this->maxLimitKey));
+        $spaceBoxCount = $this->MemberBox->boxCountForSpace();
+        
+        if ($spaceBoxCount == $maxLimit) {
+            $this->Session->setFlash('Sorry we have no room for any more boxes');
+        } else if ($memberBoxCount == $individualLimit) {
             // all ready got to many boxes
             $this->Session->setFlash('Too many boxes already');
         } else if ($this->MemberBox->changeStateForBox($memberBoxId, MemberBox::BOX_INUSE)) {
