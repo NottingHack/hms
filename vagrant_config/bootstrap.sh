@@ -124,6 +124,7 @@ EOF
 
 chmod +x /home/vagrant/labelprinter.sh
 sed -i -e 's/^exit 0/\/home\/vagrant\/labelprinter.sh \&\n\nexit 0/' /etc/rc.local
+/home/vagrant/labelprinter.sh &
 
 echo "Setting the password of all dummy accounts to be \"password\""...
 mysql -uroot -proot hms <<<"select lower(username) from members where username is not null and username != 'Admin'" |
