@@ -24,10 +24,10 @@
 	foreach ($transactionsList as $transaction)
 	{
 		echo "\t<tr>\n";
-		echo "\t\t<td>" . $transaction['Transactions']['transaction_datetime'] . "</td>\n";
-		echo "\t\t<td>" . $transaction['Transactions']['transaction_type'] . "</td>\n";
-		echo "\t\t<td>" . $transaction['Transactions']['transaction_desc'] . "</td>\n";
-		echo "\t\t<td>" . $this->Currency->output($transaction['Transactions']['amount']) . "</td>\n";
+		echo "\t\t<td>" . $transaction['Transaction']['transaction_datetime'] . "</td>\n";
+		echo "\t\t<td>" . $transaction['Transaction']['transaction_type'] . "</td>\n";
+		echo "\t\t<td>" . $transaction['Transaction']['transaction_desc'] . "</td>\n";
+		echo "\t\t<td>" . $this->Currency->output($transaction['Transaction']['amount']) . "</td>\n";
 		echo "\t</tr>\n";
 	}
 echo "</table>\n";

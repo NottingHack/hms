@@ -38,7 +38,7 @@ class MembersController extends AppController {
  * The list of components this Controller relies on.
  * @var array
  */
-	public $components = array('BankStatement');
+	public $components = array('BankStatement', 'BankStatementTSB');
 
 /**
  * Test to see if a user is authorized to make a request.
@@ -1224,6 +1224,28 @@ class MembersController extends AppController {
                         )
                     );
                 }
+                
+                array_push($actions,
+                       array(
+                             'title' => 'View Projects',
+                             'controller' => 'memberProjects',
+                             'action' => 'listProjects',
+                             'params' => array(
+                                               $memberId,
+                                               ),
+                             )
+                       );
+                array_push($actions,
+                           array(
+                                 'title' => 'View Boxes',
+                                 'controller' => 'memberBoxes',
+                                 'action' => 'listBoxes',
+                                 'params' => array(
+                                                   $memberId,
+                                                   ),
+                                 )
+                           );
+                
 			break;
 
 			case Status::EX_MEMBER:
@@ -1238,6 +1260,18 @@ class MembersController extends AppController {
 						'class' => 'positive',
 					)
 				);
+                
+                array_push($actions,
+					array(
+						'title' => 'Send SO Details Reminder',
+						'controller' => 'members',
+						'action' => 'sendSoDetailsReminder',
+						'params' => array(
+							$memberId,
+						),
+					)
+				);
+
 			break;
 		}
 
@@ -1294,10 +1328,10 @@ class MembersController extends AppController {
 
 				$filename = $this->FileUpload->getTmpName($this->request->data);
 
-				if ($this->BankStatement->readfile($filename)) {
+				if ($this->BankStatementTSB->readfile($filename)) {
 					// It seems ot be a valid .csv, grab all the payment references
 					$payRefs = array();
-					$this->BankStatement->iterate(function ($transaction) use(&$payRefs) {
+					$this->BankStatementTSB->iterate(function ($transaction) use(&$payRefs) {
 							$ref = $transaction['ref'];
 
 						if (is_string($ref) && strlen($ref) > 0) {
