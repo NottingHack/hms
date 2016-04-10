@@ -158,7 +158,7 @@ class MemberBoxesController extends AppController {
             $this->Nav->add('Buy new box', 'memberBoxes', 'buy');
         }
         
-        if ($this->Member->GroupsMember->isMemberInGroup( $this->_getLoggedInMemberId(), Group::MEMBERSHIP_ADMIN)) {
+        if ($this->Member->GroupsMember->isMemberInGroup( $this->_getLoggedInMemberId(), Group::MEMBERSHIP_ADMIN) && $memberId != $this->_getLoggedInMemberId()) {
             $this->Nav->add('Issue new box', 'memberBoxes', 'issue', array($memberId));
         }
 	}
@@ -367,7 +367,7 @@ class MemberBoxesController extends AppController {
             } else {
                 // failed to charge for a box
                 $this->Session->setFlash('Unable to buy a box, your account has not been charged');
-                return; // $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
+                return $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
             }
         }
     }
@@ -377,11 +377,15 @@ class MemberBoxesController extends AppController {
  *
  * @param int $memberId
  */
-    public function issue($memberId) {
+    public function issue($memberId = null) {
         if ($memberId == null) {
             $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
         }
         
+        if ($memberId == $this->_getLoggedInMemberId()) {
+            $this->Session->setFlash('You can not issue a box to yourself');
+            $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
+        }
         $individualLimit = ($this->Meta->getValueFor($this->individualLimitKey));
         $maxLimit = ($this->Meta->getValueFor($this->maxLimitKey));
         $boxCost = ($this->Meta->getValueFor($this->boxCostKey));
