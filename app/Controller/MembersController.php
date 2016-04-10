@@ -1260,6 +1260,18 @@ class MembersController extends AppController {
 						'class' => 'positive',
 					)
 				);
+                
+                array_push($actions,
+					array(
+						'title' => 'Send SO Details Reminder',
+						'controller' => 'members',
+						'action' => 'sendSoDetailsReminder',
+						'params' => array(
+							$memberId,
+						),
+					)
+				);
+
 			break;
 		}
 
