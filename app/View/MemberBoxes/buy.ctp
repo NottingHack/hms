@@ -9,7 +9,7 @@ $this->Html->addCrumb('Boxes', '/memberBoxes/listboxes/' . $member['id']);
 <?
 if ($canBuyBox) {
 ?>
-By clicking the Buy button you agreee to debit your account <? echo $this->Currency->output($boxCost);?><br/>
+By clicking the Buy button you agreee to debit your account by <? echo $this->Currency->output($boxCost);?><br/>
 <?
 echo $this->Form->create('MemberBox');
 echo $this->Form->end('Buy');
