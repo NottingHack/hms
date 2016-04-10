@@ -275,7 +275,7 @@ class MemberProject extends AppModel {
  * @param int $state
  * @retrun bool
  */
-    public function changeStateForPorject($memberProjectId, $state) {
+    public function changeStateForProject($memberProjectId, $state) {
         $completeDate = '';
         if ($state == MemberProject::PROJCET_COMPLETE) {
             $completeDate = date( 'Y-m-d' );
