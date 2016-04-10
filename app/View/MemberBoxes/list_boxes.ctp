@@ -6,6 +6,16 @@ $this->Html->addCrumb(isset($member['username']) ? $member['username'] : $member
 $this->Html->addCrumb('Boxes', '/memberBoxes/listboxes/' . $member['id']);
 ?>
 
+<p>All members are entitled to a member's box in the storage room, but we have limited space.</p>
+
+<p>If there is an empty box available (please check in real life first!) you can purchase it using the "Buy new box" button below. This will debit your snackspace account by £5 and assign a box to you. The system will also check that there is space available for your box.</p>
+
+<p><strong>Note:</strong> The system does not know if there is an actual empty box available for you, and will debit you either way - please check first!</p>
+
+<p>Once you have bought a box, please print a label (using the link below) and place it on the front of your box so it can be identified.</p>
+
+<br />
+
 <table>
 <tr>
 <th>Box Id</th>
