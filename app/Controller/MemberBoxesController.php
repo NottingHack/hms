@@ -242,7 +242,7 @@ class MemberBoxesController extends AppController {
             $this->redirect(array('controller' => 'memberBoxes', 'action' => 'listBoxes'));
         }
         
-        if ($this->MemberBox->changeStateForPorject($memberBoxId, MemberBox::BOX_REMOVED)) {
+        if ($this->MemberBox->changeStateForBox($memberBoxId, MemberBox::BOX_REMOVED)) {
             $this->Session->setFlash('Box marked as removed');
         } else {
             $this->Session->setFlash('Unable to update box');
