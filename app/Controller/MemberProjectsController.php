@@ -228,11 +228,12 @@ class MemberProjectsController extends AppController {
         $project = $this->MemberProject->getProject($memberProjectId);
         $member = $this->Member->getMemberSummaryForMember($project['memberId']);
         
-        $qrURL = Router::url([
-                          'controller' => 'memberProjects',
-                          'action' => 'view',
-                          $project['memberProjectId'],
-                          ], true);
+        $qrURL = Router::url(array(
+                                   'controller' => 'memberProjects',
+                                   'action' => 'view',
+                                   $project['memberProjectId'],
+                                   ),
+                             true);
         
         $memberName = $member['firstname'] . ' ' . $member['surname'];
  

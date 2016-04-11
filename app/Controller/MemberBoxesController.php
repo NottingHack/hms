@@ -204,11 +204,12 @@ class MemberBoxesController extends AppController {
         $box = $this->MemberBox->getBox($memberBoxId);
         $member = $this->Member->getMemberSummaryForMember($box['memberId']);
         
-        $qrURL = Router::url([
-                          'controller' => 'memberBoxes',
-                          'action' => 'view',
-                          $box['memberBoxId'],
-                          ], true);
+        $qrURL = Router::url(array(
+                                   'controller' => 'memberBoxes',
+                                   'action' => 'view',
+                                   $box['memberBoxId'],
+                                   ),
+                             true);
         
         $memberName = $member['firstname'] . ' ' . $member['surname'];
  
