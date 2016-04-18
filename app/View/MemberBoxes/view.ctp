@@ -15,10 +15,10 @@ Box Id
 <?php echo $box['memberBoxId']; ?>
 </dd>
 <dt>
-Brought Date
+Bought Date
 </dt>
 <dd>
-<?php echo $box['broughtDate']; ?>
+<?php echo $box['boughtDate']; ?>
 </dd>
 <?php if( isset($box['removedDate']) ): ?>
 <dt>

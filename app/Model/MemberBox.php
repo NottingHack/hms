@@ -187,7 +187,7 @@ class MemberBox extends AppModel {
   		Data should be presented to the view in an array like so:
         [memberBoxId] => box id
   		[memberId] => member id
-        [broughtDate] => date box brought
+        [boughtDate] => date box bought
         [removedDate] => removed date
   		[stateId] => state of card as used in the DB
   		[stateName] => description of the stateId value
@@ -195,7 +195,7 @@ class MemberBox extends AppModel {
   		$formatted = array(
             'memberBoxId' => Hash::get($box, 'MemberBox.member_box_id'),
 	  		'memberId' => Hash::get($box, 'MemberBox.member_id'),
-	  		'broughtDate' => Hash::get($box, 'MemberBox.brought_date'),
+	  		'boughtDate' => Hash::get($box, 'MemberBox.bought_date'),
             'removedDate' => Hash::get($box, 'MemberBox.removed_date'),
 	  		'stateId' => Hash::get($box, 'MemberBox.state'),
 	  		'stateName' => $this->statusStrings[Hash::get($box, 'MemberBox.state')],
@@ -226,7 +226,7 @@ class MemberBox extends AppModel {
         $box = array(
                          'MemberBox' => array(
                                                   'member_id' => $memberId,
-                                                  'brought_date' => date('Y-m-d'),
+                                                  'bought_date' => date('Y-m-d'),
                                                   'state' => MemberBox::BOX_INUSE
                                                   )
                          );
