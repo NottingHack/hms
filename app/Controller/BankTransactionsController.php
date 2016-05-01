@@ -14,9 +14,6 @@
  */
 
 App::uses('AppController', 'Controller');
-App::uses('PhpReader', 'Configure');
-Configure::config('default', new PhpReader());
-Configure::load('hms', 'default');
     
 /**
  * Controller for the Bank Transactions, handles upload of CSV's and 
@@ -28,7 +25,7 @@ class BankTransactionsController extends AppController {
  * List of models this controller uses.
  * @var array
  */
-    public $uses = array('BankTransaction', 'Member');
+    public $uses = array('BankTransaction', 'Member', 'Meta');
     
 /** 
  * Test to see if a user is authorised to make a request.
@@ -106,7 +103,7 @@ class BankTransactionsController extends AppController {
             // move file to csv folder
             $tmp_name = Hash::get($data, 'filename.tmp_name');
             $filename = Hash::get($data, 'filename.name');
-            $dir = Configure::read('hms_csv_folder');
+            $dir = $this->Meta->getValueFor('bank_csv_folder');
             
             // has this file already been uploaded if so
             if (file_exists("$dir/$filename")) {

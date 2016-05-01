@@ -29,13 +29,7 @@ class AuditMembersController extends AppController {
  * The list of models this Controller relies on.
  * @var array
  */
-	public $uses = array('Member', 'BankTransaction');
-
-/**
- * Constanst to define when membership is remove and warned
- */
-    const REVOKE_INTERVAL = "P2M";
-    const WARN_INTERVAL = "P1M14D";
+	public $uses = array('Member', 'BankTransaction', 'Meta');
 
 /**
  * Test to see if a user is authorized to make a request.
@@ -125,9 +119,9 @@ class AuditMembersController extends AppController {
         $dateNow = new DateTime(); // this will be the server time the we run, might need to shift time portion to end of the day 23:59
         $dateNow->setTime(0,0,0);
         $warnDate = clone $dateNow;
-        $warnDate->sub(new DateInterval(self::WARN_INTERVAL));
+        $warnDate->sub(new DateInterval($this->Meta->getValueFor('audit_warn_interval')));
         $revokeDate = clone $dateNow;
-        $revokeDate->sub(new DateInterval(self::REVOKE_INTERVAL));
+        $revokeDate->sub(new DateInterval($this->Meta->getValueFor('audit_revoke_interval')));
 
         // now we can work through the data and apply audit logic
         foreach ($memberIdsAndStatusForAccounts as $accountId => $membersForAccount) {

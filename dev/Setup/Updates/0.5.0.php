@@ -36,11 +36,20 @@ $query = "CREATE TABLE IF NOT EXISTS `banks` (
            `sort_code` varchar(8) DEFUALT NULL,
            `account_number` varchar(8) DEFUALT NULL,
            PRIMARY KEY (`bank_id`)
-          ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+          ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 $this->__runQuery($conn, $query);
 
 $this->__logMessage('Adding banks to `bank` table');
 $query = "INSERT INTO `banks` (`bank_id`, `name`) VALUES
            (1, 'Natwest'),
            (2, 'TSB');";
+$this->__runQuery($conn, $query);
+
+$this->__logMessage('new entries into `hms_meta` table.');
+$query = "INSERT INTO `hms_meta` (`name`, `value`) VALUES
+    ('csv_folder', '/vagrant/csv'),
+    ('audit_revoke_interval' , 'P2M'),
+    ('audit_warn_interval', 'P1M14D')
+    ;
+    ";
 $this->__runQuery($conn, $query);
