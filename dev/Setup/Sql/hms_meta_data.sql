@@ -14,7 +14,7 @@ INSERT INTO `hms_meta` (`name`, `value`) VALUES
 ('access_wifi_ssid', 'HSNOTTS'),
 ('access_wifi_password', '123456'),
 ('membership_email', 'membership@localhost'),
-('bank_csv_folder', '/vagrant/csv'),
+('bank_csv_folder', '/vagrant/app/tmp/csv'),
 ('audit_revoke_interval' , 'P2M'),
 ('audit_warn_interval', 'P1M14D')
 ;

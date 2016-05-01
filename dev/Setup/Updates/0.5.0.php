@@ -47,7 +47,7 @@ $this->__runQuery($conn, $query);
 
 $this->__logMessage('new entries into `hms_meta` table.');
 $query = "INSERT INTO `hms_meta` (`name`, `value`) VALUES
-    ('csv_folder', '/vagrant/csv'),
+    ('csv_folder', '/vagrant/app/tmp/csv'),
     ('audit_revoke_interval' , 'P2M'),
     ('audit_warn_interval', 'P1M14D')
     ;
