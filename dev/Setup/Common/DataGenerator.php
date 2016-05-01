@@ -363,28 +363,28 @@ class DataGenerator {
 		$contactNumber = $stockData['TelephoneNumber'];
 
 		$unlockText = 'Welcome ' . $firstname;
-        echo "Member Id: " . $memberId . " Status: " . $membershipStage ."\n";
+//        echo "Member Id: " . $memberId . " Status: " . $membershipStage ."\n";
         // Need to genrate bank transaction and csv records
         if ((int)$membershipStage == Status::PRE_MEMBER_3) {
             // Gen a record that is less than 2 weeks old so if we run an audit we get some member movememnt
             $ran = rand(1,3);
             // random number 1 gen bank, 4 gen csv, else none
             if ($ran == 1 ) {
-                echo "pre bank\n";
+//                echo "pre bank\n";
                 $this->__generateBankTransaction($accountId,
                                                  strtotime('-3 weeks'),
                                                  time(),
                                                  $firstname .' '. $surname
                                                  );
             } else if ($ran == 3) {
-                echo "pre csv\n";
+//                echo "pre csv\n";
                 $this->__generateBankCSV($accountId,
                                          strtotime('-1 weeks'),
                                          time(),
                                          $firstname .' '. $surname
                                          );
-            } else {
-                echo "pre none\n";
+//            } else {
+//                echo "pre none\n";
             }
         
         } else if ((int)$membershipStage == Status::CURRENT_MEMBER) {
@@ -400,7 +400,7 @@ class DataGenerator {
             $ran = rand(1, 6);
             if ($ran == 5) {
                 // some ex just to csv less than 2 weeks (cause ex aproval)
-                echo "current ex csv\n";
+//                echo "current ex csv\n";
                 $this->__generateBankCSV($accountId,
                                          strtotime('-1 weeks'),
                                          time(),
@@ -408,7 +408,7 @@ class DataGenerator {
                                          );
             } else if ($ran == 4) {
                 // some warn (between 1.5 and 1 month)
-                echo "current warn bank\n";
+//                echo "current warn bank\n";
                 $this->__generateBankTransaction($accountId,
                                                  strtotime('-2 months'),
                                                  strtotime('-1 month 14 days'),
@@ -416,7 +416,7 @@ class DataGenerator {
                                                  );
                 // some also with a csv less that 1 weeks
                 if (rand(1, 3) == 2) {
-                    echo "current warn csv\n";
+//                    echo "current warn csv\n";
                     $this->__generateBankCSV($accountId,
                                              strtotime('-1 week'),
                                              time(),
@@ -424,7 +424,7 @@ class DataGenerator {
                                              );
                 }
             } else {
-                echo "currnet stay\n";
+//                echo "currnet stay\n";
                 $this->__generateBankTransaction($accountId,
                                                  strtotime('-1 month'),
                                                  time(),
@@ -445,14 +445,14 @@ class DataGenerator {
             $ran = rand(1, 4);
             // random number 1 gen bank, 4 gen csv, else none
             if ($ran == 2 ) {
-                echo "ex bank\n";
+//                echo "ex bank\n";
                 $this->__generateBankTransaction($accountId,
                                                  strtotime('-3 weeks'),
                                                  time(),
                                                  $firstname .' '. $surname
                                                  );
             } else if ($ran == 4) {
-                echo "ex csv\n";
+//                echo "ex csv\n";
                 $this->__generateBankCSV($accountId,
                                          strtotime('-1 weeks'),
                                          time(),

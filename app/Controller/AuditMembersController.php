@@ -12,7 +12,9 @@
  * @package       app.Controller
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-
+App::uses('AppController', 'Controller');
+App::uses('CakeEmail', 'Network/Email');
+    
 /**
  * Controller to handle Member audit functionality.
  *
@@ -113,7 +115,7 @@ class AuditMembersController extends AppController {
         $approveIds = array();
         $warnIds = array();
         $revokeIds = array();
-        $reactivateIds = array();
+        $reinstateIds = array();
         $ohCrapIds = array();
 
         $dateNow = new DateTime(); // this will be the server time the we run, might need to shift time portion to end of the day 23:59
@@ -122,7 +124,7 @@ class AuditMembersController extends AppController {
         $warnDate->sub(new DateInterval($this->Meta->getValueFor('audit_warn_interval')));
         $revokeDate = clone $dateNow;
         $revokeDate->sub(new DateInterval($this->Meta->getValueFor('audit_revoke_interval')));
-
+        
         // now we can work through the data and apply audit logic
         foreach ($memberIdsAndStatusForAccounts as $accountId => $membersForAccount) {
             if (isset($latestTransactionDateForAccounts[$accountId])) {
@@ -165,8 +167,8 @@ class AuditMembersController extends AppController {
 
                     case Status::EX_MEMBER:
                         if ($transactionDate > $revokeDate){ // transaction date is newer than revoke date
-                            // reactivate member
-                            array_push($reactivateIds, $memberId);
+                            // reinstate member
+                            array_push($reinstateIds, $memberId);
                         }
                         break;
                     default:
@@ -185,18 +187,211 @@ class AuditMembersController extends AppController {
         // reactivte, name, emial, date they were made ex, last visit date, joint?
         // ohcrap list to software@, member_id
         
-        debug($approveIds);
-        debug($warnIds);
-        debug($revokeIds);
-        debug($reactivateIds);
-        debug($ohCrapIds);
-              
-
+//        debug("Now: " . $dateNow->format('Y-m-d'));
+//        debug("Warn: " . $warnDate->format('Y-m-d'));
+//        debug("Revoke: " . $revokeDate->format('Y-m-d'));
         
-        $this->Session->setFlash('No audit ran');
+        $adminId = $this->_getLoggedInMemberId();
+        
+//        debug("Approve");
+//        debug($approveIds);
+        foreach ($approveIds as $memberId) {
+            $this->__aproveMember($memberId, $adminId);
+        }
+//        debug("Warn");
+//        debug($warnIds);
+        foreach ($warnIds as $memberId) {
+            $this->__warnMember($memberId);
+        }
+//        debug("Revoke");
+//        debug($revokeIds);
+        foreach ($revokeIds as $memberId) {
+            $this->__revokeMember($memberId, $adminId);
+        }
+//        debug("Reinstate");
+//        debug($reinstateIds);
+        foreach ($reinstateIds as $memberId) {
+            $this->__reinstateMember($memberId, $adminId);
+        }
+
+//        debug($ohCrapIds);
+        if (count($ohCrapIds) != 0) {
+            $this->__sendSoftwareEmail($ohCrapIds);
+        }
+    
+        $membershipTeamEmail = $this->Meta->getValueFor('membership_email');
+        $subject = 'HMS Audit results';
+        $template = 'notify_admins_audit';
+        
+        $this->_sendEmail(
+                          $membershipTeamEmail,
+                          $subject,
+                          $template,
+                          array(
+                                'approveMembers' => $this->Member->getMemberSummaryForMembers($approveIds),
+                                'warnedMembers' => $this->Member->getMemberSummaryForMembers($warnIds),
+                                'revokedMembers' => $this->Member->getMemberSummaryForMembers($revokeIds),
+                                'reinstatedMembers' => $this->Member->getMemberSummaryForMembers($reinstateIds),
+                                )
+                          );
+        
+        
+        $this->Session->setFlash('Audit complete');
         
         return; //$this->redirect(array( 'controller' => 'members'));
         
+    }
+    
+/**
+ * Approve a membership.
+ *
+ * @param int $memberId The id of the member who we are approving.
+ */
+    private function __aproveMember($memberId, $adminId) {
+		$memberDetails = $this->Member->approveMember($memberId, $adminId);
+		if ($memberDetails) {
+            return $this->__sendMembershipCompleteMail($memberId, Status::PRE_MEMBER_3); // E-mail the member
+        }
+        
+        return false;
+    }
+    
+/**
+ * Warn a member.
+ *
+ * @param int $memberId The id of the member who we are warning.
+ */
+    private function __warnMember($memberId) {
+//		$memberDetails = $this->Member->recordWarning($memberId, $adminId);
+		if ($memberDetails) {
+           return $this->__sendMembershipRevokeMail($memberId, true); // E-mail the member
+        }
+        
+        return false;
+    }
+    
+/**
+ * Revoke a membership.
+ *
+ * @param int $memberId The id of the member who we are approving.
+ */
+    private function __revokeMember($memberId, $adminId) {
+		$memberDetails = $this->Member->revokeMembership($memberId, $adminId);
+		if ($memberDetails) {
+            return $this->__sendMembershipRevokeMail($memberId); // E-mail the member
+		}
+        
+        return false;
+    }
+    
+/**
+ * Approve a membership.
+ *
+ * @param int $memberId The id of the member who we are approving.
+ */
+    private function __reinstateMember($memberId, $adminId) {
+		$memberDetails = $this->Member->reinstateMembership($memberId, $adminId);
+        if ($memberDetails) {
+            return $this->__sendMembershipCompleteMail($memberId, Status::EX_MEMBER); // E-mail the member
+        }
+        
+        return false;
+    }
+    
+/**
+ *
+ * Send a "membership complete" e-mail to the member
+ * @param int $id The id of the member to send to
+ * @param int $statusId previous status_id of the member to email
+ *
+ */
+	private function __sendMembershipCompleteMail($id, $statusId) {
+        
+        $memberDetails = $this->Member->getMemberSummaryForMember($id);
+		$email = $this->Member->getEmailForMember($id);
+		if ($email) {
+
+			if ($statusId == Status::PRE_MEMBER_3) {
+				$subject = 'Membership Complete';
+				$template = 'to_member_access_details';
+			} elseif ($statusId == Status::EX_MEMBER) {
+				$subject = 'Your Membership Has Been Reinstated';
+				$template = 'to_member_access_details_reinstated';
+			}
+
+			return $this->_sendEmail(
+				$email,
+				$subject,
+				$template,
+				array(
+                    'name' => $memberDetails['bestName'],
+                    'membersGuideHTML' => $this->Meta->getValueFor('members_guide_html'),
+                    'membersGuidePDF' => $this->Meta->getValueFor('members_guide_pdf'),
+                    'rulesHTML' => $this->Meta->getValueFor('rules_html'),
+					'outerDoorCode' => $this->Meta->getValueFor('access_street_door'),
+					'innerDoorCode' => $this->Meta->getValueFor('access_inner_door'),
+					'wifiSsid' => $this->Meta->getValueFor('access_wifi_ssid'),
+					'wifiPass' => $this->Meta->getValueFor('access_wifi_password'),
+				)
+			);
+		}
+        
+        return false;
+	}
+    
+/**
+ *
+ * Send a "membership revoke" ro warn e-mail to the member
+ * @param int $id The id of the member to send to
+ * @param int $statusId previous status_id of the member to email
+ *
+ */
+	private function __sendMembershipRevokeMail($id, $warn = false) {
+        $memberSoDetails = $this->Member->getSoDetails($id);
+		if ($memberSoDetails != null) {
+            if ($warn) {
+                $subject = 'Your Membership May Be Revoked';
+                $template = 'to_member_warn';
+            } else {
+                $subject = 'Your Membership Has Been Revoked';
+                $template = 'to_member_revoked';
+            }
+            
+			return $this->_sendEmail(
+				$memberSoDetails['email'],
+				$subject,
+				$template,
+				array(
+					'name' => sprintf('%s %s', $memberSoDetails['firstname'], $memberSoDetails['surname']),
+					'paymentRef' => $memberSoDetails['paymentRef'],
+					'accountNum' => $this->Meta->getValueFor('so_accountNumber'),
+					'sortCode' => $this->Meta->getValueFor('so_sortCode'),
+					'accountName' => $this->Meta->getValueFor('so_accountName'),
+				)
+			);
+		}
+        
+        return false;
+    }
+    
+/**
+ *
+ * Send ohCrap list to software team
+ * @param array $ohCrapIds List of Ids for members in states we need to manually fix
+ */
+	private function __sendSoftwareEmail($ohCrapIds) {
+        $email = $this->Meta->getValueFor('software_team_email');
+        $subject = 'HMS Audit issues';
+        $template = 'notify_software_ohcrap';
+    
+        return $this->_sendEmail(
+            $email,
+            $subject,
+            $template,
+            array(
+                  'ohCrapMembers' => $this->Member->getMemberSummaryForMembers($ohCrapIds),
+            )
+        );
     }
 
 }

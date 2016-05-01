@@ -1510,6 +1510,7 @@ class Member extends AppModel {
  * @return bool True if membership was revoked, false otherwise.
  */
 	public function revokeMembership($memberId, $adminId) {
+        // TODO: remove from Group::CURRENT_MEMBERS
 		return $this->__setMemberStatus($memberId, $adminId, Status::EX_MEMBER, Status::CURRENT_MEMBER);
 	}
 
@@ -1521,6 +1522,7 @@ class Member extends AppModel {
  * @return bool True if membership was reinstated, false otherwise.
  */
 	public function reinstateMembership($memberId, $adminId) {
+        // TODO: re-add to Group::CURRENT_MEMBERS
 		return $this->__setMemberStatus($memberId, $adminId, Status::CURRENT_MEMBER, Status::EX_MEMBER);
 	}
 
@@ -1705,6 +1707,7 @@ class Member extends AppModel {
 					$existingGroups = $this->GroupsMember->getGroupIdsForMember( $memberId );
 				}
 
+                // TODO: fix this nasty hack so we can remove ex members from Group::CURRENT_MEMBERS
 				if (!in_array(Group::CURRENT_MEMBERS, $existingGroups)) {
 					array_push($existingGroups, Group::CURRENT_MEMBERS);
 				}
@@ -1904,7 +1907,7 @@ class Member extends AppModel {
 		}
     
 /**
- *  Update the balance for a member, by ammount given
+ *  Update the balance for a member, by amount given
  * 
  * @param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
  * @param int
