@@ -117,6 +117,9 @@ class TSBCsvBehavior extends ModelBehavior {
             }
         }
         
+        // make PHP treat it as a UK date not US http://stackoverflow.com/a/2891949
+        $transaction['Transaction Date'] = str_replace('/', '-', $transaction['Transaction Date']);
+        
         $allValues = array(
 			'transaction_date' => CakeTime::format($transaction['Transaction Date'], '%Y-%m-%d'),
 			'description' => $transaction['Transaction Description'],

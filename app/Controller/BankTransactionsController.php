@@ -126,7 +126,7 @@ class BankTransactionsController extends AppController {
             // read csv and get a nice formatted list of new transactions
             $transactions = $this->CsvUpload->find('all');
             
-            if (count($transactions) == 0) {
+            if (count($transactions) == 0 || $transactions == null) {
                 $this->Session->setFlash("No transactions found in CSV file");
                 return;
             }
