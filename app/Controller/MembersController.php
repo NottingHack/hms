@@ -17,8 +17,6 @@ App::uses('AppController', 'Controller');
 App::uses('HmsAuthenticate', 'Controller/Component/Auth');
 App::uses('CakeEmail', 'Network/Email');
 App::uses('PhpReader', 'Configure');
-Configure::config('default', new PhpReader());
-Configure::load('hms', 'default');
 
 /**
  * Controller to handle Member functionality, allows members to be viewed,
