@@ -698,7 +698,6 @@ class DataGenerator {
  * @param  string  $name
  */
      private function __generateBankTransaction($accountId, $oldestTimestamp, $newestTimestamp, $name) {
-         $bankTransactionId = count($this->__bankTransaction) + 1;
          
          // fudge the date
          echo "old " . date('Y-m-d', $oldestTimestamp) ."\n";
@@ -708,7 +707,6 @@ class DataGenerator {
          echo "trans " . date('Y-m-d', $transactionDate) ."\n";
          
          $record = array(
-                         'bank_transaction_id' => $bankTransactionId,
                          'transaction_date' => date('Y-m-d', $transactionDate),
                          'description' => $name .' '. $this->__accounts[$accountId -1 ]['payment_ref'] . ' ' . $accountId,
                          'amount' => rand(1, 7500)/100,
@@ -734,7 +732,7 @@ class DataGenerator {
          $record = array(
                          'transaction_date' => $transactionDate,
                          
-                         'description' => $name .' '. $this->__accounts[$accountId -1 ]['payment_ref'],
+                         'description' => $name .' '. $this->__accounts[$accountId -1 ]['payment_ref']. ' ' . $accountId,
                          'amount' => rand(1, 7500)/100,
                          );
          array_push($this->__bankCSV, $record);
