@@ -789,14 +789,6 @@ class Setup {
 				'test_database' => 'hms_test',
 				'csv_folder' => '/vagrant/csv',
 			),
-			'hms' => array(
-				'streetdoor' => '1234',
-				'innerdoor' => '1234',
-				'wifi' => '123456',
-                'membership_email' => 'membership@localhost',
-                'label_printer_ip' => 'localhost',
-                'csv_folder' => '/vagrant/csv',
-			),
 			'debug' => array(
 			),
 			'mailchimp'	=> array(

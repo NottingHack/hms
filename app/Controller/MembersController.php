@@ -15,12 +15,8 @@
 
 App::uses('AppController', 'Controller');
 App::uses('HmsAuthenticate', 'Controller/Component/Auth');
-App::uses('Member', 'Model');
-App::uses('ForgotPassword', 'Model');
 App::uses('CakeEmail', 'Network/Email');
 App::uses('PhpReader', 'Configure');
-Configure::config('default', new PhpReader());
-Configure::load('hms', 'default');
 
 /**
  * Controller to handle Member functionality, allows members to be viewed,
@@ -33,6 +29,12 @@ class MembersController extends AppController {
  * @var array
  */
 	public $helpers = array('Html', 'Form', 'Paginator', 'TinyMCE.TinyMCE', 'Currency', 'Mailinglist');
+
+/**
+ * The list of models this Controller relies on.
+ * @var array
+ */
+	public $uses = array('ForgotPassword', 'Meta', 'Member');
 
 /**
  * Test to see if a user is authorized to make a request.
@@ -237,7 +239,7 @@ class MembersController extends AppController {
 				// E-mail the member admins for a created record
 				if ($result['createdRecord'] === true) {
 					$this->_sendEmail(
-						Configure::read('hms_membership_email'),
+						$this->Meta->getValueFor('membership_email'),
 						'New Prospective Member Notification',
 						'notify_admins_member_added',
 						array(
@@ -351,7 +353,7 @@ class MembersController extends AppController {
 					$this->Session->setFlash('Contact details saved.');
 
 					$this->_sendEmail(
-						Configure::read('hms_membership_email'),
+						$this->Meta->getValueFor('membership_email'),
 						'New Member Contact Details',
 						'notify_admins_check_contact_details',
 						array(
@@ -439,7 +441,7 @@ class MembersController extends AppController {
 					$this->__sendSoDetailsToMember($id);
 
 					$this->_sendEmail(
-						Configure::read('hms_membership_email'),
+						$this->Meta->getValueFor('membership_email'),
 						'Impending Payment',
 						'notify_admins_payment_incoming',
 						array(
@@ -524,11 +526,13 @@ class MembersController extends AppController {
 				$subject,
 				$template,
 				array(
-					'manLink' => Configure::read('hms_help_manual_url'),
-					'outerDoorCode' => Configure::read('hms_access_street_door'),
-					'innerDoorCode' => Configure::read('hms_access_inner_door'),
-					'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
-					'wifiPass' => Configure::read('hms_access_wifi_password'),
+                    'membersGuideHTML' => $this->Meta->getValueFor('members_guide_html'),
+                    'membersGuidePDF' => $this->Meta->getValueFor('members_guide_pdf'),
+                    'rulesHTML' => $this->Meta->getValueFor('rules_html'),
+					'outerDoorCode' => $this->Meta->getValueFor('access_street_door'),
+					'innerDoorCode' => $this->Meta->getValueFor('access_inner_door'),
+					'wifiSsid' => $this->Meta->getValueFor('access_wifi_ssid'),
+					'wifiPass' => $this->Meta->getValueFor('access_wifi_password'),
 				)
 			);
 
@@ -561,7 +565,7 @@ class MembersController extends AppController {
 			}
 			// Notify all the member admins
 			$this->_sendEmail(
-				Configure::read('hms_membership_email'),
+				$this->Meta->getValueFor('membership_email'),
 				$subject,
 				$template,
 				array(
@@ -756,9 +760,9 @@ class MembersController extends AppController {
 				array(
 					'name' => sprintf('%s %s', $memberSoDetails['firstname'], $memberSoDetails['surname']),
 					'paymentRef' => $memberSoDetails['paymentRef'],
-					'accountNum' => Configure::read('hms_so_accountNumber'),
-					'sortCode' => Configure::read('hms_so_sortCode'),
-					'accountName' => Configure::read('hms_so_accountName'),
+					'accountNum' => $this->Meta->getValueFor('so_accountNumber'),
+					'sortCode' => $this->Meta->getValueFor('so_sortCode'),
+					'accountName' => $this->Meta->getValueFor('so_accountName'),
 				)
 			);
 		}
@@ -926,10 +930,10 @@ class MembersController extends AppController {
         // gather various access codes to pass to view and present to the view
         
         $accessCodes = array(
-                             'outerDoorCode' => Configure::read('hms_access_street_door'),
-                             'innerDoorCode' => Configure::read('hms_access_inner_door'),
-                             'wifiSsid' => Configure::read('hms_access_wifi_ssid'),
-                             'wifiPass' => Configure::read('hms_access_wifi_password'),
+                             'outerDoorCode' => $this->Meta->getValueFor('access_street_door'),
+                             'innerDoorCode' => $this->Meta->getValueFor('access_inner_door'),
+                             'wifiSsid' => $this->Meta->getValueFor('access_wifi_ssid'),
+                             'wifiPass' => $this->Meta->getValueFor('access_wifi_password'),
         );
         
         
