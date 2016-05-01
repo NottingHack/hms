@@ -19,7 +19,7 @@ $this->Html->addCrumb('Boxes', '/memberBoxes/listboxes/' . $member['id']);
 <table>
 <tr>
 <th>Box Id</th>
-<th>Brought Date</th>
+<th>Bought Date</th>
 <th>Removed Date</th>
 <th>State</th>
 <th>Actions</th>
@@ -28,7 +28,7 @@ $this->Html->addCrumb('Boxes', '/memberBoxes/listboxes/' . $member['id']);
 foreach ($boxesList as $box) {
 echo '<tr>';
 echo '<td>' . $box['memberBoxId'] . '</td>';
-echo '<td>' . $box['broughtDate'] . '</td>';
+echo '<td>' . $box['boughtDate'] . '</td>';
 echo '<td>' . $box['removedDate'] . '</td>';
 echo '<td>' . $box['stateName'] . '</td>';
 echo '<td>';
