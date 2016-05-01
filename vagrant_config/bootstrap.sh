@@ -115,6 +115,17 @@ wget -O /vagrant/app/Vendor/phpunit.phar https://phar.phpunit.de/phpunit-3.7.38.
 
 apachectl restart
 
+cat <<\EOF > /home/vagrant/labelprinter.sh
+#!/bin/bash
+while [ 1 ]; do
+nc -l -p 9100 >> /vagrant/labelprinter.txt;
+done
+EOF
+
+chmod +x /home/vagrant/labelprinter.sh
+sed -i -e 's/^exit 0/\/home\/vagrant\/labelprinter.sh \&\n\nexit 0/' /etc/rc.local
+/home/vagrant/labelprinter.sh &
+
 echo "Setting the password of all dummy accounts to be \"password\""...
 mysql -uroot -proot hms <<<"select lower(username) from members where username is not null and username != 'Admin'" |
 while IFS='\n' read USERNAME

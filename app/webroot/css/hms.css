@@ -937,13 +937,13 @@ pre {
 }
 
 .nav li {
-	margin: 0px;
+	margin: 10px 0px 0px 0px;
 	padding: 0px 10px;
-	display: inline;
+	display: inline-block;
 }
 
 .actions ul li a {
-	display: inline;
+    display: inline-block;
 }
 
 .news_item {

@@ -794,7 +794,8 @@ class Setup {
 				'innerdoor' => '1234',
 				'wifi' => '123456',
                 'membership_email' => 'membership@localhost',
-				'csv_folder' => '/vagrant/csv',
+                'label_printer_ip' => 'localhost',
+                'csv_folder' => '/vagrant/csv',
 			),
 			'debug' => array(
 			),

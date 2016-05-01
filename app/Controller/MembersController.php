@@ -1216,6 +1216,28 @@ class MembersController extends AppController {
                         )
                     );
                 }
+                
+                array_push($actions,
+                       array(
+                             'title' => 'View Projects',
+                             'controller' => 'memberProjects',
+                             'action' => 'listProjects',
+                             'params' => array(
+                                               $memberId,
+                                               ),
+                             )
+                       );
+                array_push($actions,
+                           array(
+                                 'title' => 'View Boxes',
+                                 'controller' => 'memberBoxes',
+                                 'action' => 'listBoxes',
+                                 'params' => array(
+                                                   $memberId,
+                                                   ),
+                                 )
+                           );
+                
 			break;
 
 			case Status::EX_MEMBER:
@@ -1230,6 +1252,18 @@ class MembersController extends AppController {
 						'class' => 'positive',
 					)
 				);
+                
+                array_push($actions,
+					array(
+						'title' => 'Send SO Details Reminder',
+						'controller' => 'members',
+						'action' => 'sendSoDetailsReminder',
+						'params' => array(
+							$memberId,
+						),
+					)
+				);
+
 			break;
 		}
 

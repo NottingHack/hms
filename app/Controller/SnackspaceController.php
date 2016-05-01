@@ -22,7 +22,7 @@ class SnackspaceController extends AppController {
  * List of models this controller uses.
  * @var array
  */
-	public $uses = array('Transactions', 'Memeber');
+	public $uses = array('Transaction', 'Memeber');
 
 /** 
  * Test to see if a user is authorized to make a request.
@@ -86,8 +86,8 @@ class SnackspaceController extends AppController {
  * @param int $memberId The members id to list all transactions for
  */
 	private function __transactionList($memberId) {
-		$this->paginate = $this->Transactions->getTransactionList(true, array('Member.member_id' => $memberId));
-		$transactionsList = $this->paginate('Transactions');
+		$this->paginate = $this->Transaction->getTransactionList(true, array('Member.member_id' => $memberId));
+		$transactionsList = $this->paginate('Transaction');
 		$this->set('transactionsList', $transactionsList);
 	}
 
