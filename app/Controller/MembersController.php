@@ -510,6 +510,7 @@ class MembersController extends AppController {
 			$statusId = Status::PRE_MEMBER_3;
 		}
 
+        $memberDetails = $this->Member->getMemberSummaryForMember($id);
 		$email = $this->Member->getEmailForMember($id);
 		if ($email) {
 
@@ -526,6 +527,7 @@ class MembersController extends AppController {
 				$subject,
 				$template,
 				array(
+                    'name' => $memberDetails['bestName'],
                     'membersGuideHTML' => $this->Meta->getValueFor('members_guide_html'),
                     'membersGuidePDF' => $this->Meta->getValueFor('members_guide_pdf'),
                     'rulesHTML' => $this->Meta->getValueFor('rules_html'),

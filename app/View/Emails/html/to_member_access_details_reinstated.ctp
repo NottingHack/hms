@@ -1,5 +1,5 @@
 <p>
-	Hello,
+	Hello <?php echo $name; ?>,
 </p>
 
 <p>
