@@ -14,6 +14,7 @@
  */
 
 App::uses('AppController', 'Controller');
+App::uses('CakeEmail', 'Network/Email');
     
 /**
  * Controller for the Bank Transactions, handles upload of CSV's and 
@@ -136,10 +137,30 @@ class BankTransactionsController extends AppController {
             $ret = $this->BankTransaction->importTransactions($transactions);
             
             // email accounts with list a transaction that could not be matched to accounts, some might just be other xfers, some might be special people)
-            // TODO: notify_accounts_unmatch
-            
-            
-            // place holder for returns
+            $unmatchedTansactions = array();
+            foreach ($transactions as $transaction) {
+                if (!isset($transaction['account_id'])) {
+                   array_push($unmatchedTansactions, $transaction);
+                }
+            }
+
+            if (count($unmatchedTansactions) != 0) {
+                $email = $this->Meta->getValueFor('accounts_team_email');
+                $subject = 'HMS Unmatched transactions';
+                $template = 'notify_accounts_unmatch';
+
+
+                $this->_sendEmail(
+                    $email,
+                    $subject,
+                    $template,
+                    array(
+                        'transactions' => $unmatchedTansactions,
+                    )
+                );
+            }
+
+            // place holder for returns (could include import count)
             $this->Session->setFlash("CSV upload complete");
             return;
         }

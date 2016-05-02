@@ -396,9 +396,17 @@ class DataGenerator {
                                                  $firstname .' '. $surname
                                                  );
             }
+
             // now mix of records mostly stay
             $ran = rand(1, 6);
-            if ($ran == 5) {
+            if ($firstname == 'admin') {
+            	// make sure we cant make the make our admin and ex member
+            	$this->__generateBankTransaction($accountId,
+                                                 strtotime('-1 week'),
+                                                 time(),
+                                                 $firstname .' '. $surname
+                                                 );
+            } else if ($ran == 5) {
                 // some ex just to csv less than 2 weeks (cause ex aproval)
 //                echo "current ex csv\n";
                 $this->__generateBankCSV($accountId,
@@ -700,11 +708,7 @@ class DataGenerator {
      private function __generateBankTransaction($accountId, $oldestTimestamp, $newestTimestamp, $name) {
          
          // fudge the date
-         echo "old " . date('Y-m-d', $oldestTimestamp) ."\n";
-         echo "new " . date('Y-m-d', $newestTimestamp) ."\n";
-         
          $transactionDate = rand($oldestTimestamp, $newestTimestamp);
-         echo "trans " . date('Y-m-d', $transactionDate) ."\n";
          
          $record = array(
                          'transaction_date' => date('Y-m-d', $transactionDate),

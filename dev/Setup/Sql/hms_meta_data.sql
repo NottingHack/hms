@@ -17,5 +17,6 @@ INSERT INTO `hms_meta` (`name`, `value`) VALUES
 ('bank_csv_folder', '/vagrant/app/tmp/csv'),
 ('audit_revoke_interval' , 'P2M'),
 ('audit_warn_interval', 'P1M14D'),
-('software_team_email', 'software@nottinghack.org.uk')
+('software_team_email', 'software@nottinghack.org.uk'),
+('accounts_team_email', 'accounts@nottinghack.org.uk')
 ;

@@ -201,7 +201,7 @@ class AuditMembersController extends AppController {
 //        debug("Warn");
 //        debug($warnIds);
         foreach ($warnIds as $memberId) {
-            $this->__warnMember($memberId);
+            // $this->__warnMember($memberId);
         }
 //        debug("Revoke");
 //        debug($revokeIds);
@@ -262,7 +262,7 @@ class AuditMembersController extends AppController {
  * @param int $memberId The id of the member who we are warning.
  */
     private function __warnMember($memberId) {
-//		$memberDetails = $this->Member->recordWarning($memberId, $adminId);
+		$memberDetails = $this->Member->recordWarning($memberId, $adminId);
 		if ($memberDetails) {
            return $this->__sendMembershipRevokeMail($memberId, true); // E-mail the member
         }
