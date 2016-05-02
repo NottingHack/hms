@@ -15,6 +15,7 @@
 
 App::uses('AppController', 'Controller');
 App::uses('HmsAuthenticate', 'Controller/Component/Auth');
+App::uses('ForgotPassword', 'Model');
 App::uses('CakeEmail', 'Network/Email');
 App::uses('PhpReader', 'Configure');
 
