@@ -54,12 +54,12 @@ class AuditMembersController extends AppController {
 	}
     
 /**
- *
+ * Big huge audit members function with lots of complex logic ;)
  */
     public function audit() {
-        // TODO: this is going to need some good auto gen data in dev and a boat load of CSV loading in live before ever getting executed
-        
-        // get the latest transaction date for all acounts, store in $latestTransactionDateForAccounts
+        // This is going to need some good auto gen data in dev and a boat load of CSV loading in live before ever getting executed
+
+        // get the latest transaction date for all accounts, store in $latestTransactionDateForAccounts
         $btOptions = array(
            'fields' => array(
                              'MAX(BankTransaction.transaction_date) AS transaction_date',
@@ -82,8 +82,8 @@ class AuditMembersController extends AppController {
             [account_id] => transaction_date
          */
         $latestTransactionDateForAccounts = Hash::combine($bt, '{n}.BankTransaction.account_id', '{n}.{n}.transaction_date');
-        
-        // get the list of memberId and there satus for accounts, store in $memberIdsAndStatusForAccounts
+
+        // get the list of memberId and there status for accounts, store in $memberIdsAndStatusForAccounts
         $mOptions = array(
             'fields' => array(
                               'Member.member_id',
@@ -96,22 +96,21 @@ class AuditMembersController extends AppController {
                                                                   Status::CURRENT_MEMBER,
                                                                   Status::EX_MEMBER
                                                                   ),
-                         
                          ),
             'recursive' => -1
         );
-        
+
         /*
             Results data format
-            [account_id] => 
+            [account_id] =>
                 array(
                     [member_id] => member_status
                 )
          */
         $memberIdsAndStatusForAccounts = $this->Member->find('list', $mOptions);
-        
+
         // now we have the data we need from the DB
-        
+
         $approveIds = array();
         $warnIds = array();
         $revokeIds = array();
@@ -124,7 +123,7 @@ class AuditMembersController extends AppController {
         $warnDate->sub(new DateInterval($this->Meta->getValueFor('audit_warn_interval')));
         $revokeDate = clone $dateNow;
         $revokeDate->sub(new DateInterval($this->Meta->getValueFor('audit_revoke_interval')));
-        
+
         // now we can work through the data and apply audit logic
         foreach ($memberIdsAndStatusForAccounts as $accountId => $membersForAccount) {
             if (isset($latestTransactionDateForAccounts[$accountId])) {
@@ -132,14 +131,13 @@ class AuditMembersController extends AppController {
             } else {
                 $transactionDate = null;
             }
-            
-            
+
             foreach ($membersForAccount as $memberId => $memberStatus) {
                 // either switch on transaction age or on status???
                 switch ($memberStatus) {
                     case Status::PRE_MEMBER_3:
                         if ($transactionDate === null) {
-                            break; // not paid us yet notting to do here
+                            break; // not paid us yet nothing to do here
                         } elseif ($transactionDate > $revokeDate) { // transaction date is newer than revoke date
                             // approve member
                             array_push($approveIds, $memberId);
@@ -158,9 +156,11 @@ class AuditMembersController extends AppController {
                             // make ex member
                             array_push($revokeIds, $memberId);
                         } elseif ($transactionDate < $warnDate) { // transaction date is older than warning date
-                            // if not all ready warned
-                                // warn membership may be terminated if we dont see one soon
-                            array_push($warnIds, $memberId);
+                            // if not already warned
+                            if (!$this->Member->beenWarned($memberId)) {
+                                // warn membership may be terminated if we don't see one soon
+                                array_push($warnIds, $memberId);
+                            }
                         }
                         // date diff should be less than 1.5 months
                         break;
@@ -177,22 +177,22 @@ class AuditMembersController extends AppController {
                 }
             }
         }
-        
+
         // right should now have 5 arrays of Id's to go and process
         // by batching the id's we can send just one email to membership team with tables of members
-        // showing diffrent bits of info for diffrent states
-        // approve, name, emial, pin, joint?
+        // showing different bits of info for different states
+        // approve, name, email, pin, joint?
         // warn, name, email, last payment date, ref, last visit date, joint?
         // revoke, name, email, last payment date, ref, last visit date, joint?
-        // reactivte, name, emial, date they were made ex, last visit date, joint?
+        // einstate, name, email, date they were made ex, last visit date, joint?
         // ohcrap list to software@, member_id
-        
+
 //        debug("Now: " . $dateNow->format('Y-m-d'));
 //        debug("Warn: " . $warnDate->format('Y-m-d'));
 //        debug("Revoke: " . $revokeDate->format('Y-m-d'));
-        
+
         $adminId = $this->_getLoggedInMemberId();
-        
+
 //        debug("Approve");
 //        debug($approveIds);
         foreach ($approveIds as $memberId) {
@@ -201,7 +201,7 @@ class AuditMembersController extends AppController {
 //        debug("Warn");
 //        debug($warnIds);
         foreach ($warnIds as $memberId) {
-            // $this->__warnMember($memberId);
+            $this->__warnMember($memberId);
         }
 //        debug("Revoke");
 //        debug($revokeIds);
@@ -218,11 +218,11 @@ class AuditMembersController extends AppController {
         if (count($ohCrapIds) != 0) {
             $this->__sendSoftwareEmail($ohCrapIds);
         }
-    
+
         $membershipTeamEmail = $this->Meta->getValueFor('membership_email');
         $subject = 'HMS Audit results';
         $template = 'notify_admins_audit';
-        
+
         $this->_sendEmail(
                           $membershipTeamEmail,
                           $subject,
@@ -234,82 +234,81 @@ class AuditMembersController extends AppController {
                                 'reinstatedMembers' => $this->Member->getMemberSummaryForMembers($reinstateIds),
                                 )
                           );
-        
-        
+
         $this->Session->setFlash('Audit complete');
-        
         return; //$this->redirect(array( 'controller' => 'members'));
-        
     }
-    
+
 /**
  * Approve a membership.
  *
  * @param int $memberId The id of the member who we are approving.
+ * @param int $adminId The id of the Admin making the status change.
+ * @return bool 
  */
     private function __aproveMember($memberId, $adminId) {
-		$memberDetails = $this->Member->approveMember($memberId, $adminId);
-		if ($memberDetails) {
+    		if ($this->Member->approveMember($memberId, $adminId)) {
             return $this->__sendMembershipCompleteMail($memberId, Status::PRE_MEMBER_3); // E-mail the member
         }
-        
+
         return false;
     }
-    
+
 /**
  * Warn a member.
  *
  * @param int $memberId The id of the member who we are warning.
+ * @param int $adminId The id of the Admin making the status change.
+ * @return bool 
  */
     private function __warnMember($memberId) {
-		$memberDetails = $this->Member->recordWarning($memberId, $adminId);
-		if ($memberDetails) {
+		if ($this->Member->recordWarning($memberId)) {
            return $this->__sendMembershipRevokeMail($memberId, true); // E-mail the member
         }
-        
+
         return false;
     }
-    
+
 /**
  * Revoke a membership.
  *
  * @param int $memberId The id of the member who we are approving.
+ * @param int $adminId The id of the Admin making the status change.
+ * @return bool 
  */
     private function __revokeMember($memberId, $adminId) {
-		$memberDetails = $this->Member->revokeMembership($memberId, $adminId);
-		if ($memberDetails) {
+		if ($this->Member->revokeMembership($memberId, $adminId)) {
             return $this->__sendMembershipRevokeMail($memberId); // E-mail the member
 		}
-        
+
         return false;
     }
-    
+
 /**
- * Approve a membership.
+ * Reinstate a membership.
  *
  * @param int $memberId The id of the member who we are approving.
+ * @param int $adminId The id of the Admin making the status change.
+ * @return bool 
  */
     private function __reinstateMember($memberId, $adminId) {
-		$memberDetails = $this->Member->reinstateMembership($memberId, $adminId);
-        if ($memberDetails) {
+        if ($this->Member->reinstateMembership($memberId, $adminId)) {
             return $this->__sendMembershipCompleteMail($memberId, Status::EX_MEMBER); // E-mail the member
         }
-        
+
         return false;
     }
-    
+
 /**
+ * Send a "membership complete" or "Reinstated" e-mail to the member
  *
- * Send a "membership complete" e-mail to the member
  * @param int $id The id of the member to send to
  * @param int $statusId previous status_id of the member to email
- *
+ * @return bool 
  */
 	private function __sendMembershipCompleteMail($id, $statusId) {
-        
         $memberDetails = $this->Member->getMemberSummaryForMember($id);
-		$email = $this->Member->getEmailForMember($id);
-		if ($email) {
+		if ($memberDetails) {
 
 			if ($statusId == Status::PRE_MEMBER_3) {
 				$subject = 'Membership Complete';
@@ -320,7 +319,7 @@ class AuditMembersController extends AppController {
 			}
 
 			return $this->_sendEmail(
-				$email,
+				$memberDetails['email'],
 				$subject,
 				$template,
 				array(
@@ -340,11 +339,11 @@ class AuditMembersController extends AppController {
 	}
     
 /**
+ * Send a "membership revoke" or "warn" e-mail to the member
  *
- * Send a "membership revoke" ro warn e-mail to the member
  * @param int $id The id of the member to send to
- * @param int $statusId previous status_id of the member to email
- *
+ * @param bool $warm should we send a revoke email or just a warning
+ * @return bool 
  */
 	private function __sendMembershipRevokeMail($id, $warn = false) {
         $memberSoDetails = $this->Member->getSoDetails($id);
@@ -356,7 +355,7 @@ class AuditMembersController extends AppController {
                 $subject = 'Your Membership Has Been Revoked';
                 $template = 'to_member_revoked';
             }
-            
+
 			return $this->_sendEmail(
 				$memberSoDetails['email'],
 				$subject,
@@ -370,20 +369,21 @@ class AuditMembersController extends AppController {
 				)
 			);
 		}
-        
+
         return false;
     }
-    
+
 /**
  *
  * Send ohCrap list to software team
  * @param array $ohCrapIds List of Ids for members in states we need to manually fix
+ * @return bool 
  */
 	private function __sendSoftwareEmail($ohCrapIds) {
         $email = $this->Meta->getValueFor('software_team_email');
         $subject = 'HMS Audit issues';
         $template = 'notify_software_ohcrap';
-    
+
         return $this->_sendEmail(
             $email,
             $subject,

@@ -3,7 +3,7 @@
 </p>
 
 <p>
-    We have not seen a membership payment from you recently, if we don not see one soon you membership to Nottingham Hackspace will be revoked.
+    We have not seen a membership payment from you recently, if we do not see one soon you membership to Nottingham Hackspace will be revoked.
 </p>
 
 <p>

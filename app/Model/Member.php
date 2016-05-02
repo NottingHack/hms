@@ -1503,8 +1503,50 @@ class Member extends AppModel {
 	}
 
 /**
+ * Has a member been warned about there membership.
+ *
+ * @param int $memberId The id of the member to look up
+ * @return mixed True if member has been warned, null for error.
+ */
+	public function beenWarned($memberId) {
+    	$record = $this->find('first', array(
+    		'fields' => array('Member.member_id', 'Member.warned'),
+    		'conditions' => array('Member.member_id' => $memberId),
+    		'recursive' => 0
+    		)
+    	);
+
+    	if (is_array($record) && count($record) > 0) {
+			return Hash::get($record, 'Member.warned');
+		}
+		return null;
+	}
+
+/**
+ * Record a membership warning aginst a member.
+ *
+ * @param int $memberId The id of the membership to warn.
+ * @return bool True if membership was warned, false otherwise.
+ */
+	public function recordWarning($memberId) {
+		$this->id = $memberId;
+		return $this->saveField('warned', true);
+	}
+
+/**
+ * Clear a membership warning aginst a member.
+ *
+ * @param int $memberId The id of the membership to clear.
+ * @return bool True if membership was celared, false otherwise.
+ */
+	public function clearWarning($memberId) {
+		$this->id = $memberId;
+		return $this->saveField('warned', false);
+	}
+
+/**
  * Revoke a members membership.
- * 
+ *
  * @param int $memberId The id of the membership to revoke.
  * @param int $adminId The id of the member doing the revoking.
  * @return bool True if membership was revoked, false otherwise.

@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `members` (
   `address_city` varchar(100) DEFAULT NULL,
   `address_postcode` varchar(100) DEFAULT NULL,
   `contact_number` varchar(20) DEFAULT NULL,
+  `warned` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`member_id`),
   UNIQUE KEY `member_name` (`username`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
