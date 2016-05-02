@@ -39,11 +39,11 @@ class PagesController extends AppController {
 	public $components = array('Auth');
 
 /**
- * This controller does not use a model
+ * The list of models this Controller relies on.
  *
  * @var array
  */
-	public $uses = array();
+	public $uses = array('Meta');
 
 /**
  * Displays a view
@@ -133,4 +133,25 @@ class PagesController extends AppController {
 
 		$this->set('media', $media);
 	}
+
+/** 
+ * Links Pages
+ */
+	public function links() {
+
+		$options = array(
+			'conditions' => array('Meta.name LIKE' => '%link_%'),
+
+			);
+
+		$results = $this->Meta->find('all', $options);
+		$links = array();
+		foreach($results as $link) {
+			$link['Meta']['name'] = str_replace('link_', '', $link['Meta']['name']);
+			array_push($links, $link['Meta']);
+		}
+
+		$this->set('links', $links);
+	}
+
 }

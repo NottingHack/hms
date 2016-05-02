@@ -95,7 +95,7 @@ class AppController extends Controller {
 		// Add the main nav
 		$this->__addMainNav('Members', array( 'plugin' => null, 'controller' => 'members', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN), null);
 		$this->__addMainNav('Groups', array( 'plugin' => null, 'controller' => 'groups', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN), null);
-		$this->__addMainNav('Mailing Lists', array( 'plugin' => null, 'controller' => 'mailinglists', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN), null);
+		$this->__addMainNav('Mailing Lists', array( 'plugin' => null, 'controller' => 'mailingLists', 'action' => 'index' ), array(Group::FULL_ACCESS, Group::MEMBERSHIP_ADMIN), null);
 		$this->__addMainNav('Snackspace', array( 'plugin' => null, 'controller' => 'snackspace', 'action' => 'history' ), null, array(Status::CURRENT_MEMBER, Status::EX_MEMBER));
         $this->__addMainNav('Access Codes', array( 'plugin' => null, 'controller' => 'members', 'action' => 'viewAccessCodes' ), null, array(Status::CURRENT_MEMBER));
 		$this->__addMainNav('MemberVoice', array( 'plugin' => 'membervoice', 'controller' => 'ideas', 'action' => 'index' ), null, null);
@@ -103,7 +103,7 @@ class AppController extends Controller {
         $this->__addMainNav('Projects', array( 'plugin' => null, 'controller' => 'memberProjects', 'action' => 'listProjects' ), null, array(Status::CURRENT_MEMBER, Status::EX_MEMBER));
         $this->__addMainNav('Boxes', array( 'plugin' => null, 'controller' => 'memberBoxes', 'action' => 'listBoxes' ), null, array(Status::CURRENT_MEMBER, Status::EX_MEMBER));
         $this->__addMainNav('Meta', array( 'plugin' => null, 'controller' => 'meta', 'action' => 'listMetas' ), array(Group::FULL_ACCESS), array(Status::CURRENT_MEMBER, Status::EX_MEMBER));
-        
+        $this->__addMainNav('Links', array( 'plugin' => null, 'controller' => 'pages', 'action' => 'links' ), '', null);
 	}
 
 /**
