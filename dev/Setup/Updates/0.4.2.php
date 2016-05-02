@@ -24,7 +24,7 @@ $this->__runQuery($conn, $query);
 $this->__logMessage('new entries into `hms_meta` table.');
     
     // load hms settings file
-    $hmsSettings = '../../../app/Config/hms.phh';
+    $hmsSettings = '../../../app/Config/hms.php';
     if (file_exists(makeAbsolutePath($hmsSettings))) {
         include ($hmsSettings);
     }
