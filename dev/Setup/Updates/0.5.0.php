@@ -33,8 +33,8 @@ $this->__logMessage('Creating `banks` table.');
 $query = "CREATE TABLE IF NOT EXISTS `banks` (
            `bank_id` int(11) NOT NULL AUTO_INCREMENT,
            `name` varchar(100) NOT NULL,
-           `sort_code` varchar(8) DEFUALT NULL,
-           `account_number` varchar(8) DEFUALT NULL,
+           `sort_code` varchar(8) DEFAULT NULL,
+           `account_number` varchar(8) DEFAULT NULL,
            PRIMARY KEY (`bank_id`)
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 $this->__runQuery($conn, $query);
@@ -58,5 +58,5 @@ $this->__runQuery($conn, $query);
 
 $this->__logMessage('Add column warned to table members');
 $query = "ALTER TABLE `members` 
-           ADD COLUMN `warned` TINYINT(1) DEFAULT 0";
+           ADD COLUMN `warned` TINYINT(1) DEFAULT 0;";
 $this->__runQuery($conn, $query);

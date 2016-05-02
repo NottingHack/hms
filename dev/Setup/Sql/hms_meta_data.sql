@@ -18,7 +18,7 @@ INSERT INTO `hms_meta` (`name`, `value`) VALUES
 ('link_Broken Tools', 'https://goo.gl/zXpof6'),
 ('link_Induction', 'https://goo.gl/Jl59IM'),
 ('link_Members Guide', 'http://guide.nottinghack.org.uk'),
-('link_Hackspace Rules', 'http://rules.nottinghack.org.uk')
+('link_Hackspace Rules', 'http://rules.nottinghack.org.uk'),
 ('bank_csv_folder', '/vagrant/app/tmp/csv'),
 ('audit_revoke_interval' , 'P2M'),
 ('audit_warn_interval', 'P1M14D'),

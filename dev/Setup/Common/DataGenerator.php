@@ -774,7 +774,6 @@ class DataGenerator {
      private function __generateAccessRecord($memberId, $joinTimestamp) {
  
         $accessTime = rand($joinTimestamp, time());
-        echo $accessTime ."\n";
         $record = array(
                         'access_time' => date("Y-m-d H:i:s", $accessTime),
                         'member_id' => $memberId,
