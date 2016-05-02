@@ -126,7 +126,7 @@
 	    	  echo $this->Html->link(
 	    	  	count($member['rfidtag']) . ' '.  $msg . ' registered', 
 	    	  	array(
-	    	  		'controller' => 'rfidtags',
+	    	  		'controller' => 'rfidTags',
 	    	  		'action' => 'view',
 	    	  		$member['id']
 	    	  	),
