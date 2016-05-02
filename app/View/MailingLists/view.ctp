@@ -1,8 +1,8 @@
 <!-- File: /app/View/MailingLists/view.ctp -->
 
 <?php
-	$this->Html->addCrumb('Mailing Lists', '/mailinglists');
-	$this->Html->addCrumb($mailingList['name'], '/mailinglists/view/' . $mailingList['id']);
+	$this->Html->addCrumb('Mailing Lists', '/mailingLists');
+	$this->Html->addCrumb($mailingList['name'], '/mailingLists/view/' . $mailingList['id']);
 
 	$membersSubscribedCount = count($membersSubscribed);
 	$membersNotSubscribedCount = count($membersNotSubscribed);

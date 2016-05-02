@@ -14,8 +14,7 @@
  */
 
 /**
- * Controller to handle Member functionality, allows members to be viewed,
- * edited, and registered.
+ * Controller to handle Member rfid cards
  */
 class RfidTagsController extends AppController {
 
@@ -57,7 +56,7 @@ class RfidTagsController extends AppController {
 
 		switch ($request->action) {
 			case 'view':
-				// Allow everyone to view their own transaction history
+				// Allow everyone to view their own rfid cards
 				if ($reqMemberId == $logMemberId or $memberAdmin) {
 					return true;
 				}
@@ -66,6 +65,7 @@ class RfidTagsController extends AppController {
 				// we'll sort this out later
 				return true;
 		}
+        
 	}
 
 /**
@@ -97,7 +97,7 @@ class RfidTagsController extends AppController {
 
 		// if there wasn't a serial passed in, just punt the user back to their list of registered cards
 		if ($rfidSerial == null) {
-			return $this->redirect(array('controller' => 'rfidtags', 'action' => 'view'));
+			return $this->redirect(array('controller' => 'rfidTags', 'action' => 'view'));
 		}
 		$id = $this->RfidTag->getMemberIdForSerial($rfidSerial);
 
@@ -128,7 +128,7 @@ class RfidTagsController extends AppController {
 							// set flash
 							$this->Session->setFlash('Card updated successfully.');
 							// goto list view
-							return $this->redirect(array('controller' => 'rfidtags', 'action' => 'view', $member['id']));
+							return $this->redirect(array('controller' => 'rfidTags', 'action' => 'view', $member['id']));
 						}
 					}
 
@@ -146,7 +146,7 @@ class RfidTagsController extends AppController {
 			$this->Session->setFlash('Not owner or admin');
 
 			// redirect to users' own card list
-			return $this->redirect(array('controller' => 'rfidtags', 'action' => 'view'));
+			return $this->redirect(array('controller' => 'rfidTags', 'action' => 'view'));
 		}
 	}
 
@@ -162,11 +162,11 @@ class RfidTagsController extends AppController {
 		$this->set('tagsList', $tagsList);
 	}
 
-	/**
+/**
  * Check to see if certain view/edit params should be shown to the logged in member.
  *
  * @param int $memberId The id of the member being viewed.
-  */
+ */
 	private function __getViewPermissions($memberId) {
 		if (is_numeric($memberId)) {
 			$memberStatus = $this->Member->getStatusForMember($memberId);

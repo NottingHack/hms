@@ -16,7 +16,7 @@
 App::uses('AppModel', 'Model');
 
 /**
- * Model for all pin data
+ * Model for all rfid data
  */
 class RfidTag extends AppModel {
 
@@ -235,8 +235,8 @@ class RfidTag extends AppModel {
  * Update details for a given tag serial number
  * 
  * @param $serial Serial number of the tag we want to retrieve data for
- * @param bool $format Determines if we're going to flatten out the results array or not
- * @return array Details for the tag serial number passed in $serial
+ * @param
+ * @return bool
  */
 	public function updateDetailsForSerial($serial, $sanitisedData) {
 		$findOptions = array(
