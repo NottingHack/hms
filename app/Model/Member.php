@@ -479,7 +479,7 @@ class Member extends AppModel {
 			[unlockText] => member unlock text
 			[balance] => member balance
 			[creditLimit] => member credit limit
-			[pins] =>
+			[pin] =>
 				[n] =>
 					[id] => pin id
 					[pin] => pin number
@@ -504,6 +504,7 @@ class Member extends AppModel {
 				[from] => previous status id
 				[to] => current status id
 				[at] => time the update happened
+			[joint] => bool
 	 */
 
 		$id = Hash::get($memberInfo, 'Member.member_id');
@@ -562,7 +563,7 @@ class Member extends AppModel {
 			}
 		}
 
-
+		$accountId = Hash::get($memberInfo, 'Member.account_id');
 		$paymentRef = Hash::get($memberInfo, 'Account.payment_ref');
 		$address = array(
 			'part1' => Hash::get($memberInfo, 'Member.address_1'),
@@ -585,6 +586,8 @@ class Member extends AppModel {
 			$bestName = $firstname . ' ' . $surname;
 		}
 
+		$joinAccount = (count($this->getMemberIdsForAccount(Hash::get($memberInfo, 'Member.account_id'))) > 1);
+
 		$allValues = array(
 			'id' => $id,
 			'bestName' => $bestName,
@@ -596,6 +599,7 @@ class Member extends AppModel {
 			'status' => $status,
 			'joinDate' => $joinDate,
 			'unlockText' => $unlockText,
+			'accountId' => $accountId,
 			'paymentRef' => $paymentRef,
 			'balance' => $balance,
 			'creditLimit' => $creditLimit,
@@ -604,6 +608,7 @@ class Member extends AppModel {
 			'address' => $address,
 			'contactNumber' => $contactNumber,
 			'lastStatusUpdate' => $lastStatusUpdate,
+			'joint' => $joinAccount,
 		);
 
 		if (!$removeNullEntries) {
@@ -1509,14 +1514,14 @@ class Member extends AppModel {
  * @return mixed True if member has been warned, null for error.
  */
 	public function beenWarned($memberId) {
-    	$record = $this->find('first', array(
-    		'fields' => array('Member.member_id', 'Member.warned'),
-    		'conditions' => array('Member.member_id' => $memberId),
-    		'recursive' => 0
-    		)
-    	);
+		$record = $this->find('first', array(
+			'fields' => array('Member.member_id', 'Member.warned'),
+			'conditions' => array('Member.member_id' => $memberId),
+			'recursive' => 0
+			)
+		);
 
-    	if (is_array($record) && count($record) > 0) {
+		if (is_array($record) && count($record) > 0) {
 			return Hash::get($record, 'Member.warned');
 		}
 		return null;
@@ -2017,7 +2022,27 @@ class Member extends AppModel {
 			}
 			return null;
 		}
-		
+
+/** 
+ * Get the member Id's for all members of this account
+ * 
+ * @param int $accountId
+ * @return bool true if this is a joint account
+ */
+	public function getMemberIdsForAccount($accountId) {
+    	$ids = $this->find('all', array(
+    		'fields' => array('Member.member_id'),
+    		'conditions' => array('Member.account_id' => $accountId),
+    		'recursive' => 0
+    		)
+    	);
+
+    	if (is_array($ids) && count($ids) > 0) {
+    		return Hash::extract($ids, '{n}.Member.member_id');
+    		}
+		return null;
+	}
+
 /**
  * Get a list of member names or e-mails (if we don't have their name) for all members.
  * 
