@@ -128,7 +128,7 @@ class RfidTagsController extends AppController {
 							// set flash
 							$this->Session->setFlash('Card updated successfully.');
 							// goto list view
-							return $this->redirect(array('controller' => 'rfidtags', 'action' => 'view'));
+							return $this->redirect(array('controller' => 'rfidtags', 'action' => 'view', $member['id']));
 						}
 					}
 
