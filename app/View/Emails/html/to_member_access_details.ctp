@@ -11,8 +11,8 @@
 </p>
 
 <p>
-	Here's a PDF hackspace manual, it can also be found at guide.nottinghack.org.uk<br>
-	<?php echo $manLink; ?>
+    The hackspace members guide can be found at <?php echo $this->Html->link($membersGuideHTML); ?> and it is a recommended read for all members. <br/>
+    A PDF version is also available <?php echo $this->Html->link('here', $membersGuidePDF); ?>
 </p>
 
 <p>
@@ -32,7 +32,7 @@
 
 <p>
 	The hackspace rules:<br>
-	<?php echo $this->Html->link('http://rules.nottinghack.org.uk'); ?>
+	<?php echo $this->Html->link($rulesHTML); ?>
 </p>
 
 <p>

@@ -11,8 +11,6 @@
 	App::uses('HmsControllerTestBase', 'TestController');
 
 	App::uses('PhpReader', 'Configure');
-	Configure::config('default', new PhpReader());
-	Configure::load('hms', 'default');
 
 	class MembersControllerTest extends HmsControllerTestBase
 	{
@@ -29,6 +27,7 @@
                                  'app.MailingListSubscriptions',
                                  'app.EmailRecord',
                                  'app.RfidTag',
+                                 'app.Meta',
                                  );
 
 		public function setUp()
@@ -37,6 +36,7 @@
 
 			$this->MembersController = new MembersController();
 			$this->MembersController->constructClasses();
+            
 		}
 
 		private function _testMailingListView($expectedResults)
@@ -974,7 +974,7 @@
 			$mockEmail->expects($this->at(3))->method('to')->with('RoyJForsman@teleworm.us');
 			$mockEmail->expects($this->at(4))->method('subject')->with('Bank Details');
 			$mockEmail->expects($this->at(5))->method('template')->with('to_member_so_details');
-			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('name' => 'Roy Forsman', 'paymentRef' => $fakePaymentRef, 'accountNum' => Configure::read('hms_so_accountNumber'), 'sortCode' => Configure::read('hms_so_sortCode'), 'accountName' => Configure::read('hms_so_accountName') ));
+			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('name' => 'Roy Forsman', 'paymentRef' => $fakePaymentRef, 'accountNum' => $this->MembersController->Meta->getValueFor('so_accountNumber'), 'sortCode' => $this->MembersController->Meta->getValueFor('so_sortCode'), 'accountName' => $this->MembersController->Meta->getValueFor('so_accountName') ));
 			$mockEmail->expects($this->at(7))->method('config')->with('smtp');
 			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
 
@@ -1076,7 +1076,16 @@
 			$mockEmail->expects($this->at(12))->method('to')->with('RyanMiles@dayrep.com');
 			$mockEmail->expects($this->at(13))->method('subject')->with('Membership Complete');
 			$mockEmail->expects($this->at(14))->method('template')->with('to_member_access_details');
-			$mockEmail->expects($this->at(15))->method('viewVars')->with(array('manLink' => Configure::read('hms_help_manual_url'), 'outerDoorCode' => Configure::read('hms_access_street_door'), 'innerDoorCode' => Configure::read('hms_access_inner_door'), 'wifiSsid' => Configure::read('hms_access_wifi_ssid'), 'wifiPass' => Configure::read('hms_access_wifi_password')));
+			$mockEmail->expects($this->at(15))->method('viewVars')->with(array(
+                                                                               'membersGuideHTML' => $this->MembersController->Meta->getValueFor('members_guide_html'),
+                                                                               'membersGuidePDF' => $this->MembersController->Meta->getValueFor('members_guide_pdf'),
+                                                                               'rulesHTML' => $this->MembersController->Meta->getValueFor('rules_html'),
+                                                                               'outerDoorCode' => $this->MembersController->Meta->getValueFor('access_street_door'),
+                                                                               'innerDoorCode' => $this->MembersController->Meta->getValueFor('access_inner_door'),
+                                                                               'wifiSsid' => $this->MembersController->Meta->getValueFor('access_wifi_ssid'),
+                                                                               'wifiPass' => $this->MembersController->Meta->getValueFor('access_wifi_password')
+                                                                               )
+                                                                         );
 			$mockEmail->expects($this->at(16))->method('config')->with('smtp');
 			$mockEmail->expects($this->at(17))->method('send')->will($this->returnValue(true));
 
@@ -1643,7 +1652,7 @@
 			$mockEmail->expects($this->at(3))->method('to')->with('RyanMiles@dayrep.com');
 			$mockEmail->expects($this->at(4))->method('subject')->with('Bank Details');
 			$mockEmail->expects($this->at(5))->method('template')->with('to_member_so_details');
-			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('name' => 'Ryan Miles', 'paymentRef' => 'HSTSBKFFGXWGKF48', 'accountNum' => Configure::read('hms_so_accountNumber'), 'sortCode' => Configure::read('hms_so_sortCode'), 'accountName' => Configure::read('hms_so_accountName') ));
+			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('name' => 'Ryan Miles', 'paymentRef' => 'HSTSBKFFGXWGKF48', 'accountNum' => $this->MembersController->Meta->getValueFor('so_accountNumber'), 'sortCode' => $this->MembersController->Meta->getValueFor('so_sortCode'), 'accountName' => $this->MembersController->Meta->getValueFor('so_accountName') ));
 			$mockEmail->expects($this->at(7))->method('config')->with('smtp');
 			$mockEmail->expects($this->at(8))->method('send')->will($this->returnValue(true));
 

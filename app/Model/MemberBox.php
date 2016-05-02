@@ -143,7 +143,7 @@ class MemberBox extends AppModel {
  * 
  * @param bool $paginate If true, return a query to retrieve a page of the data, otherwise return the data.
  * @param array $conditions An array of conditions to decide which member records to access.
- * @return array A list of boxes or query to report a list of tags
+ * @return array A list of boxes or query to report a list of boxes
  */
 	public function getBoxesList($paginate, $conditions = array()) {
 		$findOptions = array(
@@ -180,7 +180,7 @@ class MemberBox extends AppModel {
  * 
  * @param array $box raw box record from the model
  * @param bool $removeNullEntries strips out null fields from the result
- * @return array Details for the tag serial number passed in $serial
+ * @return array Details for the box record
  */
   public function formatDetails($box, $removeNullEntries = true) {
   	/*
