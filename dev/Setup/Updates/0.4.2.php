@@ -46,3 +46,14 @@ $query = "INSERT INTO `hms_meta` (`name`, `value`) VALUES
     ;
     ";
 $this->__runQuery($conn, $query);
+
+$this->__logMessage('new entries into `hms_meta` table for links.');
+$query = "INSERT INTO `hms_meta` (`name`, `value`) VALUES
+    ('link_Resources Requests', 'https://docs.google.com/forms/d/1jURztPXwFxh3NbXU0oqdC7T3YfJYK-6x67lq79HAqR8/viewform'),
+    ('link_Broken Tools', 'https://goo.gl/zXpof6'),
+    ('link_Induction', 'https://goo.gl/Jl59IM'),
+    ('link_Members Guide', 'http://guide.nottinghack.org.uk'),
+    ('link_Hackspace Rules', 'http://rules.nottinghack.org.uk')
+    ;
+    ";
+$this->__runQuery($conn, $query);
