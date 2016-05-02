@@ -1,7 +1,7 @@
 <!-- File: /app/View/MailingLists/index.ctp -->
 
 <?php
-	$this->Html->addCrumb('Mailing Lists', '/mailinglists');
+	$this->Html->addCrumb('Mailing Lists', '/mailingLists');
 ?>
 
 <?php
@@ -24,7 +24,7 @@
 ?>
 
 	<tr>
-		<td><?php echo $this->Html->link($list['name'], array('controller' => 'mailinglists', 'action' => 'view', $list['id'])); ?></td>
+		<td><?php echo $this->Html->link($list['name'], array('controller' => 'mailingLists', 'action' => 'view', $list['id'])); ?></td>
 		<td><?php echo $list['stats']['member_count']; ?></td>
 		<td><?php echo $list['stats']['hms_member_count']; ?></td>
 	</tr>
