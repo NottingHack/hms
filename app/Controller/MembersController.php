@@ -1160,32 +1160,34 @@ class MembersController extends AppController {
 					)
 				);
 
-				array_push($actions,
-					array(
-						'title' => 'Approve Member',
-						'controller' => 'members',
-						'action' => 'approveMember',
-						'params' => array(
-							$memberId,
-						),
-						'class' => 'positive attention approve_member',
-					)
-				);
+				// No longer posible due to automatic audtis
+				// array_push($actions,
+				// 	array(
+				// 		'title' => 'Approve Member',
+				// 		'controller' => 'members',
+				// 		'action' => 'approveMember',
+				// 		'params' => array(
+				// 			$memberId,
+				// 		),
+				// 		'class' => 'positive attention approve_member',
+				// 	)
+				// );
 
 			break;
 
 			case Status::CURRENT_MEMBER:
-				array_push($actions,
-					array(
-						'title' => 'Revoke Membership',
-						'controller' => 'members',
-						'action' => 'revokeMembership',
-						'params' => array(
-							$memberId,
-						),
-						'class' => 'negative',
-					)
-				);
+				// No longer posible due to automatic audtis
+				// array_push($actions,
+				// 	array(
+				// 		'title' => 'Revoke Membership',
+				// 		'controller' => 'members',
+				// 		'action' => 'revokeMembership',
+				// 		'params' => array(
+				// 			$memberId,
+				// 		),
+				// 		'class' => 'negative',
+				// 	)
+				// );
 
 				array_push($actions,
 					array(
@@ -1247,17 +1249,18 @@ class MembersController extends AppController {
 			break;
 
 			case Status::EX_MEMBER:
-				array_push($actions,
-					array(
-						'title' => 'Reinstate Membership',
-						'controller' => 'members',
-						'action' => 'reinstateMembership',
-						'params' => array(
-							$memberId,
-						),
-						'class' => 'positive',
-					)
-				);
+				// No longer posible due to automatic audtis
+				// array_push($actions,
+				// 	array(
+				// 		'title' => 'Reinstate Membership',
+				// 		'controller' => 'members',
+				// 		'action' => 'reinstateMembership',
+				// 		'params' => array(
+				// 			$memberId,
+				// 		),
+				// 		'class' => 'positive',
+				// 	)
+				// );
                 
                 array_push($actions,
 					array(
