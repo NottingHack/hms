@@ -113,7 +113,7 @@ class BankTransactionsController extends AppController {
             }
             
             move_uploaded_file($tmp_name, "$dir/$filename");
-            
+            sleep(1);
             // strip .csv from file name before passing to classRegistry
             $filename = preg_replace('/.csv$/', '', $filename);
             

@@ -74,7 +74,7 @@ class NatwestCsvBehavior extends ModelBehavior {
             array_push($withIds, $transaction);
         }
         
-        return $formatedTransactions;
+        return $withIds;
     }
 
 /**
@@ -121,7 +121,7 @@ class NatwestCsvBehavior extends ModelBehavior {
         }
         
         // make PHP treat it as a UK date not US http://stackoverflow.com/a/2891949
-        $transaction['Date'] = str_replace('/', '-', $transaction['Transaction Date']);
+        $transaction['Date'] = str_replace('/', '-', $transaction['Date']);
         
         $allValues = array(
 			'transaction_date' => CakeTime::format($transaction['Date'], '%Y-%m-%d'),
