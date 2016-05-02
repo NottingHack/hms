@@ -2004,7 +2004,9 @@
 					'member_id' => '4',
 					'subject' => 'Test email 2',
 					'timestamp' => '2013-06-05 13:51:04'
-				)
+				),
+				'accountId' => 3,
+				'joint' => true,
 			);
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
@@ -2098,7 +2100,9 @@
 					'member_id' => '3',
 					'subject' => 'Test email 2',
 					'timestamp' => '2013-03-23 05:42:21'
-				)
+				),
+				'accountId' => 3,
+				'joint' => true,
 			);
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
@@ -2208,7 +2212,9 @@
 					'member_id' => '4',
 					'subject' => 'Test email 2',
 					'timestamp' => '2013-06-05 13:51:04'
-				)
+				),
+				'accountId' => 3,
+				'joint' => true,
 			);
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
@@ -2277,6 +2283,8 @@
 					'postcode' => 'IV51 9DR',
 				),
 				'contactNumber' => '077 7181 0959',
+				'joint' => true,
+				'accountId' => '3',
 			);
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
@@ -2321,6 +2329,7 @@
 					'id' => '1',
 					'name' => 'Prospective Member',
 				),
+				'joint' => true,
 			);
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
@@ -2364,6 +2373,7 @@
 				'surname' => 'Russell',
 				'username' => 'Warang29',
 				'email' => 'DorothyDRussell@dayrep.com',
+				'joint' => true,
 			);
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
@@ -2415,6 +2425,7 @@
 					'postcode' => 'OX7 2US',
 				),
 				'contactNumber' => '079 0572 8737',
+				'joint' => true,
 			);
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
@@ -2467,6 +2478,8 @@
 					'postcode' => 'WR5 8WJ',
 				),
 				'contactNumber' => '078 5295 7976',
+				'accountId' => '7',
+				'joint' => false,
 			);
 
 			$this->assertEqual( $this->vars['member'], $expectedMemberInfo, 'Member info was not correct.' );
@@ -2525,6 +2538,7 @@
 					'postcode' => 'EC4M 8SH',
 				),
 				'contactNumber' => '077 1755 4342',
+				'joint' => true,
 			);
 			$this->_testEditMemberViewVars($expectedMemberVal, array('us8gz1v8rq' => true, '455de2ac56' => false));
 		}
@@ -2577,6 +2591,7 @@
 					'postcode' => 'EC4M 8SH',
 				),
 				'contactNumber' => '077 1755 4342',
+				'joint' => true,
 			);
 
 			$expectedRecordData = array(
@@ -2597,6 +2612,7 @@
 					'address_city' => 'Bobbington',
 					'address_postcode' => 'FU453JD',
 					'contact_number' => '079716523804',
+					'warned' => false,
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -2744,6 +2760,7 @@
 					'postcode' => 'EC4M 8SH',
 				),
 				'contactNumber' => '077 1755 4342',
+				'joint' => true,
 			);
 
 			$expectedRecordData = array(
@@ -2764,6 +2781,7 @@
 					'address_city' => 'Bobbington',
 					'address_postcode' => 'FU453JD',
 					'contact_number' => '079716523804',
+					'warned' => false
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -2924,6 +2942,8 @@
 					'at' => '2012-12-17 19:19:59',
 					'by_username' => 'chollertonbanker',
 				),
+				'accountId' => 3,
+				'joint' => true,
 			);
 
 			$expectedRecordData = array(
@@ -2944,6 +2964,7 @@
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
+					'warned' => 0,
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -3107,6 +3128,8 @@
 					'id' => '5',
 					'name' => 'Current Member',
 				),
+				'accountId' => '2',
+				'joint' => false,
 			);
 
 			$expectedRecordData = array(
@@ -3127,6 +3150,7 @@
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
+					'warned' => false,
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -3258,6 +3282,8 @@
 					'id' => '5',
 					'name' => 'Current Member',
 				),
+				'accountId' => '3',
+				'joint' => true,
 			);
 
 			$expectedRecordData = array(
@@ -3278,6 +3304,7 @@
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
+					'warned' => false,
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -3414,6 +3441,8 @@
 					'at' => '2013-04-02 09:32:42',
 					'by_username' => 'chollertonbanker',
 				),
+				'joint' => true,
+				'accountId' => '3',
 			);
 
 			$expectedRecordData = array(
@@ -3434,6 +3463,7 @@
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
+					'warned' => false,
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -3585,6 +3615,8 @@
 					'at' => '2013-04-02 09:32:42',
 					'by_username' => 'chollertonbanker',
 				),
+				'joint' => true,
+				'accountId' => '3',
 			);
 
 			$expectedRecordData = array(
@@ -3605,6 +3637,7 @@
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
+					'warned' => false,
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -3814,6 +3847,8 @@
 					'at' => '2013-04-02 09:32:42',
 					'by_username' => 'chollertonbanker',
 				),
+				'accountId' => '3',
+				'joint' => true,
 			);
 
 			$expectedRecordData = array(
@@ -3834,6 +3869,7 @@
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
+					'warned' => false,
 				),
 				'Status' => array(
 					'status_id' => '5',
