@@ -1078,6 +1078,7 @@
 			$mockEmail->expects($this->at(13))->method('subject')->with('Membership Complete');
 			$mockEmail->expects($this->at(14))->method('template')->with('to_member_access_details');
 			$mockEmail->expects($this->at(15))->method('viewVars')->with(array(
+																			   'name' => 'Ryan Miles',
                                                                                'membersGuideHTML' => $this->MembersController->Meta->getValueFor('members_guide_html'),
                                                                                'membersGuidePDF' => $this->MembersController->Meta->getValueFor('members_guide_pdf'),
                                                                                'rulesHTML' => $this->MembersController->Meta->getValueFor('rules_html'),
