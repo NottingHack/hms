@@ -15,7 +15,7 @@
 
 $conn = $this->__getDbConnection('default', true);
 
-$this->__logMessage('Update tp MemberBoxes table');
+$this->__logMessage('Update to MemberBoxes table');
 
 $this->__logMessage('Update `member_boxes` table.');
 $query = "ALTER TABLE  `member_boxes` CHANGE  `brought_date`  `bought_date` DATE NOT NULL;";
