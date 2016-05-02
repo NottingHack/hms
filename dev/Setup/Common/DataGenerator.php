@@ -105,6 +105,12 @@ class DataGenerator {
     private $__bankCSV = array();
     
 /**
+ * Array of access log records.
+ * @var array
+ */
+    private $__accessLog = array();
+    
+/**
  * Constructor
  */
 	public function __construct() {
@@ -235,6 +241,20 @@ class DataGenerator {
 	}
     
 /**
+ * Get the array of access log data.
+ *
+ * @return array The array of access log data.
+ */
+    public function getAccessLogData() {
+ 
+        usort($this->__accessLog, function ($a, $b) {
+              return $a['access_time'] - $a['access_time'];
+              });
+        
+        return $this->__accessLog;
+    }
+    
+/**
  * Generate a new member record
  *
  * @param int $membershipStage The stage of membership this member should be at, see Status model for details.
@@ -302,6 +322,11 @@ class DataGenerator {
 
 				$this->__setMemberGroups($memberId, $groupList);
 			}
+
+            $numAccessRecords = rand (0,2);
+            for ($i = 0; $i < $numAccessRecords; $i++) {
+                $this->__generateAccessRecord($memberId, $registerTimestamp);
+            }
 		}
 
 		// Need to generate status updates for all levels of membership
@@ -698,7 +723,7 @@ class DataGenerator {
 	}
     
 /**
- * Genate a bank transaction for a given memberId with age between
+ * Generate a bank transaction for a given memberId with age between
  *
  * @param  int  $accountId
  * @param  int  $oldestTimestamp
@@ -707,23 +732,22 @@ class DataGenerator {
  */
      private function __generateBankTransaction($accountId, $oldestTimestamp, $newestTimestamp, $name) {
          
-         // fudge the date
-         $transactionDate = rand($oldestTimestamp, $newestTimestamp);
+        // fudge the date
+        $transactionDate = rand($oldestTimestamp, $newestTimestamp);
          
-         $record = array(
-                         'transaction_date' => date('Y-m-d', $transactionDate),
-                         'description' => $name .' '. $this->__accounts[$accountId -1 ]['payment_ref'] . ' ' . $accountId,
-                         'amount' => rand(1, 7500)/100,
-                         'bank_id' => 2,
-                         'account_id' => $accountId,
-                         
-         );
+        $record = array(
+                        'transaction_date' => date('Y-m-d', $transactionDate),
+                        'description' => $name .' '. $this->__accounts[$accountId -1 ]['payment_ref'] . ' ' . $accountId,
+                        'amount' => rand(1, 7500)/100,
+                        'bank_id' => 2,
+                        'account_id' => $accountId,
+                        );
          array_push($this->__bankTransaction, $record);
      }
     
     
 /**
- * Genate a bank csv for a given accountId with age between
+ * Generate a bank csv for a given accountId with age between
  *
  * @param  int  $accountId
  * @param  int  $oldestTimestamp
@@ -732,15 +756,35 @@ class DataGenerator {
  */
      private function __generateBankCSV($accountId, $oldestTimestamp, $newestTimestamp, $name) {
  
-         $transactionDate = rand($oldestTimestamp, $newestTimestamp);
-         $record = array(
-                         'transaction_date' => $transactionDate,
-                         
-                         'description' => $name .' '. $this->__accounts[$accountId -1 ]['payment_ref']. ' ' . $accountId,
-                         'amount' => rand(1, 7500)/100,
-                         );
+        $transactionDate = rand($oldestTimestamp, $newestTimestamp);
+        $record = array(
+                        'transaction_date' => $transactionDate,        
+                        'description' => $name .' '. $this->__accounts[$accountId -1 ]['payment_ref']. ' ' . $accountId,
+                        'amount' => rand(1, 7500)/100,
+                        );
          array_push($this->__bankCSV, $record);
      }
+
+/**
+ * Generate Access Record
+ *
+ * @param int $memberId The id of the member the pin belongs to.
+ * @param int $joinTimestamp The time the pin was generated.
+ */
+     private function __generateAccessRecord($memberId, $joinTimestamp) {
+ 
+        $accessTime = rand($joinTimestamp, time());
+        echo $accessTime ."\n";
+        $record = array(
+                        'access_time' => date("Y-m-d H:i:s", $accessTime),
+                        'member_id' => $memberId,
+                        'access_result' => 10,
+                        'rfid_serial' => $this->__rfidTags[count($this->__rfidTags)-1]['rfid_serial'],
+                        );
+        array_push($this->__accessLog, $record);
+     }
+
+
 /**
  * Given an array of array data, a key to the inner array, and a function to generate data, keep generating until the data is unique.
  *

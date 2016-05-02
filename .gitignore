@@ -25,6 +25,7 @@ hms.settings
 /dev/Setup/Sql/mailinglist_subscriptions_data.development.sql
 /dev/Setup/Sql/hms_emails_data.development.sql
 /dev/Setup/Sql/bank_transactions_data.sql
+/dev/Setup/Sql/access_log_data.sql
 /dev/tsb_bank_test.csv
 app/Lib/MailChimp/MCAPI.php
 docs

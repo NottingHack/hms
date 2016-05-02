@@ -510,6 +510,11 @@ class Setup {
                 'tableName' => 'bank_transactions',
                 'data' => $dataGenerator->getBankTransactionData(),
             ),
+            array(
+                'filepath' => '../Sql/access_log_data.sql',
+                'tableName' => 'access_log',
+                'data' => $dataGenerator->getAccessLogData(),
+            ),
 		);
 
 		$sqlWriter = new sqlWriter();
