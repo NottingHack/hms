@@ -31,7 +31,7 @@ class AuditMembersController extends AppController {
  * The list of models this Controller relies on.
  * @var array
  */
-	public $uses = array('Member', 'BankTransaction', 'Meta');
+	public $uses = array('Member', 'BankTransaction', 'Meta', 'AccessLog');
 
 /**
  * Test to see if a user is authorized to make a request.
@@ -178,13 +178,14 @@ class AuditMembersController extends AppController {
             }
         }
 
+
         // right should now have 5 arrays of Id's to go and process
         // by batching the id's we can send just one email to membership team with tables of members
         // showing different bits of info for different states
         // approve, name, email, pin, joint?
         // warn, name, email, last payment date, ref, last visit date, joint?
         // revoke, name, email, last payment date, ref, last visit date, joint?
-        // einstate, name, email, date they were made ex, last visit date, joint?
+        // reinstate, name, email, date they were made ex, last visit date, joint?
         // ohcrap list to software@, member_id
 
 //        debug("Now: " . $dateNow->format('Y-m-d'));
@@ -232,11 +233,15 @@ class AuditMembersController extends AppController {
                                 'warnedMembers' => $this->Member->getMemberSummaryForMembers($warnIds),
                                 'revokedMembers' => $this->Member->getMemberSummaryForMembers($revokeIds),
                                 'reinstatedMembers' => $this->Member->getMemberSummaryForMembers($reinstateIds),
+                                'latestTransactionDateForAccounts' => $latestTransactionDateForAccounts,
+                                'warnedLastAccess' => $this->AccessLog->getLastAccessForMembers($warnIds),
+                                'revokedLastAccess' => $this->AccessLog->getLastAccessForMembers($revokeIds),
+                                'reinstatedLastAccess' => $this->AccessLog->getLastAccessForMembers($reinstateIds),
                                 )
                           );
 
         $this->Session->setFlash('Audit complete');
-        return; //$this->redirect(array( 'controller' => 'members'));
+        return $this->redirect(array( 'controller' => 'members'));
     }
 
 /**

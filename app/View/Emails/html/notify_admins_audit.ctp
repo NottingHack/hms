@@ -9,6 +9,8 @@
     <tr>
         <th>Name</th>
         <th>Email</th>
+        <th>Pin</th>
+        <th>Joint Account</th>
     </tr>
 <?php foreach ($approveMembers as $member): ?>
     <tr>
@@ -22,6 +24,8 @@
                                         );
             ?></td>
         <td><?php echo $member['email']; ?></td>
+        <td><?php echo $member['pin'][0]['pin']; ?></td>
+        <td><?php echo $member['joint']? "Yes": "No"; ?></td>
     </tr>
 <?php endforeach; ?>
 </table>
@@ -31,6 +35,10 @@
     <tr>
         <th>Name</th>
         <th>Email</th>
+        <th>Joint Account</th>
+        <th>Balance</th>
+        <th>Last payment date</th>
+        <th>Last visit date</th>
     </tr>
 <?php foreach ($warnedMembers as $member): ?>
     <tr>
@@ -44,6 +52,10 @@
                                         );
             ?></td>
         <td><?php echo $member['email']; ?></td>
+        <td><?php echo $member['joint']? "Yes": "No"; ?></td>
+        <td><?php echo $this->Currency->output($member['balance']); ?></td>
+        <td><?php echo $latestTransactionDateForAccounts[$member['accountId']]; ?></td>
+        <td><?php echo $warnedLastAccess[$member['id']]; ?></td>
     </tr>
 <?php endforeach; ?>
 </table>
@@ -53,6 +65,10 @@
     <tr>
         <th>Name</th>
         <th>Email</th>
+        <th>Joint Account</th>
+        <th>Balance</th>
+        <th>Last payment date</th>
+        <th>Last visit date</th>
     </tr>
 <?php foreach ($revokedMembers as $member): ?>
     <tr>
@@ -66,6 +82,10 @@
                                         );
             ?></td>
         <td><?php echo $member['email']; ?></td>
+        <td><?php echo $member['joint']? "Yes": "No"; ?></td>
+        <td><?php echo $this->Currency->output($member['balance']); ?></td>
+        <td><?php echo $latestTransactionDateForAccounts[$member['accountId']]; ?></td>
+        <td><?php echo $revokedLastAccess[$member['id']]; ?></td>
     </tr>
 <?php endforeach; ?>
 </table>
@@ -75,6 +95,10 @@
     <tr>
         <th>Name</th>
         <th>Email</th>
+        <th>Joint Account</th>
+        <th>Balance</th>
+        <th>Date made Ex</th>
+        <th>Last visit date</th>
     </tr>
 <?php foreach ($reinstatedMembers as $member): ?>
     <tr>
@@ -88,6 +112,10 @@
                                         );
             ?></td>
         <td><?php echo $member['email']; ?></td>
+        <td><?php echo $member['joint']? "Yes": "No"; ?></td>
+        <td><?php echo $this->Currency->output($member['balance']); ?></td>
+        <td><?php echo $member['lastStatusUpdate']['at']; ?></td>
+        <td><?php echo $reinstatedLastAccess[$member['id']]; ?></td>
     </tr>
 <?php endforeach; ?>
 </table>

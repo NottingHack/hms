@@ -44,7 +44,7 @@ class AppController extends Controller {
  * List of helpers views rendered from this controller will have access to.
  * @var array
  */
-	public $helpers = array('Html', 'Form', 'Nav');
+	public $helpers = array('Html', 'Form', 'Nav', 'Currency');
 
 /**
  * Email object, used for easy mocking.

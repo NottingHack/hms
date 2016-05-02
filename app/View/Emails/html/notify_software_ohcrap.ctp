@@ -7,12 +7,14 @@
 <p>
     <table border="1" style="width:100%">
         <tr>
+            <th>Member Id</th>
             <th>Name</th>
             <th>Email</th>
             <th>Status</th>
         </tr>
 <?php foreach ($ohCrapMembers as $member): ?>
         <tr>
+            <td><?php echo $member['id']; ?></td>
             <td><?php echo $this->Html->link(
                                             sprintf('%s %s', $member['firstname'], $member['surname']),
                                             array(
