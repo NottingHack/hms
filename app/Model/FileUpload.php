@@ -32,7 +32,7 @@ class FileUpload extends AppModel {
  */
 	public $validate = array(
 		'filename' => array(
-			'rule' => 'notEmpty'
+			'rule' => 'notBlank'
 		),
 	);
 

@@ -117,7 +117,7 @@ class Member extends AppModel {
 		),
 		'password' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'minLen' => array(
@@ -127,7 +127,7 @@ class Member extends AppModel {
 		),
 		'password_confirm' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'minLen' => array(
@@ -141,7 +141,7 @@ class Member extends AppModel {
 		),
 		'username' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'mustbeUnique' => array(
@@ -164,7 +164,7 @@ class Member extends AppModel {
 			),
 		),
 		'usernameOrEmail' => array(
-			'notEmpty',
+			'notBlank',
 		),
 		'account_id' => array(
 			'length' => array(

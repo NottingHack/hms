@@ -44,7 +44,7 @@ class ForgotPassword extends AppModel {
 	public $validate = array(
 		'email' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'matchMemberEmail' => array(
@@ -54,7 +54,7 @@ class ForgotPassword extends AppModel {
 		),
 		'new_password' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'minLen' => array(
@@ -64,7 +64,7 @@ class ForgotPassword extends AppModel {
 		),
 		'new_password_confirm' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'matchNewPassword' => array(
