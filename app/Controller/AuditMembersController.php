@@ -193,7 +193,8 @@ class AuditMembersController extends AppController {
 //        debug("Revoke: " . $revokeDate->format('Y-m-d'));
 
         $adminId = $this->_getLoggedInMemberId();
-
+        // for reinstatedMembers grab there detials first (so we get the date they wher made ex)
+        $reinstatedMembers = $this->Member->getMemberSummaryForMembers($reinstateIds);
 //        debug("Approve");
 //        debug($approveIds);
         foreach ($approveIds as $memberId) {
@@ -221,23 +222,25 @@ class AuditMembersController extends AppController {
         }
 
         $membershipTeamEmail = $this->Meta->getValueFor('membership_email');
+        $trusteesTeamEmail = $this->Meta->getValueFor('trustees_team_email');
         $subject = 'HMS Audit results';
         $template = 'notify_admins_audit';
 
         $this->_sendEmail(
-                          $membershipTeamEmail,
+                          array($membershipTeamEmail => "Membership Team", $trusteesTeamEmail => "Trustees"),
                           $subject,
                           $template,
                           array(
                                 'approveMembers' => $this->Member->getMemberSummaryForMembers($approveIds),
                                 'warnedMembers' => $this->Member->getMemberSummaryForMembers($warnIds),
                                 'revokedMembers' => $this->Member->getMemberSummaryForMembers($revokeIds),
-                                'reinstatedMembers' => $this->Member->getMemberSummaryForMembers($reinstateIds),
+                                'reinstatedMembers' => $reinstatedMembers,
                                 'latestTransactionDateForAccounts' => $latestTransactionDateForAccounts,
                                 'warnedLastAccess' => $this->AccessLog->getLastAccessForMembers($warnIds),
                                 'revokedLastAccess' => $this->AccessLog->getLastAccessForMembers($revokeIds),
                                 'reinstatedLastAccess' => $this->AccessLog->getLastAccessForMembers($reinstateIds),
-                                )
+                                ),
+                          false
                           );
 
         $this->Session->setFlash('Audit complete');
@@ -324,7 +327,7 @@ class AuditMembersController extends AppController {
 			}
 
 			return $this->_sendEmail(
-				$memberDetails['email'],
+				array($memberDetails['email'] => $memberDetails['bestName']),
 				$subject,
 				$template,
 				array(
@@ -362,7 +365,7 @@ class AuditMembersController extends AppController {
             }
 
 			return $this->_sendEmail(
-				$memberSoDetails['email'],
+				array($memberSoDetails['email'] => $memberDetails['bestName']),
 				$subject,
 				$template,
 				array(
@@ -390,7 +393,7 @@ class AuditMembersController extends AppController {
         $template = 'notify_software_ohcrap';
 
         return $this->_sendEmail(
-            $email,
+            array($email => "Software Team"),
             $subject,
             $template,
             array(

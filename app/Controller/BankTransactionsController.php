@@ -145,18 +145,19 @@ class BankTransactionsController extends AppController {
             }
 
             if (count($unmatchedTansactions) != 0) {
-                $email = $this->Meta->getValueFor('accounts_team_email');
+                $accountsEmail = $this->Meta->getValueFor('accounts_team_email');
                 $subject = 'HMS Unmatched transactions';
                 $template = 'notify_accounts_unmatch';
 
 
                 $this->_sendEmail(
-                    $email,
+                    array($accountsEmail => "Finance Team"),
                     $subject,
                     $template,
                     array(
                         'transactions' => $unmatchedTansactions,
-                    )
+                    ),
+                    false
                 );
             }
 

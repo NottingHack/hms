@@ -240,7 +240,7 @@ class MembersController extends AppController {
 				// E-mail the member admins for a created record
 				if ($result['createdRecord'] === true) {
 					$this->_sendEmail(
-						$this->Meta->getValueFor('membership_email'),
+						array($this->Meta->getValueFor('membership_email') => "Membership Team"),
 						'New Prospective Member Notification',
 						'notify_admins_member_added',
 						array(
@@ -349,12 +349,13 @@ class MembersController extends AppController {
 		if ($this->request->is('post')) {
 			try {
 				if ($this->Member->setupDetails($id, $this->request->data)) {
-					$memberEmail = $this->Member->getEmailForMember($id);
+					$memberDetails = $this->Member->getMemberSummary($id);
+					$memberEmail = $memberDetails['email'];
 
 					$this->Session->setFlash('Contact details saved.');
 
 					$this->_sendEmail(
-						$this->Meta->getValueFor('membership_email'),
+						array($this->Meta->getValueFor('membership_email') => "Membership Team"),
 						'New Member Contact Details',
 						'notify_admins_check_contact_details',
 						array(
@@ -364,7 +365,7 @@ class MembersController extends AppController {
 					);
 
 					$this->_sendEmail(
-						$memberEmail,
+						array($memberEmail => $memberDetails['bestName']),
 						'Contact Information Completed',
 						'to_member_post_contact_update'
 					);
@@ -397,12 +398,13 @@ class MembersController extends AppController {
 				if ($this->Member->rejectDetails($id, $this->request->data, $this->_getLoggedInMemberId())) {
 					$this->Session->setFlash('Member has been contacted.');
 
-					$memberEmail = $this->Member->getEmailForMember($id);
+					$memberDetails = $this->Member->getMemberSummary($id);
+					$memberEmail = $memberDetails['email'];
 
 					Controller::loadModel('MemberEmail');
 
 					$this->_sendEmail(
-						$memberEmail,
+						array($memberEmail => $memberDetails['bestName']),
 						'Issue With Contact Information',
 						'to_member_contact_details_rejected',
 						array(
@@ -442,7 +444,7 @@ class MembersController extends AppController {
 					$this->__sendSoDetailsToMember($id);
 
 					$this->_sendEmail(
-						$this->Meta->getValueFor('membership_email'),
+						array($this->Meta->getValueFor('membership_email') => "Membership Team"),
 						'Impending Payment',
 						'notify_admins_payment_incoming',
 						array(
@@ -524,7 +526,7 @@ class MembersController extends AppController {
 			}
 
 			$this->_sendEmail(
-				$email,
+				array($email => $memberDetails['bestName']),
 				$subject,
 				$template,
 				array(
@@ -639,7 +641,7 @@ class MembersController extends AppController {
 					$data = $this->Member->createForgotPassword($this->request->data);
 					if ($data != false) {
 						$this->_sendEmail(
-							$data['email'],
+							array($data['email'] => $data['email']),
 							'Password Reset Request',
 							'forgot_password',
 							array(
@@ -693,7 +695,7 @@ class MembersController extends AppController {
 		$email = $this->Member->getEmailForMember($memberId);
 		if ($email) {
 			return $this->_sendEmail(
-				$email,
+				array($email => $email),
 				'Welcome to Nottingham Hackspace',
 				'to_prospective_member',
 				array(
@@ -715,7 +717,7 @@ class MembersController extends AppController {
 		$email = $this->Member->getEmailForMember($id);
 		if ($email) {
 			$emailSent = $this->_sendEmail(
-				$email,
+				array($email => $email),
 				'Membership Info',
 				'to_member_contact_details_reminder',
 				array(
@@ -757,7 +759,7 @@ class MembersController extends AppController {
 		$memberSoDetails = $this->Member->getSoDetails($memberId);
 		if ($memberSoDetails != null) {
 			return $this->_sendEmail(
-				$memberSoDetails['email'],
+				array($memberSoDetails['email'] => $memberSoDetails['firstname'] . " " . $memberSoDetails['surname']),
 				'Bank Details',
 				'to_member_so_details',
 				array(
@@ -999,7 +1001,7 @@ class MembersController extends AppController {
 					$failedMembers = array();
 					foreach ($memberList as $member) {
 						$emailOk = $this->_sendEmail(
-							$member['email'],
+							array($member['email'] => $member['bestName']),
 							$messageDetails['subject'],
 							'default',
 							array(

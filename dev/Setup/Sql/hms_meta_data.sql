@@ -23,5 +23,6 @@ INSERT INTO `hms_meta` (`name`, `value`) VALUES
 ('audit_revoke_interval' , 'P2M'),
 ('audit_warn_interval', 'P1M14D'),
 ('software_team_email', 'software@nottinghack.org.uk'),
-('accounts_team_email', 'accounts@nottinghack.org.uk')
+('accounts_team_email', 'accounts@nottinghack.org.uk'),
+('trustees_team_email', 'trustees@nottinghack.org.uk')
 ;
