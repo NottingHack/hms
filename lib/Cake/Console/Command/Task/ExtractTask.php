@@ -151,7 +151,7 @@ class ExtractTask extends AppShell {
  */
 	public function execute() {
 		if (!empty($this->params['exclude'])) {
-			$this->_exclude = explode(',', $this->params['exclude']);
+			$this->_exclude = explode(',', str_replace('/', DS, $this->params['exclude']));
 		}
 		if (isset($this->params['files']) && !is_array($this->params['files'])) {
 			$this->_files = explode(',', $this->params['files']);
@@ -316,6 +316,10 @@ class ExtractTask extends AppShell {
 		))->addOption('merge', array(
 			'help' => __d('cake_console', 'Merge all domain and category strings into the default.po file.'),
 			'choices' => array('yes', 'no')
+		))->addOption('no-location', array(
+			'boolean' => true,
+			'default' => false,
+			'help' => __d('cake_console', 'Do not write lines with locations'),
 		))->addOption('output', array(
 			'help' => __d('cake_console', 'Full path to output directory.')
 		))->addOption('files', array(
@@ -432,6 +436,7 @@ class ExtractTask extends AppShell {
 					$category = isset($category) ? $category : 6;
 					$category = (int)$category;
 					$categoryName = $categories[$category];
+
 					$domain = isset($domain) ? $domain : 'default';
 					$details = array(
 						'file' => $this->_file,
@@ -443,8 +448,11 @@ class ExtractTask extends AppShell {
 					if (isset($context)) {
 						$details['msgctxt'] = $context;
 					}
-					$this->_addTranslation($categoryName, $domain, $singular, $details);
-				} else {
+					// Skip LC_TIME files as we use a special file format for them.
+					if ($categoryName !== 'LC_TIME') {
+						$this->_addTranslation($categoryName, $domain, $singular, $details);
+					}
+				} elseif (!is_array($this->_tokens[$count - 1]) || $this->_tokens[$count - 1][0] != T_FUNCTION) {
 					$this->_markerError($this->_file, $line, $functionName, $count);
 				}
 			}
@@ -563,19 +571,27 @@ class ExtractTask extends AppShell {
 	protected function _buildFiles() {
 		$paths = $this->_paths;
 		$paths[] = realpath(APP) . DS;
+
+		usort($paths, function ($a, $b) {
+			return strlen($b) - strlen($a);
+		});
+
 		foreach ($this->_translations as $category => $domains) {
 			foreach ($domains as $domain => $translations) {
 				foreach ($translations as $msgid => $contexts) {
 					foreach ($contexts as $context => $details) {
 						$plural = $details['msgid_plural'];
-						$files = $details['references'];
-						$occurrences = array();
-						foreach ($files as $file => $lines) {
-							$lines = array_unique($lines);
-							$occurrences[] = $file . ':' . implode(';', $lines);
+						$header = '';
+						if (empty($this->params['no-location'])) {
+							$files = $details['references'];
+							$occurrences = array();
+							foreach ($files as $file => $lines) {
+								$lines = array_unique($lines);
+								$occurrences[] = $file . ':' . implode(';', $lines);
+							}
+							$occurrences = implode("\n#: ", $occurrences);
+							$header = '#: ' . str_replace(DS, '/', str_replace($paths, '', $occurrences)) . "\n";
 						}
-						$occurrences = implode("\n#: ", $occurrences);
-						$header = '#: ' . str_replace(DS, '/', str_replace($paths, '', $occurrences)) . "\n";
 
 						$sentence = '';
 						if ($context) {
@@ -795,19 +811,17 @@ class ExtractTask extends AppShell {
 			}
 			$pattern = '/' . implode('|', $exclude) . '/';
 		}
-		foreach ($this->_paths as $path) {
-			$Folder = new Folder($path);
+		foreach ($this->_paths as $i => $path) {
+			$this->_paths[$i] = realpath($path) . DS;
+			$Folder = new Folder($this->_paths[$i]);
 			$files = $Folder->findRecursive('.*\.(php|ctp|thtml|inc|tpl)', true);
 			if (!empty($pattern)) {
-				foreach ($files as $i => $file) {
-					if (preg_match($pattern, $file)) {
-						unset($files[$i]);
-					}
-				}
+				$files = preg_grep($pattern, $files, PREG_GREP_INVERT);
 				$files = array_values($files);
 			}
 			$this->_files = array_merge($this->_files, $files);
 		}
+		$this->_files = array_unique($this->_files);
 	}
 
 /**
