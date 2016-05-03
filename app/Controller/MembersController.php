@@ -1532,6 +1532,6 @@ class MembersController extends AppController {
  * @link MemberController::uploadCsv
  */
 	public function getMemberIdSessionKey() {
-		return String::uuid();
+		return CakeText::uuid();
 	}
 }

@@ -17,7 +17,7 @@ App::uses('AppModel', 'Model');
 App::uses('Status', 'Model');
 App::uses('InvalidStatusException', 'Error/Exception');
 App::uses('NotAuthorizedException', 'Error/Exception');
-App::uses('String', 'Utility');
+App::uses('CakeText', 'Utility');
 
 /**
  * Model for all member data
@@ -1494,7 +1494,7 @@ class Member extends AppModel {
 				array_push($memberNames, $fullName);
 			}
 
-			$accountList[$accountId] = String::toList($memberNames);
+			$accountList[$accountId] = CakeText::toList($memberNames);
 		}
 		$accountList['-1'] = 'Create new';
 		ksort($accountList);

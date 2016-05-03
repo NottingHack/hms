@@ -70,7 +70,7 @@ class MailinglistHelper extends AppHelper {
 		}
 
 		if (count($output) > 0) {
-			return String::toList($output);
+			return CakeText::toList($output);
 		}
 
 		return 'None';
