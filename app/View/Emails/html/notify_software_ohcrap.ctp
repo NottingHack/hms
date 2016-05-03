@@ -2,7 +2,8 @@
     Hello Software Team,
 </p>
 <p>
-    I was unable to audit the following members automatically
+    I was unable to audit the following members automatically. <br/>
+    These are Current members that have no bank transaction aginst there name.
 </p>
 <p>
     <table border="1" style="width:100%">

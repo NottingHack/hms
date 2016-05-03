@@ -2,9 +2,11 @@
     Hello Membership Team,
 </p>
 <p>
-    I have audited the members with following results.
+    I have audited the members with following results. <br/>
+    Each will have had an automated email. 
 </p>
 <h2>New Members: <?php echo count($approveMembers);?></h2>
+<p>We have just seen a payment from these new members.</p>
 <table border="1" style="width:100%">
     <tr>
         <th>Name</th>
@@ -30,7 +32,8 @@
 <?php endforeach; ?>
 </table>
 
-<h2>Warned Members: <?php echo count($warnedMembers);?></h2>
+<h2>Notified Members: <?php echo count($warnedMembers);?></h2>
+<p>We have not seen a payment from these members in a while, they may soon have there membership revoked.</p>
 <table border="1" style="width:100%">
     <tr>
         <th>Name</th>
@@ -61,6 +64,7 @@
 </table>
 
 <h2>Revoked Members: <?php echo count($revokedMembers);?></h2>
+<p>These members last payment was too long ago, so thier membership has been revoked</p>
 <table border="1" style="width:100%">
     <tr>
         <th>Name</th>
@@ -91,6 +95,7 @@
 </table>
 
 <h2>Reinstated Members: <?php echo count($reinstatedMembers);?></h2>
+<p>These Ex members have started paying again, so there membership has been reinstated</p>
 <table border="1" style="width:100%">
     <tr>
         <th>Name</th>

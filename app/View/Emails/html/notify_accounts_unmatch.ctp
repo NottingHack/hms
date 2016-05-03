@@ -2,7 +2,7 @@
     Hello Finance Team,
 </p>
 <p>
-    I was unable to match the following transactions to members accounts.
+    I was unable to match the following transactions to any payment refrence or member account.
 </p>
 <table border="1" style="width:100%">
         <tr>
@@ -17,6 +17,7 @@
             <td><?php echo $transaction['description']; ?></td>
             <td><?php echo $transaction['amount']; ?></td>
             <td><?php echo $transaction['bank_id']; ?></td>
+            <td><?php echo $transaction['ref']; ?></td>
         </tr>
 <?php endforeach; ?>
 </table>
