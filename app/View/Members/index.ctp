@@ -6,7 +6,7 @@
 
 <div class="search">
 <?php
-    echo $this->form->create("Member", array('action' => 'search', 'type' => 'GET'));
+    echo $this->form->create("Member", array('url' => array('controller' => 'members', 'action' => 'search'), 'type' => 'GET'));
     echo $this->form->input("query", array('label' => ''));
     echo $this->form->end("Search"); 
 ?>
