@@ -339,6 +339,9 @@ class AuditMembersController extends AppController {
 					'innerDoorCode' => $this->Meta->getValueFor('access_inner_door'),
 					'wifiSsid' => $this->Meta->getValueFor('access_wifi_ssid'),
 					'wifiPass' => $this->Meta->getValueFor('access_wifi_password'),
+                    'wikiLink' => $this->Meta->getValueFor('link_Wiki'),
+                    'groupLink' => $this->Meta->getValueFor('link_Google Group'),
+                    'membershipEmail'  => $this->Meta->getValueFor('membership_email'),
 				)
 			);
 		}
