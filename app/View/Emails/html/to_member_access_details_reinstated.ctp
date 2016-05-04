@@ -27,7 +27,7 @@
 
 <p>
 	Our Google Group is where a lot of online discussion takes place:<br>
-	<?php echo $this->Html->link('https://groups.google.com/group/nottinghack?hl=en'); ?>
+	<?php echo $this->Html->link($groupLink); ?>
 </p>
 
 <p>
@@ -37,11 +37,11 @@
 
 <p>
 	We also have a wiki, with lots of information about the tools in the Hackspace:<br>
-	<?php echo $this->Html->link('http://wiki.nottinghack.org.uk/wiki'); ?>
+	<?php echo $this->Html->link($wikiLink); ?>
 </p>
 
 <p>
-	If you have any questions, feel free to email: membership@nottinghack.org.uk
+	If you have any questions, feel free to email: <?php echo $membershipEmail; ?>
 </p>
 
 <p>
