@@ -17,7 +17,6 @@
             <td><?php echo $transaction['description']; ?></td>
             <td><?php echo $transaction['amount']; ?></td>
             <td><?php echo $transaction['bank_id']; ?></td>
-            <td><?php echo $transaction['ref']; ?></td>
         </tr>
 <?php endforeach; ?>
 </table>

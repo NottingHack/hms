@@ -365,7 +365,7 @@ class AuditMembersController extends AppController {
             }
 
 			return $this->_sendEmail(
-				array($memberSoDetails['email'] => $memberDetails['bestName']),
+				array($memberSoDetails['email'] => $memberSODetails['bestName']),
 				$subject,
 				$template,
 				array(
