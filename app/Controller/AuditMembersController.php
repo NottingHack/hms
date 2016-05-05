@@ -31,7 +31,7 @@ class AuditMembersController extends AppController {
  * The list of models this Controller relies on.
  * @var array
  */
-	public $uses = array('Member', 'BankTransaction', 'Meta', 'AccessLog');
+	public $uses = array('Member', 'BankTransaction', 'Meta', 'AccessLog', 'MembershipStatusNotification');
 
 /**
  * Test to see if a user is authorized to make a request.
@@ -109,6 +109,13 @@ class AuditMembersController extends AppController {
          */
         $memberIdsAndStatusForAccounts = $this->Member->find('list', $mOptions);
 
+        // need to garb a list of all members with current notifications
+        /* 
+            Results data format
+            [member_id, ...]
+        */
+       $memberIdsForCurrentNotifications = $this->MembershipStatusNotification->listAllMembersWithNotifications();
+
         // now we have the data we need from the DB
 
         $approveIds = array();
@@ -116,6 +123,8 @@ class AuditMembersController extends AppController {
         $revokeIds = array();
         $reinstateIds = array();
         $ohCrapIds = array();
+        $notificationRevokeIds = array();
+        $notificationPaymentIds = array();
 
         $dateNow = new DateTime(); // this will be the server time the we run, might need to shift time portion to end of the day 23:59
         $dateNow->setTime(0,0,0);
@@ -155,14 +164,20 @@ class AuditMembersController extends AppController {
                         } elseif ($transactionDate < $revokeDate) { // transaction date is older than revoke date
                             // make ex member
                             array_push($revokeIds, $memberId);
+                            // clear notification if needed
+                            array_push($notificationRevokeIds, $memberId);
                         } elseif ($transactionDate < $warnDate) { // transaction date is older than warning date
                             // if not already warned
-                            if (!$this->Member->beenWarned($memberId)) {
+                            if (!in_array($memberId, $memberIdsForCurrentNotifications)) {
                                 // warn membership may be terminated if we don't see one soon
-                                array_push($warnIds, $memberId);
+                                $warnIds[$memberId] = $accountId;
                             }
                         }
                         // date diff should be less than 1.5 months
+                        // clear any out standing warnings
+                        if (in_array($mem, $memberIdsForCurrentNotifications)) {
+                            array_push($notificationPaymentIds, $memberId);   
+                        }
                         break;
 
                     case Status::EX_MEMBER:
@@ -193,7 +208,7 @@ class AuditMembersController extends AppController {
 //        debug("Revoke: " . $revokeDate->format('Y-m-d'));
 
         $adminId = $this->_getLoggedInMemberId();
-        // for reinstatedMembers grab there detials first (so we get the date they wher made ex)
+        // for reinstatedMembers grab there detials first (so we get the date they where made ex and use it in email)
         $reinstatedMembers = $this->Member->getMemberSummaryForMembers($reinstateIds);
 //        debug("Approve");
 //        debug($approveIds);
@@ -202,14 +217,19 @@ class AuditMembersController extends AppController {
         }
 //        debug("Warn");
 //        debug($warnIds);
-        foreach ($warnIds as $memberId) {
-            $this->__warnMember($memberId);
+        foreach ($warnIds as $memberId => $accountId) {
+            $this->__warnMember($memberId, $accountId);
         }
 //        debug("Revoke");
 //        debug($revokeIds);
+//        debug($notificationRevokeIds);
         foreach ($revokeIds as $memberId) {
             $this->__revokeMember($memberId, $adminId);
+            if (in_array($mem, $notificationRevokeIds)) {
+                $this->MembershipStatusNotification->clearNotificationsByRevokeForMember($memberId);
+            }
         }
+
 //        debug("Reinstate");
 //        debug($reinstateIds);
         foreach ($reinstateIds as $memberId) {
@@ -221,6 +241,12 @@ class AuditMembersController extends AppController {
             $this->__sendSoftwareEmail($ohCrapIds);
         }
 
+        // before sending out team emails clean up the warnings for people that have now paid us
+        foreach ($notificationPaymentIds as $memberId) {
+            $this->MembershipStatusNotification->clearNotificationsByPaymentForMember($memberId);
+        }
+
+        // now email the audit results
         $membershipTeamEmail = $this->Meta->getValueFor('membership_email');
         $trusteesTeamEmail = $this->Meta->getValueFor('trustees_team_email');
         $subject = 'HMS Audit results';
@@ -232,13 +258,14 @@ class AuditMembersController extends AppController {
                           $template,
                           array(
                                 'approveMembers' => $this->Member->getMemberSummaryForMembers($approveIds),
-                                'warnedMembers' => $this->Member->getMemberSummaryForMembers($warnIds),
+                                'warnedMembers' => $this->Member->getMemberSummaryForMembers(array_keys($warnIds)),
                                 'revokedMembers' => $this->Member->getMemberSummaryForMembers($revokeIds),
                                 'reinstatedMembers' => $reinstatedMembers,
                                 'latestTransactionDateForAccounts' => $latestTransactionDateForAccounts,
-                                'warnedLastAccess' => $this->AccessLog->getLastAccessForMembers($warnIds),
+                                'warnedLastAccess' => $this->AccessLog->getLastAccessForMembers(array_keys($warnIds)),
                                 'revokedLastAccess' => $this->AccessLog->getLastAccessForMembers($revokeIds),
                                 'reinstatedLastAccess' => $this->AccessLog->getLastAccessForMembers($reinstateIds),
+                                'paymentNotificationsClearCount' => count($notificationPaymentIds),
                                 ),
                           false
                           );
@@ -266,11 +293,11 @@ class AuditMembersController extends AppController {
  * Warn a member.
  *
  * @param int $memberId The id of the member who we are warning.
- * @param int $adminId The id of the Admin making the status change.
+ * @param int $accountId The id of the members account
  * @return bool 
  */
-    private function __warnMember($memberId) {
-		if ($this->Member->recordWarning($memberId)) {
+    private function __warnMember($memberId, $accountId) {
+		if ($this->MembershipStatusNotification->issueNotificationForMember($memberId, $accountId)) {
            return $this->__sendMembershipRevokeMail($memberId, true); // E-mail the member
         }
 

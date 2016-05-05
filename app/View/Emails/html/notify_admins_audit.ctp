@@ -62,7 +62,10 @@
     </tr>
 <?php endforeach; ?>
 </table>
-
+<?php if ($paymentNotificationsClearCount != 0): ?>
+<h2>
+<?php echo $paymentNotificationsClearCount; ?> member<?php if ($paymentNotificationsClearCount != 1) { echo "s"; }?> that had been Notified <?php echo ($paymentNotificationsClearCount == 1)? "has" : "have"; ?> now made a payment in time to not be revoked.</h2>
+<?php endif; ?>
 <h2>Revoked Members: <?php echo count($revokedMembers);?></h2>
 <p>These members last payment was too long ago, so thier membership has been revoked</p>
 <table border="1" style="width:100%">
