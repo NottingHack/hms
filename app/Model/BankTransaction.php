@@ -187,7 +187,27 @@ class BankTransaction extends AppModel {
         
 		return $info;
 	}
-    
+
+/**
+ * Get last transaction on record for a member
+ *
+ * @param int $accountId
+ * @param bool $format If true format the data first, otherwise just return it in the same format as the datasource gives it us.
+ * @return string
+ **/
+    public function getLastTransactionForAccount($accountId, $format = true) {
+        $options = array(
+            'conditions' => array('BankTransaction.account_id' => $accountId),
+            'order' => 'BankTransaction.transaction_date DESC'
+            );
+
+        $lastTransaction = $this->find('first', $options);
+        // $lastTransaction = Hash::get($result, 'BankTransaction.transaction_date');
+        if ($format) {
+            return $this->formatBankTransactionInfo($lastTransaction, false);
+        }
+        return $lastTransaction;
+    }
 /**
  * Proces
  *

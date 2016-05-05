@@ -491,6 +491,7 @@ class Member extends AppModel {
                     [last_used] => last_used
                     [name] => friendly_name
 			[paymentRef] => member payment ref
+			[accountId] => account_id
 			[address] =>
 				[part1] => member address part 1
 				[part2] => member address part 2

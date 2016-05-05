@@ -5,6 +5,14 @@
     $this->Html->addCrumb(isset($member['username']) ? $member['username'] : $member['email'], '/members/view/' . $member['id']);
     $this->Html->addCrumb('Membership Payments', '/banktransactions/history/' . $member['id']);
 ?>
+<?php if (isset($lastTrasaction)) { ?>
+<dl>
+<dt>Last Payment Date</dt>
+<dd><?php echo $lastTrasaction['transaction_date']; ?></dd>
+<dt>Bank</dt>
+<dd><?php echo $lastTrasaction['bank']; ?></dd>
+</dl>
+<?php } else { ?>
 <table>
 	<tr>
 		<th>Date</th>
@@ -22,15 +30,13 @@
 	}
 echo "</table>\n";
 
+
 if(count($bankTransactionsList) == 0)
 {
 	echo "No payments found!<br />\n";
 }
-
+} //end else
 ?>
-
-
 <div class="paginate">
 	<?php echo $this->Paginator->numbers(); ?>
-
 </div>

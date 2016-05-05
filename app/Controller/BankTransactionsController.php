@@ -184,9 +184,15 @@ class BankTransactionsController extends AppController {
         
         // grab account_id as its not in memberSummary
         $accountId = $this->Member->getAccountIdForMember($memberId);
-        
-        $this->__paginateTransactionList($accountId);
 
+        if ($this->_getLoggedInMemberId() != $memberId and !$this->Member->GroupsMember->isMemberInGroup( $this->_getLoggedInMemberId(), Group::FULL_ACCESS )) { // log in member not $memberId and loged in member does not have FullAccess 
+           // show only last payment date
+            $lastTrasaction = $this->BankTransaction->getLastTransactionForAccount($member['accountId']);
+            $this->set('lastTrasaction', $lastTrasaction);
+        } else {
+            $bankTransactionsList = $this->__paginateTransactionList($accountId);
+            $this->set('bankTransactionsList', $bankTransactionsList);
+        }
 	}
 
 /**
@@ -196,14 +202,13 @@ class BankTransactionsController extends AppController {
  */
 	private function __paginateTransactionList($accountId) {
         if ($accountId == null) {
-            $this->set('bankTransactionsList', array());
-            return;
+            return null;
         }
         
 		$this->paginate = $this->BankTransaction->getBankTransactionList(true, array('AccountBT.account_id' => $accountId));
 		$bankTransactionsList = $this->paginate('BankTransaction');
         $bankTransactionsList = $this->BankTransaction->formatBankTransactionList($bankTransactionsList, false);
- 		$this->set('bankTransactionsList', $bankTransactionsList);
+ 		return $bankTransactionsList;
 	}
 
 }
