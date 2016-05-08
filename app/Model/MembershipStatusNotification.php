@@ -23,17 +23,17 @@ class MembershipStatusNotification extends AppModel {
 /**
  * The Notification was clear due to a payment before membership was revoked
  */
-    const PAYMENT = "PAYMENT";
+    const PAYMENT = 'PAYMENT';
 
 /**
  * The Notification was cleared when the membership was revoked
  */
-    const REVOKE = "REVOKE";
+    const REVOKED = 'REVOKED';
 
 /**
  * The Notification was cleared manually, likely due to audit issues
  */
-    const MANUAL = "MANUAL";
+    const MANUAL = 'MANUAL';
 
 /**
  * Specify the table to use
@@ -46,21 +46,6 @@ class MembershipStatusNotification extends AppModel {
  * @var string
  */
     public $primaryKey = 'membership_status_notification_id'; //!< Specify the primary key to use.
-/**
- * Specify 'belongs to' associations.
- * @var array
- */ 
-    // not actually needed for how we a munging the data
-    // public $belongsTo = array(
-    //         'AccountMSN' => array(
-    //             'className' => 'Account',
-    //             'foreignKey' => 'account_id',
-    //         ),
-    //         'MemberMSN' => array(
-    //             'className' => 'Member',
-    //             'foreignKey' => 'member_id',
-    //         ),
-    // );
 
 /**
  * fetch array of memberIds with a current issued warnings
@@ -68,7 +53,13 @@ class MembershipStatusNotification extends AppModel {
  */
     public function listAllMembersWithNotifications()
     {
-        return ; // array(member_id, ...)
+        // SELLECT member_id FROM membership_status_notifications WHERE time_cleared IS NULL
+        $options = array(
+            'fields' => array('MembershipStatusNotification.member_id'),
+            'conditions' => array('MembershipStatusNotification.time_cleared' => null),
+            );
+
+        return array_values($this->find('list', $options)); // array(member_id, ...
     }
 /**
  * Create a new notification record against a member and account
@@ -79,7 +70,16 @@ class MembershipStatusNotification extends AppModel {
  */
     public function issueNotificationForMember($memberId, $accountId)
     {
+        // INSERT INTO membership_status_notifications (member_id, account_id) SET ($memberId, $accountId)
+        $toSave = array(
+            'MembershipStatusNotification' => array(
+                'member_id' => $memberId,
+                'account_id' => $accountId,
+                ),
+            );
 
+        $this->create();
+        return $this->save($toSave);
     }
 
 /**
@@ -89,7 +89,19 @@ class MembershipStatusNotification extends AppModel {
  */
     public function clearNotificationsByPaymentForMember($memberId)
     {
-        
+        // UPDATE membership_status_notifications SET time_cleared = CURENT_TIMESTAMP, cleared_reason = MembershipStatusNotification::PAYMENT WHERE member_id IS $memberId and time_cleared IS NULL 
+        $db = $this->getDataSource();
+        $reson = $db->value(MembershipStatusNotification::PAYMENT, 'string');
+        $fields = array(
+            'MembershipStatusNotification.cleared_reason' => $reson,
+            'MembershipStatusNotification.time_cleared' => 'NOW()', 
+            );
+        $conditions = array(
+            'MembershipStatusNotification.member_id' => $memberId,
+            'MembershipStatusNotification.time_cleared' => NULL,
+         );
+
+        return $this->updateAll($fields, $conditions);
     }
 
 /**
@@ -99,7 +111,19 @@ class MembershipStatusNotification extends AppModel {
  */
     public function clearNotificationsByRevokeForMember($memberId)
     {
-        
+        // UPDATE membership_status_notifications SET time_cleared = CURENT_TIMESTAMP, cleared_reason = MembershipStatusNotification::REVOKED WHERE member_id IS $memberId and time_cleared IS NULL   
+        $db = $this->getDataSource();
+        $reson = $db->value(MembershipStatusNotification::REVOKED, 'string');
+        $fields = array(
+            'MembershipStatusNotification.cleared_reason' => $reson,
+            'MembershipStatusNotification.time_cleared' => 'NOW()', 
+            );
+        $conditions = array(
+            'MembershipStatusNotification.member_id' => $memberId,
+            'MembershipStatusNotification.time_cleared' => NULL,
+         );
+
+        return $this->updateAll($fields, $conditions); 
     }    
 
 }

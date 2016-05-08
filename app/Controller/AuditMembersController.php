@@ -172,11 +172,12 @@ class AuditMembersController extends AppController {
                                 // warn membership may be terminated if we don't see one soon
                                 $warnIds[$memberId] = $accountId;
                             }
-                        }
-                        // date diff should be less than 1.5 months
-                        // clear any out standing warnings
-                        if (in_array($mem, $memberIdsForCurrentNotifications)) {
-                            array_push($notificationPaymentIds, $memberId);   
+                        } else {
+                            // date diff should be less than 1.5 months
+                            // clear any out standing warnings
+                            if (in_array($memberId, $memberIdsForCurrentNotifications)) {
+                                array_push($notificationPaymentIds, $memberId);   
+                            }
                         }
                         break;
 
@@ -225,7 +226,7 @@ class AuditMembersController extends AppController {
 //        debug($notificationRevokeIds);
         foreach ($revokeIds as $memberId) {
             $this->__revokeMember($memberId, $adminId);
-            if (in_array($mem, $notificationRevokeIds)) {
+            if (in_array($memberId, $notificationRevokeIds)) {
                 $this->MembershipStatusNotification->clearNotificationsByRevokeForMember($memberId);
             }
         }
@@ -395,7 +396,7 @@ class AuditMembersController extends AppController {
             }
 
 			return $this->_sendEmail(
-				array($memberSoDetails['email'] => $memberSODetails['bestName']),
+				array($memberSoDetails['email'] => sprintf('%s %s', $memberSoDetails['firstname'], $memberSoDetails['surname'])),
 				$subject,
 				$template,
 				array(
