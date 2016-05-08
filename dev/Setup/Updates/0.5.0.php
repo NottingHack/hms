@@ -57,11 +57,6 @@ $query = "INSERT INTO `hms_meta` (`name`, `value`) VALUES
     ";
 $this->__runQuery($conn, $query);
 
-$this->__logMessage('Add column warned to table members');
-$query = "ALTER TABLE `members` 
-           ADD COLUMN `warned` TINYINT(1) DEFAULT 0;";
-$this->__runQuery($conn, $query);
-           
 $this->__logMessage('Creating `membership_status_notifications` table.');
 $query = "CREATE TABLE IF NOT EXISTS `membership_status_notifications` (
             `membership_status_notification_id` int(11) NOT NULL AUTO_INCREMENT,

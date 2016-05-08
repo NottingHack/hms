@@ -2612,7 +2612,6 @@
 					'address_city' => 'Bobbington',
 					'address_postcode' => 'FU453JD',
 					'contact_number' => '079716523804',
-					'warned' => false,
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -2781,7 +2780,6 @@
 					'address_city' => 'Bobbington',
 					'address_postcode' => 'FU453JD',
 					'contact_number' => '079716523804',
-					'warned' => false
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -2964,7 +2962,6 @@
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
-					'warned' => 0,
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -3150,7 +3147,6 @@
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
-					'warned' => false,
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -3304,7 +3300,6 @@
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
-					'warned' => false,
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -3463,7 +3458,6 @@
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
-					'warned' => false,
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -3637,7 +3631,6 @@
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
-					'warned' => false,
 				),
 				'Status' => array(
 					'status_id' => '5',
@@ -3869,7 +3862,6 @@
 					'address_city' => '5468452456',
 					'address_postcode' => 'weqfwrgetshb',
 					'contact_number' => '01321564895',
-					'warned' => false,
 				),
 				'Status' => array(
 					'status_id' => '5',
