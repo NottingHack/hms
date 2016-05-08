@@ -1083,8 +1083,11 @@
                                                                                'outerDoorCode' => $this->MembersController->Meta->getValueFor('access_street_door'),
                                                                                'innerDoorCode' => $this->MembersController->Meta->getValueFor('access_inner_door'),
                                                                                'wifiSsid' => $this->MembersController->Meta->getValueFor('access_wifi_ssid'),
-                                                                               'wifiPass' => $this->MembersController->Meta->getValueFor('access_wifi_password')
-                                                                               )
+                                                                               'wifiPass' => $this->MembersController->Meta->getValueFor('access_wifi_password'),
+                                                                               'wikiLink' => null,
+																			   'groupLink' => null,
+																			   'membershipEmail' => 'membership@localhost'
+                                                                              )
                                                                          );
 			$mockEmail->expects($this->at(16))->method('config')->with('smtp');
 			$mockEmail->expects($this->at(17))->method('send')->will($this->returnValue(true));
@@ -1173,7 +1176,7 @@
 		{
 			// A non logged in user can't do this
 			$this->testAction('/members/changePassword/3');
-			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred 0.' );
 
 			// A logged in user that is a non member-admin cannot change the password of another member.
 			$this->controller = $this->generate('Members', array(
@@ -1186,7 +1189,7 @@
 
 			$this->controller->Auth->staticExpects($this->any())->method('user')->will($this->returnValue(3));
 			$this->testAction('/members/changePassword/2');
-			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred.' );
+			$this->assertArrayHasKey( 'Location', $this->headers, 'Redirect has not occurred 1.' );
 		}
 
 		public function testChangePasswordMemberCanChangeOwnPassword()
