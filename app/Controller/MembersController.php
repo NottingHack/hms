@@ -349,7 +349,7 @@ class MembersController extends AppController {
 		if ($this->request->is('post')) {
 			try {
 				if ($this->Member->setupDetails($id, $this->request->data)) {
-					$memberDetails = $this->Member->getMemberSummary($id);
+					$memberDetails = $this->Member->getMemberSummaryForMember($id);
 					$memberEmail = $memberDetails['email'];
 
 					$this->Session->setFlash('Contact details saved.');
@@ -398,7 +398,7 @@ class MembersController extends AppController {
 				if ($this->Member->rejectDetails($id, $this->request->data, $this->_getLoggedInMemberId())) {
 					$this->Session->setFlash('Member has been contacted.');
 
-					$memberDetails = $this->Member->getMemberSummary($id);
+					$memberDetails = $this->Member->getMemberSummaryForMember($id);
 					$memberEmail = $memberDetails['email'];
 
 					Controller::loadModel('MemberEmail');
@@ -573,7 +573,7 @@ class MembersController extends AppController {
 			}
 			// Notify all the member admins
 			$this->_sendEmail(
-				$this->Meta->getValueFor('membership_email'),
+				array($this->Meta->getValueFor('membership_email') => "Membership Team"),
 				$subject,
 				$template,
 				array(
