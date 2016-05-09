@@ -259,7 +259,7 @@ class AppController extends Controller {
 			Controller::loadModel('Member');
 			Controller::loadModel('EmailRecord');
 
-			$memberIdList = $this->Member->emailToMemberId($to);
+			$memberIdList = $this->Member->emailToMemberId(array_keys($to)[0]);
 			$this->EmailRecord->createNewRecord($memberIdList, $subject);
 		}
 

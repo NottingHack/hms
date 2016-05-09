@@ -417,7 +417,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with('membership@localhost');
+			$mockEmail->expects($this->at(3))->method('to')->with(array('membership@localhost' => "Membership Team"));
 			$mockEmail->expects($this->at(4))->method('subject')->with('New Prospective Member Notification');
 			$mockEmail->expects($this->at(5))->method('template')->with('notify_admins_member_added');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('email' => $emailAddress));
@@ -427,7 +427,7 @@
 			$mockEmail->expects($this->at(9))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(10))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(11))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(12))->method('to')->with($emailAddress);
+			$mockEmail->expects($this->at(12))->method('to')->with(array($emailAddress => $emailAddress));
 			$mockEmail->expects($this->at(13))->method('subject')->with('Welcome to Nottingham Hackspace');
 			$mockEmail->expects($this->at(14))->method('template')->with('to_prospective_member');
 			$mockEmail->expects($this->at(15))->method('viewVars')->with(array('memberId' => 15));
@@ -495,7 +495,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with($emailAddress);
+			$mockEmail->expects($this->at(3))->method('to')->with(array($emailAddress => $emailAddress));
 			$mockEmail->expects($this->at(4))->method('subject')->with('Welcome to Nottingham Hackspace');
 			$mockEmail->expects($this->at(5))->method('template')->with('to_prospective_member');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('memberId' => 7));
@@ -705,7 +705,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with('membership@localhost');
+			$mockEmail->expects($this->at(3))->method('to')->with(array('membership@localhost' => "Membership Team"));
 			$mockEmail->expects($this->at(4))->method('subject')->with('New Member Contact Details');
 			$mockEmail->expects($this->at(5))->method('template')->with('notify_admins_check_contact_details');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('email' => 'DorothyDRussell@dayrep.com', 'id' => 9));
@@ -715,7 +715,7 @@
 			$mockEmail->expects($this->at(9))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(10))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(11))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(12))->method('to')->with('DorothyDRussell@dayrep.com');
+			$mockEmail->expects($this->at(12))->method('to')->with(array('DorothyDRussell@dayrep.com' => 'Dorothy Russell'));
 			$mockEmail->expects($this->at(13))->method('subject')->with('Contact Information Completed');
 			$mockEmail->expects($this->at(14))->method('template')->with('to_member_post_contact_update');
 			$mockEmail->expects($this->at(15))->method('viewVars')->with(array());
@@ -838,7 +838,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with('BettyCParis@teleworm.us');
+			$mockEmail->expects($this->at(3))->method('to')->with(array('BettyCParis@teleworm.us' => 'Betty Paris'));
 			$mockEmail->expects($this->at(4))->method('subject')->with('Issue With Contact Information');
 			$mockEmail->expects($this->at(5))->method('template')->with('to_member_contact_details_rejected');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('reason' => 'barrrrrrrrrrrr'));
@@ -972,7 +972,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with('RoyJForsman@teleworm.us');
+			$mockEmail->expects($this->at(3))->method('to')->with(array('RoyJForsman@teleworm.us' => 'Roy Forsman'));
 			$mockEmail->expects($this->at(4))->method('subject')->with('Bank Details');
 			$mockEmail->expects($this->at(5))->method('template')->with('to_member_so_details');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('name' => 'Roy Forsman', 'paymentRef' => $fakePaymentRef, 'accountNum' => $this->MembersController->Meta->getValueFor('so_accountNumber'), 'sortCode' => $this->MembersController->Meta->getValueFor('so_sortCode'), 'accountName' => $this->MembersController->Meta->getValueFor('so_accountName') ));
@@ -982,7 +982,7 @@
 			$mockEmail->expects($this->at(9))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(10))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(11))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(12))->method('to')->with('membership@localhost');
+			$mockEmail->expects($this->at(12))->method('to')->with(array('membership@localhost' => "Membership Team"));
 			$mockEmail->expects($this->at(13))->method('subject')->with('Impending Payment');
 			$mockEmail->expects($this->at(14))->method('template')->with('notify_admins_payment_incoming');
 			$mockEmail->expects($this->at(15))->method('viewVars')->with(array('memberId' => '12', 'memberName' => 'Roy Forsman', 'memberEmail' => 'RoyJForsman@teleworm.us', 'memberPayRef' => $fakePaymentRef));
@@ -1064,7 +1064,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with('membership@localhost');
+			$mockEmail->expects($this->at(3))->method('to')->with(array('membership@localhost' => "Membership Team"));
 			$mockEmail->expects($this->at(4))->method('subject')->with('Member Approved');
 			$mockEmail->expects($this->at(5))->method('template')->with('notify_admins_member_approved');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('memberName' => 'Ryan Miles', 'memberId' => 13, 'memberEmail' => 'RyanMiles@dayrep.com', 'memberPin' => '2234'));
@@ -1074,7 +1074,7 @@
 			$mockEmail->expects($this->at(9))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(10))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(11))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(12))->method('to')->with('RyanMiles@dayrep.com');
+			$mockEmail->expects($this->at(12))->method('to')->with(array('RyanMiles@dayrep.com' => 'Ryan Miles'));
 			$mockEmail->expects($this->at(13))->method('subject')->with('Membership Complete');
 			$mockEmail->expects($this->at(14))->method('template')->with('to_member_access_details');
 			$mockEmail->expects($this->at(15))->method('viewVars')->with(array(
@@ -1085,7 +1085,10 @@
                                                                                'outerDoorCode' => $this->MembersController->Meta->getValueFor('access_street_door'),
                                                                                'innerDoorCode' => $this->MembersController->Meta->getValueFor('access_inner_door'),
                                                                                'wifiSsid' => $this->MembersController->Meta->getValueFor('access_wifi_ssid'),
-                                                                               'wifiPass' => $this->MembersController->Meta->getValueFor('access_wifi_password')
+                                                                               'wifiPass' => $this->MembersController->Meta->getValueFor('access_wifi_password'),
+                                                                               'wikiLink' => null,
+																			   'groupLink' => null,
+																			   'membershipEmail' => 'membership@localhost'
                                                                                )
                                                                          );
 			$mockEmail->expects($this->at(16))->method('config')->with('smtp');
@@ -1333,7 +1336,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with('a.santini@hotmail.com');
+			$mockEmail->expects($this->at(3))->method('to')->with(array('a.santini@hotmail.com' => 'a.santini@hotmail.com'));
 			$mockEmail->expects($this->at(4))->method('subject')->with('Password Reset Request');
 			$mockEmail->expects($this->at(5))->method('template')->with('forgot_password');
 			$mockEmail->expects($this->at(7))->method('config')->with('smtp');
@@ -1604,7 +1607,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with('CherylLCarignan@teleworm.us');
+			$mockEmail->expects($this->at(3))->method('to')->with(array('CherylLCarignan@teleworm.us' => 'CherylLCarignan@teleworm.us'));
 			$mockEmail->expects($this->at(4))->method('subject')->with('Welcome to Nottingham Hackspace');
 			$mockEmail->expects($this->at(5))->method('template')->with('to_prospective_member');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('memberId' => 7));
@@ -1651,7 +1654,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with('RyanMiles@dayrep.com');
+			$mockEmail->expects($this->at(3))->method('to')->with(array('RyanMiles@dayrep.com' => 'Ryan Miles'));
 			$mockEmail->expects($this->at(4))->method('subject')->with('Bank Details');
 			$mockEmail->expects($this->at(5))->method('template')->with('to_member_so_details');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('name' => 'Ryan Miles', 'paymentRef' => 'HSTSBKFFGXWGKF48', 'accountNum' => $this->MembersController->Meta->getValueFor('so_accountNumber'), 'sortCode' => $this->MembersController->Meta->getValueFor('so_sortCode'), 'accountName' => $this->MembersController->Meta->getValueFor('so_accountName') ));
@@ -1698,7 +1701,7 @@
 			$mockEmail->expects($this->at(0))->method('from')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(1))->method('sender')->with(array('membership@nottinghack.org.uk' => 'Nottinghack Membership'));
 			$mockEmail->expects($this->at(2))->method('emailFormat')->with('html');
-			$mockEmail->expects($this->at(3))->method('to')->with('HugoJLorenz@dayrep.com');
+			$mockEmail->expects($this->at(3))->method('to')->with(array('HugoJLorenz@dayrep.com' => 'HugoJLorenz@dayrep.com'));
 			$mockEmail->expects($this->at(4))->method('subject')->with('Membership Info');
 			$mockEmail->expects($this->at(5))->method('template')->with('to_member_contact_details_reminder');
 			$mockEmail->expects($this->at(6))->method('viewVars')->with(array('memberId' => 10));
@@ -1791,11 +1794,11 @@
 			$mockEmail->expects($this->exactly(5))->method('send');
 
 			$emails = array(
-				'm.pryce@example.org',
-				'a.santini@hotmail.com',
-				'g.viles@gmail.com',
-				'k.savala@yahoo.co.uk',
-				'j.easterwood@googlemail.com',
+				array('m.pryce@example.org' => 'Mathew Pryce'),
+				array('a.santini@hotmail.com' => 'Annabelle Santini'),
+				array('g.viles@gmail.com' => 'Guy Viles'),
+				array('k.savala@yahoo.co.uk' => 'Kelly Savala'),
+				array('j.easterwood@googlemail.com' => 'Jessie Easterwood'),
 			);
 
 			$data = array(
@@ -1840,11 +1843,11 @@
 			$mockEmail->expects($this->exactly(5))->method('send');
 
 			$emails = array(
-				'm.pryce@example.org',
-				'a.santini@hotmail.com',
-				'g.viles@gmail.com',
-				'k.savala@yahoo.co.uk',
-				'j.easterwood@googlemail.com',
+				array('m.pryce@example.org' => 'Mathew Pryce'),
+				array('a.santini@hotmail.com' => 'Annabelle Santini'),
+				array('g.viles@gmail.com' => 'Guy Viles'),
+				array('k.savala@yahoo.co.uk' => 'Kelly Savala'),
+				array('j.easterwood@googlemail.com' => 'Jessie Easterwood'),
 			);
 
 			$data = array(

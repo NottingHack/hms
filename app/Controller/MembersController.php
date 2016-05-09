@@ -35,7 +35,7 @@ class MembersController extends AppController {
  * The list of models this Controller relies on.
  * @var array
  */
-	public $uses = array('ForgotPassword', 'Meta', 'Member');
+	public $uses = array('ForgotPassword', 'Meta', 'EmailRecord', 'MemberEmail', 'Member');
 
 /**
  * Test to see if a user is authorized to make a request.
@@ -400,8 +400,6 @@ class MembersController extends AppController {
 
 					$memberDetails = $this->Member->getMemberSummaryForMember($id);
 					$memberEmail = $memberDetails['email'];
-
-					Controller::loadModel('MemberEmail');
 
 					$this->_sendEmail(
 						array($memberEmail => $memberDetails['bestName']),
@@ -806,7 +804,6 @@ class MembersController extends AppController {
 					if ($formattedInfo) {
 						if ($showAdminFeatures) {
 							// Grab the data for the last e-mail
-							Controller::loadModel('EmailRecord');
 							$lastEmailRecord = $this->EmailRecord->getMostRecentEmailForMember($id);
 							if ($lastEmailRecord != null) {
 								$formattedInfo['lastEmail'] = $lastEmailRecord;
