@@ -7,7 +7,7 @@
 </p>
 
 <p>
-	If you'd like to become a Nottingham Hackspace member, the first step is is to <?php echo $this->Html->link('create an HMS account', array('controller' => 'members', 'action' => 'setupLogin', $memberId, 'full_base' => true)); ?>. Also, please add "membership@nottinghack.org.uk" to your address book to reduce the chances of hackspace email going into your spam.
+	If you'd like to become a Nottingham Hackspace member, the first step is is to <?php echo $this->Html->link('create an HMS account', array('controller' => 'members', 'action' => 'setupLogin', $memberId, 'full_base' => true)); ?>. Also, please add "<?php echo $membershipEmail; ?>" to your address book to reduce the chances of hackspace email going into your spam.
 </p>
 
 <p>
@@ -28,12 +28,12 @@
 
 <p>
 	Here's the URL for the public google group:<br>
-	<?php echo $this->Html->link('https://groups.google.com/group/nottinghack?hl=en'); ?>
+	<?php echo $this->Html->link($groupLink); ?>
 </p>
 
 <p>
 	Here are the hackspace rules:<br>
-	<?php echo $this->Html->link('http://wiki.nottinghack.org.uk/wiki/Category:Rules'); ?>
+	<?php echo $this->Html->link($rulesHTML); ?>
 </p>
 
 <p>

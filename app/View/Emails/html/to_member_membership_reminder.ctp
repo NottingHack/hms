@@ -24,7 +24,7 @@
 
 <p>
 	Here's the URL for the public google group:<br>
-	<?php echo $this->Html->link('https://groups.google.com/group/nottinghack?hl=en'); ?>
+	<?php echo $this->Html->link($groupLink); ?>
 </p>
 
 <p>

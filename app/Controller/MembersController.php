@@ -701,6 +701,9 @@ class MembersController extends AppController {
 				'to_prospective_member',
 				array(
 					'memberId' => $memberId,
+                    'rulesHTML' => $this->Meta->getValueFor('rules_html'),
+					'groupLink' => $this->Meta->getValueFor('link_Google Group'),
+					'membershipEmail'  => $this->Meta->getValueFor('membership_email'),
 				)
 			);
 		}
@@ -723,6 +726,7 @@ class MembersController extends AppController {
 				'to_member_contact_details_reminder',
 				array(
 					'memberId' => $id,
+					'groupLink' => $this->Meta->getValueFor('link_Google Group'),
 				)
 			);
 		}
