@@ -3,7 +3,7 @@
 </p>
 <p>
     I was unable to audit the following members automatically. <br/>
-    These are Current members that have no bank transaction aginst there name.
+    These are current members that have no bank transactions against their name.
 </p>
 <p>
     <table border="1" style="width:100%">

@@ -33,7 +33,7 @@
 </table>
 
 <h2>Notified Members: <?php echo count($warnedMembers);?></h2>
-<p>We have not seen a payment from these members in a while, they may soon have there membership revoked.</p>
+<p>We have not seen a payment from these members in a while, they may soon have their membership revoked.</p>
 <table border="1" style="width:100%">
     <tr>
         <th>Name</th>
@@ -64,10 +64,10 @@
 </table>
 <?php if ($paymentNotificationsClearCount != 0): ?>
 <h3>
-<?php echo $paymentNotificationsClearCount; ?> member<?php if ($paymentNotificationsClearCount != 1) { echo "s"; }?> that had been previously Notified <?php echo ($paymentNotificationsClearCount == 1)? "has" : "have"; ?> now made a payment in time to not be revoked.</h3>
+<?php echo $paymentNotificationsClearCount; ?> member<?php if ($paymentNotificationsClearCount != 1) { echo "s"; }?> that had been previously notified <?php echo ($paymentNotificationsClearCount == 1)? "has" : "have"; ?> now made a payment in time to not be revoked.</h3>
 <?php endif; ?>
 <h2>Revoked Members: <?php echo count($revokedMembers);?></h2>
-<p>These members last payment was too long ago, so thier membership has been revoked</p>
+<p>These members' last payment was too long ago, so their membership has been revoked</p>
 <table border="1" style="width:100%">
     <tr>
         <th>Name</th>
@@ -98,7 +98,7 @@
 </table>
 
 <h2>Reinstated Members: <?php echo count($reinstatedMembers);?></h2>
-<p>These Ex members have started paying again, so there membership has been reinstated</p>
+<p>These ex-members have started paying again, so their membership has been reinstated</p>
 <table border="1" style="width:100%">
     <tr>
         <th>Name</th>
