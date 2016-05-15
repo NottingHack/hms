@@ -90,7 +90,7 @@ class NatwestCsvBehavior extends ModelBehavior {
          array(
 			'Date' => '02/12/2015',
 			' Type' => 'BAC',
-			' Description' => ''MR O.MEARA , HACKSPACE BO.M , FP 02/12/15 0215 , 000000000053043693',
+			' Description' => ''MR J DOE, HSNOTTSYTJBWM9TJYT , FP 02/12/15 0215 , 000000000053043693',
 			' Value' => '5.00',
 			' Balance' => '2537.14',
 			' Account Name' => ''NOTTINGHACK',

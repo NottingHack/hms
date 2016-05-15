@@ -88,9 +88,9 @@ class TSBCsvBehavior extends ModelBehavior {
             'Transaction Type' => 'FPI',
             'Sort Code' => ''77-22-24',
             'Account Number' => '13007568',
-            'Transaction Description' => 'DUCKHOUSE J  V02 HSNTSBQ7XBJ38YDQ 51023332313523000N 560061     30 03FEB16 02:51 ',
+            'Transaction Description' => 'Jackson J  V02 HSNTSBVPXW8RC7C4 51023332313523000N 560061     30 03FEB16 02:51 ',
             'Debit Amount' => '',
-            'Credit Amount' => '20.00',
+            'Credit Amount' => '17.00',
             'Balance' => '18685.05'
         )
         */
