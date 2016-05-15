@@ -40,6 +40,9 @@ class Account extends AppModel {
 		'Member' => array(
 			'className' => 'Member',
 		),
+        'BankTransaction' => array(
+            'className' => 'BankTransaction',
+        ),
 	);
 
 /**
@@ -150,7 +153,11 @@ class Account extends AppModel {
  */
 	public function getAccountIdsForRefs($paymentRefs) {
 		if (is_array($paymentRefs)) {
-			return array_values($this->find('list', array('conditions' => array('Account.payment_ref' => $paymentRefs))));
+			return $this->find('list', array(
+                                            'conditions' => array('Account.payment_ref' => $paymentRefs),
+                                            'fields' => array('Account.payment_ref', 'Account.account_id')
+                                            )
+                               );
 		}
 
 		return array();
@@ -163,7 +170,11 @@ class Account extends AppModel {
  */
 	public function getAccountIdsForNatwestRefs($paymentRefs) {
 		if (is_array($paymentRefs)) {
-			return array_values($this->find('list', array('conditions' => array('Account.natwest_ref' => $paymentRefs))));
+			return $this->find('list', array(
+											'conditions' => array('Account.natwest_ref' => $paymentRefs),
+                                            'fields' => array('Account.natwest_ref', 'Account.account_id')
+											)
+			);
 		}
 
 		return array();

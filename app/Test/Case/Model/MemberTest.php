@@ -18,6 +18,8 @@
                                  'app.MailingListSubscriptions',
                                  'app.EmailRecord',
                                  'app.RfidTag',
+                                 'app.BankTransaction',
+                                 'app.Bank',
                                  );
 
         public function setUp() 

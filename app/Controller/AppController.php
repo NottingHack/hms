@@ -37,14 +37,14 @@ App::uses('Status', 'Model');
 class AppController extends Controller {
 
 	const VERSION_MAJOR = 0;
-	const VERSION_MINOR = 4;
-	const VERSION_BUILD = 2;
+	const VERSION_MINOR = 5;
+	const VERSION_BUILD = 0;
 
 /**
  * List of helpers views rendered from this controller will have access to.
  * @var array
  */
-	public $helpers = array('Html', 'Form', 'Nav');
+	public $helpers = array('Html', 'Form', 'Nav', 'Currency');
 
 /**
  * Email object, used for easy mocking.
@@ -259,7 +259,7 @@ class AppController extends Controller {
 			Controller::loadModel('Member');
 			Controller::loadModel('EmailRecord');
 
-			$memberIdList = $this->Member->emailToMemberId($to);
+			$memberIdList = $this->Member->emailToMemberId(array_keys($to)[0]);
 			$this->EmailRecord->createNewRecord($memberIdList, $subject);
 		}
 

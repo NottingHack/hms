@@ -163,7 +163,7 @@
 			Account Ref
 		</dt>
 		<dd>
-			<?php echo $member['paymentRef']; ?>
+            <?php echo $this->Html->link($member['paymentRef'], array('controller' => 'bankTransactions', 'action' => 'history', $member['id']), array('escape' => false)); ?>
 		</dd>
 
 	<?php endif; ?>

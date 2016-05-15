@@ -505,6 +505,16 @@ class Setup {
 				'tableName' => 'hms_emails',
 				'data' => $dataGenerator->getEmailRecordData(),
 			),
+            array(
+                'filepath' => '../Sql/bank_transactions_data.sql',
+                'tableName' => 'bank_transactions',
+                'data' => $dataGenerator->getBankTransactionData(),
+            ),
+            array(
+                'filepath' => '../Sql/access_log_data.sql',
+                'tableName' => 'access_log',
+                'data' => $dataGenerator->getAccessLogData(),
+            ),
 		);
 
 		$sqlWriter = new sqlWriter();
@@ -519,12 +529,56 @@ class Setup {
 				return false;
 			}
 		}
+        
+        // TODO: write out csv files of records we can import into the bank transactions table
+        
+        $this->__writeDataCSV($dataGenerator->getBankCSVData());
 
 		$this->__popLogIndent();
 		return true;
 	}
 
-/** 
+/**
+ * Write out bank csv file
+ *
+ * @param  array  $bankCSVRecords
+ */
+    private function __writeDataCSV($bankCSVRecords) {
+        /* need to write out in the following format
+         Transaction Date,Transaction Type,Sort Code,Account Number,Transaction Description,Debit Amount,Credit Amount,Balance,
+         29/04/2016,PAY,'77-22-24,13007568,SERVICE CHARGES REF : 196704345 ,18.77,,33203.36
+         */
+        $path = '../../tsb_bank_test.csv';
+        
+        $data = 'Transaction Date,Transaction Type,Sort Code,Account Number,Transaction Description,Debit Amount,Credit Amount,Balance,';
+        $data = $data . "\n";
+        
+        $balance = rand(1000, 10000)/100;
+        
+        foreach ($bankCSVRecords as $record) {
+            $balance += $record['amount'];
+            
+            $data = $data . date('d/m/Y', $record['transaction_date']);
+            $data = $data . ",FPI,'77-22-24,13007568,";
+            $data = $data . $record['description'];
+            $data = $data . ',,';
+            $data = $data . $record['amount'];
+            $data = $data . ',';
+            $data = $data . $balance;
+            $data = $data . "\n";
+        }
+        
+        if ($this->__writeToFile($path, $data)) {
+            $this->__logMessage("Wrote $path");
+        } else {
+            $this->__logMessage("Failed to write $path");
+            $this->__popLogIndent();
+            return false;
+        }
+        return true;
+    }
+    
+/**
  * Get a mysqli database connection.
  *
  * @param string $connName The name of the connection to get (e.g. default/test)
@@ -700,6 +754,7 @@ class Setup {
 				'../../../app/tmp/cache/models',
 				'../../../app/tmp/cache/persistent',
 				'../../../app/tmp/cache/views',
+                '../../../app/tmp/csv',
 				'../../../app/tmp/logs',
 				'../../../app/tmp/sessions',
 				'../../../app/tmp/tests',
@@ -786,7 +841,8 @@ class Setup {
 				'test_host' => 'localhost',
 				'test_login' =>	'hms',
 				'test_password' => '',
-				'test_database' => 'hms_test'
+				'test_database' => 'hms_test',
+				'csv_folder' => '/vagrant/app/tmp/csv',
 			),
 			'debug' => array(
 			),

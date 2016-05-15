@@ -93,6 +93,24 @@ class DataGenerator {
 	private $__emailRecords = array();
 
 /**
+ * Array of bank transaction records.
+ * @var array
+ */
+    private $__bankTransaction = array();
+
+/**
+ * Array of bank csv records.
+ * @var array
+ */
+    private $__bankCSV = array();
+    
+/**
+ * Array of access log records.
+ * @var array
+ */
+    private $__accessLog = array();
+    
+/**
  * Constructor
  */
 	public function __construct() {
@@ -195,7 +213,47 @@ class DataGenerator {
 	public function getEmailRecordData() {
 		return $this->__emailRecords;
 	}
+    
+/**
+ * Get the array of bank transaction data.
+ *
+ * @return array The array of bank transactin data.
+ */
+	public function getBankTransactionData() {
+      
+        usort($this->__bankTransaction, array('DataGenerator','__transactionDateSortFunction'));
+        
+		return $this->__bankTransaction;
+	}
 
+/**
+ * Get the array of email record data.
+ *
+ * @return array The array of email record data.
+ */
+	public function getBankCSVData() {
+ 
+        usort($this->__bankCSV, function ($a, $b) {
+              return $b['transaction_date'] - $a['transaction_date'];
+              });
+        
+        return $this->__bankCSV;
+	}
+    
+/**
+ * Get the array of access log data.
+ *
+ * @return array The array of access log data.
+ */
+    public function getAccessLogData() {
+ 
+        usort($this->__accessLog, function ($a, $b) {
+              return $a['access_time'] - $a['access_time'];
+              });
+        
+        return $this->__accessLog;
+    }
+    
 /**
  * Generate a new member record
  *
@@ -264,6 +322,11 @@ class DataGenerator {
 
 				$this->__setMemberGroups($memberId, $groupList);
 			}
+
+            $numAccessRecords = rand (0,2);
+            for ($i = 0; $i < $numAccessRecords; $i++) {
+                $this->__generateAccessRecord($memberId, $registerTimestamp);
+            }
 		}
 
 		// Need to generate status updates for all levels of membership
@@ -325,7 +388,112 @@ class DataGenerator {
 		$contactNumber = $stockData['TelephoneNumber'];
 
 		$unlockText = 'Welcome ' . $firstname;
+//        echo "Member Id: " . $memberId . " Status: " . $membershipStage ."\n";
+        // Need to genrate bank transaction and csv records
+        if ((int)$membershipStage == Status::PRE_MEMBER_3) {
+            // Gen a record that is less than 2 weeks old so if we run an audit we get some member movememnt
+            $ran = rand(1,3);
+            // random number 1 gen bank, 4 gen csv, else none
+            if ($ran == 1 ) {
+//                echo "pre bank\n";
+                $this->__generateBankTransaction($accountId,
+                                                 strtotime('-3 weeks'),
+                                                 time(),
+                                                 $firstname .' '. $surname
+                                                 );
+            } else if ($ran == 3) {
+//                echo "pre csv\n";
+                $this->__generateBankCSV($accountId,
+                                         strtotime('-1 weeks'),
+                                         time(),
+                                         $firstname .' '. $surname
+                                         );
+//            } else {
+//                echo "pre none\n";
+            }
+        
+        } else if ((int)$membershipStage == Status::CURRENT_MEMBER) {
+            // Gen 1-3 records that are over 1.5 months old (history)
+            for ($i = 1; $i <= rand(1,3); $i++) {
+                $this->__generateBankTransaction($accountId,
+                                                 strtotime('-6 months'),
+                                                 strtotime('-2 months 1 day'),
+                                                 $firstname .' '. $surname
+                                                 );
+            }
 
+            // now mix of records mostly stay
+            $ran = rand(1, 6);
+            if ($firstname == 'admin') {
+            	// make sure we cant make the make our admin and ex member
+            	$this->__generateBankTransaction($accountId,
+                                                 strtotime('-1 week'),
+                                                 time(),
+                                                 $firstname .' '. $surname
+                                                 );
+            } else if ($ran == 5) {
+                // some ex just to csv less than 2 weeks (cause ex aproval)
+//                echo "current ex csv\n";
+                $this->__generateBankCSV($accountId,
+                                         strtotime('-1 weeks'),
+                                         time(),
+                                         $firstname .' '. $surname
+                                         );
+            } else if ($ran == 4) {
+                // some warn (between 1.5 and 1 month)
+//                echo "current warn bank\n";
+                $this->__generateBankTransaction($accountId,
+                                                 strtotime('-2 months'),
+                                                 strtotime('-1 month 14 days'),
+                                                 $firstname .' '. $surname
+                                                 );
+                // some also with a csv less that 1 weeks
+                if (rand(1, 3) == 2) {
+//                    echo "current warn csv\n";
+                    $this->__generateBankCSV($accountId,
+                                             strtotime('-1 week'),
+                                             time(),
+                                             $firstname .' '. $surname
+                                             );
+                }
+            } else {
+//                echo "currnet stay\n";
+                $this->__generateBankTransaction($accountId,
+                                                 strtotime('-1 month'),
+                                                 time(),
+                                                 $firstname .' '. $surname
+                                                 );
+            }
+            
+        } else if ((int)$membershipStage == Status::EX_MEMBER) {
+            // Gen 1-3 records that are over 2 months old (history)
+            for ($i = 1; $i <= rand(1,3); $i++) {
+                $this->__generateBankTransaction($accountId,
+                                                 strtotime('-6 months'),
+                                                 strtotime('-2 month 1 day'),
+                                                 $firstname .' '. $surname
+                                                 );
+            }
+            // Gen a record that is less than 2 weeks old so if we run an audit we get some member movememnt
+            $ran = rand(1, 4);
+            // random number 1 gen bank, 4 gen csv, else none
+            if ($ran == 2 ) {
+//                echo "ex bank\n";
+                $this->__generateBankTransaction($accountId,
+                                                 strtotime('-3 weeks'),
+                                                 time(),
+                                                 $firstname .' '. $surname
+                                                 );
+            } else if ($ran == 4) {
+//                echo "ex csv\n";
+                $this->__generateBankCSV($accountId,
+                                         strtotime('-1 weeks'),
+                                         time(),
+                                         $firstname .' '. $surname
+                                         );
+            }
+        }
+        
 		// Clear any data that wouldn't be set yet
 		if ((int)$membershipStage <= Status::PRE_MEMBER_1) {
 			$firstname = null;
@@ -553,6 +721,68 @@ class DataGenerator {
 
 		array_push($this->__pins, $record);
 	}
+    
+/**
+ * Generate a bank transaction for a given memberId with age between
+ *
+ * @param  int  $accountId
+ * @param  int  $oldestTimestamp
+ * @param  int  $newestTimestamp
+ * @param  string  $name
+ */
+     private function __generateBankTransaction($accountId, $oldestTimestamp, $newestTimestamp, $name) {
+         
+        // fudge the date
+        $transactionDate = rand($oldestTimestamp, $newestTimestamp);
+         
+        $record = array(
+                        'transaction_date' => date('Y-m-d', $transactionDate),
+                        'description' => $name .' '. $this->__accounts[$accountId -1 ]['payment_ref'] . ' ' . $accountId,
+                        'amount' => rand(1, 7500)/100,
+                        'bank_id' => 2,
+                        'account_id' => $accountId,
+                        );
+         array_push($this->__bankTransaction, $record);
+     }
+    
+    
+/**
+ * Generate a bank csv for a given accountId with age between
+ *
+ * @param  int  $accountId
+ * @param  int  $oldestTimestamp
+ * @param  int  $newestTimestamp
+ * @param  string  $name
+ */
+     private function __generateBankCSV($accountId, $oldestTimestamp, $newestTimestamp, $name) {
+ 
+        $transactionDate = rand($oldestTimestamp, $newestTimestamp);
+        $record = array(
+                        'transaction_date' => $transactionDate,        
+                        'description' => $name .' '. $this->__accounts[$accountId -1 ]['payment_ref']. ' ' . $accountId,
+                        'amount' => rand(1, 7500)/100,
+                        );
+         array_push($this->__bankCSV, $record);
+     }
+
+/**
+ * Generate Access Record
+ *
+ * @param int $memberId The id of the member the pin belongs to.
+ * @param int $joinTimestamp The time the pin was generated.
+ */
+     private function __generateAccessRecord($memberId, $joinTimestamp) {
+ 
+        $accessTime = rand($joinTimestamp, time());
+        $record = array(
+                        'access_time' => date("Y-m-d H:i:s", $accessTime),
+                        'member_id' => $memberId,
+                        'access_result' => 10,
+                        'rfid_serial' => $this->__rfidTags[count($this->__rfidTags)-1]['rfid_serial'],
+                        );
+        array_push($this->__accessLog, $record);
+     }
+
 
 /**
  * Given an array of array data, a key to the inner array, and a function to generate data, keep generating until the data is unique.
@@ -592,4 +822,16 @@ class DataGenerator {
 		array_splice($this->__stockData, $index, 1);
 		return $data;
 	}
+    
+/**
+ * array sort function
+ *
+ * @param
+ * @param
+ * @return
+ */
+    private static function __transactionDateSortFunction( $a, $b ) {
+        return strtotime($a['transaction_date']) - strtotime($b['transaction_date']);
+    }
+
 }
