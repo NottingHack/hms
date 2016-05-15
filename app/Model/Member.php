@@ -17,7 +17,7 @@ App::uses('AppModel', 'Model');
 App::uses('Status', 'Model');
 App::uses('InvalidStatusException', 'Error/Exception');
 App::uses('NotAuthorizedException', 'Error/Exception');
-App::uses('String', 'Utility');
+App::uses('CakeText', 'Utility');
 
 /**
  * Model for all member data
@@ -117,7 +117,7 @@ class Member extends AppModel {
 		),
 		'password' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'minLen' => array(
@@ -127,7 +127,7 @@ class Member extends AppModel {
 		),
 		'password_confirm' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'minLen' => array(
@@ -141,7 +141,7 @@ class Member extends AppModel {
 		),
 		'username' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'mustbeUnique' => array(
@@ -164,7 +164,7 @@ class Member extends AppModel {
 			),
 		),
 		'usernameOrEmail' => array(
-			'notEmpty',
+			'notBlank',
 		),
 		'account_id' => array(
 			'length' => array(
@@ -479,7 +479,7 @@ class Member extends AppModel {
 			[unlockText] => member unlock text
 			[balance] => member balance
 			[creditLimit] => member credit limit
-			[pins] =>
+			[pin] =>
 				[n] =>
 					[id] => pin id
 					[pin] => pin number
@@ -491,6 +491,7 @@ class Member extends AppModel {
                     [last_used] => last_used
                     [name] => friendly_name
 			[paymentRef] => member payment ref
+			[accountId] => account_id
 			[address] =>
 				[part1] => member address part 1
 				[part2] => member address part 2
@@ -504,6 +505,7 @@ class Member extends AppModel {
 				[from] => previous status id
 				[to] => current status id
 				[at] => time the update happened
+			[joint] => bool
 	 */
 
 		$id = Hash::get($memberInfo, 'Member.member_id');
@@ -562,7 +564,7 @@ class Member extends AppModel {
 			}
 		}
 
-
+		$accountId = Hash::get($memberInfo, 'Member.account_id');
 		$paymentRef = Hash::get($memberInfo, 'Account.payment_ref');
 		$address = array(
 			'part1' => Hash::get($memberInfo, 'Member.address_1'),
@@ -585,6 +587,8 @@ class Member extends AppModel {
 			$bestName = $firstname . ' ' . $surname;
 		}
 
+		$joinAccount = (count($this->getMemberIdsForAccount(Hash::get($memberInfo, 'Member.account_id'))) > 1);
+
 		$allValues = array(
 			'id' => $id,
 			'bestName' => $bestName,
@@ -596,6 +600,7 @@ class Member extends AppModel {
 			'status' => $status,
 			'joinDate' => $joinDate,
 			'unlockText' => $unlockText,
+			'accountId' => $accountId,
 			'paymentRef' => $paymentRef,
 			'balance' => $balance,
 			'creditLimit' => $creditLimit,
@@ -604,6 +609,7 @@ class Member extends AppModel {
 			'address' => $address,
 			'contactNumber' => $contactNumber,
 			'lastStatusUpdate' => $lastStatusUpdate,
+			'joint' => $joinAccount,
 		);
 
 		if (!$removeNullEntries) {
@@ -1494,7 +1500,7 @@ class Member extends AppModel {
 				array_push($memberNames, $fullName);
 			}
 
-			$accountList[$accountId] = String::toList($memberNames);
+			$accountList[$accountId] = CakeText::toList($memberNames);
 		}
 		$accountList['-1'] = 'Create new';
 		ksort($accountList);
@@ -1504,12 +1510,13 @@ class Member extends AppModel {
 
 /**
  * Revoke a members membership.
- * 
+ *
  * @param int $memberId The id of the membership to revoke.
  * @param int $adminId The id of the member doing the revoking.
  * @return bool True if membership was revoked, false otherwise.
  */
 	public function revokeMembership($memberId, $adminId) {
+        // TODO: remove from Group::CURRENT_MEMBERS
 		return $this->__setMemberStatus($memberId, $adminId, Status::EX_MEMBER, Status::CURRENT_MEMBER);
 	}
 
@@ -1521,6 +1528,7 @@ class Member extends AppModel {
  * @return bool True if membership was reinstated, false otherwise.
  */
 	public function reinstateMembership($memberId, $adminId) {
+        // TODO: re-add to Group::CURRENT_MEMBERS
 		return $this->__setMemberStatus($memberId, $adminId, Status::CURRENT_MEMBER, Status::EX_MEMBER);
 	}
 
@@ -1705,6 +1713,7 @@ class Member extends AppModel {
 					$existingGroups = $this->GroupsMember->getGroupIdsForMember( $memberId );
 				}
 
+                // TODO: fix this nasty hack so we can remove ex members from Group::CURRENT_MEMBERS
 				if (!in_array(Group::CURRENT_MEMBERS, $existingGroups)) {
 					array_push($existingGroups, Group::CURRENT_MEMBERS);
 				}
@@ -1904,7 +1913,7 @@ class Member extends AppModel {
 		}
     
 /**
- *  Update the balance for a member, by ammount given
+ *  Update the balance for a member, by amount given
  * 
  * @param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
  * @param int
@@ -1972,7 +1981,27 @@ class Member extends AppModel {
 			}
 			return null;
 		}
-		
+
+/** 
+ * Get the member Id's for all members of this account
+ * 
+ * @param int $accountId
+ * @return bool true if this is a joint account
+ */
+	public function getMemberIdsForAccount($accountId) {
+    	$ids = $this->find('all', array(
+    		'fields' => array('Member.member_id'),
+    		'conditions' => array('Member.account_id' => $accountId),
+    		'recursive' => 0
+    		)
+    	);
+
+    	if (is_array($ids) && count($ids) > 0) {
+    		return Hash::extract($ids, '{n}.Member.member_id');
+    		}
+		return null;
+	}
+
 /**
  * Get a list of member names or e-mails (if we don't have their name) for all members.
  * 

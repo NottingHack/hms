@@ -24,6 +24,9 @@ hms.settings
 /dev/Setup/Sql/mailinglists_data.development.sql
 /dev/Setup/Sql/mailinglist_subscriptions_data.development.sql
 /dev/Setup/Sql/hms_emails_data.development.sql
+/dev/Setup/Sql/bank_transactions_data.sql
+/dev/Setup/Sql/access_log_data.sql
+/dev/tsb_bank_test.csv
 app/Lib/MailChimp/MCAPI.php
 docs
 CodeSnifferReport.txt
@@ -34,6 +37,7 @@ dev/junit.xml
 vendor/
 bin/
 app/Vendor/phpunit.phar
+csv/*.csv
 
 # Vagrant development ends up adding some files that we don't want to commit
 .vagrant

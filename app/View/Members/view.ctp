@@ -84,7 +84,7 @@
 	        		array_push($groupsList, $this->Html->link($group['description'], array('controller' => 'groups', 'action' => 'view', $group['id'])));
 	        	}
 
-	        	echo String::toList($groupsList);
+	        	echo CakeText::toList($groupsList);
 	        }
 	       ?>
 		</dd>
@@ -126,7 +126,7 @@
 	    	  echo $this->Html->link(
 	    	  	count($member['rfidtag']) . ' '.  $msg . ' registered', 
 	    	  	array(
-	    	  		'controller' => 'rfidtags',
+	    	  		'controller' => 'rfidTags',
 	    	  		'action' => 'view',
 	    	  		$member['id']
 	    	  	),
@@ -163,7 +163,7 @@
 			Account Ref
 		</dt>
 		<dd>
-			<?php echo $member['paymentRef']; ?>
+            <?php echo $this->Html->link($member['paymentRef'], array('controller' => 'bankTransactions', 'action' => 'history', $member['id']), array('escape' => false)); ?>
 		</dd>
 
 	<?php endif; ?>

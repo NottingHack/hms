@@ -143,7 +143,7 @@ class MemberBox extends AppModel {
  * 
  * @param bool $paginate If true, return a query to retrieve a page of the data, otherwise return the data.
  * @param array $conditions An array of conditions to decide which member records to access.
- * @return array A list of boxes or query to report a list of tags
+ * @return array A list of boxes or query to report a list of boxes
  */
 	public function getBoxesList($paginate, $conditions = array()) {
 		$findOptions = array(
@@ -180,14 +180,14 @@ class MemberBox extends AppModel {
  * 
  * @param array $box raw box record from the model
  * @param bool $removeNullEntries strips out null fields from the result
- * @return array Details for the tag serial number passed in $serial
+ * @return array Details for the box record
  */
   public function formatDetails($box, $removeNullEntries = true) {
   	/*
   		Data should be presented to the view in an array like so:
         [memberBoxId] => box id
   		[memberId] => member id
-        [broughtDate] => date box brought
+        [boughtDate] => date box bought
         [removedDate] => removed date
   		[stateId] => state of card as used in the DB
   		[stateName] => description of the stateId value
@@ -195,7 +195,7 @@ class MemberBox extends AppModel {
   		$formatted = array(
             'memberBoxId' => Hash::get($box, 'MemberBox.member_box_id'),
 	  		'memberId' => Hash::get($box, 'MemberBox.member_id'),
-	  		'broughtDate' => Hash::get($box, 'MemberBox.brought_date'),
+	  		'boughtDate' => Hash::get($box, 'MemberBox.bought_date'),
             'removedDate' => Hash::get($box, 'MemberBox.removed_date'),
 	  		'stateId' => Hash::get($box, 'MemberBox.state'),
 	  		'stateName' => $this->statusStrings[Hash::get($box, 'MemberBox.state')],
@@ -226,7 +226,7 @@ class MemberBox extends AppModel {
         $box = array(
                          'MemberBox' => array(
                                                   'member_id' => $memberId,
-                                                  'brought_date' => date('Y-m-d'),
+                                                  'bought_date' => date('Y-m-d'),
                                                   'state' => MemberBox::BOX_INUSE
                                                   )
                          );

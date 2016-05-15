@@ -3,7 +3,7 @@
 <?php
 	$this->Html->addCrumb('Members', '/members');
 	$this->Html->addCrumb(isset($member['username']) ? $member['username'] : $member['email'], '/members/view/' . $member['id']);
-	$this->Html->addCrumb('Registered Cards', '/rfidtags/view/' . $member['id']);
+	$this->Html->addCrumb('Registered Cards', '/rfidTags/view/' . $member['id']);
 ?>
 
 <table>
@@ -21,7 +21,7 @@
 			echo '<td>' . $tag['lastSeen'] . '</td>';
 			echo '<td>' . $tag['tagName'] . '</td>';
 			echo '<td>' . $tag['stateName'] . '</td>';
-			echo '<td>' . $this->Html->Link('Edit Card', array('controller' => 'rfidtags', 'action' => 'edit', $tag['tagSerial']), array('escape' => false)) . '</td>';
+			echo '<td>' . $this->Html->Link('Edit Card', array('controller' => 'rfidTags', 'action' => 'edit', $tag['tagSerial']), array('escape' => false)) . '</td>';
 //			echo 'some text here</form> some text after';
 			echo '</tr>';
 		}

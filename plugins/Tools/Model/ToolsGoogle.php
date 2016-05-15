@@ -361,7 +361,7 @@ class ToolsGoogle extends ToolsAppModel {
 			$member = $this->Member->getMemberSummaryForMember($details['member'], false);
 
 			// build the parts of the event
-			$title = $member['Member']['firstname'] . " " . $member['Member']['surname'];
+			$title = $member['Member']['username'];
 
 			$start = new Google_Service_Calendar_EventDateTime();
 			$start->setDateTime($start_date->format(self::DATETIME_STR));
@@ -449,9 +449,15 @@ class ToolsGoogle extends ToolsAppModel {
 				continue;
 			}
 			$description = json_decode($googleEvent->getDescription());
+
+			// grab the member so we can swap out username on publice calender for realy name on hms
+			$this->Member = new Member();
+			$member = $this->Member->getMemberSummaryForMember($description->member);
+
 			$event = array(
 				'id'		=>	$googleEvent->getId(),
-				'title'		=>	$googleEvent->getSummary(),
+				// 'title'		=>	$googleEvent->getSummary(), // what ever was stored on the public calender
+				'title'		=>  $member['Member']['firstname'] . " " . $member['Member']['surname'], // pull back real name for display on HMS rendered calender
 				'type'		=>	$description->type,
 				'booked'	=>	new DateTime($description->booked, new DateTimeZone('Europe/London')),
 				'member'	=>	$description->member,

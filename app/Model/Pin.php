@@ -199,6 +199,9 @@ class Pin extends AppModel {
             );
             // should only get one pin back anyway
             $pinRecord = $this->find('first', $findOptions);
+            if (count($pinRecord) == 0) {
+                return false;
+            }
             
             return $pinRecord['Pin']['state'];
         }

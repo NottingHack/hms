@@ -15,9 +15,7 @@
 
 App::uses('Component', 'Controller');
 App::uses('PhpReader', 'Configure');
-Configure::config('default', new PhpReader());
-Configure::load('hms', 'default');
-App::uses('String', 'Utility');
+App::uses('CakeText', 'Utility');
 
 /**
  * LabelPrinterComponent is a component to handle printing to a network attached zebra printer.
@@ -41,16 +39,18 @@ class LabelPrinterComponent extends Component {
     public function printLabel($templateName, $substitutions = array()) {
         
         $this->LabelTemplate = ClassRegistry::init('LabelTemplate');
+        $this->Meta = ClassRegistry::init('Meta');
         
         $template = $this->LabelTemplate->getTemplate($templateName);
         if ($template == null) {
             return false;
         }
         
-        $label = String::insert($template, $substitutions);
+        
+        $label = CakeText::insert($template, $substitutions);
         
         // Get the IP address for the printer.
-        $host = Configure::read('hms_label_printer_ip');
+        $host = $this->Meta->getValueFor('label_printer_ip');
         
         $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
         if ($socket === false) {

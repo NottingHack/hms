@@ -109,6 +109,10 @@ class XmlView extends View {
 /**
  * Serialize view vars.
  *
+ * ### Special parameters
+ * `_xmlOptions` You can set an array of custom options for Xml::fromArray() this way, e.g.
+ *   'format' as 'attributes' instead of 'tags'.
+ *
  * @param array $serialize The viewVars that need to be serialized.
  * @return string The serialized data
  */
@@ -131,10 +135,16 @@ class XmlView extends View {
 		}
 
 		$options = array();
+		if (isset($this->viewVars['_xmlOptions'])) {
+			$options = $this->viewVars['_xmlOptions'];
+		}
 		if (Configure::read('debug')) {
 			$options['pretty'] = true;
 		}
 
+		if (isset($options['return']) && strtolower($options['return']) === 'domdocument') {
+			return Xml::fromArray($data, $options)->saveXML();
+		}
 		return Xml::fromArray($data, $options)->asXML();
 	}
 

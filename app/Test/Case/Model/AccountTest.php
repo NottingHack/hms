@@ -8,6 +8,8 @@
                                  'app.Account',
                                  'app.Member',
                                  'app.RfidTag',
+                                 'app.BankTransaction',
+                                 'app.Bank',
                                  );
 
         public function setUp() 

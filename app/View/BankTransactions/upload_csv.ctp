@@ -1,13 +1,13 @@
-<!-- File: /app/View/Member/upload_csv.ctp -->
+<!-- File: /app/View/BankTransactions/upload_csv.ctp -->
 
 <?php
 	$this->Html->addCrumb('Members', '/members');
-	$this->Html->addCrumb('Upload CSV', '/members/uploadCsv');
+	$this->Html->addCrumb('Upload CSV', '/bankTransactions/uploadCsv');
 ?>
 
-<?php if($memberList == null): ?>
+<?php if(true): ?>
 	<?php
-		echo $this->Form->create('FileUpload', array('type' => 'file'));
+		echo $this->Form->create(false, array('type' => 'file'));
 		echo $this->Form->input('filename', array('type' => 'file'));
 		echo $this->Form->end('Upload');
 	?>

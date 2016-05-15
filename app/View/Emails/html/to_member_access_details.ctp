@@ -1,5 +1,5 @@
 <p>
-	Hello,
+	Hello <?php echo $name; ?>,
 </p>
 
 <p>
@@ -11,8 +11,8 @@
 </p>
 
 <p>
-	Here's a PDF hackspace manual, it can also be found at guide.nottinghack.org.uk<br>
-	<?php echo $manLink; ?>
+    The hackspace members guide can be found at <?php echo $this->Html->link($membersGuideHTML); ?> and it is a recommended read for all members. <br/>
+    A PDF version is also available <?php echo $this->Html->link('here', $membersGuidePDF); ?>
 </p>
 
 <p>
@@ -27,21 +27,21 @@
 
 <p>
 	Our Google Group is where a lot of online discussion takes place:<br>
-	<?php echo $this->Html->link('https://groups.google.com/group/nottinghack?hl=en'); ?>
+	<?php echo $this->Html->link($groupLink); ?>
 </p>
 
 <p>
 	The hackspace rules:<br>
-	<?php echo $this->Html->link('http://rules.nottinghack.org.uk'); ?>
+	<?php echo $this->Html->link($rulesHTML); ?>
 </p>
 
 <p>
 	We also have a wiki, with lots of information about the tools in the Hackspace:<br>
-	<?php echo $this->Html->link('http://wiki.nottinghack.org.uk/wiki'); ?>
+	<?php echo $this->Html->link($wikiLink); ?>
 </p>
 
 <p>
-	If you have any questions, feel free to email: membership@nottinghack.org.uk
+	If you have any questions, feel free to email: <?php echo $membershipEmail; ?>
 </p>
 
 <p>

@@ -1,27 +1,18 @@
 <p>
-	Hello,
+	Hello <?php echo $name; ?>,
 </p>
 
 <p>
-	Thanks for reinstating your membership of Nottingham Hackspace. Here are all of the remaining details you need, though there's one last step before you'll have full 24 hour access.
+	Thanks for reinstating your membership of Nottingham Hackspace. Here is a reminder of some details  you might needu need.
 </p>
 
 <p>
-	GateKeeper is our RFID entry system, for which you need a suitable card set up. If you have a CityCard, Nottingham Library card, or Oyster Card, it will work with it, otherwise, we have blank RFIDs for a £1 deposit. Please contact someone from the membership team to arrange a meeting, or visit on the next open hack night and ask people to point you to one of the team.
+	GateKeeper is our RFID entry system for which you need a suitable card set up. If you still have a card form before your membership was deactivated you will be able to carry on using that, other wise a replacement card cost £1. Visit on the next open hack night and ask people to point you to one of the membership team, or please contact membership@nottinghack.org.uk if you are unable to attend one.
 </p>
 
 <p>
-	Here's a calendar showing when people from the membership team could potentially meet you at the space:
-	<?php echo $this->Html->link('https://www.google.com/calendar/embed?src=bmnnboh643lt5gl0b2ku45c4p0%40group.calendar.google.com&ctz=Europe/London'); ?>
-</p>
-
-<p>
-	NOTE: This doesn't indicate when they *will* be at the space, just when they could potentially meet you to do gatekeeper setup and answer any other questions you might have. Switch to week view to see hours in which people can be available. If there are any issues please contact the member admin team at membership@nottinghack.org.uk
-</p>
-
-<p>
-	Here's a PDF hackspace manual:<br>
-	<?php echo $manLink; ?>
+    The hackspace members guide can be found at <?php echo $this->Html->link($membersGuideHTML); ?> and it is a recommended read for all members. <br/>
+    A PDF version is also available <?php echo $this->Html->link('here', $membersGuidePDF); ?>
 </p>
 
 <p>
@@ -35,20 +26,25 @@
 </p>
 
 <p>
-	Here again is the google group:<br>
-	<?php echo $this->Html->link('https://groups.google.com/group/nottinghack?hl=en'); ?>
+	Our Google Group is where a lot of online discussion takes place:<br>
+	<?php echo $this->Html->link($groupLink); ?>
 </p>
 
 <p>
-	and the hackspace rules:<br>
-	<?php echo $this->Html->link('http://wiki.nottinghack.org.uk/wiki/Category:Rules'); ?>
+	The hackspace rules:<br>
+	<?php echo $this->Html->link($rulesHTML); ?>
 </p>
 
 <p>
-	If you have any questions, feel free to email: membership@nottinghack.org.uk
+	We also have a wiki, with lots of information about the tools in the Hackspace:<br>
+	<?php echo $this->Html->link($wikiLink); ?>
+</p>
+
+<p>
+	If you have any questions, feel free to email: <?php echo $membershipEmail; ?>
 </p>
 
 <p>
 	Thanks,<br>
-	Nottinghack Member Admin Team
+	Nottinghack Membership Team
 </p>

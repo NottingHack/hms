@@ -21,7 +21,7 @@ class MailingListsController extends AppController {
 
 /**
  * Views rendered from this controller will have access to the following helpers.
- * @var array
+* @var array
  */
 	public $helpers = array('Html', 'Form');
 
