@@ -32,11 +32,11 @@ class ChangePassword extends AppModel {
  */
 	public $validate = array(
 		'current_password' => array(
-			'rule' => 'notEmpty'
+			'rule' => 'notBlank'
 		),
 		'new_password' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'minLen' => array(
@@ -46,7 +46,7 @@ class ChangePassword extends AppModel {
 		),
 		'new_password_confirm' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'matchNewPassword' => array(

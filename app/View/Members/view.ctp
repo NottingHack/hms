@@ -84,7 +84,7 @@
 	        		array_push($groupsList, $this->Html->link($group['description'], array('controller' => 'groups', 'action' => 'view', $group['id'])));
 	        	}
 
-	        	echo String::toList($groupsList);
+	        	echo CakeText::toList($groupsList);
 	        }
 	       ?>
 		</dd>

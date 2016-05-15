@@ -44,7 +44,7 @@ class ForgotPassword extends AppModel {
 	public $validate = array(
 		'email' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'matchMemberEmail' => array(
@@ -54,7 +54,7 @@ class ForgotPassword extends AppModel {
 		),
 		'new_password' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'minLen' => array(
@@ -64,7 +64,7 @@ class ForgotPassword extends AppModel {
 		),
 		'new_password_confirm' => array(
 			'noEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'This field cannot be left blank'
 			),
 			'matchNewPassword' => array(
@@ -107,7 +107,7 @@ class ForgotPassword extends AppModel {
  */
 	public function createNewEntry($memberId) {
 		$data['ForgotPassword']['member_id'] = $memberId;
-		$data['ForgotPassword']['request_guid'] = String::UUID();
+		$data['ForgotPassword']['request_guid'] = CakeText::UUID();
 		$data['ForgotPassword']['expired'] = 0;
 		// Timestamp is generated automatically
 		if ($this->save($data)) {

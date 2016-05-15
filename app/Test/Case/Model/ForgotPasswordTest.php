@@ -83,7 +83,7 @@
 
         public function testIsValidGuid()
         {
-            $this->assertTrue( ForgotPassword::isValidGuid(String::UUID()), 'Valid input was not handled correctly.' );
+            $this->assertTrue( ForgotPassword::isValidGuid(CakeText::UUID()), 'Valid input was not handled correctly.' );
             $this->assertFalse( ForgotPassword::isValidGuid(null), 'Invalid input was not handled correctly.' );
             $this->assertFalse( ForgotPassword::isValidGuid(-1), 'Invalid input was not handled correctly.' );
             $this->assertFalse( ForgotPassword::isValidGuid(1), 'Invalid input was not handled correctly.' );

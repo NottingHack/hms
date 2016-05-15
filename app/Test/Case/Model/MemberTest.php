@@ -1693,12 +1693,12 @@
         {
             $this->assertFalse( $this->Member->completeForgotPassword(null, null), 'Invalid data was not handled correctly.' );
             $this->assertFalse( $this->Member->completeForgotPassword('addwd', 'fdfs'), 'Invalid data was not handled correctly.' );
-            $this->assertFalse( $this->Member->completeForgotPassword(String::UUID(), -1), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->completeForgotPassword(CakeText::UUID(), -1), 'Invalid data was not handled correctly.' );
             $this->assertFalse( $this->Member->completeForgotPassword('adssd', 1), 'Invalid data was not handled correctly.' );
-            $this->assertFalse( $this->Member->completeForgotPassword(String::UUID(), array()), 'Invalid data was not handled correctly.' );
-            $this->assertFalse( $this->Member->completeForgotPassword(String::UUID(), array('ForgotPassword')), 'Invalid data was not handled correctly.' );
-            $this->assertFalse( $this->Member->completeForgotPassword(String::UUID(), array('ForgotPassword' => array('email'))), 'Invalid data was not handled correctly.' );
-            $this->assertFalse( $this->Member->completeForgotPassword(String::UUID(), array('ForgotPassword' => array('email' => 'totallynotavalidemail@test.org.uk'))), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->completeForgotPassword(CakeText::UUID(), array()), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->completeForgotPassword(CakeText::UUID(), array('ForgotPassword')), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->completeForgotPassword(CakeText::UUID(), array('ForgotPassword' => array('email'))), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->completeForgotPassword(CakeText::UUID(), array('ForgotPassword' => array('email' => 'totallynotavalidemail@test.org.uk'))), 'Invalid data was not handled correctly.' );
 
             $data = array(
                 'ForgotPassword' => array(
@@ -1707,7 +1707,7 @@
                     'new_password_confirm' => 'not the same',
                 )
             );
-            $this->assertFalse( $this->Member->completeForgotPassword(String::UUID(), $data), 'Invalid data was not handled correctly.' );
+            $this->assertFalse( $this->Member->completeForgotPassword(CakeText::UUID(), $data), 'Invalid data was not handled correctly.' );
 
             $data = array(
                 'ForgotPassword' => array(
