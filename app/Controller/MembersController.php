@@ -137,7 +137,7 @@ class MembersController extends AppController {
 
 		$this->Nav->add('Register Member', 'members', 'register');
 		$this->Nav->add('E-mail all current members', 'members', 'emailMembersWithStatus', array( Status::CURRENT_MEMBER ) );
-        $this->Nav->add('Upload CSV', 'banktransactions', 'uploadCsv' );
+        $this->Nav->add('Upload CSV', 'bankTransactions', 'uploadCsv' );
         $this->Nav->add('Audit Members', 'auditmembers', 'audit');
 	}
 /**
