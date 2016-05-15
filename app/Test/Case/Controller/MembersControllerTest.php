@@ -4168,7 +4168,7 @@
 			07/02/2013,BAC,"\'C DAVIES , CHRIS , FP 07/02/13 0034 , 00156265632BBBVSCR",5,1694.08,\'NOTTINGHACK,\'558899-45687951';
 			$guid = null;
 
-			$generatedGuid = String::uuid();
+			$generatedGuid = CakeText::uuid();
 			$this->_setupTestUploadCsv();
 			$this->controller->Session->expects($this->never())->method('setFlash');
 			$this->controller->Nav->expects($this->once())->method('add')->with('Approve All', 'members', 'uploadTsb', array($generatedGuid), 'positive');

@@ -90,6 +90,50 @@ class CakeRequestTest extends CakeTestCase {
 	}
 
 /**
+ * Test the header detector.
+ *
+ * @return void
+ */
+	public function testHeaderDetector() {
+		$request = new CakeRequest('some/path');
+		$request->addDetector('host', array('header' => array('host' => 'cakephp.org')));
+
+		$_SERVER['HTTP_HOST'] = 'cakephp.org';
+		$this->assertTrue($request->is('host'));
+
+		$_SERVER['HTTP_HOST'] = 'php.net';
+		$this->assertFalse($request->is('host'));
+	}
+
+/**
+ * Test the accept header detector.
+ *
+ * @return void
+ */
+	public function testExtensionDetector() {
+		$request = new CakeRequest('some/path');
+		$request->params['ext'] = 'json';
+		$this->assertTrue($request->is('json'));
+
+		$request->params['ext'] = 'xml';
+		$this->assertFalse($request->is('json'));
+	}
+
+/**
+ * Test the accept header detector.
+ *
+ * @return void
+ */
+	public function testAcceptHeaderDetector() {
+		$request = new CakeRequest('some/path');
+		$_SERVER['HTTP_ACCEPT'] = 'application/json, text/plain, */*';
+		$this->assertTrue($request->is('json'));
+
+		$_SERVER['HTTP_ACCEPT'] = 'text/plain, */*';
+		$this->assertFalse($request->is('json'));
+	}
+
+/**
  * Test that the autoparse = false constructor works.
  *
  * @return void
@@ -100,6 +144,21 @@ class CakeRequestTest extends CakeTestCase {
 		);
 		$request = new CakeRequest(null, false);
 		$this->assertFalse(isset($request->query['one']));
+	}
+
+/**
+ * Test the content type method.
+ * 
+ * @return void
+ */
+	public function testContentType() {
+		$_SERVER['HTTP_CONTENT_TYPE'] = 'application/json';
+		$request = new CakeRequest('/', false);
+		$this->assertEquals('application/json', $request->contentType());
+
+		$_SERVER['CONTENT_TYPE'] = 'application/xml';
+		$request = new CakeRequest('/', false);
+		$this->assertEquals('application/xml', $request->contentType(), 'prefer non http header.');
 	}
 
 /**
@@ -274,12 +333,6 @@ class CakeRequestTest extends CakeTestCase {
 		$request->reConstruct();
 		$this->assertEquals($data, $request->data);
 
-		$data = array(
-			'data' => array(
-				'Article' => array('title' => 'Testing'),
-			),
-			'action' => 'update'
-		);
 		$request = $this->getMock('TestCakeRequest', array('_readInput'));
 		$request->expects($this->at(0))->method('_readInput')
 			->will($this->returnValue('data[Article][title]=Testing&action=update'));
@@ -658,18 +711,18 @@ class CakeRequestTest extends CakeTestCase {
 		$_SERVER['HTTP_X_FORWARDED_FOR'] = '192.168.1.5, 10.0.1.1, proxy.com';
 		$_SERVER['HTTP_CLIENT_IP'] = '192.168.1.2';
 		$_SERVER['REMOTE_ADDR'] = '192.168.1.3';
+
 		$request = new CakeRequest('some/path');
-		$this->assertEquals('192.168.1.5', $request->clientIp(false));
-		$this->assertEquals('192.168.1.2', $request->clientIp());
+		$this->assertEquals('192.168.1.3', $request->clientIp(), 'Use remote_addr in safe mode');
+		$this->assertEquals('192.168.1.5', $request->clientIp(false), 'Use x-forwarded');
 
 		unset($_SERVER['HTTP_X_FORWARDED_FOR']);
-		$this->assertEquals('192.168.1.2', $request->clientIp());
+		$this->assertEquals('192.168.1.3', $request->clientIp(), 'safe uses remote_addr');
+		$this->assertEquals('192.168.1.2', $request->clientIp(false), 'unsafe reads from client_ip');
 
 		unset($_SERVER['HTTP_CLIENT_IP']);
-		$this->assertEquals('192.168.1.3', $request->clientIp());
-
-		$_SERVER['HTTP_CLIENTADDRESS'] = '10.0.1.2, 10.0.1.1';
-		$this->assertEquals('10.0.1.2', $request->clientIp());
+		$this->assertEquals('192.168.1.3', $request->clientIp(), 'use remote_addr');
+		$this->assertEquals('192.168.1.3', $request->clientIp(false), 'use remote_addr');
 	}
 
 /**
@@ -687,6 +740,10 @@ class CakeRequestTest extends CakeTestCase {
 
 		$_SERVER['HTTP_REFERER'] = '';
 		$result = $request->referer();
+		$this->assertSame($result, '/');
+
+		$_SERVER['HTTP_REFERER'] = Configure::read('App.fullBaseUrl') . '/';
+		$result = $request->referer(true);
 		$this->assertSame($result, '/');
 
 		$_SERVER['HTTP_REFERER'] = Configure::read('App.fullBaseUrl') . '/some/path';
@@ -747,6 +804,24 @@ class CakeRequestTest extends CakeTestCase {
 
 		$_SERVER['REQUEST_METHOD'] = 'delete';
 		$this->assertFalse($request->is('delete'));
+	}
+
+/**
+ * Test is() with json and xml.
+ *
+ * @return void
+ */
+	public function testIsJsonAndXml() {
+		$request = new CakeRequest('some/path');
+
+		$_SERVER['HTTP_ACCEPT'] = 'application/json, text/plain, */*';
+		$this->assertTrue($request->is(array('json')));
+
+		$_SERVER['HTTP_ACCEPT'] = 'application/xml, text/plain, */*';
+		$this->assertTrue($request->is(array('xml')));
+
+		$_SERVER['HTTP_ACCEPT'] = 'text/xml, */*';
+		$this->assertTrue($request->is(array('xml')));
 	}
 
 /**
@@ -1069,12 +1144,14 @@ class CakeRequestTest extends CakeTestCase {
  * @return void
  */
 	public function testHeader() {
+		$_SERVER['HTTP_X_THING'] = '';
 		$_SERVER['HTTP_HOST'] = 'localhost';
 		$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_4; en-ca) AppleWebKit/534.8+ (KHTML, like Gecko) Version/5.0 Safari/533.16';
 		$request = new CakeRequest('/', false);
 
 		$this->assertEquals($_SERVER['HTTP_HOST'], $request->header('host'));
 		$this->assertEquals($_SERVER['HTTP_USER_AGENT'], $request->header('User-Agent'));
+		$this->assertSame('', $request->header('X-thing'));
 	}
 
 /**
@@ -1304,7 +1381,6 @@ class CakeRequestTest extends CakeTestCase {
  * - index.php/apples/
  * - index.php/bananas/eat/tasty_banana
  *
- * @link https://cakephp.lighthouseapp.com/projects/42648-cakephp/tickets/3318
  * @return void
  */
 	public function testBaseUrlWithModRewriteAndIndexPhp() {
@@ -1357,6 +1433,24 @@ class CakeRequestTest extends CakeTestCase {
 		$this->assertEquals('/cakephp/', $request->webroot);
 		$this->assertEquals('bananas/eat/tasty_banana', $request->url);
 		$this->assertEquals('/cakephp/bananas/eat/tasty_banana', $request->here);
+	}
+
+/**
+ * Test that even if mod_rewrite is on, and the url contains index.php
+ * and there are numerous //s that the base/webroot is calculated correctly.
+ *
+ * @return void
+ */
+	public function testBaseUrlWithModRewriteAndExtraSlashes() {
+		$_SERVER['REQUEST_URI'] = '/cakephp/webroot///index.php/bananas/eat';
+		$_SERVER['PHP_SELF'] = '/cakephp/webroot///index.php/bananas/eat';
+		$_SERVER['PATH_INFO'] = '/bananas/eat';
+		$request = new CakeRequest();
+
+		$this->assertEquals('/cakephp', $request->base);
+		$this->assertEquals('/cakephp/', $request->webroot);
+		$this->assertEquals('bananas/eat', $request->url);
+		$this->assertEquals('/cakephp/bananas/eat', $request->here);
 	}
 
 /**
@@ -2179,7 +2273,7 @@ class CakeRequestTest extends CakeTestCase {
 
 		// Checking if requested
 		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'es_mx,en_ca';
-		$result = CakeRequest::acceptLanguage();
+		CakeRequest::acceptLanguage();
 
 		$result = CakeRequest::acceptLanguage('en-ca');
 		$this->assertTrue($result);
@@ -2366,6 +2460,24 @@ XML;
 
 		$this->setExpectedException('MethodNotAllowedException');
 		$request->allowMethod('POST');
+	}
+
+/**
+ * Tests that overriding the method to GET will clean all request
+ * data, to better simulate a GET request.
+ *
+ * @return void
+ */
+	public function testMethodOverrideEmptyData() {
+		$_POST = array('_method' => 'GET', 'foo' => 'bar');
+		$_SERVER['REQUEST_METHOD'] = 'PUT';
+		$request = new CakeRequest('/posts/edit/1');
+		$this->assertEmpty($request->data);
+
+		$_POST = array('foo' => 'bar');
+		$_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] = 'GET';
+		$request = new CakeRequest('/posts/edit/1');
+		$this->assertEmpty($request->data);
 	}
 
 /**

@@ -48,7 +48,7 @@ class EmailRecord extends AppModel {
 			),
 		),
 		'subject' => array(
-			'rule' => 'notEmpty',
+			'rule' => 'notBlank',
 			'message' => 'Must have a subject',
 		),
 	);
