@@ -61,7 +61,7 @@ class BankTransaction extends AppModel {
 		),
         'description' => array(
             'content' => array(
-                'rule' => 'notEmpty',
+                'rule' => 'notBlank',
                 'message' => 'Must have a description',
             ),
             'unique' => array(
