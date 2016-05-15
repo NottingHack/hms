@@ -64,11 +64,11 @@ $cakeDescription = "Nottingham Hackspace Management System";
 						Logged in as:
 						<?php echo $this->Html->link(isset($username) ? $username : $email, array( 'plugin' => null, 'controller' => 'members', 'action' => 'view', $memberId ) ); ?>
 						<span class="loginSpace">
-							<?php echo $this->Html->link('Logout', array( 'plugin' => null, 'controller' => 'members', 'action' => 'logout' )) ?>
+							<?php echo $this->Html->link('Logout', array( 'plugin' => null, 'controller' => 'members', 'action' => 'logout'), array('id' => 'logout')) ?>
 						</span>
 					<?php else: ?>
 						Already a member?
-						<?php echo $this->Html->link('Login', array( 'plugin' => null, 'controller' => 'members', 'action' => 'login' )) ?>
+						<?php echo $this->Html->link('Login', array( 'plugin' => null, 'controller' => 'members', 'action' => 'login'), array('id' => 'login')) ?>
 					<?php endif; ?>
 				</div>
 				<?php if( isset($adminNav) && count($adminNav) > 0 ): ?>
