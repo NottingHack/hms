@@ -238,7 +238,7 @@ class AuditMembersController extends AppController {
         }
 
 //        debug($ohCrapIds);
-        if (count($ohCrapIds) != 0 || (count($ohCrapIds) == 1 && $ohCrapIds[0] == 778)) {
+        if (count($ohCrapIds) != 0 || (count($ohCrapIds) == 1 && $ohCrapIds[0] != 778)) {
             $this->__sendSoftwareEmail($ohCrapIds);
         }
 
