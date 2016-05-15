@@ -36,8 +36,8 @@ App::uses('Status', 'Model');
  */
 class AppController extends Controller {
 
-	const VERSION_MAJOR = 0;
-	const VERSION_MINOR = 5;
+	const VERSION_MAJOR = 1;
+	const VERSION_MINOR = 0;
 	const VERSION_BUILD = 0;
 
 /**
