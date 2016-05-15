@@ -20,7 +20,7 @@ require_once (CAKE_PATH . 'Core/App.php');
 require_once (CAKE_PATH . 'Core/Object.php');
 require_once (CAKE_PATH . 'Event/CakeEventListener.php');
 require_once (CAKE_PATH . 'Model/Model.php');
-require_once (CAKE_PATH . 'Utility/String.php');
+require_once (CAKE_PATH . 'Utility/CakeText.php');
 require_once (APP_PATH . 'Model/AppModel.php');
 require_once (APP_PATH . 'Model/Status.php');
 require_once (APP_PATH . 'Model/Account.php');
