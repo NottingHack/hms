@@ -62,14 +62,7 @@ class BankTransactionsController extends AppController {
                 $authGranted = true;
             }
         }
-        
-        $memberIsMembershipAdmin = $this->Member->GroupsMember->isMemberInGroup( $memberId, Group::MEMBERSHIP_ADMIN );
-        
-        switch ($request->action) {
-            case 'uploadCsv':
-                return $memberIsMembershipAdmin;
-        
-        }
+
 		return $authGranted;
 	}
     
