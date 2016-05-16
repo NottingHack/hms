@@ -7,8 +7,8 @@ $this->Html->addCrumb($meta['name'], '/meta/edit/' . $meta['name']);
 
 <!-- add some text here about keeping a little info on a project-->
 
-<h2><?=$meta['name']?></h2>
-<?
+<h2><?php echo $meta['name']?></h2>
+<?php
 echo $this->Form->create('Meta');
 echo $this->Form->hidden('name');
 echo $this->Form->input('value');

@@ -5,7 +5,7 @@
 	$this->Html->addCrumb('Add Existing Member ' . $this->data['Member']['name'], '/members/add_existing_member/' . $this->data['Member']['member_id']);
 ?>
 
-<?
+<?php
 	echo $this->Form->create('Member');
 	echo $this->Form->hidden('member_id');
 	echo $this->Form->input('username');
