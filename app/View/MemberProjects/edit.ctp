@@ -9,7 +9,7 @@ $this->Html->addCrumb($project['projectName'], '/memberProjects/view/' . $projec
 
 <!-- add some text here about keeping a little info on a project-->
 
-<?
+<?php
 echo $this->Form->create('MemberProject');
 echo $this->Form->hidden('member_project_id');
 echo $this->Form->input('project_name');

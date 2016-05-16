@@ -8,7 +8,7 @@ $this->Html->addCrumb('Projects', '/memberProjects/listprojects/' . $member['id'
 
 <!-- add some text here about needing a little info to start a project-->
 
-<?
+<?php
 echo $this->Form->create('MemberProject');
 echo $this->Form->input('project_name');
 echo $this->Form->input('description');
