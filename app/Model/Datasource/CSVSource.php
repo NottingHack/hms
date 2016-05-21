@@ -155,10 +155,11 @@ class CsvSource extends DataSource {
  */
 	public function listSources($data = null) {
 		$this->config['database'] = 'csv';
-		$cache = parent::listSources();
-		if ($cache !== null) {
-			return $cache;
-		}
+		// As we are changing the file list each time we realy dont want the cache list!
+		// $cache = parent::listSources();
+		// if ($cache !== null) {
+		// 	return $cache;
+		// }
 
 		$extPattern = '\.' . preg_quote($this->config['extension']);
 		if ($this->config['recursive']) {
