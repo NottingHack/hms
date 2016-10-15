@@ -26,7 +26,7 @@ debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password mysql'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2'
 
 # nb. SetupCmd.php needs php5-mysqlnd not php5-mysql
-apt-get install -y apache2  php5-mysqlnd libapache2-mod-php5 git haveged expect php-pear php5-dev libkrb5-dev mysql-server phpmyadmin php5-xdebug
+apt-get install -y apache2  php5-mysqlnd libapache2-mod-php5 git haveged expect php-pear php5-dev libkrb5-dev mysql-server phpmyadmin php5-xdebug make
 
 # bump php.ini memory limit's for xdebug code coverage
 sed -i -e 's/memory_limit = 128M/memory_limit = 256M/' /etc/php5/apache2/php.ini
