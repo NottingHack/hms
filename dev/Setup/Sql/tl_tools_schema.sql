@@ -13,4 +13,4 @@ create table tl_tools
   tool_calendar       varchar(255), -- id of google calendar
   primary key (tool_id),
   unique (tool_name)
-);
+) ENGINE=InnoDB CHARSET=latin1;

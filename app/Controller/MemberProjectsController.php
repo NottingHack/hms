@@ -474,7 +474,7 @@ class MemberProjectsController extends AppController {
  * @return bool True if the request is coming from with in the hackspace, false otherwise.
  */
 	public function isRequestLocal() {
-		return preg_match('/10\.0\.0\.\d+/', $this->getRequestIpAddress());
+		return preg_match('/10\.0\.0\.(?!(?:2)$)\d+/', $this->getRequestIpAddress());
 	}
 
 /**

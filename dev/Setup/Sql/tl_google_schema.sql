@@ -4,4 +4,4 @@ create table tl_google
   identity          varchar(255), -- google account username
   refresh_token     varchar(255),
   primary key (id)
-);
+) ENGINE=InnoDB CHARSET=latin1;
