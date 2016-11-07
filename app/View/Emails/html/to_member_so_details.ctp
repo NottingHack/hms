@@ -14,7 +14,7 @@
 </p>
 
 <p>
-	Once we've received your first standing order (whihc may take 3-4 days to show up in our account after it leaves yours), you'll be sent details to arrange a meeting with someone from the membership team. After that meeting, you'll have 24hr access to the space.
+	Once we've received your first standing order (which may take 3-4 days to show up in our account after it leaves yours), you'll be sent details to arrange a meeting with someone from the membership team. After that meeting, you'll have 24hr access to the space.
 </p>
 
 <p>
