@@ -91,15 +91,15 @@ class RfidTagsController extends AppController {
  *
  * @param int|null $rfidSerial The serial number of the card to edit
  */
-	public function edit($rfidSerial = null) {
+	public function edit($rfidId = null) {
 
 		$this->set('states', $this->RfidTag->statusStrings);
 
 		// if there wasn't a serial passed in, just punt the user back to their list of registered cards
-		if ($rfidSerial == null) {
+		if ($rfidId == null) {
 			return $this->redirect(array('controller' => 'rfidTags', 'action' => 'view'));
 		}
-		$id = $this->RfidTag->getMemberIdForSerial($rfidSerial);
+		$id = $this->RfidTag->getMemberIdForTag($rfidId);
 
 		$member = $this->Member->getMemberSummaryForMember($id);
 		$this->set('member', $member);
@@ -107,7 +107,7 @@ class RfidTagsController extends AppController {
 		$canView = $this->__getViewPermissions($id);
 	
 		if ($canView == true) {
-			$rawTagDetails = $this->RfidTag->getDetailsForSerial($rfidSerial, false);
+			$rawTagDetails = $this->RfidTag->getDetailsForTag($rfidId, false);
 			$formattedTagDetails = $this->RfidTag->formatDetails($rawTagDetails);
 
 			if ($formattedTagDetails)
@@ -123,7 +123,7 @@ class RfidTagsController extends AppController {
 
 					if ($sanitisedData) {
 						// persist data to the table
-						$updateResult = $this->RfidTag->updateDetailsForSerial($rfidSerial, $sanitisedData);
+						$updateResult = $this->RfidTag->updateDetailsForTag($rfidId, $sanitisedData);
 						if ($updateResult) {
 							// set flash
 							$this->Session->setFlash('Card updated successfully.');

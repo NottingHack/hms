@@ -54,7 +54,7 @@ class RfidTag extends AppModel {
  * Specify the primary key.
  * @var string
  */
-	public $primaryKey = 'rfid_serial';
+	public $primaryKey = 'rfid_id';
 
 /**
  * Specify 'belongs to' associations.
@@ -167,10 +167,16 @@ class RfidTag extends AppModel {
   		[stateId] => state of card as used in the DB
   		[stateName] => description of the stateId value
   	*/
+        if (Hash::get($details, 'RfidTag.rfid_serial') == null) {
+            $serial = Hash::get($details, 'RfidTag.rfid_serial_legacy');
+        } else {
+            $serial = Hash::get($details, 'RfidTag.rfid_serial');
+        }
   		$formatted = array(
+            'rfidId' => Hash::get($details, 'RfidTag.rfid_id'),
 	  		'memberId' => Hash::get($details, 'RfidTag.member_id'),
 	  		'tagName' => Hash::get($details, 'RfidTag.friendly_name'),
-	  		'tagSerial' => Hash::get($details, 'RfidTag.rfid_serial'),
+	  		'tagSerial' => $serial,
 	  		'lastSeen' => Hash::get($details, 'RfidTag.last_used'),
 	  		'stateId' => Hash::get($details, 'RfidTag.state'),
 	  		'stateName' => $this->statusStrings[Hash::get($details, 'RfidTag.state')],
@@ -197,10 +203,10 @@ class RfidTag extends AppModel {
  * @param bool $format Determines if we're going to flatten out the results array or not
  * @return array Details for the tag serial number passed in $serial
  */
-	public function getDetailsForSerial($serial, $format = true) {
+	public function getDetailsForTag($rfidId, $format = true) {
 		$findOptions = array(
 			'conditions' => array(
-				'RfidTag.rfid_serial' => $serial,
+				'RfidTag.rfid_id' => $rfidId,
 			),
 			'fields' => array('RfidTag.*'),
 		);
@@ -220,9 +226,9 @@ class RfidTag extends AppModel {
  * @param $serial Serial number of the tag we want to retrieve data for
  * @return int|null member id associated with this serial or null if serial does not exist
  */
-	public function getMemberIdForSerial($serial) {
+	public function getMemberIdForTag($rfidId) {
 
-		$details = $this->getDetailsForSerial($serial, false);
+		$details = $this->getDetailsForTag($rfidId, false);
 
 		if (is_array($details)) {
 			return $details['RfidTag']['member_id'];
@@ -234,14 +240,14 @@ class RfidTag extends AppModel {
 /**
  * Update details for a given tag serial number
  * 
- * @param $serial Serial number of the tag we want to retrieve data for
+ * @param $id Id of the tag we want to retrieve data for
  * @param
  * @return bool
  */
-	public function updateDetailsForSerial($serial, $sanitisedData) {
+	public function updateDetailsForTag($rfidId, $sanitisedData) {
 		$findOptions = array(
 			'conditions' => array(
-				'RfidTag.rfid_serial' => $serial,
+				'RfidTag.rfid_id' => $rfdiId,
 			),
 			'fields' => array('RfidTag.*'),
 		);

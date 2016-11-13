@@ -21,7 +21,7 @@
 			echo '<td>' . $tag['lastSeen'] . '</td>';
 			echo '<td>' . $tag['tagName'] . '</td>';
 			echo '<td>' . $tag['stateName'] . '</td>';
-			echo '<td>' . $this->Html->Link('Edit Card', array('controller' => 'rfidTags', 'action' => 'edit', $tag['tagSerial']), array('escape' => false)) . '</td>';
+			echo '<td>' . $this->Html->Link('Edit Card', array('controller' => 'rfidTags', 'action' => 'edit', $tag['rfidId']), array('escape' => false)) . '</td>';
 //			echo 'some text here</form> some text after';
 			echo '</tr>';
 		}

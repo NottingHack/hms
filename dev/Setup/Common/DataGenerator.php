@@ -640,15 +640,17 @@ class DataGenerator {
 			}
 		}
 
-		// The RFID serial seems to be between 9 and 10 numbers starting with 1
-		$serialLenRemaining = 9;
-		$serial = '1';
-		if (rand() % 2 == 0) {
-			$serialLenRemaining = 8;
-		}
+		// The RFID serial are hex uid either 4, 7 or 10 bytes long
+		$serialLenRemaining = 4;
+		$serial = "";
+		if (rand() % 5 == 0) {
+			$serialLenRemaining = 7;
+		} elseif (rand() % 10 == 0) {
+            $serialLenRemaining = 10;
+        }
 
 		for ($i = 0; $i < $serialLenRemaining; $i++) {
-			$serial .= rand(0, 9);
+			$serial .= dechex( rand( 0,255 ) );
 		}
 
 		// Make it so the card was used within the last month

@@ -486,6 +486,7 @@ class Member extends AppModel {
 					[state] => pin state (see constance defined in Pin.php)
             [rfidtag] =>
                 [n] =>
+                    [id] => rfid_id
                     [serial] => rfid_serial
                     [state] => state (see constance deined in RfidTag.php)
                     [last_used] => last_used
@@ -553,9 +554,15 @@ class Member extends AppModel {
 		$rfidtags = array();
 		if (array_key_exists('RfidTag', $memberInfo)) {
 			foreach ($memberInfo['RfidTag'] as $tag) {
+				if (Hash::get($tag, 'rfid_serial') == null) {
+					$serial = Hash::get($tag, 'rfid_serial_legacy');
+				} else {
+					$serial = Hash::get($tag, 'rfid_serial');
+				}
 				array_push($rfidtags,
 					array(
-						'serial' => Hash::get($tag, 'rfid_serial'),
+						'id' => Hash::get($tag, 'rfid_id'),
+						'serial' => $serial,
 						'state' => Hash::get($tag, 'state'),
 						'last_used' => Hash::get($tag, 'last_used'),
 						'name' => Hash::get($tag, 'friendly_name'),
