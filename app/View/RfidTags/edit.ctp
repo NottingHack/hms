@@ -4,7 +4,7 @@
 	$this->Html->addCrumb('Members', '/members');
 	$this->Html->addCrumb(isset($member['username']) ? $member['username'] : $member['email'], '/members/view/' . $member['id']);
 	$this->Html->addCrumb('Registered Cards', '/rfidTags/view/' . $member['id']);
-	$this->Html->addCrumb(isset($rfidTagDetails['tagName']) ? $rfidTagDetails['tagName'] : $rfidTagDetails['tagSerial'], '/rfidTags/edit/'. $rfidTagDetails['tagSerial']);
+	$this->Html->addCrumb(isset($rfidTagDetails['tagName']) ? $rfidTagDetails['tagName'] : $rfidTagDetails['rfidId'], '/rfidTags/edit/'. $rfidTagDetails['rfidId']);
 ?>
 
 <?php
@@ -15,7 +15,7 @@
   		),
   	)
   );
-  echo $this->Form->hidden('tagSerial');
+  echo $this->Form->hidden('rfidId');
  ?>
 <table>
 	<tr>

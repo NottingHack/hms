@@ -25,15 +25,15 @@ class SqlWriter {
  * @return string SQL string representation of the value.
  */
 	public function write($value) {
-		if (is_numeric($value)) {
-			return strval($value);
-		}
-
 		if (is_string($value)) {
 			// Note that this escaping is not secure
 			// but it's about the best we can do without connecting
 			// to a database.
 			return "'" . str_replace("'", "\'", $value) . "'";
+		}
+
+		if (is_numeric($value)) {
+			return strval($value);
 		}
 
 		return 'NULL';
