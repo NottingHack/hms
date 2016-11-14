@@ -17,7 +17,7 @@
 	<?php
 		foreach ($tagsList as $tag) {
 			echo '<tr>';
-			echo '<td>' . $tag['tagSerial'] . '</td>';
+			echo '<td style="font-family: monospace">' . $tag['tagSerial'] . '</td>';
 			echo '<td>' . $tag['lastSeen'] . '</td>';
 			echo '<td>' . $tag['tagName'] . '</td>';
 			echo '<td>' . $tag['stateName'] . '</td>';
