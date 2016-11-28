@@ -2038,6 +2038,32 @@ class Member extends AppModel {
 	}
 
 /**
+ * Get a full name for a member.
+ *
+ * @param int $memberId
+ * @return string Member Name.
+ */
+	public function getFullNameForMember($memberId) {
+		$findOptions = array(
+			'conditions' => array(
+				'Member.member_id' => $memberId,
+			),
+			'fields' => array(
+				'Member.member_id', 
+				'Member.firstname', 
+				'Member.surname'
+			),
+            'recursive' => -1,
+		);
+		$record = $this->find('first', $findOptions );
+
+		$firstname = Hash::get($record, 'Member.firstname');
+		$surname = Hash::get($record, 'Member.surname');
+
+		return trim("$firstname $surname");
+	}
+	
+/**
  * Set the password for the member, with the option to create a new password entry if needed.
  * 
  * @param string $username The username of the member.
