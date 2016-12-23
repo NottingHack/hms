@@ -395,7 +395,7 @@ class ToolsToolsController extends ToolsAppController {
 
 			// does it clash?
 			if ($this->__checkForClash($start_date, $end_date, $events)) {
-				$this->Session->setFlash(__("Clashes with another booking"));
+				$this->Session->setFlash(__("Your booking request clashes with another booking. No booking has been made."));
 				return;
 			}
 
