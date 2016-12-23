@@ -522,10 +522,10 @@ class ToolsToolsController extends ToolsAppController {
 			// first possibility, the new event <= existing events
 			// If the start or end are within an existing event, there is a clash
 
-			if ($start > $event['start'] && $start < $event['end']) {
+			if ($start >= $event['start'] && $start < $event['end']) {
 				return true;
 			}
-			if ($end > $event['start'] && $end < $event['end']) {
+			if ($end > $event['start'] && $end <= $event['end']) {
 				return true;
 			}
 
