@@ -118,12 +118,14 @@ class RfidTagsController extends AppController {
 				if ($this->request->is('post') || $this->request->is('put')) {
 					// sanitise!
 					$sanitisedData = $this->request->data;
+					$sanitisedData['RfidTag']['friendly_name'] = 
+						(strlen($sanitisedData['RfidTag']['friendly_name']) > 0 ? $sanitisedData['RfidTag']['friendly_name'] : null);
 
 					//var_dump($sanitisedData);
 
 					if ($sanitisedData) {
 						// persist data to the table
-						$updateResult = $this->RfidTag->updateDetailsForTag($rfidId, $sanitisedData);
+						$updateResult = $this->RfidTag->save($sanitisedData);
 						if ($updateResult) {
 							// set flash
 							$this->Session->setFlash('Card updated successfully.');
