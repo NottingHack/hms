@@ -236,33 +236,4 @@ class RfidTag extends AppModel {
 
 		return null;
 	}
-
-/**
- * Update details for a given tag serial number
- * 
- * @param $id Id of the tag we want to retrieve data for
- * @param
- * @return bool
- */
-	public function updateDetailsForTag($rfidId, $sanitisedData) {
-		$findOptions = array(
-			'conditions' => array(
-				'RfidTag.rfid_id' => $rfdiId,
-			),
-			'fields' => array('RfidTag.*'),
-		);
-
-		if ($sanitisedData) {
-			$details = $this->find( 'first', $findOptions );
-
-			$details['RfidTag']['friendly_name'] = 
-				(strlen($sanitisedData['RfidTag']['friendly_name']) > 0 ? $sanitisedData['RfidTag']['friendly_name'] : null);
-			$details['RfidTag']['state'] = $sanitisedData['RfidTag']['state'];
-
-			return ($this->save($details) != false);
-		}
-
-		return false;
-	}
-
 }
