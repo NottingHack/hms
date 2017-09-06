@@ -7,7 +7,7 @@
 </p>
 
 <p>
-	GateKeeper is our RFID entry system for which you need a suitable card set up. If you still have a card form before your membership was deactivated you will be able to carry on using that, other wise a replacement card cost £1. Visit on the next open hack night and ask people to point you to one of the membership team, or please contact membership@nottinghack.org.uk if you are unable to attend one.
+	GateKeeper is our RFID entry system for which you need a suitable card set up. If you still have a card form before your membership was deactivated you will be able to carry on using that, other wise a replacement card cost £1. Visit on the next open hack night (Wednesdays from 18:30) and ask people to point you to one of the membership team, or please contact membership@nottinghack.org.uk if you are unable to attend one.
 </p>
 
 <p>
