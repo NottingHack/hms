@@ -238,7 +238,16 @@ class AuditMembersController extends AppController {
         }
 
 //        debug($ohCrapIds);
-        if (count($ohCrapIds) != 0 && (count($ohCrapIds) == 1 && $ohCrapIds[0] != 778)) {
+        // remove cleaners 778
+        if (($key = array_search(778, $ohCrapIds)) !== false) {
+            unset($ohCrapIds[$key]);
+        }
+        // remove laser maintainer 3033
+        if (($key = array_search(3033, $ohCrapIds)) !== false) {
+            unset($ohCrapIds[$key]);
+        }
+
+        if (count($ohCrapIds) != 0) {
             $this->__sendSoftwareEmail($ohCrapIds);
         }
 
