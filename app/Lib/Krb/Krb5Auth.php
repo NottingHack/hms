@@ -36,6 +36,9 @@ class Krb5Auth {
  */
 	private $__debug;
 
+	private $__krbUsername;
+	private $__keytab;
+
 /**
  * Constructor.
  * @param string $krbUsername Username to construct the KADM5 object with.
@@ -45,7 +48,18 @@ class Krb5Auth {
 	public function __construct($krbUsername, $keytab, $realm) {
 		$this->__debug = false;
 		$this->__realm = $realm;
-		$this->__krbConn = new KADM5($krbUsername, $keytab, true); // use keytab=true
+		$this->__krbUsername = $krbUsername;
+		$this->__keytab = $keytab;
+		$this->__krbConn = null;
+	}
+
+/**
+ * Init Kadmin connection if needed.
+ */
+	protected function initConnection() {
+		if (is_null($this->__krbConn)) {
+			$this->__krbConn = new KADM5($this->__krbUsername, $this->__keytab, true); // use keytab=true
+		}
 	}
 
 /**
@@ -55,6 +69,7 @@ class Krb5Auth {
  * @return bool True if sucessful, false otherwise.
  */
 	public function addUser($username, $password) {
+		$this->initConnection();
 		/* Just incase some smartarse appends /admin to their handle
 		* in an attempt to become a krb admin... */
 		if (stristr($username, '/admin') === false) {
@@ -82,6 +97,7 @@ class Krb5Auth {
  * @return bool True if sucessful, false otherwise.
  */
 	public function deleteUser($username) {
+		$this->initConnection();
 		try {
 			$princ = $this->__krbConn->getPrincipal(strtolower($username));
 			$princ->delete();
@@ -120,6 +136,7 @@ class Krb5Auth {
  * @return bool True if sucessful, false otherwise.
  */
 	public function changePassword($username, $newpassword) {
+		$this->initConnection();
 		try {
 			$princ = $this->__krbConn->getPrincipal(strtolower($username));
 			$princ->changePassword($newpassword);
@@ -138,6 +155,7 @@ class Krb5Auth {
  * @return bool|null True if user exists, false if user does not exist. Null on error.
  */
 	public function userExists($username) {
+		$this->initConnection();
 		try {
 			$this->__krbConn->getPrincipal(strtolower($username));
 		} catch (Exception $e) {
