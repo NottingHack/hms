@@ -441,17 +441,17 @@ class MembersController extends AppController {
 
 					$this->__sendSoDetailsToMember($id);
 
-					$this->_sendEmail(
-						array($this->Meta->getValueFor('membership_email') => "Membership Team"),
-						'Impending Payment',
-						'notify_admins_payment_incoming',
-						array(
-							'memberId' => $id,
-							'memberName' => sprintf('%s %s', $memberDetails['firstname'], $memberDetails['surname']),
-							'memberEmail' => $memberDetails['email'],
-							'memberPayRef' => $memberDetails['paymentRef'],
-						)
-					);
+					// $this->_sendEmail(
+					// 	array($this->Meta->getValueFor('membership_email') => "Membership Team"),
+					// 	'Impending Payment',
+					// 	'notify_admins_payment_incoming',
+					// 	array(
+					// 		'memberId' => $id,
+					// 		'memberName' => sprintf('%s %s', $memberDetails['firstname'], $memberDetails['surname']),
+					// 		'memberEmail' => $memberDetails['email'],
+					// 		'memberPayRef' => $memberDetails['paymentRef'],
+					// 	)
+					// );
 
 					return $this->redirect(array( 'controller' => 'members', 'action' => 'view', $id));
 				} else {
