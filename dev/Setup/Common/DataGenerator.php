@@ -17,7 +17,7 @@ define('CAKE_PATH', '../../../lib/Cake/');
 define('APP_PATH', '../../../app/');
 
 require_once (CAKE_PATH . 'Core/App.php');
-require_once (CAKE_PATH . 'Core/Object.php');
+require_once (CAKE_PATH . 'Core/CakeObject.php');
 require_once (CAKE_PATH . 'Event/CakeEventListener.php');
 require_once (CAKE_PATH . 'Model/Model.php');
 require_once (CAKE_PATH . 'Utility/CakeText.php');
