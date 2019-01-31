@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  * PHP 5
  *
  * Copyright (C) HMS Team
@@ -71,7 +71,7 @@ class Account extends AppModel {
 
 /**
  * Generate a payment reference
- * 
+ *
  * @return string A unique (at the time of function-call) payment reference.
  */
 	public static function generatePaymentRef() {
@@ -95,7 +95,7 @@ class Account extends AppModel {
 
 /**
  * Generate a unique payment reference
- * 
+ *
  * @return string A unique (at the time of function-call) payment reference.
  * @link http://www.bacs.co.uk/Bacs/Businesses/BacsDirectCredit/Receiving/Pages/PaymentReferenceInformation.aspx
  */
@@ -111,7 +111,7 @@ class Account extends AppModel {
 
 /**
  * Create and save a new account if needed or check for an existing account.
- * 
+ *
  * @param int $accountId An account id.
  * @return int The new or existing account id on success, or -1 on error.
  */
@@ -123,10 +123,11 @@ class Account extends AppModel {
 				$data = array(
 					'Account' => array(
 						'payment_ref' => $this->generateUniquePaymentRef(),
+						'natwest_ref' => '',
 					),
 				);
 
-				if ( $this->save($data, array('fieldList' => array('account_id', 'payment_ref'))) ) {
+				if ( $this->save($data, array('fieldList' => array('account_id', 'payment_ref', 'natwest_ref'))) ) {
 					// New account is ok
 					$accountId = $this->getID();
 					return $accountId;

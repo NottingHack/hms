@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  * PHP 5
  *
  * Copyright (C) HMS Team
@@ -240,7 +240,7 @@ class Member extends AppModel {
 
 /**
  * Validation function to see if the user-supplied password and password confirmation match.
- * 
+ *
  * @param array $check The password to be validated.
  * @return bool True if the supplied password values match, otherwise false.
  */
@@ -250,7 +250,7 @@ class Member extends AppModel {
 
 /**
  * Validation function to see if the user-supplied username is already taken.
- * 
+ *
  * @param array $check The username to check.
  * @return bool True if the supplied username exists in the database (case-insensitive) registered to a different user, otherwise false.
  */
@@ -275,7 +275,7 @@ class Member extends AppModel {
 
 /**
  * Validation function to see if the user-supplied email matches what's in the database.
- * 
+ *
  * @param array $check The email to check.
  * @return bool True if the supplied email value matches the database, otherwise false.
  * @link Member::addEmailMustMatch()
@@ -288,7 +288,7 @@ class Member extends AppModel {
 
 /**
  * Actions to perform before saving any data
- * 
+ *
  * @param array $options Any options that were passed to the Save method
  * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforesave
  */
@@ -301,7 +301,7 @@ class Member extends AppModel {
 
 /**
  * Add an extra validation rule to the e-mail field stating that the user supplied e-mail must match what's in the database.
- * 
+ *
  * @link Member::checkEmailMatch()
  * @link Member::removeEmailMustMatch()
  */
@@ -311,7 +311,7 @@ class Member extends AppModel {
 
 /**
  * Remove the 'e-mail must match' validation rule.
- * 
+ *
  * @link Member::checkEmailMatch()
  * @link Member::addEmailMustMatch()
  */
@@ -321,7 +321,7 @@ class Member extends AppModel {
 
 /**
  * Find how many members have a certain Status.
- * 
+ *
  * @param int $statusId The id of the Status record to check.
  * @return int The number of member records that belong to the Status.
  */
@@ -331,7 +331,7 @@ class Member extends AppModel {
 
 /**
  * Find out how many member records exist in the database.
- * 
+ *
  * @return int The number of member records in the database.
  */
 	public function getCount() {
@@ -340,7 +340,7 @@ class Member extends AppModel {
 
 /**
  * Find out if we have record of a Member with a specific e-mail address.
- * 
+ *
  * @param string $email E-mail address to check.
  * @return bool True if there is a Member with this e-mail, false otherwise.
  */
@@ -350,7 +350,7 @@ class Member extends AppModel {
 
 /**
  * Get a summary of the member records for a specific member.
- * 
+ *
  * @param int $memberId The id of the member to work with.
  * @param $format If true format the return data.
  * @return array A summary of the data for a specific member.
@@ -366,7 +366,7 @@ class Member extends AppModel {
 
 /**
  * Get a summary of the member records for a list of members.
- * 
+ *
  * @param array $memberIds The array of member ids to work with.
  * @param $format If true format the return data.
  * @return array A summary of the data for the members in the list
@@ -437,7 +437,7 @@ class Member extends AppModel {
 
 /**
  * Format an array of member infos.
- * 
+ *
  * @param array $memberInfoList The array of member infos.
  * @param bool $removeNullEntries If true then entries that have a value of null, false or an empty array won't exist in the final array.
  * @return array An array of formatted member infos.
@@ -452,7 +452,7 @@ class Member extends AppModel {
 
 /**
  * Format member information into a nicer arrangement.
- * 
+ *
  * @param array $memberInfo The info to format, usually retrieved from Member::__getMemberSummary or Member::getMemberDetails.
  * @param bool $removeNullEntries If true then entries that have a value of null, false or an empty array won't exist in the final array.
  * @return array An array of member information, formatted so that nothing needs to know database rows.
@@ -645,7 +645,7 @@ class Member extends AppModel {
 
 /**
  * Create a member info array for a new member.
- * 
+ *
  * @param string $email The e-mail address for the new member.
  * @return array An array of member info suitable for saving.
  */
@@ -654,13 +654,14 @@ class Member extends AppModel {
 			'Member' => array(
 				'email' => $email,
 				'member_status' => Status::PROSPECTIVE_MEMBER,
+				'join_date' => '0000-00-00',
 			),
 		);
 	}
 
 /**
  * Get the Status for a member, may hit the database.
- * 
+ *
  * @param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
  * @return int The status for the member, or 0 if status could not be found.
  */
@@ -678,7 +679,7 @@ class Member extends AppModel {
 
 /**
  * Get the username for a member, may hit the database.
- * 
+ *
  * @param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
  * @return int The username for the member, or 0 if username could not be found.
  */
@@ -706,7 +707,7 @@ class Member extends AppModel {
 
 /**
  * Get the Status for a member, may hit the database.
- * 
+ *
  * @param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
  * @return int The status for the member, or 0 if status could not be found.
  */
@@ -737,7 +738,7 @@ class Member extends AppModel {
 
 /**
  * Get the email for a member, may hit the database.
- * 
+ *
  * @param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
  * @return int The email for the member, or null if email could not be found.
  */
@@ -768,7 +769,7 @@ class Member extends AppModel {
 
 /**
  * Get a list of e-mail addresses for all members in a Group.
- * 
+ *
  * @param int $groupId The id of the group the members must belong to.
  * @return array A list of member e-mails.
  */
@@ -783,7 +784,7 @@ class Member extends AppModel {
 
 /**
  * Get a list of e-mail addresses for all members.
- * 
+ *
  * @return array A list of member e-mails.
  */
 	public function getEmailsForAllMembers() {
@@ -793,7 +794,7 @@ class Member extends AppModel {
 
 /**
  * Attempt to register a new member record.
- * 
+ *
  * @param array $data Information to use to create the new member record.
  * @return mixed Array of details if the member record was created or didn't need to be, or null if member record could not be created.
  */
@@ -859,7 +860,7 @@ class Member extends AppModel {
 					}
 				}
 
-				$saveResult = $this->__saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status' ), 'MailingLists' => array()), 0);
+				$saveResult = $this->__saveMemberData( $memberInfo, array( 'Member' => array('member_id', 'email', 'member_status', 'join_date' ), 'MailingLists' => array()), 0);
 				if ( !is_array($saveResult) ) {
 					// Save failed for reasons.
 					return null;
@@ -882,7 +883,7 @@ class Member extends AppModel {
 
 /**
  * Attempt to set-up login details for a member.
- * 
+ *
  * @param int $memberId The id of the member to set-up the login details for.
  * @param array $data The data to use.
  * @return bool True on success, otherwise false.
@@ -943,7 +944,7 @@ class Member extends AppModel {
 
 /**
  * Attempt to set-up contact details for a member.
- * 
+ *
  * @param int $memberId The id of the member to set-up the contact details for.
  * @param array $data The data to use.
  * @return bool True on success, otherwise false.
@@ -1067,7 +1068,7 @@ class Member extends AppModel {
 
 /**
  * Mark a members details as valid.
- * 
+ *
  * @param int $memberId The id of the member who's details we want to mark as valid.
  * @param array $data The account data to use.
  * @param int $adminId The id of the member admin who's accepting the details.
@@ -1382,7 +1383,7 @@ class Member extends AppModel {
 
 /**
  * Update all the updatable info for a member.
- * 
+ *
  * @param int $memberId The id of the member to update.
  * @param array $data The array of new data.
  * @param int $adminId The id of the member who is updating the details.
@@ -1485,7 +1486,7 @@ class Member extends AppModel {
 
 /**
  * Get a list of account and member details that is suitable for populating a drop-down box
- * 
+ *
  * @return null List of values on success, null on failure.
  */
 	public function getReadableAccountList() {
@@ -1529,7 +1530,7 @@ class Member extends AppModel {
 
 /**
  * Reinstate an ex-members membership.
- * 
+ *
  * @param int $memberId The id of the membership to reinstate.
  * @param int $adminId The id of the member doing the reinstating.
  * @return bool True if membership was reinstated, false otherwise.
@@ -1541,7 +1542,7 @@ class Member extends AppModel {
 
 /**
  * Set a members member_status.
- * 
+ *
  * @param int $memberId The id of the member to change the status of.
  * @param int $adminId The id of the member doing then changing.
  * @param int $newStatus The new member_status.
@@ -1586,7 +1587,7 @@ class Member extends AppModel {
 
 /**
  * Validate that e-mail data is ok.
- * 
+ *
  * @param array $data The data to validate.
  * @return mixed Array of e-mail data if $data is valid, false otherwise.
  */
@@ -1608,7 +1609,7 @@ class Member extends AppModel {
 
 /**
  * Sanitise an array of member info, removing certain fields.
- * 
+ *
  * @param array $memberInfo The array of member info to sanitise.
  * @param bool $showAdminFeatures If true then all data should be shown.
  * @param bool $showFinances If true then finance data should be shown.
@@ -1671,7 +1672,7 @@ class Member extends AppModel {
 
 /**
  * Create or save a member record, and all associated data.
- *  
+ *
  * @param array $memberInfo The information to use to create or update the member record.
  * @param array $fields The fields that should be saved.
  * @param int $adminId The id of the member who is making the change that needs saving.
@@ -1855,7 +1856,7 @@ class Member extends AppModel {
 
 /**
  * Get a MailingList model.
- * 
+ *
  * @return MailingList The MailingList model.
  */
 	public function getMailingList() {
@@ -1867,9 +1868,9 @@ class Member extends AppModel {
 
 /**
  * Given either a single e-mail or an array of e-mails, return a member id or array of member ids.
- * 
+ *
  * @param mixed $email Either a single e-mail address or an array of e-mail addresses.
- * @return mixed If $email is a single e-mail, returns the member id of the record matching that e-mail (or null if none can be found). 
+ * @return mixed If $email is a single e-mail, returns the member id of the record matching that e-mail (or null if none can be found).
  *               If $email is an array of e-mail addresses, return an array of all matching member ids that can be found.
  *	             Returns null on error.
  */
@@ -1891,7 +1892,7 @@ class Member extends AppModel {
 
 /**
  *  Get the balance for a member, may hit the database.
- * 
+ *
  * @param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
  * @return int The balance for the member, or null if balaance could not be found.
  */
@@ -1918,10 +1919,10 @@ class Member extends AppModel {
 			}
 			return null;
 		}
-    
+
 /**
  *  Update the balance for a member, by amount given
- * 
+ *
  * @param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
  * @param int
  * @return bool
@@ -1940,10 +1941,10 @@ class Member extends AppModel {
                                                       )
                                     );
             }
-            
+
 			if (is_array($memberInfo)) {
                 $memberInfo['Member']['balance'] += $amount;
-                
+
                 $result = $this->save($memberInfo,
                                       $params = array(
                                                       'callbacks' => false,
@@ -1953,14 +1954,14 @@ class Member extends AppModel {
                 if ($result) {
                     return true;
                 }
-				
+
 			}
 			return false;
 		}
 
 /**
  *  Get the account_id for a member, will hit the database.
- * 
+ *
  * @param mixed $memberData If array, assumed to be an array of member info in the same format that is returned from database queries, otherwise assumed to be a member id.
  * @return int The account_id for the member, or null if account_id could not be found.
  */
@@ -1972,14 +1973,14 @@ class Member extends AppModel {
 			if (is_array($memberData)) {
 				$memberData = Hash::get($memberData, 'Member.member_id');
 			}
-            
+
             $memberInfo = $this->find('first', array(
                                                      'fields' => array('Member.account_id'),
                                                      'conditions' => array('Member.member_id' => $memberData),
                                                      'recursive' => -1,
                                                      )
                                       );
-            
+
 			if (is_array($memberInfo)) {
 				$accountId = Hash::get($memberInfo, 'Member.account_id');
 				if (isset($accountId)) {
@@ -1989,9 +1990,9 @@ class Member extends AppModel {
 			return null;
 		}
 
-/** 
+/**
  * Get the member Id's for all members of this account
- * 
+ *
  * @param int $accountId
  * @return bool true if this is a joint account
  */
@@ -2011,7 +2012,7 @@ class Member extends AppModel {
 
 /**
  * Get a list of member names or e-mails (if we don't have their name) for all members.
- * 
+ *
  * @return array Array of member info, indexed by member id.
  */
 	public function getBestMemberNames() {
@@ -2049,8 +2050,8 @@ class Member extends AppModel {
 				'Member.member_id' => $memberId,
 			),
 			'fields' => array(
-				'Member.member_id', 
-				'Member.firstname', 
+				'Member.member_id',
+				'Member.firstname',
 				'Member.surname'
 			),
             'recursive' => -1,
@@ -2062,10 +2063,10 @@ class Member extends AppModel {
 
 		return trim("$firstname $surname");
 	}
-	
+
 /**
  * Set the password for the member, with the option to create a new password entry if needed.
- * 
+ *
  * @param string $username The username of the member.
  * @param string $password The new password.
  * @param bool $allowCreate If true, will create a new auth record for a member that doesn't currently have one.
@@ -2087,7 +2088,7 @@ class Member extends AppModel {
 
 /**
  * Get a summary of the member records for all members that match the conditions.
- * 
+ *
  * @param bool $paginate If true, just return the query for pagination instead of the data.
  * @param array $conditions An array of conditions to decide which member records to access.
  * @param bool $format If true format the data first, otherwise just return it in the same format as the datasource gives it us.

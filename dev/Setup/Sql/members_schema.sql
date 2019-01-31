@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `members` (
   `firstname` varchar(100) DEFAULT NULL,
   `surname` varchar(100) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
-  `join_date` date NOT NULL,
+  `join_date` date NOT NULL DEFAULT '0000-00-00',
   `unlock_text` varchar(95) DEFAULT NULL,
   `balance` int(11) NOT NULL DEFAULT '0',
   `credit_limit` int(11) NOT NULL DEFAULT '0',
