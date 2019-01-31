@@ -11,7 +11,7 @@
 	echo $this->Form->hidden('member_id');
 	if(isset($member['username']))
 	{
-		echo $this->Form->input('username');
+		echo $this->Form->input('username', array('label' => 'Username, this can not be changed', 'disabled'));
 	}
 
 	if(isset($member['firstname']))
@@ -49,10 +49,10 @@
 
 	if( isset($member['paymentRef']) )
 	{
-		echo $this->Form->input('account_id', array( 
+		echo $this->Form->input('account_id', array(
 				'options' => $accounts,
 				'label' => 'Account',
-			) 
+			)
 		);
 	}
 
@@ -65,7 +65,7 @@
 
 		for($i = 0; $i < count($member['pin']); $i++)
 		{
-			echo $this->Form->input("Pin.$i.pin", array( 'readonly' => 'readonly' ));	
+			echo $this->Form->input("Pin.$i.pin", array( 'readonly' => 'readonly' ));
 			//echo $this->Form->input('Pin.expiry', array('type'=>'date', 'empty' => true, 'minYear' => date("Y"), 'orderYear' => 'asc', 'dateFormat' => 'DMY'));
 		}
 	}
@@ -82,7 +82,7 @@
 	            'multiple' => 'checkbox',
 	            'options' => $groups,
 	            'selected' => $this->Html->value('Group.Group'),
-	        )); 
+	        ));
 
 		echo '</fieldset>';
 	}
