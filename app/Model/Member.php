@@ -31,7 +31,7 @@ class Member extends AppModel {
 /**
  * Initial credit limit, in pence.
  */
-	const INITAL_CREDIT_LIMIT = 2000;
+	const INITAL_CREDIT_LIMIT = 0;
 
 /**
  * Specify the primary key.
